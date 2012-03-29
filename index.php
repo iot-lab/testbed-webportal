@@ -25,8 +25,8 @@ if($_SESSION['is_auth']) {
            <div class="alert alert-error" id="div_error" style="display:none"></div>
            
             <form class="well form-inline">
-              <input id="txt_login" type="text" class="input-small" placeholder="Id">
-              <input id="txt_password" type="password" class="input-small" placeholder="Password">
+              Login: <input id="txt_login" type="text" class="input-small" placeholder="Login">
+              Password: <input id="txt_password" type="password" class="input-small" placeholder="Password">
               <button id="btn_submit" type="submit" class="btn">Log in</button>
             </form>
         <a href="signup.php">Ask for an account</a> - <a href="resetpassword.php">Forgot your password ?</a>
@@ -72,7 +72,7 @@ $("#btn_submit").click(function(){
                 $("#div_error").show();
                 $("#div_error").removeClass("alert-success");
                 $("#div_error").addClass("alert-error");
-                $("#div_error").html("Wrong login or password: " + errorThrows);
+                $("#div_error").html("Wrong login or password");
             }
         });
         

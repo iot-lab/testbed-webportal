@@ -17,12 +17,6 @@ if(!$_SESSION['is_auth']) {
           <h2>New Experiment</h2>
            <p>
            
-           
-           
-           
-           
-           
-           
            </p>
         </div>
         <div class="span4">
@@ -34,7 +28,7 @@ if(!$_SESSION['is_auth']) {
                 <li><span class="badge">851</span> done</li>
             </ul>
           <p><i class="icon-th"></i> Profiles: 2 <p>
-          <p><i class="icon-home"></i> Home's quota: 
+          <p><i class="icon-home"></i> Home's quota: 60% (600/1000Mo)
             <div class="progress" style="width:200px">
               <div class="bar"
                    style="width: 60%;"></div>
