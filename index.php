@@ -72,7 +72,7 @@ $("#btn_submit").click(function(){
                 $("#div_error").show();
                 $("#div_error").removeClass("alert-success");
                 $("#div_error").addClass("alert-error");
-                $("#div_error").html(errorThrows);
+                $("#div_error").html("Wrong login or password: " + errorThrows);
             }
         });
         

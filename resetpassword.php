@@ -58,13 +58,13 @@ $(document).ready(function(){
                 $("#div_error").show();
                 $("#div_error").removeClass("alert-error");
                 $("#div_error").addClass("alert-success");
-                $("#div_error").html(data);
+                $("#div_error").html("Your password was reset, check your inbox");
         },
             error:function(XMLHttpRequest, textStatus, errorThrows){
                 $("#div_error").show();
                 $("#div_error").removeClass("alert-success");
                 $("#div_error").addClass("alert-error");
-                $("#div_error").html(errorThrows);
+                $("#div_error").html("This email was not found");
             }
         });
         
