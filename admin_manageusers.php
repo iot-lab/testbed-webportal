@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-if(!$_SESSION['is_auth']) {
+if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
     header("location: http://devgrenoble.senslab.info/portal/");
     exit();
 }
@@ -56,9 +56,9 @@ if(!$_SESSION['is_auth']) {
                 var i = 0;
                 $.each(data, function(key,val) {
                     var btnState = "";
-		    var btnClass = "";
+                    var btnClass = "";
                     if(val.validate) { btnState = 'disabled="true"' }
-		    else{ btnClass="btn-primary" };
+                    else { btnClass="btn-primary" };
 
                     $("#tbl_users tbody").append(
                     '<tr data=' + i + '>'+
@@ -80,46 +80,46 @@ if(!$_SESSION['is_auth']) {
     
     function deleteUser(id) {
         
-	if(confirm("Delete user?"))
+        if(confirm("Delete user?"))
         {
-        	var userdelete = userjson[id];
-        	$.ajax({
-           	url: "http://devgrenoble.senslab.info/rest/admin/user",
-            	type: "DELETE",
-            	contentType: "application/json",
-            	data: JSON.stringify(userdelete),
-            	dataType: "text",
+            var userdelete = userjson[id];
+            $.ajax({
+            url: "http://devgrenoble.senslab.info/rest/admin/user",
+                type: "DELETE",
+                contentType: "application/json",
+                data: JSON.stringify(userdelete),
+                dataType: "text",
             
-            	success:function(data){
-                	$("tr[data="+id+"]").remove()    
-        	},
-            	error:function(XMLHttpRequest, textStatus, errorThrows){
-                	alert("error: " + errorThrows)
-            	}
-       		});
-	}
+                success:function(data){
+                    $("tr[data="+id+"]").remove()    
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrows){
+                    alert("error: " + errorThrows)
+                }
+            });
+        }
     };
     
     
     function validateUser(id) {
         
-	if(confirm("Validate user?"))
-	{
-        	var uservalidate = userjson[id];
-        	$.ajax({
-            	url: "http://devgrenoble.senslab.info/rest/admin/user?validate",
-            	type: "POST",
-          	dataType: "text",
-            	contentType: "application/json; charset=utf-8",
-            	data: JSON.stringify(uservalidate),
-            	success:function(data){
-                	$("tr[data="+id+"] .validate").attr("disabled","disabled")
-			$("tr[data="+id+"] .validate").removeClass("btn-primary");
-        	},
-            	error:function(XMLHttpRequest, textStatus, errorThrows){
-                	alert("error:" + errorThrows)
-            	}
-	})
+        if(confirm("Validate user?"))
+        {
+            var uservalidate = userjson[id];
+            $.ajax({
+                url: "http://devgrenoble.senslab.info/rest/admin/user?validate",
+                type: "POST",
+                dataType: "text",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(uservalidate),
+                success:function(data){
+                    $("tr[data="+id+"] .validate").attr("disabled","disabled")
+                    $("tr[data="+id+"] .validate").removeClass("btn-primary");
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrows){
+                    alert("error:" + errorThrows)
+                }
+            })
         };
     };
     
