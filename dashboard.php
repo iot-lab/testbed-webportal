@@ -33,14 +33,18 @@ if(!$_SESSION['is_auth']) {
                    style="width: 60%;"></div>
             </div>
             </p>
-          <p><i class="icon-user"></i> VM's Status: <button class="btn btn-success">ON</button></p>
+            <p><i class="icon-user"></i> VM's Status: <button class="btn btn-success">ON</button></p>
 
-           <p><a href="https://strasbourg.senslab.info/monika">View nodes status</a></p>
-           <p><a href="https://strasbourg.senslab.info/drawgantt">View Gantt chart</a></p>
+            <hr/>
+ 
+            <p><a href="#"><button class="btn btn-danger" onClick="new_password()">Get new password</button></a></p>
+            <p><a href="modsshkey.php">Modify SSH Key</a></p>
+
+            <hr/>
+
+            <p><a href="https://strasbourg.senslab.info/monika">View nodes status</a></p>
+            <p><a href="https://strasbourg.senslab.info/drawgantt">View Gantt chart</a></p>
            
-
-           <p><a href="#"><button class="btn btn-danger" onClick="new_password()">Get new password</button></a></p>
-
           </div>
       </div>
         
@@ -51,8 +55,6 @@ if(!$_SESSION['is_auth']) {
             var user = {
                 "login": "<?php echo $_SESSION["login"] ?>",
             };
-            
-            console.log(user);
             
             $.ajax({
             url: "http://devgrenoble.senslab.info/rest/admin/user?modpassword",
