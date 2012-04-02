@@ -61,7 +61,7 @@
             
           </div><!--/.nav-collapse -->
           
-          <?php if($_SESSION['is_auth']) { ?>
+          <?php if($_SESSION['is_auth'] && $_SESSION['is_admin']) { ?>
           <ul class="nav pull-right">
             <li class="divider-vertical"></li>
             <li class="dropdown">
