@@ -2,6 +2,11 @@
 
 session_start();
 
+if($_POST['login'] == "")
+{
+    header("HTTP/1.0 404 Not Found");
+    exit();
+}
 
 $url = 'http://localhost/rest/admin/user?bind';
 $method = 'POST';
