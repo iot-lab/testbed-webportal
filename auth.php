@@ -49,6 +49,7 @@ $code = curl_getinfo($handle, CURLINFO_HTTP_CODE);
 
 
 if($code == 200) {
+    $_SESSION['login'] = $_POST['login'];
     $_SESSION['is_auth'] = true;
 }
 else

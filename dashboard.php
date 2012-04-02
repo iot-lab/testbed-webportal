@@ -7,7 +7,6 @@ if(!$_SESSION['is_auth']) {
 
 ?>
 
-
 <?php include("header.php") ?>
 
     <div class="container">
@@ -40,11 +39,40 @@ if(!$_SESSION['is_auth']) {
            <p><a href="https://strasbourg.senslab.info/drawgantt">View Gantt chart</a></p>
            
 
+           <p><a href="#"><button class="btn btn-danger" onClick="new_password()">Get new password</button></a></p>
+
           </div>
       </div>
         
+        <script type="text/javascript">
+        
+        
+        function new_password() {
+            var user = {
+                "login": "<?php echo $_SESSION["login"] ?>",
+            };
+            
+            console.log(user);
+            
+            $.ajax({
+            url: "http://devgrenoble.senslab.info/rest/admin/user?modpassword",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(user),
+                dataType: "text",
+            
+                success:function(data){
+                    alert("ok");
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrows){
+                    alert("error: " + errorThrows);
+                }
+            });
+        }
+        
+        </script>
+        
         <?php include('footer.php') ?>
-
 
   </body>
 </html>
