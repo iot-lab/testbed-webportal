@@ -78,30 +78,7 @@ if(!$_SESSION['is_auth']) {
         $(document).ready(function(){
             
             $('#ssh_modal').modal('hide');
-            
-            function new_password() {
-                var user = {
-                    "login": "<?php echo $_SESSION["login"] ?>",
-                };
-                
-                $.ajax({
-                url: "http://devgrenoble.senslab.info/rest/admin/user?modpassword",
-                    type: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify(user),
-                    dataType: "text",
-                
-                    success:function(data){
-                        alert("ok");
-                    },
-                    error:function(XMLHttpRequest, textStatus, errorThrows){
-                        alert("error: " + errorThrows);
-                    }
-                });
-            }
-
-            
-
+        
             $('#form_modify').bind('submit', function(){
             
                 var user = {
@@ -133,6 +110,28 @@ if(!$_SESSION['is_auth']) {
             
             });
         });
+        
+        function new_password() {
+            var user = {
+                "login": "<?php echo $_SESSION["login"] ?>",
+            };
+            
+            $.ajax({
+            url: "http://devgrenoble.senslab.info/rest/admin/user?modpassword",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(user),
+                dataType: "text",
+            
+                success:function(data){
+                    alert("ok");
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrows){
+                    alert("error: " + errorThrows);
+                }
+            });
+        }
+        
     </script>
 
   </body>
