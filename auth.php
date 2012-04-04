@@ -59,6 +59,7 @@ if($code == 200) {
 }
 else
 {
+    echo $code . " - " . $response;
     header("HTTP/1.0 404 Not Found");
     exit();
 }

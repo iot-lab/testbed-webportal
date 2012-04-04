@@ -33,12 +33,12 @@ if(!$_SESSION['is_auth']) {
                    style="width: 60%;"></div>
             </div>
             </p>
-            <p><i class="icon-user"></i> VM's Status: <button class="btn btn-success">ON</button></p>
+            <!-- <p><i class="icon-user"></i> VM's Status: <button class="btn btn-success">ON</button></p> -->
 
             <hr/>
  
             <p><a href="#"><button class="btn btn-danger" onClick="new_password()">Get new password</button></a></p>
-            <p><a href="modsshkey.php">Modify SSH Key</a></p>
+            <p><a data-toggle="modal" href="#ssh_modal">Modify SSH Key</a></p>
 
             <hr/>
 
@@ -48,33 +48,92 @@ if(!$_SESSION['is_auth']) {
           </div>
       </div>
         
-        <script type="text/javascript">
         
-        
-        function new_password() {
-            var user = {
-                "login": "<?php echo $_SESSION["login"] ?>",
-            };
-            
-            $.ajax({
-            url: "http://devgrenoble.senslab.info/rest/admin/user?modpassword",
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(user),
-                dataType: "text",
-            
-                success:function(data){
-                    alert("ok");
-                },
-                error:function(XMLHttpRequest, textStatus, errorThrows){
-                    alert("error: " + errorThrows);
-                }
-            });
-        }
-        
-        </script>
+        <div id="ssh_modal" class="modal hide fade">
+            <div class="modal-header">
+              <a class="close" data-dismiss="modal">×</a>
+              <h3>Modify SSH Key</h3>
+            </div>
+           <div class="modal-body">
+               <div class="alert alert-error" id="div_error" style="display:none"></div>
+               
+                <form class="well form-horizontal" id="form_modify">
+
+              <div class="control-group">
+                <label class="control-label" for="txt_ssh">SSH Key:</label>
+                <div class="controls">
+                    <textarea id="txt_ssh" class="input-xlarge" id="textarea" rows="3" required="required"></textarea>
+                </div>
+              </div>
+
+                <button id="btn_modify" class="btn btn-primary" type="submit">Modify</button>
+                </form>
+            </div>
+        </div>
         
         <?php include('footer.php') ?>
+
+    <script type="text/javascript">
+        
+        $(document).ready(function(){
+            
+            $('#ssh_modal').modal('hide');
+            
+            function new_password() {
+                var user = {
+                    "login": "<?php echo $_SESSION["login"] ?>",
+                };
+                
+                $.ajax({
+                url: "http://devgrenoble.senslab.info/rest/admin/user?modpassword",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(user),
+                    dataType: "text",
+                
+                    success:function(data){
+                        alert("ok");
+                    },
+                    error:function(XMLHttpRequest, textStatus, errorThrows){
+                        alert("error: " + errorThrows);
+                    }
+                });
+            }
+
+            
+
+            $('#form_modify').bind('submit', function(){
+            
+                var user = {
+                "login":"<?php echo $_SESSION['login']?>",
+                "sshPublicKey":$("#txt_ssh").val(),
+                };
+                
+                $.ajax({
+                    url: "http://devgrenoble.senslab.info/rest/admin/user?modsshkey",
+                    type: "POST",
+                    dataType: "text",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(user),
+                    success:function(data){
+                        $("#div_error").show();
+                        $("#div_error").removeClass("alert-error");
+                        $("#div_error").addClass("alert-success");
+                        $("#div_error").html("Your SSH Key was modify");
+                },
+                    error:function(XMLHttpRequest, textStatus, errorThrows){
+                        $("#div_error").show();
+                        $("#div_error").removeClass("alert-success");
+                        $("#div_error").addClass("alert-error");
+                        $("#div_error").html("Error");
+                    }
+                });
+                
+            return false;
+            
+            });
+        });
+    </script>
 
   </body>
 </html>
