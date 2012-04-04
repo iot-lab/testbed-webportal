@@ -37,7 +37,8 @@ if(!$_SESSION['is_auth']) {
 
             <hr/>
  
-            <p><a href="#"><button class="btn btn-danger" onClick="new_password()">Get new password</button></a></p>
+ 
+            <p><a data-toggle="modal" href="#password_modal">Modify Password</a></p>
             <p><a data-toggle="modal" href="#ssh_modal">Modify SSH Key</a></p>
 
             <hr/>
@@ -62,7 +63,7 @@ if(!$_SESSION['is_auth']) {
               <div class="control-group">
                 <label class="control-label" for="txt_ssh">SSH Key:</label>
                 <div class="controls">
-                    <textarea id="txt_ssh" class="input-xlarge" id="textarea" rows="3" required="required"></textarea>
+                    <textarea id="txt_ssh" class="input-xlarge" rows="3" required="required"></textarea>
                 </div>
               </div>
 
@@ -71,6 +72,32 @@ if(!$_SESSION['is_auth']) {
             </div>
         </div>
         
+        
+        <div id="password_modal" class="modal hide fade">
+            <div class="modal-header">
+              <a class="close" data-dismiss="modal">×</a>
+              <h3>Modify Password</h3>
+            </div>
+           <div class="modal-body">
+               <div class="alert alert-error" id="div_error_password" style="display:none"></div>
+               
+                <form class="well form-horizontal" id="form_modify_password">
+
+              <div class="control-group">
+                <label class="control-label" for="txt_password">New password:</label>
+                <div class="controls">
+                    <input id="txt_password" class="input-xlarge" type="password" required="required"/>
+                </div>
+              </div>
+
+                <button id="btn_modify_password" class="btn btn-primary" type="submit">Modify</button>
+                </form>
+            </div>
+        </div>        
+        
+        
+        
+        
         <?php include('footer.php') ?>
 
     <script type="text/javascript">
@@ -78,9 +105,10 @@ if(!$_SESSION['is_auth']) {
         $(document).ready(function(){
             
             $('#ssh_modal').modal('hide');
+            $('#password_modal').modal('hide');
         
+            /* Modify SSH Key */
             $('#form_modify').bind('submit', function(){
-            
                 var user = {
                 "login":"<?php echo $_SESSION['login']?>",
                 "sshPublicKey":$("#txt_ssh").val(),
@@ -109,28 +137,42 @@ if(!$_SESSION['is_auth']) {
             return false;
             
             });
-        });
-        
-        function new_password() {
-            var user = {
-                "login": "<?php echo $_SESSION["login"] ?>",
-            };
             
-            $.ajax({
-            url: "http://devgrenoble.senslab.info/rest/admin/user?modpassword",
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(user),
-                dataType: "text",
             
-                success:function(data){
-                    alert("ok");
+            /* Modify Password Key */
+            $('#form_modify_password').bind('submit', function(){
+            
+                var user = {
+                "login":"<?php echo $_SESSION['login']?>",
+                "password":$("#txt_password").val(),
+                };
+                
+                $.ajax({
+                    url: "http://devgrenoble.senslab.info/rest/admin/user?modpassword",
+                    type: "POST",
+                    dataType: "text",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(user),
+                    success:function(data){
+                        $("#div_error_password").show();
+                        $("#div_error_password").removeClass("alert-error");
+                        $("#div_error_password").addClass("alert-success");
+                        $("#div_error_password").html("Your Password was modify");
                 },
-                error:function(XMLHttpRequest, textStatus, errorThrows){
-                    alert("error: " + errorThrows);
-                }
+                    error:function(XMLHttpRequest, textStatus, errorThrows){
+                        $("#div_error_password").show();
+                        $("#div_error_password").removeClass("alert-success");
+                        $("#div_error_password").addClass("alert-error");
+                        $("#div_error_password").html("Error");
+                    }
+                });
+                
+            return false;
+            
             });
-        }
+            
+        });
+    
         
     </script>
 
