@@ -107,7 +107,7 @@ $(document).ready(function(){
         console.log(userregister);
         
         $.ajax({
-            url: "http://devgrenoble.senslab.info/rest/admin/user",
+            url: "http://devgrenoble.senslab.info/rest/users",
             type: "POST",
             dataType: "text",
             contentType: "application/json; charset=utf-8",

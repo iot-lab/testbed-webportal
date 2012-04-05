@@ -84,7 +84,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
         {
             var userdelete = userjson[id];
             $.ajax({
-            url: "http://devgrenoble.senslab.info/rest/admin/user",
+            url: "http://devgrenoble.senslab.info/rest/admin/users",
                 type: "DELETE",
                 contentType: "application/json",
                 data: JSON.stringify(userdelete),
@@ -107,7 +107,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
         {
             var uservalidate = userjson[id];
             $.ajax({
-                url: "http://devgrenoble.senslab.info/rest/admin/user?validate",
+                url: "http://devgrenoble.senslab.info/rest/admin/users?validate",
                 type: "POST",
                 dataType: "text",
                 contentType: "application/json; charset=utf-8",
