@@ -115,7 +115,7 @@ if(!$_SESSION['is_auth']) {
                 };
                 
                 $.ajax({
-                    url: "http://devgrenoble.senslab.info/rest/admin/user?modsshkey",
+                    url: "http://devgrenoble.senslab.info/rest/users?modsshkey",
                     type: "POST",
                     dataType: "text",
                     contentType: "application/json; charset=utf-8",
@@ -148,7 +148,7 @@ if(!$_SESSION['is_auth']) {
                 };
                 
                 $.ajax({
-                    url: "http://devgrenoble.senslab.info/rest/admin/user?modpassword",
+                    url: "http://devgrenoble.senslab.info/rest/users?modpassword",
                     type: "POST",
                     dataType: "text",
                     contentType: "application/json; charset=utf-8",

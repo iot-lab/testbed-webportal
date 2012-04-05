@@ -49,7 +49,7 @@ $(document).ready(function(){
         console.log(user);
         
         $.ajax({
-            url: "http://devgrenoble.senslab.info/rest/admin/user?resetpassword",
+            url: "http://devgrenoble.senslab.info/rest/users?resetpassword",
             type: "POST",
             dataType: "text",
             contentType: "application/json; charset=utf-8",
