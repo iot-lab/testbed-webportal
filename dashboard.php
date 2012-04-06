@@ -1,7 +1,7 @@
 <?php 
 session_start();
 if(!$_SESSION['is_auth']) {
-    header("location: http://devgrenoble.senslab.info/portal/");
+    header("location: .");
     exit();
 }
 

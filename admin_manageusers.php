@@ -2,7 +2,7 @@
 
 session_start();
 if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
-    header("location: http://devgrenoble.senslab.info/portal/");
+    header("location: .");
     exit();
 }
 
@@ -35,6 +35,27 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
 
       </div>
 
+        <div id="edit_modal" class="modal hide fade">
+            <div class="modal-header">
+              <a class="close" data-dismiss="modal">×</a>
+              <h3>Edit user</h3>
+            </div>
+           <div class="modal-body">
+               <div class="alert alert-error" id="div_error" style="display:none"></div>
+               
+                <form class="well form-horizontal" id="form_modify">
+
+              <div class="control-group">
+                <label class="control-label" for="txt_ssh">SSH Key:</label>
+                <div class="controls">
+                    <textarea id="txt_ssh" class="input-xlarge" rows="3" required="required"></textarea>
+                </div>
+              </div>
+
+                <button id="btn_modify" class="btn btn-primary" type="submit">Modify</button>
+                </form>
+            </div>
+        </div>
       <hr>
 
 <?php include('footer.php') ?>
@@ -46,6 +67,8 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
 
 
     $(document).ready(function(){
+
+            $('#edit_modal').modal('hide');
 
         $.ajax({
             url: "http://devgrenoble.senslab.info/rest/admin/users",
@@ -67,6 +90,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                     '<td>'+ val.lastName +'</td>'+
                     '<td><a href="mailto:' + val.email + '">' + val.email + '</a></td>'+
                     '<td><a href="#"><button class="btn ' + btnClass + ' validate "' + btnState + 'onClick="validateUser('+i+')">Validate</button></a> ' +
+                    '<a href="#"><button class="btn ' + btnClass + ' edit "' + btnState + 'onClick="editUser('+i+')">Validate</button></a> ' +
                     '<a href="#"><button class="btn btn-danger" onClick="deleteUser('+i+')">Delete</button></a></td>'
                     +'</tr>');
                     i++;

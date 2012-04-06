@@ -6,7 +6,7 @@ session_start();
 //$_SESSION['is_auth'] = true;
 
 if($_SESSION['is_auth']) {
-    header("location: http://devgrenoble.senslab.info/portal/dashboard.php");
+    header("location: dashboard.php");
     exit();
 }
 
@@ -52,14 +52,14 @@ $("#btn_submit").click(function(){
         console.log(userlogin);
     
         $.ajax({
-            url: "http://devgrenoble.senslab.info/portal/auth.php",
+            url: "auth.php",
             //url: "http://devgrenoble.senslab.info/rest/admin/user?bind",
             type: "POST",
             //data: JSON.stringify(userlogin),
             data: {"login":$("#txt_login").val(),"password":$("#txt_password").val()},
             success:function(data){
                 // similar behavior as an HTTP redirect
-                window.location.replace("http://devgrenoble.senslab.info/portal");
+                window.location.replace(".");
                 // similar behavior as clicking on a link
                 //window.location.href = "http://devgrenoble.senslab.info/portal";
                 

@@ -8,7 +8,7 @@ if($_POST['login'] == "")
     exit();
 }
 
-$url = 'http://localhost/rest/users?bind';
+$url = 'http://devgrenoble.senslab.info/rest/users?bind';
 $method = 'POST';
 
 # headers and data (this is API dependent, some uses XML)
@@ -67,7 +67,7 @@ else
 
 /* Test isAdmin */
 
-$url = 'http://localhost/rest/users?isadmin';
+$url = 'http://devgrenoble.senslab.info/rest/users?isadmin';
 
 $data = json_encode(array('login'=> $_POST['login']));
 

@@ -36,26 +36,26 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="/portal">Senslab</a>
+          <a class="brand" href=".">Senslab</a>
           <div class="nav-collapse">
               
 
             <?php if(!$_SESSION['is_auth']) { ?>
             <ul class="nav">
-            <li><a href="/portal/">Login</a></li>
+            <li><a href=".">Login</a></li>
             </ul> 
             <?php } ?> 
             
             <?php if($_SESSION['is_auth']) { ?>
             <ul class="nav">
-            <li><a href="/portal/logout.php">Logout</a></li>
+            <li><a href="logout.php">Logout</a></li>
             </ul> 
             <?php } ?>
             
             
             <?php if(!$_SESSION['is_auth']) { ?>
             <ul class="nav">
-            <li><a href="/portal/signup.php">Sign up</a></li>
+            <li><a href="signup.php">Sign up</a></li>
             </ul> 
             <?php } ?>  
             
@@ -67,7 +67,7 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="/portal/admin_manageusers.php">Users</a></li>
+                <li><a href="admin_manageusers.php">Users</a></li>
               </ul>
             </li>
           </ul>

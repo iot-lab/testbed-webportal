@@ -113,7 +113,7 @@ $(document).ready(function(){
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(userregister),
             success:function(data){
-                 window.location.replace("http://devgrenoble.senslab.info/portal");
+                 window.location.replace(".");
         },
             error:function(XMLHttpRequest, textStatus, errorThrows){
                 if(XMLHttpRequest.status == 409)
