@@ -68,6 +68,24 @@
             </div>
           </div>
 
+
+
+          <div class="control-group" id="cg_captcha">
+            <label class="control-label" for="txt_motivation">Anti-spam :</label>
+            <div class="controls">
+                <input id="captcha" class="input-xlarge" name="captcha"  />
+                <br/>
+                <br/>
+                    <a href="#" onclick="
+                    document.getElementById('captcha-img').src='captcha/captcha.php?'+Math.random();
+                    document.getElementById('captcha').focus();"
+                    id="change-image" title="Click to change text">
+                    <img style="border:solid 1px" src="captcha/captcha.php" id="captcha-img" /></a>
+                
+            </div>
+          </div>
+
+
             <button id="btn_register" class="btn btn-primary" type="submit">Submit</button>
 
             </form>
@@ -92,6 +110,7 @@ $(document).ready(function(){
     $('#signup_form').bind('submit', function(){
     
         var userregister = {
+        //'login':'test2',
         "firstName":$("#txt_firstname").val(),
         "lastName":$("#txt_lastname").val(),
         "email":$("#txt_email").val(),
@@ -101,17 +120,20 @@ $(document).ready(function(){
         "sshPublicKey":$("#txt_sshkey").val(),
         "motivations":$("#txt_motivation").val(),
         "password":$("#txt_password").val(),
-        "validate":true
+        "validate":true,
+        "captcha":$("#captcha").val(),
         };
         
         console.log(userregister);
         
         $.ajax({
-            url: "http://devgrenoble.senslab.info/rest/users",
+            //url: "http://devgrenoble.senslab.info/rest/users",
+            url: "captcha.php",
             type: "POST",
-            dataType: "text",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(userregister),
+            //dataType: "text",
+            //contentType: "application/json; charset=utf-8",
+            //data: JSON.stringify(userregister),
+            data: userregister,
             success:function(data){
                  window.location.replace(".");
         },
@@ -122,6 +144,15 @@ $(document).ready(function(){
                     $("#div_error").removeClass("alert-success");
                     $("#div_error").addClass("alert-error");
                     $("#div_error").html("This user is already registered");
+                }
+                else if(XMLHttpRequest.status == 403)
+                {
+                    $("#div_error").show();
+                    $("#div_error").removeClass("alert-success");
+                    $("#div_error").addClass("alert-error");
+                    $("#div_error").html("Error");
+                    $("#cg_captcha").addClass("error");
+                    $("#captcha").focus();
                 }
                 else {
                     $("#div_error").show();
