@@ -24,7 +24,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                         <th>FirstName</th>
                         <th>LastName</th>
                         <th>Email</th>
-                        <th>Validate</th>
+                        <th>Options</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,8 +37,8 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
 
         <div id="edit_modal" class="modal hide fade">
             <div class="modal-header">
-              <a class="close" data-dismiss="modal">×</a>
-              <h3>Edit user</h3>
+              <a class="close" data-dismiss="modal">X</a>
+              <h3>Edit user <span id="s_login"></span></h3>
             </div>
            <div class="modal-body">
                <div class="alert alert-error" id="div_error" style="display:none"></div>
@@ -46,9 +46,9 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                 <form class="well form-horizontal" id="form_modify">
 
               <div class="control-group">
-                <label class="control-label" for="txt_ssh">SSH Key:</label>
+                <label class="control-label" for="txt_sshkey">SSH Key:</label>
                 <div class="controls">
-                    <textarea id="txt_ssh" class="input-xlarge" rows="3" required="required"></textarea>
+                    <textarea id="txt_sshkey" class="input-xlarge" rows="3" required="required"></textarea>
                 </div>
               </div>
 
@@ -56,6 +56,8 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                 </form>
             </div>
         </div>
+
+
       <hr>
 
 <?php include('footer.php') ?>
@@ -64,12 +66,13 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
     <script type="text/javascript">
 
     var userjson = {};
-
+    var useredit = {};
 
     $(document).ready(function(){
+            
+        $('#edit_modal').modal('hide');
 
-            $('#edit_modal').modal('hide');
-
+        //load data
         $.ajax({
             url: "http://devgrenoble.senslab.info/rest/admin/users",
             type: "GET",
@@ -90,11 +93,21 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                     '<td>'+ val.lastName +'</td>'+
                     '<td><a href="mailto:' + val.email + '">' + val.email + '</a></td>'+
                     '<td><a href="#"><button class="btn ' + btnClass + ' validate "' + btnState + 'onClick="validateUser('+i+')">Validate</button></a> ' +
-                    '<a href="#"><button class="btn ' + btnClass + ' edit "' + btnState + 'onClick="editUser('+i+')">Validate</button></a> ' +
+                    '<a href="#" class="btn btn-edit" data-toggle="modal" data="'+i+'">Edit</a> ' +
                     '<a href="#"><button class="btn btn-danger" onClick="deleteUser('+i+')">Delete</button></a></td>'
                     +'</tr>');
                     i++;
                 });
+
+                //action on Edit click button
+                $(".btn-edit").click(function(){
+                    var userid = $(this).attr("data");
+                    useredit = userjson[userid];
+                    $('#s_login').html(useredit.login);
+                    $('#txt_sshkey').html(useredit.sshPublicKey);
+                    $("#edit_modal").modal('show');
+                });
+
             },
             error:function(XMLHttpRequest, textStatus, errorThrows){
                 alert("error: " + errorThrows)
@@ -102,6 +115,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
         });
     });
     
+    //delete a user
     function deleteUser(id) {
         
         if(confirm("Delete user?"))
@@ -125,6 +139,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
     };
     
     
+    //validate a user
     function validateUser(id) {
         
         if(confirm("Validate user?"))
@@ -146,6 +161,36 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
             })
         };
     };
+    
+    
+    //save edit modal modifications
+    $('#form_modify').bind('submit', function(){
+    
+        var usermodify = {
+        "login":useredit.login,
+        "sshPublicKey":$("#txt_sshkey").val(),
+        };
+        
+        console.log(usermodify);
+        
+        $.ajax({
+            url: "http://devgrenoble.senslab.info/rest/users",
+            type: "POST",
+            dataType: "text",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(usermodify),
+            success:function(data){
+                alert("Ok")
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrows){
+                alert("Error")
+            }
+        });
+        
+    return false;
+    
+    });
+    
     
     </script>
 
