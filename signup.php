@@ -98,10 +98,7 @@
 <?php include('footer.php') ?>
 
 
-
-    
-
-    <script type="text/javascript">
+<script type="text/javascript">
 
 $(document).ready(function(){
 
@@ -110,7 +107,6 @@ $(document).ready(function(){
     $('#signup_form').bind('submit', function(){
     
         var userregister = {
-        //'login':'test2',
         "firstName":$("#txt_firstname").val(),
         "lastName":$("#txt_lastname").val(),
         "email":$("#txt_email").val(),
@@ -169,7 +165,7 @@ $(document).ready(function(){
 
     
  });
-    </script>
+</script>
 
   </body>
 </html>
