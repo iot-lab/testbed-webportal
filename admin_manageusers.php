@@ -11,8 +11,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
 <?php include("header.php") ?>
 
     <div class="container">
-
-      <!-- Example row of columns -->
+        
       <div class="row">
         <div class="span12">
           <h2>Users</h2>
@@ -30,7 +29,6 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                 <tbody>
                 </tbody>
                 </table>
-
         </div>
 
       </div>
@@ -46,15 +44,75 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                 <form class="well form-horizontal" id="form_modify">
 
               <div class="control-group">
+                <label class="control-label" for="txt_firstname">First Name:</label>
+                <div class="controls">
+                    <input id="txt_firstname" type="text" class="input-xlarge" required="required" disabled="disabled"/>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label" for="txt_lastname">Last Name:</label>
+                <div class="controls">
+                    <input id="txt_lastname" type="text" class="input-xlarge" required="required" disabled="disabled"/>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label" for="txt_login">Login:</label>
+                <div class="controls">
+                    <input id="txt_login" type="text" class="input-xlarge" required="required" disabled="disabled"/>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label" for="txt_email">Email:</label>
+                <div class="controls">
+                    <input id="txt_email" type="email" class="input-xlarge" required="required" disabled="disabled"/>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label" for="txt_structure">Structure:</label>
+                <div class="controls">
+                    <input id="txt_structure" type="text" class="input-xlarge" required="required" disabled="disabled"/>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label" for="txt_city">City:</label>
+                <div class="controls">
+                    <input id="txt_city" type="text" class="input-xlarge" required="required" disabled="disabled"/>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label" for="txt_country">Country:</label>
+                <div class="controls">
+                    <input id="txt_country" type="text" class="input-xlarge" required="required" disabled="disabled"/>
+                </div>
+              </div>
+
+              <div class="control-group">
                 <label class="control-label" for="txt_sshkey">SSH Key:</label>
                 <div class="controls">
                     <textarea id="txt_sshkey" class="input-xlarge" rows="3" required="required"></textarea>
                 </div>
               </div>
-
-                <button id="btn_modify" class="btn btn-primary" type="submit">Modify</button>
+              
+               <div class="control-group">
+                <label class="control-label" for="txt_motivation">Motivation:</label>
+                <div class="controls">
+                    <textarea id="txt_motivation" class="input-xlarge" rows="3" required="required"></textarea>
+                </div>
+              </div>
+              
+            </div>
+            
+            <div class="modal-footer">
+                   <button id="btn_modify" class="btn btn-primary" type="submit">Modify</button>
                 </form>
             </div>
+            
         </div>
 
 
@@ -92,7 +150,6 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                     else { 
                         btnIsAdminState = '';
                     }
-                   
 
                     $("#tbl_users tbody").append(
                     '<tr data=' + i + '>'+
@@ -113,7 +170,15 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                     var userid = $(this).attr("data");
                     useredit = userjson[userid];
                     $('#s_login').html(useredit.login);
-                    $('#txt_sshkey').html(useredit.sshPublicKey);
+                    $('#txt_sshkey').val(useredit.sshPublicKey);
+                    $('#txt_firstname').val(useredit.firstName);
+                    $('#txt_lastname').val(useredit.lastName);
+                    $('#txt_login').val(useredit.login);
+                    $('#txt_email').val(useredit.email);
+                    $('#txt_structure').val(useredit.structure);
+                    $('#txt_city').val(useredit.city);
+                    $('#txt_country').val(useredit.country);
+                    $('#txt_motivation').val(useredit.motivations);
                     $("#edit_modal").modal('show');
                 });
 
@@ -204,14 +269,14 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
     //validate a user
     function setAdmin(id) {
         
-	var state = $("tr[data="+id+"] .btn-admin").attr("data-state");
+        var state = $("tr[data="+id+"] .btn-admin").attr("data-state");
 
         if(state == "true") {
             url = "http://devgrenoble.senslab.info/rest/admin/users?deladmin";
-	}
+        }
         else {
             url = "http://devgrenoble.senslab.info/rest/admin/users?addadmin";
-    	}
+        }
 
         if(confirm("Change Admin state?"))
         {
@@ -223,14 +288,14 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(user),
                 success:function(data){       
-                        if(state == "true") {
-                            $("tr[data="+id+"] .btn-admin").removeClass("btn-warning");
-			    $("tr[data="+id+"] .btn-admin").attr("data-state","false");
-			}
-                        else {
-                            $("tr[data="+id+"] .btn-admin").addClass("btn-warning");
-			    $("tr[data="+id+"] .btn-admin").attr("data-state","true");
-			}
+                    if(state == "true") {
+                        $("tr[data="+id+"] .btn-admin").removeClass("btn-warning");
+                        $("tr[data="+id+"] .btn-admin").attr("data-state","false");
+                    }
+                    else {
+                        $("tr[data="+id+"] .btn-admin").addClass("btn-warning");
+                        $("tr[data="+id+"] .btn-admin").attr("data-state","true");
+                    }
                 },
                 error:function(XMLHttpRequest, textStatus, errorThrows){
                     alert("error:" + errorThrows)
