@@ -204,9 +204,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
     //validate a user
     function setAdmin(id) {
         
-var state = $("tr[data="+id+"] .btn-admin").attr("data-state");
-
-console.log(state);
+	var state = $("tr[data="+id+"] .btn-admin").attr("data-state");
 
         if(state == "true") {
             url = "http://devgrenoble.senslab.info/rest/admin/users?deladmin";
