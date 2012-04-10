@@ -85,6 +85,14 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                     var btnClass = "";
                     if(val.validate) { btnState = 'disabled="true"' }
                     else { btnClass="btn-primary" };
+                    
+                    if(val.admin) {
+                        btnIsAdminState = 'btn-warning';
+                    }
+                    else { 
+                        btnIsAdminState = '';
+                    }
+                   
 
                     $("#tbl_users tbody").append(
                     '<tr data=' + i + '>'+
@@ -94,6 +102,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                     '<td><a href="mailto:' + val.email + '">' + val.email + '</a></td>'+
                     '<td><a href="#"><button class="btn ' + btnClass + ' validate "' + btnState + 'onClick="validateUser('+i+')">Validate</button></a> ' +
                     '<a href="#" class="btn btn-edit" data-toggle="modal" data="'+i+'">Edit</a> ' +
+                    '<a href="#" class="btn btn-admin '+btnIsAdminState+'" data="'+i+'" onClick="setAdmin('+i+','+val.admin+')">Admin</a> ' +
                     '<a href="#"><button class="btn btn-danger" onClick="deleteUser('+i+')">Delete</button></a></td>'
                     +'</tr>');
                     i++;
@@ -190,6 +199,36 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
     return false;
     
     });
+    
+    
+    //validate a user
+    function setAdmin(id,state) {
+        
+        if(state)
+            url = "http://devgrenoble.senslab.info/rest/admin/users?deladmin";
+        else
+            url = "http://devgrenoble.senslab.info/rest/admin/users?addadmin";
+    
+        if(confirm("Change Admin state?"))
+        {
+            var uservalidate = userjson[id];
+            $.ajax({
+                url: url,
+                type: "POST",
+                dataType: "text",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(uservalidate),
+                success:function(data){
+                        alert("ok");
+                        //$("tr[data="+id+"] .validate").attr("disabled","disabled")
+                        //$("tr[data="+id+"] .validate").removeClass("btn-primary");
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrows){
+                    alert("error:" + errorThrows)
+                }
+            })
+        };
+    };    
     
     
     </script>

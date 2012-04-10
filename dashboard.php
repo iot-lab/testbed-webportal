@@ -84,11 +84,27 @@ if(!$_SESSION['is_auth']) {
                 <form class="well form-horizontal" id="form_modify_password">
 
               <div class="control-group">
-                <label class="control-label" for="txt_password">New password:</label>
+                <label class="control-label" for="txt_current_password">Current password:</label>
                 <div class="controls">
-                    <input id="txt_password" class="input-xlarge" type="password" required="required"/>
+                    <input id="txt_current_password" class="input-xlarge" type="password" required="required"/>
                 </div>
               </div>
+
+              <div class="control-group">
+                <label class="control-label" for="txt_new_password">New password:</label>
+                <div class="controls">
+                    <input id="txt_new_password" class="input-xlarge" type="password" required="required"/>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label" for="txt_cnew_password">Confirm New password:</label>
+                <div class="controls">
+                    <input id="txt_cnew_password" class="input-xlarge" type="password" required="required"/>
+                </div>
+              </div>
+              
+              
 
                 <button id="btn_modify_password" class="btn btn-primary" type="submit">Modify</button>
                 </form>
@@ -103,6 +119,22 @@ if(!$_SESSION['is_auth']) {
     <script type="text/javascript">
         
         $(document).ready(function(){
+            
+            /* Retrieve current sshkey */
+            $.ajax({
+                url: "http://devgrenoble.senslab.info/rest/users?sshkey",
+                type: "GET",
+                //contentType: "application/json",
+                //data: JSON.stringify({"login":"<?php echo $_SESSION['login'] ?>"}),
+                data: {"login":"<?php echo $_SESSION['login'] ?>"},
+                dataType: "text",
+                success:function(data){
+                    $("#txt_ssh").val(data);
+            },
+                error:function(XMLHttpRequest, textStatus, errorThrows){
+                    alert("error" + textStatus);
+                }
+            });
             
             $('#ssh_modal').modal('hide');
             $('#password_modal').modal('hide');
@@ -142,9 +174,20 @@ if(!$_SESSION['is_auth']) {
             /* Modify Password Key */
             $('#form_modify_password').bind('submit', function(){
             
+                if($("#txt_new_password").val() != $("#txt_cnew_password").val()) 
+                {
+                    $("#div_error_password").show();
+                    $("#div_error_password").removeClass("alert-success");
+                    $("#div_error_password").addClass("alert-error");
+                    $("#div_error_password").html("Please confirm password");
+                    return false;
+                }
+            
+            
                 var user = {
                 "login":"<?php echo $_SESSION['login']?>",
-                "password":$("#txt_password").val(),
+                "newPassword":$("#txt_new_password").val(),
+                "oldPassword":$("#txt_current_password").val(),
                 };
                 
                 $.ajax({

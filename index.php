@@ -45,6 +45,7 @@ if($_SESSION['is_auth']) {
     var userjson = {};
 
 
+
 $("#btn_submit").click(function(){
     
         var userlogin = {"login":$("#txt_login").val(),"password":$("#txt_password").val()};
@@ -59,7 +60,7 @@ $("#btn_submit").click(function(){
             data: {"login":$("#txt_login").val(),"password":$("#txt_password").val()},
             success:function(data){
                 // similar behavior as an HTTP redirect
-                window.location.replace(".");
+                window.location.replace("http://devgrenoble.senslab.info/portal");
                 // similar behavior as clicking on a link
                 //window.location.href = "http://devgrenoble.senslab.info/portal";
                 
