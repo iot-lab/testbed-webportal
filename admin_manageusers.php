@@ -211,17 +211,18 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
     
         if(confirm("Change Admin state?"))
         {
-            var uservalidate = userjson[id];
+            var user = userjson[id];
             $.ajax({
                 url: url,
                 type: "POST",
                 dataType: "text",
                 contentType: "application/json; charset=utf-8",
-                data: JSON.stringify(uservalidate),
-                success:function(data){
-                        alert("ok");
-                        //$("tr[data="+id+"] .validate").attr("disabled","disabled")
-                        //$("tr[data="+id+"] .validate").removeClass("btn-primary");
+                data: JSON.stringify(user),
+                success:function(data){       
+                        if(state)
+                            $("tr[data="+id+"] .btn-admin").removeClass("btn-warning");
+                        else
+                            $("tr[data="+id+"] .btn-admin").addClass("btn-warning");
                 },
                 error:function(XMLHttpRequest, textStatus, errorThrows){
                     alert("error:" + errorThrows)
