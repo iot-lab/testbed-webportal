@@ -102,7 +102,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                     '<td><a href="mailto:' + val.email + '">' + val.email + '</a></td>'+
                     '<td><a href="#"><button class="btn ' + btnClass + ' validate "' + btnState + 'onClick="validateUser('+i+')">Validate</button></a> ' +
                     '<a href="#" class="btn btn-edit" data-toggle="modal" data="'+i+'">Edit</a> ' +
-                    '<a href="#" class="btn btn-admin '+btnIsAdminState+'" data="'+i+'" onClick="setAdmin('+i+','+val.admin+')">Admin</a> ' +
+                    '<a href="#" class="btn btn-admin '+btnIsAdminState+'" data="'+i+'" data-state="'+val.admin+'" onClick="setAdmin('+i+')">Admin</a> ' +
                     '<a href="#"><button class="btn btn-danger" onClick="deleteUser('+i+')">Delete</button></a></td>'
                     +'</tr>');
                     i++;
@@ -202,13 +202,19 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
     
     
     //validate a user
-    function setAdmin(id,state) {
+    function setAdmin(id) {
         
-        if(state)
+var state = $("tr[data="+id+"] .btn-admin").attr("data-state");
+
+console.log(state);
+
+        if(state == "true") {
             url = "http://devgrenoble.senslab.info/rest/admin/users?deladmin";
-        else
+	}
+        else {
             url = "http://devgrenoble.senslab.info/rest/admin/users?addadmin";
-    
+    	}
+
         if(confirm("Change Admin state?"))
         {
             var user = userjson[id];
@@ -219,10 +225,14 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(user),
                 success:function(data){       
-                        if(state)
+                        if(state == "true") {
                             $("tr[data="+id+"] .btn-admin").removeClass("btn-warning");
-                        else
+			    $("tr[data="+id+"] .btn-admin").attr("data-state","false");
+			}
+                        else {
                             $("tr[data="+id+"] .btn-admin").addClass("btn-warning");
+			    $("tr[data="+id+"] .btn-admin").attr("data-state","true");
+			}
                 },
                 error:function(XMLHttpRequest, textStatus, errorThrows){
                     alert("error:" + errorThrows)
