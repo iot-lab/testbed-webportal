@@ -183,7 +183,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
         console.log(usermodify);
         
         $.ajax({
-            url: "http://devgrenoble.senslab.info/rest/users",
+            url: "http://devgrenoble.senslab.info/rest/users?edituser",
             type: "POST",
             dataType: "text",
             contentType: "application/json; charset=utf-8",
