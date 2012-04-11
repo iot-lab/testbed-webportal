@@ -124,20 +124,20 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
 
     <script type="text/javascript">
 
-    var userjson = {};
-    var useredit = {};
+    var users = {};
+    var selectedUser = {};
 
-    $(document).ready(function(){
-            
+    $(document).ready(function()
+    {
         $('#edit_modal').modal('hide');
 
-        //load data
+        /* Load data in the table */
         $.ajax({
             url: "http://devgrenoble.senslab.info/rest/admin/users",
             type: "GET",
             dataType: "json",
             success:function(data){
-                userjson = data;
+                users = data;
                 var i = 0;
                 $.each(data, function(key,val) {
                     var btnState = "";
@@ -152,37 +152,37 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                         btnIsAdminState = '';
                     }
 
+                    //user row
                     $("#tbl_users tbody").append(
                     '<tr data=' + i + '>'+
                     '<td>' + val.login + '</td>'+
                     '<td>' + val.firstName + '</td>'+
                     '<td>'+ val.lastName +'</td>'+
                     '<td><a href="mailto:' + val.email + '">' + val.email + '</a></td>'+
-                    '<td><a href="#"><button class="btn ' + btnClass + ' validate "' + btnState + 'onClick="validateUser('+i+')">Validate</button></a> ' +
+                    '<td><a href="#"><button class="btn ' + btnClass + ' validate " data="'+i+'" ' + btnState + 'onClick="validateUser('+i+')">Validate</button></a> ' +
                     '<a href="#" class="btn btn-edit" data-toggle="modal" data="'+i+'">Edit</a> ' +
                     '<a href="#" class="btn btn-admin '+btnIsAdminState+'" data="'+i+'" data-state="'+val.admin+'" onClick="setAdmin('+i+')">Admin</a> ' +
-                    '<a href="#"><button class="btn btn-danger" onClick="deleteUser('+i+')">Delete</button></a></td>'
+                    '<a href="#"><button class="btn btn-danger" data="'+i+'" onClick="deleteUser('+i+')">Delete</button></a></td>'
                     +'</tr>');
                     i++;
                 });
 
-                //action on Edit click button
+                //action on edit button: load data on modal form
                 $(".btn-edit").click(function(){
-                    var userid = $(this).attr("data");
-                    useredit = userjson[userid];
-                    $('#s_login').html(useredit.login);
-                    $('#txt_sshkey').val(useredit.sshPublicKey);
-                    $('#txt_firstname').val(useredit.firstName);
-                    $('#txt_lastname').val(useredit.lastName);
-                    $('#txt_login').val(useredit.login);
-                    $('#txt_email').val(useredit.email);
-                    $('#txt_structure').val(useredit.structure);
-                    $('#txt_city').val(useredit.city);
-                    $('#txt_country').val(useredit.country);
-                    $('#txt_motivation').val(useredit.motivations);
+                    var userId = $(this).attr("data");
+                    selectedUser = users[userId];
+                    $('#s_login').html(selectedUser.login);
+                    $('#txt_sshkey').val(selectedUser.sshPublicKey);
+                    $('#txt_firstname').val(selectedUser.firstName);
+                    $('#txt_lastname').val(selectedUser.lastName);
+                    $('#txt_login').val(selectedUser.login);
+                    $('#txt_email').val(selectedUser.email);
+                    $('#txt_structure').val(selectedUser.structure);
+                    $('#txt_city').val(selectedUser.city);
+                    $('#txt_country').val(selectedUser.country);
+                    $('#txt_motivation').val(selectedUser.motivations);
                     $("#edit_modal").modal('show');
                 });
-
             },
             error:function(XMLHttpRequest, textStatus, errorThrows){
                 alert("error: " + errorThrows)
@@ -190,12 +190,12 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
         });
     });
     
-    //delete a user
-    function deleteUser(id) {
-        
+    /* Delete a user */
+    function deleteUser(id) 
+    {
         if(confirm("Delete user?"))
         {
-            var userdelete = userjson[id];
+            var userdelete = users[id];
             $.ajax({
             url: "http://devgrenoble.senslab.info/rest/admin/users",
                 type: "DELETE",
@@ -214,14 +214,17 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
     };
     
     
-    //validate a user
-    function validateUser(id) {
-        
+    /* Validate a user */
+    function validateUser(id) 
+    {
         if(confirm("Validate user?"))
         {
-            var uservalidate = userjson[id];
+            //validate field
+            var uservalidate = users[id];
+            uservalidate.validate = true;
+            
             $.ajax({
-                url: "http://devgrenoble.senslab.info/rest/admin/users?validate",
+                url: "http://devgrenoble.senslab.info/rest/admin/users?edituser",
                 type: "POST",
                 dataType: "text",
                 contentType: "application/json; charset=utf-8",
@@ -238,26 +241,26 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
     };
     
     
-    //save edit modal modifications
-    $('#form_modify').bind('submit', function(){
-    
-
-        useredit.firstName = $("#txt_firstname").val();
-        useredit.lastName = $("#txt_lastname").val();
-        useredit.login = $("#txt_login").val();
-        useredit.email = $("#txt_email").val();
-        useredit.sshPublicKey = $("#txt_sshkey").val();
-        useredit.motivations = $("#txt_motivation").val();
-        useredit.structure = $("#txt_structure").val();
-        useredit.city = $("#txt_city").val();
-        useredit.country = $("#txt_country").val();
+    /* Save values from edit modal */
+    $('#form_modify').bind('submit', function()
+    {
+        //change all value
+        selectedUser.firstName = $("#txt_firstname").val();
+        selectedUser.lastName = $("#txt_lastname").val();
+        selectedUser.login = $("#txt_login").val();
+        selectedUser.email = $("#txt_email").val();
+        selectedUser.sshPublicKey = $("#txt_sshkey").val();
+        selectedUser.motivations = $("#txt_motivation").val();
+        selectedUser.structure = $("#txt_structure").val();
+        selectedUser.city = $("#txt_city").val();
+        selectedUser.country = $("#txt_country").val();
         
         $.ajax({
             url: "http://devgrenoble.senslab.info/rest/admin/users?edituser",
             type: "POST",
             dataType: "text",
             contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(useredit),
+            data: JSON.stringify(selectedUser),
             success:function(data){
                 $("#edit_modal").modal('hide');
                 $("#div_error").html("");
@@ -275,28 +278,25 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
     });
     
     
-    //validate a user
-    function setAdmin(id) {
-        
+    /* Validate a user */
+    function setAdmin(id) 
+    {
         var state = $("tr[data="+id+"] .btn-admin").attr("data-state");
-
-        if(state == "true") {
-            url = "http://devgrenoble.senslab.info/rest/admin/users?deladmin";
-        }
-        else {
-            url = "http://devgrenoble.senslab.info/rest/admin/users?addadmin";
-        }
 
         if(confirm("Change Admin state?"))
         {
-            var user = userjson[id];
+            var user = users[id];
+            
+            //toggle admin value
+            user.admin = !user.admin;
+            
             $.ajax({
-                url: url,
+                url: "http://devgrenoble.senslab.info/rest/admin/users?edituser",
                 type: "POST",
                 dataType: "text",
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(user),
-                success:function(data){       
+                success:function(data){
                     if(state == "true") {
                         $("tr[data="+id+"] .btn-admin").removeClass("btn-warning");
                         $("tr[data="+id+"] .btn-admin").attr("data-state","false");
