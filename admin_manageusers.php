@@ -245,7 +245,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
         useredit.firstName = $("#txt_firstname").val();
         useredit.lastName = $("#txt_lastname").val();
         useredit.login = $("#txt_login").val();
-        useredit.mail = $("#txt_mail").val();
+        useredit.email = $("#txt_email").val();
         useredit.sshPublicKey = $("#txt_sshkey").val();
         useredit.motivations = $("#txt_motivation").val();
         useredit.structure = $("#txt_structure").val();
