@@ -37,6 +37,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
             <div class="modal-header">
               <a class="close" data-dismiss="modal">X</a>
               <h3>Edit user <span id="s_login"></span></h3>
+              
             </div>
            <div class="modal-body">
                <div class="alert alert-error" id="div_error" style="display:none"></div>
@@ -46,14 +47,14 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
               <div class="control-group">
                 <label class="control-label" for="txt_firstname">First Name:</label>
                 <div class="controls">
-                    <input id="txt_firstname" type="text" class="input-xlarge" required="required" disabled="disabled"/>
+                    <input id="txt_firstname" type="text" class="input-xlarge" required="required"/>
                 </div>
               </div>
 
               <div class="control-group">
                 <label class="control-label" for="txt_lastname">Last Name:</label>
                 <div class="controls">
-                    <input id="txt_lastname" type="text" class="input-xlarge" required="required" disabled="disabled"/>
+                    <input id="txt_lastname" type="text" class="input-xlarge" required="required"/>
                 </div>
               </div>
 
@@ -67,28 +68,28 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
               <div class="control-group">
                 <label class="control-label" for="txt_email">Email:</label>
                 <div class="controls">
-                    <input id="txt_email" type="email" class="input-xlarge" required="required" disabled="disabled"/>
+                    <input id="txt_email" type="email" class="input-xlarge" required="required"/>
                 </div>
               </div>
 
               <div class="control-group">
                 <label class="control-label" for="txt_structure">Structure:</label>
                 <div class="controls">
-                    <input id="txt_structure" type="text" class="input-xlarge" required="required" disabled="disabled"/>
+                    <input id="txt_structure" type="text" class="input-xlarge" required="required" />
                 </div>
               </div>
 
               <div class="control-group">
                 <label class="control-label" for="txt_city">City:</label>
                 <div class="controls">
-                    <input id="txt_city" type="text" class="input-xlarge" required="required" disabled="disabled"/>
+                    <input id="txt_city" type="text" class="input-xlarge" required="required" />
                 </div>
               </div>
 
               <div class="control-group">
                 <label class="control-label" for="txt_country">Country:</label>
                 <div class="controls">
-                    <input id="txt_country" type="text" class="input-xlarge" required="required" disabled="disabled"/>
+                    <input id="txt_country" type="text" class="input-xlarge" required="required" />
                 </div>
               </div>
 
@@ -240,24 +241,32 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
     //save edit modal modifications
     $('#form_modify').bind('submit', function(){
     
-        var usermodify = {
-        "login":useredit.login,
-        "sshPublicKey":$("#txt_sshkey").val(),
-        };
-        
-        console.log(usermodify);
+
+        useredit.firstName = $("#txt_firstname").val();
+        useredit.lastName = $("#txt_lastname").val();
+        useredit.login = $("#txt_login").val();
+        useredit.mail = $("#txt_mail").val();
+        useredit.sshPublicKey = $("#txt_sshkey").val();
+        useredit.motivations = $("#txt_motivation").val();
+        useredit.structure = $("#txt_structure").val();
+        useredit.city = $("#txt_city").val();
+        useredit.country = $("#txt_country").val();
         
         $.ajax({
-            url: "http://devgrenoble.senslab.info/rest/users?edituser",
+            url: "http://devgrenoble.senslab.info/rest/admin/users?edituser",
             type: "POST",
             dataType: "text",
             contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(usermodify),
+            data: JSON.stringify(useredit),
             success:function(data){
-                alert("Ok")
+                $("#edit_modal").modal('hide');
+                $("#div_error").html("");
             },
             error:function(XMLHttpRequest, textStatus, errorThrows){
-                alert("Error")
+                $("#div_error").show();
+                $("#div_error").removeClass("alert-success");
+                $("#div_error").addClass("alert-error");
+                $("#div_error").html("Error");
             }
         });
         
