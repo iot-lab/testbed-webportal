@@ -48,7 +48,7 @@
             
             <?php if($_SESSION['is_auth']) { ?>
             <ul class="nav">
-            <li><a href="logout.php">Logout</a></li>
+            <li><a href="logout.php">Logout <?php echo "[".$_SESSION['login']."]" ?></a></li>
             </ul> 
             <?php } ?>
             

@@ -8,7 +8,7 @@ if($_POST['login'] == "" || $_POST['password'] == "")
     exit();
 }
 
-$url = 'http://localhost/rest/users?login';
+$url = 'http://localhost/rest/users/'.$_POST['login'].'?login';
 $handle = curl_init();
 curl_setopt($handle, CURLOPT_URL, $url);
 curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
@@ -39,7 +39,7 @@ else
 
 
 /* Test isAdmin */
-$url = 'http://localhost/rest/users?isadmin&login='.$_POST['login'];
+$url = 'http://localhost/rest/users/'.$_POST['login'].'/isadmin';
 
 $handle = curl_init();
 curl_setopt($handle, CURLOPT_URL, $url);

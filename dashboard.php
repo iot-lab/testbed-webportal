@@ -122,11 +122,11 @@ if(!$_SESSION['is_auth']) {
             
             /* Retrieve current sshkey */
             $.ajax({
-                url: "http://devgrenoble.senslab.info/rest/users?sshkey",
+                url: "http://devgrenoble.senslab.info/rest/users/"+<?php echo '"'.$_SESSION['login'].'"'?>+"/sshkeys",
                 type: "GET",
                 //contentType: "application/json",
                 //data: JSON.stringify({"login":"<?php echo $_SESSION['login'] ?>"}),
-                data: {"login":"<?php echo $_SESSION['login'] ?>"},
+                data: {},
                 dataType: "text",
                 success:function(data){
                     $("#txt_ssh").val(data);
@@ -142,13 +142,12 @@ if(!$_SESSION['is_auth']) {
             /* Modify SSH Key */
             $('#form_modify').bind('submit', function(){
                 var user = {
-                "login":"<?php echo $_SESSION['login']?>",
-                "sshPublicKey":$("#txt_ssh").val(),
+                    "sshkeys":$("#txt_ssh").val(),
                 };
                 
                 $.ajax({
-                    url: "http://devgrenoble.senslab.info/rest/users?modsshkey",
-                    type: "POST",
+                    url: "http://devgrenoble.senslab.info/rest/users/"+<?php echo '"'.$_SESSION['login'].'"'?>+"/sshkeys",
+                    type: "PUT",
                     dataType: "text",
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify(user),
@@ -186,14 +185,13 @@ if(!$_SESSION['is_auth']) {
             
             
                 var user = {
-                "login":"<?php echo $_SESSION['login']?>",
-                "newPassword":$("#txt_new_password").val(),
-                "oldPassword":$("#txt_current_password").val(),
+                    "newPassword":$("#txt_new_password").val(),
+                    "oldPassword":$("#txt_current_password").val(),
                 };
                 
                 $.ajax({
-                    url: "http://devgrenoble.senslab.info/rest/users?modpassword",
-                    type: "POST",
+                    url: "http://devgrenoble.senslab.info/rest/users/"+<?php echo '"'.$_SESSION['login'].'"'?>+"/password",
+                    type: "PUT",
                     dataType: "text",
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify(user),

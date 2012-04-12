@@ -32,25 +32,23 @@
 
 
 
-    
-
     <script type="text/javascript">
 
-$(document).ready(function(){
+    $(document).ready(function(){
 
-    $("#txt_email").focus();
+        $("#txt_email").focus();
+        
+        $('#reset_form').bind('submit', function(){
 
-    $('#reset_form').bind('submit', function(){
-    
         var user = {
-        "email":$("#txt_email").val(),
+            "email":$("#txt_email").val(),
         };
         
         console.log(user);
         
         $.ajax({
-            url: "http://devgrenoble.senslab.info/rest/users?resetpassword",
-            type: "POST",
+            url: "http://devgrenoble.senslab.info/rest/users/"+$("#txt_email").val()+"?resetpassword",
+            type: "PUT",
             dataType: "text",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(user),
@@ -59,7 +57,7 @@ $(document).ready(function(){
                 $("#div_error").removeClass("alert-error");
                 $("#div_error").addClass("alert-success");
                 $("#div_error").html("Your password was reset, check your inbox");
-        },
+            },
             error:function(XMLHttpRequest, textStatus, errorThrows){
                 $("#div_error").show();
                 $("#div_error").removeClass("alert-success");
@@ -68,12 +66,11 @@ $(document).ready(function(){
             }
         });
         
-    return false;
-    
-    });
+        return false;
+        });
 
-    
- });
+
+    });
     </script>
 
   </body>

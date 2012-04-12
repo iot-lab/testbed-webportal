@@ -77,7 +77,7 @@ if($_SESSION['is_auth']) {
     function other_function() {
 
         $.ajax({
-            url: "http://"+$("#txt_login").val()+":"+$("#txt_password").val()+"@devgrenoble.senslab.info/rest/users?login",
+            url: "http://"+$("#txt_login").val()+":"+$("#txt_password").val()+"@devgrenoble.senslab.info/rest/users/"+$("#txt_login").val()+"?login",
             type: "GET",
             success:function(response){
                 window.location.replace("http://devgrenoble.senslab.info/portal");
