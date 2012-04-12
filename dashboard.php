@@ -157,6 +157,7 @@ if(!$_SESSION['is_auth']) {
                         $("#div_error").removeClass("alert-error");
                         $("#div_error").addClass("alert-success");
                         $("#div_error").html("Your SSH Key was modify");
+                        $("#ssh_modal").modal("hide");
                 },
                     error:function(XMLHttpRequest, textStatus, errorThrows){
                         $("#div_error").show();
@@ -201,6 +202,7 @@ if(!$_SESSION['is_auth']) {
                         $("#div_error_password").removeClass("alert-error");
                         $("#div_error_password").addClass("alert-success");
                         $("#div_error_password").html("Your Password was modify");
+                        $("#password_modal").modal("hide");
                 },
                     error:function(XMLHttpRequest, textStatus, errorThrows){
                         $("#div_error_password").show();

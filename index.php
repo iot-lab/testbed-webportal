@@ -46,29 +46,23 @@ if($_SESSION['is_auth']) {
 
 
 
-$("#btn_submit").click(function(){
+    $("#btn_submit").click(function(){
     
         var userlogin = {"login":$("#txt_login").val(),"password":$("#txt_password").val()};
         
         console.log(userlogin);
-    
+
         $.ajax({
             url: "auth.php",
-            //url: "http://devgrenoble.senslab.info/rest/admin/user?bind",
             type: "POST",
-            //data: JSON.stringify(userlogin),
-            data: {"login":$("#txt_login").val(),"password":$("#txt_password").val()},
-            success:function(data){
-                // similar behavior as an HTTP redirect
-                window.location.replace("http://devgrenoble.senslab.info/portal");
-                // similar behavior as clicking on a link
-                //window.location.href = "http://devgrenoble.senslab.info/portal";
-                
-                /*$("#div_error").show();
+            data: userlogin,
+            success:function(response){
+                $("#div_error").show();
                 $("#div_error").removeClass("alert-error");
                 $("#div_error").addClass("alert-success");
-                $("#div_error").html("Ok");*/
-        },
+                $("#div_error").html("OK, please wait ...");
+                other_function();
+            },
             error:function(XMLHttpRequest, textStatus, errorThrows){
                 $("#div_error").show();
                 $("#div_error").removeClass("alert-success");
@@ -76,12 +70,22 @@ $("#btn_submit").click(function(){
                 $("#div_error").html("Wrong login or password");
             }
         });
-        
-    return false;
-    
+        return false;
     });
 
-    
+
+    function other_function() {
+
+        $.ajax({
+            url: "http://"+$("#txt_login").val()+":"+$("#txt_password").val()+"@devgrenoble.senslab.info/rest/users?login",
+            type: "GET",
+            success:function(response){
+                window.location.replace("http://devgrenoble.senslab.info/portal");
+            }
+        });
+        
+        return false;
+    }   
  
     </script>
 
