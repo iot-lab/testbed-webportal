@@ -197,10 +197,9 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
         {
             var userdelete = users[id];
             $.ajax({
-            url: "http://devgrenoble.senslab.info/rest/admin/users",
+            url: "http://devgrenoble.senslab.info/rest/admin/users/"+userdelete.login,
                 type: "DELETE",
                 contentType: "application/json",
-                data: JSON.stringify(userdelete),
                 dataType: "text",
             
                 success:function(data){
@@ -224,8 +223,8 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
             uservalidate.validate = true;
             
             $.ajax({
-                url: "http://devgrenoble.senslab.info/rest/admin/users?edituser",
-                type: "POST",
+                url: "http://devgrenoble.senslab.info/rest/admin/users/"+uservalidate.login,
+                type: "PUT",
                 dataType: "text",
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(uservalidate),
@@ -256,8 +255,8 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
         selectedUser.country = $("#txt_country").val();
         
         $.ajax({
-            url: "http://devgrenoble.senslab.info/rest/admin/users?edituser",
-            type: "POST",
+            url: "http://devgrenoble.senslab.info/rest/admin/users/"+selectedUser.login,
+            type: "PUT",
             dataType: "text",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(selectedUser),
@@ -291,8 +290,8 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
             user.admin = !user.admin;
             
             $.ajax({
-                url: "http://devgrenoble.senslab.info/rest/admin/users?edituser",
-                type: "POST",
+                url: "http://devgrenoble.senslab.info/rest/admin/users/"+user.login,
+                type: "PUT",
                 dataType: "text",
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(user),
