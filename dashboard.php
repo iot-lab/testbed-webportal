@@ -43,8 +43,8 @@ if(!$_SESSION['is_auth']) {
 
             <hr/>
 
-            <p><a href="https://strasbourg.senslab.info/monika">View nodes status</a></p>
-            <p><a href="https://strasbourg.senslab.info/drawgantt">View Gantt chart</a></p>
+            <p><a href="/monika">View nodes status</a></p>
+            <p><a href="/drawgantt">View Gantt chart</a></p>
            
           </div>
       </div>
@@ -122,7 +122,7 @@ if(!$_SESSION['is_auth']) {
             
             /* Retrieve current sshkey */
             $.ajax({
-                url: "http://devgrenoble.senslab.info/rest/users/"+<?php echo '"'.$_SESSION['login'].'"'?>+"/sshkeys",
+                url: "/rest/users/"+<?php echo '"'.$_SESSION['login'].'"'?>+"/sshkeys",
                 type: "GET",
                 //contentType: "application/json",
                 //data: JSON.stringify({"login":"<?php echo $_SESSION['login'] ?>"}),
@@ -146,7 +146,7 @@ if(!$_SESSION['is_auth']) {
                 };
                 
                 $.ajax({
-                    url: "http://devgrenoble.senslab.info/rest/users/"+<?php echo '"'.$_SESSION['login'].'"'?>+"/sshkeys",
+                    url: "/rest/users/"+<?php echo '"'.$_SESSION['login'].'"'?>+"/sshkeys",
                     type: "PUT",
                     dataType: "text",
                     contentType: "application/json; charset=utf-8",
@@ -190,7 +190,7 @@ if(!$_SESSION['is_auth']) {
                 };
                 
                 $.ajax({
-                    url: "http://devgrenoble.senslab.info/rest/users/"+<?php echo '"'.$_SESSION['login'].'"'?>+"/password",
+                    url: "/rest/users/"+<?php echo '"'.$_SESSION['login'].'"'?>+"/password",
                     type: "PUT",
                     dataType: "text",
                     contentType: "application/json; charset=utf-8",

@@ -47,7 +47,7 @@
         console.log(user);
         
         $.ajax({
-            url: "http://devgrenoble.senslab.info/rest/users/"+$("#txt_email").val()+"?resetpassword",
+            url: "/rest/users/"+$("#txt_email").val()+"?resetpassword",
             type: "PUT",
             dataType: "text",
             contentType: "application/json; charset=utf-8",

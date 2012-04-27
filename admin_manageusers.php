@@ -133,7 +133,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
 
         /* Load data in the table */
         $.ajax({
-            url: "http://devgrenoble.senslab.info/rest/admin/users",
+            url: "/rest/admin/users",
             type: "GET",
             dataType: "json",
             success:function(data){
@@ -197,7 +197,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
         {
             var userdelete = users[id];
             $.ajax({
-            url: "http://devgrenoble.senslab.info/rest/admin/users/"+userdelete.login,
+            url: "/rest/admin/users/"+userdelete.login,
                 type: "DELETE",
                 contentType: "application/json",
                 dataType: "text",
@@ -223,7 +223,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
             uservalidate.validate = true;
             
             $.ajax({
-                url: "http://devgrenoble.senslab.info/rest/admin/users/"+uservalidate.login,
+                url: "/rest/admin/users/"+uservalidate.login,
                 type: "PUT",
                 dataType: "text",
                 contentType: "application/json; charset=utf-8",
@@ -255,7 +255,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
         selectedUser.country = $("#txt_country").val();
         
         $.ajax({
-            url: "http://devgrenoble.senslab.info/rest/admin/users/"+selectedUser.login,
+            url: "/rest/admin/users/"+selectedUser.login,
             type: "PUT",
             dataType: "text",
             contentType: "application/json; charset=utf-8",
@@ -290,7 +290,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
             user.admin = !user.admin;
             
             $.ajax({
-                url: "http://devgrenoble.senslab.info/rest/admin/users/"+user.login,
+                url: "/rest/admin/users/"+user.login,
                 type: "PUT",
                 dataType: "text",
                 contentType: "application/json; charset=utf-8",
