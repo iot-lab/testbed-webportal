@@ -1,0 +1,43 @@
+
+div.dataTables_length label {
+	width: 460px;
+	float: left;
+	text-align: left;
+}
+
+div.dataTables_length select {
+	width: 75px;
+}
+
+div.dataTables_filter label {
+	width: 460px;
+}
+
+div.dataTables_info {
+	padding-top: 0px;
+	padding-bottom: 2px;
+}
+
+div.dataTables_paginate {
+	margin: 0;
+}
+
+table {
+	margin: 1em 0;
+	clear: both;
+}
+
+table.dataTable th:active {
+	outline: none;
+}
+
+
+.header {
+	background: url('../img/sort_both.png') no-repeat center right;
+	cursor: pointer;
+	*cursor: hand;
+ }
+.headerSortUp { background: url('../img/sort_asc.png') no-repeat center right; }
+.headerSortDown { background: url('../img/sort_desc.png') no-repeat center right; }
+
+
