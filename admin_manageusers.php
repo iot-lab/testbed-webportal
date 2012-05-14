@@ -11,12 +11,22 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
 <?php include("header.php") ?>
 
     <div class="container">
-        
+      
       <div class="row">
         <div class="span12">
           <h2>Users</h2>
-            <p></p>
-		<a href="#" class="btn btn-add" data-toggle="modal">Add user(s)</a>
+        </div>
+      </div>
+  
+      <div class="row">
+        <div class="span2 offset10" style="text-align:right">
+          <a href="#" class="btn btn-add" data-toggle="modal">Add user(s)</a>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="span12">
+		<!-- <a href="#" class="btn btn-add" data-toggle="modal">Add user(s)</a> -->
                 <table id="tbl_users" class="table table-bordered table-striped table-condensed">
                 <thead>
                     <tr>
@@ -250,8 +260,8 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                     '<td>'+ val.lastName +'</td>'+
                     '<td><a href="mailto:' + val.email + '">' + val.email + '</a></td>'+
                     '<td><a href="#" class="btn btn-valid '+btnValidClass+'" data="'+i+'" data-state="'+val.validate+'" onClick="validateUser('+i+')">'+btnValidValue+'</a> ' +
-                        '<a href="#" class="btn btn-admin '+btnAdminClass+'" data="'+i+'" data-state="'+val.admin+'" onClick="setAdmin('+i+')">'+btnAdminValue+'</a> ' +
                         '<a href="#" class="btn btn-edit" data-toggle="modal" data="'+i+'">Edit</a> ' +
+                        '<a href="#" class="btn btn-admin '+btnAdminClass+'" data="'+i+'" data-state="'+val.admin+'" onClick="setAdmin('+i+')">'+btnAdminValue+'</a> ' +
                         '<a href="#"><button class="btn btn-danger" data="'+i+'" onClick="deleteUser('+i+')">Delete</button></a></td>'
                     +'</tr>');
                     $("tr[data="+i+"] .btn-valid").width(50);
@@ -276,7 +286,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                     $("#edit_modal").modal('show');
                 });
                 $('#tbl_users').dataTable({
-			"sDom": "<'span8'f>t<'span8'i'p>",
+			"sDom": "<''f>t<''i'p>",
                         "bPaginate": true,
                         "sPaginationType": "bootstrap",
                         "bLengthChange": false,
