@@ -120,7 +120,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
         <div id="edit_modal" class="modal hide fade">
             <div class="modal-header">
               <a class="close" data-dismiss="modal">X</a>
-              <h3>Edit user <span id="s_login"></span></h3>
+              <h3>Edit user <span id="s_login_e"></span></h3>
               
             </div>
            <div class="modal-body">
@@ -129,65 +129,65 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                 <form class="well form-horizontal" id="form_modify">
 
               <div class="control-group">
-                <label class="control-label" for="txt_firstname">First Name:</label>
+                <label class="control-label" for="txt_firstname_e">First Name:</label>
                 <div class="controls">
-                    <input id="txt_firstname" type="text" class="input-xlarge" required="required"/>
+                    <input id="txt_firstname_e" type="text" class="input-xlarge" required="required"/>
                 </div>
               </div>
 
               <div class="control-group">
-                <label class="control-label" for="txt_lastname">Last Name:</label>
+                <label class="control-label" for="txt_lastname_e">Last Name:</label>
                 <div class="controls">
-                    <input id="txt_lastname" type="text" class="input-xlarge" required="required"/>
+                    <input id="txt_lastname_e" type="text" class="input-xlarge" required="required"/>
                 </div>
               </div>
 
               <div class="control-group">
-                <label class="control-label" for="txt_login">Login:</label>
+                <label class="control-label" for="txt_login_e">Login:</label>
                 <div class="controls">
-                    <input id="txt_login" type="text" class="input-xlarge" required="required" disabled="disabled"/>
+                    <input id="txt_login_e" type="text" class="input-xlarge" required="required" disabled="disabled"/>
                 </div>
               </div>
 
               <div class="control-group">
-                <label class="control-label" for="txt_email">Email:</label>
+                <label class="control-label" for="txt_email_e">Email:</label>
                 <div class="controls">
-                    <input id="txt_email" type="email" class="input-xlarge" required="required"/>
+                    <input id="txt_email_e" type="email" class="input-xlarge" required="required"/>
                 </div>
               </div>
 
               <div class="control-group">
-                <label class="control-label" for="txt_structure">Structure:</label>
+                <label class="control-label" for="txt_structure_e">Structure:</label>
                 <div class="controls">
-                    <input id="txt_structure" type="text" class="input-xlarge" required="required" />
+                    <input id="txt_structure_e" type="text" class="input-xlarge" required="required" />
                 </div>
               </div>
 
               <div class="control-group">
-                <label class="control-label" for="txt_city">City:</label>
+                <label class="control-label" for="txt_city_e">City:</label>
                 <div class="controls">
-                    <input id="txt_city" type="text" class="input-xlarge" required="required" />
+                    <input id="txt_city_e" type="text" class="input-xlarge" required="required" />
                 </div>
               </div>
 
               <div class="control-group">
-                <label class="control-label" for="txt_country">Country:</label>
+                <label class="control-label" for="txt_country_e">Country:</label>
                 <div class="controls">
-                    <input id="txt_country" type="text" class="input-xlarge" required="required" />
+                    <input id="txt_country_e" type="text" class="input-xlarge" required="required" />
                 </div>
               </div>
 
               <div class="control-group">
-                <label class="control-label" for="txt_sshkey">SSH Key:</label>
+                <label class="control-label" for="txt_sshkey_e">SSH Key:</label>
                 <div class="controls">
-                    <textarea id="txt_sshkey" class="input-xlarge" rows="3" required="required"></textarea>
+                    <textarea id="txt_sshkey_e" class="input-xlarge" rows="3" required="required"></textarea>
                 </div>
               </div>
               
                <div class="control-group">
-                <label class="control-label" for="txt_motivation">Motivation:</label>
+                <label class="control-label" for="txt_motivation_e">Motivation:</label>
                 <div class="controls">
-                    <textarea id="txt_motivation" class="input-xlarge" rows="3" required="required"></textarea>
+                    <textarea id="txt_motivation_e" class="input-xlarge" rows="3" required="required"></textarea>
                 </div>
               </div>
               
@@ -263,16 +263,16 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                 $(".btn-edit").click(function(){
                     var userId = $(this).attr("data");
                     selectedUser = users[userId];
-                    $('#s_login').html(selectedUser.login);
-                    $('#txt_sshkey').val(selectedUser.sshPublicKey);
-                    $('#txt_firstname').val(selectedUser.firstName);
-                    $('#txt_lastname').val(selectedUser.lastName);
-                    $('#txt_login').val(selectedUser.login);
-                    $('#txt_email').val(selectedUser.email);
-                    $('#txt_structure').val(selectedUser.structure);
-                    $('#txt_city').val(selectedUser.city);
-                    $('#txt_country').val(selectedUser.country);
-                    $('#txt_motivation').val(selectedUser.motivations);
+                    $('#s_login_e').html(selectedUser.login);
+                    $('#txt_sshkey_e').val(selectedUser.sshPublicKey);
+                    $('#txt_firstname_e').val(selectedUser.firstName);
+                    $('#txt_lastname_e').val(selectedUser.lastName);
+                    $('#txt_login_e').val(selectedUser.login);
+                    $('#txt_email_e').val(selectedUser.email);
+                    $('#txt_structure_e').val(selectedUser.structure);
+                    $('#txt_city_e').val(selectedUser.city);
+                    $('#txt_country_e').val(selectedUser.country);
+                    $('#txt_motivation_e').val(selectedUser.motivations);
                     $("#edit_modal").modal('show');
                 });
                 $('#tbl_users').dataTable({
@@ -454,15 +454,15 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
     $('#form_modify').bind('submit', function()
     {
         //change all value
-        selectedUser.firstName = $("#txt_firstname").val();
-        selectedUser.lastName = $("#txt_lastname").val();
-        selectedUser.login = $("#txt_login").val();
-        selectedUser.email = $("#txt_email").val();
-        selectedUser.sshPublicKey = $("#txt_sshkey").val();
-        selectedUser.motivations = $("#txt_motivation").val();
-        selectedUser.structure = $("#txt_structure").val();
-        selectedUser.city = $("#txt_city").val();
-        selectedUser.country = $("#txt_country").val();
+        selectedUser.firstName = $("#txt_firstname_e").val();
+        selectedUser.lastName = $("#txt_lastname_e").val();
+        selectedUser.login = $("#txt_login_e").val();
+        selectedUser.email = $("#txt_email_e").val();
+        selectedUser.sshPublicKey = $("#txt_sshkey_e").val();
+        selectedUser.motivations = $("#txt_motivation_e").val();
+        selectedUser.structure = $("#txt_structure_e").val();
+        selectedUser.city = $("#txt_city_e").val();
+        selectedUser.country = $("#txt_country_e").val();
         
         $.ajax({
             url: "/rest/admin/users/"+selectedUser.login,
