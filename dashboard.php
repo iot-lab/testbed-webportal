@@ -13,9 +13,23 @@ if(!$_SESSION['is_auth']) {
         
     <div class="row">
         <div class="span8">
-          <h2>New Experiment</h2>
+          <h2>Experiment List</h2>
            <p>
-           
+				<div class="loading" id="loading"><b>Loading ...</b></div>
+                <table id="tbl_exps" class="table table-bordered table-striped table-condensed" style="display:none">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Date</th>
+                        <th>Duration</th>
+                        <th>Node(s)</th>
+                        <th>Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                </table>
            </p>
         </div>
         <div class="span4">
@@ -112,13 +126,81 @@ if(!$_SESSION['is_auth']) {
         </div>        
         
         
+
+        <div id="details_modal" class="modal hide fade">
+            <div class="modal-header">
+              <a class="close" data-dismiss="modal">×</a>
+              <h3>Experiment Details</h3>
+            </div>
+           <div class="modal-body">
+
+		<div id="detailsExp">...</div>
+
+            </div>
+        </div>
+
+
+
+
+
+
         
         
         <?php include('footer.php') ?>
 
+<link href="css/datatable.css" rel="stylesheet">
+<script type="text/javascript" language="javascript" src="js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" language="javascript" src="js/datatable.js"></script>
     <script type="text/javascript">
         
         $(document).ready(function(){
+            
+            /* Retrieve experiment list */
+            $.ajax({
+                url: "/rest/experiments?range",
+                type: "GET",
+                //contentType: "application/json",
+                //data: JSON.stringify({"login":"<?php echo $_SESSION['login'] ?>"}),
+                data: {},
+                dataType: "json",
+                success:function(data){
+                    exps = data.items;
+                    var i = 0;
+                    $.each(data.items, function(key,val) {
+                        
+                        var date=new Date();
+                        date.setTime(val.submission+"000");
+
+			//exp row
+                        $("#tbl_exps tbody").append(
+                        '<tr data=' + i + '>'+
+                        '<td>' + val.id + '</td>'+
+                        '<td>' + val.name + '</td>'+
+                        '<td>'+ date + '</td>'+
+                        '<td>' + val.api_timestamp + '</a></td>'+
+                        '<td>yeah</td>'+
+                        '<td><a href="#" class="btn btn-valid" data="'+i+'" onClick="detailsExp('+i+')">Details</a></td>'
+                        +'</tr>');
+                        i++;
+                    });
+                    $('#tbl_exps').dataTable({
+                    	"sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
+    			//"sDom": "<''f>t<''i'p>",
+                            "bPaginate": true,
+                            "sPaginationType": "bootstrap",
+                            "bLengthChange": true,
+                            "bFilter": true,
+                            "bSort": true,
+                            "bInfo": true,
+                            "bAutoWidth": false
+                    } );
+                    $('#tbl_exps').show();
+                    $('#loading').hide();
+            },
+                error:function(XMLHttpRequest, textStatus, errorThrows){
+                    alert("error" + textStatus);
+                }
+            });
             
             /* Retrieve current sshkey */
             $.ajax({
@@ -213,9 +295,34 @@ if(!$_SESSION['is_auth']) {
             return false;
             
             });
-            
+
+            $('#exp_details').modal('hide');
         });
-    
+
+
+
+	function detailsExp(id) {
+
+            /* Retrieve experiment details */
+            $.ajax({
+                url: "/rest/experiments/"+id,
+                type: "GET",
+                data: {},
+                dataType: "json",
+                success:function(data){
+                	console.log(data);
+			$("#detailsExp").html(
+				"Number of Nodes: " + data.nodes.length);
+			$('#details_modal').modal('show');
+            	},
+                error:function(XMLHttpRequest, textStatus, errorThrows){
+                    alert("error" + textStatus);
+                }
+            });
+
+	}
+
+   
         
     </script>
 
