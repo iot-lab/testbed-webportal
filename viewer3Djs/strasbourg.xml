@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<senslab>
+	<room x="5" y="2.7" z="7" posx="0" posy="0" posz="0"/>
+	<rails x="1.6" y="0.03" z="3" posx="-0.4" posy="0" posz="-0.8"/>
+	<roffset x="-4.5" y="-0.6" z="-6"/>
+	<camera tx="0" ty="3" tz="14" rx="0.2" ry="0" rz="0"/>
+	
+	<!-- indoor -->
+	<node name="node1" id="1" x="1" y="1" z="1" uniqueid="c0d8" type="indoor" />
+	<node name="node2" id="2" x="1" y="1" z="2" uniqueid="b2a7" type="indoor" />
+	<node name="node3" id="3" x="1" y="1" z="3" uniqueid="c6f0" type="indoor" />
+	<node name="node4" id="4" x="2" y="1" z="1" uniqueid="bcab" type="indoor" />
+	<node name="node5" id="5" x="2" y="1" z="2" uniqueid="c66a" type="indoor" />
+	<node name="node6" id="6" x="2" y="1" z="3" uniqueid="b222" type="indoor" />
+	<node name="node7" id="7" x="3" y="1" z="1" uniqueid="b012" type="indoor" />
+	<node name="node8" id="8" x="3" y="1" z="2" uniqueid="c5ac" type="indoor" />
+	<node name="node9" id="9" x="3" y="1" z="3" uniqueid="bef2" type="indoor" />
+	<node name="node10" id="10" x="4" y="1" z="1" uniqueid="b7b2"
+		type="indoor" />
+	<node name="node11" id="11" x="4" y="1" z="2" uniqueid="b9f1"
+		type="indoor" />
+	<node name="node12" id="12" x="4" y="1" z="3" uniqueid="c223"
+		type="indoor" />
+	<node name="node13" id="13" x="5" y="1" z="1" uniqueid="c3a0"
+		type="indoor" />
+	<node name="node14" id="14" x="5" y="1" z="2" uniqueid="cb40"
+		type="indoor" />
+	<node name="node15" id="15" x="5" y="1" z="3" uniqueid="bd81"
+		type="indoor" />
+	<node name="node16" id="16" x="6" y="1" z="1" uniqueid="afa3"
+		type="indoor" />
+	<node name="node17" id="17" x="6" y="1" z="2" uniqueid="be5a"
+		type="indoor" />
+	<node name="node18" id="18" x="6" y="1" z="3" uniqueid="1bf9"
+		type="indoor" />
+	<node name="node19" id="19" x="7" y="1" z="1" uniqueid="bca1"
+		type="indoor" />
+	<node name="node20" id="20" x="7" y="1" z="2" uniqueid="c1c3"
+		type="indoor" />
+	<node name="node21" id="21" x="7" y="1" z="3" uniqueid="c6ce"
+		type="indoor" />
+	<node name="node22" id="22" x="8" y="1" z="1" uniqueid="c5d4"
+		type="indoor" />
+	<node name="node23" id="23" x="8" y="1" z="2" uniqueid="ba38"
+		type="indoor" />
+	<node name="node24" id="24" x="8" y="1" z="3" uniqueid="1f59"
+		type="indoor" />
+	<node name="node25" id="25" x="1" y="2" z="1" uniqueid="b862"
+		type="indoor" />
+	<node name="node26" id="26" x="1" y="2" z="2" uniqueid="b5e1"
+		type="indoor" />
+	<node name="node27" id="27" x="1" y="2" z="3" uniqueid="bb10"
+		type="indoor" />
+	<node name="node28" id="28" x="2" y="2" z="1" uniqueid="c68a"
+		type="indoor" />
+	<node name="node29" id="29" x="2" y="2" z="2" uniqueid="b576"
+		type="indoor" />
+	<node name="node30" id="30" x="2" y="2" z="3" uniqueid="b343"
+		type="indoor" />
+	<node name="node31" id="31" x="3" y="2" z="1" uniqueid="c19f"
+		type="indoor" />
+	<node name="node32" id="32" x="3" y="2" z="2" uniqueid="1cef"
+		type="indoor" />
+	<node name="node33" id="33" x="3" y="2" z="3" uniqueid="c225"
+		type="indoor" />
+	<node name="node34" id="34" x="4" y="2" z="1" uniqueid="bc7a"
+		type="indoor" />
+	<node name="node35" id="35" x="4" y="2" z="2" uniqueid="ba03"
+		type="indoor" />
+	<node name="node36" id="36" x="4" y="2" z="3" uniqueid="c262"
+		type="indoor" />
+	<node name="node37" id="37" x="5" y="2" z="1" uniqueid="ba7f"
+		type="indoor" />
+	<node name="node38" id="38" x="5" y="2" z="2" uniqueid="b614"
+		type="indoor" />
+	<node name="node39" id="39" x="5" y="2" z="3" uniqueid="be35"
+		type="indoor" />
+	<node name="node40" id="40" x="6" y="2" z="1" uniqueid="b9a0"
+		type="indoor" />
+	<node name="node41" id="41" x="6" y="2" z="2" uniqueid="c9fa"
+		type="indoor" />
+	<node name="node42" id="42" x="6" y="2" z="3" uniqueid="b42e"
+		type="indoor" />
+	<node name="node43" id="43" x="7" y="2" z="1" uniqueid="c935"
+		type="indoor" />
+	<node name="node44" id="44" x="7" y="2" z="2" uniqueid="bdd3"
+		type="indoor" />
+	<node name="node45" id="45" x="7" y="2" z="3" uniqueid="b957"
+		type="indoor" />
+	<node name="node46" id="46" x="8" y="2" z="1" uniqueid="c87f"
+		type="indoor" />
+	<node name="node47" id="47" x="8" y="2" z="2" uniqueid="cdac"
+		type="indoor" />
+	<node name="node48" id="48" x="8" y="2" z="3" uniqueid="bf84"
+		type="indoor" />
+	<node name="node49" id="49" x="1" y="3" z="1" uniqueid="cf14"
+		type="indoor" />
+	<node name="node50" id="50" x="1" y="3" z="2" uniqueid="c605"
+		type="indoor" />
+	<node name="node51" id="51" x="1" y="3" z="3" uniqueid="af8a"
+		type="indoor" />
+	<node name="node52" id="52" x="2" y="3" z="1" uniqueid="c35d"
+		type="indoor" />
+	<node name="node53" id="53" x="2" y="3" z="2" uniqueid="ca60"
+		type="indoor" />
+	<node name="node54" id="54" x="2" y="3" z="3" uniqueid="c09b"
+		type="indoor" />
+	<node name="node55" id="55" x="3" y="3" z="1" uniqueid="c4aa"
+		type="indoor" />
+	<node name="node56" id="56" x="3" y="3" z="2" uniqueid="ca01"
+		type="indoor" />
+	<node name="node57" id="57" x="3" y="3" z="3" uniqueid="bb25"
+		type="indoor" />
+	<node name="node58" id="58" x="4" y="3" z="1" uniqueid="b7af"
+		type="indoor" />
+	<node name="node59" id="59" x="4" y="3" z="2" uniqueid="b057"
+		type="indoor" />
+	<node name="node60" id="60" x="4" y="3" z="3" uniqueid="cf0a"
+		type="indoor" />
+	<node name="node61" id="61" x="5" y="3" z="1" uniqueid="ca27"
+		type="indoor" />
+	<node name="node62" id="62" x="5" y="3" z="2" uniqueid="cb57"
+		type="indoor" />
+	<node name="node63" id="63" x="5" y="3" z="3" uniqueid="cbaf"
+		type="indoor" />
+	<node name="node64" id="64" x="6" y="3" z="1" uniqueid="c7de"
+		type="indoor" />
+	<node name="node65" id="65" x="6" y="3" z="2" uniqueid="bcf4"
+		type="indoor" />
+	<node name="node66" id="66" x="6" y="3" z="3" uniqueid="bf80"
+		type="indoor" />
+	<node name="node67" id="67" x="7" y="3" z="1" uniqueid="bdb0"
+		type="indoor" />
+	<node name="node68" id="68" x="7" y="3" z="2" uniqueid="be6b"
+		type="indoor" />
+	<node name="node69" id="69" x="7" y="3" z="3" uniqueid="cd74"
+		type="indoor" />
+	<node name="node70" id="70" x="8" y="3" z="1" uniqueid="b7e2"
+		type="indoor" />
+	<node name="node71" id="71" x="8" y="3" z="2" uniqueid="cc5e"
+		type="indoor" />
+	<node name="node72" id="72" x="8" y="3" z="3" uniqueid="b467"
+		type="indoor" />
+	<node name="node73" id="73" x="1" y="4" z="1" uniqueid="cecf"
+		type="indoor" />
+	<node name="node74" id="74" x="1" y="4" z="2" uniqueid="cd64"
+		type="indoor" />
+	<node name="node75" id="75" x="1" y="4" z="3" uniqueid="c9cf"
+		type="indoor" />
+	<node name="node76" id="76" x="2" y="4" z="1" uniqueid="b23c"
+		type="indoor" />
+	<node name="node77" id="77" x="2" y="4" z="2" uniqueid="cd18"
+		type="indoor" />
+	<node name="node78" id="78" x="2" y="4" z="3" uniqueid="bb3a"
+		type="indoor" />
+	<node name="node79" id="79" x="3" y="4" z="1" uniqueid="c987"
+		type="indoor" />
+	<node name="node80" id="80" x="3" y="4" z="2" uniqueid="c8ea"
+		type="indoor" />
+	<node name="node81" id="81" x="3" y="4" z="3" uniqueid="b5c5"
+		type="indoor" />
+	<node name="node82" id="82" x="4" y="4" z="1" uniqueid="1f3c"
+		type="indoor" />
+	<node name="node83" id="83" x="4" y="4" z="2" uniqueid="bb11"
+		type="indoor" />
+	<node name="node84" id="84" x="4" y="4" z="3" uniqueid="c7df"
+		type="indoor" />
+	<node name="node85" id="85" x="5" y="4" z="1" uniqueid="c986"
+		type="indoor" />
+	<node name="node86" id="86" x="5" y="4" z="2" uniqueid="c5e2"
+		type="indoor" />
+	<node name="node87" id="87" x="5" y="4" z="3" uniqueid="c755"
+		type="indoor" />
+	<node name="node88" id="88" x="6" y="4" z="1" uniqueid="ca2f"
+		type="indoor" />
+	<node name="node89" id="89" x="6" y="4" z="2" uniqueid="b138"
+		type="indoor" />
+	<node name="node90" id="90" x="6" y="4" z="3" uniqueid="c92f"
+		type="indoor" />
+	<node name="node91" id="91" x="7" y="4" z="1" uniqueid="c681"
+		type="indoor" />
+	<node name="node92" id="92" x="7" y="4" z="2" uniqueid="cd2e"
+		type="indoor" />
+	<node name="node93" id="93" x="7" y="4" z="3" uniqueid="c1d5"
+		type="indoor" />
+	<node name="node94" id="94" x="8" y="4" z="1" uniqueid="cc22"
+		type="indoor" />
+	<node name="node95" id="95" x="8" y="4" z="2" uniqueid="c4e5"
+		type="indoor" />
+	<node name="node96" id="96" x="8" y="4" z="3" uniqueid="c5b3"
+		type="indoor" />
+	<node name="node97" id="97" x="1" y="5" z="1" uniqueid="bfb9"
+		type="indoor" />
+	<node name="node98" id="98" x="1" y="5" z="2" uniqueid="b8fb"
+		type="indoor" />
+	<node name="node99" id="99" x="1" y="5" z="3" uniqueid="bc1c"
+		type="indoor" />
+	<node name="node100" id="100" x="2" y="5" z="1" uniqueid="bae2"
+		type="indoor" />
+	<node name="node101" id="101" x="2" y="5" z="2" uniqueid="bbff"
+		type="indoor" />
+	<node name="node102" id="102" x="2" y="5" z="3" uniqueid="c881"
+		type="indoor" />
+	<node name="node103" id="103" x="3" y="5" z="1" uniqueid="ca54"
+		type="indoor" />
+	<node name="node104" id="104" x="3" y="5" z="2" uniqueid="c71e"
+		type="indoor" />
+	<node name="node105" id="105" x="3" y="5" z="3" uniqueid="bb7d"
+		type="indoor" />
+	<node name="node106" id="106" x="4" y="5" z="1" uniqueid="1f94"
+		type="indoor" />
+	<node name="node107" id="107" x="4" y="5" z="2" uniqueid="b4d8"
+		type="indoor" />
+	<node name="node108" id="108" x="4" y="5" z="3" uniqueid="cccb"
+		type="indoor" />
+	<node name="node109" id="109" x="5" y="5" z="1" uniqueid="be59"
+		type="indoor" />
+	<node name="node110" id="110" x="5" y="5" z="2" uniqueid="ceb0"
+		type="indoor" />
+	<node name="node111" id="111" x="5" y="5" z="3" uniqueid="b5e2"
+		type="indoor" />
+	<node name="node112" id="112" x="6" y="5" z="1" uniqueid="c302"
+		type="indoor" />
+	<node name="node113" id="113" x="6" y="5" z="2" uniqueid="af64"
+		type="indoor" />
+	<node name="node114" id="114" x="6" y="5" z="3" uniqueid="ced2"
+		type="indoor" />
+	<node name="node115" id="115" x="7" y="5" z="1" uniqueid="ced4"
+		type="indoor" />
+	<node name="node116" id="116" x="7" y="5" z="2" uniqueid="203f"
+		type="indoor" />
+	<node name="node117" id="117" x="7" y="5" z="3" uniqueid="c14d"
+		type="indoor" />
+	<node name="node118" id="118" x="8" y="5" z="1" uniqueid="b0d7"
+		type="indoor" />
+	<node name="node119" id="119" x="8" y="5" z="2" uniqueid="1cc4"
+		type="indoor" />
+	<node name="node120" id="120" x="8" y="5" z="3" uniqueid="bc76"
+		type="indoor" />
+	<node name="node121" id="121" x="1" y="6" z="1" uniqueid="b634"
+		type="indoor" />
+	<node name="node122" id="122" x="1" y="6" z="2" uniqueid="af9d"
+		type="indoor" />
+	<node name="node123" id="123" x="1" y="6" z="3" uniqueid="bc2c"
+		type="indoor" />
+	<node name="node124" id="124" x="2" y="6" z="1" uniqueid="cb20"
+		type="indoor" />
+	<node name="node125" id="125" x="2" y="6" z="2" uniqueid="bbfc"
+		type="indoor" />
+	<node name="node126" id="126" x="2" y="6" z="3" uniqueid="c2e8"
+		type="indoor" />
+	<node name="node127" id="127" x="3" y="6" z="1" uniqueid="cd45"
+		type="indoor" />
+	<node name="node128" id="128" x="3" y="6" z="2" uniqueid="b268"
+		type="indoor" />
+	<node name="node129" id="129" x="3" y="6" z="3" uniqueid="c396"
+		type="indoor" />
+	<node name="node130" id="130" x="4" y="6" z="1" uniqueid="c1d4"
+		type="indoor" />
+	<node name="node131" id="131" x="4" y="6" z="2" uniqueid="ca19"
+		type="indoor" />
+	<node name="node132" id="132" x="4" y="6" z="3" uniqueid="b54e"
+		type="indoor" />
+	<node name="node133" id="133" x="5" y="6" z="1" uniqueid="b6be"
+		type="indoor" />
+	<node name="node134" id="134" x="5" y="6" z="2" uniqueid="b0db"
+		type="indoor" />
+	<node name="node135" id="135" x="5" y="6" z="3" uniqueid="bbe8"
+		type="indoor" />
+	<node name="node136" id="136" x="6" y="6" z="1" uniqueid="cedc"
+		type="indoor" />
+	<node name="node137" id="137" x="6" y="6" z="2" uniqueid="c677"
+		type="indoor" />
+	<node name="node138" id="138" x="6" y="6" z="3" uniqueid="c211"
+		type="indoor" />
+	<node name="node139" id="139" x="7" y="6" z="1" uniqueid="c47f"
+		type="indoor" />
+	<node name="node140" id="140" x="7" y="6" z="2" uniqueid="c381"
+		type="indoor" />
+	<node name="node141" id="141" x="7" y="6" z="3" uniqueid="b2fa"
+		type="indoor" />
+	<node name="node142" id="142" x="8" y="6" z="1" uniqueid="caa0"
+		type="indoor" />
+	<node name="node143" id="143" x="8" y="6" z="2" uniqueid="afd3"
+		type="indoor" />
+	<node name="node144" id="144" x="8" y="6" z="3" uniqueid="b256"
+		type="indoor" />
+	<node name="node145" id="145" x="1" y="7" z="1" uniqueid="c9d8"
+		type="indoor" />
+	<node name="node146" id="146" x="1" y="7" z="2" uniqueid="cefd"
+		type="indoor" />
+	<node name="node147" id="147" x="1" y="7" z="3" uniqueid="ba79"
+		type="indoor" />
+	<node name="node148" id="148" x="2" y="7" z="1" uniqueid="b71d"
+		type="indoor" />
+	<node name="node149" id="149" x="2" y="7" z="2" uniqueid="c7e8"
+		type="indoor" />
+	<node name="node150" id="150" x="2" y="7" z="3" uniqueid="c941"
+		type="indoor" />
+	<node name="node151" id="151" x="3" y="7" z="1" uniqueid="ba7d"
+		type="indoor" />
+	<node name="node152" id="152" x="3" y="7" z="2" uniqueid="ba0b"
+		type="indoor" />
+	<node name="node153" id="153" x="3" y="7" z="3" uniqueid="b7fe"
+		type="indoor" />
+	<node name="node154" id="154" x="4" y="7" z="1" uniqueid="b90e"
+		type="indoor" />
+	<node name="node155" id="155" x="4" y="7" z="2" uniqueid="c84e"
+		type="indoor" />
+	<node name="node156" id="156" x="4" y="7" z="3" uniqueid="c7ad"
+		type="indoor" />
+	<node name="node157" id="157" x="5" y="7" z="1" uniqueid="bd0f"
+		type="indoor" />
+	<node name="node158" id="158" x="5" y="7" z="2" uniqueid="ce62"
+		type="indoor" />
+	<node name="node159" id="159" x="5" y="7" z="3" uniqueid="b4f8"
+		type="indoor" />
+	<node name="node160" id="160" x="6" y="7" z="1" uniqueid="b78d"
+		type="indoor" />
+	<node name="node161" id="161" x="6" y="7" z="2" uniqueid="bf13"
+		type="indoor" />
+	<node name="node162" id="162" x="6" y="7" z="3" uniqueid="babf"
+		type="indoor" />
+	<node name="node163" id="163" x="7" y="7" z="1" uniqueid="bc2e"
+		type="indoor" />
+	<node name="node164" id="164" x="7" y="7" z="2" uniqueid="be2b"
+		type="indoor" />
+	<node name="node165" id="165" x="7" y="7" z="3" uniqueid="b44f"
+		type="indoor" />
+	<node name="node166" id="166" x="8" y="7" z="1" uniqueid="c128"
+		type="indoor" />
+	<node name="node167" id="167" x="8" y="7" z="2" uniqueid="c86d"
+		type="indoor" />
+	<node name="node168" id="168" x="8" y="7" z="3" uniqueid="b1a2"
+		type="indoor" />
+	<node name="node169" id="169" x="1" y="8" z="1" uniqueid="bdcc"
+		type="indoor" />
+	<node name="node170" id="170" x="1" y="8" z="2" uniqueid="b8fa"
+		type="indoor" />
+	<node name="node171" id="171" x="1" y="8" z="3" uniqueid="1c26"
+		type="indoor" />
+	<node name="node172" id="172" x="2" y="8" z="1" uniqueid="bff3"
+		type="indoor" />
+	<node name="node173" id="173" x="2" y="8" z="2" uniqueid="b7e7"
+		type="indoor" />
+	<node name="node174" id="174" x="2" y="8" z="3" uniqueid="cabc"
+		type="indoor" />
+	<node name="node175" id="175" x="3" y="8" z="1" uniqueid="c5d6"
+		type="indoor" />
+	<node name="node176" id="176" x="3" y="8" z="2" uniqueid="cb6c"
+		type="indoor" />
+	<node name="node177" id="177" x="3" y="8" z="3" uniqueid="cc0a"
+		type="indoor" />
+	<node name="node178" id="178" x="4" y="8" z="1" uniqueid="b847"
+		type="indoor" />
+	<node name="node179" id="179" x="4" y="8" z="2" uniqueid="c02a"
+		type="indoor" />
+	<node name="node180" id="180" x="4" y="8" z="3" uniqueid="ba20"
+		type="indoor" />
+	<node name="node181" id="181" x="5" y="8" z="1" uniqueid="c9d5"
+		type="indoor" />
+	<node name="node182" id="182" x="5" y="8" z="2" uniqueid="b661"
+		type="indoor" />
+	<node name="node183" id="183" x="5" y="8" z="3" uniqueid="be23"
+		type="indoor" />
+	<node name="node184" id="184" x="6" y="8" z="1" uniqueid="b7b0"
+		type="indoor" />
+	<node name="node185" id="185" x="6" y="8" z="2" uniqueid="b4b9"
+		type="indoor" />
+	<node name="node186" id="186" x="6" y="8" z="3" uniqueid="bc68"
+		type="indoor" />
+	<node name="node187" id="187" x="7" y="8" z="1" uniqueid="b7c1"
+		type="indoor" />
+	<node name="node188" id="188" x="7" y="8" z="2" uniqueid="b7f7"
+		type="indoor" />
+	<node name="node189" id="189" x="7" y="8" z="3" uniqueid="1cad"
+		type="indoor" />
+	<node name="node190" id="190" x="8" y="8" z="1" uniqueid="1f7b"
+		type="indoor" />
+	<node name="node191" id="191" x="8" y="8" z="2" uniqueid="b5c4"
+		type="indoor" />
+	<node name="node192" id="192" x="8" y="8" z="3" uniqueid="bfb7"
+		type="indoor" />
+	<node name="node193" id="193" x="1" y="9" z="1" uniqueid="b9dd"
+		type="indoor" />
+	<node name="node194" id="194" x="1" y="9" z="2" uniqueid="cd65"
+		type="indoor" />
+	<node name="node195" id="195" x="1" y="9" z="3" uniqueid="c790"
+		type="indoor" />
+	<node name="node196" id="196" x="2" y="9" z="1" uniqueid="b9cf"
+		type="indoor" />
+	<node name="node197" id="197" x="2" y="9" z="2" uniqueid="b37d"
+		type="indoor" />
+	<node name="node198" id="198" x="2" y="9" z="3" uniqueid="c0c2"
+		type="indoor" />
+	<node name="node199" id="199" x="3" y="9" z="1" uniqueid="bcff"
+		type="indoor" />
+	<node name="node200" id="200" x="3" y="9" z="2" uniqueid="b162"
+		type="indoor" />
+	<node name="node201" id="201" x="3" y="9" z="3" uniqueid="b36d"
+		type="indoor" />
+	<node name="node202" id="202" x="4" y="9" z="1" uniqueid="afa5"
+		type="indoor" />
+	<node name="node203" id="203" x="4" y="9" z="2" uniqueid="bce0"
+		type="indoor" />
+	<node name="node204" id="204" x="4" y="9" z="3" uniqueid="c610"
+		type="indoor" />
+	<node name="node205" id="205" x="5" y="9" z="1" uniqueid="b4f2"
+		type="indoor" />
+	<node name="node206" id="206" x="5" y="9" z="2" uniqueid="bc93"
+		type="indoor" />
+	<node name="node207" id="207" x="5" y="9" z="3" uniqueid="cadf"
+		type="indoor" />
+	<node name="node208" id="208" x="6" y="9" z="1" uniqueid="c324"
+		type="indoor" />
+	<node name="node209" id="209" x="6" y="9" z="2" uniqueid="bf07"
+		type="indoor" />
+	<node name="node210" id="210" x="6" y="9" z="3" uniqueid="cd83"
+		type="indoor" />
+	<node name="node211" id="211" x="7" y="9" z="1" uniqueid="ce46"
+		type="indoor" />
+	<node name="node212" id="212" x="7" y="9" z="2" uniqueid="ba40"
+		type="indoor" />
+	<node name="node213" id="213" x="7" y="9" z="3" uniqueid="b37a"
+		type="indoor" />
+	<node name="node214" id="214" x="8" y="9" z="1" uniqueid="c8bf"
+		type="indoor" />
+	<node name="node215" id="215" x="8" y="9" z="2" uniqueid="bec0"
+		type="indoor" />
+	<node name="node216" id="216" x="8" y="9" z="3" uniqueid="2037"
+		type="indoor" />
+	<node name="node217" id="217" x="1" y="10" z="1" uniqueid="ce48"
+		type="indoor" />
+	<node name="node218" id="218" x="1" y="10" z="2" uniqueid="b814"
+		type="indoor" />
+	<node name="node219" id="219" x="1" y="10" z="3" uniqueid="b8a6"
+		type="indoor" />
+	<node name="node220" id="220" x="2" y="10" z="1" uniqueid="bdb9"
+		type="indoor" />
+	<node name="node221" id="221" x="2" y="10" z="2" uniqueid="b675"
+		type="indoor" />
+	<node name="node222" id="222" x="2" y="10" z="3" uniqueid="b75f"
+		type="indoor" />
+	<node name="node223" id="223" x="3" y="10" z="1" uniqueid="afeb"
+		type="indoor" />
+	<node name="node224" id="224" x="3" y="10" z="2" uniqueid="b42a"
+		type="indoor" />
+	<node name="node225" id="225" x="3" y="10" z="3" uniqueid="b63a"
+		type="indoor" />
+	<node name="node226" id="226" x="4" y="10" z="1" uniqueid="bf23"
+		type="indoor" />
+	<node name="node227" id="227" x="4" y="10" z="2" uniqueid="bff9"
+		type="indoor" />
+	<node name="node228" id="228" x="4" y="10" z="3" uniqueid="c1cd"
+		type="indoor" />
+	<node name="node229" id="229" x="5" y="10" z="1" uniqueid="b38d"
+		type="indoor" />
+	<node name="node230" id="230" x="5" y="10" z="2" uniqueid="ce99"
+		type="indoor" />
+	<node name="node231" id="231" x="5" y="10" z="3" uniqueid="b169"
+		type="indoor" />
+	<node name="node232" id="232" x="6" y="10" z="1" uniqueid="c6c5"
+		type="indoor" />
+	<node name="node233" id="233" x="6" y="10" z="2" uniqueid="b8e7"
+		type="indoor" />
+	<node name="node234" id="234" x="6" y="10" z="3" uniqueid="c394"
+		type="indoor" />
+	<node name="node235" id="235" x="7" y="10" z="1" uniqueid="b109"
+		type="indoor" />
+	<node name="node236" id="236" x="7" y="10" z="2" uniqueid="bbe0"
+		type="indoor" />
+	<node name="node237" id="237" x="7" y="10" z="3" uniqueid="cdef"
+		type="indoor" />
+	<node name="node238" id="238" x="8" y="10" z="1" uniqueid="cb29"
+		type="indoor" />
+	<node name="node239" id="239" x="8" y="10" z="2" uniqueid="b38f"
+		type="indoor" />
+	<node name="node240" id="240" x="8" y="10" z="3" uniqueid="b89b"
+		type="indoor" />
+
+	<!-- outdoor -->
+	<node name="node241" id="241" x="-1" y="1" z="2.5" uniqueid=""
+		type="outdoor" down="true" />
+	<node name="node242" id="242" x="-1" y="2" z="2.5" uniqueid=""
+		type="outdoor" down="true" />
+	<node name="node243" id="243" x="-1" y="3" z="2.5" uniqueid=""
+		type="outdoor" down="true" />
+	<node name="node244" id="244" x="-1" y="4" z="2.5" uniqueid=""
+		type="outdoor" down="true" />
+	<node name="node245" id="245" x="-1" y="5" z="2.5" uniqueid=""
+		type="outdoor" down="true" />
+	<node name="node246" id="246" x="-1" y="6" z="2.5" uniqueid=""
+		type="outdoor" down="true" />
+	<node name="node247" id="247" x="-1" y="7" z="2.5" uniqueid=""
+		type="outdoor" down="true" />
+	<node name="node248" id="248" x="-1" y="8" z="2.5" uniqueid=""
+		type="outdoor" down="true" />
+	<node name="node249" id="249" x="-1" y="9" z="2.5" uniqueid=""
+		type="outdoor" down="true" />
+	<node name="node250" id="250" x="-1" y="10" z="2.5" uniqueid=""
+		type="outdoor" down="true" />
+	<node name="node251" id="251" x="-1" y="11" z="2.5" uniqueid=""
+		type="outdoor" down="true" />
+	<node name="node252" id="252" x="-1" y="12" z="2.5" uniqueid=""
+		type="outdoor" down="true" />
+
+	<!-- mobile -->
+	<node name="node253" id="253" x="5.7" y="7.1" z="1" uniqueid="c140"
+		type="mobile" />
+	<node name="node254" id="254" x="5.7" y="6.4" z="1" uniqueid="b67f"
+		type="mobile" />
+	<node name="node255" id="255" x="5.7" y="5.7" z="1" uniqueid="b7d6"
+		type="mobile" />
+	<node name="node256" id="256" x="5.7" y="5.0" z="1" uniqueid="1f5d"
+		type="mobile" />
+
+</senslab>
