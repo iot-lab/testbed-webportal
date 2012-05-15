@@ -7,10 +7,19 @@ div.dataTables_length label {
 
 div.dataTables_length select {
 	width: 75px;
+    display: inline-block;
+    margin-top: 7px;
 }
 
 div.dataTables_filter label {
 	width: 460px;
+	float: right;
+	text-align: right;
+}
+
+div.dataTables_filter input {
+    display: inline-block;
+    margin-top: 7px;
 }
 
 div.dataTables_info {
@@ -20,6 +29,8 @@ div.dataTables_info {
 
 div.dataTables_paginate {
 	margin: 0;
+	float: right;
+	text-align: right;
 }
 
 table {
@@ -31,7 +42,6 @@ table.dataTable th:active {
 	outline: none;
 }
 
-
 .header {
 	background: url('../img/sort_both.png') no-repeat center right;
 	cursor: pointer;
@@ -40,4 +50,39 @@ table.dataTable th:active {
 .headerSortUp { background: url('../img/sort_asc.png') no-repeat center right; }
 .headerSortDown { background: url('../img/sort_desc.png') no-repeat center right; }
 
+.span8 {
+	width:564px;
+    background-color: #EEEEEE;
+}
+
+.dataTables_wrapper {
+	-moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-collapse: separate;
+    border-color: #DDDDDD;
+    border-radius: 4px 4px 4px 4px;
+    border-style: solid solid solid solid;
+    border-width: 1px 1px 1px 1px;
+    padding:5px;
+    background-color: #EEEEEE;
+}
+
+.loading {
+	-moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-collapse: separate;
+    border-color: #DDDDDD;
+    border-radius: 4px 4px 4px 4px;
+    border-style: solid solid solid solid;
+    border-width: 1px 1px 1px 1px;
+    padding:5px;
+    background-color: #EEEEEE;
+    text-align: center;
+}
 

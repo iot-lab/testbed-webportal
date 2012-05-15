@@ -19,21 +19,23 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
       </div>
   
       <div class="row">
-        <div class="span2 offset10" style="text-align:right">
+        <div class="span2" style="text-align:left;padding-bottom:5px;padding-left:5px;">
           <a href="#" class="btn btn-add" data-toggle="modal">Add user(s)</a>
         </div>
       </div>
-
+      
       <div class="row">
         <div class="span12">
 		<!-- <a href="#" class="btn btn-add" data-toggle="modal">Add user(s)</a> -->
-                <table id="tbl_users" class="table table-bordered table-striped table-condensed">
+				<div class="loading" id="loading"><b>Loading ...</b></div>
+                <table id="tbl_users" class="table table-bordered table-striped table-condensed" style="display:none">
                 <thead>
                     <tr>
                         <th>Login</th>
                         <th>FirstName</th>
                         <th>LastName</th>
                         <th>Email</th>
+                        <th>Creation date</th>
                         <th>Options</th>
                     </tr>
                 </thead>
@@ -259,6 +261,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                     '<td>' + val.firstName + '</td>'+
                     '<td>'+ val.lastName +'</td>'+
                     '<td><a href="mailto:' + val.email + '">' + val.email + '</a></td>'+
+                    '<td>'+ formatCreateTimeStamp(val.createTimeStamp) +'</td>'+
                     '<td><a href="#" class="btn btn-valid '+btnValidClass+'" data="'+i+'" data-state="'+val.validate+'" onClick="validateUser('+i+')">'+btnValidValue+'</a> ' +
                         '<a href="#" class="btn btn-edit" data-toggle="modal" data="'+i+'">Edit</a> ' +
                         '<a href="#" class="btn btn-admin '+btnAdminClass+'" data="'+i+'" data-state="'+val.admin+'" onClick="setAdmin('+i+')">'+btnAdminValue+'</a> ' +
@@ -286,15 +289,18 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                     $("#edit_modal").modal('show');
                 });
                 $('#tbl_users').dataTable({
-			"sDom": "<''f>t<''i'p>",
+                	"sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
+			//"sDom": "<''f>t<''i'p>",
                         "bPaginate": true,
                         "sPaginationType": "bootstrap",
-                        "bLengthChange": false,
+                        "bLengthChange": true,
                         "bFilter": true,
                         "bSort": true,
                         "bInfo": true,
                         "bAutoWidth": false
                 } );
+                $('#tbl_users').show();
+                $('#loading').hide();
 
             },
             error:function(XMLHttpRequest, textStatus, errorThrows){
@@ -494,7 +500,12 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
         
     return false;
     
-    }); 
+    });
+
+    function formatCreateTimeStamp(createTimeStamp) {
+        /* "yyyy/mm/dd" */
+		return createTimeStamp.substring(0,4)+"/"+createTimeStamp.substring(4,6)+"/"+createTimeStamp.substring(6,8);
+    }
     
     
     </script>
