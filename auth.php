@@ -39,7 +39,7 @@ else
 
 
 /* Test isAdmin */
-$url = 'http://localhost/rest/users/'.$_POST['login'].'/isadmin';
+$url = 'https://localhost/rest/users/'.$_POST['login'].'/isadmin';
 
 $handle = curl_init();
 curl_setopt($handle, CURLOPT_URL, $url);

@@ -16,7 +16,7 @@ else
     exit();
 }
 
-$url = 'http://localhost/rest/users';
+$url = 'https://localhost/rest/users';
 
 # headers and data (this is API dependent, some uses XML)
 $headers = array(
