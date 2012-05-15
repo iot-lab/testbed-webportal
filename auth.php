@@ -8,7 +8,7 @@ if($_POST['login'] == "" || $_POST['password'] == "")
     exit();
 }
 
-$url = 'http://localhost/rest/users/'.$_POST['login'].'?login';
+$url = 'https://localhost/rest/users/'.$_POST['login'].'?login';
 $handle = curl_init();
 curl_setopt($handle, CURLOPT_URL, $url);
 curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
