@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
     header("location: .");
@@ -12,35 +11,35 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
 
     <div class="container">
       
-      <div class="row">
+    <div class="row">
         <div class="span12">
           <h2>Users</h2>
         </div>
-      </div>
+    </div>
   
-      <div class="row">
+    <div class="row">
         <div class="span2" style="text-align:left;padding-bottom:5px;padding-left:5px;">
           <a href="#" class="btn btn-add" data-toggle="modal">Add user(s)</a>
         </div>
-      </div>
+    </div>
       
       <div class="row">
         <div class="span12">
-		<!-- <a href="#" class="btn btn-add" data-toggle="modal">Add user(s)</a> -->
+        
 				<div class="loading" id="loading"><b>Loading ...</b></div>
                 <table id="tbl_users" class="table table-bordered table-striped table-condensed" style="display:none">
-                <thead>
-                    <tr>
-                        <th>Login</th>
-                        <th>FirstName</th>
-                        <th>LastName</th>
-                        <th>Email</th>
-                        <th>Creation date</th>
-                        <th>Options</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
+	                <thead>
+	                    <tr>
+	                        <th>Login</th>
+	                        <th>FirstName</th>
+	                        <th>LastName</th>
+	                        <th>Email</th>
+	                        <th>Creation date</th>
+	                        <th>Options</th>
+	                    </tr>
+	                </thead>
+	                <tbody>
+	                </tbody>
                 </table>
         </div>
 

@@ -55,6 +55,11 @@ table.dataTable th:active {
 	background-color: #EEEEEE;
 }
 
+.span7 {
+	width:362px;
+	background-color: #EEEEEE;
+}
+
 .span9 {
 	width:770px;
 	background-color: #FFF;
@@ -89,30 +94,5 @@ table.dataTable th:active {
 	padding:5px;
 	background-color: #EEEEEE;
 	text-align: center;
-}
-.tabbable {
-	-moz-border-bottom-colors: none;
-	-moz-border-image: none;
-	-moz-border-left-colors: none;
-	-moz-border-right-colors: none;
-	-moz-border-top-colors: none;
-	border-collapse: separate;
-	border-color: #DDDDDD;
-	border-radius: 4px 4px 4px 4px;
-	border-style: solid solid solid solid;
-	border-width: 1px 1px 1px 1px;
-	text-align: center;
-}
-
-.nav-tabs > .active > a, .nav-tabs > .active > a:hover {
-	background-color: #EEEEEE;
-}
-
-.tab-content{
-	background-color: #EEEEEE;
-}
-
-.nav {
-	margin-bottom:0px;
 }
 

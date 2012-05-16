@@ -16,69 +16,33 @@ if(!$_SESSION['is_auth']) {
           <h2>Experiment List</h2>
         </div>
 	</div>
+  
+    <div class="row">
+        <div class="span2" style="text-align:left;padding-bottom:5px;padding-left:5px;">
+          <a href="#" class="btn btn-new" data-toggle="modal">New Experiment</a>&nbsp;<a href="#" class="btn btn-clear" onClick="getExpList()">clear</a>
+        </div>
+    </div>
     
 	<div class="row">
 		<div class="span9">
-           <p>
+		
                 <div class="loading" id="loading"><b>Loading ...</b></div>
-                <div class="tabbable" id="tabbable" style="display:none">
-                    <ul class="nav nav-tabs">
-                            <li class="active"><a href="#tab1" data-toggle="tab">Running Experiment(s)</a></li>
-                            <li><a href="#tab2" data-toggle="tab">Upcoming Experiment(s)</a></li>
-                            <li><a href="#tab3" data-toggle="tab">Past Experiment(s)</a></li>
-                    </ul>
-                    <div class="tab-content">
-                            <div class="tab-pane active" id="tab1">
-                                <table id="tbl_running_exps" class="table table-bordered table-striped table-condensed">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Date</th>
-                                        <th>Duration</th>
-                                        <th>Node(s)</th>
-                                        <th>Options</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                                </table>
-                            </div>
-                                   <div class="tab-pane" id="tab2">
-                                <table id="tbl_upcoming_exps" class="table table-bordered table-striped table-condensed">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Date</th>
-                                        <th>Duration</th>
-                                        <th>Node(s)</th>
-                                        <th>Options</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                                </table>
-                            </div>
-                            <div class="tab-pane" id="tab3">
-                                <table id="tbl_past_exps" class="table table-bordered table-striped table-condensed">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Date</th>
-                                        <th>Duration</th>
-                                        <th>Node(s)</th>
-                                        <th>Options</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                                </table>
-                            </div>
-                    </div>
-                </div>
-           </p>
+                <table id="tbl_exps" class="table table-bordered table-striped table-condensed" style="display:none">
+					<thead>
+                    	<tr>
+                        	<th>ID</th>
+                            <th>Name</th>
+                            <th>Date</th>
+                            <th>Duration</th>
+                            <th>Node(s)</th>
+                            <th>State</th>
+                            <th>Options</th>
+                        </tr>
+                   	</thead>
+                    <tbody>
+                    </tbody>
+             	</table>
+             	
         </div>
           
         <div class="span4">
@@ -193,61 +157,8 @@ if(!$_SESSION['is_auth']) {
     <script type="text/javascript">
         
         $(document).ready(function(){
-            
-            /* Retrieve experiment list */
-            $.ajax({
-                url: "/rest/experiments?range",
-                type: "GET",
-                //contentType: "application/json",
-                //data: JSON.stringify({"login":"<?php echo $_SESSION['login'] ?>"}),
-                data: {},
-                dataType: "json",
-                success:function(data){
-	                exps = data.items;
-	                var i = 0;
-	                var expRunning=0;
-	                var expUpcoming=0;
-	                var expPast=0;
-	                $.each(data.items, function(key,val) {
-	
-	                    var date=new Date();
-	                    date.setTime(val.date+"000");
-	
-	                    var tdToAppend='<tr data=' + val.id + '>'+
-	                            '<td>' + val.id + '</td>'+
-	                            '<td>' + val.name + '</td>'+
-	                            '<td>'+ date + '</td>'+
-	                            '<td>' + Math.floor(val.duration/60) + ' minute(s)</a></td>'+
-	                            '<td>' + val.nb_resources + ' node(s)</td>'+
-	                            '<td><a href="#" class="btn btn-valid" data="'+val.id+'" onClick="detailsExp('+val.id+')">Details</a></td>'
-	                            +'</tr>';
-	
-	                    switch(val.state) {
-	                            case "Running":
-	                                    $("#tbl_running_exps tbody").append(tdToAppend);
-	                                    expRunning++;
-	                                    break;
-	                            case "Upcoming":
-	                                    $("#tbl_upcoming_exps tbody").append(tdToAppend);
-	                                    expUpcoming++;
-	                                    break;
-	                            case "Past":
-	                                    $("#tbl_past_exps tbody").append(tdToAppend);
-	                                    expPast++;
-	                                    break;
-	                    }
-	                    i++;
-	                });
-	                $('#loading').hide();
-	                $('#tabbable').show();
-	                $("#expRunning").text(expRunning);
-	                $("#expUpcoming").text(expUpcoming);
-	                $("#expPast").text(expPast);            
-            },
-                error:function(XMLHttpRequest, textStatus, errorThrows){
-                    alert("error" + textStatus);
-                }
-            });
+
+            getExpList();
             
             /* Retrieve current sshkey */
             $.ajax({
@@ -410,6 +321,82 @@ if(!$_SESSION['is_auth']) {
                     alert("error" + textStatus);
                 }
             });
+
+	}
+
+	function getExpList() {
+
+		$("#tbl_exps tbody").empty();
+        
+        /* Retrieve experiment list */
+        $.ajax({
+            url: "/rest/experiments?limite",
+            type: "GET",
+            //contentType: "application/json",
+            //data: JSON.stringify({"login":"<?php echo $_SESSION['login'] ?>"}),
+            data: {},
+            dataType: "json",
+            success:function(data){
+                exps = data.items;
+                var i = 0;
+                var expRunning=0;
+                var expUpcoming=0;
+                var expPast=0;
+                $.each(data.items, function(key,val) {
+
+                    var date=new Date();
+                    date.setTime(val.date+"000");
+
+					var buttonAction='<a href="#" class="btn btn-valid" data="'+val.id+'" onClick="detailsExp('+val.id+')">Details</a>';
+                	
+                    switch(val.state) {
+                            case "Running":
+	                            buttonAction+='<a href="#" class="btn btn-danger" data="'+val.id+'" onClick="stopExp('+val.id+')">Stop</a>';
+								expRunning++;
+                                break;
+                            case "Upcoming":
+                            	buttonAction+='<a href="#" class="btn btn-danger" data="'+val.id+'" onClick="cancelExp('+val.id+')">Cancel</a>';
+                                expUpcoming++;
+                                break;
+                            case "Terminated":
+                            case "Error":
+                                expPast++;
+                                break;
+                    }
+
+                    $("#tbl_exps tbody").append(
+    	                    '<tr data=' + val.id + '>'+
+                            '<td>' + val.id + '</td>'+
+                            '<td>' + val.name + '</td>'+
+                            '<td>'+ date + '</td>'+
+                            '<td>' + Math.floor(val.duration/60) + ' minute(s)</a></td>'+
+                            '<td>' + val.nb_resources + ' node(s)</td>'+
+                            '<td>' + val.state + '</td>'+
+                            '<td>' + buttonAction +'</td>'
+                            +'</tr>');
+                    i++;
+                });
+                $('#tbl_exps').dataTable({
+                	"sDom": "<'row'<'span7'l><'span7'f>r>t<'row'<'span7'i><'span7'p>>",
+                        "bPaginate": true,
+                        "sPaginationType": "bootstrap",
+                        "bLengthChange": true,
+                        "bFilter": true,
+                        "bSort": true,
+                        "bInfo": true,
+                        "bAutoWidth": false,
+                        "aaSorting": [[ 0, "desc" ]]
+                } );
+                $('#loading').hide();
+                $('#tbl_exps').show();
+                $("#expRunning").text(expRunning);
+                $("#expUpcoming").text(expUpcoming);
+                $("#expPast").text(expPast);
+        },
+            error:function(XMLHttpRequest, textStatus, errorThrows){
+                alert("error" + textStatus);
+            }
+        });
 
 	}
 
