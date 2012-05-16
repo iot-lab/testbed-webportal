@@ -118,15 +118,11 @@ if(!$_SESSION['is_auth']) {
                 </div>
               </div>
               
-              
-
                 <button id="btn_modify_password" class="btn btn-primary" type="submit">Modify</button>
                 </form>
             </div>
         </div>        
         
-        
-
         <div id="details_modal" class="modal hide fade">
             <div class="modal-header">
               <a class="close" data-dismiss="modal">×</a>
@@ -139,12 +135,6 @@ if(!$_SESSION['is_auth']) {
             </div>
         </div>
 
-
-
-
-
-
-        
         
         <?php include('footer.php') ?>
 
@@ -310,9 +300,35 @@ if(!$_SESSION['is_auth']) {
                 data: {},
                 dataType: "json",
                 success:function(data){
-                	console.log(data);
-			$("#detailsExp").html(
-				"Number of Nodes: " + data.nodes.length);
+                	//console.log(data);
+
+			$("#detailsExp").html("Number of Nodes: " + data.nodes.length);
+
+			$("#detailsExp").append('<ul>');
+			$.each(data.nodes, function(key,val) {
+				$("#detailsExp").append('<li>'+val+'</li>');
+			});
+			$("#detailsExp").append('</ul>');
+
+                        $("#detailsExp").append('<ul>');
+                        $.each(data.firmwareassociations, function(key,val) {
+				var liste = "";
+				var liste_nodes = "";
+				$.each(val, function(key2,val2) {
+					if(key2 == "firmwarename"){
+						liste = '<ul><li>'+val2+'</li><ul>'+liste_nodes+'</ul></lu>';
+					}
+					else{
+						liste_nodes += '<li><b>'+val2+'</b></li>';
+					}
+					$("#detailsExp").append(liste);
+				});
+
+                        });
+
+                        $("#detailsExp").append('</ul>');
+
+
 			$('#details_modal').modal('show');
             	},
                 error:function(XMLHttpRequest, textStatus, errorThrows){
