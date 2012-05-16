@@ -316,7 +316,7 @@ if(!$_SESSION['is_auth']) {
 				var liste_nodes = "";
 				$.each(val, function(key2,val2) {
 					if(key2 == "firmwarename"){
-						liste = '<ul><li>'+val2+'</li><ul>'+liste_nodes+'</ul></lu>';
+						liste = '<ul><li>'+val2+'</li><ul>'+liste_nodes.replace(/,/g,'<br/>')+'</ul></lu>';
 					}
 					else{
 						liste_nodes += '<li><b>'+val2+'</b></li>';
@@ -325,6 +325,24 @@ if(!$_SESSION['is_auth']) {
 				});
 
                         });
+
+
+                        $.each(data.profileassociations, function(key,val) {
+                                var liste = "";
+                                var liste_nodes = "";
+                                $.each(val, function(key2,val2) {
+                                        if(key2 == "profilename"){
+                                                liste = '<ul><li>'+val2+'</li><ul>'+liste_nodes.replace(/,/g,'<br/>')+'</ul></lu>';
+                                        }
+                                        else{
+                                                liste_nodes += '<li><b>'+val2+'</b></li>';
+                                        }
+                                        $("#detailsExp").append(liste);
+                                });
+
+                        });
+
+
 
                         $("#detailsExp").append('</ul>');
 
