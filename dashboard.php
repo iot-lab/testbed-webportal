@@ -10,35 +10,84 @@ if(!$_SESSION['is_auth']) {
 <?php include("header.php") ?>
 
     <div class="container">
-        
+    
     <div class="row">
-        <div class="span8">
+        <div class="span12">
           <h2>Experiment List</h2>
+        </div>
+	</div>
+    
+	<div class="row">
+		<div class="span9">
            <p>
-				<div class="loading" id="loading"><b>Loading ...</b></div>
-                <table id="tbl_exps" class="table table-bordered table-striped table-condensed" style="display:none">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Date</th>
-                        <th>Duration</th>
-                        <th>Node(s)</th>
-                        <th>Options</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-                </table>
+                <div class="loading" id="loading"><b>Loading ...</b></div>
+                <div class="tabbable" id="tabbable" style="display:none">
+                    <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab1" data-toggle="tab">Running Experiment(s)</a></li>
+                            <li><a href="#tab2" data-toggle="tab">Upcoming Experiment(s)</a></li>
+                            <li><a href="#tab3" data-toggle="tab">Past Experiment(s)</a></li>
+                    </ul>
+                    <div class="tab-content">
+                            <div class="tab-pane active" id="tab1">
+                                <table id="tbl_running_exps" class="table table-bordered table-striped table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Date</th>
+                                        <th>Duration</th>
+                                        <th>Node(s)</th>
+                                        <th>Options</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                                </table>
+                            </div>
+                                   <div class="tab-pane" id="tab2">
+                                <table id="tbl_upcoming_exps" class="table table-bordered table-striped table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Date</th>
+                                        <th>Duration</th>
+                                        <th>Node(s)</th>
+                                        <th>Options</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="tab3">
+                                <table id="tbl_past_exps" class="table table-bordered table-striped table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Date</th>
+                                        <th>Duration</th>
+                                        <th>Node(s)</th>
+                                        <th>Options</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                                </table>
+                            </div>
+                    </div>
+                </div>
            </p>
         </div>
+          
         <div class="span4">
           <h2>Personal dashboard</h2>
           <p><i class="icon-cog"></i> Experiments:</p>
             <ul>
-                <li><span class="badge badge-success">1</span> running</li>
-                <li><span class="badge badge-info">2</span> upcoming</li>
-                <li><span class="badge">851</span> done</li>
+				<li><span id="expRunning" class="badge badge-success">&nbsp;</span> running</li>
+				<li><span id="expUpcoming" class="badge badge-info">&nbsp;</span> upcoming</li>
+				<li><span id="expPast" class="badge">&nbsp;</span> past</li>
             </ul>
           <p><i class="icon-th"></i> Profiles: 2 <p>
           <p><i class="icon-home"></i> Home's quota: 60% (600/1000Mo)
@@ -154,38 +203,46 @@ if(!$_SESSION['is_auth']) {
                 data: {},
                 dataType: "json",
                 success:function(data){
-                    exps = data.items;
-                    var i = 0;
-                    $.each(data.items, function(key,val) {
-                        
-                        var date=new Date();
-                        date.setTime(val.submission+"000");
-
-			//exp row
-                        $("#tbl_exps tbody").append(
-                        '<tr data=' + i + '>'+
-                        '<td>' + val.id + '</td>'+
-                        '<td>' + val.name + '</td>'+
-                        '<td>'+ date + '</td>'+
-                        '<td>' + val.api_timestamp + '</a></td>'+
-                        '<td>yeah</td>'+
-                        '<td><a href="#" class="btn btn-valid" data="'+i+'" onClick="detailsExp('+i+')">Details</a></td>'
-                        +'</tr>');
-                        i++;
-                    });
-                    $('#tbl_exps').dataTable({
-                    	"sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
-    			//"sDom": "<''f>t<''i'p>",
-                            "bPaginate": true,
-                            "sPaginationType": "bootstrap",
-                            "bLengthChange": true,
-                            "bFilter": true,
-                            "bSort": true,
-                            "bInfo": true,
-                            "bAutoWidth": false
-                    } );
-                    $('#tbl_exps').show();
-                    $('#loading').hide();
+	                exps = data.items;
+	                var i = 0;
+	                var expRunning=0;
+	                var expUpcoming=0;
+	                var expPast=0;
+	                $.each(data.items, function(key,val) {
+	
+	                    var date=new Date();
+	                    date.setTime(val.date+"000");
+	
+	                    var tdToAppend='<tr data=' + val.id + '>'+
+	                            '<td>' + val.id + '</td>'+
+	                            '<td>' + val.name + '</td>'+
+	                            '<td>'+ date + '</td>'+
+	                            '<td>' + Math.floor(val.duration/60) + ' minute(s)</a></td>'+
+	                            '<td>' + val.nb_resources + ' node(s)</td>'+
+	                            '<td><a href="#" class="btn btn-valid" data="'+val.id+'" onClick="detailsExp('+val.id+')">Details</a></td>'
+	                            +'</tr>';
+	
+	                    switch(val.state) {
+	                            case "Running":
+	                                    $("#tbl_running_exps tbody").append(tdToAppend);
+	                                    expRunning++;
+	                                    break;
+	                            case "Upcoming":
+	                                    $("#tbl_upcoming_exps tbody").append(tdToAppend);
+	                                    expUpcoming++;
+	                                    break;
+	                            case "Past":
+	                                    $("#tbl_past_exps tbody").append(tdToAppend);
+	                                    expPast++;
+	                                    break;
+	                    }
+	                    i++;
+	                });
+	                $('#loading').hide();
+	                $('#tabbable').show();
+	                $("#expRunning").text(expRunning);
+	                $("#expUpcoming").text(expUpcoming);
+	                $("#expPast").text(expPast);            
             },
                 error:function(XMLHttpRequest, textStatus, errorThrows){
                     alert("error" + textStatus);
