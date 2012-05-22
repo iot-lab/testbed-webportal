@@ -30,6 +30,7 @@ if($code == 200) {
     $_SESSION['login'] = $_POST['login'];
     $_SESSION['password'] = $_POST['password'];
     $_SESSION['is_auth'] = true;
+	$_SESSION['basic_value'] = base64_encode($_POST['login'].":".$_POST['password']);
 }
 else
 {

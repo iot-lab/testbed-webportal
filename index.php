@@ -39,7 +39,7 @@ if($_SESSION['is_auth']) {
 
 <?php include('footer.php') ?>
 
-
+	<script src="js/base64.js"></script>
     <script type="text/javascript">
 
     var userjson = {};
@@ -57,11 +57,7 @@ if($_SESSION['is_auth']) {
             type: "POST",
             data: userlogin,
             success:function(response){
-                $("#div_error").show();
-                $("#div_error").removeClass("alert-error");
-                $("#div_error").addClass("alert-success");
-                $("#div_error").html("OK, please wait ...");
-                other_function();
+                window.location.reload();
             },
             error:function(XMLHttpRequest, textStatus, errorThrows){
                 $("#div_error").show();
@@ -73,20 +69,6 @@ if($_SESSION['is_auth']) {
         return false;
     });
 
-
-    function other_function() {
-
-        $.ajax({
-            url: "https://"+$("#txt_login").val()+":"+$("#txt_password").val()+"@<?php echo $_SERVER['SERVER_NAME']; ?>/rest/users/"+$("#txt_login").val()+"?login",
-            type: "GET",
-            success:function(response){
-                window.location.reload();
-            }
-        });
-        
-        return false;
-    }   
- 
     </script>
 
   </body>
