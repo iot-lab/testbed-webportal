@@ -18,8 +18,8 @@ if(!$_SESSION['is_auth']) {
 	</div>
   
     <div class="row">
-        <div class="span2" style="text-align:left;padding-bottom:5px;padding-left:5px;">
-          <a href="#" class="btn btn-new" data-toggle="modal">New Experiment</a>&nbsp;<a href="#" class="btn btn-clear" onClick="getExpList()">clear</a>
+        <div class="span5" style="text-align:left;padding-bottom:5px;padding-left:5px;">
+          <a href="new_experiment.php" class="btn btn-new">New Experiment</a>&nbsp;<a href="#" class="btn btn-clear" onClick="refreshExpList()">Refresh List</a>
         </div>
     </div>
     
@@ -155,6 +155,8 @@ if(!$_SESSION['is_auth']) {
 <script type="text/javascript" language="javascript" src="js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" language="javascript" src="js/datatable.js"></script>
     <script type="text/javascript">
+
+    var oTable;
         
         $(document).ready(function(){
 
@@ -270,7 +272,8 @@ if(!$_SESSION['is_auth']) {
                 success:function(data){
                 	//console.log(data);
 
-			$("#detailsExp").html("Number of Nodes: " + data.nodes.length);
+			$("#detailsExp").html("Experiment #" + id);
+			$("#detailsExp").append("<br/>Number of Nodes: " + data.nodes.length);
 
 			$("#detailsExp").append('<ul>');
 			$.each(data.nodes, function(key,val) {
@@ -325,44 +328,39 @@ if(!$_SESSION['is_auth']) {
 	}
 
 	function getExpList() {
-
-		$("#tbl_exps tbody").empty();
         
-        /* Retrieve experiment list */
-        $.ajax({
-            url: "/rest/experiments?limite",
-            type: "GET",
-            //contentType: "application/json",
-            //data: JSON.stringify({"login":"<?php echo $_SESSION['login'] ?>"}),
-            data: {},
-            dataType: "json",
-            success:function(data){
-                exps = data.items;
-                var i = 0;
-                var expRunning=0;
-                var expUpcoming=0;
-                var expPast=0;
-                $.each(data.items, function(key,val) {
+		/* Retrieve experiment list */
+		$.ajax({
+			url: "/rest/experiments?limite",
+			type: "GET",
+			dataType: "json",
+			success:function(data){
+				exps = data.items;
+				var i = 0;
+				var expRunning=0;
+				var expUpcoming=0;
+				var expPast=0;
+				$.each(data.items, function(key,val) {
 
-                    var date=new Date();
-                    date.setTime(val.date+"000");
+					var date=new Date();
+					date.setTime(val.date+"000");
 
 					var buttonAction='<a href="#" class="btn btn-valid" data="'+val.id+'" onClick="detailsExp('+val.id+')">Details</a>';
                 	
-                    switch(val.state) {
-                            case "Running":
-	                            buttonAction+='<a href="#" class="btn btn-danger" data="'+val.id+'" onClick="stopExp('+val.id+')">Stop</a>';
-								expRunning++;
-                                break;
-                            case "Upcoming":
-                            	buttonAction+='<a href="#" class="btn btn-danger" data="'+val.id+'" onClick="cancelExp('+val.id+')">Cancel</a>';
-                                expUpcoming++;
-                                break;
-                            case "Terminated":
-                            case "Error":
-                                expPast++;
-                                break;
-                    }
+					switch(val.state) {
+						case "Running":
+							buttonAction+='<a href="#" class="btn btn-danger" data="'+val.id+'" onClick="stopExp('+val.id+')">Stop</a>';
+							expRunning++;
+							break;
+						case "Upcoming":
+							buttonAction+='<a href="#" class="btn btn-danger" data="'+val.id+'" onClick="cancelExp('+val.id+')">Cancel</a>';
+							expUpcoming++;
+							break;
+        				case "Terminated":
+    					case "Error":
+							expPast++;
+							break;
+					}
 
                     $("#tbl_exps tbody").append(
     	                    '<tr data=' + val.id + '>'+
@@ -376,7 +374,7 @@ if(!$_SESSION['is_auth']) {
                             +'</tr>');
                     i++;
                 });
-                $('#tbl_exps').dataTable({
+                oTable = $('#tbl_exps').dataTable({
                 	"sDom": "<'row'<'span7'l><'span7'f>r>t<'row'<'span7'i><'span7'p>>",
                         "bPaginate": true,
                         "sPaginationType": "bootstrap",
@@ -400,6 +398,13 @@ if(!$_SESSION['is_auth']) {
 
 	}
 
+	function refreshExpList() {
+		$('#loading').show();
+		$('#tbl_exps').hide();
+		oTable.fnClearTable(true);
+		oTable.fnDestroy();
+		getExpList();
+	}
    
         
     </script>
