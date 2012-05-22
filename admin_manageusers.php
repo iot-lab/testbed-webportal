@@ -52,7 +52,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
               
             </div>
            <div class="modal-body">
-               <div class="alert alert-error" id="div_error" style="display:none"></div>
+               <div class="alert alert-error" id="div_error_add" style="display:none"></div>
                
                 <form class="well form-horizontal" id="form_add">
 
@@ -135,7 +135,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
               
             </div>
            <div class="modal-body">
-               <div class="alert alert-error" id="div_error" style="display:none"></div>
+               <div class="alert alert-error" id="div_error_edit" style="display:none"></div>
                
                 <form class="well form-horizontal" id="form_modify">
 
@@ -289,7 +289,6 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                 });
                 $('#tbl_users').dataTable({
                 	"sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
-			//"sDom": "<''f>t<''i'p>",
                         "bPaginate": true,
                         "sPaginationType": "bootstrap",
                         "bLengthChange": true,
@@ -300,71 +299,11 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                 } );
                 $('#tbl_users').show();
                 $('#loading').hide();
-
             },
             error:function(XMLHttpRequest, textStatus, errorThrows){
                 alert("error: " + errorThrows)
             }
         });
-    });
-    
-    /* Add user(s) */
-    $(".btn-add").click(function(){
-	$("#add_modal").modal('show');
-    });
-    $('#form_add').bind('submit', function(){
-    
-        var userregister = {
-        "firstName":$("#txt_firstname").val(),
-        "lastName":$("#txt_lastname").val(),
-        "email":$("#txt_email").val(),
-        "structure":$("#txt_structure").val(),
-        "city":$("#txt_city").val(),
-        "country":$("#txt_country").val(),
-        "sshPublicKey":$("#txt_sshkey").val(),
-        "motivations":$("#txt_motivation").val(),
-        "nbUsersToAdd":$("#txt_howmany").val(),
-        };
-        
-        console.log(userregister);
-        
-        $.ajax({
-            url: "/rest/admin/users",
-            type: "POST",
-            dataType: "text",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(userregister),
-            success:function(data){
-                 window.location.reload();
- 	    },
-            error:function(XMLHttpRequest, textStatus, errorThrows){
-                if(XMLHttpRequest.status == 409)
-                {
-                    $("#div_error").show();
-                    $("#div_error").removeClass("alert-success");
-                    $("#div_error").addClass("alert-error");
-                    $("#div_error").html("This user is already registered");
-                }
-                else if(XMLHttpRequest.status == 403)
-                {
-                    $("#div_error").show();
-                    $("#div_error").removeClass("alert-success");
-                    $("#div_error").addClass("alert-error");
-                    $("#div_error").html("Error");
-                    $("#cg_captcha").addClass("error");
-                    $("#captcha").focus();
-                }
-                else {
-                    $("#div_error").show();
-                    $("#div_error").removeClass("alert-success");
-                    $("#div_error").addClass("alert-error");
-                    $("#div_error").html(errorThrows); 
-                }  
-            }
-        });
-        
-    	return false;
-    
     });
     
     /* Delete a user */
@@ -374,7 +313,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
         {
             var userdelete = users[id];
             $.ajax({
-            url: "/rest/admin/users/"+userdelete.login,
+            	url: "/rest/admin/users/"+userdelete.login,
                 type: "DELETE",
                 contentType: "application/json",
                 dataType: "text",
@@ -487,17 +426,58 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
             data: JSON.stringify(selectedUser),
             success:function(data){
                 $("#edit_modal").modal('hide');
-                $("#div_error").html("");
+                $("#div_error_edit").html("");
             },
             error:function(XMLHttpRequest, textStatus, errorThrows){
-                $("#div_error").show();
-                $("#div_error").removeClass("alert-success");
-                $("#div_error").addClass("alert-error");
-                $("#div_error").html("Error");
+                $("#div_error_edit").html("An error occurred while saving user modifications");
+                $("#div_error_edit").show();
             }
         });
         
     return false;
+    
+    });
+    
+    /* Add user(s) */
+    $(".btn-add").click(function(){
+		$("#add_modal").modal('show');
+    });
+    $('#form_add').bind('submit', function(){
+    
+        var userregister = {
+        "firstName":$("#txt_firstname").val(),
+        "lastName":$("#txt_lastname").val(),
+        "email":$("#txt_email").val(),
+        "structure":$("#txt_structure").val(),
+        "city":$("#txt_city").val(),
+        "country":$("#txt_country").val(),
+        "sshPublicKey":$("#txt_sshkey").val(),
+        "motivations":$("#txt_motivation").val(),
+        "nbUsersToAdd":$("#txt_howmany").val(),
+        };
+        
+        console.log(userregister);
+        
+        $.ajax({
+            url: "/rest/admin/users",
+            type: "POST",
+            dataType: "text",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(userregister),
+            success:function(data){
+                 window.location.reload();
+ 	    	},
+            error:function(XMLHttpRequest, textStatus, errorThrows){
+                var errorMsg="Error";
+                if(XMLHttpRequest.status == 409) errorMsg="This user is already registered";
+                else if(XMLHttpRequest.status == 403) errorMsg="Error";
+                else errorMsg=errorThrows; 
+                $("#div_error_add").html(errorMsg); 
+                $("#div_error_add").show();
+            }
+        });
+        
+    	return false;
     
     });
 

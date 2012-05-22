@@ -29,7 +29,7 @@ if($_SESSION['is_auth']) {
               Password: <input id="txt_password" type="password" class="input-small" placeholder="Password">
               <button id="btn_submit" type="submit" class="btn">Log in</button>
             </form>
-        <a href="signup.php">Ask for an account</a> - <a href="resetpassword.php">Forgot your password ?</a>
+        <a href="signup.php">Ask for an account</a> - <a href="resetpassword.php">Forgot your password?</a>
 
         </div>
 
@@ -39,12 +39,7 @@ if($_SESSION['is_auth']) {
 
 <?php include('footer.php') ?>
 
-	<script src="js/base64.js"></script>
     <script type="text/javascript">
-
-    var userjson = {};
-
-
 
     $("#btn_submit").click(function(){
     
@@ -60,10 +55,9 @@ if($_SESSION['is_auth']) {
                 window.location.reload();
             },
             error:function(XMLHttpRequest, textStatus, errorThrows){
-                $("#div_error").show();
-                $("#div_error").removeClass("alert-success");
                 $("#div_error").addClass("alert-error");
                 $("#div_error").html("Wrong login or password");
+                $("#div_error").show();
             }
         });
         return false;

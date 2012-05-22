@@ -26,7 +26,7 @@ if(!$_SESSION['is_auth']) {
 	<div class="row">
 		<div class="span9">
 		
-                <div class="loading" id="loading"><b>Loading ...</b></div>
+                <div class="loading" id="div_msg" style="display:none"><b>Loading ...</b></div>
                 <table id="tbl_exps" class="table table-bordered table-striped table-condensed" style="display:none">
 					<thead>
                     	<tr>
@@ -83,7 +83,7 @@ if(!$_SESSION['is_auth']) {
               <h3>Modify SSH Key</h3>
             </div>
            <div class="modal-body">
-               <div class="alert alert-error" id="div_error" style="display:none"></div>
+               <div class="alert alert-error" id="div_error_ssh" style="display:none"></div>
                
                 <form class="well form-horizontal" id="form_modify">
 
@@ -156,10 +156,16 @@ if(!$_SESSION['is_auth']) {
 <script type="text/javascript" language="javascript" src="js/datatable.js"></script>
     <script type="text/javascript">
 
-    var oTable;
+    	var oTable;
         
         $(document).ready(function(){
 
+    		/* Hide modal windows */
+            $('#ssh_modal').modal('hide');
+            $('#password_modal').modal('hide');
+            $('#exp_details').modal('hide');
+
+    		/* Retrieve experiment list */
             getExpList();
             
             /* Retrieve current sshkey */
@@ -172,14 +178,15 @@ if(!$_SESSION['is_auth']) {
                 dataType: "text",
                 success:function(data){
                     $("#txt_ssh").val(data);
-            },
+            	},
                 error:function(XMLHttpRequest, textStatus, errorThrows){
-                    alert("error" + textStatus);
+                    $("#div_msg").removeClass("loading");
+                    $("#div_msg").addClass("alert");
+                    $("#div_msg").addClass("alert-error");
+                    $("#div_msg").html("An error occurred while retrieving your ssh keys");
+                    $("#div_msg").show();
                 }
             });
-            
-            $('#ssh_modal').modal('hide');
-            $('#password_modal').modal('hide');
         
             /* Modify SSH Key */
             $('#form_modify').bind('submit', function(){
@@ -194,21 +201,23 @@ if(!$_SESSION['is_auth']) {
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify(user),
                     success:function(data){
-                        $("#div_error").show();
-                        $("#div_error").removeClass("alert-error");
-                        $("#div_error").addClass("alert-success");
-                        $("#div_error").html("Your SSH Key was modify");
+                        $("#div_msg").removeClass("loading");
+                        $("#div_msg").removeClass("alert-error");
+                        $("#div_msg").addClass("alert");
+                        $("#div_msg").addClass("alert-success");
+                        $("#div_msg").html("Your SSH keys had been changed successfully.");
+                        $("#div_msg").show();
                         $("#ssh_modal").modal("hide");
                 },
                     error:function(XMLHttpRequest, textStatus, errorThrows){
-                        $("#div_error").show();
-                        $("#div_error").removeClass("alert-success");
-                        $("#div_error").addClass("alert-error");
-                        $("#div_error").html("Error");
+                        $("#div_error_ssh").removeClass("alert-success");
+                        $("#div_error_ssh").addClass("alert-error");
+                        $("#div_error_ssh").html("An error occurred while saving your ssh keys");
+                        $("#div_error_ssh").show();
                     }
                 });
                 
-            return false;
+            	return false;
             
             });
             
@@ -216,12 +225,11 @@ if(!$_SESSION['is_auth']) {
             /* Modify Password Key */
             $('#form_modify_password').bind('submit', function(){
             
-                if($("#txt_new_password").val() != $("#txt_cnew_password").val()) 
-                {
-                    $("#div_error_password").show();
+                if($("#txt_new_password").val() != $("#txt_cnew_password").val()) {
                     $("#div_error_password").removeClass("alert-success");
                     $("#div_error_password").addClass("alert-error");
                     $("#div_error_password").html("Please confirm password");
+                    $("#div_error_password").show();
                     return false;
                 }
             
@@ -238,173 +246,173 @@ if(!$_SESSION['is_auth']) {
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify(user),
                     success:function(data){
-                        $("#div_error_password").show();
-                        $("#div_error_password").removeClass("alert-error");
-                        $("#div_error_password").addClass("alert-success");
-                        $("#div_error_password").html("Your Password was modify");
+                        $("#div_msg").removeClass("loading");
+                        $("#div_msg").removeClass("alert-error");
+                        $("#div_msg").addClass("alert");
+                        $("#div_msg").addClass("alert-success");
+                        $("#div_msg").html("Your password has been changed successfully. Please login again.");
+                        $("#div_msg").show();
                         $("#password_modal").modal("hide");
-                },
+                	},
                     error:function(XMLHttpRequest, textStatus, errorThrows){
-                        $("#div_error_password").show();
                         $("#div_error_password").removeClass("alert-success");
                         $("#div_error_password").addClass("alert-error");
-                        $("#div_error_password").html("Error");
+                        $("#div_error_password").html("An error occurred while saving your password");
+                        $("#div_error_password").show();
                     }
                 });
                 
-            return false;
+            	return false;
             
             });
-
-            $('#exp_details').modal('hide');
+            
         });
 
 
 
-	function detailsExp(id) {
+		function detailsExp(id) {
 
-            /* Retrieve experiment details */
-            $.ajax({
-                url: "/rest/experiments/"+id,
-                type: "GET",
-                data: {},
-                dataType: "json",
-                success:function(data){
-                	//console.log(data);
+			/* Retrieve experiment details */
+			$.ajax({
+				url: "/rest/experiments/"+id,
+				type: "GET",
+				data: {},
+				dataType: "json",
+				success:function(data){
+					//console.log(data);
 
-			$("#detailsExp").html("Experiment #" + id);
-			$("#detailsExp").append("<br/>Number of Nodes: " + data.nodes.length);
+					$("#detailsExp").html("Experiment #" + id);
+					$("#detailsExp").append("<br/>Number of Nodes: " + data.nodes.length);
+		
+					$("#detailsExp").append('<ul>');
+					$.each(data.nodes, function(key,val) {
+						$("#detailsExp").append('<li>'+val+'</li>');
+					});
+					$("#detailsExp").append('</ul>');
 
-			$("#detailsExp").append('<ul>');
-			$.each(data.nodes, function(key,val) {
-				$("#detailsExp").append('<li>'+val+'</li>');
+					$("#detailsExp").append('<ul>');
+					$.each(data.firmwareassociations, function(key,val) {
+						var liste = "";
+						var liste_nodes = "";
+						$.each(val, function(key2,val2) {
+							if(key2 == "firmwarename") liste = '<ul><li>'+val2+'</li><ul>'+liste_nodes.replace(/,/g,'<br/>')+'</ul></lu>';
+							else liste_nodes += '<li><b>'+val2+'</b></li>';
+							$("#detailsExp").append(liste);
+						});
+					});
+
+					$.each(data.profileassociations, function(key,val) {
+						var liste = "";
+						var liste_nodes = "";
+						$.each(val, function(key2,val2) {
+							if(key2 == "profilename") liste = '<ul><li>'+val2+'</li><ul>'+liste_nodes.replace(/,/g,'<br/>')+'</ul></lu>';
+							else liste_nodes += '<li><b>'+val2+'</b></li>';
+							$("#detailsExp").append(liste);
+						});
+					});
+
+					$("#detailsExp").append('</ul>');
+
+					$('#details_modal').modal('show');
+				},
+				error:function(XMLHttpRequest, textStatus, errorThrows){
+					$("#div_msg").removeClass("loading");
+		            $("#div_msg").removeClass("alert-success");
+					$("#div_msg").addClass("alert");
+					$("#div_msg").addClass("alert-error");
+					$("#div_msg").html("An error occurred while retrieving experiment #" + id + " details");
+					$("#div_msg").show();
+				}
 			});
-			$("#detailsExp").append('</ul>');
+		}
 
-                        $("#detailsExp").append('<ul>');
-                        $.each(data.firmwareassociations, function(key,val) {
-				var liste = "";
-				var liste_nodes = "";
-				$.each(val, function(key2,val2) {
-					if(key2 == "firmwarename"){
-						liste = '<ul><li>'+val2+'</li><ul>'+liste_nodes.replace(/,/g,'<br/>')+'</ul></lu>';
-					}
-					else{
-						liste_nodes += '<li><b>'+val2+'</b></li>';
-					}
-					$("#detailsExp").append(liste);
-				});
+		function getExpList() {
+			$("#div_msg").removeClass("alert-error");
+            $("#div_msg").removeClass("alert-success");
+			$("#div_msg").removeClass("alert");
+			$("#div_msg").addClass("loading");
+			$("#div_msg").html("<b>Loading ...</b>");
+			$("#div_msg").show();
+		
+	        
+			/* Retrieve experiment list */
+			$.ajax({
+				url: "/rest/experiments?limite",
+				type: "GET",
+				dataType: "json",
+				success:function(data){
+					exps = data.items;
+					var i = 0;
+					var expRunning=0;
+					var expUpcoming=0;
+					var expPast=0;
+					$.each(data.items, function(key,val) {
+	
+						var date=new Date();
+						date.setTime(val.date+"000");
+	
+						var buttonAction='<a href="#" class="btn btn-valid" data="'+val.id+'" onClick="detailsExp('+val.id+')">Details</a>';
+	                	
+						switch(val.state) {
+							case "Running":
+								buttonAction+='<a href="#" class="btn btn-danger" data="'+val.id+'" onClick="stopExp('+val.id+')">Stop</a>';
+								expRunning++;
+								break;
+							case "Upcoming":
+								buttonAction+='<a href="#" class="btn btn-danger" data="'+val.id+'" onClick="cancelExp('+val.id+')">Cancel</a>';
+								expUpcoming++;
+								break;
+	        				case "Terminated":
+	    					case "Error":
+								expPast++;
+								break;
+						}
 
-                        });
+						$("#tbl_exps tbody").append(
+								'<tr data=' + val.id + '>'+
+								'<td>' + val.id + '</td>'+
+								'<td>' + val.name + '</td>'+
+								'<td>'+ date + '</td>'+
+								'<td>' + Math.floor(val.duration/60) + ' minute(s)</a></td>'+
+								'<td>' + val.nb_resources + ' node(s)</td>'+
+								'<td>' + val.state + '</td>'+
+								'<td>' + buttonAction +'</td>'+
+								'</tr>');
+						i++;
+					});
+					oTable = $('#tbl_exps').dataTable({
+						"sDom": "<'row'<'span7'l><'span7'f>r>t<'row'<'span7'i><'span7'p>>",
+						"bPaginate": true,
+						"sPaginationType": "bootstrap",
+						"bLengthChange": true,
+						"bFilter": true,
+						"bSort": true,
+						"bInfo": true,
+						"bAutoWidth": false,
+						"aaSorting": [[ 0, "desc" ]]
+					});
+					$('#div_msg').hide();
+					$('#tbl_exps').show();
+					$("#expRunning").text(expRunning);
+					$("#expUpcoming").text(expUpcoming);
+					$("#expPast").text(expPast);
+				},
+				error:function(XMLHttpRequest, textStatus, errorThrows){
+                    $("#div_msg").removeClass("loading");
+                    $("#div_msg").addClass("alert");
+                    $("#div_msg").addClass("alert-error");
+                    $("#div_msg").show();
+					$("#div_msg").html("An error occurred while retrieving your experiment list");
+				}
+			});
+		}
 
-
-                        $.each(data.profileassociations, function(key,val) {
-                                var liste = "";
-                                var liste_nodes = "";
-                                $.each(val, function(key2,val2) {
-                                        if(key2 == "profilename"){
-                                                liste = '<ul><li>'+val2+'</li><ul>'+liste_nodes.replace(/,/g,'<br/>')+'</ul></lu>';
-                                        }
-                                        else{
-                                                liste_nodes += '<li><b>'+val2+'</b></li>';
-                                        }
-                                        $("#detailsExp").append(liste);
-                                });
-
-                        });
-
-
-
-                        $("#detailsExp").append('</ul>');
-
-
-			$('#details_modal').modal('show');
-            	},
-                error:function(XMLHttpRequest, textStatus, errorThrows){
-                    alert("error" + textStatus);
-                }
-            });
-
-	}
-
-	function getExpList() {
-        
-		/* Retrieve experiment list */
-		$.ajax({
-			url: "/rest/experiments?limite",
-			type: "GET",
-			dataType: "json",
-			success:function(data){
-				exps = data.items;
-				var i = 0;
-				var expRunning=0;
-				var expUpcoming=0;
-				var expPast=0;
-				$.each(data.items, function(key,val) {
-
-					var date=new Date();
-					date.setTime(val.date+"000");
-
-					var buttonAction='<a href="#" class="btn btn-valid" data="'+val.id+'" onClick="detailsExp('+val.id+')">Details</a>';
-                	
-					switch(val.state) {
-						case "Running":
-							buttonAction+='<a href="#" class="btn btn-danger" data="'+val.id+'" onClick="stopExp('+val.id+')">Stop</a>';
-							expRunning++;
-							break;
-						case "Upcoming":
-							buttonAction+='<a href="#" class="btn btn-danger" data="'+val.id+'" onClick="cancelExp('+val.id+')">Cancel</a>';
-							expUpcoming++;
-							break;
-        				case "Terminated":
-    					case "Error":
-							expPast++;
-							break;
-					}
-
-                    $("#tbl_exps tbody").append(
-    	                    '<tr data=' + val.id + '>'+
-                            '<td>' + val.id + '</td>'+
-                            '<td>' + val.name + '</td>'+
-                            '<td>'+ date + '</td>'+
-                            '<td>' + Math.floor(val.duration/60) + ' minute(s)</a></td>'+
-                            '<td>' + val.nb_resources + ' node(s)</td>'+
-                            '<td>' + val.state + '</td>'+
-                            '<td>' + buttonAction +'</td>'
-                            +'</tr>');
-                    i++;
-                });
-                oTable = $('#tbl_exps').dataTable({
-                	"sDom": "<'row'<'span7'l><'span7'f>r>t<'row'<'span7'i><'span7'p>>",
-                        "bPaginate": true,
-                        "sPaginationType": "bootstrap",
-                        "bLengthChange": true,
-                        "bFilter": true,
-                        "bSort": true,
-                        "bInfo": true,
-                        "bAutoWidth": false,
-                        "aaSorting": [[ 0, "desc" ]]
-                } );
-                $('#loading').hide();
-                $('#tbl_exps').show();
-                $("#expRunning").text(expRunning);
-                $("#expUpcoming").text(expUpcoming);
-                $("#expPast").text(expPast);
-        },
-            error:function(XMLHttpRequest, textStatus, errorThrows){
-                alert("error" + textStatus);
-            }
-        });
-
-	}
-
-	function refreshExpList() {
-		$('#loading').show();
-		$('#tbl_exps').hide();
-		oTable.fnClearTable(true);
-		oTable.fnDestroy();
-		getExpList();
-	}
+		function refreshExpList() {
+			$('#tbl_exps').hide();
+			oTable.fnClearTable(true);
+			oTable.fnDestroy();
+			getExpList();
+		}
    
         
     </script>
