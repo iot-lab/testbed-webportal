@@ -1,13 +1,12 @@
 <?php 
 session_start();
+
 if(!$_SESSION['is_auth']) {
     header("location: .");
     exit();
 }
 
-?>
-
-<?php include("header.php") ?>
+include("header.php") ?>
 
     <div class="container">
     
@@ -316,12 +315,14 @@ if(!$_SESSION['is_auth']) {
 					$('#details_modal').modal('show');
 				},
 				error:function(XMLHttpRequest, textStatus, errorThrows){
-					$("#div_msg").removeClass("loading");
+					/*$("#div_msg").removeClass("loading");
 		            $("#div_msg").removeClass("alert-success");
 					$("#div_msg").addClass("alert");
 					$("#div_msg").addClass("alert-error");
 					$("#div_msg").html("An error occurred while retrieving experiment #" + id + " details");
-					$("#div_msg").show();
+					$("#div_msg").show();*/
+					$("#detailsExp").html("An error occurred while retrieving experiment #" + id + " details");
+					$('#details_modal').modal('show');
 				}
 			});
 		}

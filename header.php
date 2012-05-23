@@ -41,23 +41,20 @@
               
 
             <?php if(!$_SESSION['is_auth']) { ?>
-            <ul class="nav">
-            <li><a href=".">Login</a></li>
-            </ul> 
-            <?php } ?> 
-            
-            <?php if($_SESSION['is_auth']) { ?>
-            <ul class="nav">
-            <li><a href="logout.php">Logout <?php echo "[".$_SESSION['login']."]" ?></a></li>
-            </ul> 
+	            <ul class="nav">
+	            	<li><a href="#" onClick="showLogin()">Login</a></li>
+	            </ul> 
+	            <ul class="nav">
+	            	<li><a href="#" onClick="showSignup()">Sign up</a></li>
+	            </ul> 
+	            <ul class="nav">
+	            	<li><a href="#" onClick="showReset()">Reset password</a></li>
+	            </ul> 
+            <?php } else { ?>
+	            <ul class="nav">
+	            	<li><a href="index.php?logout">Logout <?php echo "[".$_SESSION['login']."]" ?></a></li>
+	            </ul>
             <?php } ?>
-            
-            
-            <?php if(!$_SESSION['is_auth']) { ?>
-            <ul class="nav">
-            <li><a href="signup.php">Sign up</a></li>
-            </ul> 
-            <?php } ?>  
             
           </div><!--/.nav-collapse -->
           
@@ -68,6 +65,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li><a href="admin_manageusers.php">Users</a></li>
+                <li><a href="admin_manageexps.php">Experiments</a></li>
               </ul>
             </li>
           </ul>

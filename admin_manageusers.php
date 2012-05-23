@@ -1,13 +1,12 @@
 <?php
 session_start();
+
 if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
     header("location: .");
     exit();
 }
 
-?>
-
-<?php include("header.php") ?>
+include("header.php") ?>
 
     <div class="container">
       
