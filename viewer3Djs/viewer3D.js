@@ -19,18 +19,16 @@ var objects = [];
 // list of selected nodes
 var selectedNodes = [];
 
-
-//select a plateform
-var nodes = nodes_str;
-
 var div3d, nodebox, infobox;
 init();
+
+var nodes = nodes;
 
 function init() {
     var particles, particle;
 
     div3d = document.getElementById('div3d');
-    nodebox = document.getElementById('nodebox_strasbourg');
+    nodebox = document.getElementById('nodebox');
     infobox = document.getElementById('infobox');
     titlebox = document.getElementById('titlebox');
     offY = div3d.offsetTop;
