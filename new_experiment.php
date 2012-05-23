@@ -67,14 +67,19 @@
 
     <div class="row" id="maps">
         <div class="span8 offset2">
-            <div ID='selectionbox' style="text-align:center;padding:2px">
-            Selected Nodes <input type="text" ID='nodebox'/> <i>(example : 1-10,24,25)</i>
+            <div id='selectionbox' style="text-align:center;padding:2px">
+            Strasbourg Nodes <input type="text" id='nodebox_strasbourg'/> <i>(example : 1-10,24,25)</i>
             </div>
 
             <div ID='div3d' style=" height:300px;background-color:#202020;z-index:-1" oncontextmenu="return false;"></div>
             
-		<div ID='infobox' style="text-align:center">senslab3djs</div>   
+	    <div ID='infobox' style="text-align:center">senslab3djs</div>   
         </div>
+
+
+
+
+
     </div>
         
 		<button id="btn_submit" class="btn btn-primary" type="submit">Submit</button>
@@ -92,7 +97,6 @@
 		
 
 		$("#maps").hide();
-//set3dsize();
 		$("input[name=ResourcesType]").change(function () {
 			if($(this).val() == "maps") {
 				$("#maps").show();

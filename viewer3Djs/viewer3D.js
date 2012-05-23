@@ -19,6 +19,10 @@ var objects = [];
 // list of selected nodes
 var selectedNodes = [];
 
+
+//select a plateform
+var nodes = nodes_str;
+
 var div3d, nodebox, infobox;
 init();
 
@@ -26,13 +30,13 @@ function init() {
     var particles, particle;
 
     div3d = document.getElementById('div3d');
-    nodebox = document.getElementById('nodebox');
+    nodebox = document.getElementById('nodebox_strasbourg');
     infobox = document.getElementById('infobox');
     titlebox = document.getElementById('titlebox');
     offY = div3d.offsetTop;
     offX = div3d.offsetLeft;
 
-    //titlebox.innerHTML = 'Grenoble Site ' + nodes_gre.length + " nodes";
+    //titlebox.innerHTML = 'Grenoble Site ' + nodes.length + " nodes";
     infobox.innerHTML = 'Node info : ';
 
     nodebox.value = "";
@@ -57,13 +61,13 @@ function init() {
     xmin = ymin = zmin = 0;
     xmax = ymax = zmax = 0;
 
-    for (var i = 0; i < nodes_gre.length; i++) {
-        if (nodes_gre[i][1] > xmax) xmax = nodes_gre[i][1];
-        if (nodes_gre[i][1] < xmin) xmin = nodes_gre[i][1];
-        if (nodes_gre[i][2] > ymax) ymax = nodes_gre[i][2];
-        if (nodes_gre[i][2] < ymin) ymin = nodes_gre[i][2];
-        if (nodes_gre[i][3] > zmax) zmax = nodes_gre[i][3];
-        if (nodes_gre[i][3] < zmin) zmin = nodes_gre[i][3];
+    for (var i = 0; i < nodes.length; i++) {
+        if (nodes[i][1] > xmax) xmax = nodes[i][1];
+        if (nodes[i][1] < xmin) xmin = nodes[i][1];
+        if (nodes[i][2] > ymax) ymax = nodes[i][2];
+        if (nodes[i][2] < ymin) ymin = nodes[i][2];
+        if (nodes[i][3] > zmax) zmax = nodes[i][3];
+        if (nodes[i][3] < zmin) zmin = nodes[i][3];
     }
 
     xcenter = (xmax + xmin) / 2;
@@ -71,7 +75,7 @@ function init() {
     zcenter = (zmax + zmin) / 2;
 
     // display nodes as TREE particles
-    for (var i = 0; i < nodes_gre.length; i++) {
+    for (var i = 0; i < nodes.length; i++) {
         material = new THREE.ParticleCanvasMaterial({
             color: 0xffffff,
             program: function (context) {
@@ -82,10 +86,10 @@ function init() {
             }
         });
         particle = new THREE.Particle(material);
-        particle.name = nodes_gre[i][0];
-        particle.position.x = nodes_gre[i][1] - xcenter;
-        particle.position.y = nodes_gre[i][2] - ycenter;
-        particle.position.z = nodes_gre[i][3] - zcenter;
+        particle.name = nodes[i][0];
+        particle.position.x = nodes[i][1] - xcenter;
+        particle.position.y = nodes[i][2] - ycenter;
+        particle.position.z = nodes[i][3] - zcenter;
         particle.position.multiplyScalar(10);
         particle.scale.x = particle.scale.y = 1;
         scene.add(particle);
@@ -266,7 +270,7 @@ function findNodeUnderMouse(event) {
 // display some info of the node under the mouse
 function displayNodeInfo(e) {
     obj = findNodeUnderMouse(e);
-    if (obj) infobox.innerHTML = 'Node info : number ' + obj.object.name + " with id " + nodes_gre[obj.object.id][4];
+    if (obj) infobox.innerHTML = 'Node info : number ' + obj.object.name + " with id " + nodes[obj.object.id][4];
     //    else infobox.innerHTML = e.clientX + "," + e.clientY + " - " + offX + "," + offY;
 }
 
