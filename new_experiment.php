@@ -1,3 +1,11 @@
+<?php 
+session_start();
+
+if(!$_SESSION['is_auth']) {
+    header("location: .");
+    exit();
+}
+?>
 
 <?php include("header.php") ?>
 
@@ -43,7 +51,7 @@
             <div class="controls">
               <label class="radio">
                 <input type="radio" name="ResourcesType" id="optionsRadiosType" value="type" checked="">
-                type
+                by type
               </label>
 
 
@@ -58,8 +66,8 @@
 
 
               <label class="radio">
-                <input type="radio" name="ResourcesType" id="optionsRadiosMaps" value="maps">
-                maps
+                <input type="radio" name="ResourcesType" id="optionsRadiosMaps" value="physical">
+                physical
               </label>
             </div>
 
@@ -92,7 +100,7 @@
 
 		$("#divResourcesMap").hide();
 		$("input[name=ResourcesType]").change(function () {
-			if($(this).val() == "maps") {
+			if($(this).val() == "physical") {
 				$("#divResourcesType").hide();
 				$("#divResourcesMap").show();
 			}
@@ -116,11 +124,66 @@
 
 	$("#form_new_exp").bind("submit",function(){
 
+	
 		console.log("TODO");
+
+
+                var exp_json = {
+                    "type":$("input[name=ResourcesType]:checked").val(),
+                };
+	
+		//var my_nodes = new Array();
+		var my_nodes = "";
+
+		//$("#txt_name").value();
+		//$("#txt_duration").value();
+		//$("input[name=ExecutionType]:checked").val();
+
+		var str_all = parseNodebox($("#str_list").val());
+		for(i=0;i<str_all.length;i++) {
+			my_nodes += "node"+str_all[i]+".devstras.senslab.info,";
+		}
+
+                var gre_all = parseNodebox($("#gre_list").val());
+                for(i=0;i<gre_all.length;i++) {
+			my_nodes += "node"+str_all[i]+".devgrenoble.senslab.info,";
+                }
+
+		exp_json.nodes = my_nodes;
+		console.log(exp_json);
+
+
 		return false;
 	})
 
-   
+
+
+// expand a list of nodes containing dash intervals
+// 1-3,5,9 -> 1,2,3,5,9
+function expand(factExp) {
+    exp = [];
+    for (i = 0; i < factExp.length; i++) {
+        dashExpression = factExp[i].split("-");
+        if (dashExpression.length == 2) {
+            for (j = parseInt(dashExpression[0]); j < (parseInt(dashExpression[1]) + 1); j++)
+                exp.push(j);
+        } else exp.push(parseInt(factExp[i]));
+    }
+    exp.sort(sortfunction);
+    for (var i = 1; i < exp.length; i++) { if (exp[i] == exp[i - 1]) { exp.splice(i--, 1); } }
+    return exp;
+}
+
+function parseNodebox(input) {
+    return expand(input.split(","));
+}
+
+function sortfunction(a, b) {
+    return (a - b) //causes an array to be sorted numerically and ascending
+}
+
+
+  
         
     </script>
 
