@@ -137,7 +137,6 @@ if(!$_SESSION['is_auth']) {
 
 		//$("#txt_name").value();
 		//$("#txt_duration").value();
-		//$("input[name=ExecutionType]:checked").val();
 
 		var str_all = parseNodebox($("#str_list").val());
 		for(i=0;i<str_all.length;i++) {
@@ -146,7 +145,7 @@ if(!$_SESSION['is_auth']) {
 
                 var gre_all = parseNodebox($("#gre_list").val());
                 for(i=0;i<gre_all.length;i++) {
-			my_nodes += "node"+str_all[i]+".devgrenoble.senslab.info,";
+			my_nodes += "node"+gre_all[i]+".devgrenoble.senslab.info,";
                 }
 
 		exp_json.nodes = my_nodes;
