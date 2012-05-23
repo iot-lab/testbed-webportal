@@ -35,6 +35,8 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
 	                        <th>LastName</th>
 	                        <th>Email</th>
 	                        <th>Creation date</th>
+	                        <th width='50px'>isValid</th>
+	                        <th width='50px'>isAdmin</th>
 	                        <th>Options</th>
 	                    </tr>
 	                </thead>
@@ -48,7 +50,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
         <div id="add_modal" class="modal hide fade">
             <div class="modal-header">
               <a class="close" data-dismiss="modal">X</a>
-              <h3>Add user(s) <span id="s_login"></span></h3>
+              <h3>Add user(s)</h3>
               
             </div>
            <div class="modal-body">
@@ -131,7 +133,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
         <div id="edit_modal" class="modal hide fade">
             <div class="modal-header">
               <a class="close" data-dismiss="modal">X</a>
-              <h3>Edit user <span id="s_login_e"></span></h3>
+              <h3>Edit user <span id="s_login_e"></span><span id="s_id_e" style="display:none"></span></h3>
               
             </div>
            <div class="modal-body">
@@ -222,6 +224,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
  
     <script type="text/javascript">
 
+    var oTable;
     var users = {};
     var selectedUser = {};
 
@@ -257,13 +260,13 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                     $("#tbl_users tbody").append(
                     '<tr data=' + i + '>'+
                     '<td>' + val.login + '</td>'+
-                    '<td>' + val.firstName + '</td>'+
-                    '<td>'+ val.lastName +'</td>'+
-                    '<td><a href="mailto:' + val.email + '">' + val.email + '</a></td>'+
+                    '<td class="firstName">' + val.firstName + '</td>'+
+                    '<td class="lastName">'+ val.lastName +'</td>'+
+                    '<td><a href="mailto:' + val.email + '" class="email">' + val.email + '</a></td>'+
                     '<td>'+ formatCreateTimeStamp(val.createTimeStamp) +'</td>'+
-                    '<td><a href="#" class="btn btn-valid '+btnValidClass+'" data="'+i+'" data-state="'+val.validate+'" onClick="validateUser('+i+')">'+btnValidValue+'</a> ' +
-                        '<a href="#" class="btn btn-edit" data-toggle="modal" data="'+i+'">Edit</a> ' +
-                        '<a href="#" class="btn btn-admin '+btnAdminClass+'" data="'+i+'" data-state="'+val.admin+'" onClick="setAdmin('+i+')">'+btnAdminValue+'</a> ' +
+                    '<td><a href="#" class="btn btn-valid '+btnValidClass+'" data="'+i+'" data-state="'+val.validate+'" onClick="validateUser('+i+')">'+btnValidValue+'</a></td>' +
+                    '<td><a href="#" class="btn btn-admin '+btnAdminClass+'" data="'+i+'" data-state="'+val.admin+'" onClick="setAdmin('+i+')">'+btnAdminValue+'</a></td>' +
+                    '<td><a href="#" class="btn btn-edit" data-toggle="modal" data="'+i+'">Edit</a> ' +
                         '<a href="#"><button class="btn btn-danger" data="'+i+'" onClick="deleteUser('+i+')">Delete</button></a></td>'
                     +'</tr>');
                     $("tr[data="+i+"] .btn-valid").width(50);
@@ -276,6 +279,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                     var userId = $(this).attr("data");
                     selectedUser = users[userId];
                     $('#s_login_e').html(selectedUser.login);
+                    $('#s_id_e').html(userId);
                     $('#txt_sshkey_e').val(selectedUser.sshPublicKey);
                     $('#txt_firstname_e').val(selectedUser.firstName);
                     $('#txt_lastname_e').val(selectedUser.lastName);
@@ -287,7 +291,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                     $('#txt_motivation_e').val(selectedUser.motivations);
                     $("#edit_modal").modal('show');
                 });
-                $('#tbl_users').dataTable({
+                oTable = $('#tbl_users').dataTable({
                 	"sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
                         "bPaginate": true,
                         "sPaginationType": "bootstrap",
@@ -307,10 +311,8 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
     });
     
     /* Delete a user */
-    function deleteUser(id) 
-    {
-        if(confirm("Delete user?"))
-        {
+    function deleteUser(id) {
+        if(confirm("Delete user?")) {
             var userdelete = users[id];
             $.ajax({
             	url: "/rest/admin/users/"+userdelete.login,
@@ -319,7 +321,8 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                 dataType: "text",
             
                 success:function(data){
-                    $("tr[data="+id+"]").remove()    
+                    //$("tr[data="+id+"]").remove()
+                    oTable.fnDeleteRow(id,true);
                 },
                 error:function(XMLHttpRequest, textStatus, errorThrows){
                     alert("error: " + errorThrows)
@@ -348,14 +351,17 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                 data: JSON.stringify(user),
                 success:function(data){
                     if(state == "false") {
-                        $("tr[data="+id+"] .btn-valid").removeClass("btn-primary");
-                        $("tr[data="+id+"] .btn-valid").attr("data-state","true");
-                        $("tr[data="+id+"] .btn-valid").text("Valid");
+                    	oTable.fnUpdate('<a href="#" class="btn btn-valid" data="'+id+'" data-state="true" onClick="validateUser('+id+')">Valid</a>',id,5,true);
+                        //$("tr[data="+id+"] .btn-valid").removeClass("btn-primary");
+                        //$("tr[data="+id+"] .btn-valid").attr("data-state","true");
+                        //$("tr[data="+id+"] .btn-valid").text("Valid");
                     } else {
-                        $("tr[data="+id+"] .btn-valid").addClass("btn-primary");
-                        $("tr[data="+id+"] .btn-valid").attr("data-state","false");
-                        $("tr[data="+id+"] .btn-valid").text("Pending");
+                    	oTable.fnUpdate('<a href="#" class="btn btn-valid btn-primary" data="'+id+'" data-state="false" onClick="validateUser('+id+')">Pending</a>',id,5,true);
+                        //$("tr[data="+id+"] .btn-valid").addClass("btn-primary");
+                        //$("tr[data="+id+"] .btn-valid").attr("data-state","false");
+                        //$("tr[data="+id+"] .btn-valid").text("Pending");
                     }
+                    $("tr[data="+id+"] .btn-valid").width(50);
                 },
                 error:function(XMLHttpRequest, textStatus, errorThrows){
                     alert("error:" + errorThrows)
@@ -366,15 +372,13 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
     
     
     /* Toggle Admin state */
-    function setAdmin(id) 
-    {
+    function setAdmin(id) {
         var state = $("tr[data="+id+"] .btn-admin").attr("data-state");
         var confirmText = "Set Admin state?";
         if(state=="true") confirmText="Unset Admin state?";
 
 
-        if(confirm(confirmText))
-        {
+        if(confirm(confirmText)) {
             //toggle admin flag
             var user = users[id];
             user.admin = !user.admin;
@@ -387,14 +391,17 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
                 data: JSON.stringify(user),
                 success:function(data){
                     if(state == "false") {
-                        $("tr[data="+id+"] .btn-admin").addClass("btn-warning");
-                        $("tr[data="+id+"] .btn-admin").attr("data-state","true");
-                        $("tr[data="+id+"] .btn-admin").text("Admin");
+                    	oTable.fnUpdate('<a href="#" class="btn btn-admin btn-warning" data="'+id+'" data-state="true" onClick="setAdmin('+id+')">Admin</a>',id,6,true);
+                        //$("tr[data="+id+"] .btn-admin").addClass("btn-warning");
+                        //$("tr[data="+id+"] .btn-admin").attr("data-state","true");
+                        //$("tr[data="+id+"] .btn-admin").text("Admin");
                     } else {
-                        $("tr[data="+id+"] .btn-admin").removeClass("btn-warning");
-                        $("tr[data="+id+"] .btn-admin").attr("data-state","false");
-                        $("tr[data="+id+"] .btn-admin").text("User");
+                    	oTable.fnUpdate('<a href="#" class="btn btn-admin" data="'+id+'" data-state="false" onClick="setAdmin('+id+')">User</a>',id,6,true);
+                        //$("tr[data="+id+"] .btn-admin").removeClass("btn-warning");
+                        //$("tr[data="+id+"] .btn-admin").attr("data-state","false");
+                        //$("tr[data="+id+"] .btn-admin").text("User");
                     }
+                    $("tr[data="+id+"] .btn-admin").width(50);
                 },
                 error:function(XMLHttpRequest, textStatus, errorThrows){
                     alert("error:" + errorThrows)
@@ -408,6 +415,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
     $('#form_modify').bind('submit', function()
     {
         //change all value
+        id = $('#s_id_e').html();
         selectedUser.firstName = $("#txt_firstname_e").val();
         selectedUser.lastName = $("#txt_lastname_e").val();
         selectedUser.login = $("#txt_login_e").val();
@@ -427,6 +435,9 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
             success:function(data){
                 $("#edit_modal").modal('hide');
                 $("#div_error_edit").html("");
+                oTable.fnUpdate (selectedUser.firstName, id, 1, false);
+                oTable.fnUpdate (selectedUser.lastName, id, 2, false);
+                oTable.fnUpdate (selectedUser.email, id, 3, true);
             },
             error:function(XMLHttpRequest, textStatus, errorThrows){
                 $("#div_error_edit").html("An error occurred while saving user modifications");
