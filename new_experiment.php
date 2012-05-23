@@ -6,7 +6,7 @@
 
 <h2>New experiment</h2>
 
-	<form class="well form-horizontal" id="form_add">
+	<form class="well form-horizontal" id="form_new_exp">
 
               <div class="control-group">
                 <label class="control-label" for="txt_name">Name:</label>
@@ -62,24 +62,28 @@
                 maps
               </label>
             </div>
+
+	        <div class="" id="divResourcesMap">
+                	<ul>
+                        <li><a href="#" id="str_maps">Strasbourg Maps</a> <input id="str_list" value=""/></li>
+                        <li><a href="#" id="gre_maps">Grenoble Maps</a> <input id="gre_list" value=""/></li>
+                	</ul>
+        	</div>
+
           </div>
 
-	<div id="divResourcesMap">
-		<ul>
-			<li><a href="#" id="str_maps">Strasbourg Maps</a> <input id="str_list" value=""/></li>
-			<li><a href="#" id="gre_maps">Grenoble Maps</a> <input id="gre_list" value=""/></li>
-		</ul>
-	</div>
 
+	<button id="btn_submit" class="btn btn-primary" type="submit">Submit</button>
 
-
-    </div>
-		<button id="btn_submit" class="btn btn-primary" type="submit">Submit</button>
     </form>
 
 
+	<?php include('footer.php') ?>
+
+    </div>
+
+
         
-<?php include('footer.php') ?>
 
     <script type="text/javascript">
         
@@ -96,7 +100,6 @@
 				$("#divResourcesType").show();
 				$("#divResourcesMap").hide();
 			}
-			console.log($(this).val());
 
 		});
 
@@ -109,7 +112,15 @@
                 });
 
         });
-    
+ 
+
+	$("#form_new_exp").bind("submit",function(){
+
+		console.log("TODO");
+		return false;
+	})
+
+   
         
     </script>
 

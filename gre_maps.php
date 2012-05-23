@@ -4,7 +4,7 @@
             Selected Nodes <input type="text" id='nodebox'/> <i>(example : 1-10,24,25)</i> <button id="btnSave" onClick="save()" value="Save"/>Save</button>
             </div>
 
-            <div ID='div3d' style=" height:300px;background-color:#202020;z-index:-1" oncontextmenu="return false;"></div>
+            <div ID='div3d' style=" height:400px;background-color:#202020;z-index:-1" oncontextmenu="return false;"></div>
 
             <div ID='infobox' style="text-align:center">senslab3djs</div>
         </div>
