@@ -64,27 +64,17 @@
             </div>
           </div>
 
-
-    <div class="row" id="maps">
-        <div class="span8 offset2">
-            <div id='selectionbox' style="text-align:center;padding:2px">
-            Strasbourg Nodes <input type="text" id='nodebox_strasbourg'/> <i>(example : 1-10,24,25)</i>
-            </div>
-
-            <div ID='div3d' style=" height:300px;background-color:#202020;z-index:-1" oncontextmenu="return false;"></div>
-            
-	    <div ID='infobox' style="text-align:center">senslab3djs</div>   
-        </div>
-
-
+	<div id="divResourcesMap">
+		<ul>
+			<li><a href="#" id="str_maps">Strasbourg Maps</a> <input id="str_list" value=""/></li>
+			<li><a href="#" id="gre_maps">Grenoble Maps</a> <input id="gre_list" value=""/></li>
+		</ul>
+	</div>
 
 
 
     </div>
-        
 		<button id="btn_submit" class="btn btn-primary" type="submit">Submit</button>
-              
-              
     </form>
 
 
@@ -96,30 +86,33 @@
         $(document).ready(function(){
 		
 
-		$("#maps").hide();
+		$("#divResourcesMap").hide();
 		$("input[name=ResourcesType]").change(function () {
 			if($(this).val() == "maps") {
-				$("#maps").show();
 				$("#divResourcesType").hide();
+				$("#divResourcesMap").show();
 			}
 			else {
-				$("#maps").hide();
 				$("#divResourcesType").show();
+				$("#divResourcesMap").hide();
 			}
 			console.log($(this).val());
 
 		});
 
+		$("#str_maps").click(function(){
+			window.open('str_maps.php', '', 'resizable=no, location=no, width=500, height=500, menubar=no, status=no, scrollbars=no, menubar=no');
+		});
+
+                $("#gre_maps").click(function(){
+                        window.open('gre_maps.php', '', 'resizable=no, location=no, width=500, height=500, menubar=no, status=no, scrollbars=no, menubar=no');
+                });
 
         });
     
         
     </script>
 
-
-    <script type="text/javascript" src="viewer3Djs/Three.js"></script>
-    <script type="text/javascript" src="viewer3Djs/strasbourg.js"></script>
-    <script type="text/javascript" src="viewer3Djs/viewer3D.js"></script>
 
   </body>
 </html>
