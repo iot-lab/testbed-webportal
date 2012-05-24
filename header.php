@@ -50,7 +50,7 @@
 		        <li class="dropdown">
 		        	<a href="#" class="dropdown-toggle" data-toggle="dropdown">User <?php echo "[".$_SESSION['login']."]" ?> <b class="caret"></b></a>
 		            <ul class="dropdown-menu">
-		            	<li><a data-toggle="modal" href="#ssh_modal">Modify SSH keys</a></li>
+		            	<li><a data-toggle="modal" href="#ssh_modal" onClick="loadSSHKeys()">Modify SSH keys</a></li>
 		                <li><a data-toggle="modal" href="#password_modal">Modify password</a></li>
 		                <li><a href="index.php?logout">Logout</a></li>
 		            </ul>
@@ -143,30 +143,14 @@
       <script src="js/bootstrap.js"></script>
     <script type="text/javascript">
 
-        
+
+var SSHKeysLoaded = false;
+
         $(document).ready(function(){
 
     		// Hide modal windows
             $('#ssh_modal').modal('hide');
             $('#password_modal').modal('hide');
-            
-            // Retrieve current sshkey
-            $.ajax({
-                url: "/rest/users/"+<?php echo '"'.$_SESSION['login'].'"'?>+"/sshkeys",
-                type: "GET",
-                data: {},
-                dataType: "text",
-                success:function(data){
-                    $("#txt_ssh").val(data);
-            	},
-                error:function(XMLHttpRequest, textStatus, errorThrows){
-                    $("#div_msg").removeClass("loading");
-                    $("#div_msg").addClass("alert");
-                    $("#div_msg").addClass("alert-error");
-                    $("#div_msg").html("An error occurred while retrieving your ssh keys");
-                    $("#div_msg").show();
-                }
-            });
         
             // Modify SSH Key
             $('#form_modify').bind('submit', function(){
@@ -185,6 +169,7 @@
                         $("#div_error_ssh").addClass("alert-success");
                         $("#div_error_ssh").html("Your SSH keys had been changed successfully.");
                         $("#div_error_ssh").show();
+                        setTimeout( "$('#div_error_ssh').hide()", 2000); 
                         setTimeout( "$('#ssh_modal').modal('hide')", 3000); 
                 },
                     error:function(XMLHttpRequest, textStatus, errorThrows){
@@ -227,6 +212,7 @@
                         $("#div_error_password").addClass("alert-success");
                         $("#div_error_password").html("Your password has been changed successfully. Please login again.");
                         $("#div_error_password").show();
+                        setTimeout( "$('#div_error_password').hide()", 2000); 
                         setTimeout( "window.location.href = 'index.php?logout'", 3000); 
                 	},
                     error:function(XMLHttpRequest, textStatus, errorThrows){
@@ -241,4 +227,33 @@
             
             });
         });
+
+
+        function loadSSHKeys() {
+
+            if (!SSHKeysLoaded) {
+                $("#div_error_ssh").addClass("alert-success");
+                $("#div_error_ssh").removeClass("alert-error");
+                $("#div_error_ssh").html("Loading your ssh keys ...");
+                $("#div_error_ssh").show();
+	            // Retrieve current sshkey
+	            $.ajax({
+	                url: "/rest/users/"+<?php echo '"'.$_SESSION['login'].'"'?>+"/sshkeys",
+	                type: "GET",
+	                data: {},
+	                dataType: "text",
+	                success:function(data){
+	                    $("#div_error_ssh").hide();
+	                    $("#txt_ssh").val(data);
+	                    SSHKeysLoaded=true;
+	            	},
+	                error:function(XMLHttpRequest, textStatus, errorThrows){
+	                    $("#div_error_ssh").removeClass("alert-success");
+	                    $("#div_error_ssh").addClass("alert-error");
+	                    $("#div_error_ssh").html("An error occurred while retrieving your ssh keys");
+	                    $("#div_error_ssh").show();
+	                }
+	            });
+            }
+        }
     </script>

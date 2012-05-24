@@ -218,8 +218,7 @@ if($_SESSION['is_auth']) {
         <?php } ?>
 
 		// submit login
-        $('#login_form').bind('submit', function(){
-	  
+        $('#login_form').bind('submit', function(){	  
 	    
 	        var userlogin = {"login":$("#txt_login").val(),"password":$("#txt_password").val()};
 	        
