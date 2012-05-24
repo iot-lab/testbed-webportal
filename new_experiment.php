@@ -14,7 +14,10 @@ if(!$_SESSION['is_auth']) {
 
 <h2>New experiment</h2>
 
+
 	<form class="well form-horizontal" id="form_new_exp">
+
+		<h3>1. Configure your experiment</h3>
 
               <div class="control-group">
                 <label class="control-label" for="txt_name">Name:</label>
@@ -26,7 +29,7 @@ if(!$_SESSION['is_auth']) {
               <div class="control-group">
                 <label class="control-label" for="txt_duration">Duration (minutes):</label>
                 <div class="controls">
-                    <input id="txt_duration" type="text" class="input-large" required="required">
+                    <input id="txt_duration" type="number" class="input-large" required="required">
                 </div>
               </div>
 
@@ -46,6 +49,8 @@ if(!$_SESSION['is_auth']) {
           </div>
 
 
+	<h3>2. Select your nodes</h3>
+
         <div class="control-group">
             <label class="control-label">Resources</label>
             <div class="controls">
@@ -54,9 +59,8 @@ if(!$_SESSION['is_auth']) {
                 by type
               </label>
 
-
 	<!-- by type -->
-              <div class="control-group" id="divResourcesType">
+              <div class="" id="divResourcesType">
                 <label class="control-label" for="txt_fixed">Fixed:</label>
                 <div class="controls">
                     <input id="txt_fixed" type="text" class="input-large">
@@ -69,19 +73,18 @@ if(!$_SESSION['is_auth']) {
                 <input type="radio" name="ResourcesType" id="optionsRadiosMaps" value="physical">
                 physical
               </label>
-            </div>
 
 	        <div class="" id="divResourcesMap">
-                	<ul>
-                        <li><a href="#" id="str_maps">Strasbourg Maps</a> <input id="str_list" value=""/></li>
-                        <li><a href="#" id="gre_maps">Grenoble Maps</a> <input id="gre_list" value=""/></li>
-                	</ul>
+                	
+                        <p><a href="#" id="str_maps">Strasbourg Maps</a> <input id="str_list" value=""/></p>
+                        <p><a href="#" id="gre_maps">Grenoble Maps</a> <input id="gre_list" value=""/></p>
         	</div>
 
           </div>
+	</div>
 
 
-	<button id="btn_submit" class="btn btn-primary" type="submit">Submit</button>
+	<button id="btn_submit" class="btn btn-primary" type="submit">Next</button>
 
     </form>
 
@@ -124,10 +127,6 @@ if(!$_SESSION['is_auth']) {
 
 	$("#form_new_exp").bind("submit",function(){
 
-	
-		console.log("TODO");
-
-
                 var exp_json = {
                     "type":$("input[name=ResourcesType]:checked").val(),
                 };
@@ -138,19 +137,32 @@ if(!$_SESSION['is_auth']) {
 		//$("#txt_name").value();
 		//$("#txt_duration").value();
 
-		var str_all = parseNodebox($("#str_list").val());
-		for(i=0;i<str_all.length;i++) {
-			my_nodes += "node"+str_all[i]+".devstras.senslab.info,";
+		if($("#str_list").val() != "")
+		{
+
+			var str_all = parseNodebox($("#str_list").val());
+			for(i=0;i<str_all.length;i++) {
+				my_nodes += "node"+str_all[i]+".devstras.senslab.info,";
+			}
 		}
 
-                var gre_all = parseNodebox($("#gre_list").val());
-                for(i=0;i<gre_all.length;i++) {
-			my_nodes += "node"+gre_all[i]+".devgrenoble.senslab.info,";
-                }
+		if($("#gre_list").val() != "")
+                {
+                	var gre_all = parseNodebox($("#gre_list").val());
+                	for(i=0;i<gre_all.length;i++) {
+				my_nodes += "node"+gre_all[i]+".devgrenoble.senslab.info,";
+                	}
+		}
 
 		exp_json.nodes = my_nodes;
 		console.log(exp_json);
 
+		if(typeof localStorage!='undefined') {
+			localStorage.setItem("exp_json",JSON.stringify(exp_json));
+		} else {
+		}
+
+		window.location.href="new_experiment2.php";
 
 		return false;
 	})
