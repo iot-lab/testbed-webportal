@@ -5,8 +5,6 @@
       </div>
       
       
-      <script src="js/jquery.js"></script>
-      <script src="js/bootstrap.js"></script>
 
 <?php if (isset($_SESSION['basic_value'])) { ?>
 	  <script type='text/javascript'>
