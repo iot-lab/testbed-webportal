@@ -41,7 +41,7 @@ include("header.php") ?>
           
         <div class="span4">
           <h2>Personal dashboard</h2>
-          <p><i class="icon-cog"></i> Experiments:</p>
+          <p><i class="icon-cog"></i> Experiments: <span id="expTotal">&nbsp;</span></p>
             <ul>
 				<li><span id="expRunning" class="badge badge-success">&nbsp;</span> running</li>
 				<li><span id="expUpcoming" class="badge badge-info">&nbsp;</span> upcoming</li>
@@ -83,7 +83,28 @@ include("header.php") ?>
         $(document).ready(function(){
 
     		/* Hide modal windows */
-            $('#exp_details').modal('hide');
+            $('#exp_details').modal('hide');		
+	        
+			/* Retrieve experiments total */
+			$.ajax({
+				url: "/rest/experiments?total",
+				type: "GET",
+				dataType: "json",
+				success:function(data){
+					var total = data.running+data.upcoming+data.terminated;
+					$("#expRunning").text(data.running);
+					$("#expUpcoming").text(data.upcoming);
+					$("#expPast").text(data.terminated);
+					$("#expTotal").text(total);
+				},
+				error:function(XMLHttpRequest, textStatus, errorThrows){
+                    $("#div_msg").removeClass("loading");
+                    $("#div_msg").addClass("alert");
+                    $("#div_msg").addClass("alert-error");
+                    $("#div_msg").show();
+					$("#div_msg").html("An error occurred while retrieving your experiment list");
+				}
+			});
 
     		/* Retrieve experiment list */
             getExpList();
@@ -210,9 +231,6 @@ include("header.php") ?>
 					});
 					$('#div_msg').hide();
 					$('#tbl_exps').show();
-					$("#expRunning").text(expRunning);
-					$("#expUpcoming").text(expUpcoming);
-					$("#expPast").text(expPast);
 				},
 				error:function(XMLHttpRequest, textStatus, errorThrows){
                     $("#div_msg").removeClass("loading");
