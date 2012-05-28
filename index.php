@@ -7,10 +7,6 @@ if($_SESSION['is_auth']) {
     header("location: dashboard.php");
     exit();
 }?>
-
-          
-<!--  START OF HEADER --> 
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -214,11 +210,12 @@ if($_SESSION['is_auth']) {
 	        $("#div_error_login").addClass("alert-success");
 	        $("#div_error_login").html("You have been successfully logged out.");
 	        $("#div_error_login").show();
-            setTimeout( "window.location.href = 'index.php'", 3000); 
+            setTimeout( "window.location.href = 'index.php'", 5000); 
         <?php } ?>
 
 		// submit login
-        $('#login_form').bind('submit', function(){	  
+        $('#login_form').bind('submit', function(){
+	  
 	    
 	        var userlogin = {"login":$("#txt_login").val(),"password":$("#txt_password").val()};
 	        
