@@ -141,7 +141,7 @@ if(!$_SESSION['is_auth']) {
 
 			var str_all = parseNodebox($("#str_list").val());
 			for(i=0;i<str_all.length;i++) {
-				my_nodes += "node"+str_all[i]+".devstras.senslab.info,";
+				my_nodes += "node"+str_all[i]+".devlille.senslab.info,";
 			}
 		}
 
@@ -149,7 +149,7 @@ if(!$_SESSION['is_auth']) {
                 {
                 	var gre_all = parseNodebox($("#gre_list").val());
                 	for(i=0;i<gre_all.length;i++) {
-				my_nodes += "node"+gre_all[i]+".devgrenoble.senslab.info,";
+				my_nodes += "node"+gre_all[i]+".lyon.senslab.info";
                 	}
 		}
 

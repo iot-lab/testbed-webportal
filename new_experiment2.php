@@ -87,7 +87,7 @@ if(!$_SESSION['is_auth']) {
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(exp_json),
             success:function(data){
-                 alert("ok");
+                 alert("ok: " + data );
             },
             error:function(XMLHttpRequest, textStatus, errorThrows){
 		 alert("error: " + errorThrows );
