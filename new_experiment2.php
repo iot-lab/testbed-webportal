@@ -60,8 +60,7 @@ if(!$_SESSION['is_auth']) {
 	var exp_json_tmp = localStorage.getItem("exp_json");
 	var exp_json = JSON.parse(exp_json_tmp);
 
-	exp_json.profileassociations = [];
-        exp_json.firmwareassociations = [];
+        var withAssoc = false;
 
         $(document).ready(function(){
 		
@@ -77,26 +76,34 @@ if(!$_SESSION['is_auth']) {
         $("#form_new_exp").bind('submit',function(){
 	       console.log(JSON.stringify(exp_json));
 
+	var url = "/rest/experiments?body";
+	if(withAssoc)
+		 url = "/rest/experiments";
 
         $.ajax({
-            url: "/rest/experiments?body",
+            url: url,
             type: "POST",
             dataType: "text",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(exp_json),
             success:function(data){
                  alert("ok");
-                },
+            },
             error:function(XMLHttpRequest, textStatus, errorThrows){
-				 alert("error: " + errorThrows );
+		 alert("error: " + errorThrows );
             }
         });
-
 
 	       return false;
         });
 
 	$("#btn_assoc").click(function(){
+
+                if(!withAssoc) {
+			exp_json.profileassociations = [];
+        		exp_json.firmwareassociations = [];
+			withAssoc = true;
+		}
 
 		var nodes_set = $("#all_nodes").val();
 		var profil_set = $("#all_profils").val();
