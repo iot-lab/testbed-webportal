@@ -129,13 +129,12 @@ if(!$_SESSION['is_auth']) {
 
                 var exp_json = {
                     "type":$("input[name=ResourcesType]:checked").val(),
+                    "name":$("#txt_name").val(),
+                    "duration":parseInt($("#txt_duration").val())
                 };
 	
 		//var my_nodes = new Array();
 		var my_nodes = "";
-
-		//$("#txt_name").value();
-		//$("#txt_duration").value();
 
 		if($("#str_list").val() != "")
 		{
@@ -154,7 +153,8 @@ if(!$_SESSION['is_auth']) {
                 	}
 		}
 
-		exp_json.nodes = my_nodes;
+                exp_json.nodes = [];
+		exp_json.nodes.push(my_nodes);
 		console.log(exp_json);
 
 		if(typeof localStorage!='undefined') {

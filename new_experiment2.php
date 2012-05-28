@@ -18,7 +18,7 @@ if(!$_SESSION['is_auth']) {
 
 	<h3>3. Configure your nodes</h3>
 
-
+	<p>
 	<select id="all_nodes" size="15" multiple></select>
         <select id="all_profils" size="15">
 		<option value="profil1">profil1</option>
@@ -29,13 +29,21 @@ if(!$_SESSION['is_auth']) {
                 <option value="firmware2">firmware2</option>
 	</select>
 
+	</p>
+
+	<p>
+	
 	<button id="btn_assoc" class="btn">Associate</button>
-
-
-	<h3>4. Validate</h3>
-
+        <!-- <button id="btn_clear" class="btn btn-danger">Clear (TODO)</button> -->
 	<button id="btn_submit" class="btn btn-primary" type="submit">Submit</button>
-	<p id="my_assoc"></p>
+	</p>
+
+	<p>
+		<table style="width:500px"class="table table-striped table-bordered table-condensed">
+		<thead><tr><th>node</th><th>profil</th><th>firmware</th></tr></thead>
+		<tbody id="my_assoc"></tbody>
+		</table>
+	</p>
 
     </form>
 
@@ -58,13 +66,35 @@ if(!$_SESSION['is_auth']) {
         $(document).ready(function(){
 		
 
-	var selected_nodes = exp_json.nodes.split(",");
+	var selected_nodes = exp_json.nodes[0].split(",");
 	for(i=0;i<selected_nodes.length;i++)
 	{
 		if(selected_nodes[i] != "")
 			$("#all_nodes").append(new Option(selected_nodes[i],selected_nodes[i] , true, true));
 	}
 
+
+        $("#form_new_exp").bind('submit',function(){
+	       console.log(JSON.stringify(exp_json));
+
+
+        $.ajax({
+            url: "/rest/experiments?body",
+            type: "POST",
+            dataType: "text",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(exp_json),
+            success:function(data){
+                 alert("ok");
+                },
+            error:function(XMLHttpRequest, textStatus, errorThrows){
+				 alert("error: " + errorThrows );
+            }
+        });
+
+
+	       return false;
+        });
 
 	$("#btn_assoc").click(function(){
 
@@ -81,8 +111,9 @@ if(!$_SESSION['is_auth']) {
 		for(i=0;i<nodes_set.length;i++)
 		{
 			nodes_str += nodes_set[i]+",";
-			$("#my_assoc").append("<li>" + nodes_set[i] + " > " + profil_set + " > " + firmware_set + "</li>");
+			$("#my_assoc").append("<tr><td>" + nodes_set[i] + "</td><td>" + profil_set + "</td><td>" + firmware_set + "</td></tr>");
 		}
+
 
 
 		var find = false;
@@ -121,14 +152,9 @@ if(!$_SESSION['is_auth']) {
                 }
 
 
-
-
-
-
 		console.log(JSON.stringify(exp_json)); 
 		return false;
 	});
-
 
 	});
         
