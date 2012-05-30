@@ -57,8 +57,6 @@ if(!$_SESSION['is_auth']) {
 	var exp_json_tmp = localStorage.getItem("exp_json");
 	var exp_json = JSON.parse(exp_json_tmp);
 
-console.log(exp_json_tmp);
-
 	var binary = [];
 
 
@@ -90,17 +88,19 @@ console.log(exp_json_tmp);
 		content_type = "multipart/form-data; boundary="+boundary;
 		data = "";
 	
-		//TODO: loop
-		data += boundary + '\r\n';
-		data += 'Content-Disposition: form-data; name="'+binary[0].name+'" filename="'+binary[0].name+'"\r\n';
-                data += 'Content-Type: text/plain\r\n\r\n';
-		data += binary[0].bin + '\r\n';
+		for(i=0;i<binary.length;i++)
+		{
+			data += boundary + '\r\n';
+			data += 'Content-Disposition: form-data; name="'+binary[i].name+'" filename="'+binary[i].name+'"\r\n';
+                	data += 'Content-Type: text/plain\r\n\r\n';
+			data += binary[i].bin + '\r\n';
+		}
 
-		//TODO: add json
+		//add json
                 data += boundary + '\r\n';
                 data += 'Content-Disposition: form-data; name="test.json" filename="test.json"\r\n';
                 data += 'Content-Type: text/json\r\n\r\n';
-                data += datab + '\r\n';		
+                data += datab + '\r\n\r\n';		
 
 
 		data += boundary + '--\r\n';
