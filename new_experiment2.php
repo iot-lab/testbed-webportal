@@ -57,6 +57,8 @@ if(!$_SESSION['is_auth']) {
 	var exp_json_tmp = localStorage.getItem("exp_json");
 	var exp_json = JSON.parse(exp_json_tmp);
 
+console.log(exp_json_tmp);
+
 	var binary = [];
 
 
@@ -79,12 +81,32 @@ if(!$_SESSION['is_auth']) {
 	var url = "/rest/experiments?body";
         var content_type = "application/json; charset=utf-8";
 	var data = JSON.stringify(exp_json);
+        var datab = JSON.stringify(exp_json);
+
+	var boundary = "----------------------------a9c9cb8394e1";
 
 	if(withAssoc) {
 		url = "/rest/experiments";
-		content_type = "multipart/form-data";
-		data = new FormData();
-                data.append(binary[0].name,binary[0].bin);
+		content_type = "multipart/form-data; boundary="+boundary;
+		data = "";
+	
+		//TODO: loop
+		data += boundary + '\r\n';
+		data += 'Content-Disposition: form-data; name="'+binary[0].name+'" filename="'+binary[0].name+'"\r\n';
+                data += 'Content-Type: text/plain\r\n\r\n';
+		data += binary[0].bin + '\r\n';
+
+		//TODO: add json
+                data += boundary + '\r\n';
+                data += 'Content-Disposition: form-data; name="test.json" filename="test.json"\r\n';
+                data += 'Content-Type: text/json\r\n\r\n';
+                data += datab + '\r\n';		
+
+
+		data += boundary + '--\r\n';
+		
+		//data = new FormData();
+		//data.append(binary[0].name,binary[0].bin);
 	}
 
         $.ajax({

@@ -149,7 +149,7 @@ if(!$_SESSION['is_auth']) {
                 {
                 	var gre_all = parseNodebox($("#gre_list").val());
                 	for(i=0;i<gre_all.length;i++) {
-				my_nodes += "node"+gre_all[i]+".lyon.senslab.info";
+				my_nodes += "node"+gre_all[i]+".lyon.senslab.info,";
                 	}
 		}
 
