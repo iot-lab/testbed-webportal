@@ -25,10 +25,10 @@ if(!$_SESSION['is_auth']) {
                 <option value="profil2">profil2</option>
 	</select>
         <select id="all_firmwares" size="15">
-		<option value="firmware1">firmware1</option>
-                <option value="firmware2">firmware2</option>
+		<!--<option value="firmware1">firmware1</option>
+                <option value="firmware2">firmware2</option>-->
 	</select>
-
+	<input type="file" id="files" name="files[]" multiple />
 	</p>
 
 	<p>
@@ -47,18 +47,18 @@ if(!$_SESSION['is_auth']) {
 
     </form>
 
-
 	<?php include('footer.php') ?>
 
     </div>
 
 
-        
-
     <script type="text/javascript">
        
 	var exp_json_tmp = localStorage.getItem("exp_json");
 	var exp_json = JSON.parse(exp_json_tmp);
+
+	var binary = [];
+
 
         var withAssoc = false;
 
@@ -69,7 +69,7 @@ if(!$_SESSION['is_auth']) {
 	for(i=0;i<selected_nodes.length;i++)
 	{
 		if(selected_nodes[i] != "")
-			$("#all_nodes").append(new Option(selected_nodes[i],selected_nodes[i] , true, true));
+			$("#all_nodes").append(new Option(selected_nodes[i],selected_nodes[i] , false, false));
 	}
 
 
@@ -77,15 +77,23 @@ if(!$_SESSION['is_auth']) {
 	       console.log(JSON.stringify(exp_json));
 
 	var url = "/rest/experiments?body";
-	if(withAssoc)
-		 url = "/rest/experiments";
+        var content_type = "application/json; charset=utf-8";
+	var data = JSON.stringify(exp_json);
+
+	if(withAssoc) {
+		url = "/rest/experiments";
+		content_type = "multipart/form-data";
+		data = new FormData();
+                data.append(binary[0].name,binary[0].bin);
+	}
 
         $.ajax({
             url: url,
             type: "POST",
             dataType: "text",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(exp_json),
+            contentType: content_type,
+            data: data,
+            processData:false,
             success:function(data){
                  alert("ok: " + data );
             },
@@ -165,6 +173,33 @@ if(!$_SESSION['is_auth']) {
 
 	});
         
+
+
+function handleFileSelect(evt) {
+    var files = evt.target.files; // FileList object
+
+    // Loop through the FileList and render image files as thumbnails.
+    for (var i = 0, f; f = files[i]; i++) {
+
+      var reader = new FileReader();
+
+      // Closure to capture the file information.
+      reader.onload = (function(theFile) {
+        return function(e) {
+
+	  binary.push({"name":theFile.name,"bin":e.target.result});
+
+          $("#all_firmwares").append(new Option(theFile.name,theFile.name,false,false));
+        };
+      })(f);
+
+      reader.readAsText(f);
+    }
+  }
+
+  document.getElementById('files').addEventListener('change', handleFileSelect, false);
+
+
     </script>
 
 
