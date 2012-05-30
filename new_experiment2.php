@@ -60,7 +60,7 @@ if(!$_SESSION['is_auth']) {
                 $("#form_new_exp").bind('submit', function () {
                     console.log(JSON.stringify(exp_json));
 
-                    var url = "/rest/experiments?body";
+                    var url = "/rest/experiment?body";
                     var content_type = "application/json; charset=utf-8";
                     var data = JSON.stringify(exp_json);
                     var datab = JSON.stringify(exp_json);
@@ -68,7 +68,7 @@ if(!$_SESSION['is_auth']) {
                     var boundary = "----------------------------a9c9cb8394e1";
 
                     if (withAssoc) {
-                        url = "/rest/experiments";
+                        url = "/rest/experiment?body";
                         content_type = "multipart/form-data; boundary=" + boundary;
                         data = "";
 
