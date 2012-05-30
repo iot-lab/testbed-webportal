@@ -68,11 +68,11 @@ if(!$_SESSION['is_auth']) {
 
                     if (withAssoc) {
                         url = "/rest/experiment";
-                        content_type = "multipart/form-data; boundary=" + boundary;
+                        content_type = "multipart/form-data; boundary="+boundary;
                         data = "";
 
                         for (i = 0; i < binary.length; i++) {
-                            data += boundary + '\r\n';
+                            data += "--" + boundary + '\r\n';
                             data += 'Content-Disposition: form-data; name="' + binary[i].name + '" filename="' + binary[i].name + '"\r\n';
                             data += 'Content-Type: text/plain\r\n\r\n';
                             data += binary[i].bin + '\r\n';
@@ -81,10 +81,10 @@ if(!$_SESSION['is_auth']) {
                         //add json
                         data += boundary + '\r\n';
                         data += 'Content-Disposition: form-data; name="test.json" filename="test.json"\r\n';
-                        data += 'Content-Type: text/json\r\n\r\n';
+                        data += 'Content-Type: application/json\r\n\r\n';
                         data += datab + '\r\n\r\n';
 
-                        data += boundary + '--\r\n';
+                        data += "--" + boundary + '--\r\n';
 
                         //data = new FormData();
                         //data.append(binary[0].name,binary[0].bin);
@@ -95,8 +95,8 @@ if(!$_SESSION['is_auth']) {
                         type: "POST",
                         dataType: "text",
                         contentType: content_type,
-                        data: data,
                         processData: false,
+                        data: data,
                         success: function (data) {
                             alert("ok: " + data);
                         },
@@ -155,7 +155,7 @@ exp_json.profiles.profile1.profilename = 'profile1';
                     if (exp_json.profileassociations != null) {
                         for (i = 0; i < exp_json.profileassociations.length; i++) {
                             if (exp_json.profileassociations[i].profilename == profil_set) {
-                                exp_json.profileassociations[i].nodes += nodes_str;
+                                exp_json.profileassociations[i].nodes[0] += nodes_str;
                                 find = true;
                             }
                         }
@@ -164,7 +164,7 @@ exp_json.profiles.profile1.profilename = 'profile1';
                     if (!find) {
                         exp_json.profileassociations.push({
                             "profilename": profil_set,
-                            "nodes": nodes_str
+                            "nodes": [nodes_str]
                         });
                     }
 
@@ -173,7 +173,7 @@ exp_json.profiles.profile1.profilename = 'profile1';
                     if (exp_json.firmwareassociations != null) {
                         for (i = 0; i < exp_json.firmwareassociations.length; i++) {
                             if (exp_json.firmwareassociations[i].firmwarename == firmware_set) {
-                                exp_json.firmwareassociations[i].nodes += nodes_str;
+                                exp_json.firmwareassociations[i].nodes[0] += nodes_str;
                                 find = true;
                             }
                         }
@@ -182,12 +182,10 @@ exp_json.profiles.profile1.profilename = 'profile1';
                     if (!find) {
                         exp_json.firmwareassociations.push({
                             "firmwarename": firmware_set,
-                            "nodes": nodes_str
+                            "nodes": [nodes_str]
                         });
                     }
 
-
-                    console.log(JSON.stringify(exp_json));
                     return false;
                 });
 
