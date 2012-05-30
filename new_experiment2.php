@@ -16,8 +16,7 @@ if(!$_SESSION['is_auth']) {
                 <p>
                     <select id="all_nodes" size="15" multiple></select>
                     <select id="all_profils" size="15">
-                        <option value="profil1">profil1</option>
-                        <option value="profil2">profil2</option>
+                        <option value="profile1">profil1</option>
                     </select>
                     <select id="all_firmwares" size="15">
                     </select>
@@ -68,7 +67,7 @@ if(!$_SESSION['is_auth']) {
                     var boundary = "----------------------------a9c9cb8394e1";
 
                     if (withAssoc) {
-                        url = "/rest/experiment?body";
+                        url = "/rest/experiment";
                         content_type = "multipart/form-data; boundary=" + boundary;
                         data = "";
 
@@ -114,6 +113,26 @@ if(!$_SESSION['is_auth']) {
                     if (!withAssoc) {
                         exp_json.profileassociations = [];
                         exp_json.firmwareassociations = [];
+
+
+//TODO: for debug only
+exp_json.profiles = {};
+exp_json.profiles.profile1 = {};
+exp_json.profiles.profile1.power = 'dc';
+exp_json.profiles.profile1.sensor = {};
+exp_json.profiles.profile1.sensor.temperature = false;
+exp_json.profiles.profile1.sensor.luminosity = false;
+exp_json.profiles.profile1.sensor.frequency = 15;
+exp_json.profiles.profile1.consemptium = {};
+exp_json.profiles.profile1.consemptium.current = true;
+exp_json.profiles.profile1.consemptium.voltage = true;
+exp_json.profiles.profile1.consemptium.frequency = 60;
+exp_json.profiles.profile1.radio = {};
+exp_json.profiles.profile1.radio.rssi = false;
+exp_json.profiles.profile1.radio.frequency = 11;
+exp_json.profiles.profile1.profilename = 'profile1';
+
+
                         withAssoc = true;
                     }
 
