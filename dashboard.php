@@ -16,7 +16,7 @@ include("header.php") ?>
           <h2>Experiment List</h2>
         </div>
         <div class="span5" style="text-align:left;padding-bottom:5px;padding-left:5px;">
-          <a href="new_experiment.php" class="btn btn-new">New Experiment</a>&nbsp;<a href="#" class="btn btn-clear" onClick="refreshExpList()">Refresh List</a>
+          <a href="new_experiment.php" class="btn btn-new">New Experiment</a>
         </div>
 		<div class="span9">
 		
@@ -34,12 +34,7 @@ include("header.php") ?>
                         </tr>
                    	</thead>
                     <tbody>
-						<tr>
-							<td colspan="5" class="dataTables_empty">Loading ...</td>
-						</tr>
                     </tbody>
-                    <tfoot>
-                    </tfoot>
              	</table>
              	
         </div>
@@ -111,21 +106,19 @@ include("header.php") ?>
 				}
 			});
 
-    		/* Retrieve experiment list */
-            //getExpList();
+    		/* Manage experiment list */
 			oTable = $('#tbl_exps').dataTable({
 				"sDom": "<'row'<'span7'l><'span7'f>r>t<'row'<'span7'i><'span7'p>>",
 				"bProcessing": true,
 				"bServerSide": true,
-				"sAjaxSource": "/rest/experiments",
+				"sAjaxSource": "list_experiments.php",
 				"bPaginate": true,
 				"sPaginationType": "bootstrap",
 				"bLengthChange": true,
-				"bFilter": true,
-				"bSort": true,
+				"bFilter": false,
+				"bSort": false,
 				"bInfo": true,
-				"bAutoWidth": false,
-				"aaSorting": [[ 0, "desc" ]]
+				"bAutoWidth": false
 			});
 			$('#div_msg').hide();
 			$('#tbl_exps').show();
@@ -138,7 +131,7 @@ include("header.php") ?>
 
 			/* Retrieve experiment details */
 			$.ajax({
-				url: "/rest/experiments/"+id,
+				url: "/rest/experiment/"+id,
 				type: "GET",
 				data: {},
 				dataType: "json",
@@ -185,94 +178,7 @@ include("header.php") ?>
 				}
 			});
 		}
-
-		function getExpList() {
-			$("#div_msg").removeClass("alert-error");
-			$("#div_msg").removeClass("alert");
-			$("#div_msg").addClass("loading");
-			$("#div_msg").html("<b>Loading ...</b>");
-			$("#div_msg").show();
-		
-	        
-			/* Retrieve experiment list */
-			$.ajax({
-				url: "/rest/experiments",
-				type: "GET",
-				dataType: "json",
-				success:function(data){
-					exps = data.items;
-					var i = 0;
-					var expRunning=0;
-					var expUpcoming=0;
-					var expPast=0;
-					$.each(data.items, function(key,val) {
-	
-						var date=new Date();
-						date.setTime(val.date+"000");
-	
-						var buttonAction='<a href="#" class="btn btn-valid" data="'+val.id+'" onClick="detailsExp('+val.id+')">Details</a>';
-	                	
-						switch(val.state) {
-							case "Running":
-								buttonAction+='<a href="#" class="btn btn-danger" data="'+val.id+'" onClick="stopExp('+val.id+')">Stop</a>';
-								expRunning++;
-								break;
-							case "Upcoming":
-								buttonAction+='<a href="#" class="btn btn-danger" data="'+val.id+'" onClick="cancelExp('+val.id+')">Cancel</a>';
-								expUpcoming++;
-								break;
-	        				case "Terminated":
-	    					case "Error":
-								expPast++;
-								break;
-						}
-
-						$("#tbl_exps tbody").append(
-								'<tr data=' + val.id + '>'+
-								'<td>' + val.id + '</td>'+
-								'<td>' + val.name + '</td>'+
-								'<td>'+ date + '</td>'+
-								'<td>' + Math.floor(val.duration/60) + ' minute(s)</a></td>'+
-								'<td>' + val.nb_resources + ' node(s)</td>'+
-								'<td>' + val.state + '</td>'+
-								'<td>' + buttonAction +'</td>'+
-								'</tr>');
-						i++;
-					});
-					oTable = $('#tbl_exps').dataTable({
-						"sDom": "<'row'<'span7'l><'span7'f>r>t<'row'<'span7'i><'span7'p>>",
-						"bProcessing": true,
-						"bServerSide": true,
-						"sAjaxSource": "/rest/experiments",
-						"bPaginate": true,
-						"sPaginationType": "bootstrap",
-						"bLengthChange": true,
-						"bFilter": true,
-						"bSort": true,
-						"bInfo": true,
-						"bAutoWidth": false,
-						"aaSorting": [[ 0, "desc" ]]
-					});
-					$('#div_msg').hide();
-					$('#tbl_exps').show();
-				},
-				error:function(XMLHttpRequest, textStatus, errorThrows){
-                    $("#div_msg").removeClass("loading");
-                    $("#div_msg").addClass("alert");
-                    $("#div_msg").addClass("alert-error");
-                    $("#div_msg").show();
-					$("#div_msg").html("An error occurred while retrieving your experiment list");
-				}
-			});
-		}
-
-		function refreshExpList() {
-			$('#tbl_exps').hide();
-			oTable.fnClearTable(true);
-			oTable.fnDestroy();
-			getExpList();
-		}
-   
+  
         
     </script>
 
