@@ -16,7 +16,7 @@ if(!$_SESSION['is_auth']) {
                 <p>
                     <select id="all_nodes" size="15" multiple></select>
                     <select id="all_profils" size="15">
-                        <option value="profile1">profil1</option>
+                        <option value="profile1">profile1</option>
                     </select>
                     <select id="all_firmwares" size="15">
                     </select>
@@ -31,7 +31,7 @@ if(!$_SESSION['is_auth']) {
                         <thead>
                             <tr>
                                 <th>node</th>
-                                <th>profil</th>
+                                <th>profile</th>
                                 <th>firmware</th>
                             </tr>
                         </thead>
