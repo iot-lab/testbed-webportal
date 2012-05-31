@@ -34,7 +34,12 @@ include("header.php") ?>
                         </tr>
                    	</thead>
                     <tbody>
+						<tr>
+							<td colspan="5" class="dataTables_empty">Loading ...</td>
+						</tr>
                     </tbody>
+                    <tfoot>
+                    </tfoot>
              	</table>
              	
         </div>
@@ -107,7 +112,23 @@ include("header.php") ?>
 			});
 
     		/* Retrieve experiment list */
-            getExpList();
+            //getExpList();
+			oTable = $('#tbl_exps').dataTable({
+				"sDom": "<'row'<'span7'l><'span7'f>r>t<'row'<'span7'i><'span7'p>>",
+				"bProcessing": true,
+				"bServerSide": true,
+				"sAjaxSource": "/rest/experiments",
+				"bPaginate": true,
+				"sPaginationType": "bootstrap",
+				"bLengthChange": true,
+				"bFilter": true,
+				"bSort": true,
+				"bInfo": true,
+				"bAutoWidth": false,
+				"aaSorting": [[ 0, "desc" ]]
+			});
+			$('#div_msg').hide();
+			$('#tbl_exps').show();
             
         });
 
@@ -175,7 +196,7 @@ include("header.php") ?>
 	        
 			/* Retrieve experiment list */
 			$.ajax({
-				url: "/rest/experiments?limite",
+				url: "/rest/experiments",
 				type: "GET",
 				dataType: "json",
 				success:function(data){
@@ -220,6 +241,9 @@ include("header.php") ?>
 					});
 					oTable = $('#tbl_exps').dataTable({
 						"sDom": "<'row'<'span7'l><'span7'f>r>t<'row'<'span7'i><'span7'p>>",
+						"bProcessing": true,
+						"bServerSide": true,
+						"sAjaxSource": "/rest/experiments",
 						"bPaginate": true,
 						"sPaginationType": "bootstrap",
 						"bLengthChange": true,
