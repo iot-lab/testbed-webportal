@@ -144,13 +144,9 @@ exp_json.profiles.profile1.profilename = 'profile1';
 
                     $("#all_nodes option:selected").remove();
 
-                    var nodes_str = "";
+                    var nodes_str = [];
                     for (i = 0; i < nodes_set.length; i++) {
-                        
-                        if(nodes_str == "")
-                                nodes_str += nodes_set[i];	
-                        else
-                                nodes_str += "," + nodes_set[i];
+                        nodes_str.push(nodes_set[i]);
 
 			$("#my_assoc").append("<tr><td>" + nodes_set[i] + "</td><td>" + profil_set + "</td><td>" + firmware_set + "</td></tr>");
                     }
@@ -160,7 +156,8 @@ exp_json.profiles.profile1.profilename = 'profile1';
                     if (exp_json.profileassociations != null) {
                         for (i = 0; i < exp_json.profileassociations.length; i++) {
                             if (exp_json.profileassociations[i].profilename == profil_set) {
-                                exp_json.profileassociations[i].nodes[0] += nodes_str;
+				for(j=0;j<nodes_str.length;j++)
+                                	exp_json.profileassociations[i].nodes.push(nodes_str[j]);
 				find = true;
                             }
                         }
@@ -169,7 +166,7 @@ exp_json.profiles.profile1.profilename = 'profile1';
                     if (!find) {
                         exp_json.profileassociations.push({
                             "profilename": profil_set,
-                            "nodes": [nodes_str]
+                            "nodes": nodes_str
                         });
                     }
 
@@ -178,7 +175,8 @@ exp_json.profiles.profile1.profilename = 'profile1';
                     if (exp_json.firmwareassociations != null) {
                         for (i = 0; i < exp_json.firmwareassociations.length; i++) {
                             if (exp_json.firmwareassociations[i].firmwarename == firmware_set) {
-                                exp_json.firmwareassociations[i].nodes[0] += nodes_str;
+				for(j=0;j<nodes_str.length;j++)
+					exp_json.firmwareassociations[i].nodes.push(nodes_str[j]);
                                 find = true;
                             }
                         }
@@ -187,7 +185,7 @@ exp_json.profiles.profile1.profilename = 'profile1';
                     if (!find) {
                         exp_json.firmwareassociations.push({
                             "firmwarename": firmware_set,
-                            "nodes": [nodes_str]
+                            "nodes": nodes_str
                         });
                     }
 
