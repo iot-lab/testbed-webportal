@@ -146,7 +146,10 @@ exp_json.profiles.profile1.profilename = 'profile1';
 
                     var nodes_str = ""
                     for (i = 0; i < nodes_set.length; i++) {
-                        nodes_str += nodes_set[i] + ",";
+                        if(nodes_str == "")
+                        	nodes_str += nodes_set[i];
+			else
+				nodes_str += "," + nodes_set[i];
                         $("#my_assoc").append("<tr><td>" + nodes_set[i] + "</td><td>" + profil_set + "</td><td>" + firmware_set + "</td></tr>");
                     }
 
