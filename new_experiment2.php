@@ -51,7 +51,7 @@ if(!$_SESSION['is_auth']) {
 
             $(document).ready(function () {
 
-                var selected_nodes = exp_json.nodes[0].split(",");
+                var selected_nodes = exp_json.nodes;
                 for (i = 0; i < selected_nodes.length; i++) {
                     if (selected_nodes[i] != "") $("#all_nodes").append(new Option(selected_nodes[i], selected_nodes[i], false, false));
                 }
@@ -144,13 +144,15 @@ exp_json.profiles.profile1.profilename = 'profile1';
 
                     $("#all_nodes option:selected").remove();
 
-                    var nodes_str = ""
+                    var nodes_str = "";
                     for (i = 0; i < nodes_set.length; i++) {
+                        
                         if(nodes_str == "")
-                        	nodes_str += nodes_set[i];
-			else
-				nodes_str += "," + nodes_set[i];
-                        $("#my_assoc").append("<tr><td>" + nodes_set[i] + "</td><td>" + profil_set + "</td><td>" + firmware_set + "</td></tr>");
+                                nodes_str += nodes_set[i];	
+                        else
+                                nodes_str += "," + nodes_set[i];
+
+			$("#my_assoc").append("<tr><td>" + nodes_set[i] + "</td><td>" + profil_set + "</td><td>" + firmware_set + "</td></tr>");
                     }
 
                     var find = false;
@@ -159,7 +161,7 @@ exp_json.profiles.profile1.profilename = 'profile1';
                         for (i = 0; i < exp_json.profileassociations.length; i++) {
                             if (exp_json.profileassociations[i].profilename == profil_set) {
                                 exp_json.profileassociations[i].nodes[0] += nodes_str;
-                                find = true;
+				find = true;
                             }
                         }
                     }
@@ -222,6 +224,3 @@ exp_json.profiles.profile1.profilename = 'profile1';
 
             document.getElementById('files').addEventListener('change', handleFileSelect, false);
         </script>
-        </body>
-        
-        </html>

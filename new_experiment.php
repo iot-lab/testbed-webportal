@@ -102,31 +102,24 @@ if(!$_SESSION['is_auth']) {
                 };
 
                 //var my_nodes = new Array();
-                var my_nodes = "";
+                var my_nodes = [];
 
                 if ($("#str_list").val() != "") {
 
                     var str_all = parseNodebox($("#str_list").val());
                     for (i = 0; i < str_all.length; i++) {
-                        if(my_nodes == "")
-                        	my_nodes += "node" + str_all[i] + ".devlille.senslab.info";
-			else
-				my_nodes += ",node" + str_all[i] + ".devlille.senslab.info";
+                        my_nodes.push("node"+str_all[i]+".devlille.senslab.info");
                     }
                 }
 
                 if ($("#gre_list").val() != "") {
                     var gre_all = parseNodebox($("#gre_list").val());
                     for (i = 0; i < gre_all.length; i++) {
-			if(my_nodes == "")
-                        	my_nodes += "node" + gre_all[i] + ".lyon.senslab.info";
-			else
-				my_nodes += ",node" + gre_all[i] + ".lyon.senslab.info";
+			my_nodes.push("node"+gre_all[i]+".lyon.senslab.info");
                     }
                 }
 
-                exp_json.nodes = [];
-                exp_json.nodes.push(my_nodes);
+                exp_json.nodes = my_nodes;
                 console.log(exp_json);
 
                 if (typeof localStorage != 'undefined') {
