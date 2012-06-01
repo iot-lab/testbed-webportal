@@ -73,14 +73,14 @@ if(!$_SESSION['is_auth']) {
 
                         for (i = 0; i < binary.length; i++) {
                             data += "--" + boundary + '\r\n';
-                            data += 'Content-Disposition: form-data; name="' + binary[i].name + '" filename="' + binary[i].name + '"\r\n';
+                            data += 'Content-Disposition: form-data; name="' + binary[i].name + '"; filename="' + binary[i].name + '"\r\n';
                             data += 'Content-Type: text/plain\r\n\r\n';
                             data += binary[i].bin + '\r\n';
                         }
 
                         //add json
                         data += boundary + '\r\n';
-                        data += 'Content-Disposition: form-data; name="test.json" filename="test.json"\r\n';
+                        data += 'Content-Disposition: form-data; name="'+exp_json.name+'.json"; filename="'+exp_json.name+'.json"\r\n';
                         data += 'Content-Type: application/json\r\n\r\n';
                         data += datab + '\r\n\r\n';
 
