@@ -115,7 +115,7 @@ if(!$_SESSION['is_auth']) {
                 if ($("#gre_list").val() != "") {
                     var gre_all = parseNodebox($("#gre_list").val());
                     for (i = 0; i < gre_all.length; i++) {
-			my_nodes.push("node"+gre_all[i]+".lyon.senslab.info");
+                        my_nodes.push("node"+gre_all[i]+".lyon.senslab.info");
                     }
                 }
 

@@ -114,23 +114,22 @@ if(!$_SESSION['is_auth']) {
                         exp_json.profileassociations = [];
                         exp_json.firmwareassociations = [];
 
-
-//TODO: for debug only
-exp_json.profiles = {};
-exp_json.profiles.profile1 = {};
-exp_json.profiles.profile1.power = 'dc';
-exp_json.profiles.profile1.sensor = {};
-exp_json.profiles.profile1.sensor.temperature = false;
-exp_json.profiles.profile1.sensor.luminosity = false;
-exp_json.profiles.profile1.sensor.frequency = 15;
-exp_json.profiles.profile1.consemptium = {};
-exp_json.profiles.profile1.consemptium.current = true;
-exp_json.profiles.profile1.consemptium.voltage = true;
-exp_json.profiles.profile1.consemptium.frequency = 60;
-exp_json.profiles.profile1.radio = {};
-exp_json.profiles.profile1.radio.rssi = false;
-exp_json.profiles.profile1.radio.frequency = 11;
-exp_json.profiles.profile1.profilename = 'profile1';
+                        //TODO: default profil, only for debug
+                        exp_json.profiles = {};
+                        exp_json.profiles.profile1 = {};
+                        exp_json.profiles.profile1.power = 'dc';
+                        exp_json.profiles.profile1.sensor = {};
+                        exp_json.profiles.profile1.sensor.temperature = false;
+                        exp_json.profiles.profile1.sensor.luminosity = false;
+                        exp_json.profiles.profile1.sensor.frequency = 15;
+                        exp_json.profiles.profile1.consemptium = {};
+                        exp_json.profiles.profile1.consemptium.current = true;
+                        exp_json.profiles.profile1.consemptium.voltage = true;
+                        exp_json.profiles.profile1.consemptium.frequency = 60;
+                        exp_json.profiles.profile1.radio = {};
+                        exp_json.profiles.profile1.radio.rssi = false;
+                        exp_json.profiles.profile1.radio.frequency = 11;
+                        exp_json.profiles.profile1.profilename = 'profile1';
 
 
                         withAssoc = true;
@@ -145,17 +144,17 @@ exp_json.profiles.profile1.profilename = 'profile1';
                     $("#all_nodes option:selected").remove();
 
                     for (i = 0; i < nodes_str.length; i++) {
-			$("#my_assoc").append("<tr><td>" + nodes_str[i] + "</td><td>" + profil_set + "</td><td>" + firmware_set + "</td></tr>");
+                        $("#my_assoc").append("<tr><td>" + nodes_str[i] + "</td><td>" + profil_set + "</td><td>" + firmware_set + "</td></tr>");
                     }
 
                     var find = false;
                     //if profil already exist in the table
-                        for (i = 0; i < exp_json.profileassociations.length; i++) {
-                            if (exp_json.profileassociations[i].profilename == profil_set) {
-				exp_json.profileassociations[i].nodes = exp_json.profileassociations[i].nodes.concat(nodes_str);
-				find = true;
-                            }
+                    for (i = 0; i < exp_json.profileassociations.length; i++) {
+                        if (exp_json.profileassociations[i].profilename == profil_set) {
+                            exp_json.profileassociations[i].nodes = exp_json.profileassociations[i].nodes.concat(nodes_str);
+                            find = true;
                         }
+                    }
 
                     if (!find) {
                         exp_json.profileassociations.push({
@@ -166,12 +165,12 @@ exp_json.profiles.profile1.profilename = 'profile1';
 
                     find = false;
                     //if firmware already exist in the table
-                        for (i = 0; i < exp_json.firmwareassociations.length; i++) {
-                            if (exp_json.firmwareassociations[i].firmwarename == firmware_set) {
-				exp_json.firmwareassociations[i].nodes = exp_json.firmwareassociations[i].nodes.concat(nodes_str);
-                                find = true;
-                            }
+                    for (i = 0; i < exp_json.firmwareassociations.length; i++) {
+                        if (exp_json.firmwareassociations[i].firmwarename == firmware_set) {
+                            exp_json.firmwareassociations[i].nodes = exp_json.firmwareassociations[i].nodes.concat(nodes_str);
+                            find = true;
                         }
+                    }
 
                     if (!find) {
                         exp_json.firmwareassociations.push({
