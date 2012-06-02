@@ -142,6 +142,7 @@ include("header.php") ?>
 
 
         var json_exp = [];
+        var withAssoc = false;
         function detailsExp(id) {
 
             /* Retrieve experiment details */
@@ -159,9 +160,11 @@ include("header.php") ?>
                     $("#detailsExpSummary").append("<b>Number of Nodes:</b> " + data.nodes.length + "<br/>");
         
                     json_exp = [];
+                    withAssoc = false;
                     //build a more simple json for parsing
                     if(data.profileassociations != null)
                     {
+                        withAssoc = true;
                         for(i = 0; i < data.profileassociations.length; i++) {
                             for(j = 0; j < data.profileassociations[i].nodes.length;j++){
                                 json_exp.push({"node": data.profileassociations[i].nodes[j],"profilename":data.profileassociations[i].profilename});
@@ -181,11 +184,16 @@ include("header.php") ?>
                         }
                     }
                     
-                    
                     $("#detailsExpRow").html("");
                     for(k = 0; k < json_exp.length; k++) {
                         $("#detailsExpRow").append("<tr><td>"+json_exp[k].node+"</td><td>"+json_exp[k].profilename+"</td><td>"+json_exp[k].firmwarename+"</td></tr>");
-
+                    }
+                    
+                    if(!withAssoc)
+                    {
+                        for(k = 0; k < data.nodes.length; k++) {
+                            $("#detailsExpRow").append("<tr><td>"+data.nodes[k]+"</td><td></td><td></td></tr>");
+                        }
                     }
 
                     $('#details_modal').modal('show');
