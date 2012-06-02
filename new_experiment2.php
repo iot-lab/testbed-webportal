@@ -11,7 +11,7 @@ if(!$_SESSION['is_auth']) {
 
         <div class="container">
             <h2>New experiment</h2>
-            <form class="well form-horizontal" id="form_new_exp">
+            <form class="well form-horizontal" id="form_new_exp" >
                 <h3>3. Configure your nodes</h3>
                 <p>
                     <select id="all_nodes" size="15" multiple></select>
@@ -59,51 +59,69 @@ if(!$_SESSION['is_auth']) {
                 $("#form_new_exp").bind('submit', function () {
                     console.log(JSON.stringify(exp_json));
 
-                    var url = "/rest/experiment?body";
-                    var content_type = "application/json; charset=utf-8";
-                    var data = JSON.stringify(exp_json);
-                    var datab = JSON.stringify(exp_json);
+                    var mydata = JSON.stringify(exp_json);
+                    var datab = "";
 
-                    var boundary = "----------------------------a9c9cb8394e1";
-
+                    
                     if (withAssoc) {
-                        url = "/rest/experiment";
-                        content_type = "multipart/form-data; boundary="+boundary;
-                        data = "";
+                        var boundary = "AaB03x";
+  
+                        //JSON
+                        datab += "--" + boundary + '\r\n';
+                        datab += 'Content-Disposition: form-data; name="'+exp_json.name+'.json"; filename="'+exp_json.name+'.json"\r\n';
+                        datab += 'Content-Type: application/json\r\n\r\n';
+                        datab += mydata + '\r\n\r\n';
+                        //datab += "--" + boundary + '\r\n';
+
 
                         for (i = 0; i < binary.length; i++) {
-                            data += "--" + boundary + '\r\n';
-                            data += 'Content-Disposition: form-data; name="' + binary[i].name + '"; filename="' + binary[i].name + '"\r\n';
-                            data += 'Content-Type: text/plain\r\n\r\n';
-                            data += binary[i].bin + '\r\n';
+                            datab += "--" + boundary + '\r\n';
+                            datab += 'Content-Disposition: form-data; name="' + binary[i].name + '"; filename="' + binary[i].name + '"\r\n';
+                            datab += 'Content-Type: text/plain\r\n\r\n';
+                            datab += binary[i].bin + '\r\n';
                         }
 
                         //add json
-                        data += boundary + '\r\n';
-                        data += 'Content-Disposition: form-data; name="'+exp_json.name+'.json"; filename="'+exp_json.name+'.json"\r\n';
-                        data += 'Content-Type: application/json\r\n\r\n';
-                        data += datab + '\r\n\r\n';
+                        datab += "--" + boundary + '--';
 
-                        data += "--" + boundary + '--\r\n';
 
-                        //data = new FormData();
-                        //data.append(binary[0].name,binary[0].bin);
+                        $.ajax({
+                            type: "POST",
+                            dataType: "text",
+                            
+                            data: datab,
+                            url: "/rest/experiment",
+                            contentType: "multipart/form-data; boundary="+boundary,
+                            
+                            //data: "data="+datab,
+                            //url: "dump.php",
+                            success: function (data_server) {
+                                alert("ok: " + data_server);
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrows) {
+                                alert("error: " + errorThrows);
+                            }
+                        });
+                    }
+                    else
+                    {
+                        $.ajax({
+                            type: "POST",
+                            dataType: "text",
+                            data: mydata,
+                            contentType: "application/json; charset=utf-8",
+                            url: "/rest/experiment?body",
+                            success: function (data_server) {
+                                alert("ok: " + data_server);
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrows) {
+                                alert("error: " + errorThrows);
+                            }
+                        });
+                        
                     }
 
-                    $.ajax({
-                        url: url,
-                        type: "POST",
-                        dataType: "text",
-                        contentType: content_type,
-                        processData: false,
-                        data: data,
-                        success: function (data) {
-                            alert("ok: " + data);
-                        },
-                        error: function (XMLHttpRequest, textStatus, errorThrows) {
-                            alert("error: " + errorThrows);
-                        }
-                    });
+
 
                     return false;
                 });
