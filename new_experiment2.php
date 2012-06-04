@@ -11,6 +11,12 @@ if(!$_SESSION['is_auth']) {
 
         <div class="container">
             <h2>New experiment</h2>
+            
+            <div class="alert" id="txt_notif">
+                <button class="close" data-dismiss="alert">×</button>
+                <p id="txt_notif_msg"></p>
+            </div>
+            
             <form class="well form-horizontal" id="form_new_exp" >
                 <h3>3. Configure your nodes</h3>
                 <p>
@@ -50,6 +56,8 @@ if(!$_SESSION['is_auth']) {
             var withAssoc = false;
 
             $(document).ready(function () {
+
+                $("#txt_notif").hide();
 
                 var selected_nodes = exp_json.nodes;
                 for (i = 0; i < selected_nodes.length; i++) {
@@ -96,10 +104,16 @@ if(!$_SESSION['is_auth']) {
                             //data: "data="+datab,
                             //url: "dump.php",
                             success: function (data_server) {
-                                alert("ok: " + data_server);
+                                $("#txt_notif_msg").html(data_server);
+                                $("#txt_notif").show();
+                                $("#txt_notif").removeClass("alert-error");
+                                $("#txt_notif").addClass("alert-success");
                             },
                             error: function (XMLHttpRequest, textStatus, errorThrows) {
-                                alert("error: " + errorThrows);
+                                $("#txt_notif_msg").html(errorThrows);
+                                $("#txt_notif").show();
+                                $("#txt_notif").removeClass("alert-success");
+                                $("#txt_notif").addClass("alert-error");
                             }
                         });
                     }
@@ -112,10 +126,16 @@ if(!$_SESSION['is_auth']) {
                             contentType: "application/json; charset=utf-8",
                             url: "/rest/experiment?body",
                             success: function (data_server) {
-                                alert("ok: " + data_server);
+                                $("#txt_notif_msg").html(data_server);
+                                $("#txt_notif").show();
+                                $("#txt_notif").removeClass("alert-error");
+                                $("#txt_notif").addClass("alert-success");
                             },
                             error: function (XMLHttpRequest, textStatus, errorThrows) {
-                                alert("error: " + errorThrows);
+                                $("#txt_notif_msg").html(errorThrows);
+                                $("#txt_notif").show();
+                                $("#txt_notif").removeClass("alert-success");
+                                $("#txt_notif").addClass("alert-error");
                             }
                         });
                         
