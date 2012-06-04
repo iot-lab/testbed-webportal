@@ -20,7 +20,7 @@ include("header.php") ?>
         </div>
         <div class="span9">
     
-                <div class="loading" id="div_msg" style="display:none"><b>Loading ...</b></div>
+                <div class="alert alert-error" id="div_msg" style="display:none"></div>
                 <table id="tbl_exps" class="table table-bordered table-striped table-condensed" style="display:none">
                     <thead>
                         <tr>
@@ -113,8 +113,7 @@ include("header.php") ?>
                     $("#expTotal").text(total);
                 },
                 error:function(XMLHttpRequest, textStatus, errorThrows){
-                    $("#div_msg").removeClass("loading");
-                    $("#div_msg").addClass("alert");
+                    $("#div_msg").removeClass("alert-success");
                     $("#div_msg").addClass("alert-error");
                     $("#div_msg").show();
                     $("#div_msg").html("An error occurred while retrieving your experiment list");
@@ -143,6 +142,7 @@ include("header.php") ?>
 
         var json_exp = [];
         var withAssoc = false;
+
         function detailsExp(id) {
 
             /* Retrieve experiment details */
@@ -203,6 +203,21 @@ include("header.php") ?>
                     $('#details_modal').modal('show');
                 }
             });
+        }
+
+        function reloadExp(id) {
+            $("#detailsExp").html("NYI");
+            $('#details_modal').modal('show');
+        }
+
+        function cancelExp(id) {
+            $("#detailsExp").html("NYI");
+            $('#details_modal').modal('show');
+        }
+
+        function stopExp(id) {
+            $("#detailsExp").html("NYI");
+            $('#details_modal').modal('show');
         }
   
         
