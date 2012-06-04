@@ -62,7 +62,9 @@ $response = curl_exec($handle);
 $code = curl_getinfo($handle, CURLINFO_HTTP_CODE);
 curl_close($handle);
 
+echo $response."<BR/><HR/>";
 
+/*
 if($code != 200) {
     header("HTTP/1.0 404 Not Found");
     exit();
@@ -98,5 +100,5 @@ if($code != 200) {
 	}
 	$responseToWebClient.="]}";
 	echo $responseToWebClient;
-}
+}*/
 ?>
