@@ -62,9 +62,7 @@ $response = curl_exec($handle);
 $code = curl_getinfo($handle, CURLINFO_HTTP_CODE);
 curl_close($handle);
 
-echo $response."<BR/><HR/>";
 
-/*
 if($code != 200) {
     header("HTTP/1.0 404 Not Found");
     exit();
@@ -95,10 +93,10 @@ if($code != 200) {
 			$buttons.='&nbsp;<a href=\"#\" class=\"btn btn-primary\" data=\"'.$item->{'id'}.'\" onClick=\"reloadExp('.$item->{'id'}.')\">Reload</a>';
 		}
 
-		$responseToWebClient.='{"0":"'.$item->{'id'}.'","1":"'.$item->{'name'}.'","2":"'.$item->{'date'}.'","3":"'.$item->{'duration'}.'","4":"'.$item->{'nb_resources'}.'","5":"'.$item->{'state'}.'","6":"'.$buttons.'"}';
+		$responseToWebClient.='{"0":"'.$item->{'id'}.'","1":"'.$item->{'name'}.'","2":"'.date("Y/m/d H:i O", $item->{'date'}).'","3":"'.$item->{'duration'}.'","4":"'.$item->{'nb_resources'}.'","5":"'.$item->{'state'}.'","6":"'.$buttons.'"}';
 		if($i!=$nb_items-1)$responseToWebClient.=",";
 	}
 	$responseToWebClient.="]}";
 	echo $responseToWebClient;
-}*/
+}
 ?>
