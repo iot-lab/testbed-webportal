@@ -92,8 +92,10 @@ if($code != 200) {
 		} else {
 			$buttons.='&nbsp;<a href=\"#\" class=\"btn btn-primary\" data=\"'.$item->{'id'}.'\" onClick=\"reloadExp('.$item->{'id'}.')\">Reload</a>';
 		}
+		$date = date("Y/m/d H:i O", $item->{'date'});
+		if($date=="") $date="as soon as possible";
 
-		$responseToWebClient.='{"0":"'.$item->{'id'}.'","1":"'.$item->{'name'}.'","2":"'.date("Y/m/d H:i O", $item->{'date'}).'","3":"'.$item->{'duration'}.'","4":"'.$item->{'nb_resources'}.'","5":"'.$item->{'state'}.'","6":"'.$buttons.'"}';
+		$responseToWebClient.='{"0":"'.$item->{'id'}.'","1":"'.$item->{'name'}.'","2":"'.$date.'","3":"'.$item->{'duration'}.'","4":"'.$item->{'nb_resources'}.'","5":"'.$item->{'state'}.'","6":"'.$buttons.'"}';
 		if($i!=$nb_items-1)$responseToWebClient.=",";
 	}
 	$responseToWebClient.="]}";
