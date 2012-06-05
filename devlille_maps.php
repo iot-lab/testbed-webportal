@@ -26,10 +26,19 @@ body {
 
 <script type="text/javascript">
 
+function loadData() {
+    var list = document.getElementById("nodebox");
+    list.value = window.opener.document.getElementById("devlille_list").value;
+    parseNodebox();
+}; 
+
 function save() {
-	window.opener.document.getElementById("devlille_list").value=document.getElementById("nodebox").value;
-	window.close();	
+    window.opener.document.getElementById("devlille_list").value=document.getElementById("nodebox").value;
+    window.close();
 }
+
+window.onload = loadData;
+
 </script>
 
 

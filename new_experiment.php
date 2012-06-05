@@ -25,7 +25,7 @@ if(!$_SESSION['is_auth']) {
                         <input id="txt_duration" type="number" class="input-large" required="required">
                     </div>
                 </div>
-                <div class="control-group">
+               <!-- <div class="control-group">
                     <label class="control-label">Execution</label>
                     <div class="controls">
                         <label class="radio">
@@ -35,6 +35,7 @@ if(!$_SESSION['is_auth']) {
                             <input type="radio" name="ExecutionType" id="optionsRadiosScheduled" value="scheduled">scheduled</label>
                     </div>
                 </div>
+                -->
                 <h3>2. Select your nodes</h3>
                 <div class="control-group">
                     <label class="control-label">Resources</label>
@@ -76,6 +77,12 @@ if(!$_SESSION['is_auth']) {
         <script type="text/javascript">
             $(document).ready(function () {
 
+                //restore value from localStorage
+                $("#txt_name").val(localStorage.getItem("txt_name"));
+                $("#txt_duration").val(localStorage.getItem("txt_duration"));
+                $("#devlille_list").val(localStorage.getItem("devlille_list"));
+
+                //ressources type
                 $("#divResourcesMap").hide();
                 $("input[name=ResourcesType]").change(function () {
                     if ($(this).val() == "physical") {
@@ -88,21 +95,14 @@ if(!$_SESSION['is_auth']) {
 
                 });
 
-                $("#str_maps").click(function () {
-                    window.open('str_maps.php', '', 'resizable=no, location=no, width=500, height=500, menubar=no, status=no, scrollbars=no, menubar=no');
-                });
-
-                $("#gre_maps").click(function () {
-                    window.open('gre_maps.php', '', 'resizable=no, location=no, width=500, height=500, menubar=no, status=no, scrollbars=no, menubar=no');
-                });
-                
+                //open popup
                 $("#devlille_maps").click(function () {
-                    window.open('devlille_maps.php', '', 'resizable=no, location=no, width=500, height=500, menubar=no, status=no, scrollbars=no, menubar=no');
+                    window.open('devlille_maps.php', '', 'resizable=yes, location=no, width=500, height=500, menubar=no, status=no, scrollbars=no, menubar=no');
                 });
 
             });
 
-
+            //on submit
             $("#form_new_exp").bind("submit", function () {
 
                 var exp_json = {
@@ -111,24 +111,9 @@ if(!$_SESSION['is_auth']) {
                     "duration": parseInt($("#txt_duration").val())
                 };
 
-                //var my_nodes = new Array();
                 var my_nodes = [];
 
-                /*if ($("#str_list").val() != "") {
-
-                    var str_all = parseNodebox($("#str_list").val());
-                    for (i = 0; i < str_all.length; i++) {
-                        my_nodes.push("node"+str_all[i]+".devlille.senslab.info");
-                    }
-                }
-
-                if ($("#gre_list").val() != "") {
-                    var gre_all = parseNodebox($("#gre_list").val());
-                    for (i = 0; i < gre_all.length; i++) {
-                        my_nodes.push("node"+gre_all[i]+".lyon.senslab.info");
-                    }
-                }*/
-                
+                //build nodes list
                 if ($("#devlille_list").val() != "") {
                     var devlille_all = parseNodebox($("#devlille_list").val());
                     for (i = 0; i < devlille_all.length; i++) {
@@ -136,13 +121,16 @@ if(!$_SESSION['is_auth']) {
                     }
                 }
                 
-
                 exp_json.nodes = my_nodes;
-                console.log(exp_json);
+                
+                //save value in localStorage
+                localStorage.setItem("txt_name",$("#txt_name").val());
+                localStorage.setItem("txt_duration",$("#txt_duration").val());
+                localStorage.setItem("devlille_list",$("#devlille_list").val());
 
                 if (typeof localStorage != 'undefined') {
                     localStorage.setItem("exp_json", JSON.stringify(exp_json));
-                } else {}
+                } else { }
 
                 window.location.href = "new_experiment2.php";
 

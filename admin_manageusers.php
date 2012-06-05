@@ -25,22 +25,22 @@ include("header.php") ?>
       <div class="row">
         <div class="span12">
         
-				<div class="loading" id="loading"><b>Loading ...</b></div>
+                <div class="loading" id="loading"><b>Loading ...</b></div>
                 <table id="tbl_users" class="table table-bordered table-striped table-condensed" style="display:none">
-	                <thead>
-	                    <tr>
-	                        <th>Login</th>
-	                        <th>FirstName</th>
-	                        <th>LastName</th>
-	                        <th>Email</th>
-	                        <th>Creation date</th>
-	                        <th width='50px'>isValid</th>
-	                        <th width='50px'>isAdmin</th>
-	                        <th>Options</th>
-	                    </tr>
-	                </thead>
-	                <tbody>
-	                </tbody>
+                    <thead>
+                        <tr>
+                            <th>Login</th>
+                            <th>FirstName</th>
+                            <th>LastName</th>
+                            <th>Email</th>
+                            <th>Creation date</th>
+                            <th width='50px'>isValid</th>
+                            <th width='50px'>isAdmin</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
                 </table>
         </div>
 
@@ -265,7 +265,8 @@ include("header.php") ?>
                     '<td>'+ formatCreateTimeStamp(val.createTimeStamp) +'</td>'+
                     '<td><a href="#" class="btn btn-valid '+btnValidClass+'" data="'+i+'" data-state="'+val.validate+'" onClick="validateUser('+i+')">'+btnValidValue+'</a></td>' +
                     '<td><a href="#" class="btn btn-admin '+btnAdminClass+'" data="'+i+'" data-state="'+val.admin+'" onClick="setAdmin('+i+')">'+btnAdminValue+'</a></td>' +
-                    '<td><a href="#" class="btn btn-edit" data-toggle="modal" data="'+i+'">Edit</a> ' +
+                    '<td><a href="#" class="btn btn-view" data-toggle="modal" data="'+i+'">Exp</a> ' +
+                        '<a href="#" class="btn btn-edit" data-toggle="modal" data="'+i+'">Edit</a> ' +
                         '<a href="#"><button class="btn btn-danger" data="'+i+'" onClick="deleteUser('+i+')">Delete</button></a></td>'
                     +'</tr>');
                     $("tr[data="+i+"] .btn-valid").width(50);
@@ -291,7 +292,7 @@ include("header.php") ?>
                     $("#edit_modal").modal('show');
                 });
                 oTable = $('#tbl_users').dataTable({
-                	"sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
+                    "sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
                         "bPaginate": true,
                         "sPaginationType": "bootstrap",
                         "bLengthChange": true,
@@ -302,6 +303,13 @@ include("header.php") ?>
                 } );
                 $('#tbl_users').show();
                 $('#loading').hide();
+                
+                
+                //action on view exp button
+                $(".btn-view").click(function(){
+                    alert($(this).attr('data'));
+                });
+                
             },
             error:function(XMLHttpRequest, textStatus, errorThrows){
                 alert("error: " + errorThrows)
@@ -314,7 +322,7 @@ include("header.php") ?>
         if(confirm("Delete user?")) {
             var userdelete = users[id];
             $.ajax({
-            	url: "/rest/admin/users/"+userdelete.login,
+                url: "/rest/admin/users/"+userdelete.login,
                 type: "DELETE",
                 contentType: "application/json",
                 dataType: "text",
@@ -350,12 +358,12 @@ include("header.php") ?>
                 data: JSON.stringify(user),
                 success:function(data){
                     if(state == "false") {
-                    	oTable.fnUpdate('<a href="#" class="btn btn-valid" data="'+id+'" data-state="true" onClick="validateUser('+id+')">Valid</a>',id,5,true);
+                        oTable.fnUpdate('<a href="#" class="btn btn-valid" data="'+id+'" data-state="true" onClick="validateUser('+id+')">Valid</a>',id,5,true);
                         //$("tr[data="+id+"] .btn-valid").removeClass("btn-primary");
                         //$("tr[data="+id+"] .btn-valid").attr("data-state","true");
                         //$("tr[data="+id+"] .btn-valid").text("Valid");
                     } else {
-                    	oTable.fnUpdate('<a href="#" class="btn btn-valid btn-primary" data="'+id+'" data-state="false" onClick="validateUser('+id+')">Pending</a>',id,5,true);
+                        oTable.fnUpdate('<a href="#" class="btn btn-valid btn-primary" data="'+id+'" data-state="false" onClick="validateUser('+id+')">Pending</a>',id,5,true);
                         //$("tr[data="+id+"] .btn-valid").addClass("btn-primary");
                         //$("tr[data="+id+"] .btn-valid").attr("data-state","false");
                         //$("tr[data="+id+"] .btn-valid").text("Pending");
@@ -390,12 +398,12 @@ include("header.php") ?>
                 data: JSON.stringify(user),
                 success:function(data){
                     if(state == "false") {
-                    	oTable.fnUpdate('<a href="#" class="btn btn-admin btn-warning" data="'+id+'" data-state="true" onClick="setAdmin('+id+')">Admin</a>',id,6,true);
+                        oTable.fnUpdate('<a href="#" class="btn btn-admin btn-warning" data="'+id+'" data-state="true" onClick="setAdmin('+id+')">Admin</a>',id,6,true);
                         //$("tr[data="+id+"] .btn-admin").addClass("btn-warning");
                         //$("tr[data="+id+"] .btn-admin").attr("data-state","true");
                         //$("tr[data="+id+"] .btn-admin").text("Admin");
                     } else {
-                    	oTable.fnUpdate('<a href="#" class="btn btn-admin" data="'+id+'" data-state="false" onClick="setAdmin('+id+')">User</a>',id,6,true);
+                        oTable.fnUpdate('<a href="#" class="btn btn-admin" data="'+id+'" data-state="false" onClick="setAdmin('+id+')">User</a>',id,6,true);
                         //$("tr[data="+id+"] .btn-admin").removeClass("btn-warning");
                         //$("tr[data="+id+"] .btn-admin").attr("data-state","false");
                         //$("tr[data="+id+"] .btn-admin").text("User");
@@ -450,7 +458,7 @@ include("header.php") ?>
     
     /* Add user(s) */
     $(".btn-add").click(function(){
-		$("#add_modal").modal('show');
+        $("#add_modal").modal('show');
     });
     $('#form_add').bind('submit', function(){
     
@@ -476,7 +484,7 @@ include("header.php") ?>
             data: JSON.stringify(userregister),
             success:function(data){
                  window.location.reload();
- 	    	},
+            },
             error:function(XMLHttpRequest, textStatus, errorThrows){
                 var errorMsg="Error";
                 if(XMLHttpRequest.status == 409) errorMsg="This user is already registered";
@@ -487,13 +495,13 @@ include("header.php") ?>
             }
         });
         
-    	return false;
+        return false;
     
     });
 
     function formatCreateTimeStamp(createTimeStamp) {
         /* "yyyy/mm/dd" */
-		return createTimeStamp.substring(0,4)+"/"+createTimeStamp.substring(4,6)+"/"+createTimeStamp.substring(6,8);
+        return createTimeStamp.substring(0,4)+"/"+createTimeStamp.substring(4,6)+"/"+createTimeStamp.substring(6,8);
     }
     
     

@@ -17,6 +17,10 @@ if(!$_SESSION['is_auth']) {
                 <p id="txt_notif_msg"></p>
             </div>
             
+            <p>
+                <a class="btn" href="new_experiment.php">Previous step</a>
+            </p>
+            
             <form class="well form-horizontal" id="form_new_exp" >
                 <h3>3. Configure your nodes</h3>
                 <p>

@@ -98,7 +98,7 @@ include("header.php") ?>
         $(document).ready(function(){
 
             /* Hide modal windows */
-            $('#exp_details').modal('hide');        
+            $('#exp_details').modal('hide');
            
             /* Retrieve experiments total */
             $.ajax({
