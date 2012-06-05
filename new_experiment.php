@@ -52,14 +52,20 @@ if(!$_SESSION['is_auth']) {
                         <label class="radio">
                             <input type="radio" name="ResourcesType" id="optionsRadiosMaps" value="physical">physical</label>
                         <div class="" id="divResourcesMap">
-                            <p>
+                           <!-- <p>
                                 <a href="#" id="str_maps">Strasbourg Maps</a>
                                 <input id="str_list" value="" />
-                            </p>
+                            </p> 
                             <p>
                                 <a href="#" id="gre_maps">Grenoble Maps</a>
                                 <input id="gre_list" value="" />
                             </p>
+                            -->
+                            <p>
+                                <a href="#" id="devlille_maps">Devlille Maps</a>
+                                <input id="devlille_list" value="" />
+                            </p>
+
                         </div>
                     </div>
                 </div>
@@ -89,6 +95,10 @@ if(!$_SESSION['is_auth']) {
                 $("#gre_maps").click(function () {
                     window.open('gre_maps.php', '', 'resizable=no, location=no, width=500, height=500, menubar=no, status=no, scrollbars=no, menubar=no');
                 });
+                
+                $("#devlille_maps").click(function () {
+                    window.open('devlille_maps.php', '', 'resizable=no, location=no, width=500, height=500, menubar=no, status=no, scrollbars=no, menubar=no');
+                });
 
             });
 
@@ -104,7 +114,7 @@ if(!$_SESSION['is_auth']) {
                 //var my_nodes = new Array();
                 var my_nodes = [];
 
-                if ($("#str_list").val() != "") {
+                /*if ($("#str_list").val() != "") {
 
                     var str_all = parseNodebox($("#str_list").val());
                     for (i = 0; i < str_all.length; i++) {
@@ -117,7 +127,15 @@ if(!$_SESSION['is_auth']) {
                     for (i = 0; i < gre_all.length; i++) {
                         my_nodes.push("node"+gre_all[i]+".lyon.senslab.info");
                     }
+                }*/
+                
+                if ($("#devlille_list").val() != "") {
+                    var devlille_all = parseNodebox($("#devlille_list").val());
+                    for (i = 0; i < devlille_all.length; i++) {
+                        my_nodes.push("node"+devlille_all[i]+".devlille.senslab.info");
+                    }
                 }
+                
 
                 exp_json.nodes = my_nodes;
                 console.log(exp_json);
