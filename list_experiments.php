@@ -76,7 +76,7 @@ if($code != 200) {
 	
 	for ($i=0;$i<$nb_items;$i++) {
 		$item = $response2->{'items'}[$nb_items-$i-1];
-		$buttons='<a href=\"#\" class=\"btn btn-valid\" data=\"'.$item->{'id'}.'\" onClick=\"detailsExp('.$item->{'id'}.')\">Details</a>';
+		$buttons='<a href=\"details_exp.php?id='.$item->{'id'}.'\" class=\"btn btn-valid\" data=\"'.$item->{'id'}.'\" >Details</a>';
 		if(strcasecmp($item->{'state'},"Running")==0
 			|| strcasecmp($item->{'state'},"Finishing")==0
 			|| strcasecmp($item->{'state'},"Resuming")==0
@@ -93,7 +93,7 @@ if($code != 200) {
 			$buttons.='&nbsp;<a href=\"#\" class=\"btn btn-primary\" data=\"'.$item->{'id'}.'\" onClick=\"reloadExp('.$item->{'id'}.')\">Reload</a>';
 		}
 		$date = date("Y/m/d H:i O", $item->{'date'});
-		if($date=="") $date="as soon as possible";
+		if($date=="") $date="ok";
 
 		$responseToWebClient.='{"0":"'.$item->{'id'}.'","1":"'.$item->{'name'}.'","2":"'.$date.'","3":"'.$item->{'duration'}.'","4":"'.$item->{'nb_resources'}.'","5":"'.$item->{'state'}.'","6":"'.$buttons.'"}';
 		if($i!=$nb_items-1)$responseToWebClient.=",";
