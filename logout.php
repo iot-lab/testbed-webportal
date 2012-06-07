@@ -23,5 +23,16 @@ include("header.php");
 
 <?php include('footer.php') ?>
 
+    <script type="text/javascript">
+
+    function showSignup() {
+        window.location.href=".";
+    }
+
+    function showLogin() {
+        window.location.href=".";
+    }
+    </script>
+
   </body>
 </html>
