@@ -69,11 +69,8 @@ include("header.php") ?>
         var oTable;
         
         $(document).ready(function(){
-
-            /* Hide modal windows */
-            $('#exp_details').modal('hide');
            
-            /* Retrieve experiments total */
+            // Retrieve experiments total 
             $.ajax({
                 url: "/rest/experiments?total",
                 type: "GET",
@@ -93,7 +90,7 @@ include("header.php") ?>
                 }
             });
 
-            /* Manage experiment list */
+            // Manage experiment list 
             oTable = $('#tbl_exps').dataTable({
                 "sDom": "<'row'<'span7'l><'span7'f>r>t<'row'<'span7'i><'span7'p>>",
                 "bProcessing": true,
@@ -112,23 +109,22 @@ include("header.php") ?>
             
         });
 
-
-        var json_exp = [];
-        var withAssoc = false;
-
         function reloadExp(id) {
-            $("#detailsExp").html("NYI");
-            $('#details_modal').modal('show');
+            $("#div_msg").html("NYI");
+            $("#div_msg").show();
+            setTimeout( "$('#div_msg').hide()", 2000); 
         }
 
         function cancelExp(id) {
-            $("#detailsExp").html("NYI");
-            $('#details_modal').modal('show');
+            $("#div_msg").html("NYI");
+            $("#div_msg").show();
+            setTimeout( "$('#div_msg').hide()", 2000); 
         }
 
         function stopExp(id) {
-            $("#detailsExp").html("NYI");
-            $('#details_modal').modal('show');
+            $("#div_msg").html("NYI");
+            $("#div_msg").show();
+            setTimeout( "$('#div_msg').hide()", 2000); 
         }
   
         
