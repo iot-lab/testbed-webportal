@@ -27,6 +27,14 @@ include("header.php");
               f.style.height = (f.contentWindow.document.body.scrollHeight + 50) + "px";
         }
 
+
+        function showSignup() {
+            window.location.href=".";
+        }
+
+        function showLogin() {
+            window.location.href=".";
+        }
     </script>
 
   </body>
