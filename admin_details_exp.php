@@ -1,7 +1,7 @@
 <?php 
 session_start();
 
-if(!$_SESSION['is_auth']) {
+if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
     header("location: .");
     exit();
 }
@@ -13,7 +13,7 @@ include("header.php") ?>
    
 <div class="row">
 
-    <h2>Experiment Details</h2>
+    <h2>Admin Experiment Details</h2>
 
     <div id="detailsExp">
         <div class="alert alert-error" id="div_msg" style="display:none"></div>
@@ -48,7 +48,7 @@ include("header.php") ?>
 
             /* Retrieve experiment details */
             $.ajax({
-                url: "/rest/experiment/"+id,
+                url: "/rest/admin/experiment/"+id,
                 type: "GET",
                 data: {},
                 dataType: "json",
@@ -56,6 +56,7 @@ include("header.php") ?>
                     //console.log(data);
 
                     $("#detailsExpSummary").html("<b>Experiment:</b> " + id + "<br/>");
+                    $("#detailsExpSummary").append("<b>Owner:</b> " + data.owner + "<br/>");
                     $("#detailsExpSummary").append("<b>Name:</b> " + data.name + "<br/>");
                     $("#detailsExpSummary").append("<b>Duration:</b> " + data.duration + "<br/>");
                     $("#detailsExpSummary").append("<b>Number of Nodes:</b> " + data.nodes.length + "<br/>");
