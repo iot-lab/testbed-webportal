@@ -1,65 +1,14 @@
 <?php 
 session_start();
 
-if(isset($_GET['logout'])) $_SESSION = array();
-
 if($_SESSION['is_auth']) {
     header("location: dashboard.php");
     exit();
-}?>
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Senslab</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+}
 
-    <!-- Le styles -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <style type="text/css">
-      body {
-        padding-top: 60px;
-        padding-bottom: 40px;
-      }
-    </style>
-    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+include("header.php");
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-      <script src="js/jquery.js"></script>
-      <script src="js/bootstrap.js"></script>
-  </head>
-
-  <body>
-
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href=".">Senslab</a>
-          <div class="nav-collapse">          
-	            <ul class="nav">
-	            	<li><a href="#" onClick="showLogin()">Login</a></li>
-	            </ul> 
-	            <ul class="nav">
-	            	<li><a href="#" onClick="showSignup()">Sign up</a></li>
-	            </ul>            
-          </div><!--/.nav-collapse -->          
-        </div>
-      </div>
-    </div>    
-          
-          
-<!--  END OF HEADER --> 
+?>
 
 	<div class="container">
 
@@ -187,31 +136,12 @@ if($_SESSION['is_auth']) {
       
       
       <hr>
-          
-<!--  START OF FOOTER --> 
-      
-      
-      <footer>
-        <p>Copyright &copy 2012 Senslab - All Rights Reserved - <a href="https://gforge.inria.fr/tracker/?func=add&group_id=1014&atid=9376">Report bug</a></p>
-      </footer>
-      
-      </div>
-      
-      
-<!-- END OF FOOTER -->
-<?php //include('footer.php') ?>
+
+<?php include('footer.php') ?>
 
     <script type="text/javascript">
     
     $(document).ready(function(){
-
-        <?php if(isset($_GET['logout'])) { ?>
-	        $("#div_error_login").removeClass("alert-error");
-	        $("#div_error_login").addClass("alert-success");
-	        $("#div_error_login").html("You have been successfully logged out.");
-	        $("#div_error_login").show();
-            setTimeout( "window.location.href = 'index.php'", 5000); 
-        <?php } ?>
 
 		// submit login
         $('#login_form').bind('submit', function(){

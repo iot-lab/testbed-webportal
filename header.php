@@ -22,6 +22,9 @@
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     
+      <script src="js/jquery.js"></script>
+      <script src="js/bootstrap.js"></script>
+    
   </head>
 
   <body>
@@ -37,23 +40,33 @@
           <a class="brand" href=".">Senslab</a>
           <div class="nav-collapse">
 	            <ul class="nav">
-	            	<li class="divider-vertical"></li>
-	            	<li><a href="."><i class="icon-home icon-white"></i> Home</a></li>  
-	            	<li class="divider-vertical"></li>
-	            	<li><a href="new_experiment.php">New experiment</a></li>  
+	            	<li class="divider-vertical"></li>          
+	          		<?php if($_SESSION['is_auth']) { ?>
+						<li><a href="."><i class="icon-home icon-white"></i> Home</a></li>  
+						<li class="divider-vertical"></li>
+						<li><a href="new_experiment.php">New experiment</a></li>  
+	          		<?php } else { ?>
+						<li><a href="#" onClick="showLogin()">Login</a></li>
+						<li class="divider-vertical"></li>
+						<li><a href="#" onClick="showSignup()">Sign up</a></li>
+	          		<?php } ?>
 	            	<li class="divider-vertical"></li>
 	            </ul> 
           </div><!--/.nav-collapse -->
           <ul class="nav pull-right">
+          
+	          <?php if($_SESSION['is_auth']) { ?>
 	          	<li class="divider-vertical"></li>
 		        <li class="dropdown">
 		        	<a href="#" class="dropdown-toggle" data-toggle="dropdown">User <?php echo "[".$_SESSION['login']."]" ?> <b class="caret"></b></a>
 		            <ul class="dropdown-menu">
 		            	<li><a data-toggle="modal" href="#ssh_modal" onClick="loadSSHKeys()">Modify SSH keys</a></li>
 		                <li><a data-toggle="modal" href="#password_modal">Modify password</a></li>
-		                <li><a href="index.php?logout">Logout</a></li>
+		                <li><a href="logout.php">Logout</a></li>
 		            </ul>
 		        </li>
+	          <?php } ?>
+	          
 	            <li class="divider-vertical"></li>
 		        <li class="dropdown">
 		            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Testbed activity <b class="caret"></b></a>
@@ -77,7 +90,8 @@
         </div>
       </div>
     </div>
-    
+ 
+<?php if($_SESSION['is_auth']) { ?>   
         <div id="password_modal" class="modal hide fade">
             <div class="modal-header">
               <a class="close" data-dismiss="modal">×</a>
@@ -136,10 +150,7 @@
             </div>
         </div>
         
-        
 
-      <script src="js/jquery.js"></script>
-      <script src="js/bootstrap.js"></script>
     <script type="text/javascript">
 
 
@@ -256,3 +267,5 @@ var SSHKeysLoaded = false;
             }
         }
     </script>
+
+<?php } ?>       
