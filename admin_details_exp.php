@@ -13,7 +13,7 @@ include("header.php") ?>
    
 <div class="row">
 
-    <h2>Admin Experiment Details</h2>
+    <h2>Experiment details</h2>
 
     <div id="detailsExp">
         <div class="alert alert-error" id="div_msg" style="display:none"></div>

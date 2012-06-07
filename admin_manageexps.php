@@ -8,12 +8,12 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
 
 include("header.php");
 
-$title="";
+$title="(all exp)";
 $dashboard="Admin";
 $request_total="/rest/admin/experiments?total";
 $request_exps="";
 if (isset($_GET['user'])) {
-	$title = " of user: "+$_GET['user'];
+	$title = " (".$_GET['user'].")";
 	$dashboard=$_GET['user'];
 	$request_total.="&user=".$_GET['user'];
 	$request_exps = '"fnServerParams": function ( aoData ) { aoData.push( { "name": "user", "value": "'.$_GET['user'].'" } ); },';
@@ -24,7 +24,7 @@ if (isset($_GET['user'])) {
       
     <div class="row">
         <div class="span9">
-          <h2>Experiments List <?php echo $title; ?></h2>
+          <h2>Experiments list <?php echo $title; ?></h2>
         </div>
         
         <div class="span9">
