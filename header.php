@@ -1,3 +1,9 @@
+<?php
+$logout = strrpos($_SERVER['PHP_SELF'],"logout.php");// is the logout page?
+$loginMenu = '<li><a href=".">Login</a></li>';
+if(!$logout) $loginMenu = '<li><a href="#" onClick="showLogin()">Login</a></li><li class="divider-vertical"></li><li><a href="#" onClick="showSignup()">Sign up</a></li>';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -45,11 +51,9 @@
 						<li><a href="."><i class="icon-home icon-white"></i> Home</a></li>  
 						<li class="divider-vertical"></li>
 						<li><a href="new_experiment.php">New experiment</a></li>  
-	          		<?php } else { ?>
-						<li><a href="#" onClick="showLogin()">Login</a></li>
-						<li class="divider-vertical"></li>
-						<li><a href="#" onClick="showSignup()">Sign up</a></li>
-	          		<?php } ?>
+	          		<?php } else { 
+	          			echo $loginMenu;
+	          		 } ?>
 	            	<li class="divider-vertical"></li>
 	            </ul> 
           </div><!--/.nav-collapse -->
