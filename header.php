@@ -75,8 +75,8 @@ if(!$logout) $loginMenu = '<li><a href="#" onClick="showLogin()">Login</a></li><
 		        <li class="dropdown">
 		            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Testbed activity <b class="caret"></b></a>
 		            <ul class="dropdown-menu">
-		        		<li><a href="/monika" target="_blank">View nodes status</a></li>
-		                <li><a href="/drawgantt" target="_blank">View Gantt chart</a></li>
+		        		<li><a href="monika.php" target="_blank">View nodes status</a></li>
+		                <li><a href="drawgantt.php" target="_blank">View Gantt chart</a></li>
 		            </ul>
 		        </li>
           
