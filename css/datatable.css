@@ -42,6 +42,10 @@ table.dataTable th:active {
 	outline: none;
 }
 
+table.dataTable tbody tr {
+	cursor:pointer;
+}
+
 .header {
 	background: url('../img/sort_both.png') no-repeat center right;
 	cursor: pointer;

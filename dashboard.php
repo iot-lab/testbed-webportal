@@ -104,6 +104,10 @@ include("header.php") ?>
                 "bInfo": true,
                 "bAutoWidth": false
             });
+			$('#tbl_exps tbody tr').live('click',function () {
+				var aData = oTable.fnGetData( this );
+				window.location.href="details_exp.php?id="+aData[0];
+			});            
             $('#div_msg').hide();
             $('#tbl_exps').show();
             
