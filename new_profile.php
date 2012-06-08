@@ -57,6 +57,62 @@ if(!$_SESSION['is_auth']) {
             </div>
           </div>
 
+        <div class="control-group">
+            <label class="control-label" for="consumption_frequency">Frequency (ms)</label>
+            <div class="controls">
+              <select id="consumption_frequency">
+                <option>100</option>
+                <option>500</option>
+                <option>1000</option>
+              </select>
+            </div>
+          </div>
+
+
+
+        <div class="control-group">
+            <label class="control-label" for="inlineCheckboxes">Sensors</label>
+            <div class="controls">
+              <label class="checkbox inline">
+                <input type="checkbox" id="cb_luminosity" value="luminosity"> luminosity
+              </label>
+              <label class="checkbox inline">
+                <input type="checkbox" id="cb_temperature" value="temperature"> temperature
+              </label>
+            </div>
+          </div>
+
+        <div class="control-group">
+            <label class="control-label" for="sensor_frequency">Frequency (ms)</label>
+            <div class="controls">
+              <select id="sensor_frequency">
+                <option>100</option>
+                <option>500</option>
+                <option>1000</option>
+              </select>
+            </div>
+          </div>
+
+
+        <div class="control-group">
+            <label class="control-label" for="inlineCheckboxes">Radio</label>
+            <div class="controls">
+              <label class="checkbox inline">
+                <input type="checkbox" id="cb_rssi" value="luminosity"> rssi
+              </label>
+            </div>
+          </div>
+
+        <div class="control-group">
+            <label class="control-label" for="radio_frequency">Frequency (ms)</label>
+            <div class="controls">
+              <select id="radio_frequency">
+                <option>100</option>
+                <option>500</option>
+                <option>1000</option>
+              </select>
+            </div>
+          </div>
 
 
                 <button id="btn_submit" class="btn btn-primary" type="submit">Create</button>
@@ -70,23 +126,6 @@ if(!$_SESSION['is_auth']) {
         
         
         <script type="text/javascript">
-
-            /*
-            exp_json.profiles.profile1 = {};
-            exp_json.profiles.profile1.power = 'dc';
-            exp_json.profiles.profile1.sensor = {};
-            exp_json.profiles.profile1.sensor.temperature = false;
-            exp_json.profiles.profile1.sensor.luminosity = false;
-            exp_json.profiles.profile1.sensor.frequency = 15;
-            exp_json.profiles.profile1.consemptium = {};
-            exp_json.profiles.profile1.consemptium.current = true;
-            exp_json.profiles.profile1.consemptium.voltage = true;
-            exp_json.profiles.profile1.consemptium.frequency = 60;
-            exp_json.profiles.profile1.radio = {};
-            exp_json.profiles.profile1.radio.rssi = false;
-            exp_json.profiles.profile1.radio.frequency = 11;
-            exp_json.profiles.profile1.profilename = 'profile1';
-            */
 
             /* ************ */
             /*   on ready   */
@@ -106,13 +145,27 @@ if(!$_SESSION['is_auth']) {
                 consemptium = {
                     "current":$('#cb_current').is(':checked'),
                     "voltage":$('#cb_voltage').is(':checked'),
-                    "power":$('#cb_power').is(':checked')
+                    "power":$('#cb_power').is(':checked'),
+                    "frequency":$('#consumption_frequency').val(),
+                };
+
+                sensor = {
+                    "luminosity":$('#cb_luminosity').is(':checked'),
+                    "temperature":$('#cb_temperature').is(':checked'),
+                    "frequency":$('#sensor_frequency').val(),
+                };
+
+                radio = {
+                    "rssi":$('#cb_rssi').is(':checked'),
+                    "frequency":$('#radio_frequency').val(),
                 };
 
                 var profile_json = {
-                    "name":$("#txt_name").val(),
+                    "profilename":$("#txt_name").val(),
                     "power":$("input[name=or_power]:checked").val(),
                     "consemptium":consemptium,
+                    "sensor":sensor,
+                    "radio":radio
                 };
                 
                 console.log(profile_json);
