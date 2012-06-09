@@ -24,13 +24,13 @@ if(!$_SESSION['is_auth']) {
                 <div class="control-group">
                     <label class="control-label" for="txt_name">Name:</label>
                     <div class="controls">
-                        <input id="txt_name" type="text" class="input-large" required="required">
+                        <input id="txt_name" type="text" class="input-large">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="txt_duration">Duration (minutes):</label>
                     <div class="controls">
-                        <input id="txt_duration" type="number" class="input-large" required="required">
+                        <input id="txt_duration" type="number" class="input-large" value="120" required="required">
                     </div>
                 </div>
                 
@@ -67,9 +67,7 @@ if(!$_SESSION['is_auth']) {
                 <h3>3. Configure your nodes</h3>
                 <p>
                     <select id="my_nodes" size="15" multiple></select>
-                    <select id="my_profils" size="15">
-                        <option value="profile1">profile1</option>
-                    </select>
+                    <select id="my_profiles" size="15"></select>
                     <select id="my_firmwares" size="15">
                     </select>
                     <input type="file" id="files" name="files[]" multiple />
@@ -110,8 +108,11 @@ if(!$_SESSION['is_auth']) {
                 "name": "test",
                 "duration": 100
             };
+            
+            //profiles
+            var my_profiles = [];
 
-            //firmware
+            //firmwares
             var binary = [];
 
 
@@ -140,6 +141,37 @@ if(!$_SESSION['is_auth']) {
                 $("#devlille_maps").click(function () {
                     window.open('devlille_maps.php', '', 'resizable=yes, location=no, width=500, height=500, menubar=no, status=no, scrollbars=no, menubar=no');
                 });
+
+
+                //get all profiles
+                $.ajax({
+                    type: "GET",
+                    dataType: "text",
+                    contentType: "application/json; charset=utf-8",
+                    url: "/rest/profiles",
+                    success: function (data_server) {
+                        
+                        if(data_server == "") {
+                            //no profile
+                            return false;
+                        }
+                        
+                        my_profiles = JSON.parse(data_server);
+                        
+                        //fill profiles list
+                        for(i = 0; i < my_profiles.length; i++) {
+                            $("#my_profiles").append(new Option(my_profiles[i].profilename,my_profiles[i].profilename));
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrows) {
+                        $("#txt_notif_msg").html(errorThrows);
+                        $("#txt_notif").show();
+                        $("#txt_notif").removeClass("alert-success");
+                        $("#txt_notif").addClass("alert-error");
+                    }
+                });
+
+
 
             });
 
@@ -185,7 +217,7 @@ if(!$_SESSION['is_auth']) {
                 
                 
                 
-                //TODO: check associations for removed nodes
+                //check associations for removed nodes
                 if(exp_json.profileassociations != null) {
                     for (i = 0; i < exp_json.profileassociations.length; i++) {
                         for (j = 0; j < exp_json.profileassociations[i].nodes.length; j++) {
@@ -241,9 +273,9 @@ if(!$_SESSION['is_auth']) {
                 //set an association
                 $("#btn_assoc").click(function () {
 
-                    //get selected item an remove
+                    //get selected item and remove
                     var nodes_set = $("#my_nodes").val();
-                    var profil_set = $("#my_profils").val();
+                    var profil_set = $("#my_profiles").val();
                     var firmware_set = $("#my_firmwares").val();
 
                     if (nodes_set == null || profil_set == null || firmware_set == null) {
@@ -251,32 +283,42 @@ if(!$_SESSION['is_auth']) {
                     }
                     $("#my_nodes option:selected").remove();
 
+                    
 
                     //init some vars
                     if (exp_json.profiles == null) {
                         exp_json.profileassociations = [];
                         exp_json.firmwareassociations = [];
-
-                        //TODO: default profile, only for debug
-                        exp_json.profiles = {};
-                        exp_json.profiles.profile1 = {};
-                        exp_json.profiles.profile1.power = 'dc';
-                        exp_json.profiles.profile1.sensor = {};
-                        exp_json.profiles.profile1.sensor.temperature = false;
-                        exp_json.profiles.profile1.sensor.luminosity = false;
-                        exp_json.profiles.profile1.sensor.frequency = 15;
-                        exp_json.profiles.profile1.consemptium = {};
-                        exp_json.profiles.profile1.consemptium.current = true;
-                        exp_json.profiles.profile1.consemptium.voltage = true;
-                        exp_json.profiles.profile1.consemptium.frequency = 60;
-                        exp_json.profiles.profile1.radio = {};
-                        exp_json.profiles.profile1.radio.rssi = false;
-                        exp_json.profiles.profile1.radio.frequency = 11;
-                        exp_json.profiles.profile1.profilename = 'profile1';
+                        exp_json.profiles = []; 
+                    }
+                    
+                    //retrieve profile index
+                    var find = false;
+                    var index = -1;
+                    for (i = 0; i < my_profiles.length && index == -1; i++) {
+                        if (my_profiles[i].profilename == profil_set) {
+                            find = true;
+                            index = i;
+                            break;
+                        }
+                    }
+                    
+                    //check if profile already in the exp json
+                    var find = false;
+                    for (i = 0; i < exp_json.profiles.length; i++) {
+                        if (exp_json.profiles[i].profilename == profil_set) {
+                            find = true;
+                            break;
+                        }
+                    }
+                    
+                    if(!find) {
+                        exp_json.profiles.push(my_profiles[index]);
                     }
 
+
                     var find = false;
-                    //if profil already exist in the table
+                    //if profile already exist in the table
                     for (i = 0; i < exp_json.profileassociations.length; i++) {
                         if (exp_json.profileassociations[i].profilename == profil_set) {
                             exp_json.profileassociations[i].nodes = exp_json.profileassociations[i].nodes.concat(nodes_set);
