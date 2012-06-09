@@ -156,9 +156,15 @@ if(!$_SESSION['is_auth']) {
                     url: "/rest/profiles",
                     success: function (data_server) {
                         
+                        if(data_server == "") {
+                            //no profile
+                            return false;
+                        }
+                        
                         my_profiles = JSON.parse(data_server);
                         
-                        for(i = 0; i<my_profiles.length; i++) {
+                        //fill profiles list
+                        for(i = 0; i < my_profiles.length; i++) {
                             $("#my_profiles").append(new Option(my_profiles[i].profilename,my_profiles[i].profilename));
                         }
                         
@@ -248,9 +254,22 @@ if(!$_SESSION['is_auth']) {
                     url: "/rest/profile",
                     success: function (data_server) {
                         
-                        $("#my_profiles").append(new Option(profile_json.profilename,profile_json.profilename));
+                        var edit = false;
+                        //check if profile already exist
+                        for(i = 0; i < $("#my_profiles option").length; i++) {
+                            if($($("#my_profiles option")[i]).val() == profile_json.profilename) {
+                                edit = true;
+                            }
+                        }
                         
-                        $("#txt_notif_msg").html("Profile created");
+                        if(!edit) {
+                            $("#txt_notif_msg").html("Profile created");
+                            $("#my_profiles").append(new Option(profile_json.profilename,profile_json.profilename));
+                        }
+                        else {
+                             $("#txt_notif_msg").html("Profile edited");
+                        }
+
                         $("#txt_notif").show();
                         $("#txt_notif").removeClass("alert-error");
                         $("#txt_notif").addClass("alert-success");
@@ -273,15 +292,24 @@ if(!$_SESSION['is_auth']) {
             /* ********************** */
             function loadProfile(profilename) {
                 
-                var index = 0;
+                var index = -1;
                 
-                for(i=0;i<my_profiles.length;i++) {
+                for(i = 0; i < my_profiles.length && index == -1; i++) {
                     if(my_profiles[i].profilename == profilename) {
                         index = i;
+                        break;
                     }
                 }
                 
-                $("#txt_name").val(my_profiles[index].profilename);
+                if(index != -1) {
+                    $("#txt_name").val(my_profiles[index].profilename);
+                    $('#consumption_frequency').val(my_profiles[i].consemptium.frequency);
+                    $('#sensor_frequency').val(my_profiles[i].sensor.frequency);
+                    $('#radio_frequency').val(my_profiles[i].radio.frequency);
+                    
+                    //TODO: radio button
+                }
+                
             }
             
             
