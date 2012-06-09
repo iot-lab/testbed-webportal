@@ -307,7 +307,15 @@ if(!$_SESSION['is_auth']) {
                     $('#sensor_frequency').val(my_profiles[i].sensor.frequency);
                     $('#radio_frequency').val(my_profiles[i].radio.frequency);
                     
-                    //TODO: radio button
+                    $("input[name='or_power']").val([my_profiles[i].power]);
+                    $("#cb_current").attr("checked",my_profiles[i].consemptium.current);
+                    $("#cb_voltage").attr("checked",my_profiles[i].consemptium.votage);
+                    $("#cb_power").attr("checked",my_profiles[i].consemptium.power);
+                    
+                    $("#cb_temperature").attr("checked",my_profiles[i].sensor.temperature);
+                    $("#cb_luminosity").attr("checked",my_profiles[i].sensor.luminosity);
+                    
+                    $("#cb_rssi").attr("checked",my_profiles[i].radio.rssi);
                 }
                 
             }
