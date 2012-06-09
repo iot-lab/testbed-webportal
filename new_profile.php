@@ -10,13 +10,20 @@ if(!$_SESSION['is_auth']) {
 <?php include("header.php") ?>
 
         <div class="container">
-            <h2>New profile</h2>
+            
+            
+            <h2>Manage profiles</h2>
             
             <div class="alert" id="txt_notif">
                 <button class="close" data-dismiss="alert">×</button>
                 <p id="txt_notif_msg"></p>
             </div>
             
+            <select id="my_profiles" size="15"></select>
+            <button class="btn btn-danger" id="btn_delete" href="#">Delete</button>
+            
+            
+             <h2>Create or Edit profile</h2>
             
             <form class="well form-horizontal" id="form_part">
 
@@ -61,9 +68,11 @@ if(!$_SESSION['is_auth']) {
             <label class="control-label" for="consumption_frequency">Frequency (ms)</label>
             <div class="controls">
               <select id="consumption_frequency">
-                <option>100</option>
-                <option>500</option>
-                <option>1000</option>
+                <option value="70">70</option>
+                <option value="100">100</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+                <option value="5000">5000</option>
               </select>
             </div>
           </div>
@@ -86,9 +95,9 @@ if(!$_SESSION['is_auth']) {
             <label class="control-label" for="sensor_frequency">Frequency (ms)</label>
             <div class="controls">
               <select id="sensor_frequency">
-                <option>100</option>
-                <option>500</option>
-                <option>1000</option>
+                <option value="5000">5000</option>
+                <option value="10000">10000</option>
+                <option value="30000">30000</option>
               </select>
             </div>
           </div>
@@ -107,15 +116,16 @@ if(!$_SESSION['is_auth']) {
             <label class="control-label" for="radio_frequency">Frequency (ms)</label>
             <div class="controls">
               <select id="radio_frequency">
-                <option>100</option>
-                <option>500</option>
-                <option>1000</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+                <option value="5000">5000</option>
+                <option value="10000">10000</option>
               </select>
             </div>
           </div>
 
 
-                <button id="btn_submit" class="btn btn-primary" type="submit">Create</button>
+           <button id="btn_submit" class="btn btn-primary" type="submit">Create</button>
 
             </form>
             
@@ -127,6 +137,9 @@ if(!$_SESSION['is_auth']) {
         
         <script type="text/javascript">
 
+
+            var my_profiles;
+
             /* ************ */
             /*   on ready   */
             /* ************ */
@@ -135,6 +148,63 @@ if(!$_SESSION['is_auth']) {
                 $("#txt_notif").hide();
 
 
+                //get all profiles
+                $.ajax({
+                    type: "GET",
+                    dataType: "text",
+                    contentType: "application/json; charset=utf-8",
+                    url: "/rest/profiles",
+                    success: function (data_server) {
+                        
+                        my_profiles = JSON.parse(data_server);
+                        
+                        for(i = 0; i<my_profiles.length; i++) {
+                            $("#my_profiles").append(new Option(my_profiles[i].profilename,my_profiles[i].profilename));
+                        }
+                        
+                        //bind onClick event
+                        $("#my_profiles option").each(function(){
+                            $(this).click(function(){
+                               loadProfile($(this).val())
+                            })
+                        });
+                        
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrows) {
+                        $("#txt_notif_msg").html(errorThrows);
+                        $("#txt_notif").show();
+                        $("#txt_notif").removeClass("alert-success");
+                        $("#txt_notif").addClass("alert-error");
+                    }
+                });
+
+
+                //delete selected profile
+                $("#btn_delete").click(function(){
+                    var profile_name = $("#my_profiles").val();
+                    $.ajax({
+                        type: "DELETE",
+                        dataType: "text",
+                        contentType: "application/json; charset=utf-8",
+                        url: "/rest/profile/"+profile_name,
+                        success: function (data_server) {
+                            
+                            $("#my_profiles option:selected").remove();
+                            
+                            $("#txt_notif_msg").html("Delete ok");
+                            $("#txt_notif").show();
+                            $("#txt_notif").removeClass("alert-error");
+                            $("#txt_notif").addClass("alert-success");
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrows) {
+                            $("#txt_notif_msg").html(errorThrows);
+                            $("#txt_notif").show();
+                            $("#txt_notif").removeClass("alert-success");
+                            $("#txt_notif").addClass("alert-error");
+                        }
+                    });
+                    
+                });
             });
 
             /* ************* */
@@ -168,16 +238,19 @@ if(!$_SESSION['is_auth']) {
                     "radio":radio
                 };
                 
-                console.log(profile_json);
 
+                //send edit or create request
                 $.ajax({
                     type: "POST",
                     dataType: "text",
-                    data: profile_json,
+                    data: JSON.stringify(profile_json),
                     contentType: "application/json; charset=utf-8",
-                    url: "/rest/TODO",
+                    url: "/rest/profile",
                     success: function (data_server) {
-                        $("#txt_notif_msg").html(data_server);
+                        
+                        $("#my_profiles").append(new Option(profile_json.profilename,profile_json.profilename));
+                        
+                        $("#txt_notif_msg").html("Profile created");
                         $("#txt_notif").show();
                         $("#txt_notif").removeClass("alert-error");
                         $("#txt_notif").addClass("alert-success");
@@ -190,9 +263,27 @@ if(!$_SESSION['is_auth']) {
                     }
                 });
             
-            return false;
+                return false;
             });
 
+            
+            
+            /* ********************** */
+            /* fill form with profile */
+            /* ********************** */
+            function loadProfile(profilename) {
+                
+                var index = 0;
+                
+                for(i=0;i<my_profiles.length;i++) {
+                    if(my_profiles[i].profilename == profilename) {
+                        index = i;
+                    }
+                }
+                
+                $("#txt_name").val(my_profiles[index].profilename);
+            }
+            
             
         </script>
        
