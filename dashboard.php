@@ -13,32 +13,26 @@ include("header.php") ?>
    
     <div class="row">
         <div class="span9">
-          <h2>Experiment List</h2>
+            <h2>Experiment List</h2>
+            <a href="new_experiment.php" class="btn btn-new">New Experiment</a>
+            <div class="alert alert-error" id="div_msg" style="display:none"></div>
+            <table id="tbl_exps" class="table table-bordered table-striped table-condensed" style="display:none">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Date</th>
+                        <th>Duration</th>
+                        <th>Node(s)</th>
+                        <th>State</th>
+                        <th>Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
         </div>
-        <div class="span5" style="text-align:left;padding-bottom:5px;padding-left:5px;">
-          <a href="new_experiment.php" class="btn btn-new">New Experiment</a>
-        </div>
-        <div class="span9">
     
-                <div class="alert alert-error" id="div_msg" style="display:none"></div>
-                <table id="tbl_exps" class="table table-bordered table-striped table-condensed" style="display:none">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Date</th>
-                            <th>Duration</th>
-                            <th>Node(s)</th>
-                            <th>State</th>
-                            <th>Options</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-                
-        </div>
-          
         <div class="span4">
           <h2>Personal dashboard</h2>
           <p><i class="icon-cog"></i> Experiments: <span id="expTotal">&nbsp;</span></p>
@@ -47,17 +41,8 @@ include("header.php") ?>
                 <li><span id="expUpcoming" class="badge badge-info">&nbsp;</span> upcoming</li>
                 <li><span id="expPast" class="badge">&nbsp;</span> past</li>
             </ul>
-          <p><i class="icon-th"></i> Profiles: 2 <p>
-          <p><i class="icon-home"></i> Home's quota: 60% (600/1000Mo)
-            <div class="progress" style="width:200px">
-              <div class="bar"
-                   style="width: 60%;"></div>
-            </div>
-            </p>
-           
           </div>
-      </div>      
-        
+    </div>
         
         <?php include('footer.php') ?>
 
@@ -104,14 +89,27 @@ include("header.php") ?>
                 "bInfo": true,
                 "bAutoWidth": false
             });
-			$('#tbl_exps tbody tr').live('click',function () {
-				var aData = oTable.fnGetData( this );
-				window.location.href="details_exp.php?id="+aData[0];
-			});            
+            $('#tbl_exps tbody tr').each(function() {
+                this.setAttribute('title','click to see details');
+            });
+            $('#tbl_exps tbody tr[title]').tooltip( {
+                "delay": 0,
+                "track": true,
+                "fade": 250
+            });
+
+            $('#tbl_exps tbody tr').live('click',function () {
+                var aData = oTable.fnGetData( this );
+                window.location.href="details_exp.php?id="+aData[0];
+            });
             $('#div_msg').hide();
             $('#tbl_exps').show();
             
         });
+
+
+        var json_exp = [];
+        var withAssoc = false;
 
         function reloadExp(id) {
             $("#div_msg").html("NYI");
