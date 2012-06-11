@@ -289,7 +289,7 @@ if(!$_SESSION['is_auth']) {
                     if (exp_json.profiles == null) {
                         exp_json.profileassociations = [];
                         exp_json.firmwareassociations = [];
-                        exp_json.profiles = []; 
+                        exp_json.profiles = {}; 
                     }
                     
                     //retrieve profile index
@@ -304,17 +304,14 @@ if(!$_SESSION['is_auth']) {
                     }
                     
                     //check if profile already in the exp json
-                    var find = false;
-                    for (i = 0; i < exp_json.profiles.length; i++) {
-                        if (exp_json.profiles[i].profilename == profil_set) {
-                            find = true;
-                            break;
-                        }
+                    if(profil_set in exp_json.profiles){
+                      
+                    }
+                    else{
+                        
+                        exp_json.profiles[profil_set] = my_profiles[index];
                     }
                     
-                    if(!find) {
-                        exp_json.profiles.push(my_profiles[index]);
-                    }
 
 
                     var find = false;
