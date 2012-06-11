@@ -272,6 +272,14 @@ if(!$_SESSION['is_auth']) {
                         if(!edit) {
                             $("#txt_notif_msg").html("Profile created");
                             $("#my_profiles").append(new Option(profile_json.profilename,profile_json.profilename));
+                            
+                            my_profiles.push(profile_json);
+                            
+                            //bind onClick event
+                            $("#my_profiles option[value='"+profile_json.profilename+"']").live("click",function(){
+                               loadProfile($(this).val());
+                            });
+                            
                         }
                         else {
                              $("#txt_notif_msg").html("Profile edited");
