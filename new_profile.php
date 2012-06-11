@@ -11,128 +11,135 @@ if(!$_SESSION['is_auth']) {
 
         <div class="container">
             
-            
-            <h2>Manage profiles</h2>
-            
-            <div class="alert" id="txt_notif">
-                <button class="close" data-dismiss="alert">×</button>
-                <p id="txt_notif_msg"></p>
+            <div class="row">
+                <h2>Manage profiles</h2>
+                <div class="alert" id="txt_notif">
+                    <button class="close" data-dismiss="alert">×</button>
+                    <p id="txt_notif_msg"></p>
+                </div>
             </div>
             
-            <select id="my_profiles" size="15"></select>
-            <button class="btn btn-danger" id="btn_delete" href="#">Delete</button>
             
+            <div class="row">
+                <div class="span3">
+                    <select id="my_profiles" size="15"></select>
+                    <p>
+                    <button class="btn btn-danger" id="btn_delete" href="#">Delete</button>
+                    </p>
+                </div>
             
-             <h2>Create or Edit profile</h2>
-            
-            <form class="well form-horizontal" id="form_part">
+                <div class="span8">
+             
+                    <form class="well form-horizontal" id="form_part">
+
+                        <div class="control-group">
+                            <label class="control-label" for="txt_name">Name:</label>
+                            <div class="controls">
+                                <input id="txt_name" type="text" class="input-large" required="required">
+                            </div>
+                        </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Power mode</label>
+                        <div class="controls">
+                          <label class="radio">
+                            <input type="radio" name="or_power" id="or_power_dc" value="dc" checked="">
+                            dc
+                          </label>
+                          <label class="radio">
+                            <input type="radio" name="or_power" id="or_power_battery" value="battery">
+                            battery
+                          </label>
+                        </div>
+                      </div>
+
 
                 <div class="control-group">
-                    <label class="control-label" for="txt_name">Name:</label>
+                    <label class="control-label" for="inlineCheckboxes">Consumption</label>
                     <div class="controls">
-                        <input id="txt_name" type="text" class="input-large" required="required">
+                      <label class="checkbox inline">
+                        <input type="checkbox" id="cb_current" value="current"> current
+                      </label>
+                      <label class="checkbox inline">
+                        <input type="checkbox" id="cb_voltage" value="voltage"> voltage
+                      </label>
+                      <label class="checkbox inline">
+                        <input type="checkbox" id="cb_power" value="power"> power
+                      </label>
                     </div>
-                </div>
+                  </div>
 
-            <div class="control-group">
-                <label class="control-label">Power mode</label>
-                <div class="controls">
-                  <label class="radio">
-                    <input type="radio" name="or_power" id="or_power_dc" value="dc" checked="">
-                    dc
-                  </label>
-                  <label class="radio">
-                    <input type="radio" name="or_power" id="or_power_battery" value="battery">
-                    battery
-                  </label>
-                </div>
-              </div>
+                <div class="control-group">
+                    <label class="control-label" for="consumption_frequency">Frequency (ms)</label>
+                    <div class="controls">
+                      <select id="consumption_frequency">
+                        <option value="70">70</option>
+                        <option value="100">100</option>
+                        <option value="500">500</option>
+                        <option value="1000">1000</option>
+                        <option value="5000">5000</option>
+                      </select>
+                    </div>
+                  </div>
 
 
-        <div class="control-group">
-            <label class="control-label" for="inlineCheckboxes">Consumption</label>
-            <div class="controls">
-              <label class="checkbox inline">
-                <input type="checkbox" id="cb_current" value="current"> current
-              </label>
-              <label class="checkbox inline">
-                <input type="checkbox" id="cb_voltage" value="voltage"> voltage
-              </label>
-              <label class="checkbox inline">
-                <input type="checkbox" id="cb_power" value="power"> power
-              </label>
+
+                <div class="control-group">
+                    <label class="control-label" for="inlineCheckboxes">Sensors</label>
+                    <div class="controls">
+                      <label class="checkbox inline">
+                        <input type="checkbox" id="cb_luminosity" value="luminosity"> luminosity
+                      </label>
+                      <label class="checkbox inline">
+                        <input type="checkbox" id="cb_temperature" value="temperature"> temperature
+                      </label>
+                    </div>
+                  </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="sensor_frequency">Frequency (ms)</label>
+                    <div class="controls">
+                      <select id="sensor_frequency">
+                        <option value="5000">5000</option>
+                        <option value="10000">10000</option>
+                        <option value="30000">30000</option>
+                      </select>
+                    </div>
+                  </div>
+
+
+                <div class="control-group">
+                    <label class="control-label" for="inlineCheckboxes">Radio</label>
+                    <div class="controls">
+                      <label class="checkbox inline">
+                        <input type="checkbox" id="cb_rssi" value="luminosity"> rssi
+                      </label>
+                    </div>
+                  </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="radio_frequency">Frequency (ms)</label>
+                    <div class="controls">
+                      <select id="radio_frequency">
+                        <option value="500">500</option>
+                        <option value="1000">1000</option>
+                        <option value="5000">5000</option>
+                        <option value="10000">10000</option>
+                      </select>
+                    </div>
+                  </div>
+
+
+                   <button id="btn_submit" class="btn btn-primary" type="submit">Save</button>
+
+                    </form>
+                </div> 
             </div>
-          </div>
-
-        <div class="control-group">
-            <label class="control-label" for="consumption_frequency">Frequency (ms)</label>
-            <div class="controls">
-              <select id="consumption_frequency">
-                <option value="70">70</option>
-                <option value="100">100</option>
-                <option value="500">500</option>
-                <option value="1000">1000</option>
-                <option value="5000">5000</option>
-              </select>
-            </div>
-          </div>
-
-
-
-        <div class="control-group">
-            <label class="control-label" for="inlineCheckboxes">Sensors</label>
-            <div class="controls">
-              <label class="checkbox inline">
-                <input type="checkbox" id="cb_luminosity" value="luminosity"> luminosity
-              </label>
-              <label class="checkbox inline">
-                <input type="checkbox" id="cb_temperature" value="temperature"> temperature
-              </label>
-            </div>
-          </div>
-
-        <div class="control-group">
-            <label class="control-label" for="sensor_frequency">Frequency (ms)</label>
-            <div class="controls">
-              <select id="sensor_frequency">
-                <option value="5000">5000</option>
-                <option value="10000">10000</option>
-                <option value="30000">30000</option>
-              </select>
-            </div>
-          </div>
-
-
-        <div class="control-group">
-            <label class="control-label" for="inlineCheckboxes">Radio</label>
-            <div class="controls">
-              <label class="checkbox inline">
-                <input type="checkbox" id="cb_rssi" value="luminosity"> rssi
-              </label>
-            </div>
-          </div>
-
-        <div class="control-group">
-            <label class="control-label" for="radio_frequency">Frequency (ms)</label>
-            <div class="controls">
-              <select id="radio_frequency">
-                <option value="500">500</option>
-                <option value="1000">1000</option>
-                <option value="5000">5000</option>
-                <option value="10000">10000</option>
-              </select>
-            </div>
-          </div>
-
-
-           <button id="btn_submit" class="btn btn-primary" type="submit">Create</button>
-
-            </form>
-            
-            
+    
+        
         <?php include('footer.php') ?>
         
-        </div>
+</div>
         
         
         <script type="text/javascript">
