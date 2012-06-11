@@ -262,10 +262,13 @@ if(!$_SESSION['is_auth']) {
                     success: function (data_server) {
                         
                         var edit = false;
+                        var index = -1;
                         //check if profile already exist
                         for(i = 0; i < $("#my_profiles option").length; i++) {
                             if($($("#my_profiles option")[i]).val() == profile_json.profilename) {
                                 edit = true;
+                                index = i;
+                                break;
                             }
                         }
                         
@@ -283,6 +286,8 @@ if(!$_SESSION['is_auth']) {
                         }
                         else {
                              $("#txt_notif_msg").html("Profile edited");
+                             my_profiles[index] = profile_json;
+                             
                         }
 
                         $("#txt_notif").show();
