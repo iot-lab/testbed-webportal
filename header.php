@@ -54,41 +54,41 @@
                  <?php } ?>
                 <li class="divider-vertical"></li>
             </ul> 
+	      <ul class="nav pull-right">
+	      
+	          <?php if($_SESSION['is_auth']) { ?>
+	            <li class="divider-vertical"></li>
+	            <li class="dropdown">
+	                <a href="#" class="dropdown-toggle" data-toggle="dropdown">User <?php echo "[".$_SESSION['login']."]" ?> <b class="caret"></b></a>
+	                <ul class="dropdown-menu">
+	                    <li><a data-toggle="modal" href="#ssh_modal" onClick="loadSSHKeys()">Modify SSH keys</a></li>
+	                    <li><a data-toggle="modal" href="#password_modal">Modify password</a></li>
+	                    <li><a href="logout.php">Logout</a></li>
+	                </ul>
+	            </li>
+	          <?php } ?>
+	          
+	            <li class="divider-vertical"></li>
+	            <li class="dropdown">
+	                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Testbed activity <b class="caret"></b></a>
+	                <ul class="dropdown-menu">
+	                    <li><a href="monika.php" target="_blank">View nodes status</a></li>
+	                    <li><a href="drawgantt.php" target="_blank">View Gantt chart</a></li>
+	                </ul>
+	            </li>
+	      
+	          <?php if($_SESSION['is_admin']) { ?>
+	            <li class="divider-vertical"></li>
+	            <li class="dropdown">
+	              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
+	              <ul class="dropdown-menu">
+	                <li><a href="admin_manageusers.php">Users</a></li>
+	                <li><a href="admin_manageexps.php">Experiments</a></li>
+	              </ul>
+	            </li>
+	          <?php } ?>
+	      </ul>
       </div><!--/.nav-collapse -->
-      <ul class="nav pull-right">
-      
-          <?php if($_SESSION['is_auth']) { ?>
-            <li class="divider-vertical"></li>
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">User <?php echo "[".$_SESSION['login']."]" ?> <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                    <li><a data-toggle="modal" href="#ssh_modal" onClick="loadSSHKeys()">Modify SSH keys</a></li>
-                    <li><a data-toggle="modal" href="#password_modal">Modify password</a></li>
-                    <li><a href="logout.php">Logout</a></li>
-                </ul>
-            </li>
-          <?php } ?>
-          
-            <li class="divider-vertical"></li>
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Testbed activity <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                    <li><a href="monika.php" target="_blank">View nodes status</a></li>
-                    <li><a href="drawgantt.php" target="_blank">View Gantt chart</a></li>
-                </ul>
-            </li>
-      
-          <?php if($_SESSION['is_admin']) { ?>
-            <li class="divider-vertical"></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="admin_manageusers.php">Users</a></li>
-                <li><a href="admin_manageexps.php">Experiments</a></li>
-              </ul>
-            </li>
-          <?php } ?>
-      </ul>
     </div>
   </div>
 </div>

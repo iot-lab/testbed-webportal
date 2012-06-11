@@ -1,6 +1,6 @@
 
 
-table.dataTable tbody tr {
+#tbl_exps tbody tr {
 	cursor:pointer;
 }
 
