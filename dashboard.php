@@ -25,7 +25,6 @@ include("header.php") ?>
                         <th>Duration</th>
                         <th>Node(s)</th>
                         <th>State</th>
-                        <th>Options</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -81,53 +80,66 @@ include("header.php") ?>
                 "bProcessing": true,
                 "bServerSide": true,
                 "sAjaxSource": "list_experiments.php",
+				"aoColumns": [
+					{"mDataProp": "id" },
+					{"mDataProp": "name" },
+					{"mDataProp": "date",
+						 "fnRender": function(obj) {
+								var date = obj.aData['date'];
+								myDate = new Date(date*1000);
+								if(myDate == "Invalid Date") myDate = "As soon as possible";
+								else myDate=myDate.toGMTString();
+								return myDate;
+						 }
+					},
+					{"mDataProp": "duration" },
+					{"mDataProp": "nb_resources" },
+					{"mDataProp": "state",
+					 "fnRender": function(obj) {
+							var state = obj.aData['state'];
+							if ( state == "Error" ) { // terminated error 
+								state = "<span class='label label-important'>"+state+"</span>";
+							} else if( state == "Terminated" ) { // terminated OK 
+								state = "<span class='label'>"+state+"</span>";
+							} else if( state == "Running" || state == "Finishing" || state == "Resuming" || state == "toError" ) { // running 
+								state = "<span class='label label-new'>"+state+"</span>";
+							} else if( state == "Waiting" || state=="Launching" || state=="Suspended"
+								|| state == "Hold" || state=="toAckReservation" || state=="toLaunch" ) { // upcomming 
+								state = "<span class='label label-info'>"+state+"</span>";
+							}
+							return state;
+					 }
+					}
+				],
+			    "sAjaxDataProp": "items",
                 "bPaginate": true,
                 "sPaginationType": "bootstrap",
                 "bLengthChange": true,
                 "bFilter": false,
                 "bSort": false,
                 "bInfo": true,
-                "bAutoWidth": false
-            });
-            $('#tbl_exps tbody tr').each(function() {
-                this.setAttribute('title','click to see details');
-            });
-            $('#tbl_exps tbody tr[title]').tooltip( {
-                "delay": 0,
-                "track": true,
-                "fade": 250
+                "bAutoWidth": false,
+				"fnInitComplete": function(oSettings, json) {
+		            $('#tbl_exps tbody tr').each(function(){
+		                this.setAttribute('title','Click to see details');
+		            });
+		            $('#tbl_exps tbody tr[title]').tooltip( {
+		                "delay": 0,
+		                "track": true,
+		                "fade": 250,
+		                "placement": 'right'
+		            });
+				}
             });
 
             $('#tbl_exps tbody tr').live('click',function () {
                 var aData = oTable.fnGetData( this );
-                window.location.href="details_exp.php?id="+aData[0];
+                window.location.href="details_exp.php?id="+aData['id'];
             });
             $('#div_msg').hide();
             $('#tbl_exps').show();
             
         });
-
-
-        var json_exp = [];
-        var withAssoc = false;
-
-        function reloadExp(id) {
-            $("#div_msg").html("NYI");
-            $("#div_msg").show();
-            setTimeout( "$('#div_msg').hide()", 2000); 
-        }
-
-        function cancelExp(id) {
-            $("#div_msg").html("NYI");
-            $("#div_msg").show();
-            setTimeout( "$('#div_msg').hide()", 2000); 
-        }
-
-        function stopExp(id) {
-            $("#div_msg").html("NYI");
-            $("#div_msg").show();
-            setTimeout( "$('#div_msg').hide()", 2000); 
-        }
   
         
     </script>

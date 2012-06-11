@@ -34,15 +34,12 @@ if($code == 200) {
 	$total=$response2->{'upcoming'}+$response2->{'terminated'}+$response2->{'running'};
 }
 
+/* Get Exp list regarding pagination and sort desc */
 $offset = $total - $_GET['iDisplayLength'] - $_GET['iDisplayStart'];
 if($offset<0) $offset = 0;
 $limit = $_GET['iDisplayLength'];
 if($total<$_GET['iDisplayLength']+$_GET['iDisplayStart']) $limit = $total % $_GET['iDisplayLength'];
 
-
-/*echo $total." / ".$_GET['iDisplayLength']." / ".$_GET['iDisplayStart']."<br/>";
-echo $total." / ".$limit." / ".$offset."<br/>";
-echo "<hr/>";*/
 
 $url = "https://localhost/rest/experiments?state=Terminated,Error,Running,Finishing,Resuming,toError,Waiting,Launching,Hold,toLaunch,toAckReservation,Suspended&limit=".$limit."&offset=".$offset;
 $handle = curl_init();
@@ -68,37 +65,8 @@ if($code != 200) {
     exit();
 } else {
 	$response2=json_decode($response);
-	
-	$responseToWebClient='{"iTotalRecords":"'.$response2->{'total'}.'","iTotalDisplayRecords":"'.$response2->{'total'}.'",';
-	$responseToWebClient.='"sEcho":"'.$_GET['sEcho'].'","aaData":[';
-	
-	$nb_items=count($response2->{'items'});
-	
-	for ($i=0;$i<$nb_items;$i++) {
-		$item = $response2->{'items'}[$nb_items-$i-1];
-		$buttons='<a href=\"details_exp.php?id='.$item->{'id'}.'\" class=\"btn btn-valid\" data=\"'.$item->{'id'}.'\" >Details</a>';
-		if(strcasecmp($item->{'state'},"Running")==0
-			|| strcasecmp($item->{'state'},"Finishing")==0
-			|| strcasecmp($item->{'state'},"Resuming")==0
-			|| strcasecmp($item->{'state'},"toError")==0) {
-				$buttons.='&nbsp;<a href=\"#\" class=\"btn btn-danger\" data=\"'.$item->{'id'}.'\" onClick=\"stopExp('.$item->{'id'}.')\">Stop</a>';
-		} else if(strcasecmp($item->{'state'},"Launching")==0
-			|| strcasecmp($item->{'state'},"Hold")==0
-			|| strcasecmp($item->{'state'},"toLaunch")==0
-			|| strcasecmp($item->{'state'},"toAckReservation")==0
-			|| strcasecmp($item->{'state'},"Waiting")==0
-			|| strcasecmp($item->{'state'},"Suspended")==0) {
-				$buttons.='&nbsp;<a href=\"#\" class=\"btn btn-danger\" data=\"'.$item->{'id'}.'\" onClick=\"cancelExp('.$item->{'id'}.')\">Cancel</a>';
-		} else {
-			$buttons.='&nbsp;<a href=\"#\" class=\"btn btn-primary\" data=\"'.$item->{'id'}.'\" onClick=\"reloadExp('.$item->{'id'}.')\">Reload</a>';
-		}
-		$date = date("Y/m/d H:i O", $item->{'date'});
-		if($date=="") $date="ok";
-
-		$responseToWebClient.='{"0":"'.$item->{'id'}.'","1":"'.$item->{'name'}.'","2":"'.$date.'","3":"'.$item->{'duration'}.'","4":"'.$item->{'nb_resources'}.'","5":"'.$item->{'state'}.'","6":"'.$buttons.'"}';
-		if($i!=$nb_items-1)$responseToWebClient.=",";
-	}
-	$responseToWebClient.="]}";
+	$responseToWebClient='{"iTotalRecords":"'.$response2->{'total'}.'","iTotalDisplayRecords":"'.$response2->{'total'}.'",
+		"sEcho":"'.$_GET['sEcho'].'","items":'.json_encode(array_reverse($response2->{'items'})).'}';	
 	echo $responseToWebClient;
 }
 ?>
