@@ -30,8 +30,8 @@ $code = curl_getinfo($handle, CURLINFO_HTTP_CODE);
 curl_close($handle);
 
 if($code == 200) {
-	$response2=json_decode($response);
-	$total=$response2->{'upcoming'}+$response2->{'terminated'}+$response2->{'running'};
+    $response2=json_decode($response);
+    $total=$response2->{'upcoming'}+$response2->{'terminated'}+$response2->{'running'};
 }
 
 /* Get Exp list regarding pagination and sort desc */
@@ -64,9 +64,9 @@ if($code != 200) {
     header("HTTP/1.0 404 Not Found");
     exit();
 } else {
-	$response2=json_decode($response);
-	$responseToWebClient='{"iTotalRecords":"'.$response2->{'total'}.'","iTotalDisplayRecords":"'.$response2->{'total'}.'",
-		"sEcho":"'.$_GET['sEcho'].'","items":'.json_encode(array_reverse($response2->{'items'})).'}';	
-	echo $responseToWebClient;
+    $response2=json_decode($response);
+    $responseToWebClient='{"iTotalRecords":"'.$response2->{'total'}.'","iTotalDisplayRecords":"'.$response2->{'total'}.'",
+        "sEcho":"'.$_GET['sEcho'].'","items":'.json_encode(array_reverse($response2->{'items'})).'}';
+        echo $responseToWebClient;
 }
 ?>
