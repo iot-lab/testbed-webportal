@@ -178,12 +178,7 @@ if(!$_SESSION['is_auth']) {
                         }
                         
                         //bind onClick event
-                        $("#my_profiles option").each(function(){
-                            $(this).click(function(){
-                               loadProfile($(this).val())
-                            })
-                        });
-                        
+                        $("#my_profiles").change(loadProfile);
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrows) {
                         $("#txt_notif_msg").html(errorThrows);
@@ -279,12 +274,6 @@ if(!$_SESSION['is_auth']) {
                             $("#my_profiles").append(new Option(profile_json.profilename,profile_json.profilename));
                             
                             my_profiles.push(profile_json);
-                            
-                            //bind onClick event
-                            $("#my_profiles option[value='"+profile_json.profilename+"']").live("click",function(){
-                               loadProfile($(this).val());
-                            });
-                            
                         }
                         else {
                              $("#txt_notif_msg").html("Profile edited");
@@ -312,8 +301,10 @@ if(!$_SESSION['is_auth']) {
             /* ********************** */
             /* fill form with profile */
             /* ********************** */
-            function loadProfile(profilename) {
+            function loadProfile() {
                 
+		var profilename = $(this).val();
+
                 var index = -1;
                 
                 for(i = 0; i < my_profiles.length && index == -1; i++) {
