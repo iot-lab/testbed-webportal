@@ -171,7 +171,7 @@ include("header.php");
         $('#reset_form').bind('submit', function(){
 
 	        var user = {
-	            "email":$("#txt_email_reset").val(),
+	            "email":$("#txt_email_reset").val()
 	        };
 	        
 	        console.log(user);
@@ -213,7 +213,7 @@ include("header.php");
             "motivations":$("#txt_motivation").val(),
             "password":$("#txt_password").val(),
             "validate":true,
-            "captcha":$("#captcha").val(),
+            "captcha":$("#captcha").val()
             };
             
             console.log(userregister);
