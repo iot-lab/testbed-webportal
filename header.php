@@ -39,6 +39,7 @@
         color: #999;
     }
 
+
 </style>
 
 </head>
@@ -53,7 +54,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-      <a class="brand" href="." style="color:#AAD400">Senslab</a>
+      <a class="brand" href="." style="color:#AAD400"><img src="img/banniere.png" style="width:110px"></a>
       <div class="nav-collapse">
             <ul class="nav">
                 <li class="divider-vertical"></li>
