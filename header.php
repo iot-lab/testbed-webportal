@@ -25,6 +25,7 @@
   <script src="js/jquery.js"></script>
   <script src="js/bootstrap.js"></script>
 
+<link rel="shortcut icon" href="img/favicon.png" />
 
 <style type="text/css">
     h2,h3{

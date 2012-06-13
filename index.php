@@ -5,7 +5,6 @@ if($_SESSION['is_auth']) {
     header("location: dashboard.php");
     exit();
 }
-
 include("header.php");
 
 ?>
