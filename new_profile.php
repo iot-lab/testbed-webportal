@@ -145,7 +145,7 @@ if(!$_SESSION['is_auth']) {
         <script type="text/javascript">
 
 
-            var my_profiles;
+            var my_profiles = [];
 
             /* ************ */
             /*   on ready   */
