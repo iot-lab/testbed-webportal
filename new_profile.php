@@ -160,6 +160,7 @@ if(!$_SESSION['is_auth']) {
                 //get all profiles
                 $.ajax({
                     type: "GET",
+                    cache: false,
                     dataType: "text",
                     contentType: "application/json; charset=utf-8",
                     url: "/rest/profiles",
