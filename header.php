@@ -30,6 +30,14 @@
     h2,h3{
         color: #577996;
     }
+    
+    .navbar .nav > li > a {
+        color: #fff;
+    }
+
+    .navbar .nav > li > a:hover {
+        color: #999;
+    }
 
 </style>
 
