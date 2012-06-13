@@ -16,10 +16,9 @@ include("header.php") ?>
     <h2>Experiment Details</h2>
 
     <div id="detailsExp">
-        <div class="alert alert-error" id="div_msg" style="display:none"></div>
         <p id="detailsExpSummary"></p>
         
-        <table class="table table-striped table-bordered table-condensed">
+        <table class="table table-striped table-bordered table-condensed" style="width:500px">
         <thead>
             <tr>
                 <th>node</th>
@@ -96,10 +95,12 @@ include("header.php") ?>
                             $("#detailsExpRow").append("<tr><td>"+data.nodes[k]+"</td><td></td><td></td></tr>");
                         }
                     }
+
+                    $('#details_modal').modal('show');
                 },
                 error:function(XMLHttpRequest, textStatus, errorThrows){
-                    $("#div_msg").html("An error occurred while retrieving experiment #" + id + " details");
-                    $('#div_msg').show();
+                    $("#detailsExpSummary").html("An error occurred while retrieving experiment #" + id + " details");
+                    $('#details_modal').modal('show');
                 }
             });
     });

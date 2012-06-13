@@ -13,13 +13,13 @@ include("header.php") ?>
    
 <div class="row">
 
-    <h2>Experiment details</h2>
+    <h2>Admin Experiment Details</h2>
 
     <div id="detailsExp">
         <div class="alert alert-error" id="div_msg" style="display:none"></div>
         <p id="detailsExpSummary"></p>
         
-        <table class="table table-striped table-bordered table-condensed">
+        <table class="table table-striped table-bordered table-condensed" style="width:500px">
         <thead>
             <tr>
                 <th>node</th>
