@@ -12,10 +12,12 @@ if(!$_SESSION['is_auth']) {
         <div class="container">
             
             <div class="row">
+                <div class="span12">
                 <h2>Manage profiles</h2>
                 <div class="alert" id="txt_notif">
                     <button class="close" data-dismiss="alert">×</button>
                     <p id="txt_notif_msg"></p>
+                </div>
                 </div>
             </div>
             

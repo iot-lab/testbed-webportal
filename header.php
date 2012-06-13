@@ -25,6 +25,14 @@
   <script src="js/jquery.js"></script>
   <script src="js/bootstrap.js"></script>
 
+
+<style type="text/css">
+    h2,h3{
+        color: #577996;
+    }
+
+</style>
+
 </head>
 
 <body>
@@ -37,7 +45,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-      <a class="brand" href=".">Senslab</a>
+      <a class="brand" href="." style="color:#AAD400">Senslab</a>
       <div class="nav-collapse">
             <ul class="nav">
                 <li class="divider-vertical"></li>

@@ -9,15 +9,6 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
 
 include("header.php") ?>
 
-    <style type="text/css">
-    
-    .btn-mini {
-        padding: 2px 6px;
-        font-size: 13px;
-        line-height: 15px;
-    }
-    
-    </style>
 
     <div class="container">
       
@@ -274,11 +265,11 @@ include("header.php") ?>
                     '<td class="lastName">'+ val.lastName +'</td>'+
                     '<td><a href="mailto:' + val.email + '" class="email">' + val.email + '</a></td>'+
                     '<td>'+ formatCreateTimeStamp(val.createTimeStamp) +'</td>'+
-                    '<td><a href="#" class="btn btn-mini btn-valid '+btnValidClass+'" data="'+i+'" data-state="'+val.validate+'" onClick="validateUser('+i+')">'+btnValidValue+'</a></td>' +
-                    '<td><a href="#" class="btn btn-mini btn-admin '+btnAdminClass+'" data="'+i+'" data-state="'+val.admin+'" onClick="setAdmin('+i+')">'+btnAdminValue+'</a></td>' +
-                    '<td><a href="admin_manageexps.php?user='+val.login+'" class="btn btn-mini btn-view">Exp</a> ' +
-                        '<a href="#" class="btn btn-mini btn-edit" data-toggle="modal" data="'+i+'">Edit</a> ' +
-                        '<a href="#"><button class="btn btn-mini btn-danger" data="'+i+'" onClick="deleteUser('+i+')">Delete</button></a></td>'
+                    '<td><a href="#" class="btn btn-valid '+btnValidClass+'" data="'+i+'" data-state="'+val.validate+'" onClick="validateUser('+i+')">'+btnValidValue+'</a></td>' +
+                    '<td><a href="#" class="btn btn-admin '+btnAdminClass+'" data="'+i+'" data-state="'+val.admin+'" onClick="setAdmin('+i+')">'+btnAdminValue+'</a></td>' +
+                    '<td><a href="admin_manageexps.php?user='+val.login+'" class="btn btn-view">Exp</a> ' +
+                        '<a href="#" class="btn btn-edit" data-toggle="modal" data="'+i+'">Edit</a> ' +
+                        '<a href="#"><button class="btn btn-danger" data="'+i+'" onClick="deleteUser('+i+')">Delete</button></a></td>'
                     +'</tr>');
                     $("tr[data="+i+"] .btn-valid").width(50);
                     $("tr[data="+i+"] .btn-admin").width(50);
