@@ -149,7 +149,7 @@ include("header.php");
 	    
 	        var userlogin = {"login":$("#txt_login").val(),"password":$("#txt_password").val()};
 	        
-	        console.log(userlogin);
+	        //console.log(userlogin);
 	
 	        $.ajax({
 	            url: "auth.php",
@@ -174,7 +174,7 @@ include("header.php");
 	            "email":$("#txt_email_reset").val()
 	        };
 	        
-	        console.log(user);
+	        //console.log(user);
 	        
 	        $.ajax({
 	            url: "/rest/users/"+$("#txt_email_reset").val()+"?resetpassword",
@@ -216,7 +216,7 @@ include("header.php");
             "captcha":$("#captcha").val()
             };
             
-            console.log(userregister);
+            //console.log(userregister);
             
             $.ajax({
                 url: "captcha.php",
