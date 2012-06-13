@@ -467,7 +467,7 @@ include("header.php") ?>
         "country":$("#txt_country").val(),
         "sshPublicKey":$("#txt_sshkey").val(),
         "motivations":$("#txt_motivation").val(),
-        "nbUsersToAdd":$("#txt_howmany").val(),
+        "nbUsersToAdd":$("#txt_howmany").val()
         };
         
         console.log(userregister);

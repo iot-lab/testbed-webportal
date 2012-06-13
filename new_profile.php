@@ -231,18 +231,18 @@ if(!$_SESSION['is_auth']) {
                     "current":$('#cb_current').is(':checked'),
                     "voltage":$('#cb_voltage').is(':checked'),
                     "power":$('#cb_power').is(':checked'),
-                    "frequency":$('#consumption_frequency').val(),
+                    "frequency":$('#consumption_frequency').val()
                 };
 
                 sensor = {
                     "luminosity":$('#cb_luminosity').is(':checked'),
                     "temperature":$('#cb_temperature').is(':checked'),
-                    "frequency":$('#sensor_frequency').val(),
+                    "frequency":$('#sensor_frequency').val()
                 };
 
                 radio = {
                     "rssi":$('#cb_rssi').is(':checked'),
-                    "frequency":$('#radio_frequency').val(),
+                    "frequency":$('#radio_frequency').val()
                 };
 
                 var profile_json = {
