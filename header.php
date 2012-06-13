@@ -184,7 +184,7 @@ var SSHKeysLoaded = false;
         // Modify SSH Key
         $('#form_modify').bind('submit', function(){
             var user = {
-                "sshkeys":$("#txt_ssh").val(),
+                "sshkeys":$("#txt_ssh").val()
             };
             
             $.ajax({
@@ -227,7 +227,7 @@ var SSHKeysLoaded = false;
         
             var user = {
                 "newPassword":$("#txt_new_password").val(),
-                "oldPassword":$("#txt_current_password").val(),
+                "oldPassword":$("#txt_current_password").val()
             };
             
             $.ajax({
