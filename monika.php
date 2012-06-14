@@ -14,9 +14,7 @@ include("header.php");
     </div>
 
     </div>
-      
-      
-    <hr>
+    
 
 
 <?php include('footer.php') ?>

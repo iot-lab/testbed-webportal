@@ -92,9 +92,7 @@ if(!$_SESSION['is_auth']) {
             
             
         <?php include('footer.php') ?>
-        
-        </div>
-        
+                
         
         <script type="text/javascript">
 
