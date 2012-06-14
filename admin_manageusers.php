@@ -26,8 +26,8 @@ include("header.php") ?>
       
       <div class="row">
         <div class="span12">
-        
-                <div class="loading" id="loading"><b>Loading ...</b></div>
+        		<div id="tbl_exps_processing" class="dataTables_processing">Processing...</div>
+                <div class="alert alert-error" id="div_msg" style="display:none">Loading ...</div>
                 <table id="tbl_users" class="table table-bordered table-striped table-condensed" style="display:none">
                     <thead>
                         <tr>
@@ -304,11 +304,13 @@ include("header.php") ?>
                         "bAutoWidth": false
                 } );
                 $('#tbl_users').show();
-                $('#loading').hide();
+                $('#tbl_exps_processing').hide();
                 
             },
             error:function(XMLHttpRequest, textStatus, errorThrows){
-                alert("error: " + errorThrows)
+                $('#tbl_exps_processing').hide();
+                $("#div_msg").show();
+                $("#div_msg").html("An error occurred while retrieving user list");
             }
         });
     });
@@ -355,14 +357,8 @@ include("header.php") ?>
                 success:function(data){
                     if(state == "false") {
                         oTable.fnUpdate('<a href="#" class="btn btn-valid" data="'+id+'" data-state="true" onClick="validateUser('+id+')">Valid</a>',id,5,true);
-                        //$("tr[data="+id+"] .btn-valid").removeClass("btn-primary");
-                        //$("tr[data="+id+"] .btn-valid").attr("data-state","true");
-                        //$("tr[data="+id+"] .btn-valid").text("Valid");
                     } else {
                         oTable.fnUpdate('<a href="#" class="btn btn-valid btn-primary" data="'+id+'" data-state="false" onClick="validateUser('+id+')">Pending</a>',id,5,true);
-                        //$("tr[data="+id+"] .btn-valid").addClass("btn-primary");
-                        //$("tr[data="+id+"] .btn-valid").attr("data-state","false");
-                        //$("tr[data="+id+"] .btn-valid").text("Pending");
                     }
                     $("tr[data="+id+"] .btn-valid").width(50);
                 },
@@ -395,14 +391,8 @@ include("header.php") ?>
                 success:function(data){
                     if(state == "false") {
                         oTable.fnUpdate('<a href="#" class="btn btn-admin btn-warning" data="'+id+'" data-state="true" onClick="setAdmin('+id+')">Admin</a>',id,6,true);
-                        //$("tr[data="+id+"] .btn-admin").addClass("btn-warning");
-                        //$("tr[data="+id+"] .btn-admin").attr("data-state","true");
-                        //$("tr[data="+id+"] .btn-admin").text("Admin");
                     } else {
                         oTable.fnUpdate('<a href="#" class="btn btn-admin" data="'+id+'" data-state="false" onClick="setAdmin('+id+')">User</a>',id,6,true);
-                        //$("tr[data="+id+"] .btn-admin").removeClass("btn-warning");
-                        //$("tr[data="+id+"] .btn-admin").attr("data-state","false");
-                        //$("tr[data="+id+"] .btn-admin").text("User");
                     }
                     $("tr[data="+id+"] .btn-admin").width(50);
                 },

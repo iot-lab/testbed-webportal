@@ -29,7 +29,7 @@
 
 <style type="text/css">
     h2,h3{
-        color: #577996;
+        color: #AAD400;
     }
     
     .navbar .nav > li > a {
@@ -38,6 +38,14 @@
 
     .navbar .nav > li > a:hover {
         color: #999;
+    }
+
+    .dropdown-menu > li > a:hover {
+        background-color: #AAD400;    
+    }
+    
+    a {
+        color: #AAD400;
     }
 
 
@@ -55,7 +63,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-      <a class="brand" href="." style="color:#AAD400"><img src="img/banniere.png" style="width:110px"></a>
+      <a class="brand" href="." style="color:#AAD400"><img src="img/banniere.png"></a>
       <div class="nav-collapse">
             <ul class="nav">
                 <li class="divider-vertical"></li>
