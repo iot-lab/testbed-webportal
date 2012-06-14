@@ -67,6 +67,6 @@ if($code != 200) {
     $response2=json_decode($response);
     $responseToWebClient='{"iTotalRecords":"'.$response2->{'total'}.'","iTotalDisplayRecords":"'.$response2->{'total'}.'",
         "sEcho":"'.$_GET['sEcho'].'","items":'.json_encode(array_reverse($response2->{'items'})).'}';
-        echo $responseToWebClient;
+	echo $responseToWebClient;
 }
 ?>

@@ -67,7 +67,10 @@ if($code != 200) {
     exit();
 } else {
 	$response2=json_decode($response);
-	
+    $responseToWebClient='{"iTotalRecords":"'.$response2->{'total'}.'","iTotalDisplayRecords":"'.$response2->{'total'}.'",
+        "sEcho":"'.$_GET['sEcho'].'","items":'.json_encode(array_reverse($response2->{'items'})).'}';
+	echo $responseToWebClient;
+	/*
 	$responseToWebClient='{"iTotalRecords":"'.$response2->{'total'}.'","iTotalDisplayRecords":"'.$response2->{'total'}.'",';
 	$responseToWebClient.='"sEcho":"'.$_GET['sEcho'].'","aaData":[';
 	
@@ -98,6 +101,6 @@ if($code != 200) {
 		if($i!=$nb_items-1)$responseToWebClient.=",";
 	}
 	$responseToWebClient.="]}";
-	echo $responseToWebClient;
+	echo $responseToWebClient;*/
 }
 ?>
