@@ -6,7 +6,6 @@ if(!$_SESSION['is_auth']) {
     exit();
 }
 ?>
-
 <?php include("header.php") ?>
 
         <div class="container">
@@ -141,6 +140,8 @@ if(!$_SESSION['is_auth']) {
         
         <?php include('footer.php') ?>
         
+</div>
+        
         
         <script type="text/javascript">
 
@@ -220,6 +221,13 @@ if(!$_SESSION['is_auth']) {
             /* submit part */
             /* ************ */
             $("#form_part").bind("submit", function () {
+
+               var regExp = /^[0-9A-z]*$/; ;
+               if(regExp.test($("#txt_name").val()) == false){
+                   alert("You must set a profile name with only word characters [0-9A-Za-z_]");
+                   return false;
+               }
+
 
                 consemptium = {
                     "current":$('#cb_current').is(':checked'),
