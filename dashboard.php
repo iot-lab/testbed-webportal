@@ -40,7 +40,7 @@ include("header.php") ?>
             <li><span id="expUpcoming" class="badge badge-info">&nbsp;</span> upcoming</li>
             <li><span id="expPast" class="badge">&nbsp;</span> past</li>
         </ul>
-          <p><i class="icon-th"></i> Profiles: 2 </p>
+          <p><i class="icon-th"></i> Profiles: <span id="nb_profiles">&nbsp;</span></p>
           <p><i class="icon-home"></i> Home's quota: 60% (600/1000Mo)
             <div class="progress" style="width:200px">
               <div class="bar" style="width: 60%;"></div>
@@ -77,6 +77,28 @@ include("header.php") ?>
                 $("#div_msg").addClass("alert-error");
                 $("#div_msg").show();
                 $("#div_msg").html("An error occurred while retrieving your experiment list");
+            }
+        });
+
+        // Retrieve profiles total 
+        $.ajax({
+            url: "/rest/profiles",
+            type: "GET",
+            dataType: "text",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                var nb_profiles = 0;
+                if (data!="") {
+                	my_profiles = JSON.parse(data);
+                	nb_profiles = my_profiles.length;
+                }                
+                $("#nb_profiles").text(nb_profiles);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrows) {
+                $("#div_msg").removeClass("alert-success");
+                $("#div_msg").addClass("alert-error");
+                $("#div_msg").show();
+                $("#div_msg").html("An error occurred while retrieving your profile list");
             }
         });
 
