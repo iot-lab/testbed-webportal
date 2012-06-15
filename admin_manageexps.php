@@ -11,11 +11,13 @@ include("header.php");
 $title="";
 $dashboard="Admin";
 $request_total="/rest/admin/experiments?total";
+$request_profiles="/rest/admin/profiles";
 $request_exps="";
 if (isset($_GET['user'])) {
 	$title = " of user ".$_GET['user'];
 	$dashboard=$_GET['user'];
 	$request_total.="&user=".$_GET['user'];
+	$request_profiles.="&user=".$_GET['user'];
 	$request_exps = '"fnServerParams": function ( aoData ) { aoData.push( { "name": "user", "value": "'.$_GET['user'].'" } ); },';
 }
 ?>
@@ -51,7 +53,7 @@ if (isset($_GET['user'])) {
                 <li><span id="expUpcoming" class="badge badge-info">&nbsp;</span> upcoming</li>
                 <li><span id="expPast" class="badge">&nbsp;</span> past</li>
           </ul>
-          <p><i class="icon-th"></i> Profiles: 2 </p>
+          <p><i class="icon-th"></i> Profiles: <span id="nb_profiles">&nbsp;</span></p>
           <p><i class="icon-home"></i> Home's quota: 60% (600/1000Mo)
             <div class="progress" style="width:200px">
               <div class="bar" style="width: 60%;"></div>
@@ -91,6 +93,24 @@ if (isset($_GET['user'])) {
                 $("#div_msg").addClass("alert-error");
                 $("#div_msg").show();
                 $("#div_msg").html("An error occurred while retrieving the experiment total");
+            }
+        });
+
+        // Retrieve profiles total 
+        $.ajax({
+            url: "/rest/admin/profiles?user=<?php echo $_GET['user']; ?>",
+            type: "GET",
+            dataType: "text",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                my_profiles = JSON.parse(data);
+                $("#nb_profiles").text(my_profiles.total);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrows) {
+                $("#div_msg").removeClass("alert-success");
+                $("#div_msg").addClass("alert-error");
+                $("#div_msg").show();
+                $("#div_msg").html("An error occurred while retrieving the profile list");
             }
         });
 
