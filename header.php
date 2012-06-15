@@ -58,6 +58,10 @@ input:focus, textarea:focus {
     outline: 0 none;
 }
 
+.progress .bar {
+    background-color: #AAD400;
+    background-image: -moz-linear-gradient(center top , #BEED00, #85A600);
+
 </style>
 
 </head>
