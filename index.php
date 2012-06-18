@@ -134,6 +134,7 @@ include("header.php");
       </div>
       
       
+      <hr>
 
 <?php include('footer.php') ?>
 
@@ -209,7 +210,6 @@ include("header.php");
             "country":$("#txt_country").val(),
             "sshPublicKey":$("#txt_sshkey").val(),
             "motivations":$("#txt_motivation").val(),
-            "password":$("#txt_password").val(),
             "validate":true,
             "captcha":$("#captcha").val()
             };
