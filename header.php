@@ -146,25 +146,25 @@ input:focus, textarea:focus {
           <div class="control-group">
             <label class="control-label" for="txt_current_password">Current password:</label>
             <div class="controls">
-                <input id="txt_current_password" class="input-xlarge" type="password" required="required"/>
+                <input id="form_modify_password_txt_current_password" class="input-xlarge" type="password" required="required"/>
             </div>
           </div>
 
           <div class="control-group">
             <label class="control-label" for="txt_new_password">New password:</label>
             <div class="controls">
-                <input id="txt_new_password" class="input-xlarge" type="password" required="required"/>
+                <input id="form_modify_password_txt_new_password" class="input-xlarge" type="password" required="required"/>
             </div>
           </div>
 
           <div class="control-group">
             <label class="control-label" for="txt_cnew_password">Confirm New password:</label>
             <div class="controls">
-                <input id="txt_cnew_password" class="input-xlarge" type="password" required="required"/>
+                <input id="form_modify_password_txt_cnew_password" class="input-xlarge" type="password" required="required"/>
             </div>
           </div>
           
-            <button id="btn_modify_password" class="btn btn-primary" type="submit">Modify</button>
+            <button id="form_modify_password_btn_modify" class="btn btn-primary" type="submit">Modify</button>
             </form>
         </div>
     </div>
@@ -177,16 +177,16 @@ input:focus, textarea:focus {
        <div class="modal-body">
            <div class="alert alert-error" id="div_error_ssh" style="display:none"></div>
            
-            <form class="well form-horizontal" id="form_modify">
+            <form class="well form-horizontal" id="form_modify_ssh">
 
           <div class="control-group">
             <label class="control-label" for="txt_ssh">SSH Key:</label>
             <div class="controls">
-                <textarea id="txt_ssh" class="input-xlarge" rows="3" required="required"></textarea>
+                <textarea id="form_modify_ssh_txt_ssh" class="input-xlarge" rows="3" required="required"></textarea>
             </div>
           </div>
 
-            <button id="btn_modify" class="btn btn-primary" type="submit">Modify</button>
+            <button id="form_modify_ssh_btn_modify" class="btn btn-primary" type="submit">Modify</button>
             </form>
         </div>
     </div>
@@ -204,9 +204,9 @@ var SSHKeysLoaded = false;
         $('#password_modal').modal('hide');
     
         // Modify SSH Key
-        $('#form_modify').bind('submit', function(){
+        $('#form_modify_ssh').bind('submit', function(){
             var user = {
-                "sshkeys":$("#txt_ssh").val()
+                "sshkeys":$("#form_modify_ssh_txt_ssh").val()
             };
             
             $.ajax({
@@ -238,7 +238,7 @@ var SSHKeysLoaded = false;
         // Modify Password Key
         $('#form_modify_password').bind('submit', function(){
         
-            if($("#txt_new_password").val() != $("#txt_cnew_password").val()) {
+            if($("#form_modify_password_txt_new_password").val() != $("#form_modify_password_txt_cnew_password").val()) {
                 $("#div_error_password").removeClass("alert-success");
                 $("#div_error_password").addClass("alert-error");
                 $("#div_error_password").html("Please confirm password");
@@ -248,8 +248,8 @@ var SSHKeysLoaded = false;
         
         
             var user = {
-                "newPassword":$("#txt_new_password").val(),
-                "oldPassword":$("#txt_current_password").val()
+                "newPassword":$("#form_modify_password_txt_new_password").val(),
+                "oldPassword":$("#form_modify_password_txt_current_password").val()
             };
             
             $.ajax({
@@ -295,7 +295,7 @@ var SSHKeysLoaded = false;
                 dataType: "text",
                 success:function(data){
                     $("#div_error_ssh").hide();
-                    $("#txt_ssh").val(data);
+                    $("#form_modify_ssh_txt_ssh").val(data);
                     SSHKeysLoaded=true;
                 },
                 error:function(XMLHttpRequest, textStatus, errorThrows){
