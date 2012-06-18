@@ -16,7 +16,20 @@ if(!$_SESSION['is_auth']) {
                 <button class="close" data-dismiss="alert">×</button>
                 <p id="txt_notif_msg"></p>
             </div>
-            
+
+        <div class="modal hide" id="expState">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h3>Experiment state</h3>
+          </div>
+          <div class="modal-body">
+            <p id="expStateMsg"></p></p>
+          </div>
+          <div class="modal-footer">
+            <a href="#" class="btn" data-dismiss="modal">Close</a>
+          </div>
+        </div>
+
             
             <form class="well form-horizontal" id="form_part1">
 
@@ -92,7 +105,9 @@ if(!$_SESSION['is_auth']) {
             
             
         <?php include('footer.php') ?>
-                
+        
+        </div>
+        
         
         <script type="text/javascript">
 
@@ -120,6 +135,7 @@ if(!$_SESSION['is_auth']) {
             $(document).ready(function () {
 
                 $("#txt_notif").hide();
+                $("#expState").modal('hide');
                 document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
                 //ressources type
@@ -398,16 +414,12 @@ if(!$_SESSION['is_auth']) {
                         //data: "data="+datab,
                         //url: "dump.php",
                         success: function (data_server) {
-                            $("#txt_notif_msg").html(data_server);
-                            $("#txt_notif").show();
-                            $("#txt_notif").removeClass("alert-error");
-                            $("#txt_notif").addClass("alert-success");
+                            $("#expState").modal('show');
+                            $("#expStateMsg").html(data_server);
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrows) {
-                            $("#txt_notif_msg").html(errorThrows);
-                            $("#txt_notif").show();
-                            $("#txt_notif").removeClass("alert-success");
-                            $("#txt_notif").addClass("alert-error");
+                            $("#expState").modal('show');
+                            $("#expStateMsg").html(textStatus);
                         }
                     });
                 }
@@ -420,16 +432,12 @@ if(!$_SESSION['is_auth']) {
                         contentType: "application/json; charset=utf-8",
                         url: "/rest/experiment?body",
                         success: function (data_server) {
-                            $("#txt_notif_msg").html(data_server);
-                            $("#txt_notif").show();
-                            $("#txt_notif").removeClass("alert-error");
-                            $("#txt_notif").addClass("alert-success");
+                            $("#expState").modal('show');
+                            $("#expStateMsg").html(data_server);
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrows) {
-                            $("#txt_notif_msg").html(errorThrows);
-                            $("#txt_notif").show();
-                            $("#txt_notif").removeClass("alert-success");
-                            $("#txt_notif").addClass("alert-error");
+                            $("#expState").modal('show');
+                            $("#expStateMsg").html(textStatus);
                         }
                     });
                     
