@@ -210,7 +210,6 @@ include("header.php");
             "country":$("#txt_country").val(),
             "sshPublicKey":$("#txt_sshkey").val(),
             "motivations":$("#txt_motivation").val(),
-            "validate":true,
             "captcha":$("#captcha").val()
             };
             
