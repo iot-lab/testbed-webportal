@@ -8,7 +8,7 @@ var sTestEventType = 'mousedown';
 var window3DWidth, window3DHeight;
 var offX, offY;
 // Camera parameters
-phi = -100, theta = 0, distance = 150;
+phi = -100, theta = 0, distance = 50;
 var rcount = 0;
 // Text display
 var info, nodelist, help;
