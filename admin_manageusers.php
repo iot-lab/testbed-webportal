@@ -140,7 +140,7 @@ include("header.php") ?>
            <div class="modal-body">
                <div class="alert alert-error" id="div_error_edit" style="display:none"></div>
                
-                <form class="well form-horizontal" id="form_modify">
+                <form class="well form-horizontal" id="form_modify_user">
 
               <div class="control-group">
                 <label class="control-label" for="txt_firstname_e">First Name:</label>
@@ -257,7 +257,7 @@ include("header.php") ?>
  
                      //user row
                     $("#tbl_users tbody").append(
-                    '<tr data=' + i + '>'+
+                    '<tr id=' + i + ' data=' + i + '>'+
                     '<td>' + val.login + '</td>'+
                     '<td class="firstName">' + val.firstName + '</td>'+
                     '<td class="lastName">'+ val.lastName +'</td>'+
@@ -267,7 +267,7 @@ include("header.php") ?>
                     '<td><a href="#" class="btn btn-admin '+btnAdminClass+'" data="'+i+'" data-state="'+val.admin+'" onClick="setAdmin('+i+')">'+btnAdminValue+'</a></td>' +
                     '<td><a href="admin_manageexps.php?user='+val.login+'" class="btn btn-view">Exp</a> ' +
                         '<a href="#" class="btn btn-edit" data-toggle="modal" data="'+i+'">Edit</a> ' +
-                        '<a href="#"><button class="btn btn-danger" data="'+i+'" onClick="deleteUser('+i+')">Delete</button></a></td>'
+                        '<a href="#" class="btn btn-del btn-danger" data="'+i+'" onClick="deleteUser('+i+')">Delete</a></td>'
                     +'</tr>');
                     $("tr[data="+i+"] .btn-valid").width(50);
                     $("tr[data="+i+"] .btn-admin").width(50);
@@ -325,7 +325,7 @@ include("header.php") ?>
             
                 success:function(data){
                     //$("tr[data="+id+"]").remove()
-                    oTable.fnDeleteRow(id,true);
+                    oTable.fnDeleteRow(document.getElementById(id),true);
                 },
                 error:function(XMLHttpRequest, textStatus, errorThrows){
                     alert("error: " + errorThrows)
@@ -403,7 +403,7 @@ include("header.php") ?>
     
     
     /* Save values from edit modal */
-    $('#form_modify').bind('submit', function()
+    $('#form_modify_user').bind('submit', function()
     {
         //change all value
         id = $('#s_id_e').html();
