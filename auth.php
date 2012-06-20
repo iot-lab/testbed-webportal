@@ -55,7 +55,7 @@ curl_setopt($handle, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 $response = curl_exec($handle);
 $code = curl_getinfo($handle, CURLINFO_HTTP_CODE);
 
-if($code == 200) {
+if($code == 200 && $response == "Success") {
     $_SESSION['is_admin'] = true;
 }
 
