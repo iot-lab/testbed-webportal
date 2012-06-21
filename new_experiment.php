@@ -46,15 +46,16 @@ if(!$_SESSION['is_auth']) {
                 <div class="control-group">
                     <label class="control-label" for="txt_duration">Duration (minutes):</label>
                     <div class="controls">
-                        <input id="txt_duration" type="number" class="input-large" value="120" required="required">
+                        <input id="txt_duration" type="number" class="input-large" value="20" required="required">
                     </div>
                 </div>
                 
                 <div class="control-group">
-                    <label class="control-label" for="txt_duration">Scheduled:</label>
+                    <input type="checkbox" id="cbScheduled" value="cbScheduled"> Scheduled :
+                    <label class="control-label" for="txt_duration"></label>
                     <div class="controls">
-                        <input type="text" class="span2" value="" id="dp1">
-                        <input class="dropdown-timepicker" data-provide="timepicker" type="text">
+                        <input type="text" class="span2" value="" id="dp1" disabled="disabled">
+                        <input class="dropdown-timepicker" data-provide="timepicker" type="text" id="tp1" disabled="disabled">
                     </div>
                 </div>
                 
@@ -140,6 +141,7 @@ if(!$_SESSION['is_auth']) {
             //firmwares
             var binary = [];
 
+            var scheduled = false;
 
             /* ************ */
             /*   on ready   */
@@ -157,12 +159,12 @@ if(!$_SESSION['is_auth']) {
                     format: 'mm-dd-yyyy'
                 });
                 
-            $('.dropdown-timepicker').timepicker({
-                defaultTime: 'current',
-                minuteStep: 1,
-                disableFocus: true,
-                template: 'dropdown'
-            });
+                $('.dropdown-timepicker').timepicker({
+                    defaultTime: 'current',
+                    minuteStep: 1,
+                    disableFocus: true,
+                    template: 'dropdown'
+                });
                 
                 document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
@@ -183,6 +185,20 @@ if(!$_SESSION['is_auth']) {
                 $("#devlille_maps").click(function () {
                     window.open('devlille_maps.php', '', 'resizable=yes, location=no, width=500, height=500, menubar=no, status=no, scrollbars=no, menubar=no');
                 });
+
+                $("#cbScheduled").click(function(){
+                    if($(this).is(':checked')){
+                        $("#dp1").removeAttr("disabled");
+                        $("#tp1").removeAttr("disabled");
+                        scheduled = true;
+                    }
+                    else {
+                        $("#dp1").attr("disabled","disabled");
+                        $("#tp1").attr("disabled","disabled");
+                        scheduled = false;
+                    }
+                });
+
 
 
                 //get all profiles
@@ -221,11 +237,6 @@ if(!$_SESSION['is_auth']) {
             /* submit part 1 */
             /* ************ */
             $("#form_part1").bind("submit", function () {
-
-                //set main properties
-                exp_json.type = $("input[name=resources_type]:checked").val();
-                exp_json.name = $("#txt_name").val();
-                exp_json.duration = parseInt($("#txt_duration").val());
 
                 //build nodes list
                 var devlille_nodes = [];
@@ -388,7 +399,6 @@ if(!$_SESSION['is_auth']) {
                         });
                     }
                     
-                    
                     displayAssociation();
                     
                     return false;
@@ -403,6 +413,36 @@ if(!$_SESSION['is_auth']) {
             /* submit part 2 */
             /* ************ */
             $("#form_part2").bind('submit', function () {
+
+                //set main properties
+                exp_json.type = $("input[name=resources_type]:checked").val();
+                exp_json.name = $("#txt_name").val();
+                exp_json.duration = parseInt($("#txt_duration").val());
+
+                if(scheduled) {
+                    
+                    //parse date
+                    var tab_date = $("#dp1").val().split("-");
+                    var month = (tab_date[0] - 1);
+                    var day = tab_date[1];
+                    var year = tab_date[2];
+                    
+                    //parse hour
+                    var tab_hour = $("#tp1").val().split(" ");
+                    var tab_hour_part = tab_hour[0].split(":");
+                    var hour = tab_hour_part[0];
+                    var minute = tab_hour_part[1];
+                    
+                    //create date
+                    var schedule_date = new Date(year, month, day, hour, minute);
+                    var scheduled_timestamp = schedule_date.getTime()/1000;
+                    
+                    exp_json.reservation = scheduled_timestamp;
+                }
+                else {
+                     exp_json.reservation = "";
+                }
+
                 console.log(JSON.stringify(exp_json));
 
                 var mydata = JSON.stringify(exp_json);
@@ -432,7 +472,6 @@ if(!$_SESSION['is_auth']) {
                     $.ajax({
                         type: "POST",
                         dataType: "text",
-                        
                         data: datab,
                         url: "/rest/experiment",
                         contentType: "multipart/form-data; boundary="+boundary,
@@ -451,6 +490,7 @@ if(!$_SESSION['is_auth']) {
                 }
                 else
                 {
+                    
                     $.ajax({
                         type: "POST",
                         dataType: "text",
@@ -468,8 +508,6 @@ if(!$_SESSION['is_auth']) {
                     });
                     
                 }
-
-
 
                 return false;
             });
