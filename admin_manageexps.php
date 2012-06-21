@@ -146,7 +146,7 @@ if (isset($_GET['user'])) {
                                   } else if( state == "Terminated" ) { // terminated OK 
                                       state = "<span class='label'>"+state+"</span>";
                                   } else if( state == "Running" || state == "Finishing" || state == "Resuming" || state == "toError" ) { // running 
-                                      state = "<span class='label label-new'>"+state+"</span>";
+                                      state = "<span class='label label-success'>"+state+"</span>";
                                   } else if( state == "Waiting" || state=="Launching" || state=="Suspended"
                                       || state == "Hold" || state=="toAckReservation" || state=="toLaunch" ) { // upcomming 
                                       state = "<span class='label label-info'>"+state+"</span>";
