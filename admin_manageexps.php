@@ -119,7 +119,7 @@ if (isset($_GET['user'])) {
             "sDom": "<'row'<'span7'l><'span7'f>r>t<'row'<'span7'i><'span7'p>>",
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "admin_list_experiments.php",
+            "sAjaxSource": "list_experiments.php",
 			<?php echo $request_exps; ?>
 			"bPaginate": true,
             "aoColumns": [
