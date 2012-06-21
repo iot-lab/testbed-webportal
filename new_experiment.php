@@ -9,6 +9,8 @@ if(!$_SESSION['is_auth']) {
 
 <?php include("header.php") ?>
 
+<link rel="stylesheet" href="css/datepicker.css" type="text/css"/>
+
         <div class="container">
             <h2>New experiment</h2>
             
@@ -46,6 +48,14 @@ if(!$_SESSION['is_auth']) {
                         <input id="txt_duration" type="number" class="input-large" value="120" required="required">
                     </div>
                 </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="txt_duration">Scheduled:</label>
+                    <div class="controls">
+                        <input type="text" class="span2" value="" id="dp1">
+                    </div>
+                </div>
+                
                 
                 <h3>2. Select your nodes</h3>
                 <div class="control-group">
@@ -136,6 +146,15 @@ if(!$_SESSION['is_auth']) {
 
                 $("#txt_notif").hide();
                 $("#expState").modal('hide');
+
+                //date picker
+                var now = new Date();
+                $("#dp1").val(now.getMonth()+1 + "-" + now.getDate() + "-" + now.getFullYear());
+                
+                $('#dp1').datepicker({
+                    format: 'mm-dd-yyyy'
+                });
+                
                 document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
                 //ressources type
@@ -379,7 +398,6 @@ if(!$_SESSION['is_auth']) {
 
                 var mydata = JSON.stringify(exp_json);
                 var datab = "";
-
                 
                 if (exp_json.profiles != null) {
                     var boundary = "AaB03x";
@@ -402,7 +420,6 @@ if(!$_SESSION['is_auth']) {
                     //add json
                     datab += "--" + boundary + '--';
 
-
                     $.ajax({
                         type: "POST",
                         dataType: "text",
@@ -419,7 +436,7 @@ if(!$_SESSION['is_auth']) {
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrows) {
                             $("#expState").modal('show');
-                            $("#expStateMsg").html(textStatus);
+                            $("#expStateMsg").html(textStatus + ": " + errorThrows);
                         }
                     });
                 }
@@ -437,7 +454,7 @@ if(!$_SESSION['is_auth']) {
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrows) {
                             $("#expState").modal('show');
-                            $("#expStateMsg").html(textStatus);
+                            $("#expStateMsg").html(textStatus + ": " + errorThrows);
                         }
                     });
                     
@@ -561,6 +578,8 @@ if(!$_SESSION['is_auth']) {
             };  
             
         </script>
+        
+        <script src="js/bootstrap-datepicker.js"></script>
        
         </body>
 </html>
