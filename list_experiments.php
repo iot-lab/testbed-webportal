@@ -9,11 +9,19 @@ if(!$_SESSION['is_auth'] || ($_SESSION['login'] == "" || $_SESSION['password'] =
 }
 
 
+$user="";
+$url="https://localhost/rest/experiments";
+if($_SESSION['is_admin'] && !(strrpos(basename($_SERVER['HTTP_REFERER']), "admin_manageexps.php")===FALSE)) {
+	if(isset($_GET['user'])) $user="&user=".$_GET['user'];
+	$url="https://localhost/rest/admin/experiments";
+}
+
+
 /* Get total */
-$url = "https://localhost/rest/experiments?total";
+$urlTotal = $url."?total".$user;
 
 $handle = curl_init();
-curl_setopt($handle, CURLOPT_URL, $url);
+curl_setopt($handle, CURLOPT_URL, $urlTotal);
 curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
 curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
 
@@ -41,9 +49,9 @@ $limit = $_GET['iDisplayLength'];
 if($total<$_GET['iDisplayLength']+$_GET['iDisplayStart']) $limit = $total % $_GET['iDisplayLength'];
 
 
-$url = "https://localhost/rest/experiments?state=Terminated,Error,Running,Finishing,Resuming,toError,Waiting,Launching,Hold,toLaunch,toAckReservation,Suspended&limit=".$limit."&offset=".$offset;
+$urlList = $url."?state=Terminated,Error,Running,Finishing,Resuming,toError,Waiting,Launching,Hold,toLaunch,toAckReservation,Suspended&limit=".$limit."&offset=".$offset.$user;
 $handle = curl_init();
-curl_setopt($handle, CURLOPT_URL, $url);
+curl_setopt($handle, CURLOPT_URL, $urlList);
 curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
 curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
 
