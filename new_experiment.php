@@ -10,6 +10,7 @@ if(!$_SESSION['is_auth']) {
 <?php include("header.php") ?>
 
 <link rel="stylesheet" href="css/datepicker.css" type="text/css"/>
+<link rel="stylesheet" href="css/timepicker.css" type="text/css"/>
 
         <div class="container">
             <h2>New experiment</h2>
@@ -53,6 +54,7 @@ if(!$_SESSION['is_auth']) {
                     <label class="control-label" for="txt_duration">Scheduled:</label>
                     <div class="controls">
                         <input type="text" class="span2" value="" id="dp1">
+                        <input class="dropdown-timepicker" data-provide="timepicker" type="text">
                     </div>
                 </div>
                 
@@ -154,6 +156,13 @@ if(!$_SESSION['is_auth']) {
                 $('#dp1').datepicker({
                     format: 'mm-dd-yyyy'
                 });
+                
+            $('.dropdown-timepicker').timepicker({
+                defaultTime: 'current',
+                minuteStep: 1,
+                disableFocus: true,
+                template: 'dropdown'
+            });
                 
                 document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
@@ -580,6 +589,7 @@ if(!$_SESSION['is_auth']) {
         </script>
         
         <script src="js/bootstrap-datepicker.js"></script>
+        <script src="js/bootstrap-timepicker.js"></script>
        
         </body>
 </html>
