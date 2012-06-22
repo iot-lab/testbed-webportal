@@ -131,7 +131,6 @@ if(!$_SESSION['is_auth']) {
             //json
             var exp_json = {
                 "type": "physical",
-                "name": "test",
                 "duration": 100
             };
             
@@ -417,7 +416,10 @@ if(!$_SESSION['is_auth']) {
 
                 //set main properties
                 exp_json.type = $("input[name=resources_type]:checked").val();
-                exp_json.name = $("#txt_name").val();
+
+                if($("#txt_name").val() != "")
+                    exp_json.name = $("#txt_name").val();
+
                 exp_json.duration = parseInt($("#txt_duration").val());
 
                 if(scheduled) {
@@ -440,9 +442,6 @@ if(!$_SESSION['is_auth']) {
                     var d = new Date();
                     var offset = d.getTimezoneOffset();
                     exp_json.reservation = scheduled_timestamp - (offset*60);
-                }
-                else {
-                     exp_json.reservation = "";
                 }
 
                 console.log(JSON.stringify(exp_json));
