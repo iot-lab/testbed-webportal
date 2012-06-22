@@ -163,6 +163,7 @@ if(!$_SESSION['is_auth']) {
                     defaultTime: 'current',
                     minuteStep: 1,
                     disableFocus: true,
+                    showMeridian: false,
                     template: 'dropdown'
                 });
                 
@@ -428,10 +429,9 @@ if(!$_SESSION['is_auth']) {
                     var year = tab_date[2];
                     
                     //parse hour
-                    var tab_hour = $("#tp1").val().split(" ");
-                    var tab_hour_part = tab_hour[0].split(":");
-                    var hour = tab_hour_part[0];
-                    var minute = tab_hour_part[1];
+                    var tab_hour = $("#tp1").val().split(":");
+                    var hour = tab_hour[0];
+                    var minute = tab_hour[1];
                     
                     //create date
                     var schedule_date = new Date(year, month, day, hour, minute);
