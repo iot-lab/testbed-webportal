@@ -97,7 +97,7 @@ if($code != 200) {
 		$date = date("Y/m/d H:i O", $item->{'date'});
 		if($date=="") $date="ok";
 
-		$responseToWebClient.='{"0":"'.$item->{'id'}.'","1":"'.$item->{'owner'}.'","2":"'.$item->{'name'}.'","3":"'.$date.'","4":"'.($item->{'duration'})/60.'","5":"'.$item->{'nb_resources'}.'","6":"'.$item->{'state'}.'","7":"'.$buttons.'"}';
+		$responseToWebClient.='{"0":"'.$item->{'id'}.'","1":"'.$item->{'owner'}.'","2":"'.$item->{'name'}.'","3":"'.$date.'","4":"'.$item->{'duration'}.'","5":"'.$item->{'nb_resources'}.'","6":"'.$item->{'state'}.'","7":"'.$buttons.'"}';
 		if($i!=$nb_items-1)$responseToWebClient.=",";
 	}
 	$responseToWebClient.="]}";
