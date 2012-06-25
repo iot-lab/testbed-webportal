@@ -136,7 +136,11 @@ if (isset($_GET['user'])) {
                                       return myDate;
                                }
                           },
-                          {"mDataProp": "duration" },
+                          {"mDataProp": "duration",
+			  	"fnRender": function(obj) {
+                             		return Math.round(obj.aData['duration']/60);
+				}
+			  },
                           {"mDataProp": "nb_resources" },
                           {"mDataProp": "state",
                            "fnRender": function(obj) {

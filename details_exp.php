@@ -56,7 +56,7 @@ include("header.php") ?>
 
                     $("#detailsExpSummary").html("<b>Experiment:</b> " + id + "<br/>");
                     $("#detailsExpSummary").append("<b>Name:</b> " + data.name + "<br/>");
-                    $("#detailsExpSummary").append("<b>Duration:</b> " + data.duration + "<br/>");
+                    $("#detailsExpSummary").append("<b>Duration (min):</b> " + data.duration + "<br/>");
                     $("#detailsExpSummary").append("<b>Number of Nodes:</b> " + data.nodes.length + "<br/>");
         
                     json_exp = [];

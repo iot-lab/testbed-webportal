@@ -22,7 +22,7 @@ include("header.php") ?>
                     <th>ID</th>
                     <th>Name</th>
                     <th>Launch at</th>
-                    <th>Duration (s)</th>
+                    <th>Duration (min)</th>
                     <th>Node(s)</th>
                     <th>State</th>
                 </tr>
@@ -121,7 +121,13 @@ include("header.php") ?>
                             return myDate;
                      }
                 },
-                {"mDataProp": "duration" },
+                {"mDataProp": "duration",
+     			"fnRender": function(obj) {
+                            return Math.round(obj.aData['duration']/60);
+                     }
+
+		
+ 		},
                 {"mDataProp": "nb_resources" },
                 {"mDataProp": "state",
                  "fnRender": function(obj) {
