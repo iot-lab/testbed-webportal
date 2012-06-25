@@ -36,7 +36,7 @@ if(!$_SESSION['is_auth']) {
                         <div class="control-group">
                             <label class="control-label" for="txt_name">Name:</label>
                             <div class="controls">
-                                <input id="txt_name" type="text" class="input-large" required="required">
+                                <input id="txt_name" type="text" class="input-small" required="required">
                             </div>
                         </div>
 
@@ -73,7 +73,7 @@ if(!$_SESSION['is_auth']) {
                 <div class="control-group">
                     <label class="control-label" for="consumption_frequency">Frequency (ms)</label>
                     <div class="controls">
-                      <select id="consumption_frequency">
+                      <select id="consumption_frequency" class="input-small">
                         <option value="70">70</option>
                         <option value="100">100</option>
                         <option value="500">500</option>
@@ -100,7 +100,7 @@ if(!$_SESSION['is_auth']) {
                 <div class="control-group">
                     <label class="control-label" for="sensor_frequency">Frequency (ms)</label>
                     <div class="controls">
-                      <select id="sensor_frequency">
+                      <select id="sensor_frequency" class="input-small">
                         <option value="5000">5000</option>
                         <option value="10000">10000</option>
                         <option value="30000">30000</option>
@@ -121,7 +121,7 @@ if(!$_SESSION['is_auth']) {
                 <div class="control-group">
                     <label class="control-label" for="radio_frequency">Frequency (ms)</label>
                     <div class="controls">
-                      <select id="radio_frequency">
+                      <select id="radio_frequency" class="input-small">
                         <option value="500">500</option>
                         <option value="1000">1000</option>
                         <option value="5000">5000</option>

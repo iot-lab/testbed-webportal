@@ -686,7 +686,8 @@ if(!$_SESSION['is_auth']) {
             
             
             function removeRow(btnDelete) {
-                $(btnDelete).parent().parent().remove();
+                if($("#resources_table tr").length != 1)
+                    $(btnDelete).parent().parent().remove();
             }
             
             // Array Remove - By John Resig (MIT Licensed)
