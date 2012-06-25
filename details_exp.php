@@ -53,9 +53,13 @@ include("header.php") ?>
                 dataType: "json",
                 success:function(data){
                     //console.log(data);
+			
+                    var exp_name = "";
+                    if(data.name != null)
+                        exp_name = data.name;
 
                     $("#detailsExpSummary").html("<b>Experiment:</b> " + id + "<br/>");
-                    $("#detailsExpSummary").append("<b>Name:</b> " + data.name + "<br/>");
+                    $("#detailsExpSummary").append("<b>Name:</b> " + exp_name + "<br/>");
                     $("#detailsExpSummary").append("<b>Duration (min):</b> " + data.duration + "<br/>");
                     $("#detailsExpSummary").append("<b>Number of Nodes:</b> " + data.nodes.length + "<br/>");
         
