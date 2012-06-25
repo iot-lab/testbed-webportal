@@ -332,7 +332,7 @@ if(!$_SESSION['is_auth']) {
                     var firmware_set = $("#my_firmwares").val();
 
                     if (nodes_set == null || profil_set == null || firmware_set == null) {
-                        return false;
+			 return false;
                     }
                     $("#my_nodes option:selected").remove();
 

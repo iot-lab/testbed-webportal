@@ -8,6 +8,8 @@ if(!$_SESSION['is_auth'] || ($_SESSION['login'] == "" || $_SESSION['password'] =
     exit();
 }
 
+//echo (strrpos(basename($_SERVER['HTTP_REFERER']), "admin_manageexps.php")===FALSE);
+
 
 $user="";
 $url="https://localhost/rest/experiments";

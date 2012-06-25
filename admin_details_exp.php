@@ -8,7 +8,7 @@ if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
 
 include("header.php") ?>
 
-    <div class="container" text-align="top">
+    <div class="container">
     
    
 <div class="row">
@@ -107,5 +107,6 @@ include("header.php") ?>
 
     </script>
 
+    </div>
   </body>
 </html>

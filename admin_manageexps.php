@@ -12,13 +12,13 @@ $title="";
 $dashboard="Admin";
 $request_total="/rest/admin/experiments?total";
 $request_profiles="/rest/admin/profiles";
-$request_exps="";
+$request_exps="\"\"";
 if (isset($_GET['user'])) {
 	$title = " of user ".$_GET['user'];
 	$dashboard=$_GET['user'];
 	$request_total.="&user=".$_GET['user'];
 	$request_profiles.="&user=".$_GET['user'];
-	$request_exps = '"fnServerParams": function ( aoData ) { aoData.push( { "name": "user", "value": "'.$_GET['user'].'" } ); },';
+	$request_exps = 'function ( aoData ) { aoData.push( { "name": "user", "value": "'.$_GET['user'].'" } ); }';
 }
 ?>
 
@@ -120,7 +120,7 @@ if (isset($_GET['user'])) {
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "list_experiments.php",
-			<?php echo $request_exps; ?>
+			"fnServerParams": <?php echo $request_exps; ?>,
 			"bPaginate": true,
             "aoColumns": [
                           {"mDataProp": "id" },
