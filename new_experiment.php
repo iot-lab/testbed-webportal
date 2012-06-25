@@ -40,22 +40,26 @@ if(!$_SESSION['is_auth']) {
                 <div class="control-group">
                     <label class="control-label" for="txt_name">Name:</label>
                     <div class="controls">
-                        <input id="txt_name" type="text" class="input-large">
+                        <input id="txt_name" type="text" class="input-small">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="txt_duration">Duration (minutes):</label>
                     <div class="controls">
-                        <input id="txt_duration" type="number" class="input-large" value="20" required="required">
+                        <input id="txt_duration" type="number" class="input-small" value="20" required="required">
                     </div>
                 </div>
                 
                 <div class="control-group">
-                    <input type="checkbox" id="cbScheduled" value="cbScheduled"> Scheduled :
-                    <label class="control-label" for="txt_duration"></label>
+                    
+                    <label class="control-label" for="txt_duration">Scheduled</label>
                     <div class="controls">
-                        <input type="text" class="span2" value="" id="dp1" disabled="disabled">
-                        <input class="dropdown-timepicker" data-provide="timepicker" type="text" id="tp1" disabled="disabled">
+                        <input type="checkbox" id="cbScheduled" value="cbScheduled"/>
+                        <div id="div_scheduled" style="display:none">
+                            <input type="text" class="input-small" value="" id="dp1" disabled="disabled">
+                            <input class="dropdown-timepicker input-mini" data-provide="timepicker" type="text" id="tp1" disabled="disabled">
+                        </div>
+                        
                     </div>
                 </div>
                 
@@ -65,16 +69,40 @@ if(!$_SESSION['is_auth']) {
                     <label class="control-label">Resources</label>
                     <div class="controls">
                         
-                            <input type="radio" name="resources_type" id="optionsRadiosType" value="type"
-                            checked=""> by type
+                        <input type="radio" name="resources_type" id="optionsRadiosType" value="alias" checked=""> by alias
 
-                            <input type="radio" name="resources_type" id="optionsRadiosMaps" value="physical"> physical   
+                        <input type="radio" name="resources_type" id="optionsRadiosMaps" value="physical"> physical   
                             
-                            
-                        <!-- by type -->
+                        <!-- by alias -->
                         <div class="" id="div_resources_type">
-                            Fixed:
-                                <input id="txt_fixed" type="text" class="input-large">
+                            
+                            <table>
+                            <tr>
+                                <th>Site</th>
+                                <th>Archi</th>
+                                <th>Fixed</th>
+                                <th>Mobile</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <select id="lst_site" class="input-medium">
+                                    <option value="any">Any</option>
+                                    </select> 
+                                </td>
+                                <td>
+                                    <select id="lst_archi" class="input-medium">
+                                        <option value="any">Any</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input id="txt_fixe" type="number" class="input-small" value="0">
+                                </td>
+                                <td>
+                                    <input id="txt_mobile" type="number" class="input-small" value="0">
+                                </td>
+                                </tr>
+                            </table>
+
                         </div>
                         
                         <!-- physical -->
@@ -140,7 +168,11 @@ if(!$_SESSION['is_auth']) {
             //firmwares
             var binary = [];
 
+            //scheduled exp
             var scheduled = false;
+
+            //sites resources json
+            var site_resources = [];
 
             /* ************ */
             /*   on ready   */
@@ -190,11 +222,13 @@ if(!$_SESSION['is_auth']) {
                     if($(this).is(':checked')){
                         $("#dp1").removeAttr("disabled");
                         $("#tp1").removeAttr("disabled");
+                        $("#div_scheduled").show();
                         scheduled = true;
                     }
                     else {
                         $("#dp1").attr("disabled","disabled");
                         $("#tp1").attr("disabled","disabled");
+                        $("#div_scheduled").hide();
                         scheduled = false;
                     }
                 });
@@ -230,7 +264,41 @@ if(!$_SESSION['is_auth']) {
                 });
 
 
+                //get sites resources
+                $.ajax({
+                    type: "GET",
+                    dataType: "text",
+                    contentType: "application/json; charset=utf-8",
+                    url: "/rest/experiments?sites",
+                    success: function (data_server) {
+                        site_resources = JSON.parse(data_server);
+                        
+                        for(i = 0; i < site_resources.sites.length; i++) {
+                            $("#lst_site").append(new Option(site_resources.sites[i].site, site_resources.sites[i].site));
+                            
+                            for(j = 0; j < site_resources.sites[i].nodes.length; j++) {
+                                var find = false;
+                                for(z = 0; z < $("#lst_archi option").length && !find; z++) {
+                                    if($("#lst_archi option")[z].value == site_resources.sites[i].nodes[j].archi)
+                                    {
+                                        find = true;
+                                    }
+                                }
+                                if(!find) {
+                                    $("#lst_archi").append(new Option(site_resources.sites[i].nodes[j].archi, site_resources.sites[i].nodes[j].archi));
+                                }
+                            }
+                        }
+                        
 
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrows) {
+                        $("#txt_notif_msg").html(errorThrows);
+                        $("#txt_notif").show();
+                        $("#txt_notif").removeClass("alert-success");
+                        $("#txt_notif").addClass("alert-error");
+                    }
+                });
             });
 
 
@@ -249,7 +317,6 @@ if(!$_SESSION['is_auth']) {
                 }
                 $("#my_nodes option:selected").remove();
 
-                
 
                 //init some vars
                 if (exp_json.profiles == null) {
@@ -274,11 +341,9 @@ if(!$_SESSION['is_auth']) {
                   
                 }
                 else{
-                    
                     exp_json.profiles[profil_set] = my_profiles[index];
                 }
                 
-
 
                 var find = false;
                 //if profile already exist in the table
@@ -354,8 +419,6 @@ if(!$_SESSION['is_auth']) {
                     }
                 }
                 
-                
-                
                 //check associations for removed nodes
                 if(exp_json.profileassociations != null) {
                     for (i = 0; i < exp_json.profileassociations.length; i++) {
@@ -403,9 +466,7 @@ if(!$_SESSION['is_auth']) {
                     }
                 }
                 
-
                 //TODO: remove a assoc and re-add the nodes
-
 
                 displayAssociation();
 
@@ -495,7 +556,6 @@ if(!$_SESSION['is_auth']) {
                 }
                 else
                 {
-                    
                     $.ajax({
                         type: "POST",
                         dataType: "text",
