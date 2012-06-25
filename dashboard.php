@@ -89,8 +89,8 @@ include("header.php") ?>
             success: function (data) {
                 var nb_profiles = 0;
                 if (data!="") {
-                	my_profiles = JSON.parse(data);
-                	nb_profiles = my_profiles.length;
+                    my_profiles = JSON.parse(data);
+                    nb_profiles = my_profiles.length;
                 }                
                 $("#nb_profiles").text(nb_profiles);
             },
@@ -122,12 +122,10 @@ include("header.php") ?>
                      }
                 },
                 {"mDataProp": "duration",
-     			"fnRender": function(obj) {
-                            return Math.round(obj.aData['duration']/60);
-                     }
-
-		
- 		},
+                    "fnRender": function(obj) {
+                        return Math.round(obj.aData['duration']/60);
+                    }
+                },
                 {"mDataProp": "nb_resources" },
                 {"mDataProp": "state",
                  "fnRender": function(obj) {

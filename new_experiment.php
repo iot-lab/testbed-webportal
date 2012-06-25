@@ -233,6 +233,92 @@ if(!$_SESSION['is_auth']) {
 
             });
 
+
+            /* ****************** */
+            /* set an association */
+            /* ****************** */
+            $("#btn_assoc").click(function () {
+
+                //get selected item and remove
+                var nodes_set = $("#my_nodes").val();
+                var profil_set = $("#my_profiles").val();
+                var firmware_set = $("#my_firmwares").val();
+
+                if (nodes_set == null || profil_set == null || firmware_set == null) {
+                    return false;
+                }
+                $("#my_nodes option:selected").remove();
+
+                
+
+                //init some vars
+                if (exp_json.profiles == null) {
+                    exp_json.profileassociations = [];
+                    exp_json.firmwareassociations = [];
+                    exp_json.profiles = {}; 
+                }
+                
+                //retrieve profile index
+                var find = false;
+                var index = -1;
+                for (i = 0; i < my_profiles.length && index == -1; i++) {
+                    if (my_profiles[i].profilename == profil_set) {
+                        find = true;
+                        index = i;
+                        break;
+                    }
+                }
+                
+                //check if profile already in the exp json
+                if(profil_set in exp_json.profiles){
+                  
+                }
+                else{
+                    
+                    exp_json.profiles[profil_set] = my_profiles[index];
+                }
+                
+
+
+                var find = false;
+                //if profile already exist in the table
+                for (i = 0; i < exp_json.profileassociations.length; i++) {
+                    if (exp_json.profileassociations[i].profilename == profil_set) {
+                        exp_json.profileassociations[i].nodes = exp_json.profileassociations[i].nodes.concat(nodes_set);
+                        find = true;
+                    }
+                }
+
+                if (!find) {
+                    exp_json.profileassociations.push({
+                        "profilename": profil_set,
+                        "nodes": nodes_set
+                    });
+                }
+
+                find = false;
+                //if firmware already exist in the table
+                for (i = 0; i < exp_json.firmwareassociations.length; i++) {
+                    if (exp_json.firmwareassociations[i].firmwarename == firmware_set) {
+                        exp_json.firmwareassociations[i].nodes = exp_json.firmwareassociations[i].nodes.concat(nodes_set);
+                        find = true;
+                    }
+                }
+
+                if (!find) {
+                    exp_json.firmwareassociations.push({
+                        "firmwarename": firmware_set,
+                        "nodes": nodes_set
+                    });
+                }
+                
+                displayAssociation();
+                
+                return false;
+            });
+
+
+
             /* ************* */
             /* submit part 1 */
             /* ************ */
@@ -323,88 +409,6 @@ if(!$_SESSION['is_auth']) {
 
                 displayAssociation();
 
-                //set an association
-                $("#btn_assoc").click(function () {
-
-                    //get selected item and remove
-                    var nodes_set = $("#my_nodes").val();
-                    var profil_set = $("#my_profiles").val();
-                    var firmware_set = $("#my_firmwares").val();
-
-                    if (nodes_set == null || profil_set == null || firmware_set == null) {
-			 return false;
-                    }
-                    $("#my_nodes option:selected").remove();
-
-                    
-
-                    //init some vars
-                    if (exp_json.profiles == null) {
-                        exp_json.profileassociations = [];
-                        exp_json.firmwareassociations = [];
-                        exp_json.profiles = {}; 
-                    }
-                    
-                    //retrieve profile index
-                    var find = false;
-                    var index = -1;
-                    for (i = 0; i < my_profiles.length && index == -1; i++) {
-                        if (my_profiles[i].profilename == profil_set) {
-                            find = true;
-                            index = i;
-                            break;
-                        }
-                    }
-                    
-                    //check if profile already in the exp json
-                    if(profil_set in exp_json.profiles){
-                      
-                    }
-                    else{
-                        
-                        exp_json.profiles[profil_set] = my_profiles[index];
-                    }
-                    
-
-
-                    var find = false;
-                    //if profile already exist in the table
-                    for (i = 0; i < exp_json.profileassociations.length; i++) {
-                        if (exp_json.profileassociations[i].profilename == profil_set) {
-                            exp_json.profileassociations[i].nodes = exp_json.profileassociations[i].nodes.concat(nodes_set);
-                            find = true;
-                        }
-                    }
-
-                    if (!find) {
-                        exp_json.profileassociations.push({
-                            "profilename": profil_set,
-                            "nodes": nodes_set
-                        });
-                    }
-
-                    find = false;
-                    //if firmware already exist in the table
-                    for (i = 0; i < exp_json.firmwareassociations.length; i++) {
-                        if (exp_json.firmwareassociations[i].firmwarename == firmware_set) {
-                            exp_json.firmwareassociations[i].nodes = exp_json.firmwareassociations[i].nodes.concat(nodes_set);
-                            find = true;
-                        }
-                    }
-
-                    if (!find) {
-                        exp_json.firmwareassociations.push({
-                            "firmwarename": firmware_set,
-                            "nodes": nodes_set
-                        });
-                    }
-                    
-                    displayAssociation();
-                    
-                    return false;
-                });
-                
-               
                 return false;
             })
 
