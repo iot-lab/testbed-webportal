@@ -77,13 +77,17 @@ if(!$_SESSION['is_auth']) {
                         <div class="" id="div_resources_type">
                             
                             <table>
+                            <thead>
                             <tr>
                                 <th>Site</th>
                                 <th>Archi</th>
                                 <th>Fixed</th>
                                 <th>Mobile</th>
+                                <th><button id="btn_add" class="btn">+</button></th>
                             </tr>
-                            <tr>
+                            </thead>
+                            <tbody id="resources_table">
+                            <tr id="resources_row">
                                 <td>
                                     <select id="lst_site" class="input-medium">
                                     <option value="any">Any</option>
@@ -100,7 +104,11 @@ if(!$_SESSION['is_auth']) {
                                 <td>
                                     <input id="txt_mobile" type="number" class="input-small" value="0">
                                 </td>
+                                <td>
+                                    <button class="btn" onclick="removeRow(this)">-</button>
+                                </td>
                                 </tr>
+                            </tbody>
                             </table>
 
                         </div>
@@ -669,6 +677,16 @@ if(!$_SESSION['is_auth']) {
                     for(k = 0; k < json_tmp.length; k++) {
                         $("#my_assoc").append("<tr><td>"+json_tmp[k].node+"</td><td>"+json_tmp[k].profilename+"</td><td>"+json_tmp[k].firmwarename+"</td></tr>");
                     }
+            }
+            
+            
+            $("#btn_add").click(function(){
+                $("#resources_table").append($("#resources_row").clone());
+            });
+            
+            
+            function removeRow(btnDelete) {
+                $(btnDelete).parent().parent().remove();
             }
             
             // Array Remove - By John Resig (MIT Licensed)
