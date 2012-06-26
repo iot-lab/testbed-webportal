@@ -33,7 +33,6 @@ if(!$_SESSION['is_auth']) {
           </div>
         </div>
 
-            
             <form class="well form-horizontal" id="form_part1">
 
                 <h3>1. Configure your experiment</h3>
@@ -81,7 +80,7 @@ if(!$_SESSION['is_auth']) {
                             <tr>
                                 <th>Site</th>
                                 <th>Archi</th>
-                                <th>Fixed</th>
+                                <th>Number</th>
                                 <th>Mobile</th>
                                 <th><button id="btn_add" class="btn">+</button></th>
                             </tr>
@@ -89,20 +88,20 @@ if(!$_SESSION['is_auth']) {
                             <tbody id="resources_table">
                             <tr id="resources_row">
                                 <td>
-                                    <select id="lst_site" class="input-medium">
+                                    <select id="lst_site" class="input-medium site">
                                     <option value="any">Any</option>
                                     </select> 
                                 </td>
                                 <td>
-                                    <select id="lst_archi" class="input-medium">
+                                    <select id="lst_archi" class="input-medium archi">
                                         <option value="any">Any</option>
                                     </select>
                                 </td>
                                 <td>
-                                    <input id="txt_fixe" type="number" class="input-small" value="0">
+                                    <input id="txt_fixe" type="number" class="input-small number" value="0">
                                 </td>
                                 <td>
-                                    <input id="txt_mobile" type="number" class="input-small" value="0">
+                                    <input id="txt_mobile" type="checkbox" class="input-small mobile" value="0">
                                 </td>
                                 <td>
                                     <button class="btn" onclick="removeRow(this)">-</button>
@@ -182,6 +181,8 @@ if(!$_SESSION['is_auth']) {
             //sites resources json
             var site_resources = [];
 
+            var alias_nodes = [];
+
             /* ************ */
             /*   on ready   */
             /* ************ */
@@ -218,7 +219,6 @@ if(!$_SESSION['is_auth']) {
                         $("#div_resources_type").show();
                         $("#div_resources_map").hide();
                     }
-
                 });
 
                 //open popup
@@ -287,8 +287,7 @@ if(!$_SESSION['is_auth']) {
                             for(j = 0; j < site_resources.sites[i].nodes.length; j++) {
                                 var find = false;
                                 for(z = 0; z < $("#lst_archi option").length && !find; z++) {
-                                    if($("#lst_archi option")[z].value == site_resources.sites[i].nodes[j].archi)
-                                    {
+                                    if($("#lst_archi option")[z].value == site_resources.sites[i].nodes[j].archi) {
                                         find = true;
                                     }
                                 }
@@ -297,8 +296,6 @@ if(!$_SESSION['is_auth']) {
                                 }
                             }
                         }
-                        
-
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrows) {
                         $("#txt_notif_msg").html(errorThrows);
@@ -325,7 +322,6 @@ if(!$_SESSION['is_auth']) {
                 }
                 $("#my_nodes option:selected").remove();
 
-
                 //init some vars
                 if (exp_json.profiles == null) {
                     exp_json.profileassociations = [];
@@ -346,7 +342,6 @@ if(!$_SESSION['is_auth']) {
                 
                 //check if profile already in the exp json
                 if(profil_set in exp_json.profiles){
-                  
                 }
                 else{
                     exp_json.profiles[profil_set] = my_profiles[index];
@@ -396,6 +391,41 @@ if(!$_SESSION['is_auth']) {
             /* submit part 1 */
             /* ************ */
             $("#form_part1").bind("submit", function () {
+
+                //type alias
+                if($("input[name=resources_type]:checked").val() == "alias"){
+                    
+                    alias_nodes = [];
+                    
+                    for(i = 0; i<$("#resources_table tr").length; i++){
+                        var row_rs = {};
+                        
+                        var row = $("#resources_table tr")[i];
+
+                        var site = $(row).find(".site").val();
+                        var archi = $(row).find(".archi").val();
+                        var number = $(row).find(".number").val();
+                        var mobile = $(row).find(".mobile").is(':checked');
+                        
+                        if(number != 0) {
+                            row_rs.nbnodes = number;
+                            
+                            if(mobile)
+                                row_rs.mobile = "true";
+                            if(archi != "any")   
+                                 row_rs.archi = archi;
+                            if(site != "any")   
+                                 row_rs.site = site;
+                                 
+                            alias_nodes.push(row_rs);
+                        }
+                    }
+
+                    console.log(alias_nodes);
+                    
+                    return false;
+                }
+
 
                 //build nodes list
                 var devlille_nodes = [];
@@ -682,12 +712,14 @@ if(!$_SESSION['is_auth']) {
             
             $("#btn_add").click(function(){
                 $("#resources_table").append($("#resources_row").clone());
+                return false;
             });
             
             
             function removeRow(btnDelete) {
                 if($("#resources_table tr").length != 1)
                     $(btnDelete).parent().parent().remove();
+                return false;
             }
             
             // Array Remove - By John Resig (MIT Licensed)
