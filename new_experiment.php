@@ -75,18 +75,21 @@ if(!$_SESSION['is_auth']) {
                         <!-- by alias -->
                         <div class="" id="div_resources_type">
                             
-                            <table>
+                            <table style="text-align:center">
                             <thead>
                             <tr>
+                                <th><button id="btn_add" class="btn" style="width:50px" >+</button></th>
                                 <th>Archi</th>
                                 <th>Site</th>
                                 <th>Number</th>
                                 <th>Mobile</th>
-                                <th><button id="btn_add" class="btn">+</button></th>
                             </tr>
                             </thead>
                             <tbody id="resources_table">
                             <tr id="resources_row">
+                                <td>
+                                    <button class="btn" style="width:50px" onclick="removeRow(this)">-</button>
+                                </td>
                                 <td>
                                     <select id="lst_archi" class="input-medium archi">
                                     </select>
@@ -101,9 +104,6 @@ if(!$_SESSION['is_auth']) {
                                 </td>
                                 <td>
                                     <input id="txt_mobile" type="checkbox" class="input-small mobile">
-                                </td>
-                                <td>
-                                    <button class="btn" onclick="removeRow(this)">-</button>
                                 </td>
                                 </tr>
                             </tbody>
