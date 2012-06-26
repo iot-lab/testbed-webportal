@@ -78,8 +78,8 @@ if(!$_SESSION['is_auth']) {
                             <table>
                             <thead>
                             <tr>
-                                <th>Site</th>
                                 <th>Archi</th>
+                                <th>Site</th>
                                 <th>Number</th>
                                 <th>Mobile</th>
                                 <th><button id="btn_add" class="btn">+</button></th>
@@ -88,14 +88,13 @@ if(!$_SESSION['is_auth']) {
                             <tbody id="resources_table">
                             <tr id="resources_row">
                                 <td>
+                                    <select id="lst_archi" class="input-medium archi">
+                                    </select>
+                                </td>
+                                <td>
                                     <select id="lst_site" class="input-medium site">
                                     <option value="any">Any</option>
                                     </select> 
-                                </td>
-                                <td>
-                                    <select id="lst_archi" class="input-medium archi">
-                                        <option value="any">Any</option>
-                                    </select>
                                 </td>
                                 <td>
                                     <input id="txt_fixe" type="number" class="input-small number" value="0">
@@ -396,9 +395,13 @@ if(!$_SESSION['is_auth']) {
                 if($("input[name=resources_type]:checked").val() == "alias"){
                     
                     alias_nodes = [];
+                    var alias_index = 0;
                     
                     for(i = 0; i<$("#resources_table tr").length; i++){
                         var row_rs = {};
+                        
+                        row_rs.alias = alias_index;
+                        row_rs.properties = {};
                         
                         var row = $("#resources_table tr")[i];
 
@@ -408,20 +411,21 @@ if(!$_SESSION['is_auth']) {
                         var mobile = $(row).find(".mobile").is(':checked');
                         
                         if(number != 0) {
-                            row_rs.nbnodes = number;
+                            row_rs.properties.nbnodes = number;
+                            row_rs.properties.archi = archi;
                             
-                            if(mobile)
-                                row_rs.mobile = "true";
-                            if(archi != "any")   
-                                 row_rs.archi = archi;
                             if(site != "any")   
-                                 row_rs.site = site;
-                                 
+                                 row_rs.properties.site = site;
+                            if(mobile)
+                                row_rs.properties.mobile = "true";
+
                             alias_nodes.push(row_rs);
+                            
+                            alias_index++;
                         }
                     }
 
-                    console.log(alias_nodes);
+                    exp_json.nodes = alias_nodes;
                     
                     return false;
                 }
@@ -524,6 +528,7 @@ if(!$_SESSION['is_auth']) {
                     exp_json.name = $("#txt_name").val();
 
                 exp_json.duration = parseInt($("#txt_duration").val());
+
 
                 if(scheduled) {
                     
