@@ -120,10 +120,14 @@ if(!$_SESSION['is_auth']) {
                         
                     </div>
                 </div>
-                <button id="btn_submit" class="btn btn-primary" type="submit">Set my nodes selection</button>
+                <button id="btn_submit" class="btn btn-primary" type="submit">Next</button>
             </form>
             
             <form class="well form-horizontal" id="form_part2">
+                
+                
+                <button id="btn_previous" class="btn">Previous</button>
+                
                 <h3>3. Configure your nodes</h3>
                 <p>
                     <select id="my_nodes" size="15" multiple></select>
@@ -134,7 +138,6 @@ if(!$_SESSION['is_auth']) {
                 </p>
                 <p>
                     <button id="btn_assoc" class="btn">Associate</button>
-                    <button id="btn_submit" class="btn btn-primary" type="submit">Submit</button>
                 </p>
                 <p>
                     <table style="width:500px" class="table table-striped table-bordered table-condensed">
@@ -148,6 +151,7 @@ if(!$_SESSION['is_auth']) {
                         <tbody id="my_assoc"></tbody>
                     </table>
                 </p>
+                <button id="btn_submit" class="btn btn-primary" type="submit">Submit</button>
             </form>
             
             
@@ -189,6 +193,8 @@ if(!$_SESSION['is_auth']) {
 
                 $("#txt_notif").hide();
                 $("#expState").modal('hide');
+
+                $("#form_part2").hide();
 
                 //date picker
                 var now = new Date();
@@ -390,6 +396,10 @@ if(!$_SESSION['is_auth']) {
             /* submit part 1 */
             /* ************ */
             $("#form_part1").bind("submit", function () {
+
+                $("#form_part1").hide();
+                $("#form_part2").show();
+        
 
                 //type alias
                 if($("input[name=resources_type]:checked").val() == "alias"){
@@ -726,6 +736,14 @@ if(!$_SESSION['is_auth']) {
                     $(btnDelete).parent().parent().remove();
                 return false;
             }
+            
+            
+            $("#btn_previous").click(function(){
+                $("#form_part2").hide();
+                $("#form_part1").show();
+                return false;
+            });
+            
             
             // Array Remove - By John Resig (MIT Licensed)
             Array.prototype.remove = function(from, to) {
