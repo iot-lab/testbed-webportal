@@ -35,7 +35,7 @@ if(!$_SESSION['is_auth']) {
 
             <form class="well form-horizontal" id="form_part1">
 
-                <h3>1. Configure your experiment</h3>
+                <h3>Configure your experiment</h3>
                 <div class="control-group">
                     <label class="control-label" for="txt_name">Name:</label>
                     <div class="controls">
@@ -63,7 +63,7 @@ if(!$_SESSION['is_auth']) {
                 </div>
                 
                 
-                <h3>2. Select your nodes</h3>
+                <h3>Choose your nodes</h3>
                 <div class="control-group">
                     <label class="control-label">Resources</label>
                     <div class="controls">
@@ -126,35 +126,11 @@ if(!$_SESSION['is_auth']) {
             <form class="well form-horizontal" id="form_part2">
                 
                 
-                <button id="btn_previous" class="btn">Previous</button>
+                <button id="btn_previous" class="btn">Previous</button> <button id="btn_submit" class="btn btn-primary" type="submit">Submit</button>
                 
-                <h3>3. Configure your nodes</h3>
+                <h3>Manage association</h3>
               
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>node</th>
-                                    <th>profile</th>
-                                    <th>firmware</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><select id="my_nodes" size="15" multiple></select></td>
-                                    <td><select id="my_profiles" size="15"></select></td>
-                                    <td><select id="my_firmwares" size="15"></select></td>
-                                </tr>
-                                <tr>
-                                    <td><button id="btn_assoc" class="btn">Associate</button></td>
-                                    <td></td>
-                                    <td><input type="file" id="files" name="files[]" multiple /></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    
-                    
-                <p>
-                    <table style="width:500px" class="table table-striped table-bordered table-condensed">
+                    <table>
                         <thead>
                             <tr>
                                 <th>node</th>
@@ -162,10 +138,34 @@ if(!$_SESSION['is_auth']) {
                                 <th>firmware</th>
                             </tr>
                         </thead>
-                        <tbody id="my_assoc"></tbody>
+                        <tbody>
+                            <tr>
+                                <td><select id="my_nodes" size="15" multiple></select></td>
+                                <td><select id="my_profiles" size="15"></select></td>
+                                <td><select id="my_firmwares" size="15"></select></td>
+                            </tr>
+                            <tr>
+                                <td><button id="btn_assoc" class="btn">Add Association</button></td>
+                                <td></td>
+                                <td><input type="file" id="files" name="files[]" multiple /></td>
+                            </tr>
+                        </tbody>
                     </table>
-                </p>
-                <button id="btn_submit" class="btn btn-primary" type="submit">Submit</button>
+                    
+                    
+                    <p>
+                        <table style="width:700px" class="table table-striped table-bordered table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>node</th>
+                                    <th>profile</th>
+                                    <th>firmware</th>
+                                </tr>
+                            </thead>
+                            <tbody id="my_assoc"></tbody>
+                        </table>
+                    </p>
+                
             </form>
             
             
