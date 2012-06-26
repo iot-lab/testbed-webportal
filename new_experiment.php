@@ -97,10 +97,10 @@ if(!$_SESSION['is_auth']) {
                                     </select> 
                                 </td>
                                 <td>
-                                    <input id="txt_fixe" type="number" class="input-small number" value="0">
+                                    <input id="txt_fixe" type="number" class="input-small number" value="1">
                                 </td>
                                 <td>
-                                    <input id="txt_mobile" type="checkbox" class="input-small mobile" value="0">
+                                    <input id="txt_mobile" type="checkbox" class="input-small mobile">
                                 </td>
                                 <td>
                                     <button class="btn" onclick="removeRow(this)">-</button>
@@ -169,7 +169,7 @@ if(!$_SESSION['is_auth']) {
             //json
             var exp_json = {
                 "type": "physical",
-                "duration": 100
+                "duration": 20
             };
             
             //profiles
@@ -193,7 +193,6 @@ if(!$_SESSION['is_auth']) {
 
                 $("#txt_notif").hide();
                 $("#expState").modal('hide');
-
                 $("#form_part2").hide();
 
                 //date picker
@@ -407,6 +406,8 @@ if(!$_SESSION['is_auth']) {
                     alias_nodes = [];
                     var alias_index = 0;
                     
+                    $("#my_nodes").empty();
+                    
                     for(i = 0; i<$("#resources_table tr").length; i++){
                         var row_rs = {};
                         
@@ -430,7 +431,9 @@ if(!$_SESSION['is_auth']) {
                                 row_rs.properties.mobile = "true";
 
                             alias_nodes.push(row_rs);
-                            
+
+                            $("#my_nodes").append(new Option(archi+"/"+site+"/"+number+"/"+mobile,alias_index));
+
                             alias_index++;
                         }
                     }
