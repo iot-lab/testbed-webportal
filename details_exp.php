@@ -53,7 +53,7 @@ include("header.php") ?>
                 dataType: "json",
                 success:function(data){
                     //console.log(data);
-			
+
                     var exp_name = "";
                     if(data.name != null)
                         exp_name = data.name;
@@ -90,13 +90,52 @@ include("header.php") ?>
                     
                     $("#detailsExpRow").html("");
                     for(k = 0; k < json_exp.length; k++) {
-                        $("#detailsExpRow").append("<tr><td>"+json_exp[k].node+"</td><td>"+json_exp[k].profilename+"</td><td>"+json_exp[k].firmwarename+"</td></tr>");
+                        
+                        if(data.type == "physical") {
+                            $("#detailsExpRow").append("<tr><td>"+json_exp[k].node+"</td><td>"+json_exp[k].profilename+"</td><td>"+json_exp[k].firmwarename+"</td></tr>");
+                        }
+                        else {
+                            for(k = 0; k < data.nodes.length; k++) {
+                                var archi = data.nodes[k].properties.archi;
+                                
+                                var site = "any";
+                                if(data.nodes[k].properties.site != null)
+                                    site = data.nodes[k].properties.site;
+                                    
+                                var nbnodes = data.nodes[k].properties.nbnodes;
+                                
+                                var mobile = false;
+                                if(data.nodes[k].properties.mobile != null)
+                                    mobile = data.nodes[k].properties.mobile;
+                                
+                                $("#detailsExpRow").append("<tr><td>"+archi+"/"+site+"/"+nbnodes+"/"+mobile+"</td><td>"+json_exp[k].profilename+"</td><td>"+json_exp[k].firmwarename+"</td></tr>")
+                            }
+                        }
                     }
                     
                     if(!withAssoc)
                     {
-                        for(k = 0; k < data.nodes.length; k++) {
-                            $("#detailsExpRow").append("<tr><td>"+data.nodes[k]+"</td><td></td><td></td></tr>");
+                        if(data.type == "physical") {
+                            for(k = 0; k < data.nodes.length; k++) {
+                                $("#detailsExpRow").append("<tr><td>"+data.nodes[k]+"</td><td></td><td></td></tr>");
+                            }
+                        }
+                        else {
+                            for(k = 0; k < data.nodes.length; k++) {
+                                var archi = data.nodes[k].properties.archi;
+                                
+                                var site = "any";
+                                if(data.nodes[k].properties.site != null)
+                                    site = data.nodes[k].properties.site;
+                                    
+                                var nbnodes = data.nodes[k].properties.nbnodes;
+                                
+                                var mobile = false;
+                                if(data.nodes[k].properties.mobile != null)
+                                    mobile = data.nodes[k].properties.mobile;
+                                
+                                $("#detailsExpRow").append("<tr><td>"+archi+"/"+site+"/"+nbnodes+"/"+mobile+"</td><td></td><td></td></tr>");
+                            }
                         }
                     }
 
