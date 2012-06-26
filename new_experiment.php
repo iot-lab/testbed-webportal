@@ -129,16 +129,30 @@ if(!$_SESSION['is_auth']) {
                 <button id="btn_previous" class="btn">Previous</button>
                 
                 <h3>3. Configure your nodes</h3>
-                <p>
-                    <select id="my_nodes" size="15" multiple></select>
-                    <select id="my_profiles" size="15"></select>
-                    <select id="my_firmwares" size="15">
-                    </select>
-                    <input type="file" id="files" name="files[]" multiple />
-                </p>
-                <p>
-                    <button id="btn_assoc" class="btn">Associate</button>
-                </p>
+              
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>node</th>
+                                    <th>profile</th>
+                                    <th>firmware</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><select id="my_nodes" size="15" multiple></select></td>
+                                    <td><select id="my_profiles" size="15"></select></td>
+                                    <td><select id="my_firmwares" size="15"></select></td>
+                                </tr>
+                                <tr>
+                                    <td><button id="btn_assoc" class="btn">Associate</button></td>
+                                    <td></td>
+                                    <td><input type="file" id="files" name="files[]" multiple /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    
+                    
                 <p>
                     <table style="width:500px" class="table table-striped table-bordered table-condensed">
                         <thead>
