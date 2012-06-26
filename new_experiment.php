@@ -225,41 +225,8 @@ if(!$_SESSION['is_auth']) {
                     template: 'dropdown'
                 });
                 
+                //file upload event
                 document.getElementById('files').addEventListener('change', handleFileSelect, false);
-
-                //ressources type
-                $("#div_resources_map").hide();
-                $("input[name=resources_type]").change(function () {
-                    if ($(this).val() == "physical") {
-                        $("#div_resources_type").hide();
-                        $("#div_resources_map").show();
-                    } else {
-                        $("#div_resources_type").show();
-                        $("#div_resources_map").hide();
-                    }
-                });
-
-                //open popup
-                $("#devlille_maps").click(function () {
-                    window.open('devlille_maps.php', '', 'resizable=yes, location=no, width=500, height=500, menubar=no, status=no, scrollbars=no, menubar=no');
-                });
-
-                $("#cbScheduled").click(function(){
-                    if($(this).is(':checked')){
-                        $("#dp1").removeAttr("disabled");
-                        $("#tp1").removeAttr("disabled");
-                        $("#div_scheduled").show();
-                        scheduled = true;
-                    }
-                    else {
-                        $("#dp1").attr("disabled","disabled");
-                        $("#tp1").attr("disabled","disabled");
-                        $("#div_scheduled").hide();
-                        scheduled = false;
-                    }
-                });
-
-
 
                 //get all profiles
                 $.ajax({
@@ -323,86 +290,6 @@ if(!$_SESSION['is_auth']) {
                     }
                 });
             });
-
-
-            /* ****************** */
-            /* set an association */
-            /* ****************** */
-            $("#btn_assoc").click(function () {
-
-                //get selected item and remove
-                var nodes_set = $("#my_nodes").val();
-                var profil_set = $("#my_profiles").val();
-                var firmware_set = $("#my_firmwares").val();
-
-                if (nodes_set == null || profil_set == null || firmware_set == null) {
-                    return false;
-                }
-                $("#my_nodes option:selected").remove();
-
-                //init some vars
-                if (exp_json.profiles == null) {
-                    exp_json.profileassociations = [];
-                    exp_json.firmwareassociations = [];
-                    exp_json.profiles = {}; 
-                }
-                
-                //retrieve profile index
-                var find = false;
-                var index = -1;
-                for (i = 0; i < my_profiles.length && index == -1; i++) {
-                    if (my_profiles[i].profilename == profil_set) {
-                        find = true;
-                        index = i;
-                        break;
-                    }
-                }
-                
-                //check if profile already in the exp json
-                if(profil_set in exp_json.profiles){
-                }
-                else{
-                    exp_json.profiles[profil_set] = my_profiles[index];
-                }
-                
-
-                var find = false;
-                //if profile already exist in the table
-                for (i = 0; i < exp_json.profileassociations.length; i++) {
-                    if (exp_json.profileassociations[i].profilename == profil_set) {
-                        exp_json.profileassociations[i].nodes = exp_json.profileassociations[i].nodes.concat(nodes_set);
-                        find = true;
-                    }
-                }
-
-                if (!find) {
-                    exp_json.profileassociations.push({
-                        "profilename": profil_set,
-                        "nodes": nodes_set
-                    });
-                }
-
-                find = false;
-                //if firmware already exist in the table
-                for (i = 0; i < exp_json.firmwareassociations.length; i++) {
-                    if (exp_json.firmwareassociations[i].firmwarename == firmware_set) {
-                        exp_json.firmwareassociations[i].nodes = exp_json.firmwareassociations[i].nodes.concat(nodes_set);
-                        find = true;
-                    }
-                }
-
-                if (!find) {
-                    exp_json.firmwareassociations.push({
-                        "firmwarename": firmware_set,
-                        "nodes": nodes_set
-                    });
-                }
-                
-                displayAssociation();
-                
-                return false;
-            });
-
 
 
             /* ************* */
@@ -543,6 +430,85 @@ if(!$_SESSION['is_auth']) {
             })
 
 
+            /* ****************** */
+            /* set an association */
+            /* ****************** */
+            $("#btn_assoc").click(function () {
+
+                //get selected item and remove
+                var nodes_set = $("#my_nodes").val();
+                var profil_set = $("#my_profiles").val();
+                var firmware_set = $("#my_firmwares").val();
+
+                if (nodes_set == null || profil_set == null || firmware_set == null) {
+                    return false;
+                }
+                $("#my_nodes option:selected").remove();
+
+                //init some vars
+                if (exp_json.profiles == null) {
+                    exp_json.profileassociations = [];
+                    exp_json.firmwareassociations = [];
+                    exp_json.profiles = {}; 
+                }
+                
+                //retrieve profile index
+                var find = false;
+                var index = -1;
+                for (i = 0; i < my_profiles.length && index == -1; i++) {
+                    if (my_profiles[i].profilename == profil_set) {
+                        find = true;
+                        index = i;
+                        break;
+                    }
+                }
+                
+                //check if profile already in the exp json
+                if(profil_set in exp_json.profiles){
+                }
+                else{
+                    exp_json.profiles[profil_set] = my_profiles[index];
+                }
+                
+
+                var find = false;
+                //if profile already exist in the table
+                for (i = 0; i < exp_json.profileassociations.length; i++) {
+                    if (exp_json.profileassociations[i].profilename == profil_set) {
+                        exp_json.profileassociations[i].nodes = exp_json.profileassociations[i].nodes.concat(nodes_set);
+                        find = true;
+                    }
+                }
+
+                if (!find) {
+                    exp_json.profileassociations.push({
+                        "profilename": profil_set,
+                        "nodes": nodes_set
+                    });
+                }
+
+                find = false;
+                //if firmware already exist in the table
+                for (i = 0; i < exp_json.firmwareassociations.length; i++) {
+                    if (exp_json.firmwareassociations[i].firmwarename == firmware_set) {
+                        exp_json.firmwareassociations[i].nodes = exp_json.firmwareassociations[i].nodes.concat(nodes_set);
+                        find = true;
+                    }
+                }
+
+                if (!find) {
+                    exp_json.firmwareassociations.push({
+                        "firmwarename": firmware_set,
+                        "nodes": nodes_set
+                    });
+                }
+                
+                displayAssociation();
+                
+                return false;
+            });
+
+
             /* ************* */
             /* submit part 2 */
             /* ************ */
@@ -551,8 +517,9 @@ if(!$_SESSION['is_auth']) {
                 //set main properties
                 exp_json.type = $("input[name=resources_type]:checked").val();
 
-                if($("#txt_name").val() != "")
+                if($("#txt_name").val() != "") {
                     exp_json.name = $("#txt_name").val();
+                }    
 
                 exp_json.duration = parseInt($("#txt_duration").val());
 
@@ -742,12 +709,14 @@ if(!$_SESSION['is_auth']) {
             }
             
             
+            //click on add row alias resources
             $("#btn_add").click(function(){
                 $("#resources_table").append($("#resources_row").clone());
                 return false;
             });
             
             
+            //click on remove row alias resources
             function removeRow(btnDelete) {
                 if($("#resources_table tr").length != 1)
                     $(btnDelete).parent().parent().remove();
@@ -755,12 +724,45 @@ if(!$_SESSION['is_auth']) {
             }
             
             
+            //click on previous button
             $("#btn_previous").click(function(){
                 $("#form_part2").hide();
                 $("#form_part1").show();
                 return false;
             });
             
+            //click on scheduled button
+            $("#cbScheduled").click(function(){
+                if($(this).is(':checked')){
+                    $("#dp1").removeAttr("disabled");
+                    $("#tp1").removeAttr("disabled");
+                    $("#div_scheduled").show();
+                    scheduled = true;
+                }
+                else {
+                    $("#dp1").attr("disabled","disabled");
+                    $("#tp1").attr("disabled","disabled");
+                    $("#div_scheduled").hide();
+                    scheduled = false;
+                }
+            });
+            
+            //click on ressources type radio button
+            $("#div_resources_map").hide();
+            $("input[name=resources_type]").change(function () {
+                if ($(this).val() == "physical") {
+                    $("#div_resources_type").hide();
+                    $("#div_resources_map").show();
+                } else {
+                    $("#div_resources_type").show();
+                    $("#div_resources_map").hide();
+                }
+            });
+
+            //click on a map (open popup)
+            $("#devlille_maps").click(function () {
+                window.open('devlille_maps.php', '', 'resizable=yes, location=no, width=500, height=500, menubar=no, status=no, scrollbars=no, menubar=no');
+            });
             
             // Array Remove - By John Resig (MIT Licensed)
             Array.prototype.remove = function(from, to) {
@@ -769,7 +771,7 @@ if(!$_SESSION['is_auth']) {
                 return this.push.apply(this, rest);
             };
             
-            
+            // Array Clean
             Array.prototype.clean = function(deleteValue) { 
                 for (var i = 0; i < this.length; i++) { 
                     if (this[i] == deleteValue) { 
