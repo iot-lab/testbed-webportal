@@ -689,69 +689,65 @@ if(!$_SESSION['is_auth']) {
             function displayAssociation() {
                 $("#my_assoc").html("");
                 
-                    json_tmp = [];
-    
-                    //build a more simple json for parsing
-                    if(exp_json.profileassociations != null)
-                    {
-                        for(i = 0; i < exp_json.profileassociations.length; i++) {
-                            for(j = 0; j < exp_json.profileassociations[i].nodes.length;j++){
-                                json_tmp.push({"node": exp_json.profileassociations[i].nodes[j],"profilename":exp_json.profileassociations[i].profilename});
-                            }
-                        }
-                    }
-                    
-                    if(exp_json.firmwareassociations != null) {
-                        for(i = 0; i < exp_json.firmwareassociations.length; i++) {
-                            for(j = 0; j < exp_json.firmwareassociations[i].nodes.length;j++){
-                                
-                                for(k = 0; k < json_tmp.length; k++) {
-                                    if(json_tmp[k].node == exp_json.firmwareassociations[i].nodes[j])
-                                        json_tmp[k].firmwarename = exp_json.firmwareassociations[i].firmwarename;
-                                }
-                            }
-                        }
-                    }
-                    
-                    //display
-                    
-                        for(k = 0; k < json_tmp.length; k++) {
-                            if(exp_json.type == "physical") {
-                                $("#my_assoc").append("<tr><td>"+json_tmp[k].node+"</td><td>"+json_tmp[k].profilename+"</td><td>"+json_tmp[k].firmwarename+"</td></tr>");
-                            }
-                            
-                            else {
-                                //$("#my_assoc").append("<tr><td>"+json_tmp[k].node+"</td><td>"+json_tmp[k].profilename+"</td><td>"+json_tmp[k].firmwarename+"</td></tr>");
-    
-                                for(z = 0; z < exp_json.nodes.length; z++) {
-                                    
-                                    if(json_tmp[k].node == exp_json.nodes[z].alias) {
-                                        var archi = exp_json.nodes[z].properties.archi;
-                                        
-                                        var site = "any";
-                                        if(exp_json.nodes[z].properties.site != null)
-                                            site = exp_json.nodes[z].properties.site;
-                                            
-                                        var nbnodes = exp_json.nodes[z].properties.nbnodes;
-                                        
-                                        var mobile = false;
-                                        if(exp_json.nodes[z].properties.mobile != null) {
-                                            mobile = exp_json.nodes[z].properties.mobile;
-                                        }
-                                        
-                                        var ntype = "fixe";
-                                        if(mobile){
-                                            ntype = "mobile";
-                                        }
-                                        
-                                        $("#my_assoc").append("<tr><td>"+archi+"/"+site+"/"+nbnodes+"/"+ntype+"</td><td>"+json_tmp[k].profilename+"</td><td>"+json_tmp[k].firmwarename+"</td></tr>");
-                                    }
-                                }
-                            }
-                            
-                        }
-                    
+                json_tmp = [];
 
+                //build a more simple json for parsing
+                if(exp_json.profileassociations != null)
+                {
+                    for(i = 0; i < exp_json.profileassociations.length; i++) {
+                        for(j = 0; j < exp_json.profileassociations[i].nodes.length;j++){
+                            json_tmp.push({"node": exp_json.profileassociations[i].nodes[j],"profilename":exp_json.profileassociations[i].profilename});
+                        }
+                    }
+                }
+                
+                if(exp_json.firmwareassociations != null) {
+                    for(i = 0; i < exp_json.firmwareassociations.length; i++) {
+                        for(j = 0; j < exp_json.firmwareassociations[i].nodes.length;j++){
+                            
+                            for(k = 0; k < json_tmp.length; k++) {
+                                if(json_tmp[k].node == exp_json.firmwareassociations[i].nodes[j])
+                                    json_tmp[k].firmwarename = exp_json.firmwareassociations[i].firmwarename;
+                            }
+                        }
+                    }
+                }
+                
+                //display
+                for(k = 0; k < json_tmp.length; k++) {
+                    if(exp_json.type == "physical") {
+                        $("#my_assoc").append("<tr><td>"+json_tmp[k].node+"</td><td>"+json_tmp[k].profilename+"</td><td>"+json_tmp[k].firmwarename+"</td></tr>");
+                    }
+                    
+                    else {
+                        //$("#my_assoc").append("<tr><td>"+json_tmp[k].node+"</td><td>"+json_tmp[k].profilename+"</td><td>"+json_tmp[k].firmwarename+"</td></tr>");
+
+                        for(z = 0; z < exp_json.nodes.length; z++) {
+                            
+                            if(json_tmp[k].node == exp_json.nodes[z].alias) {
+                                var archi = exp_json.nodes[z].properties.archi;
+                                
+                                var site = "any";
+                                if(exp_json.nodes[z].properties.site != null)
+                                    site = exp_json.nodes[z].properties.site;
+                                    
+                                var nbnodes = exp_json.nodes[z].properties.nbnodes;
+                                
+                                var mobile = false;
+                                if(exp_json.nodes[z].properties.mobile != null) {
+                                    mobile = exp_json.nodes[z].properties.mobile;
+                                }
+                                
+                                var ntype = "fixe";
+                                if(mobile){
+                                    ntype = "mobile";
+                                }
+                                
+                                $("#my_assoc").append("<tr><td>"+archi+"/"+site+"/"+nbnodes+"/"+ntype+"</td><td>"+json_tmp[k].profilename+"</td><td>"+json_tmp[k].firmwarename+"</td></tr>");
+                            }
+                        }
+                    }
+                }
             }
             
             //click on add row alias resources
