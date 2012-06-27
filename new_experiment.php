@@ -100,7 +100,7 @@ if(!$_SESSION['is_auth']) {
                                     </select> 
                                 </td>
                                 <td>
-                                    <input id="txt_fixe" type="number" class="input-small number" value="1">
+                                    <input id="txt_fixe" type="number" class="input-mini number" value="1">
                                 </td>
                                 <td>
                                     <input id="txt_mobile" type="checkbox" class="input-small mobile">
@@ -300,14 +300,27 @@ if(!$_SESSION['is_auth']) {
                 $("#form_part1").hide();
                 $("#form_part2").show();
         
+                $("#my_nodes").empty();
+                
+                //reset associations
+                if($("input[name=resources_type]:checked").val() != exp_json.type) {
+                    exp_json.profileassociations = [];
+                    exp_json.firmwareassociations = [];
+                }
+    
+                if($("input[name=resources_type]:checked").val() == "alias") {
+                    exp_json.profileassociations = [];
+                    exp_json.firmwareassociations = [];
+                }
+                
+                exp_json.type = $("input[name=resources_type]:checked").val();
+
 
                 //type alias
                 if($("input[name=resources_type]:checked").val() == "alias"){
                     
                     alias_nodes = [];
                     var alias_index = 0;
-                    
-                    $("#my_nodes").empty();
                     
                     for(i = 0; i<$("#resources_table tr").length; i++){
                         var row_rs = {};
@@ -340,94 +353,87 @@ if(!$_SESSION['is_auth']) {
                     }
 
                     exp_json.nodes = alias_nodes;
-                    
-                    return false;
                 }
-
-
-                //build nodes list
-                var devlille_nodes = [];
-                if ($("#devlille_list").val() != "") {
-                    var devlille_list = parseNodebox($("#devlille_list").val());
-                    for (i = 0; i < devlille_list.length; i++) {
-                        if(!isNaN(devlille_list[i]))
-                            devlille_nodes.push("node"+devlille_list[i]+".devlille.senslab.info");
+                else {
+                    //build nodes list
+                    var devlille_nodes = [];
+                    if ($("#devlille_list").val() != "") {
+                        var devlille_list = parseNodebox($("#devlille_list").val());
+                        for (i = 0; i < devlille_list.length; i++) {
+                            if(!isNaN(devlille_list[i]))
+                                devlille_nodes.push("node"+devlille_list[i]+".devlille.senslab.info");
+                        }
                     }
-                }
-                //set nodes list
-                exp_json.nodes = devlille_nodes;
-                
-                $("#my_nodes").empty();
-                for (i = 0; i < exp_json.nodes.length; i++) {
+                    //set nodes list
+                    exp_json.nodes = devlille_nodes;
+                    
+                    
+                    for (i = 0; i < exp_json.nodes.length; i++) {
                         $("#my_nodes").append(new Option(exp_json.nodes[i], exp_json.nodes[i], false, false));
-                }
+                    }
 
-                //check if selected nodes as already an association, if yes -> remove from the list
-                for (i = 0; i < exp_json.nodes.length; i++) {
-                    if(exp_json.profileassociations != null) {
-                        for (j = 0; j < exp_json.profileassociations.length; j++) {
-                            for (k = 0; k < exp_json.profileassociations[j].nodes.length; k++) {
-                                if(exp_json.profileassociations[j].nodes[k] == exp_json.nodes[i]) {
-                                    $('#my_nodes option[value="'+ exp_json.nodes[i]+'"]').remove();
+                    //check if selected nodes as already an association, if yes -> remove from the list
+                    for (i = 0; i < exp_json.nodes.length; i++) {
+                        if(exp_json.profileassociations != null) {
+                            for (j = 0; j < exp_json.profileassociations.length; j++) {
+                                for (k = 0; k < exp_json.profileassociations[j].nodes.length; k++) {
+                                    if(exp_json.profileassociations[j].nodes[k] == exp_json.nodes[i]) {
+                                        $('#my_nodes option[value="'+ exp_json.nodes[i]+'"]').remove();
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                
-                //check associations for removed nodes
-                if(exp_json.profileassociations != null) {
-                    for (i = 0; i < exp_json.profileassociations.length; i++) {
-                        for (j = 0; j < exp_json.profileassociations[i].nodes.length; j++) {
-                            var isHere = false;
-                            for(k = 0; k < exp_json.nodes.length; k++) {
-                                if(exp_json.nodes[k] == exp_json.profileassociations[i].nodes[j])
-                                    isHere = true;
+                    
+                    //check associations for removed nodes
+                    if(exp_json.profileassociations != null) {
+                        for (i = 0; i < exp_json.profileassociations.length; i++) {
+                            for (j = 0; j < exp_json.profileassociations[i].nodes.length; j++) {
+                                var isHere = false;
+                                for(k = 0; k < exp_json.nodes.length; k++) {
+                                    if(exp_json.nodes[k] == exp_json.profileassociations[i].nodes[j])
+                                        isHere = true;
+                                }
+                                
+                                if(!isHere) {
+                                    exp_json.profileassociations[i].nodes[j] = null;
+                                }
                             }
-                            
-                            if(!isHere) {
-                                exp_json.profileassociations[i].nodes[j] = null;
-                                //exp_json.profileassociations[i].nodes.remove(j,1);
+                        }
+                    }
+                    
+                    if(exp_json.firmwareassociations != null) {
+                        for (i = 0; i < exp_json.firmwareassociations.length; i++) {
+                            for (j = 0; j < exp_json.firmwareassociations[i].nodes.length; j++) {
+                                var isHere = false;
+                                for(k = 0; k < exp_json.nodes.length; k++) {
+                                    if(exp_json.nodes[k] == exp_json.firmwareassociations[i].nodes[j])
+                                        isHere = true;
+                                }
+                                
+                                if(!isHere) {
+                                    exp_json.firmwareassociations[i].nodes[j] = null;
+                                }
                             }
+                        }
+                    }
+                    
+                    if(exp_json.profileassociations != null) {
+                        for (i = 0; i < exp_json.profileassociations.length; i++) {
+                            exp_json.profileassociations[i].nodes.clean(null);
+                        }
+                    }
+                    
+                    if(exp_json.firmwareassociations != null) {
+                        for (i = 0; i < exp_json.firmwareassociations.length; i++) {
+                            exp_json.firmwareassociations[i].nodes.clean(null);
                         }
                     }
                 }
                 
-                if(exp_json.firmwareassociations != null) {
-                    for (i = 0; i < exp_json.firmwareassociations.length; i++) {
-                        for (j = 0; j < exp_json.firmwareassociations[i].nodes.length; j++) {
-                            var isHere = false;
-                            for(k = 0; k < exp_json.nodes.length; k++) {
-                                if(exp_json.nodes[k] == exp_json.firmwareassociations[i].nodes[j])
-                                    isHere = true;
-                            }
-                            
-                            if(!isHere) {
-                                exp_json.firmwareassociations[i].nodes[j] = null;
-                                //exp_json.firmwareassociations[i].nodes.remove(j,1);
-                            }
-                        }
-                    }
-                }
-                
-                if(exp_json.profileassociations != null) {
-                    for (i = 0; i < exp_json.profileassociations.length; i++) {
-                        exp_json.profileassociations[i].nodes.clean(null);
-                    }
-                }
-                
-                if(exp_json.firmwareassociations != null) {
-                    for (i = 0; i < exp_json.firmwareassociations.length; i++) {
-                        exp_json.firmwareassociations[i].nodes.clean(null);
-                    }
-                }
-                
-                //TODO: remove a assoc and re-add the nodes
-
                 displayAssociation();
-
                 return false;
-            })
+            });
 
 
             /* ****************** */
