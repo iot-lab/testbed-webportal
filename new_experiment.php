@@ -304,13 +304,17 @@ if(!$_SESSION['is_auth']) {
                 
                 //reset associations
                 if($("input[name=resources_type]:checked").val() != exp_json.type) {
-                    exp_json.profileassociations = [];
-                    exp_json.firmwareassociations = [];
+                    if(exp_json.profileassociations != null) {
+                        exp_json.profileassociations = [];
+                        exp_json.firmwareassociations = [];
+                    }
                 }
     
                 if($("input[name=resources_type]:checked").val() == "alias") {
-                    exp_json.profileassociations = [];
-                    exp_json.firmwareassociations = [];
+                    if(exp_json.profileassociations != null) {
+                        exp_json.profileassociations = [];
+                        exp_json.firmwareassociations = [];
+                    }    
                 }
                 
                 exp_json.type = $("input[name=resources_type]:checked").val();
