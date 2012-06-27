@@ -32,14 +32,12 @@ include("header.php") ?>
     </div>
 </div>
 
-        
-        <?php include('footer.php') ?>
 
+    <?php include('footer.php') ?>
 
     <script type="text/javascript">
         
         var json_exp = [];
-        var withAssoc = false;
         var id = <?php echo $_GET['id']?>
         
         $(document).ready(function(){
@@ -51,7 +49,6 @@ include("header.php") ?>
                 data: {},
                 dataType: "json",
                 success:function(data){
-                    //console.log(data);
 
                     var exp_name = "";
                     if(data.name != null)
@@ -70,7 +67,6 @@ include("header.php") ?>
                     //begin with nodes in an association
                     if(data.profileassociations != null)
                     {
-                        withAssoc = true;
                         for(i = 0; i < data.profileassociations.length; i++) {
                             for(j = 0; j < data.profileassociations[i].nodes.length;j++){
                                 json_exp.push({"node": data.profileassociations[i].nodes[j],"profilename":data.profileassociations[i].profilename});
@@ -90,35 +86,34 @@ include("header.php") ?>
                         }
                     }
                     
-                    //begin nodes without association
-                    
-                        for(l=0; l<data.nodes.length; l++) {
-                            find = false;
-      
-                            if(data.type == "physical") {
-      
-                                for(z=0; z<json_exp.length && !find; z++){
-                                    if(data.nodes[l] == json_exp[z].node) {
-                                        find = true;
-                                    }
-                                }
-                                
-                                if(!find) {
-                                    json_exp.push({"node": data.nodes[l],"profilename":"","firmwarename":""});
+                    //then nodes without association
+                    for(l=0; l<data.nodes.length; l++) {
+                        find = false;
+  
+                        if(data.type == "physical") {
+  
+                            for(z=0; z<json_exp.length && !find; z++){
+                                if(data.nodes[l] == json_exp[z].node) {
+                                    find = true;
                                 }
                             }
-                            else {
-                                for(z=0; z<json_exp.length && !find; z++){
-                                    if(data.nodes[l].alias == json_exp[z].node) {
-                                        find = true;
-                                    }
-                                }
-                                
-                                if(!find) {
-                                    json_exp.push({"node": data.nodes[l].alias,"profilename":"","firmwarename":""});
-                                }
-                            }    
+                            
+                            if(!find) {
+                                json_exp.push({"node": data.nodes[l],"profilename":"","firmwarename":""});
+                            }
                         }
+                        else {
+                            for(z=0; z<json_exp.length && !find; z++){
+                                if(data.nodes[l].alias == json_exp[z].node) {
+                                    find = true;
+                                }
+                            }
+                            
+                            if(!find) {
+                                json_exp.push({"node": data.nodes[l].alias,"profilename":"","firmwarename":""});
+                            }
+                        }    
+                    }
                 
                     
                     //display
