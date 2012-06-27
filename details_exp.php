@@ -99,16 +99,24 @@ include("header.php") ?>
                                 var archi = data.nodes[k].properties.archi;
                                 
                                 var site = "any";
-                                if(data.nodes[k].properties.site != null)
+                                if(data.nodes[k].properties.site != null) {
                                     site = data.nodes[k].properties.site;
+                                }
                                     
                                 var nbnodes = data.nodes[k].properties.nbnodes;
                                 
                                 var mobile = false;
-                                if(data.nodes[k].properties.mobile != null)
-                                    mobile = data.nodes[k].properties.mobile;
                                 
-                                $("#detailsExpRow").append("<tr><td>"+archi+"/"+site+"/"+nbnodes+"/"+mobile+"</td><td>"+json_exp[k].profilename+"</td><td>"+json_exp[k].firmwarename+"</td></tr>")
+                                if(data.nodes[k].properties.mobile != null) {
+                                    mobile = data.nodes[k].properties.mobile;
+                                }    
+                                
+                                var ntype = "fixe";
+                                if(mobile){
+                                    ntype = "mobile";
+                                }
+                                
+                                $("#detailsExpRow").append("<tr><td>"+archi+"/"+site+"/"+nbnodes+"/"+ntype+"</td><td>"+json_exp[k].profilename+"</td><td>"+json_exp[k].firmwarename+"</td></tr>")
                             }
                         }
                     }

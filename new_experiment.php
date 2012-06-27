@@ -76,37 +76,37 @@ if(!$_SESSION['is_auth']) {
                         <div class="" id="div_resources_type">
                             
                             <table style="text-align:center">
-                            <thead>
-                            <tr>
-                                <th><button id="btn_add" class="btn" style="width:50px" >+</button></th>
-                                <th>Archi</th>
-                                <th>Site</th>
-                                <th>Number</th>
-                                <th>Mobile</th>
-                            </tr>
-                            </thead>
-                            <tbody id="resources_table">
-                            <tr id="resources_row">
-                                <td>
-                                    <button class="btn" style="width:50px" onclick="removeRow(this)">-</button>
-                                </td>
-                                <td>
-                                    <select id="lst_archi" class="input-medium archi">
-                                    </select>
-                                </td>
-                                <td>
-                                    <select id="lst_site" class="input-medium site">
-                                    <option value="any">Any</option>
-                                    </select> 
-                                </td>
-                                <td>
-                                    <input id="txt_fixe" type="number" class="input-mini number" value="1">
-                                </td>
-                                <td>
-                                    <input id="txt_mobile" type="checkbox" class="input-small mobile">
-                                </td>
-                                </tr>
-                            </tbody>
+                                <thead>
+                                    <tr>
+                                        <th><button id="btn_add" class="btn" style="width:50px">+</button></th>
+                                        <th>Archi</th>
+                                        <th>Site</th>
+                                        <th>Number</th>
+                                        <th>Mobile</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="resources_table">
+                                    <tr id="resources_row">
+                                        <td>
+                                            <button class="btn" style="width:50px" onclick="removeRow(this);return false;">-</button>
+                                        </td>
+                                        <td>
+                                            <select id="lst_archi" class="input-medium archi">
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select id="lst_site" class="input-medium site">
+                                                <option value="any">Any</option>
+                                            </select> 
+                                        </td>
+                                        <td>
+                                            <input id="txt_fixe" type="number" class="input-mini number" value="1">
+                                        </td>
+                                        <td>
+                                            <input id="txt_mobile" type="checkbox" class="input-small mobile">
+                                        </td>
+                                    </tr>
+                                </tbody>
                             </table>
 
                         </div>
@@ -335,6 +335,11 @@ if(!$_SESSION['is_auth']) {
                         var number = $(row).find(".number").val();
                         var mobile = $(row).find(".mobile").is(':checked');
                         
+                        var ntype = "fixe";
+                        if(mobile){
+                            ntype = "mobile";
+                        }
+                        
                         if(number != 0) {
                             row_rs.properties.nbnodes = number;
                             row_rs.properties.archi = archi;
@@ -346,7 +351,7 @@ if(!$_SESSION['is_auth']) {
 
                             alias_nodes.push(row_rs);
 
-                            $("#my_nodes").append(new Option(archi+"/"+site+"/"+number+"/"+mobile,alias_index));
+                            $("#my_nodes").append(new Option(archi+"/"+site+"/"+number+"/"+ntype,alias_index));
 
                             alias_index++;
                         }
@@ -714,19 +719,22 @@ if(!$_SESSION['is_auth']) {
                     }
             }
             
-            
             //click on add row alias resources
             $("#btn_add").click(function(){
-                $("#resources_table").append($("#resources_row").clone());
+                var t = $("#resources_row").clone();
+                $(t).find(".number").val(1);
+                var t = $("#resources_table").append(t);
+                
+                
                 return false;
             });
             
             
             //click on remove row alias resources
             function removeRow(btnDelete) {
-                if($("#resources_table tr").length != 1)
+                if($("#resources_table tr").length != 1) {
                     $(btnDelete).parent().parent().remove();
-                return false;
+                }
             }
             
             
