@@ -714,9 +714,44 @@ if(!$_SESSION['is_auth']) {
                     }
                     
                     //display
-                    for(k = 0; k < json_tmp.length; k++) {
-                        $("#my_assoc").append("<tr><td>"+json_tmp[k].node+"</td><td>"+json_tmp[k].profilename+"</td><td>"+json_tmp[k].firmwarename+"</td></tr>");
-                    }
+                    
+                        for(k = 0; k < json_tmp.length; k++) {
+                            if(exp_json.type == "physical") {
+                                $("#my_assoc").append("<tr><td>"+json_tmp[k].node+"</td><td>"+json_tmp[k].profilename+"</td><td>"+json_tmp[k].firmwarename+"</td></tr>");
+                            }
+                            
+                            else {
+                                //$("#my_assoc").append("<tr><td>"+json_tmp[k].node+"</td><td>"+json_tmp[k].profilename+"</td><td>"+json_tmp[k].firmwarename+"</td></tr>");
+    
+                                for(z = 0; z < exp_json.nodes.length; z++) {
+                                    
+                                    if(json_tmp[k].node == exp_json.nodes[z].alias) {
+                                        var archi = exp_json.nodes[z].properties.archi;
+                                        
+                                        var site = "any";
+                                        if(exp_json.nodes[z].properties.site != null)
+                                            site = exp_json.nodes[z].properties.site;
+                                            
+                                        var nbnodes = exp_json.nodes[z].properties.nbnodes;
+                                        
+                                        var mobile = false;
+                                        if(exp_json.nodes[z].properties.mobile != null) {
+                                            mobile = exp_json.nodes[z].properties.mobile;
+                                        }
+                                        
+                                        var ntype = "fixe";
+                                        if(mobile){
+                                            ntype = "mobile";
+                                        }
+                                        
+                                        $("#my_assoc").append("<tr><td>"+archi+"/"+site+"/"+nbnodes+"/"+ntype+"</td><td>"+json_tmp[k].profilename+"</td><td>"+json_tmp[k].firmwarename+"</td></tr>");
+                                    }
+                                }
+                            }
+                            
+                        }
+                    
+
             }
             
             //click on add row alias resources

@@ -139,10 +139,16 @@ include("header.php") ?>
                                 var nbnodes = data.nodes[k].properties.nbnodes;
                                 
                                 var mobile = false;
-                                if(data.nodes[k].properties.mobile != null)
+                                if(data.nodes[k].properties.mobile != null) {
                                     mobile = data.nodes[k].properties.mobile;
+                                }
                                 
-                                $("#detailsExpRow").append("<tr><td>"+archi+"/"+site+"/"+nbnodes+"/"+mobile+"</td><td></td><td></td></tr>");
+                                var ntype = "fixe";
+                                if(mobile){
+                                    ntype = "mobile";
+                                }
+                                
+                                $("#detailsExpRow").append("<tr><td>"+archi+"/"+site+"/"+nbnodes+"/"+ntype+"</td><td></td><td></td></tr>");
                             }
                         }
                     }
