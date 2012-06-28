@@ -54,7 +54,7 @@ include("header.php") ?>
                     if(data.name != null)
                         exp_name = data.name;
 
-                    $("#detailsExpSummary").html("<b>Experiment:</b> " + id + "<br/>");
+                    $("#detailsExpSummary").html("<b>Experiment:</b> <a href=\"monika?job=" + id + "\">" + id + "</a><br/>");
                     $("#detailsExpSummary").append("<b>Name:</b> " + exp_name + "<br/>");
                     $("#detailsExpSummary").append("<b>Duration (min):</b> " + data.duration + "<br/>");
                     $("#detailsExpSummary").append("<b>Number of Nodes:</b> " + data.nodes.length + "<br/>");
