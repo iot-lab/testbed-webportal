@@ -1,7 +1,7 @@
 <?php 
 session_start();
 
-if($_SESSION['is_auth']) {
+if(isset($_SESSION['is_auth']) && $_SESSION['is_auth']) {
     header("location: dashboard.php");
     exit();
 }

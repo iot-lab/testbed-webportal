@@ -80,7 +80,7 @@ input:focus, textarea:focus {
       <div class="nav-collapse">
             <ul class="nav">
                 <li class="divider-vertical"></li>
-                <?php if($_SESSION['is_auth']) { ?>
+                <?php if(isset($_SESSION['is_auth']) && $_SESSION['is_auth']) { ?>
                     <li><a href="."><i class="icon-home icon-white"></i> Home</a></li>  
                     <li class="divider-vertical"></li>
                     <li><a href="new_experiment.php">New Experiment</a></li>
@@ -95,7 +95,7 @@ input:focus, textarea:focus {
             </ul> 
       <ul class="nav pull-right">
       
-          <?php if($_SESSION['is_auth']) { ?>
+          <?php if(isset($_SESSION['is_auth']) && $_SESSION['is_auth']) { ?>
             <li class="divider-vertical"></li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">User <?php echo "[".$_SESSION['login']."]" ?> <b class="caret"></b></a>
@@ -116,7 +116,7 @@ input:focus, textarea:focus {
                 </ul>
             </li>
       
-          <?php if($_SESSION['is_admin']) { ?>
+          <?php if(isset($_SESSION['is_admin']) && $_SESSION['is_admin']) { ?>
             <li class="divider-vertical"></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
@@ -132,7 +132,7 @@ input:focus, textarea:focus {
   </div>
 </div>
 
-<?php if($_SESSION['is_auth']) { ?>   
+<?php if(isset($_SESSION['is_auth']) && $_SESSION['is_auth']) { ?>   
     <div id="password_modal" class="modal hide fade">
         <div class="modal-header">
           <a class="close" data-dismiss="modal">×</a>
