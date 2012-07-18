@@ -9,10 +9,10 @@ if(!$_SESSION['is_auth'] || ($_SESSION['login'] == "" || $_SESSION['password'] =
 }
 
 /* Get total */
-$url="https://localhost/rest/experiments?total";
+$url="https://localhost/rest/experiments";
 
 $handle = curl_init();
-curl_setopt($handle, CURLOPT_URL, $url);
+curl_setopt($handle, CURLOPT_URL, $url."?total");
 curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
 curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
 
