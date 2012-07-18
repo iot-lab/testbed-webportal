@@ -426,9 +426,9 @@ include("header.php") ?>
             success:function(data){
                 $("#edit_modal").modal('hide');
                 $("#div_error_edit").html("");
-                oTable.fnUpdate (selectedUser.firstName, id, 1, false);
-                oTable.fnUpdate (selectedUser.lastName, id, 2, false);
-                oTable.fnUpdate (selectedUser.email, id, 3, true);
+                oTable.fnUpdate (selectedUser.firstName, document.getElementById(id), 1, false);
+                oTable.fnUpdate (selectedUser.lastName, document.getElementById(id), 2, false);
+                oTable.fnUpdate (selectedUser.email, document.getElementById(id), 3, true);
             },
             error:function(XMLHttpRequest, textStatus, errorThrows){
                 $("#div_error_edit").html("An error occurred while saving user modifications");
