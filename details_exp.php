@@ -18,8 +18,10 @@ include("header.php") ?>
     <div id="detailsExp">
         <p id="detailsExpSummary"></p>
         
-        <p><button class="btn btn-danger" id="btnCancel" onclick="cancelExperiment()">Cancel</button></p>
-        
+        <p>
+            <button class="btn btn-danger" id="btnCancel" onclick="cancelExperiment()">Cancel</button>
+            <a href="rest/experiment/<?php echo $_GET['id']?>?data" class="btn" id="btnDownload">Download</a>
+        </p>
         
         <table class="table table-striped table-bordered table-condensed" style="width:500px">
         <thead>
