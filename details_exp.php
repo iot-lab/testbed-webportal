@@ -58,6 +58,15 @@ include("header.php") ?>
                     if(data.name != null)
                         exp_name = data.name;
 
+                    state = data.state;
+                    if(state == "Running" || state == "Waiting") {
+                        $("#btnCancel").attr("disabled",false);
+                    }
+                    else {
+                        $("#btnCancel").attr("disabled",true);
+                    }
+
+
                     $("#detailsExpSummary").html("<b>Experiment:</b> <a href=\"monika?job=" + id + "\">" + id + "</a><br/>");
                     $("#detailsExpSummary").append("<b>Name:</b> " + exp_name + "<br/>");
                     $("#detailsExpSummary").append("<b>Duration (min):</b> " + data.duration + "<br/>");
@@ -160,25 +169,6 @@ include("header.php") ?>
                     $('#details_modal').modal('show');
                 }
             });
-            
-            $.ajax({
-                url: "/rest/experiment/"+id+"?state",
-                type: "GET",
-                data: {},
-                dataType: "json",
-                success:function(data){
-                    state = data.state;
-                    if(state == "Running" || state == "Waiting") {
-                        $("#btnCancel").attr("disabled",false);
-                    }
-                    else {
-                        $("#btnCancel").attr("disabled",true);
-                    }
-                },
-                error:function(XMLHttpRequest, textStatus, errorThrows){
-                }
-            });
-            
     });
 
     function cancelExperiment(){
