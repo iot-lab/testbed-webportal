@@ -8,22 +8,11 @@ if(!$_SESSION['is_auth'] || ($_SESSION['login'] == "" || $_SESSION['password'] =
     exit();
 }
 
-//echo (strrpos(basename($_SERVER['HTTP_REFERER']), "admin_manageexps.php")===FALSE);
-
-
-$user="";
-$url="https://localhost/rest/experiments";
-if($_SESSION['is_admin'] && !(strrpos(basename($_SERVER['HTTP_REFERER']), "admin_manageexps.php")===FALSE)) {
-	if(isset($_GET['user'])) $user="&user=".$_GET['user'];
-	$url="https://localhost/rest/admin/experiments";
-}
-
-
 /* Get total */
-$urlTotal = $url."?total".$user;
+$url="https://localhost/rest/experiments?total";
 
 $handle = curl_init();
-curl_setopt($handle, CURLOPT_URL, $urlTotal);
+curl_setopt($handle, CURLOPT_URL, $url);
 curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
 curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
 
