@@ -18,6 +18,9 @@ include("header.php") ?>
     <div id="detailsExp">
         <p id="detailsExpSummary"></p>
         
+        <p><button class="btn btn-danger" id="btnCancel" onclick="cancelExperiment()">Cancel</button></p>
+        
+        
         <table class="table table-striped table-bordered table-condensed" style="width:500px">
         <thead>
             <tr>
@@ -38,7 +41,8 @@ include("header.php") ?>
     <script type="text/javascript">
         
         var json_exp = [];
-        var id = <?php echo $_GET['id']?>
+        var id = <?php echo $_GET['id']?>;
+        var state = "";
         
         $(document).ready(function(){
 
@@ -156,7 +160,46 @@ include("header.php") ?>
                     $('#details_modal').modal('show');
                 }
             });
+            
+            $.ajax({
+                url: "/rest/experiment/"+id+"?state",
+                type: "GET",
+                data: {},
+                dataType: "json",
+                success:function(data){
+                    state = data.state;
+                    if(state == "Running" || state == "Waiting") {
+                        $("#btnCancel").attr("disabled",false);
+                    }
+                    else {
+                        $("#btnCancel").attr("disabled",true);
+                    }
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrows){
+                }
+            });
+            
     });
+
+    function cancelExperiment(){
+        if(confirm("Cancel Experiment?")) {
+            
+            $.ajax({
+                url: "/rest/experiment/" + id,
+                type: "DELETE",
+                contentType: "application/json",
+                dataType: "text",
+            
+                success:function(data){
+                    $("#btnCancel").attr("disabled",true);
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrows){
+                    alert("error: " + errorThrows)
+                }
+            });
+        }
+    }
+
 
     </script>
 
