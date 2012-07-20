@@ -12,9 +12,13 @@ if(!$_SESSION['is_auth']) {
 <link rel="stylesheet" href="css/datepicker.css" type="text/css"/>
 <link rel="stylesheet" href="css/timepicker.css" type="text/css"/>
 
-        <div class="container">
-            <h2>New experiment</h2>
-            
+    <div class="container">
+              
+        <h2>New experiment</h2>      
+                
+        <div class="row">
+            <div class="span9">
+                
             <div class="alert" id="txt_notif">
                 <button class="close" data-dismiss="alert">×</button>
                 <p id="txt_notif_msg"></p>
@@ -68,9 +72,9 @@ if(!$_SESSION['is_auth']) {
                     <label class="control-label">Resources</label>
                     <div class="controls">
                         
-                        <input type="radio" name="resources_type" id="optionsRadiosType" value="alias" checked=""> by alias
+                        <input type="radio" name="resources_type" id="optionsRadiosType" value="alias" > by alias
 
-                        <input type="radio" name="resources_type" id="optionsRadiosMaps" value="physical"> physical   
+                        <input type="radio" name="resources_type" id="optionsRadiosMaps" value="physical" checked=""> physical   
                             
                         <!-- by alias -->
                         <div class="" id="div_resources_type">
@@ -168,11 +172,31 @@ if(!$_SESSION['is_auth']) {
                 
             </form>
             
+</div> <!-- span -->
+
+    <div class="span3">
+        <div id="help1" class="alert alert-info">
+            <img src="img/help.png"> To create an new experiment you can: set a <b>name</b>, 
+            set a <b>duration</b>, run it <b>as soon as possible</b> or <b>scheduled</b>.
+        </div>
+        
+        <div id="help2" class="alert alert-info">
+            <img src="img/help.png"> You can choose <b>physical</b> resources (with node name) or by <b>alias</b> (with properties). Then click <b>Next</b> to make firmwares/profiles associations.
+        </div>
+        
+        <div id="help3" class="alert alert-info">
+            <img src="img/help.png"> Make association beetwen node, profile and firmware by selecting items and click <b>Add Association</b>.
+            When finnish, click to <b>Submit</b> button to submit your experiment.
+        </div>
+        
+    </div>
+
+</div> <!-- row -->   
+    
             
         <?php include('footer.php') ?>
         
         </div>
-        
         
         <script type="text/javascript">
 
@@ -208,6 +232,10 @@ if(!$_SESSION['is_auth']) {
                 $("#txt_notif").hide();
                 $("#expState").modal('hide');
                 $("#form_part2").hide();
+
+                $("#help1").show();
+                $("#help2").show();
+                $("#help3").hide();
 
                 //date picker
                 var now = new Date();
@@ -302,6 +330,10 @@ if(!$_SESSION['is_auth']) {
         
                 $("#my_nodes").empty();
                 
+                $("#help1").hide();
+                $("#help2").hide();
+                $("#help3").show();
+                
                 //reset associations
                 if($("input[name=resources_type]:checked").val() != exp_json.type) {
                     if(exp_json.profileassociations != null) {
@@ -351,7 +383,7 @@ if(!$_SESSION['is_auth']) {
                             if(site != "any")   
                                  row_rs.properties.site = site;
                             if(mobile)
-                                row_rs.properties.mobile = "true";
+                                row_rs.properties.mobile = 1;
 
                             alias_nodes.push(row_rs);
 
@@ -373,10 +405,10 @@ if(!$_SESSION['is_auth']) {
                                 devlille_nodes.push("node"+devlille_list[i]+".devlille.senslab.info");
                         }
                     }
+                    
                     //set nodes list
                     exp_json.nodes = devlille_nodes;
-                    
-                    
+                                    
                     for (i = 0; i < exp_json.nodes.length; i++) {
                         $("#my_nodes").append(new Option(exp_json.nodes[i], exp_json.nodes[i], false, false));
                     }
@@ -456,6 +488,7 @@ if(!$_SESSION['is_auth']) {
                 var firmware_set = $("#my_firmwares").val();
 
                 if (nodes_set == null || profil_set == null || firmware_set == null) {
+                    alert("Please select nodes, profile and firmware");
                     return false;
                 }
                 $("#my_nodes option:selected").remove();
@@ -777,6 +810,11 @@ if(!$_SESSION['is_auth']) {
             $("#btn_previous").click(function(){
                 $("#form_part2").hide();
                 $("#form_part1").show();
+                
+                $("#help1").show();
+                $("#help2").show();
+                $("#help3").hide();
+                
                 return false;
             });
             
@@ -797,7 +835,7 @@ if(!$_SESSION['is_auth']) {
             });
             
             //click on ressources type radio button
-            $("#div_resources_map").hide();
+            $("#div_resources_type").hide();
             $("input[name=resources_type]").change(function () {
                 if ($(this).val() == "physical") {
                     $("#div_resources_type").hide();
