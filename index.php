@@ -9,7 +9,7 @@ include("header.php");
 
 ?>
 
-	<div class="container">
+    <div class="container">
 
       <div class="row" id="login_div">
         <div class="span12">
@@ -20,9 +20,10 @@ include("header.php");
             <form class="well form-inline" id="login_form">
               Login: <input id="txt_login" type="text" class="input-small" placeholder="Login">
               Password: <input id="txt_password" type="password" class="input-small" placeholder="Password">
-              <button id="btn_login" type="submit" class="btn">Log in</button>
+              <button id="btn_login" type="submit" class="btn btn-primary">Log in</button>
             </form>
-        	<a href="#" onClick="showSignup()">Ask for an account</a> - <a href="#" onClick="showReset()">Forgot your password?</a>
+            
+            <a href="#" onClick="showSignup()">Ask for an account</a> - <a href="#" onClick="showReset()">Forgot your password?</a>
 
         </div>
 
@@ -35,10 +36,10 @@ include("header.php");
            <div class="alert alert-error" id="div_error_reset" style="display:none"></div>
            
             <form class="well form-inline" id="reset_form">
-				Enter your email: <input id="txt_email_reset" class="input-xlarge" type="email" required="required">
-           	  <button id="btn_reset" class="btn btn-primary" type="submit">Submit</button>
+                Enter your email: <input id="txt_email_reset" class="input-xlarge" type="email" required="required">
+                <button id="btn_reset" class="btn btn-primary" type="submit">Submit</button>
             </form>
-        	<a href="#" onClick="showSignup()">Ask for an account</a> - <a href="#" onClick="showLogin()">Login</a>
+            <a href="#" onClick="showSignup()">Ask for an account</a> - <a href="#" onClick="showLogin()">Login</a>
 
         </div>
       </div>
@@ -120,7 +121,6 @@ include("header.php");
                     document.getElementById('captcha').focus();"
                     id="change-image" title="Click to change text">
                     <img style="border:solid 1px" src="captcha/captcha.php" id="captcha-img" /></a>
-                
             </div>
           </div>
 
@@ -128,13 +128,11 @@ include("header.php");
             <button id="btn_signup" class="btn btn-primary" type="submit">Submit</button>
 
             </form>
-        	<a href="#" onClick="showReset()">Forgot your password?</a> - <a href="#" onClick="showLogin()">Login</a>
+            <a href="#" onClick="showReset()">Forgot your password?</a> - <a href="#" onClick="showLogin()">Login</a>
 
         </div>
       </div>
       
-      
-      <hr>
 
 <?php include('footer.php') ?>
 
@@ -142,63 +140,63 @@ include("header.php");
     
     $(document).ready(function(){
 
-		// submit login
+        // submit login
         $('#login_form').bind('submit', function(){
-	  
-	    
-	        var userlogin = {"login":$("#txt_login").val(),"password":$("#txt_password").val()};
-	        
-	        //console.log(userlogin);
-	
-	        $.ajax({
-	            url: "auth.php",
-	            type: "POST",
-	            data: userlogin,
-	            success:function(response){
-	                window.location.href=".";
-	            },
-	            error:function(XMLHttpRequest, textStatus, errorThrows){
-	                $("#div_error_login").addClass("alert-error");
-	                $("#div_error_login").html("Wrong login or password");
-	                $("#div_error_login").show();
-	            }
-	        });
-	        return false;
-	    });
+      
+        
+            var userlogin = {"login":$("#txt_login").val(),"password":$("#txt_password").val()};
+            
+            //console.log(userlogin);
 
-	    // submit reset password 
+            $.ajax({
+                url: "auth.php",
+                type: "POST",
+                data: userlogin,
+                success:function(response){
+                    window.location.href=".";
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrows){
+                    $("#div_error_login").addClass("alert-error");
+                    $("#div_error_login").html("Wrong login or password");
+                    $("#div_error_login").show();
+                }
+            });
+            return false;
+        });
+
+        // submit reset password 
         $('#reset_form').bind('submit', function(){
 
-	        var user = {
-	            "email":$("#txt_email_reset").val()
-	        };
-	        
-	        //console.log(user);
-	        
-	        $.ajax({
-	            url: "/rest/users/"+$("#txt_email_reset").val()+"?resetpassword",
-	            type: "PUT",
-	            dataType: "text",
-	            contentType: "application/json; charset=utf-8",
-	            data: JSON.stringify(user),
-	            success:function(data){
-	                $("#div_error_reset").show();
-	                $("#div_error_reset").removeClass("alert-error");
-	                $("#div_error_reset").addClass("alert-success");
-	                $("#div_error_reset").html("Your password was reset, check your inbox");
-	            },
-	            error:function(XMLHttpRequest, textStatus, errorThrows){
-	                $("#div_error_reset").show();
-	                $("#div_error_reset").removeClass("alert-success");
-	                $("#div_error_reset").addClass("alert-error");
-	                $("#div_error_reset").html("This email was not found");
-	            }
-	        });
-	        
-	        return false;
-	     });
+            var user = {
+                "email":$("#txt_email_reset").val()
+            };
+            
+            //console.log(user);
+            
+            $.ajax({
+                url: "/rest/users/"+$("#txt_email_reset").val()+"?resetpassword",
+                type: "PUT",
+                dataType: "text",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(user),
+                success:function(data){
+                    $("#div_error_reset").show();
+                    $("#div_error_reset").removeClass("alert-error");
+                    $("#div_error_reset").addClass("alert-success");
+                    $("#div_error_reset").html("Your password was reset, check your inbox");
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrows){
+                    $("#div_error_reset").show();
+                    $("#div_error_reset").removeClass("alert-success");
+                    $("#div_error_reset").addClass("alert-error");
+                    $("#div_error_reset").html("This email was not found");
+                }
+            });
+            
+            return false;
+        });
 
-	    // submit sign up
+        // submit sign up
         $('#signup_form').bind('submit', function(){
         
             var userregister = {
@@ -221,14 +219,14 @@ include("header.php");
                 data: userregister,
                 success:function(data){
                     $('#signup_form').each (function(){
-                   		this.reset();
-                   	});
+                        this.reset();
+                    });
                     document.getElementById('captcha-img').src='captcha/captcha.php?'+Math.random();
                     $("#div_error_signup").show();
                     $("#div_error_signup").removeClass("alert-error");
                     $("#div_error_signup").addClass("alert-success");
                     $("#div_error_signup").html("Your registration has been saved and submitted to validation by an administrator.");
-            	},
+                },
                 error:function(XMLHttpRequest, textStatus, errorThrows){
                     if(XMLHttpRequest.status == 409)
                     {
@@ -255,7 +253,7 @@ include("header.php");
                 }
             });
             
-        	return false;
+            return false;
         
         });
         

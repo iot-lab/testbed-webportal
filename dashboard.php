@@ -13,8 +13,11 @@ include("header.php") ?>
 
 <div class="row">
     <div class="span9">
+        
         <h2>Experiment List</h2>
+        
         <a href="new_experiment.php" class="btn btn-new">New Experiment</a>
+        
         <div class="alert alert-error" id="div_msg" style="display:none"></div>
         <table id="tbl_exps" class="table table-bordered table-striped table-condensed" style="display:none">
             <thead>
@@ -46,7 +49,13 @@ include("header.php") ?>
               <div class="bar" style="width: 60%;"></div>
             </div>
           </p>
+          
+        <div class="alert alert-info">
+            <img src="img/help.png"> Click on an experiment to manage it or click <b>New Experiment</b> to create a new one.
+        </div>
+          
       </div>
+
 </div>
     
     <?php include('footer.php') ?>
