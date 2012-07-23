@@ -30,10 +30,10 @@ if(!$_SESSION['is_auth']) {
             <h3>Experiment state</h3>
           </div>
           <div class="modal-body">
-            <p id="expStateMsg"></p></p>
+            <p id="expStateMsg"></p>
           </div>
           <div class="modal-footer">
-            <a href="#" class="btn" data-dismiss="modal">Close</a>
+            <a href="#" class="btn" data-dismiss="modal" onClick="redirectDashboard();">Close</a>
           </div>
         </div>
 
@@ -636,11 +636,13 @@ if(!$_SESSION['is_auth']) {
                         //url: "dump.php",
                         success: function (data_server) {
                             $("#expState").modal('show');
-                            $("#expStateMsg").html(data_server);
+                            $("#expStateMsg").html("<h3>Your experiment is submit successfully</h3>");
+                            $("#expStateMsg").append(data_server);
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrows) {
                             $("#expState").modal('show');
-                            $("#expStateMsg").html(textStatus + ": " + errorThrows);
+                            $("#expStateMsg").html("<h3 style='color:red'>Error</h3>");
+                            $("#expStateMsg").append(textStatus + ": " + errorThrows);
                         }
                     });
                 }
@@ -654,11 +656,13 @@ if(!$_SESSION['is_auth']) {
                         url: "/rest/experiment?body",
                         success: function (data_server) {
                             $("#expState").modal('show');
-                            $("#expStateMsg").html(data_server);
+                            $("#expStateMsg").html("<h3>Your experiment is submit successfully</h3>");
+                            $("#expStateMsg").append(data_server);
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrows) {
                             $("#expState").modal('show');
-                            $("#expStateMsg").html(textStatus + ": " + errorThrows);
+                            $("#expStateMsg").html("<h3 style='color:red'>Error</h3>");
+                            $("#expStateMsg").append(textStatus + ": " + errorThrows);
                         }
                     });
                     
@@ -873,6 +877,10 @@ if(!$_SESSION['is_auth']) {
                 } 
                 return this; 
             };  
+            
+            function redirectDashboard() {
+                window.location.href = ".";
+            }
             
         </script>
         
