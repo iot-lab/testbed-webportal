@@ -29,7 +29,7 @@ if(!$_SESSION['is_auth']) {
                     </p>
                 </div>
             
-                <div class="span8">
+                <div class="span6">
              
                     <form class="well form-horizontal" id="form_part">
 
@@ -135,9 +135,18 @@ if(!$_SESSION['is_auth']) {
 
                     </form>
                 </div> 
+                
+                
+    
+                <div class="span3">
+                    <div class="alert alert-info">
+                        <img src="img/help.png"> To create an new profile fill the form and click <b>Save</b>. 
+                        To edit a profile, click on the name, change settings and click <b>Save</b>.
+                    </div>
+                </div>
+                
             </div>
     
-        
         <?php include('footer.php') ?>
         
 </div>
