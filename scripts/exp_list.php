@@ -8,15 +8,11 @@ if(!$_SESSION['is_auth'] || ($_SESSION['login'] == "" || $_SESSION['password'] =
     exit();
 }
 
-$request="";
-if(isset($_GET['user'])) $request="&user=".$_GET['user'];
-
-
 /* Get total */
-$url = "https://localhost/rest/admin/experiments?total".$request;
+$url="https://localhost/rest/experiments";
 
 $handle = curl_init();
-curl_setopt($handle, CURLOPT_URL, $url);
+curl_setopt($handle, CURLOPT_URL, $url."?total");
 curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
 curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
 
@@ -33,19 +29,20 @@ $code = curl_getinfo($handle, CURLINFO_HTTP_CODE);
 curl_close($handle);
 
 if($code == 200) {
-	$response2=json_decode($response);
-	$total=$response2->{'upcoming'}+$response2->{'terminated'}+$response2->{'running'};
+    $response2=json_decode($response);
+    $total=$response2->{'upcoming'}+$response2->{'terminated'}+$response2->{'running'};
 }
 
+/* Get Exp list regarding pagination and sort desc */
 $offset = $total - $_GET['iDisplayLength'] - $_GET['iDisplayStart'];
 if($offset<0) $offset = 0;
 $limit = $_GET['iDisplayLength'];
 if($total<$_GET['iDisplayLength']+$_GET['iDisplayStart']) $limit = $total % $_GET['iDisplayLength'];
 
 
-$url = "https://localhost/rest/admin/experiments?state=Terminated,Error,Running,Finishing,Resuming,toError,Waiting,Launching,Hold,toLaunch,toAckReservation,Suspended&limit=".$limit."&offset=".$offset.$request;
+$urlList = $url."?state=Terminated,Error,Running,Finishing,Resuming,toError,Waiting,Launching,Hold,toLaunch,toAckReservation,Suspended&limit=".$limit."&offset=".$offset.$user;
 $handle = curl_init();
-curl_setopt($handle, CURLOPT_URL, $url);
+curl_setopt($handle, CURLOPT_URL, $urlList);
 curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
 curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
 
@@ -66,7 +63,7 @@ if($code != 200) {
     header("HTTP/1.0 404 Not Found");
     exit();
 } else {
-	$response2=json_decode($response);
+    $response2=json_decode($response);
     $responseToWebClient='{"iTotalRecords":"'.$response2->{'total'}.'","iTotalDisplayRecords":"'.$response2->{'total'}.'",
         "sEcho":"'.$_GET['sEcho'].'","items":'.json_encode(array_reverse($response2->{'items'})).'}';
 	echo $responseToWebClient;

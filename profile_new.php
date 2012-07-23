@@ -140,8 +140,8 @@ if(!$_SESSION['is_auth']) {
     
                 <div class="span3">
                     <div class="alert alert-info">
-                        <img src="img/help.png"> To create an new profile fill the form and click <b>Save</b>. 
-                        To edit a profile, click on the name, change settings and click <b>Save</b>.
+                        <img src="img/help.png"> To <b>create</b> an new profile fill the form and click <b>Save</b>. 
+                        <br/><br/>To <b>edit</b> a profile, click on the name, change settings, and click <b>Save</b>.
                     </div>
                 </div>
                 

@@ -6,7 +6,7 @@ $_SESSION = array();
 include("header.php");
 
 ?>
-	<div class="container">
+    <div class="container">
 
       <div class="row" id="login_div">
         <div class="span12">

@@ -149,7 +149,7 @@ include("header.php");
             //console.log(userlogin);
 
             $.ajax({
-                url: "auth.php",
+                url: "scripts/auth.php",
                 type: "POST",
                 data: userlogin,
                 success:function(response){
@@ -214,7 +214,7 @@ include("header.php");
             //console.log(userregister);
             
             $.ajax({
-                url: "captcha.php",
+                url: "scripts/captcha.php",
                 type: "POST",
                 data: userregister,
                 success:function(data){

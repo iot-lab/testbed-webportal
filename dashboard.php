@@ -16,7 +16,7 @@ include("header.php") ?>
         
         <h2>Experiment List</h2>
         
-        <a href="new_experiment.php" class="btn btn-new">New Experiment</a>
+        <a href="exp_new.php" class="btn btn-new">New Experiment</a>
         
         <div class="alert alert-error" id="div_msg" style="display:none"></div>
         <table id="tbl_exps" class="table table-bordered table-striped table-condensed" style="display:none">
@@ -116,7 +116,7 @@ include("header.php") ?>
             "sDom": "<'row'<'span7'l><'span7'f>r>t<'row'<'span7'i><'span7'p>>",
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "list_experiments.php",
+            "sAjaxSource": "scripts/exp_list.php",
             "aoColumns": [
                 {"mDataProp": "id" },
                 {"mDataProp": "name" },
@@ -176,7 +176,7 @@ include("header.php") ?>
 
         $('#tbl_exps tbody tr').live('click',function () {
             var aData = oTable.fnGetData( this );
-            window.location.href="details_exp.php?id="+aData['id'];
+            window.location.href="exp_details.php?id="+aData['id'];
         });
         $('#div_msg').hide();
         $('#tbl_exps').show();

@@ -119,7 +119,7 @@ if (isset($_GET['user'])) {
             "sDom": "<'row'<'span7'l><'span7'f>r>t<'row'<'span7'i><'span7'p>>",
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "admin_list_experiments.php",
+            "sAjaxSource": "scripts/admin_exp_list.php",
 			"fnServerParams": <?php echo $request_exps; ?>,
 			"bPaginate": true,
             "aoColumns": [
@@ -181,7 +181,7 @@ if (isset($_GET['user'])) {
 
         $('#tbl_exps tbody tr').live('click',function () {
             var aData = oTable.fnGetData( this );
-            window.location.href="admin_details_exp.php?id="+aData['id'];
+            window.location.href="admin_exp_details.php?id="+aData['id'];
         });
         
         $('#div_msg').hide();

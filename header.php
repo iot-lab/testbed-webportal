@@ -83,9 +83,9 @@ input:focus, textarea:focus {
                 <?php if(isset($_SESSION['is_auth']) && $_SESSION['is_auth']) { ?>
                     <li><a href="."><i class="icon-home icon-white"></i> Home</a></li>  
                     <li class="divider-vertical"></li>
-                    <li><a href="new_experiment.php">New Experiment</a></li>
+                    <li><a href="exp_new.php">New Experiment</a></li>
                     <li class="divider-vertical"></li>
-                    <li><a href="new_profile.php">Manage Profiles</a></li> 
+                    <li><a href="profile_new.php">Manage Profiles</a></li> 
                 <?php } else { ?>
                     <li><a href="#" onClick="showLogin()">Login</a></li>
                     <li class="divider-vertical"></li>
@@ -121,8 +121,8 @@ input:focus, textarea:focus {
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="admin_manageusers.php">Users</a></li>
-                <li><a href="admin_manageexps.php">Experiments</a></li>
+                <li><a href="admin_users.php">Users</a></li>
+                <li><a href="admin_exps.php">Experiments</a></li>
               </ul>
             </li>
           <?php } ?>

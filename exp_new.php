@@ -181,12 +181,17 @@ if(!$_SESSION['is_auth']) {
         </div>
         
         <div id="help2" class="alert alert-info">
-            <img src="img/help.png"> You can choose <b>physical</b> resources (with node name) or by <b>alias</b> (with properties). Then click <b>Next</b> to make firmwares/profiles associations.
+            <img src="img/help.png"> You can choose <b>physical</b> resources (with node name) or by <b>alias</b> (with properties). 
+            <br/><br/>For <b>physical</b> resources you can chose your nodes on a map. 
+            <br/><br/>Then click <b>Next</b> to go to the firmwares/profiles associations.
         </div>
         
         <div id="help3" class="alert alert-info">
             <img src="img/help.png"> Make association beetwen node, profile and firmware by selecting items and click <b>Add Association</b>.
-            When finnish, click to <b>Submit</b> button to submit your experiment.
+            
+            <br/><br/>Click to <b>upload</b> button to add a firmware to the list.
+            
+            <br/><br/>When finnish, click to <b>Submit</b> button to submit your experiment.
         </div>
         
     </div>
@@ -848,7 +853,7 @@ if(!$_SESSION['is_auth']) {
 
             //click on a map (open popup)
             $("#devlille_maps").click(function () {
-                window.open('devlille_maps.php', '', 'resizable=yes, location=no, width=500, height=500, menubar=no, status=no, scrollbars=no, menubar=no');
+                window.open('maps_lille.php', '', 'resizable=yes, location=no, width=500, height=500, menubar=no, status=no, scrollbars=no, menubar=no');
             });
             
             // Array Remove - By John Resig (MIT Licensed)
