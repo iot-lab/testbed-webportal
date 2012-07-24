@@ -39,7 +39,7 @@ if(!$_SESSION['is_auth']) {
                                 <input id="txt_name" type="text" class="input-small" required="required">
                             </div>
                         </div>
-
+				<div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
                     <div class="control-group">
                         <label class="control-label">Power mode</label>
                         <div class="controls">
@@ -53,8 +53,8 @@ if(!$_SESSION['is_auth']) {
                           </label>
                         </div>
                       </div>
-
-
+				</div>
+				<div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
                 <div class="control-group">
                     <label class="control-label" for="inlineCheckboxes">Consumption</label>
                     <div class="controls">
@@ -82,9 +82,9 @@ if(!$_SESSION['is_auth']) {
                       </select>
                     </div>
                   </div>
+				</div>
 
-
-
+				<div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
                 <div class="control-group">
                     <label class="control-label" for="inlineCheckboxes">Sensors</label>
                     <div class="controls">
@@ -107,8 +107,9 @@ if(!$_SESSION['is_auth']) {
                       </select>
                     </div>
                   </div>
-
-
+				</div>
+                  
+				<div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
                 <div class="control-group">
                     <label class="control-label" for="inlineCheckboxes">Radio</label>
                     <div class="controls">
@@ -129,7 +130,7 @@ if(!$_SESSION['is_auth']) {
                       </select>
                     </div>
                   </div>
-
+				</div>
 
                    <button id="btn_submit" class="btn btn-primary" type="submit">Save</button>
 
