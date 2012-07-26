@@ -149,9 +149,14 @@ if(!$_SESSION['is_auth']) {
                                 <td><select id="my_firmwares" size="15"></select></td>
                             </tr>
                             <tr>
+                                <td></td>
+                                <td><button id="btn_refresh" class="btn">Refresh</button></td>
+                                <td><input type="file" id="files" name="files[]" multiple /></td>
+                            </tr>
+                            <tr>
                                 <td><button id="btn_assoc" class="btn">Add Association</button></td>
                                 <td></td>
-                                <td><input type="file" id="files" name="files[]" multiple /></td>
+                                <td></td>
                             </tr>
                         </tbody>
                     </table>
@@ -261,34 +266,7 @@ if(!$_SESSION['is_auth']) {
                 //file upload event
                 document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
-                //get all profiles
-                $.ajax({
-                    type: "GET",
-                    dataType: "text",
-                    contentType: "application/json; charset=utf-8",
-                    url: "/rest/profiles",
-                    success: function (data_server) {
-                        
-                        if(data_server == "") {
-                            //no profile
-                            return false;
-                        }
-                        
-                        my_profiles = JSON.parse(data_server);
-                        
-                        //fill profiles list
-                        for(i = 0; i < my_profiles.length; i++) {
-                            $("#my_profiles").append(new Option(my_profiles[i].profilename,my_profiles[i].profilename));
-                        }
-                    },
-                    error: function (XMLHttpRequest, textStatus, errorThrows) {
-                        $("#txt_notif_msg").html(errorThrows);
-                        $("#txt_notif").show();
-                        $("#txt_notif").removeClass("alert-success");
-                        $("#txt_notif").addClass("alert-error");
-                    }
-                });
-
+                getProfiles();
 
                 //get sites resources
                 $.ajax({
@@ -499,10 +477,9 @@ if(!$_SESSION['is_auth']) {
                 $("#my_nodes option:selected").remove();
 
                 //init some vars
-                if (exp_json.profiles == null) {
+                if (exp_json.profileassociations == null) {
                     exp_json.profileassociations = [];
                     exp_json.firmwareassociations = [];
-                    exp_json.profiles = {}; 
                 }
                 
                 //retrieve profile index
@@ -515,14 +492,6 @@ if(!$_SESSION['is_auth']) {
                         break;
                     }
                 }
-                
-                //check if profile already in the exp json
-                if(profil_set in exp_json.profiles){
-                }
-                else{
-                    exp_json.profiles[profil_set] = my_profiles[index];
-                }
-                
 
                 var find = false;
                 //if profile already exist in the table
@@ -604,7 +573,7 @@ if(!$_SESSION['is_auth']) {
                 var mydata = JSON.stringify(exp_json);
                 var datab = "";
                 
-                if (exp_json.profiles != null) {
+                if (exp_json.profileassociations != null) {
                     var boundary = "AaB03x";
 
                     //JSON
@@ -814,6 +783,44 @@ if(!$_SESSION['is_auth']) {
                 }
             }
             
+            //refresh profile list
+            $("#btn_refresh").click(function(){
+                $("#my_profiles option").remove();
+                getProfiles();
+                return false;
+            });
+            
+            
+            function getProfiles() {
+                
+                //get all profiles
+                $.ajax({
+                    type: "GET",
+                    dataType: "text",
+                    contentType: "application/json; charset=utf-8",
+                    url: "/rest/profiles",
+                    success: function (data_server) {
+                        
+                        if(data_server == "") {
+                            //no profile
+                            return false;
+                        }
+                        
+                        my_profiles = JSON.parse(data_server);
+                        
+                        //fill profiles list
+                        for(i = 0; i < my_profiles.length; i++) {
+                            $("#my_profiles").append(new Option(my_profiles[i].profilename,my_profiles[i].profilename));
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrows) {
+                        $("#txt_notif_msg").html(errorThrows);
+                        $("#txt_notif").show();
+                        $("#txt_notif").removeClass("alert-success");
+                        $("#txt_notif").addClass("alert-error");
+                    }
+                });
+            }
             
             //click on previous button
             $("#btn_previous").click(function(){
