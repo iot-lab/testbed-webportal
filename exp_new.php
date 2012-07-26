@@ -636,7 +636,7 @@ if(!$_SESSION['is_auth']) {
                         //url: "dump.php",
                         success: function (data_server) {
                             $("#expState").modal('show');
-                            $("#expStateMsg").html("<h3>Your experiment is submit successfully</h3>");
+                            $("#expStateMsg").html("<h3>Your experience was successfully submitted</h3>");
                             $("#expStateMsg").append(data_server);
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrows) {
@@ -656,7 +656,7 @@ if(!$_SESSION['is_auth']) {
                         url: "/rest/experiment?body",
                         success: function (data_server) {
                             $("#expState").modal('show');
-                            $("#expStateMsg").html("<h3>Your experiment is submit successfully</h3>");
+                            $("#expStateMsg").html("<h3>Your experience was successfully submitted</h3>");
                             $("#expStateMsg").append(data_server);
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrows) {
