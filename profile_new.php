@@ -25,6 +25,7 @@ if(!$_SESSION['is_auth']) {
                 <div class="span3">
                     <select id="my_profiles" size="15"></select>
                     <p>
+                    <button class="btn btn" id="btn_new" href="#">New</button>
                     <button class="btn btn-danger" id="btn_delete" href="#">Delete</button>
                     </p>
                 </div>
@@ -39,7 +40,8 @@ if(!$_SESSION['is_auth']) {
                                 <input id="txt_name" type="text" class="input-small" required="required">
                             </div>
                         </div>
-				<div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
+                   
+                <div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
                     <div class="control-group">
                         <label class="control-label">Power mode</label>
                         <div class="controls">
@@ -53,8 +55,9 @@ if(!$_SESSION['is_auth']) {
                           </label>
                         </div>
                       </div>
-				</div>
-				<div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
+                </div>
+
+                <div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
                 <div class="control-group">
                     <label class="control-label" for="inlineCheckboxes">Consumption</label>
                     <div class="controls">
@@ -69,7 +72,7 @@ if(!$_SESSION['is_auth']) {
                       </label>
                     </div>
                   </div>
-
+                 
                 <div class="control-group">
                     <label class="control-label" for="consumption_frequency">Frequency (ms)</label>
                     <div class="controls">
@@ -82,9 +85,10 @@ if(!$_SESSION['is_auth']) {
                       </select>
                     </div>
                   </div>
-				</div>
+                </div>
 
-				<div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
+
+                <div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
                 <div class="control-group">
                     <label class="control-label" for="inlineCheckboxes">Sensors</label>
                     <div class="controls">
@@ -107,9 +111,9 @@ if(!$_SESSION['is_auth']) {
                       </select>
                     </div>
                   </div>
-				</div>
-                  
-				<div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
+                </div> 
+
+                <div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
                 <div class="control-group">
                     <label class="control-label" for="inlineCheckboxes">Radio</label>
                     <div class="controls">
@@ -130,19 +134,17 @@ if(!$_SESSION['is_auth']) {
                       </select>
                     </div>
                   </div>
-				</div>
+                </div>
 
                    <button id="btn_submit" class="btn btn-primary" type="submit">Save</button>
 
                     </form>
                 </div> 
-                
-                
     
                 <div class="span3">
                     <div class="alert alert-info">
-                        <img src="img/help.png"> To <b>create</b> an new profile fill the form and click <b>Save</b>. 
-                        <br/><br/>To <b>edit</b> a profile, click on the name, change settings, and click <b>Save</b>.
+                        <img src="img/help.png"> To <b>create</b> an new profile click the <b>New</b> button, fill the form and click <b>Save</b>. 
+                        <br/><br/>To <b>edit</b> a profile, click on the profile name on the list, edit settings, and click <b>Save</b>.
                     </div>
                 </div>
                 
@@ -164,7 +166,6 @@ if(!$_SESSION['is_auth']) {
             $(document).ready(function () {
 
                 $("#txt_notif").hide();
-
 
                 //get all profiles
                 $.ajax({
@@ -225,6 +226,16 @@ if(!$_SESSION['is_auth']) {
                     });
                     
                 });
+                
+                
+                //prepare form for the new profile
+                $("#btn_new").click(function(){
+                    $("#txt_name").val("new_profile");
+                    
+                    $("#my_profiles option:selected").removeAttr("selected");
+                    
+                });
+                
             });
 
             /* ************* */
@@ -232,12 +243,11 @@ if(!$_SESSION['is_auth']) {
             /* ************ */
             $("#form_part").bind("submit", function () {
 
-               var regExp = /^[0-9A-z]*$/; ;
-               if(regExp.test($("#txt_name").val()) == false){
+                var regExp = /^[0-9A-z]*$/; ;
+                if(regExp.test($("#txt_name").val()) == false){
                    alert("You must set a profile name with only word characters [0-9A-Za-z_]");
                    return false;
-               }
-
+                }
 
                 consemptium = {
                     "current":$('#cb_current').is(':checked'),
@@ -320,7 +330,7 @@ if(!$_SESSION['is_auth']) {
             /* ********************** */
             function loadProfile() {
                 
-		var profilename = $(this).val();
+                var profilename = $(this).val();
 
                 var index = -1;
                 
