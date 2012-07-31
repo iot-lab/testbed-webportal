@@ -237,7 +237,7 @@ input:focus, textarea:focus {
                         <div class="control-group">
                             <label class="control-label" for="txt_name">Name:</label>
                             <div class="controls">
-                                <input id="txt_name" type="text" class="input-small" required="required">
+                                <input id="profiles_txt_name" type="text" class="input-small" required="required">
                             </div>
                         </div>
                    
@@ -563,7 +563,7 @@ var SSHKeysLoaded = false;
     $("#form_part").bind("submit", function () {
 
         var regExp = /^[0-9A-z]*$/; ;
-        if(regExp.test($("#txt_name").val()) == false){
+        if(regExp.test($("#profiles_txt_name").val()) == false){
            alert("You must set a profile name with only word characters [0-9A-Za-z_]");
            return false;
         }
@@ -587,7 +587,7 @@ var SSHKeysLoaded = false;
         };
 
         var profile_json = {
-            "profilename":$("#txt_name").val(),
+            "profilename":$("#profiles_txt_name").val(),
             "power":$("input[name=or_power]:checked").val(),
             "consemptium":consemptium,
             "sensor":sensor,
