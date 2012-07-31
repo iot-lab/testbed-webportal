@@ -89,7 +89,7 @@ input:focus, textarea:focus {
                     <li class="divider-vertical"></li>
                     <li><a href="exp_new.php">New Experiment</a></li>
                     <li class="divider-vertical"></li>
-                    <li><a data-toggle="modal" href="#profiles_modal">Manage Profiles</a></li>
+                    <li><a data-toggle="modal" href="#profiles_modal" onClick="loadProfiles()">Manage Profiles</a></li>
                 <?php } else { ?>
                     <li><a href="#" onClick="showLogin()">Login</a></li>
                     <li class="divider-vertical"></li>
@@ -349,6 +349,7 @@ input:focus, textarea:focus {
 
 
 var my_profiles = [];
+var profilesLoaded = false;
 var SSHKeysLoaded = false;
 
 
@@ -438,38 +439,6 @@ var SSHKeysLoaded = false;
         
         });
 
-        //get all profiles
-        $.ajax({
-            type: "GET",
-            cache: false,
-            dataType: "text",
-            contentType: "application/json; charset=utf-8",
-            url: "/rest/profiles",
-            success: function (data_server) {
-                
-                if(data_server == "") {
-                    //no profile
-                    return false;
-                }
-                
-                my_profiles = JSON.parse(data_server);
-                
-                //fill profiles list
-                for(var i = 0; i < my_profiles.length; i++) {
-                    $("#my_profiles_modal").append(new Option(my_profiles[i].profilename,my_profiles[i].profilename));
-                }
-                
-                //bind onClick event
-                $("#my_profiles_modal").change(loadProfile);
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrows) {
-                $("#div_error_profiles").html(errorThrows);
-                $("#div_error_profiles").show();
-                $("#div_error_profiles").removeClass("alert-success");
-                $("#div_error_profiles").addClass("alert-error");
-            }
-        });
-
 
         //delete selected profile
         $("#btn_delete").click(function(){
@@ -538,6 +507,53 @@ var SSHKeysLoaded = false;
                     $("#div_error_ssh").show();
                 }
             });
+        }
+    }
+
+
+
+    /* ************************* */
+    /* fill select with profiles */
+    /* ************************* */
+    function loadProfiles() {
+
+        if (!profilesLoaded) {
+            $("#div_error_profiles").addClass("alert-success");
+            $("#div_error_profiles").removeClass("alert-error");
+            $("#div_error_profiles").html("Loading your profiles ...");
+            $("#div_error_profiles").show();
+		    $.ajax({
+		        type: "GET",
+		        cache: false,
+		        dataType: "text",
+		        contentType: "application/json; charset=utf-8",
+		        url: "/rest/profiles",
+		        success: function (data_server) {
+		            
+		            if(data_server == "") {
+		                //no profile
+		                return false;
+		            }
+		            
+		            my_profiles = JSON.parse(data_server);
+		            
+		            //fill profiles list
+		            for(var i = 0; i < my_profiles.length; i++) {
+		                $("#my_profiles_modal").append(new Option(my_profiles[i].profilename,my_profiles[i].profilename));
+		            }
+		            
+		            //bind onClick event
+		            $("#my_profiles_modal").change(loadProfile);
+                    $("#div_error_profiles").hide();
+		            profilesLoaded=true;
+		        },
+		        error: function (XMLHttpRequest, textStatus, errorThrows) {
+		            $("#div_error_profiles").html(errorThrows);
+		            $("#div_error_profiles").show();
+		            $("#div_error_profiles").removeClass("alert-success");
+		            $("#div_error_profiles").addClass("alert-error");
+		        }
+		    });
         }
     }
 
@@ -628,7 +644,6 @@ var SSHKeysLoaded = false;
     
         return false;
     });
-
     
     
     /* ********************** */
