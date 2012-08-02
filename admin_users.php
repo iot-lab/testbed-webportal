@@ -403,8 +403,10 @@ include("header.php") ?>
     
     
     /* Save values from edit modal */
-    $('#form_modify_user').bind('submit', function()
+    $('#form_modify_user').bind('submit', function(e)
     {
+        e.preventDefault();
+        
         //change all value
         id = $('#s_id_e').html();
         selectedUser.firstName = $("#txt_firstname_e").val();
@@ -445,8 +447,10 @@ include("header.php") ?>
     $(".btn-add").click(function(){
         $("#add_modal").modal('show');
     });
-    $('#form_add').bind('submit', function(){
+    $('#form_add').bind('submit', function(e){
     
+        e.preventDefault();
+        
         var userregister = {
         "firstName":$("#txt_firstname").val(),
         "lastName":$("#txt_lastname").val(),

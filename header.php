@@ -366,7 +366,10 @@ var SSHKeysLoaded = false;
         $('#profiles_modal').modal('hide');
     
         // Modify SSH Key
-        $('#form_modify_ssh').bind('submit', function(){
+        $('#form_modify_ssh').bind('submit', function(e){
+            
+            e.preventDefault();
+            
             var user = {
                 "sshkeys":$("#form_modify_ssh_txt_ssh").val()
             };
@@ -398,7 +401,9 @@ var SSHKeysLoaded = false;
         });
         
         // Modify Password Key
-        $('#form_modify_password').bind('submit', function(){
+        $('#form_modify_password').bind('submit', function(e){
+            
+            e.preventDefault();
         
             if($("#form_modify_password_txt_new_password").val() != $("#form_modify_password_txt_cnew_password").val()) {
                 $("#div_error_password").removeClass("alert-success");
@@ -561,7 +566,9 @@ var SSHKeysLoaded = false;
     /* *************** */
     /* submit profiles */
     /* *************** */
-    $("#form_part").bind("submit", function () {
+    $("#form_part").bind("submit", function (e) {
+
+        e.preventDefault();
 
         var regExp = /^[0-9A-z]*$/; ;
         if(regExp.test($("#profiles_txt_name").val()) == false){

@@ -14,7 +14,7 @@ if(!$_SESSION['is_auth']) {
 
     <div class="container">
               
-        <h2>New experiment</h2>      
+        <h2>New experiment</h2>
                 
         <div class="row">
             <div class="span9">
@@ -312,7 +312,9 @@ if(!$_SESSION['is_auth']) {
             /* ************* */
             /* submit part 1 */
             /* ************ */
-            $("#form_part1").bind("submit", function () {
+            $("#form_part1").bind("submit", function (e) {
+
+                e.preventDefault();
 
                 $("#form_part1").hide();
                 $("#form_part2").show();
@@ -323,21 +325,8 @@ if(!$_SESSION['is_auth']) {
                 $("#help2").hide();
                 $("#help3").show();
                 
-                //reset associations
-                if($("input[name=resources_type]:checked").val() != exp_json.type) {
-                    if(exp_json.profileassociations != null) {
-                        exp_json.profileassociations = [];
-                        exp_json.firmwareassociations = [];
-                    }
-                }
-    
-                if($("input[name=resources_type]:checked").val() == "alias") {
-                    if(exp_json.profileassociations != null) {
-                        exp_json.profileassociations = [];
-                        exp_json.firmwareassociations = [];
-                    }    
-                }
-                
+                //reset
+                exp_json = {};
                 exp_json.type = $("input[name=resources_type]:checked").val();
 
 
@@ -402,70 +391,7 @@ if(!$_SESSION['is_auth']) {
                         $("#my_nodes").append(new Option(exp_json.nodes[i], exp_json.nodes[i], false, false));
                     }
 
-
-                    /*TODO: check or remove this
-                    //check if selected nodes as already an association, if yes -> remove from the list
-                    for (i = 0; i < exp_json.nodes.length; i++) {
-                        if(exp_json.profileassociations != null) {
-                            for (j = 0; j < exp_json.profileassociations.length; j++) {
-                                for (k = 0; k < exp_json.profileassociations[j].nodes.length; k++) {
-                                    if(exp_json.profileassociations[j].nodes[k] == exp_json.nodes[i]) {
-                                        $('#my_nodes option[value="'+ exp_json.nodes[i]+'"]').remove();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    
-                    //check associations for removed nodes
-                    if(exp_json.profileassociations != null) {
-                        for (i = 0; i < exp_json.profileassociations.length; i++) {
-                            for (j = 0; j < exp_json.profileassociations[i].nodes.length; j++) {
-                                var isHere = false;
-                                for(k = 0; k < exp_json.nodes.length; k++) {
-                                    if(exp_json.nodes[k] == exp_json.profileassociations[i].nodes[j])
-                                        isHere = true;
-                                }
-                                
-                                if(!isHere) {
-                                    exp_json.profileassociations[i].nodes[j] = null;
-                                }
-                            }
-                        }
-                    }
-                    
-                    if(exp_json.firmwareassociations != null) {
-                        for (i = 0; i < exp_json.firmwareassociations.length; i++) {
-                            for (j = 0; j < exp_json.firmwareassociations[i].nodes.length; j++) {
-                                var isHere = false;
-                                for(k = 0; k < exp_json.nodes.length; k++) {
-                                    if(exp_json.nodes[k] == exp_json.firmwareassociations[i].nodes[j])
-                                        isHere = true;
-                                }
-                                
-                                if(!isHere) {
-                                    exp_json.firmwareassociations[i].nodes[j] = null;
-                                }
-                            }
-                        }
-                    }
-                    
-                    if(exp_json.profileassociations != null) {
-                        for (i = 0; i < exp_json.profileassociations.length; i++) {
-                            exp_json.profileassociations[i].nodes.clean(null);
-                        }
-                    }
-                    
-                    if(exp_json.firmwareassociations != null) {
-                        for (i = 0; i < exp_json.firmwareassociations.length; i++) {
-                            exp_json.firmwareassociations[i].nodes.clean(null);
-                        }
-                    }
-                    */
                 }
-
-                exp_json.profileassociations = null;
-                exp_json.firmwareassociations = null;
 
                 displayAssociation();
                 return false;
@@ -486,7 +412,6 @@ if(!$_SESSION['is_auth']) {
                 $("#my_profiles option:selected").removeAttr("selected");
                 $("#my_firmwares option:selected").removeAttr("selected");
 
-                
 
                 if ( nodes_set == null || (nodes_set == null && profil_set == null) || (nodes_set == null && firmware_set == null) ) {
                     alert("Please select nodes and a profile and/or a firmware");
@@ -494,16 +419,14 @@ if(!$_SESSION['is_auth']) {
                 }
                 $("#my_nodes option:selected").remove();
 
-                //init some vars
-                if (exp_json.profileassociations == null) {
-                    exp_json.profileassociations = [];
-                    
-                }
-                if(exp_json.firmwareassociations ==null) {
-                    exp_json.firmwareassociations = [];
-                }
-                
+
                 if(profil_set != null) {
+                    
+                    //init some vars
+                    if (exp_json.profileassociations == null) {
+                        exp_json.profileassociations = [];
+                    }
+                    
                     //retrieve profile index
                     var find = false;
                     var index = -1;
@@ -533,6 +456,13 @@ if(!$_SESSION['is_auth']) {
                 }
 
                 if(firmware_set != null) {
+                    
+                    //init some vars
+                    if(exp_json.firmwareassociations == null) {
+                        exp_json.firmwareassociations = [];
+                    }
+                
+                    
                     find = false;
                     //if firmware already exist in the table
                     for (i = 0; i < exp_json.firmwareassociations.length; i++) {
@@ -558,7 +488,9 @@ if(!$_SESSION['is_auth']) {
             /* ************* */
             /* submit part 2 */
             /* ************ */
-            $("#form_part2").bind('submit', function () {
+            $("#form_part2").bind('submit', function (e) {
+
+                e.preventDefault();
 
                 //set main properties
                 exp_json.type = $("input[name=resources_type]:checked").val();
@@ -597,7 +529,7 @@ if(!$_SESSION['is_auth']) {
                 var mydata = JSON.stringify(exp_json);
                 var datab = "";
                 
-                if (exp_json.profileassociations != null) {
+                if (exp_json.profileassociations != null || exp_json.firmwareassociations) {
                     var boundary = "AaB03x";
 
                     //JSON
@@ -870,27 +802,6 @@ if(!$_SESSION['is_auth']) {
                 window.open('maps_lille.php', '', 'resizable=yes, location=no, width=500, height=500, menubar=no, status=no, scrollbars=no, menubar=no');
             });
             
-            // Array Remove - By John Resig (MIT Licensed)
-            Array.prototype.remove = function(from, to) {
-                var rest = this.slice((to || from) + 1 || this.length);
-                this.length = from < 0 ? this.length + from : from;
-                return this.push.apply(this, rest);
-            };
-            
-            // Array Clean
-            Array.prototype.clean = function(deleteValue) { 
-                for (var i = 0; i < this.length; i++) { 
-                    if (this[i] == deleteValue) { 
-                        this.splice(i, 1); 
-                        i--; 
-                    } 
-                } 
-                return this; 
-            };  
-            
-            function redirectDashboard() {
-                window.location.href = ".";
-            }
             
         </script>
         

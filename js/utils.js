@@ -1,3 +1,27 @@
+// Array Remove - By John Resig (MIT Licensed)
+Array.prototype.remove = function(from, to) {
+    var rest = this.slice((to || from) + 1 || this.length);
+    this.length = from < 0 ? this.length + from : from;
+    return this.push.apply(this, rest);
+};
+
+// Array Clean
+Array.prototype.clean = function(deleteValue) { 
+    for (var i = 0; i < this.length; i++) { 
+        if (this[i] == deleteValue) { 
+            this.splice(i, 1); 
+            i--; 
+        } 
+    } 
+    return this; 
+};  
+
+// Redirect to dashboard
+function redirectDashboard() {
+    window.location.href = ".";
+}
+
+// Rebuild profile and firmware json
 function rebuildJson(exp_json) {
     
     json_tmp = [];
@@ -40,7 +64,7 @@ function rebuildJson(exp_json) {
     return json_tmp;
 }
 
-
+// Display variable
 function displayVar(variable) {
     if(variable != null) {
         return variable;

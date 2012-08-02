@@ -141,8 +141,9 @@ include("header.php");
     $(document).ready(function(){
 
         // submit login
-        $('#login_form').bind('submit', function(){
+        $('#login_form').bind('submit', function(e){
       
+            e.preventDefault();
         
             var userlogin = {"login":$("#txt_login").val(),"password":$("#txt_password").val()};
             
