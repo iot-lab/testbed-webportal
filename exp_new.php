@@ -130,7 +130,7 @@ if(!$_SESSION['is_auth']) {
             <form class="well form-horizontal" id="form_part2">
                 
                 
-                <button id="btn_previous" class="btn">Previous</button> <button id="btn_submit" class="btn btn-primary" type="submit">Submit</button>
+                <button id="btn_previous" class="btn">Previous</button>
                 
                 <h3>Manage association</h3>
               
@@ -174,6 +174,10 @@ if(!$_SESSION['is_auth']) {
                             <tbody id="my_assoc"></tbody>
                         </table>
                     </p>
+                    
+                <hr/>
+                
+                <button id="btn_submit" class="btn btn-primary" type="submit">Submit</button>
                 
             </form>
             
@@ -192,7 +196,7 @@ if(!$_SESSION['is_auth']) {
         </div>
         
         <div id="help3" class="alert alert-info">
-            <img src="img/help.png"> Make association beetwen node, profile and firmware by selecting items and click <b>Add Association</b>.
+            <img src="img/help.png"> Optionally you can create association beetwen node, profile and firmware by selecting items and click <b>Add Association</b>.
             
             <br/><br/>Click to <b>upload</b> button to add a firmware to the list.
             
