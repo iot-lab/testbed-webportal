@@ -26,7 +26,7 @@ if(!$_SESSION['is_auth']) {
 
         <div class="modal hide" id="expState">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">×</button>
+            <button type="button" class="close" data-dismiss="modal" onClick="redirectDashboard();">×</button>
             <h3>Experiment state</h3>
           </div>
           <div class="modal-body">
@@ -263,6 +263,8 @@ if(!$_SESSION['is_auth']) {
                     template: 'dropdown'
                 });
                 
+                $("#expState").bind("hidden",redirectDashboard);
+
                 //file upload event
                 document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
