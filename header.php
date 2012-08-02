@@ -23,6 +23,7 @@
 <![endif]-->
 
   <script src="js/jquery.js"></script>
+  <script src="js/utils.js"></script>
   <script src="js/bootstrap.js"></script>
 
 <link rel="shortcut icon" href="img/favicon.png" />

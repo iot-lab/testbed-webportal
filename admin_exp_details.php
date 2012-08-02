@@ -71,40 +71,70 @@ include("header.php") ?>
                         $("#btnCancel").attr("disabled",true);
                     }
         
-                    json_exp = [];
-                    withAssoc = false;
-                    //build a more simple json for parsing
-                    if(data.profileassociations != null)
-                    {
-                        withAssoc = true;
-                        for(i = 0; i < data.profileassociations.length; i++) {
-                            for(j = 0; j < data.profileassociations[i].nodes.length;j++){
-                                json_exp.push({"node": data.profileassociations[i].nodes[j],"profilename":data.profileassociations[i].profilename});
-                            }
-                        }
-                    }
+                    json_exp = rebuildJson(data);
                     
-                    if(data.firmwareassociations != null) {
-                        for(i = 0; i < data.firmwareassociations.length; i++) {
-                            for(j = 0; j < data.firmwareassociations[i].nodes.length;j++){
-                                
-                                for(k = 0; k < json_exp.length; k++) {
-                                    if(json_exp[k].node == data.firmwareassociations[i].nodes[j])
-                                        json_exp[k].firmwarename = data.firmwareassociations[i].firmwarename;
+//then nodes without association
+                    for(l=0; l<data.nodes.length; l++) {
+                        find = false;
+  
+                        if(data.type == "physical") {
+  
+                            for(z=0; z<json_exp.length && !find; z++){
+                                if(data.nodes[l] == json_exp[z].node) {
+                                    find = true;
                                 }
                             }
+                            
+                            if(!find) {
+                                json_exp.push({"node": data.nodes[l],"profilename":"","firmwarename":""});
+                            }
                         }
+                        else {
+                            for(z=0; z<json_exp.length && !find; z++){
+                                if(data.nodes[l].alias == json_exp[z].node) {
+                                    find = true;
+                                }
+                            }
+                            
+                            if(!find) {
+                                json_exp.push({"node": data.nodes[l].alias,"profilename":"","firmwarename":""});
+                            }
+                        }    
                     }
+                
                     
+                    //display
                     $("#detailsExpRow").html("");
-                    for(k = 0; k < json_exp.length; k++) {
-                        $("#detailsExpRow").append("<tr><td>"+json_exp[k].node+"</td><td>"+json_exp[k].profilename+"</td><td>"+json_exp[k].firmwarename+"</td></tr>");
-                    }
                     
-                    if(!withAssoc)
-                    {
-                        for(k = 0; k < data.nodes.length; k++) {
-                            $("#detailsExpRow").append("<tr><td>"+data.nodes[k]+"</td><td></td><td></td></tr>");
+                    for(k = 0; k < json_exp.length; k++) {
+                        
+                        if(data.type == "physical") {
+                            $("#detailsExpRow").append("<tr><td>"+json_exp[k].node+"</td><td>"+displayVar(json_exp[k].profilename)+"</td><td>"+displayVar(json_exp[k].firmwarename)+"</td></tr>");
+                        }
+                        else {
+                            for(k = 0; k < data.nodes.length; k++) {
+                                var archi = data.nodes[k].properties.archi;
+                                
+                                var site = "any";
+                                if(data.nodes[k].properties.site != null) {
+                                    site = data.nodes[k].properties.site;
+                                }
+                                    
+                                var nbnodes = data.nodes[k].properties.nbnodes;
+                                
+                                var mobile = false;
+                                
+                                if(data.nodes[k].properties.mobile != null) {
+                                    mobile = data.nodes[k].properties.mobile;
+                                }    
+                                
+                                var ntype = "fixe";
+                                if(mobile){
+                                    ntype = "mobile";
+                                }
+                                
+                                $("#detailsExpRow").append("<tr><td>"+archi+"/"+site+"/"+nbnodes+"/"+ntype+"</td><td>"+json_exp[k].profilename+"</td><td>"+json_exp[k].firmwarename+"</td></tr>")
+                            }
                         }
                     }
                 },

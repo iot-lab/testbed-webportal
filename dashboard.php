@@ -180,7 +180,9 @@ include("header.php") ?>
         });
         $('#div_msg').hide();
         $('#tbl_exps').show();
-        
+       
+
+       //window.alert(document.getElementById("my_profiles_modal").options.length);
     });
 
     

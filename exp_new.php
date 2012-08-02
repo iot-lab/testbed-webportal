@@ -402,6 +402,8 @@ if(!$_SESSION['is_auth']) {
                         $("#my_nodes").append(new Option(exp_json.nodes[i], exp_json.nodes[i], false, false));
                     }
 
+
+                    /*TODO: check or remove this
                     //check if selected nodes as already an association, if yes -> remove from the list
                     for (i = 0; i < exp_json.nodes.length; i++) {
                         if(exp_json.profileassociations != null) {
@@ -459,8 +461,12 @@ if(!$_SESSION['is_auth']) {
                             exp_json.firmwareassociations[i].nodes.clean(null);
                         }
                     }
+                    */
                 }
-                
+
+                exp_json.profileassociations = null;
+                exp_json.firmwareassociations = null;
+
                 displayAssociation();
                 return false;
             });
@@ -476,8 +482,14 @@ if(!$_SESSION['is_auth']) {
                 var profil_set = $("#my_profiles").val();
                 var firmware_set = $("#my_firmwares").val();
 
-                if (nodes_set == null || profil_set == null || firmware_set == null) {
-                    alert("Please select nodes, profile and firmware");
+
+                $("#my_profiles option:selected").removeAttr("selected");
+                $("#my_firmwares option:selected").removeAttr("selected");
+
+                
+
+                if ( nodes_set == null || (nodes_set == null && profil_set == null) || (nodes_set == null && firmware_set == null) ) {
+                    alert("Please select nodes and a profile and/or a firmware");
                     return false;
                 }
                 $("#my_nodes option:selected").remove();
@@ -485,52 +497,58 @@ if(!$_SESSION['is_auth']) {
                 //init some vars
                 if (exp_json.profileassociations == null) {
                     exp_json.profileassociations = [];
+                    
+                }
+                if(exp_json.firmwareassociations ==null) {
                     exp_json.firmwareassociations = [];
                 }
                 
-                //retrieve profile index
-                var find = false;
-                var index = -1;
-                for (i = 0; i < my_profiles.length && index == -1; i++) {
-                    if (my_profiles[i].profilename == profil_set) {
-                        find = true;
-                        index = i;
-                        break;
+                if(profil_set != null) {
+                    //retrieve profile index
+                    var find = false;
+                    var index = -1;
+                    for (i = 0; i < my_profiles.length && index == -1; i++) {
+                        if (my_profiles[i].profilename == profil_set) {
+                            find = true;
+                            index = i;
+                            break;
+                        }
+                    }
+
+                    var find = false;
+                    //if profile already exist in the table
+                    for (i = 0; i < exp_json.profileassociations.length; i++) {
+                        if (exp_json.profileassociations[i].profilename == profil_set) {
+                            exp_json.profileassociations[i].nodes = exp_json.profileassociations[i].nodes.concat(nodes_set);
+                            find = true;
+                        }
+                    }
+
+                    if (!find) {
+                        exp_json.profileassociations.push({
+                            "profilename": profil_set,
+                            "nodes": nodes_set
+                        });
                     }
                 }
 
-                var find = false;
-                //if profile already exist in the table
-                for (i = 0; i < exp_json.profileassociations.length; i++) {
-                    if (exp_json.profileassociations[i].profilename == profil_set) {
-                        exp_json.profileassociations[i].nodes = exp_json.profileassociations[i].nodes.concat(nodes_set);
-                        find = true;
+                if(firmware_set != null) {
+                    find = false;
+                    //if firmware already exist in the table
+                    for (i = 0; i < exp_json.firmwareassociations.length; i++) {
+                        if (exp_json.firmwareassociations[i].firmwarename == firmware_set) {
+                            exp_json.firmwareassociations[i].nodes = exp_json.firmwareassociations[i].nodes.concat(nodes_set);
+                            find = true;
+                        }
+                    }
+
+                    if (!find) {
+                        exp_json.firmwareassociations.push({
+                            "firmwarename": firmware_set,
+                            "nodes": nodes_set
+                        });
                     }
                 }
-
-                if (!find) {
-                    exp_json.profileassociations.push({
-                        "profilename": profil_set,
-                        "nodes": nodes_set
-                    });
-                }
-
-                find = false;
-                //if firmware already exist in the table
-                for (i = 0; i < exp_json.firmwareassociations.length; i++) {
-                    if (exp_json.firmwareassociations[i].firmwarename == firmware_set) {
-                        exp_json.firmwareassociations[i].nodes = exp_json.firmwareassociations[i].nodes.concat(nodes_set);
-                        find = true;
-                    }
-                }
-
-                if (!find) {
-                    exp_json.firmwareassociations.push({
-                        "firmwarename": firmware_set,
-                        "nodes": nodes_set
-                    });
-                }
-                
                 displayAssociation();
                 
                 return false;
@@ -710,34 +728,13 @@ if(!$_SESSION['is_auth']) {
             function displayAssociation() {
                 $("#my_assoc").html("");
                 
-                json_tmp = [];
+                json_tmp = rebuildJson(exp_json);
 
-                //build a more simple json for parsing
-                if(exp_json.profileassociations != null)
-                {
-                    for(i = 0; i < exp_json.profileassociations.length; i++) {
-                        for(j = 0; j < exp_json.profileassociations[i].nodes.length;j++){
-                            json_tmp.push({"node": exp_json.profileassociations[i].nodes[j],"profilename":exp_json.profileassociations[i].profilename});
-                        }
-                    }
-                }
-                
-                if(exp_json.firmwareassociations != null) {
-                    for(i = 0; i < exp_json.firmwareassociations.length; i++) {
-                        for(j = 0; j < exp_json.firmwareassociations[i].nodes.length;j++){
-                            
-                            for(k = 0; k < json_tmp.length; k++) {
-                                if(json_tmp[k].node == exp_json.firmwareassociations[i].nodes[j])
-                                    json_tmp[k].firmwarename = exp_json.firmwareassociations[i].firmwarename;
-                            }
-                        }
-                    }
-                }
                 
                 //display
                 for(k = 0; k < json_tmp.length; k++) {
                     if(exp_json.type == "physical") {
-                        $("#my_assoc").append("<tr><td>"+json_tmp[k].node+"</td><td>"+json_tmp[k].profilename+"</td><td>"+json_tmp[k].firmwarename+"</td></tr>");
+                        $("#my_assoc").append("<tr><td>"+json_tmp[k].node+"</td><td>"+displayVar(json_tmp[k].profilename)+"</td><td>"+displayVar(json_tmp[k].firmwarename)+"</td></tr>");
                     }
                     
                     else {

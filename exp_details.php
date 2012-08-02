@@ -74,32 +74,10 @@ include("header.php") ?>
                     $("#detailsExpSummary").append("<b>Duration (min):</b> " + data.duration + "<br/>");
                     $("#detailsExpSummary").append("<b>Number of Nodes:</b> " + data.nodes.length + "<br/>");
         
-                    json_exp = [];
                   
-                    //build a more simple json for parsing
-                    //{"node": "","profilename":"","firmwarename":""}
-                    
-                    //begin with nodes in an association
-                    if(data.profileassociations != null)
-                    {
-                        for(i = 0; i < data.profileassociations.length; i++) {
-                            for(j = 0; j < data.profileassociations[i].nodes.length;j++){
-                                json_exp.push({"node": data.profileassociations[i].nodes[j],"profilename":data.profileassociations[i].profilename});
-                            }
-                        }
-                    }
-                    
-                    if(data.firmwareassociations != null) {
-                        for(i = 0; i < data.firmwareassociations.length; i++) {
-                            for(j = 0; j < data.firmwareassociations[i].nodes.length;j++){
-                                
-                                for(k = 0; k < json_exp.length; k++) {
-                                    if(json_exp[k].node == data.firmwareassociations[i].nodes[j])
-                                        json_exp[k].firmwarename = data.firmwareassociations[i].firmwarename;
-                                }
-                            }
-                        }
-                    }
+                  
+                    json_exp = rebuildJson(data);
+    
                     
                     //then nodes without association
                     for(l=0; l<data.nodes.length; l++) {
@@ -137,7 +115,7 @@ include("header.php") ?>
                     for(k = 0; k < json_exp.length; k++) {
                         
                         if(data.type == "physical") {
-                            $("#detailsExpRow").append("<tr><td>"+json_exp[k].node+"</td><td>"+json_exp[k].profilename+"</td><td>"+json_exp[k].firmwarename+"</td></tr>");
+                            $("#detailsExpRow").append("<tr><td>"+json_exp[k].node+"</td><td>"+displayVar(json_exp[k].profilename)+"</td><td>"+displayVar(json_exp[k].firmwarename)+"</td></tr>");
                         }
                         else {
                             for(k = 0; k < data.nodes.length; k++) {
