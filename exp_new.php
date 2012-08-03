@@ -43,13 +43,13 @@ if(!$_SESSION['is_auth']) {
                 <div class="control-group">
                     <label class="control-label" for="txt_name">Name:</label>
                     <div class="controls">
-                        <input id="txt_name" type="text" class="input-small">
+                        <input id="txt_name" name="name" type="text" class="input-small">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="txt_duration">Duration (minutes):</label>
                     <div class="controls">
-                        <input id="txt_duration" type="number" class="input-small" value="20" required="required">
+                        <input id="txt_duration" name="duration" type="number" class="input-small" value="20" required="required">
                     </div>
                 </div>
                 
@@ -57,10 +57,10 @@ if(!$_SESSION['is_auth']) {
                     
                     <label class="control-label" for="txt_duration">Scheduled</label>
                     <div class="controls">
-                        <input type="checkbox" id="cbScheduled" value="cbScheduled"/>
+                        <input type="checkbox" id="cbScheduled" name="cbScheduled" value="cbScheduled"/>
                         <div id="div_scheduled" style="display:none">
-                            <input type="text" class="input-small" value="" id="dp1" disabled="disabled">
-                            <input class="dropdown-timepicker input-mini" data-provide="timepicker" type="text" id="tp1" disabled="disabled">
+                            <input type="text" class="input-small" value="" id="dp1" name="dp1" disabled="disabled">
+                            <input class="dropdown-timepicker input-mini" data-provide="timepicker" type="text" id="tp1" name="tp1" disabled="disabled">
                         </div>
                         
                     </div>
@@ -315,6 +315,9 @@ if(!$_SESSION['is_auth']) {
             $("#form_part1").bind("submit", function (e) {
 
                 e.preventDefault();
+
+                //var url = $(this).attr('action');
+                //$("#form_part1").serializeArray();
 
                 $("#form_part1").hide();
                 $("#form_part2").show();
