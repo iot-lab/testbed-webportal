@@ -23,9 +23,10 @@ include("header.php") ?>
             <a href="scripts/exp_download_data.php?id=<?php echo $_GET['id']?>" class="btn" id="btnDownload">Download</a>
         </p>
         
-        <table class="table table-striped table-bordered table-condensed" style="width:500px">
+        <table class="table table-striped table-bordered table-condensed" style="width:500px" id="tbl_nodes">
         <thead>
             <tr>
+                <th></th>
                 <th>node</th>
                 <th>profile</th>
                 <th>firmware</th>
@@ -34,6 +35,27 @@ include("header.php") ?>
         <tbody id="detailsExpRow">
         </tbody>
         </table>
+        
+        <p><a href="javascript:selectAll();">Select All</a> - <a href="javascript:unSelectAll();">Unselect All</a></p>
+        
+        
+        <form id="frm_actions">
+
+            <b>Actions on selected nodes: </b>
+            
+            <select id="action" class="input-small">
+                <option value="start">Start</option>
+                <option value="start" data-battery="battery">Start (battery)</option>
+                <option value="stop">Stop</option>
+                <option value="reset">Reset</option>
+            </select>
+            
+            <button id="btn_send" class="btn" type="submit">Send</button>
+            
+            <div id="state" class="alert" style="display:none"></div>
+            
+        </form>
+        
     </div>
 </div>
 
@@ -69,16 +91,25 @@ include("header.php") ?>
                     }
 
 
-                    $("#detailsExpSummary").html("<b>Experiment:</b> <a href=\"monika?job=" + id + "\">" + id + "</a><br/>");
-                    $("#detailsExpSummary").append("<b>Name:</b> " + exp_name + "<br/>");
-                    $("#detailsExpSummary").append("<b>Duration (min):</b> " + data.duration + "<br/>");
-                    $("#detailsExpSummary").append("<b>Number of Nodes:</b> " + data.nodes.length + "<br/>");
+                    $("#detailsExpSummary").html(
+                    "<b>Experiment:</b> <a href=\"monika?job=" + id + "\">" + id + "</a><br/>");
+                    $("#detailsExpSummary").append(
+                    "<b>State:</b> " + data.state + "<br/>");
+                    $("#detailsExpSummary").append(
+                    "<b>Name:</b> " + exp_name + "<br/>");
+                    $("#detailsExpSummary").append(
+                    "<b>Duration (min):</b> " + data.duration + "<br/>");
+                    $("#detailsExpSummary").append(
+                    "<b>Number of Nodes:</b> " + data.nodes.length + "<br/>");
         
-                  
-                  
+        
+                    if(data.state != "Running") {
+                        $("#frm_actions").hide();
+                    }
+        
+        
                     json_exp = rebuildJson(data);
     
-                    
                     //then nodes without association
                     for(l=0; l<data.nodes.length; l++) {
                         find = false;
@@ -115,7 +146,10 @@ include("header.php") ?>
                     for(k = 0; k < json_exp.length; k++) {
                         
                         if(data.type == "physical") {
-                            $("#detailsExpRow").append("<tr><td>"+json_exp[k].node+"</td><td>"+displayVar(json_exp[k].profilename)+"</td><td>"+displayVar(json_exp[k].firmwarename)+"</td></tr>");
+                            $("#detailsExpRow").append(
+                            "<tr><td><input type=\"checkbox\" name=\"option1\" value=\""+json_exp[k].node+"\"></td>"+
+                            "<td>"+json_exp[k].node+"</td><td>"+displayVar(json_exp[k].profilename)+"</td>"+
+                            "<td>"+displayVar(json_exp[k].firmwarename)+"</td></tr>");
                         }
                         else {
                             for(k = 0; k < data.nodes.length; k++) {
@@ -149,6 +183,50 @@ include("header.php") ?>
                     $('#details_modal').modal('show');
                 }
             });
+            
+            
+             //actions on nodes
+            $("#frm_actions").bind("submit",function(e){
+                e.preventDefault();
+               
+                var command = $("#action option:selected").val();
+                
+                var battery = "";
+                if($("#action option:selected").attr("data-battery") == "battery") {
+                    battery = "&battery=true";
+                }
+                
+                
+                var lnodes = [];
+                $("#tbl_nodes :checked").each(function(){
+                    lnodes.push($(this).val());
+                });
+                
+                
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    data: JSON.stringify(lnodes),
+                    contentType: "application/json; charset=utf-8",
+                    url: "/rest/experiment/"+id+"/nodes?"+command+""+battery,
+                    success: function (data) {
+                        $("#state").html("OK: " + JSON.stringify(data.success));
+                        $("#state").removeClass("alert-error");
+                        $("#state").addClass("alert-success");
+                        $("#state").show();
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrows) {
+                        $("#state").html(textStatus);
+                        $("#state").removeClass("alert-success");
+                        $("#state").addClass("alert-error");
+                        $("#state").show();
+                    }
+                });
+                
+               // return false;
+            });
+            
+            
     });
 
     function cancelExperiment(){
@@ -169,7 +247,18 @@ include("header.php") ?>
             });
         }
     }
-
+    
+    function selectAll() {
+        $("#tbl_nodes :checkbox").each(function(){
+            $(this).attr('checked', true);
+        });
+    }
+    
+    function unSelectAll() {
+        $("#tbl_nodes :checkbox").each(function(){
+            $(this).attr('checked', false);
+        });
+    }
 
     </script>
 
