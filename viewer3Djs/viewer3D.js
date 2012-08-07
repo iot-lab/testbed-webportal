@@ -56,8 +56,6 @@ function init() {
     xmin = ymin = zmin = 0;
     xmax = ymax = zmax = 0;
 
-console.log(window.nodes);
-
     for (var i = 0; i < nodes.length; i++) {
         if (nodes[i][1] > xmax) xmax = nodes[i][1];
         if (nodes[i][1] < xmin) xmin = nodes[i][1];
