@@ -802,7 +802,7 @@ if(!$_SESSION['is_auth']) {
 
             //click on a map (open popup)
             $("#devlille_maps").click(function () {
-                window.open('maps_lille.php', '', 'resizable=yes, location=no, width=500, height=500, menubar=no, status=no, scrollbars=no, menubar=no');
+                window.open('maps.php?site=devlille', '', 'resizable=yes, location=no, width=500, height=500, menubar=no, status=no, scrollbars=no, menubar=no');
             });
             
             

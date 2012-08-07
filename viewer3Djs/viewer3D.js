@@ -1,7 +1,5 @@
-﻿
-// Various global variables
-var mouseX = 0, mouseY = 0,
-			camera, scene, renderer, projector;
+﻿// Various global variables
+var mouseX = 0, mouseY = 0,camera, scene, renderer, projector;
 var sTestEventType = 'mousedown';
 //var window3DWidth = window.innerWidth * 0.8;
 //var window3DHeight=window.innerHeight*0.75;
@@ -20,9 +18,8 @@ var objects = [];
 var selectedNodes = [];
 
 var div3d, nodebox, infobox;
-init();
 
-var nodes = nodes;
+var nodes = [];
 
 function init() {
     var particles, particle;
@@ -59,6 +56,8 @@ function init() {
     xmin = ymin = zmin = 0;
     xmax = ymax = zmax = 0;
 
+console.log(window.nodes);
+
     for (var i = 0; i < nodes.length; i++) {
         if (nodes[i][1] > xmax) xmax = nodes[i][1];
         if (nodes[i][1] < xmin) xmin = nodes[i][1];
@@ -88,6 +87,7 @@ function init() {
         particle.position.x = nodes[i][1] - xcenter;
         particle.position.y = nodes[i][2] - ycenter;
         particle.position.z = nodes[i][3] - zcenter;
+        particle.uid = nodes[i][4];
         particle.position.multiplyScalar(10);
         particle.scale.x = particle.scale.y = 1;
         scene.add(particle);
@@ -268,7 +268,8 @@ function findNodeUnderMouse(event) {
 // display some info of the node under the mouse
 function displayNodeInfo(e) {
     obj = findNodeUnderMouse(e);
-    if (obj) infobox.innerHTML = 'Node info : number ' + obj.object.name + " with id " + nodes[obj.object.id][4];
+
+    if (obj) infobox.innerHTML = 'Node info : number ' + obj.object.name + " with id " + obj.object.uid;
     //    else infobox.innerHTML = e.clientX + "," + e.clientY + " - " + offX + "," + offY;
 }
 
