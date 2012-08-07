@@ -48,9 +48,12 @@ include("header.php") ?>
                 <option value="start" data-battery="battery">Start (battery)</option>
                 <option value="stop">Stop</option>
                 <option value="reset">Reset</option>
+                <option value="update">Update</option>
             </select>
             
             <button id="btn_send" class="btn" type="submit">Send</button>
+            
+            <div id="firmware" style="display:none">firmware: <input type="file" id="files" name="files[]" multiple /></div>
             
             <div id="state" class="alert" style="display:none"></div>
             
@@ -67,10 +70,12 @@ include("header.php") ?>
         var json_exp = [];
         var id = <?php echo $_GET['id']?>;
         var state = "";
+        var binary = "";
+        var boundary = "AaB03x";
         
         $(document).ready(function(){
 
-            /* Retrieve experiment details */
+            /* retrieve experiment details */
             $.ajax({
                 url: "/rest/experiment/"+id,
                 type: "GET",
@@ -185,7 +190,18 @@ include("header.php") ?>
             });
             
             
-             //actions on nodes
+            /* actions list change */
+            $("#action").change(function(){
+               if($("#action").val() == "update") {
+                   $("#firmware").show();
+               } 
+               else {
+                   $("#firmware").hide();
+               }
+            });
+            
+            
+            /* actions on nodes */
             $("#frm_actions").bind("submit",function(e){
                 e.preventDefault();
                
@@ -202,31 +218,72 @@ include("header.php") ?>
                     lnodes.push($(this).val());
                 });
                 
-                
-                $.ajax({
-                    type: "POST",
-                    dataType: "json",
-                    data: JSON.stringify(lnodes),
-                    contentType: "application/json; charset=utf-8",
-                    url: "/rest/experiment/"+id+"/nodes?"+command+""+battery,
-                    success: function (data) {
-                        $("#state").html("OK: " + JSON.stringify(data.success));
-                        $("#state").removeClass("alert-error");
-                        $("#state").addClass("alert-success");
-                        $("#state").show();
-                    },
-                    error: function (XMLHttpRequest, textStatus, errorThrows) {
-                        $("#state").html(textStatus);
-                        $("#state").removeClass("alert-success");
-                        $("#state").addClass("alert-error");
-                        $("#state").show();
-                    }
-                });
-                
+                if($("#action").val() == "update") {
+                    //JSON
+                    var datab = "";
+                    datab += "--" + boundary + '\r\n';
+                    datab += 'Content-Disposition: form-data; name="test.json"; filename="test.json"\r\n';
+                    datab += 'Content-Type: application/json\r\n\r\n';
+                    datab += JSON.stringify(lnodes) + '\r\n\r\n';
+                    //datab += "--" + boundary + '\r\n';
+
+                    //firmware
+                    datab += "--" + boundary + '\r\n';
+                    datab += 'Content-Disposition: form-data; name="test.hex"; filename="test.hex"\r\n';
+                    datab += 'Content-Type: text/plain\r\n\r\n';
+                    datab += binary + '\r\n';
+
+
+                    //add json
+                    datab += "--" + boundary + '--';
+
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        data: datab,
+                        url: "/rest/experiment/"+id+"/nodes?update",
+                        contentType: "multipart/form-data; boundary="+boundary,
+                        
+                        success: function (data) {
+                            $("#state").html("OK: " + JSON.stringify(data.success));
+                            $("#state").removeClass("alert-error");
+                            $("#state").addClass("alert-success");
+                            $("#state").show();
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrows) {
+                            $("#state").html(textStatus);
+                            $("#state").removeClass("alert-success");
+                            $("#state").addClass("alert-error");
+                            $("#state").show();
+                        }
+                    });
+                }
+                else {
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        data: JSON.stringify(lnodes),
+                        contentType: "application/json; charset=utf-8",
+                        url: "/rest/experiment/"+id+"/nodes?"+command+""+battery,
+                        success: function (data) {
+                            $("#state").html("OK: " + JSON.stringify(data.success));
+                            $("#state").removeClass("alert-error");
+                            $("#state").addClass("alert-success");
+                            $("#state").show();
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrows) {
+                            $("#state").html(textStatus);
+                            $("#state").removeClass("alert-success");
+                            $("#state").addClass("alert-error");
+                            $("#state").show();
+                        }
+                    });
+                }
                // return false;
             });
             
-            
+            //file upload event
+            document.getElementById('files').addEventListener('change', handleFileSelect, false);
     });
 
     function cancelExperiment(){
@@ -258,6 +315,25 @@ include("header.php") ?>
         $("#tbl_nodes :checkbox").each(function(){
             $(this).attr('checked', false);
         });
+    }
+
+    function handleFileSelect(evt) {
+        var files = evt.target.files; // fileList object
+
+        // loop through the FileList and render image files as thumbnails.
+        for (var i = 0, f; f = files[i]; i++) {
+
+            var reader = new FileReader();
+
+            // closure to capture the file information.
+            reader.onload = (function (theFile) {
+                return function (e) {
+                    binary = e.target.result
+                };
+            })(f);
+
+            reader.readAsText(f);
+        }
     }
 
     </script>
