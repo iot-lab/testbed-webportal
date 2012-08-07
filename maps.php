@@ -1,13 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Maps</title>
+</head>
 <?php 
 session_start();
 $site = $_GET['site'];
 ?>
 
+
+<body>
 <script src="js/jquery.js"></script>
 
 <style type="text/css">
 body {
-  margin: 0;
+  margin: 10px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
   line-height: 18px;
@@ -16,16 +23,19 @@ body {
 }
 </style>
 
+
     <div class="row" id="maps">
         <div class="span8 offset2">
             <div id='selectionbox' style="text-align:center;padding:2px">
-            Selected Nodes <input type="text" id='nodebox'/> <i>(example : 1-10,24,25)</i> <button id="btnSave" onClick="save()" value="Save"/>Save</button>
+            Selected Nodes <input type="text" placeholder="1-10,24,25" class="input-medium" id='nodebox'/>
+            <button class="btn" id="btnSave" onClick="save()" value="Save"/>Save</button>
             </div>
 
             <div ID='div3d' style=" height:400px;background-color:#202020;z-index:-1" oncontextmenu="return false;"></div>
 
-            <div ID='infobox' style="text-align:center">senslab3djs</div>
+            <div ID='infobox' style="text-align:center"></div>
         </div>
+</div>        
 
 <script type="text/javascript" src="viewer3Djs/Three.js"></script>
 <script type="text/javascript" src="viewer3Djs/viewer3D.js"></script>
