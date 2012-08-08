@@ -55,6 +55,7 @@ include("header.php") ?>
             
             <div id="firmware" style="display:none">firmware: <input type="file" id="files" name="files[]" multiple /></div>
             
+            <div id="loader" style="display:none"><img src="img/ajax-loader.gif"></div>
             <div id="state" class="alert" style="display:none"></div>
             
         </form>
@@ -74,6 +75,14 @@ include("header.php") ?>
         var boundary = "AaB03x";
         
         $(document).ready(function(){
+
+            $("#loader").ajaxStart(function(){
+                $(this).show();
+            });
+            $("#loader").ajaxStop(function(){
+                $(this).hide();
+            });
+
 
             /* retrieve experiment details */
             $.ajax({
@@ -204,6 +213,8 @@ include("header.php") ?>
             /* actions on nodes */
             $("#frm_actions").bind("submit",function(e){
                 e.preventDefault();
+               
+                $("#state").hide();
                
                 var command = $("#action option:selected").val();
                 

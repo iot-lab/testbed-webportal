@@ -14,5 +14,6 @@
                 xhr.setRequestHeader('Authorization', 'Basic <?php echo $_SESSION['basic_value']; ?>')
             }
         });
+        
     </script>
 <?php  } ?>

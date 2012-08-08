@@ -100,14 +100,14 @@ input:focus, textarea:focus {
             </ul> 
             
       <ul class="nav pull-right">
-            	<li class="divider-vertical"></li>
-	            <li class="dropdown">
-	                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Testbed activity <b class="caret"></b></a>
-	                <ul class="dropdown-menu">
-	                    <li><a href="monika.php" target="_blank">View nodes status</a></li>
-	                    <li><a href="drawgantt.php" target="_blank">View Gantt chart</a></li>
-	                </ul>
-	            </li>
+                <li class="divider-vertical"></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Testbed activity <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="monika.php" target="_blank">View nodes status</a></li>
+                        <li><a href="drawgantt.php" target="_blank">View Gantt chart</a></li>
+                    </ul>
+                </li>
       
           <?php if(isset($_SESSION['is_auth']) && $_SESSION['is_auth']) { ?>
             <li class="divider-vertical"></li>
@@ -145,8 +145,8 @@ input:focus, textarea:focus {
 
 <?php if(isset($_SESSION['is_auth']) && $_SESSION['is_auth']) { ?>   
 
-	<!--  MODAL WINDOW FOR PASSWORD MODIFICATION -->
-	
+    <!--  MODAL WINDOW FOR PASSWORD MODIFICATION -->
+
     <div id="password_modal" class="modal hide fade">
         <div class="modal-header">
           <a class="close" data-dismiss="modal">×</a>
@@ -183,8 +183,8 @@ input:focus, textarea:focus {
         </div>
     </div>
     
-	<!--  MODAL WINDOW FOR SSH KEYS MODIFICATION -->
-	
+    <!--  MODAL WINDOW FOR SSH KEYS MODIFICATION -->
+
     <div id="ssh_modal" class="modal hide fade">
         <div class="modal-header">
           <a class="close" data-dismiss="modal">×</a>
@@ -207,8 +207,8 @@ input:focus, textarea:focus {
         </div>
     </div>
     
-	<!--  MODAL WINDOW FOR MANAGING PROFILES -->
-	
+    <!--  MODAL WINDOW FOR MANAGING PROFILES -->
+
     <div id="profiles_modal" class="modal hide fade" style="width:920px;margin:-290px 0 0 -460px;">
         <div class="modal-header">
           <a class="close" data-dismiss="modal">×</a>
@@ -355,9 +355,9 @@ var SSHKeysLoaded = false;
 
 
 
-	/* ************ */
-	/*   on ready   */
-	/* ************ */
+    /* ************ */
+    /*   on ready   */
+    /* ************ */
     $(document).ready(function(){
 
         // Hide modal windows
@@ -477,7 +477,7 @@ var SSHKeysLoaded = false;
         
         //prepare form for the new profile
         $("#btn_new").click(function(){
-            $("#txt_name").val("new_profile");
+            $("#profiles_txt_name").val("new_profile");
             
             $("#my_profiles_modal option:selected").removeAttr("selected");
             
@@ -528,38 +528,38 @@ var SSHKeysLoaded = false;
             $("#div_error_profiles").removeClass("alert-error");
             $("#div_error_profiles").html("Loading your profiles ...");
             $("#div_error_profiles").show();
-		    $.ajax({
-		        type: "GET",
-		        cache: false,
-		        dataType: "text",
-		        contentType: "application/json; charset=utf-8",
-		        url: "/rest/profiles",
-		        success: function (data_server) {
-		            
-		            if(data_server == "") {
-		                //no profile
-		                return false;
-		            }
-		            
-		            my_profiles = JSON.parse(data_server);
-		            
-		            //fill profiles list
-		            for(var i = 0; i < my_profiles.length; i++) {
-		                $("#my_profiles_modal").append(new Option(my_profiles[i].profilename,my_profiles[i].profilename));
-		            }
-		            
-		            //bind onClick event
-		            $("#my_profiles_modal").change(loadProfile);
+            $.ajax({
+                type: "GET",
+                cache: false,
+                dataType: "text",
+                contentType: "application/json; charset=utf-8",
+                url: "/rest/profiles",
+                success: function (data_server) {
+                    
+                    if(data_server == "") {
+                        //no profile
+                        return false;
+                    }
+                    
+                    my_profiles = JSON.parse(data_server);
+                    
+                    //fill profiles list
+                    for(var i = 0; i < my_profiles.length; i++) {
+                        $("#my_profiles_modal").append(new Option(my_profiles[i].profilename,my_profiles[i].profilename));
+                    }
+                    
+                    //bind onClick event
+                    $("#my_profiles_modal").change(loadProfile);
                     $("#div_error_profiles").hide();
-		            profilesLoaded=true;
-		        },
-		        error: function (XMLHttpRequest, textStatus, errorThrows) {
-		            $("#div_error_profiles").html(errorThrows);
-		            $("#div_error_profiles").show();
-		            $("#div_error_profiles").removeClass("alert-success");
-		            $("#div_error_profiles").addClass("alert-error");
-		        }
-		    });
+                    profilesLoaded=true;
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrows) {
+                    $("#div_error_profiles").html(errorThrows);
+                    $("#div_error_profiles").show();
+                    $("#div_error_profiles").removeClass("alert-success");
+                    $("#div_error_profiles").addClass("alert-error");
+                }
+            });
         }
     }
 
@@ -671,7 +671,7 @@ var SSHKeysLoaded = false;
         }
         
         if(index != -1) {
-            $("#txt_name").val(my_profiles[index].profilename);
+            $("#profiles_txt_name").val(my_profiles[index].profilename);
             $('#consumption_frequency').val(my_profiles[i].consemptium.frequency);
             $('#sensor_frequency').val(my_profiles[i].sensor.frequency);
             $('#radio_frequency').val(my_profiles[i].radio.frequency);

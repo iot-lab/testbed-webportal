@@ -14,11 +14,11 @@ $request_total="/rest/admin/experiments?total";
 $request_profiles="/rest/admin/profiles";
 $request_exps="\"\"";
 if (isset($_GET['user'])) {
-	$title = " of user ".$_GET['user'];
-	$dashboard=$_GET['user'];
-	$request_total.="&user=".$_GET['user'];
-	$request_profiles.="&user=".$_GET['user'];
-	$request_exps = 'function ( aoData ) { aoData.push( { "name": "user", "value": "'.$_GET['user'].'" } ); }';
+    $title = " of user ".$_GET['user'];
+    $dashboard=$_GET['user'];
+    $request_total.="&user=".$_GET['user'];
+    $request_profiles.="&user=".$_GET['user'];
+    $request_exps = 'function ( aoData ) { aoData.push( { "name": "user", "value": "'.$_GET['user'].'" } ); }';
 }
 ?>
 
@@ -26,24 +26,26 @@ if (isset($_GET['user'])) {
       
     <div class="row">
         <div class="span9">
-        	<h2>Experiment List <?php echo $title; ?></h2>
-			<div class="alert alert-error" id="div_msg" style="display:none"></div>
-			<table id="tbl_exps" class="table table-bordered table-striped table-condensed" style="display:none">
-				<thead>
-					<tr>
-						<th>ID</th>
-						<th>Owner</th>
-						<th>Name</th>
-						<th>Date</th>
-						<th>Duration</th>
-						<th>Node(s)</th>
-						<th>State</th>
-					</tr>
-				</thead>
-				<tbody>
-				</tbody>
-			</table>
-		</div>
+            <h2>Experiment List <?php echo $title; ?></h2>
+            <div class="alert alert-error" id="div_msg" style="display:none"></div>
+            <table id="tbl_exps" class="table table-bordered table-striped table-condensed" style="display:none">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Owner</th>
+                        <th>Name</th>
+                        <th>Date</th>
+                        <th>Duration</th>
+                        <th>Node(s)</th>
+                        <th>State</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            
+            <div id="loader" style="display:none"><img src="img/ajax-loader.gif"></div>
+        </div>
           
         <div class="span4">
           <h2><?php echo $dashboard; ?> dashboard</h2>
@@ -60,9 +62,9 @@ if (isset($_GET['user'])) {
             </div>
           </p>
            
-		</div>
-	</div>
-	
+        </div>
+    </div>
+
 
 <?php include('footer.php') ?>
 
@@ -75,6 +77,13 @@ if (isset($_GET['user'])) {
     var oTable;
     
     $(document).ready(function(){
+        
+        $("#loader").ajaxStart(function(){
+            $(this).show();
+        });
+        $("#loader").ajaxStop(function(){
+            $(this).hide();
+        });
         
         // Retrieve experiments total
         $.ajax({
@@ -120,8 +129,8 @@ if (isset($_GET['user'])) {
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "scripts/admin_exp_list.php",
-			"fnServerParams": <?php echo $request_exps; ?>,
-			"bPaginate": true,
+            "fnServerParams": <?php echo $request_exps; ?>,
+            "bPaginate": true,
             "aoColumns": [
                           {"mDataProp": "id" },
                           {"mDataProp": "owner" },
@@ -137,10 +146,10 @@ if (isset($_GET['user'])) {
                                }
                           },
                           {"mDataProp": "duration",
-			  	"fnRender": function(obj) {
-                             		return Math.round(obj.aData['duration']/60);
-				}
-			  },
+                               "fnRender": function(obj) {
+                                    return Math.round(obj.aData['duration']/60);
+                               }
+                           },
                           {"mDataProp": "nb_resources" },
                           {"mDataProp": "state",
                            "fnRender": function(obj) {
@@ -158,8 +167,8 @@ if (isset($_GET['user'])) {
                                   return state;
                            }
                           }
-			],
-			"sAjaxDataProp": "items",
+            ],
+            "sAjaxDataProp": "items",
             "sPaginationType": "bootstrap",
             "bLengthChange": true,
             "bFilter": false,
