@@ -33,6 +33,7 @@ include("header.php") ?>
             <tbody>
             </tbody>
         </table>
+        <div id="loader"><img src="img/ajax-loader.gif"></div>
     </div>
 
     <div class="span4">
@@ -68,6 +69,15 @@ include("header.php") ?>
     var oTable;
     
     $(document).ready(function(){
+       
+       
+    $("#loader").ajaxStart(function(){
+        $(this).show();
+    });
+    $("#loader").ajaxStop(function(){
+        $(this).hide();
+    });
+       
        
         // Retrieve experiments total 
         $.ajax({
