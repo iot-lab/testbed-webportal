@@ -128,6 +128,7 @@ input:focus, textarea:focus {
               <ul class="dropdown-menu">
                 <li><a href="admin_users.php">Users</a></li>
                 <li><a href="admin_exps.php">Experiments</a></li>
+                <li><a href="admin_nodes.php">Nodes</a></li>
               </ul>
             </li>
             <li class="divider-vertical"></li>
