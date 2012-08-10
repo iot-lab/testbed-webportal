@@ -11,13 +11,15 @@ if(!$_SESSION['is_auth'] || ($_SESSION['login'] == "" || $_SESSION['password'] =
 /* Get total */
 $url="https://localhost/rest/experiments";
 
+$headers = array();
+
 $handle = curl_init();
 curl_setopt($handle, CURLOPT_URL, $url."?total");
 curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
 curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
 
 curl_setopt($handle, CURLOPT_HEADER, false);
-curl_setopt($handle, CURLOPT_VERBOSE, true);
+curl_setopt($handle, CURLOPT_VERBOSE, false);
 
 curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, false);
 curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
@@ -40,14 +42,14 @@ $limit = $_GET['iDisplayLength'];
 if($total<$_GET['iDisplayLength']+$_GET['iDisplayStart']) $limit = $total % $_GET['iDisplayLength'];
 
 
-$urlList = $url."?state=Terminated,Error,Running,Finishing,Resuming,toError,Waiting,Launching,Hold,toLaunch,toAckReservation,Suspended&limit=".$limit."&offset=".$offset.$user;
+$urlList = $url."?state=Terminated,Error,Running,Finishing,Resuming,toError,Waiting,Launching,Hold,toLaunch,toAckReservation,Suspended&limit=".$limit."&offset=".$offset;
 $handle = curl_init();
 curl_setopt($handle, CURLOPT_URL, $urlList);
 curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
 curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
 
 curl_setopt($handle, CURLOPT_HEADER, false);
-curl_setopt($handle, CURLOPT_VERBOSE, true);
+curl_setopt($handle, CURLOPT_VERBOSE, false);
 
 curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, false);
 curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);

@@ -15,13 +15,15 @@ if(isset($_GET['user'])) $request="&user=".$_GET['user'];
 /* Get total */
 $url = "https://localhost/rest/admin/experiments?total".$request;
 
+$headers = array();
+
 $handle = curl_init();
 curl_setopt($handle, CURLOPT_URL, $url);
 curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
 curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
 
 curl_setopt($handle, CURLOPT_HEADER, false);
-curl_setopt($handle, CURLOPT_VERBOSE, true);
+curl_setopt($handle, CURLOPT_VERBOSE, false);
 
 curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, false);
 curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
@@ -50,7 +52,7 @@ curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
 curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
 
 curl_setopt($handle, CURLOPT_HEADER, false);
-curl_setopt($handle, CURLOPT_VERBOSE, true);
+curl_setopt($handle, CURLOPT_VERBOSE, false);
 
 curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, false);
 curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);

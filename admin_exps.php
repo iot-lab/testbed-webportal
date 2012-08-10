@@ -107,7 +107,7 @@ if (isset($_GET['user'])) {
 
         // Retrieve profiles total 
         $.ajax({
-            url: "/rest/admin/profiles?user=<?php echo $_GET['user']; ?>",
+            url: "/rest/admin/profiles?user=<?php echo $_SESSION['login']; ?>",
             type: "GET",
             dataType: "text",
             contentType: "application/json; charset=utf-8",
