@@ -53,15 +53,21 @@
         color: #AAD400;
         text-decoration:underline;
     }
-input:focus, textarea:focus {
-    border-color: rgba(170, 212, 0, 0.8);
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(170, 212, 0, 0.6);
-    outline: 0 none;
-}
+    
+    input:focus, textarea:focus {
+        border-color: rgba(170, 212, 0, 0.8);
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(170, 212, 0, 0.6);
+        outline: 0 none;
+    }
 
-.progress .bar {
-    background-color: #AAD400;
-    background-image: -moz-linear-gradient(center top , #BEED00, #85A600);
+    .progress .bar {
+        background-color: #AAD400;
+        background-image: -moz-linear-gradient(center top , #BEED00, #85A600);
+    }
+
+    select {
+        background-color: #ffffff;
+    }
 
 </style>
 
