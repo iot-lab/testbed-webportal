@@ -226,9 +226,20 @@ function myrender() {
     camera.lookAt(scene.position);
     camera.updateMatrix();
 
-    for (i = 0; i < objects.length; i++)
-        if (selectedNodes.indexOf(objects[i].name) != -1) objects[i].material.color.setHex(0xff0000);
-        else objects[i].material.color.setHex(0xffffff);
+    for (i = 0; i < objects.length; i++) {
+        
+        if (selectedNodes.indexOf(objects[i].name) != -1) {
+            objects[i].material.color.setHex(0x0099CC);
+        }
+        else {
+            if(objects[i].state == "Alive") {
+                objects[i].material.color.setHex(0x7FFF00);
+            }
+            else {
+                objects[i].material.color.setHex(0xFF3030);
+            }
+        }
+    }
     renderer.render(scene, camera);
 }
 
