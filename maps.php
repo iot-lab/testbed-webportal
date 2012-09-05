@@ -61,7 +61,7 @@ body {
                         var nn = data.resources[i].network_address;
                         var node_id = nn.substring(4,nn.indexOf("."));
                         
-                        n.push(node_id);
+                        n.push(parseInt(node_id));
                         n.push(parseFloat(data.resources[i].x));
                         n.push(parseFloat(data.resources[i].y));
                         n.push(parseFloat(data.resources[i].z));
