@@ -57,11 +57,15 @@ body {
                     var n = [];
                     
                     if(data.resources[i].site == site && data.resources[i].mobile == 0) {
-                        n.push(data.resources[i].id);
+                        
+                        var nn = data.resources[i].network_address;
+                        var node_id = nn.substring(4,nn.indexOf("."));
+                        
+                        n.push(node_id);
                         n.push(parseFloat(data.resources[i].x));
                         n.push(parseFloat(data.resources[i].y));
                         n.push(parseFloat(data.resources[i].z));
-                        n.push(data.resources[i].uid);
+
                         nodes.push(n);
                     }
                 }
