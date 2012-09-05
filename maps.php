@@ -65,7 +65,8 @@ body {
                         n.push(parseFloat(data.resources[i].x));
                         n.push(parseFloat(data.resources[i].y));
                         n.push(parseFloat(data.resources[i].z));
-
+                        n.push(data.resources[i].uid);
+                        n.push(data.resources[i].state);
                         nodes.push(n);
                     }
                 }

@@ -86,12 +86,14 @@ function init() {
         particle.position.y = nodes[i][2] - ycenter;
         particle.position.z = nodes[i][3] - zcenter;
         particle.uid = nodes[i][4];
+        particle.state = nodes[i][5];
         particle.position.multiplyScalar(10);
         particle.scale.x = particle.scale.y = 1;
         scene.add(particle);
         v = new THREE.Vertex(particle.position);
         geometry.vertices.push(v);
         objects.push(particle)
+    
     }
 
     debugaxis(10);
