@@ -76,8 +76,6 @@
         -o-transition: border linear 0.2s, box-shadow linear 0.2s;
         transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
         border-radius: 3px 3px 3px 3px;
-    }
-    .span3 {
         width:280px;
     }
 

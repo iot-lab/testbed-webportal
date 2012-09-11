@@ -90,7 +90,7 @@ include("header.php");
           <div class="control-group">
             <label class="control-label" for="txt_country">Country:</label>
             <div class="controls">
-				<select id="txt_country" class="span3" required="required">
+				<select id="txt_country" required="required">
             		<option value="">Country...</option>
 					<option value="Afganistan">Afghanistan</option>
 					<option value="Albania">Albania</option>
