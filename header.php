@@ -67,6 +67,18 @@
 
     select {
         background-color: #ffffff;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+        -moz-transition: border 0.2s linear 0s, box-shadow 0.2s linear 0;
+        -ms-transition: border linear 0.2s, box-shadow linear 0.2s;
+        -o-transition: border linear 0.2s, box-shadow linear 0.2s;
+        transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+        border-radius: 3px 3px 3px 3px;
+    }
+    .span3 {
+        width:280px;
     }
 
 </style>
