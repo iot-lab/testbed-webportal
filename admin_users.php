@@ -49,6 +49,7 @@ include("header.php") ?>
       </div>
 
         <div id="add_modal" class="modal hide fade">
+                <form class="well form-horizontal" id="form_add">
             <div class="modal-header">
               <a class="close" data-dismiss="modal">X</a>
               <h3>Add user(s)</h3>
@@ -56,8 +57,6 @@ include("header.php") ?>
             </div>
            <div class="modal-body">
                <div class="alert alert-error" id="div_error_add" style="display:none"></div>
-               
-                <form class="well form-horizontal" id="form_add">
 
               <div class="control-group">
                 <label class="control-label" for="txt_firstname">First Name:</label>
@@ -374,12 +373,13 @@ include("header.php") ?>
             
             <div class="modal-footer">
                    <button id="btn_add" class="btn btn-primary" type="submit">Add</button>
-                </form>
             </div>
+                </form>
             
         </div>
 
         <div id="edit_modal" class="modal hide fade">
+                <form class="well form-horizontal" id="form_modify_user">
             <div class="modal-header">
               <a class="close" data-dismiss="modal">X</a>
               <h3>Edit user <span id="s_login_e"></span><span id="s_id_e" style="display:none"></span></h3>
@@ -388,7 +388,6 @@ include("header.php") ?>
            <div class="modal-body">
                <div class="alert alert-error" id="div_error_edit" style="display:none"></div>
                
-                <form class="well form-horizontal" id="form_modify_user">
 
               <div class="control-group">
                 <label class="control-label" for="txt_firstname_e">First Name:</label>
@@ -457,8 +456,8 @@ include("header.php") ?>
             
             <div class="modal-footer">
                    <button id="btn_modify" class="btn btn-primary" type="submit">Modify</button>
-                </form>
             </div>
+                </form>
             
         </div>
         
@@ -576,7 +575,7 @@ include("header.php") ?>
                     oTable.fnDeleteRow(document.getElementById(id),true);
                 },
                 error:function(XMLHttpRequest, textStatus, errorThrows){
-                    alert("error: " + errorThrows)
+                    alert("error: " + errorThrows);
                 }
             });
         }
@@ -609,9 +608,9 @@ include("header.php") ?>
                     $("tr[data="+id+"] .btn-valid").width(50);
                 },
                 error:function(XMLHttpRequest, textStatus, errorThrows){
-                    alert("error:" + errorThrows)
+                    alert("error:" + errorThrows);
                 }
-            })
+            });
         };
     };
     
@@ -643,9 +642,9 @@ include("header.php") ?>
                     $("tr[data="+id+"] .btn-admin").width(50);
                 },
                 error:function(XMLHttpRequest, textStatus, errorThrows){
-                    alert("error:" + errorThrows)
+                    alert("error:" + errorThrows);
                 }
-            })
+            });
         };
     };   
     
@@ -678,7 +677,7 @@ include("header.php") ?>
                 $("#div_error_edit").html("");
                 oTable.fnUpdate (selectedUser.firstName, document.getElementById(id), 1, false);
                 oTable.fnUpdate (selectedUser.lastName, document.getElementById(id), 2, false);
-                oTable.fnUpdate (selectedUser.email, document.getElementById(id), 3, true);
+                oTable.fnUpdate ('<a href="mailto:' + selectedUser.email + '" class="email">' + selectedUser.email + '</a>', document.getElementById(id), 3, true);
                 //oTable.fnUpdate (selectedUser.email, document.getElementById(id),3, true);
             },
             error:function(XMLHttpRequest, textStatus, errorThrows){
