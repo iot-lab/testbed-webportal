@@ -358,7 +358,7 @@ if(!$_SESSION['is_auth']) {
                         }
                         
                         if(number != 0) {
-                            row_rs.properties.nbnodes = number;
+                            row_rs.nbnodes = number;
                             row_rs.properties.archi = archi;
                             
                             if(site != "any")   
