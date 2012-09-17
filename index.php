@@ -345,7 +345,7 @@ include("header.php");
           <div class="control-group">
             <label class="control-label" for="txt_sshkey">SSH public key :</label>
             <div class="controls">
-                 <textarea id="txt_sshkey" class="input-xlarge" id="textarea" rows="3" required="required"></textarea>
+                 <textarea id="txt_sshkey" class="input-xlarge" id="textarea" rows="3"></textarea>
             </div>
           </div>
 
