@@ -118,8 +118,6 @@ if(!$_SESSION['is_auth']) {
                         <!-- physical -->
                         <div class="" id="div_resources_map">
                             
-                                <a href="#" id="devlille_maps">Devlille Maps</a>
-                                <input id="devlille_list" value="" />
                         </div>
                         
                     </div>
@@ -283,13 +281,22 @@ if(!$_SESSION['is_auth']) {
                     url: "/rest/experiments?sites",
                     success: function (data_server) {
                         site_resources = JSON.parse(data_server);
+                        //console.log(site_resources);
                         
-                        for(var i = 0; i < site_resources.sites.length; i++) {
+			for(var j = 0; j < site_resources.sites.length; j++) {
+				$("#div_resources_map").append('<a href="#" onclick="openMapPopup(\''+site_resources.sites[j].site+'\')" id="'+site_resources.sites[j].site+'_maps">'+site_resources.sites[j].site+' maps</a>');
+				$("#div_resources_map").append('<input id="'+site_resources.sites[j].site+'_list" value="" />');
+				$("#div_resources_map").append('<br/>');
+				
+			}
+
+
+			for(i = 0; i < site_resources.sites.length; i++) {
                             $("#lst_site").append(new Option(site_resources.sites[i].site, site_resources.sites[i].site));
                             
-                            for(var j = 0; j < site_resources.sites[i].nodes.length; j++) {
+                            for(j = 0; j < site_resources.sites[i].nodes.length; j++) {
                                 var find = false;
-                                for(var z = 0; z < $("#lst_archi option").length && !find; z++) {
+                                for(z = 0; z < $("#lst_archi option").length && !find; z++) {
                                     if($("#lst_archi option")[z].value == site_resources.sites[i].nodes[j].archi) {
                                         find = true;
                                     }
@@ -340,7 +347,7 @@ if(!$_SESSION['is_auth']) {
                     alias_nodes = [];
                     var alias_index = 0;
                     
-                    for(var i = 0; i<$("#resources_table tr").length; i++){
+                    for(i = 0; i<$("#resources_table tr").length; i++){
                         var row_rs = {};
                         
                         row_rs.alias = alias_index;
@@ -378,25 +385,29 @@ if(!$_SESSION['is_auth']) {
                     exp_json.nodes = alias_nodes;
                 }
                 else {
-                    //build nodes list
-                    var devlille_nodes = [];
-                    if ($("#devlille_list").val() != "") {
-                        var devlille_list = parseNodebox($("#devlille_list").val());
-                        for (i = 0; i < devlille_list.length; i++) {
-                            if(!isNaN(devlille_list[i]))
-                                devlille_nodes.push("node"+devlille_list[i]+".devlille.senslab.info");
-                        }
-                    }
-                    
-                    //set nodes list
-                    exp_json.nodes = devlille_nodes;
-                                    
-                    for (i = 0; i < exp_json.nodes.length; i++) {
-                        $("#my_nodes").append(new Option(exp_json.nodes[i], exp_json.nodes[i], false, false));
-                    }
+
+			exp_json.nodes = [];
+			$("#div_resources_map input").each(function(){
+				var site = $(this).attr("id").split('_')[0];
+				var val = $(this).attr("value");
+				if(val != "") {
+					var snodes = parseNodebox(val);
+	                       		for (i = 0; i < snodes.length; i++) {
+        		                    if(!isNaN(snodes[i]))
+                        	        	exp_json.nodes.push("node"+snodes[i]+"."+site+".senslab.info");
+                        		}
+
+				}
+			});
+
+              
+                   	for (i = 0; i < exp_json.nodes.length; i++) {
+                        	$("#my_nodes").append(new Option(exp_json.nodes[i], exp_json.nodes[i], false, false));
+                    	}
 
                 }
 
+                //console.log(JSON.stringify(exp_json));
                 displayAssociation();
                 return false;
             });
@@ -434,7 +445,7 @@ if(!$_SESSION['is_auth']) {
                     //retrieve profile index
                     var find = false;
                     var index = -1;
-                    for (var i = 0; i < my_profiles.length && index == -1; i++) {
+                    for (i = 0; i < my_profiles.length && index == -1; i++) {
                         if (my_profiles[i].profilename == profil_set) {
                             find = true;
                             index = i;
@@ -444,7 +455,7 @@ if(!$_SESSION['is_auth']) {
 
                     var find = false;
                     //if profile already exist in the table
-                    for (var i = 0; i < exp_json.profileassociations.length; i++) {
+                    for (i = 0; i < exp_json.profileassociations.length; i++) {
                         if (exp_json.profileassociations[i].profilename == profil_set) {
                             exp_json.profileassociations[i].nodes = exp_json.profileassociations[i].nodes.concat(nodes_set);
                             find = true;
@@ -483,6 +494,8 @@ if(!$_SESSION['is_auth']) {
                         });
                     }
                 }
+
+                //console.log(JSON.stringify(exp_json));
                 displayAssociation();
                 
                 return false;
@@ -528,7 +541,7 @@ if(!$_SESSION['is_auth']) {
                     exp_json.reservation = scheduled_timestamp - (offset*60);
                 }
 
-                console.log(JSON.stringify(exp_json));
+                //console.log(JSON.stringify(exp_json));
 
                 var mydata = JSON.stringify(exp_json);
                 var datab = "";
@@ -544,7 +557,7 @@ if(!$_SESSION['is_auth']) {
                     //datab += "--" + boundary + '\r\n';
 
 
-                    for (var i = 0; i < binary.length; i++) {
+                    for (i = 0; i < binary.length; i++) {
                         datab += "--" + boundary + '\r\n';
                         datab += 'Content-Disposition: form-data; name="' + binary[i].name + '"; filename="' + binary[i].name + '"\r\n';
                         datab += 'Content-Type: text/plain\r\n\r\n';
@@ -610,10 +623,10 @@ if(!$_SESSION['is_auth']) {
             // 1-3,5,9 -> 1,2,3,5,9
             function expand(factExp) {
                 exp = [];
-                for (var i = 0; i < factExp.length; i++) {
+                for (i = 0; i < factExp.length; i++) {
                     dashExpression = factExp[i].split("-");
                     if (dashExpression.length == 2) {
-                        for (var j = parseInt(dashExpression[0]); j < (parseInt(dashExpression[1]) + 1); j++)
+                        for (j = parseInt(dashExpression[0]); j < (parseInt(dashExpression[1]) + 1); j++)
                         exp.push(j);
                     } else exp.push(parseInt(factExp[i]));
                 }
@@ -631,7 +644,7 @@ if(!$_SESSION['is_auth']) {
             }
 
             function sortfunction(a, b) {
-                return (a - b); //causes an array to be sorted numerically and ascending
+                return (a - b) //causes an array to be sorted numerically and ascending
             }
             
             function handleFileSelect(evt) {
@@ -668,7 +681,7 @@ if(!$_SESSION['is_auth']) {
 
                 
                 //display
-                for(var k = 0; k < json_tmp.length; k++) {
+                for(k = 0; k < json_tmp.length; k++) {
                     if(exp_json.type == "physical") {
                         $("#my_assoc").append("<tr><td>"+json_tmp[k].node+"</td><td>"+displayVar(json_tmp[k].profilename)+"</td><td>"+displayVar(json_tmp[k].firmwarename)+"</td><td><a href='#' onClick='removeAssociation("+k+")'><img src='img/del.png'></img></a></td></tr>");
                     }
@@ -676,7 +689,7 @@ if(!$_SESSION['is_auth']) {
                     else {
                         //$("#my_assoc").append("<tr><td>"+json_tmp[k].node+"</td><td>"+json_tmp[k].profilename+"</td><td>"+json_tmp[k].firmwarename+"</td></tr>");
 
-                        for(var z = 0; z < exp_json.nodes.length; z++) {
+                        for(z = 0; z < exp_json.nodes.length; z++) {
                             
                             if(json_tmp[k].node == exp_json.nodes[z].alias) {
                                 var archi = exp_json.nodes[z].properties.archi;
@@ -748,7 +761,7 @@ if(!$_SESSION['is_auth']) {
                         my_profiles = JSON.parse(data_server);
                         
                         //fill profiles list
-                        for(var i = 0; i < my_profiles.length; i++) {
+                        for(i = 0; i < my_profiles.length; i++) {
                             $("#my_profiles").append(new Option(my_profiles[i].profilename,my_profiles[i].profilename));
                         }
                     },
@@ -801,67 +814,66 @@ if(!$_SESSION['is_auth']) {
                 }
             });
 
-            //click on a map (open popup)
-            $("#devlille_maps").click(function () {
-                window.open('maps.php?site=devlille', '', 'resizable=yes, location=no, width=500, height=500, menubar=no, status=no, scrollbars=no, menubar=no');
-            });
-
 
             function removeAssociation(index) {
+                json_tmp = rebuildJson(exp_json);
 
-	            json_tmp = rebuildJson(exp_json);
-	
-	            // looking for profile in json_tmp[index] 
-	            if(JSON.stringify(json_tmp[index].profilename)!=undefined) {
-	                    for (var i=0;i<exp_json.profileassociations.length;i++) {
-	                            if(exp_json.profileassociations[i].profilename==json_tmp[index].profilename) {
-	                                    for (var j=0; j<exp_json.profileassociations[i].nodes.length;j++)
-	                                            if(exp_json.profileassociations[i].nodes[j]==json_tmp[index].node)
-	                                                    exp_json.profileassociations[i].nodes.splice(j,1);
-	                                    if(exp_json.profileassociations[i].nodes.length==0)
-	                                            exp_json.profileassociations.splice(i,1);
-	                            }
-	                    }
-	                    if(exp_json.profileassociations.length==0)
-	                            delete exp_json.profileassociations;
-	
-	            }
-                // looking for firmware in json_tmp[index] 
-                if(JSON.stringify(json_tmp[index].firmwarename)!=undefined) {
+		// chercher dans json_tmp[index] si il y a un profile : alors enlever dans exp_json.profileassociations
+		if(JSON.stringify(json_tmp[index].profilename)!=undefined) {
+			for (var i=0;i<exp_json.profileassociations.length;i++) {
+				if(exp_json.profileassociations[i].profilename==json_tmp[index].profilename) {
+					for (var j=0; j<exp_json.profileassociations[i].nodes.length;j++)
+						if(exp_json.profileassociations[i].nodes[j]==json_tmp[index].node)
+							exp_json.profileassociations[i].nodes.splice(j,1);
+					if(exp_json.profileassociations[i].nodes.length==0)
+						exp_json.profileassociations.splice(i,1);
+				}
+			}
+			if(exp_json.profileassociations.length==0)
+				delete exp_json.profileassociations;
+		
+		}
+		// chercher dans json_tmp[index] si il y a un FW      : alors enlever dans exp_json.firmwareassociations
+		if(JSON.stringify(json_tmp[index].firmwarename)!=undefined) {
                         for (var i=0;i<exp_json.firmwareassociations.length;i++) {
                                 if(exp_json.firmwareassociations[i].firmwarename==json_tmp[index].firmwarename) {
                                         for (var j=0; j<exp_json.firmwareassociations[i].nodes.length;j++)
                                                 if(exp_json.firmwareassociations[i].nodes[j]==json_tmp[index].node)
                                                         exp_json.firmwareassociations[i].nodes.splice(j,1);
-                                        if(exp_json.firmwareassociations[i].nodes.length==0)
-                                                exp_json.firmwareassociations.splice(i,1);
+					if(exp_json.firmwareassociations[i].nodes.length==0)
+						exp_json.firmwareassociations.splice(i,1);
                                 }
                         }
-                        if(exp_json.firmwareassociations.length==0)
-                                delete exp_json.firmwareassociations;
-                }
-				// repopulate nodes list with the removed one 
-                if(exp_json.type=="alias") {
+			if(exp_json.firmwareassociations.length==0)
+				delete exp_json.firmwareassociations;
+		}
 
-                        var node = exp_json.nodes[json_tmp[index].node];
+		if(exp_json.type=="alias") {
+			
+			var node = exp_json.nodes[json_tmp[index].node];
                         var ntype = "fixe";
                         if(node.properties.mobile==1)
                             ntype = "mobile";
 
-                        var nsite="any";
+			var nsite="any";
                         if(node.properties.site != undefined)
-                                nsite = node.properties.site;
+                        	nsite = node.properties.site;
 
                         $("#my_nodes").append(new Option(node.properties.archi+"/"+nsite+"/"+node.nbnodes+"/"+ntype,json_tmp[index].node));
 
-                } else {
-                        $("#my_nodes").append(new Option(json_tmp[index].node, json_tmp[index].node , false, false));
-                }
-                
-                displayAssociation();
-	            
+		} else {
+	                $("#my_nodes").append(new Option(json_tmp[index].node, json_tmp[index].node , false, false));
+		}
+
+		//console.log(JSON.stringify(json_tmp));
+                //console.log(JSON.stringify(exp_json));
+		displayAssociation();
             }
-            
+   
+
+function openMapPopup(site) {
+	window.open('maps.php?site='+site, '', 'resizable=yes, location=no, width=500, height=500, menubar=no, status=no, scrollbars=no, menubar=no');
+}
             
         </script>
         
