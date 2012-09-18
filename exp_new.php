@@ -43,7 +43,7 @@ if(!$_SESSION['is_auth']) {
                 <div class="control-group">
                     <label class="control-label" for="txt_name">Name:</label>
                     <div class="controls">
-                        <input id="txt_name" name="name" type="text" class="input-small">
+                        <input id="txt_name" name="name" type="text" class="input-large">
                     </div>
                 </div>
                 <div class="control-group">
@@ -54,71 +54,79 @@ if(!$_SESSION['is_auth']) {
                 </div>
                 
                 <div class="control-group">
-                    
-                    <label class="control-label" for="txt_duration">Scheduled</label>
-                    <div class="controls">
-                        <input type="checkbox" id="cbScheduled" name="cbScheduled" value="cbScheduled"/>
-                        <div id="div_scheduled" style="display:none">
-                            <input type="text" class="input-small" value="" id="dp1" name="dp1" disabled="disabled">
-                            <input class="dropdown-timepicker input-mini" data-provide="timepicker" type="text" id="tp1" name="tp1" disabled="disabled">
+					<label class="control-label" for="txt_start">Start:</label>
+					<div class="controls">
+						<div class="row-fluid">
+							<div class="span1" style="text-align:center"><input type="radio" id="radioStart" name="radioStart" value="asap" checked/></div>
+                            <div class="span8" style="margin:0px;padding-top:3px">As soon as possible</div>
                         </div>
-                        
-                    </div>
-                </div>
-                
+                        <div class="row-fluid">
+                            <div class="span1" style="text-align:center"><input type="radio" id="radioStart" name="radioStart" value="scheduled"/></div>
+                            <div class="span2" style="margin:0px;padding-top:3px">Scheduled</div>
+                            <div class="span2" style="margin:0px"><input type="text" class="input-small" value="" id="dp1" name="dp1" disabled="disabled" style="display:none"></div>
+                            <div class="span2"><input class="dropdown-timepicker input-mini" data-provide="timepicker" type="text" id="tp1" name="tp1" disabled="disabled" style="display:none"></div>
+                        </div>
+					</div>
+				</div>
                 
                 <h3>Choose your nodes</h3>
                 <div class="control-group">
-                    <label class="control-label">Resources</label>
+                    <label class="control-label">Resources:</label>
                     <div class="controls">
-                        
-                        <input type="radio" name="resources_type" id="optionsRadiosType" value="alias" > by alias
-
-                        <input type="radio" name="resources_type" id="optionsRadiosMaps" value="physical" checked> physical   
-                            
-                        <!-- by alias -->
-                        <div class="" id="div_resources_type">
-                            
-                            <table style="text-align:center">
-                                <thead>
-                                    <tr>
-                                        <th><button id="btn_add" class="btn" style="width:50px">+</button></th>
-                                        <th>Archi</th>
-                                        <th>Site</th>
-                                        <th>Number</th>
-                                        <th>Mobile</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="resources_table">
-                                    <tr id="resources_row">
-                                        <td>
-                                            <button class="btn" style="width:50px" onclick="removeRow(this);return false;">-</button>
-                                        </td>
-                                        <td>
-                                            <select id="lst_archi" class="input-medium archi">
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select id="lst_site" class="input-medium site">
-                                                <option value="any">Any</option>
-                                            </select> 
-                                        </td>
-                                        <td>
-                                            <input id="txt_fixe" type="number" class="input-mini number" value="1">
-                                        </td>
-                                        <td>
-                                            <input id="txt_mobile" type="checkbox" class="input-small mobile">
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="row-fluid">
+                                <div class="span1" style="text-align:center;border:1px red solid"><input type="radio" name="resources_type" id="optionsRadiosMaps" value="physical" checked></div>
+                                <div class="span2" style="margin:0px;padding-top:3px;border:1px red solid">from maps</div>
+                                <div class="span9" style="margin:0px;padding-top:3px;border:1px red solid"><div class="" id="div_resources_map"></div></div>
 
                         </div>
-                        
-                        <!-- physical -->
-                        <div class="" id="div_resources_map">
-                            
+                        <div class="row-fluid">
+                                <div class="span1" style="text-align:center;border:1px red solid"><input type="radio" name="resources_type" id="optionsRadiosType" value="alias"></div>
+                                <div class="span2" style="margin:0px;padding-top:3px;border:1px red solid">by type</div>
                         </div>
+                        <div class="row-fluid">
+                                <div class="span12" style="margin:0px;padding-top:3px;border:1px red solid">
+                        
+                            
+			                        <!-- by alias -->
+			                        <div class="" id="div_resources_type">
+			                            
+			                            <table style="text-align:center">
+			                                <thead>
+			                                    <tr>
+			                                        <th><button id="btn_add" class="btn" style="width:50px">+</button></th>
+			                                        <th>Archi</th>
+			                                        <th>Site</th>
+			                                        <th>Number</th>
+			                                        <th>Mobile</th>
+			                                    </tr>
+			                                </thead>
+			                                <tbody id="resources_table">
+			                                    <tr id="resources_row">
+			                                        <td>
+			                                            <button class="btn" style="width:50px" onclick="removeRow(this);return false;">-</button>
+			                                        </td>
+			                                        <td>
+			                                            <select id="lst_archi" class="input-medium archi">
+			                                            </select>
+			                                        </td>
+			                                        <td>
+			                                            <select id="lst_site" class="input-medium site">
+			                                                <option value="any">Any</option>
+			                                            </select> 
+			                                        </td>
+			                                        <td>
+			                                            <input id="txt_fixe" type="number" class="input-mini number" value="1">
+			                                        </td>
+			                                        <td>
+			                                            <input id="txt_mobile" type="checkbox" class="input-small mobile">
+			                                        </td>
+			                                    </tr>
+			                                </tbody>
+			                            </table>
+			
+			                        </div>
+			                   </div>
+			              </div>
                         
                     </div>
                 </div>
@@ -285,7 +293,7 @@ if(!$_SESSION['is_auth']) {
                         
 			for(var j = 0; j < site_resources.sites.length; j++) {
 				$("#div_resources_map").append('<a href="#" onclick="openMapPopup(\''+site_resources.sites[j].site+'\')" id="'+site_resources.sites[j].site+'_maps">'+site_resources.sites[j].site+' maps</a>');
-				$("#div_resources_map").append('<input id="'+site_resources.sites[j].site+'_list" value="" />');
+				$("#div_resources_map").append('<input id="'+site_resources.sites[j].site+'_list" value="" class="input-large" />');
 				$("#div_resources_map").append('<br/>');
 				
 			}
@@ -786,19 +794,20 @@ if(!$_SESSION['is_auth']) {
                 return false;
             });
             
-            //click on scheduled button
-            $("#cbScheduled").click(function(){
-                if($(this).is(':checked')){
-                    $("#dp1").removeAttr("disabled");
-                    $("#tp1").removeAttr("disabled");
-                    $("#div_scheduled").show();
-                    scheduled = true;
-                }
-                else {
+            //click on scheduled button 
+            $("input[name=radioStart]").change(function () {
+                if($(this).val()== "asap") {                   
                     $("#dp1").attr("disabled","disabled");
+                    $("#dp1").hide();
                     $("#tp1").attr("disabled","disabled");
-                    $("#div_scheduled").hide();
+                    $("#tp1").hide();
                     scheduled = false;
+                } else {                    
+                    $("#dp1").removeAttr("disabled");
+                    $("#dp1").show();
+                    $("#tp1").removeAttr("disabled");
+                    $("#tp1").show();
+                    scheduled = true;
                 }
             });
             

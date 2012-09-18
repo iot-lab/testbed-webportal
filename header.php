@@ -255,7 +255,7 @@
                         <div class="control-group">
                             <label class="control-label" for="txt_name">Name:</label>
                             <div class="controls">
-                                <input id="profiles_txt_name" type="text" class="input-small" required="required">
+                                <input id="profiles_txt_name" type="text" class="input-xlarge" required="required">
                             </div>
                         </div>
                    
