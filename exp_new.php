@@ -291,12 +291,12 @@ if(!$_SESSION['is_auth']) {
 			}
 
 
-			for(i = 0; i < site_resources.sites.length; i++) {
+			for(var i = 0; i < site_resources.sites.length; i++) {
                             $("#lst_site").append(new Option(site_resources.sites[i].site, site_resources.sites[i].site));
                             
                             for(j = 0; j < site_resources.sites[i].nodes.length; j++) {
                                 var find = false;
-                                for(z = 0; z < $("#lst_archi option").length && !find; z++) {
+                                for(var z = 0; z < $("#lst_archi option").length && !find; z++) {
                                     if($("#lst_archi option")[z].value == site_resources.sites[i].nodes[j].archi) {
                                         find = true;
                                     }
@@ -347,7 +347,7 @@ if(!$_SESSION['is_auth']) {
                     alias_nodes = [];
                     var alias_index = 0;
                     
-                    for(i = 0; i<$("#resources_table tr").length; i++){
+                    for(var i = 0; i<$("#resources_table tr").length; i++){
                         var row_rs = {};
                         
                         row_rs.alias = alias_index;
@@ -445,7 +445,7 @@ if(!$_SESSION['is_auth']) {
                     //retrieve profile index
                     var find = false;
                     var index = -1;
-                    for (i = 0; i < my_profiles.length && index == -1; i++) {
+                    for (var i = 0; i < my_profiles.length && index == -1; i++) {
                         if (my_profiles[i].profilename == profil_set) {
                             find = true;
                             index = i;
@@ -557,7 +557,7 @@ if(!$_SESSION['is_auth']) {
                     //datab += "--" + boundary + '\r\n';
 
 
-                    for (i = 0; i < binary.length; i++) {
+                    for (var i = 0; i < binary.length; i++) {
                         datab += "--" + boundary + '\r\n';
                         datab += 'Content-Disposition: form-data; name="' + binary[i].name + '"; filename="' + binary[i].name + '"\r\n';
                         datab += 'Content-Type: text/plain\r\n\r\n';
@@ -623,10 +623,10 @@ if(!$_SESSION['is_auth']) {
             // 1-3,5,9 -> 1,2,3,5,9
             function expand(factExp) {
                 exp = [];
-                for (i = 0; i < factExp.length; i++) {
+                for (var i = 0; i < factExp.length; i++) {
                     dashExpression = factExp[i].split("-");
                     if (dashExpression.length == 2) {
-                        for (j = parseInt(dashExpression[0]); j < (parseInt(dashExpression[1]) + 1); j++)
+                        for (var j = parseInt(dashExpression[0]); j < (parseInt(dashExpression[1]) + 1); j++)
                         exp.push(j);
                     } else exp.push(parseInt(factExp[i]));
                 }
@@ -644,7 +644,7 @@ if(!$_SESSION['is_auth']) {
             }
 
             function sortfunction(a, b) {
-                return (a - b) //causes an array to be sorted numerically and ascending
+                return (a - b); //causes an array to be sorted numerically and ascending
             }
             
             function handleFileSelect(evt) {
@@ -681,7 +681,7 @@ if(!$_SESSION['is_auth']) {
 
                 
                 //display
-                for(k = 0; k < json_tmp.length; k++) {
+                for(var k = 0; k < json_tmp.length; k++) {
                     if(exp_json.type == "physical") {
                         $("#my_assoc").append("<tr><td>"+json_tmp[k].node+"</td><td>"+displayVar(json_tmp[k].profilename)+"</td><td>"+displayVar(json_tmp[k].firmwarename)+"</td><td><a href='#' onClick='removeAssociation("+k+")'><img src='img/del.png'></img></a></td></tr>");
                     }
@@ -689,7 +689,7 @@ if(!$_SESSION['is_auth']) {
                     else {
                         //$("#my_assoc").append("<tr><td>"+json_tmp[k].node+"</td><td>"+json_tmp[k].profilename+"</td><td>"+json_tmp[k].firmwarename+"</td></tr>");
 
-                        for(z = 0; z < exp_json.nodes.length; z++) {
+                        for(var z = 0; z < exp_json.nodes.length; z++) {
                             
                             if(json_tmp[k].node == exp_json.nodes[z].alias) {
                                 var archi = exp_json.nodes[z].properties.archi;
@@ -761,7 +761,7 @@ if(!$_SESSION['is_auth']) {
                         my_profiles = JSON.parse(data_server);
                         
                         //fill profiles list
-                        for(i = 0; i < my_profiles.length; i++) {
+                        for(var i = 0; i < my_profiles.length; i++) {
                             $("#my_profiles").append(new Option(my_profiles[i].profilename,my_profiles[i].profilename));
                         }
                     },
@@ -818,56 +818,54 @@ if(!$_SESSION['is_auth']) {
             function removeAssociation(index) {
                 json_tmp = rebuildJson(exp_json);
 
-		// chercher dans json_tmp[index] si il y a un profile : alors enlever dans exp_json.profileassociations
-		if(JSON.stringify(json_tmp[index].profilename)!=undefined) {
-			for (var i=0;i<exp_json.profileassociations.length;i++) {
-				if(exp_json.profileassociations[i].profilename==json_tmp[index].profilename) {
-					for (var j=0; j<exp_json.profileassociations[i].nodes.length;j++)
-						if(exp_json.profileassociations[i].nodes[j]==json_tmp[index].node)
-							exp_json.profileassociations[i].nodes.splice(j,1);
-					if(exp_json.profileassociations[i].nodes.length==0)
-						exp_json.profileassociations.splice(i,1);
+				// looking for profile in json_tmp[index] 
+				if(JSON.stringify(json_tmp[index].profilename)!=undefined) {
+					for (var i=0;i<exp_json.profileassociations.length;i++) {
+						if(exp_json.profileassociations[i].profilename==json_tmp[index].profilename) {
+							for (var j=0; j<exp_json.profileassociations[i].nodes.length;j++)
+								if(exp_json.profileassociations[i].nodes[j]==json_tmp[index].node)
+									exp_json.profileassociations[i].nodes.splice(j,1);
+							if(exp_json.profileassociations[i].nodes.length==0)
+								exp_json.profileassociations.splice(i,1);
+						}
+					}
+					if(exp_json.profileassociations.length==0)
+						delete exp_json.profileassociations;
+				
 				}
-			}
-			if(exp_json.profileassociations.length==0)
-				delete exp_json.profileassociations;
+				// looking for firmware in json_tmp[index] 
+				if(JSON.stringify(json_tmp[index].firmwarename)!=undefined) {
+		                for (var i=0;i<exp_json.firmwareassociations.length;i++) {
+		                   if(exp_json.firmwareassociations[i].firmwarename==json_tmp[index].firmwarename) {
+		                        for (var j=0; j<exp_json.firmwareassociations[i].nodes.length;j++)
+		                            if(exp_json.firmwareassociations[i].nodes[j]==json_tmp[index].node)
+		                                exp_json.firmwareassociations[i].nodes.splice(j,1);
+							    if(exp_json.firmwareassociations[i].nodes.length==0)
+								    exp_json.firmwareassociations.splice(i,1);
+		                   }
+		                 }
+					     if(exp_json.firmwareassociations.length==0)
+						     delete exp_json.firmwareassociations;
+				}
 		
-		}
-		// chercher dans json_tmp[index] si il y a un FW      : alors enlever dans exp_json.firmwareassociations
-		if(JSON.stringify(json_tmp[index].firmwarename)!=undefined) {
-                        for (var i=0;i<exp_json.firmwareassociations.length;i++) {
-                                if(exp_json.firmwareassociations[i].firmwarename==json_tmp[index].firmwarename) {
-                                        for (var j=0; j<exp_json.firmwareassociations[i].nodes.length;j++)
-                                                if(exp_json.firmwareassociations[i].nodes[j]==json_tmp[index].node)
-                                                        exp_json.firmwareassociations[i].nodes.splice(j,1);
-					if(exp_json.firmwareassociations[i].nodes.length==0)
-						exp_json.firmwareassociations.splice(i,1);
-                                }
-                        }
-			if(exp_json.firmwareassociations.length==0)
-				delete exp_json.firmwareassociations;
-		}
-
-		if(exp_json.type=="alias") {
-			
-			var node = exp_json.nodes[json_tmp[index].node];
-                        var ntype = "fixe";
-                        if(node.properties.mobile==1)
-                            ntype = "mobile";
-
-			var nsite="any";
-                        if(node.properties.site != undefined)
-                        	nsite = node.properties.site;
-
-                        $("#my_nodes").append(new Option(node.properties.archi+"/"+nsite+"/"+node.nbnodes+"/"+ntype,json_tmp[index].node));
-
-		} else {
-	                $("#my_nodes").append(new Option(json_tmp[index].node, json_tmp[index].node , false, false));
-		}
-
-		//console.log(JSON.stringify(json_tmp));
-                //console.log(JSON.stringify(exp_json));
-		displayAssociation();
+				if(exp_json.type=="alias") {
+					
+					var node = exp_json.nodes[json_tmp[index].node];
+		            var ntype = "fixe";
+		            if(node.properties.mobile==1)
+		                  ntype = "mobile";
+		
+					var nsite="any";
+		            if(node.properties.site != undefined)
+		                  nsite = node.properties.site;
+		
+		            $("#my_nodes").append(new Option(node.properties.archi+"/"+nsite+"/"+node.nbnodes+"/"+ntype,json_tmp[index].node));
+		
+				} else {
+			        $("#my_nodes").append(new Option(json_tmp[index].node, json_tmp[index].node , false, false));
+				}
+		
+				displayAssociation();
             }
    
 
