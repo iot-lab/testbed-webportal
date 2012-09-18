@@ -215,7 +215,7 @@
           <div class="control-group">
             <label class="control-label" for="txt_ssh">SSH Key:</label>
             <div class="controls">
-                <textarea id="form_modify_ssh_txt_ssh" class="input-xlarge" rows="3" required="required"></textarea>
+                <textarea id="form_modify_ssh_txt_ssh" class="input-xlarge" rows="3"></textarea>
             </div>
           </div>
 
@@ -445,10 +445,10 @@ var SSHKeysLoaded = false;
                 success:function(data){
                     $("#div_error_password").removeClass("alert-error");
                     $("#div_error_password").addClass("alert-success");
-                    $("#div_error_password").html("Your password has been changed successfully. Please login again.");
+                    $("#div_error_password").html("Your password has been changed successfully. Please wait...");
                     $("#div_error_password").show();
-                    setTimeout( "$('#div_error_password').hide()", 2000); 
-                    setTimeout( "window.location.href = 'index.php?logout'", 3000); 
+                    //setTimeout( "$('#div_error_password').hide()", 2000); 
+                    setTimeout( "window.location.href = 'index.php?logout'", 2000); 
                 },
                 error:function(XMLHttpRequest, textStatus, errorThrows){
                     $("#div_error_password").removeClass("alert-success");
