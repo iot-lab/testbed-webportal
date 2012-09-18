@@ -149,7 +149,7 @@ include("header.php") ?>
         if(confirm("Cancel Experiment?")) {
             
             $.ajax({
-                url: "/rest/experiment/" + id,
+                url: "/rest/admin/experiment/" + id,
                 type: "DELETE",
                 contentType: "application/json",
                 dataType: "text",
