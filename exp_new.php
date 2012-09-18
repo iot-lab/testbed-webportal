@@ -74,17 +74,17 @@ if(!$_SESSION['is_auth']) {
                     <label class="control-label">Resources:</label>
                     <div class="controls">
                         <div class="row-fluid">
-                                <div class="span1" style="text-align:center;border:1px red solid"><input type="radio" name="resources_type" id="optionsRadiosMaps" value="physical" checked></div>
-                                <div class="span2" style="margin:0px;padding-top:3px;border:1px red solid">from maps</div>
-                                <div class="span9" style="margin:0px;padding-top:3px;border:1px red solid"><div class="" id="div_resources_map"></div></div>
+                                <div class="span1" style="text-align:center"><input type="radio" name="resources_type" id="optionsRadiosMaps" value="physical" checked></div>
+                                <div class="span2" style="margin:0px;padding-top:3px">from maps</div>
+                                <div class="span9" style="margin:0px"><div class="" id="div_resources_map"></div></div>
 
                         </div>
                         <div class="row-fluid">
-                                <div class="span1" style="text-align:center;border:1px red solid"><input type="radio" name="resources_type" id="optionsRadiosType" value="alias"></div>
-                                <div class="span2" style="margin:0px;padding-top:3px;border:1px red solid">by type</div>
+                                <div class="span1" style="text-align:center"><input type="radio" name="resources_type" id="optionsRadiosType" value="alias"></div>
+                                <div class="span2" style="margin:0px;padding-top:3px">by type</div>
                         </div>
                         <div class="row-fluid">
-                                <div class="span12" style="margin:0px;padding-top:3px;border:1px red solid">
+                                <div class="span12" style="margin:0px;padding-top:3px">
                         
                             
 			                        <!-- by alias -->
