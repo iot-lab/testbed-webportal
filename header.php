@@ -448,7 +448,7 @@ var SSHKeysLoaded = false;
                     $("#div_error_password").html("Your password has been changed successfully. Please wait...");
                     $("#div_error_password").show();
                     //setTimeout( "$('#div_error_password').hide()", 2000); 
-                    setTimeout( "window.location.href = 'index.php?logout'", 2000); 
+                    setTimeout( "window.location.href = 'logout.php'", 2000); 
                 },
                 error:function(XMLHttpRequest, textStatus, errorThrows){
                     $("#div_error_password").removeClass("alert-success");
