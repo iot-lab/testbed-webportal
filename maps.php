@@ -52,11 +52,11 @@ body {
             contentType: "application/json; charset=utf-8",
             data: "",
             success:function(data){
-                
+               console.log(data);
                 for(i=0; i<data.resources.length; i++) {
                     var n = [];
                     
-                    if(data.resources[i].site == site && data.resources[i].mobile == 0) {
+                    if(data.resources[i].site == site) {
                         
                         var nn = data.resources[i].network_address;
                         var node_id = nn.substring(4,nn.indexOf("."));
