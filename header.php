@@ -593,7 +593,7 @@ var SSHKeysLoaded = false;
            return false;
         }
 
-        consemptium = {
+        consumption = {
             "current":$('#cb_current').is(':checked'),
             "voltage":$('#cb_voltage').is(':checked'),
             "power":$('#cb_power').is(':checked'),
@@ -614,7 +614,7 @@ var SSHKeysLoaded = false;
         var profile_json = {
             "profilename":$("#profiles_txt_name").val(),
             "power":$("input[name=or_power]:checked").val(),
-            "consemptium":consemptium,
+            "consumption":consumption,
             "sensor":sensor,
             "radio":radio
         };
@@ -689,14 +689,14 @@ var SSHKeysLoaded = false;
         
         if(index != -1) {
             $("#profiles_txt_name").val(my_profiles[index].profilename);
-            $('#consumption_frequency').val(my_profiles[i].consemptium.frequency);
+            $('#consumption_frequency').val(my_profiles[i].consumption.frequency);
             $('#sensor_frequency').val(my_profiles[i].sensor.frequency);
             $('#radio_frequency').val(my_profiles[i].radio.frequency);
             
             $("input[name='or_power']").val([my_profiles[i].power]);
-            $("#cb_current").attr("checked",my_profiles[i].consemptium.current);
-            $("#cb_voltage").attr("checked",my_profiles[i].consemptium.votage);
-            $("#cb_power").attr("checked",my_profiles[i].consemptium.power);
+            $("#cb_current").attr("checked",my_profiles[i].consumption.current);
+            $("#cb_voltage").attr("checked",my_profiles[i].consumption.votage);
+            $("#cb_power").attr("checked",my_profiles[i].consumption.power);
             
             $("#cb_temperature").attr("checked",my_profiles[i].sensor.temperature);
             $("#cb_luminosity").attr("checked",my_profiles[i].sensor.luminosity);
