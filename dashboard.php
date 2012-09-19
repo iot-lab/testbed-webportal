@@ -45,11 +45,11 @@ include("header.php") ?>
             <li><span id="expPast" class="badge">&nbsp;</span> past</li>
         </ul>
           <p><i class="icon-th"></i> Profiles: <span id="nb_profiles">&nbsp;</span></p>
-          <!-- <p><i class="icon-home"></i> Home's quota: 60% (600/1000Mo)
+          <!--<p><i class="icon-home"></i> Home's quota: 60% (600/1000Mo)
             <div class="progress" style="width:200px">
               <div class="bar" style="width: 60%;"></div>
             </div>
-          </p> -->
+          </p>-->
           
         <div class="alert alert-info">
             <img src="img/help.png"> Click on an experiment to manage it or click <b>New Experiment</b> to create a new one.
@@ -95,7 +95,7 @@ include("header.php") ?>
                 $("#div_msg").removeClass("alert-success");
                 $("#div_msg").addClass("alert-error");
                 $("#div_msg").show();
-                $("#div_msg").html("An error occurred while retrieving your experiment list");
+                $("#div_msg").html("An error occurred while retrieving your experiment list: " + errorThrows);
             }
         });
 
@@ -117,7 +117,7 @@ include("header.php") ?>
                 $("#div_msg").removeClass("alert-success");
                 $("#div_msg").addClass("alert-error");
                 $("#div_msg").show();
-                $("#div_msg").html("An error occurred while retrieving your profile list");
+                $("#div_msg").html("An error occurred while retrieving your profile list: " + errorThrows);
             }
         });
 
