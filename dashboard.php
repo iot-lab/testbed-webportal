@@ -24,7 +24,7 @@ include("header.php") ?>
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
-                    <th>Launch at</th>
+                    <th>Date</th>
                     <th>Duration (min)</th>
                     <th>Node(s)</th>
                     <th>State</th>
