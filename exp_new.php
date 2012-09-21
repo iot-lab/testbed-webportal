@@ -418,7 +418,12 @@ if(!$_SESSION['is_auth']) {
                         $("#help3").show();
 
                         displayAssociation();
-                } 
+                } else {
+                    $("#txt_notif_msg").html("You have to choose at least one node.");
+                    $("#txt_notif").show();
+                    $("#txt_notif").removeClass("alert-success");
+                    $("#txt_notif").addClass("alert-error");
+                }
                 return false;
             });
 
@@ -608,7 +613,7 @@ if(!$_SESSION['is_auth']) {
                         url: "/rest/experiment?body",
                         success: function (data_server) {
                             $("#expState").modal('show');
-                            $("#expStateMsg").html("<h3>Your experiment was successfully submitted</h3>");
+                            $("#expStateMsg").html("<h3>Your experiment has successfully been submitted</h3>");
                             $("#expStateMsg").append(data_server);
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrows) {
