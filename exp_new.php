@@ -138,7 +138,7 @@ if(!$_SESSION['is_auth']) {
                 
                 <button id="btn_previous" class="btn">Previous</button>
                 
-                <h3>Manage association</h3>
+                <h3>Managing associations</h3>
               
                     <table>
                         <thead>
@@ -192,22 +192,22 @@ if(!$_SESSION['is_auth']) {
 
     <div class="span3">
         <div id="help1" class="alert alert-info">
-            <img src="img/help.png"> To create an new experiment you can: set a <b>name</b>, 
+            <img src="img/help.png"> To create a new experiment you can : set a <b>name</b>, 
             set a <b>duration</b>, run it <b>as soon as possible</b> or <b>scheduled</b>.
         </div>
         
         <div id="help2" class="alert alert-info">
             <img src="img/help.png"> You can choose <b>physical</b> resources (with node name) or by <b>alias</b> (with properties). 
-            <br/><br/>For <b>physical</b> resources you can chose your nodes on a map. 
-            <br/><br/>Then click <b>Next</b> to go to the firmwares/profiles associations.
+            <br/><br/>For <b>physical</b> resources you can choose your nodes on a map. 
+            <br/><br/>Then click <b>Next</b> to go to the firmwares/profiles associations page.
         </div>
         
         <div id="help3" class="alert alert-info">
-            <img src="img/help.png"> Optionally you can create association beetwen node, profile and firmware by selecting items and click <b>Add Association</b>.
+            <img src="img/help.png"> You can associate nodes with profiles and/or firmwares by selecting items and click <b>Add Association</b>.
             
-            <br/><br/>Click to <b>upload</b> button to add a firmware to the list.
+            <br/><br/>Click <b>upload</b> button to add a firmware to the list.
             
-            <br/><br/>When finnish, click to <b>Submit</b> button to submit your experiment.
+            <br/><br/>When it's done, click <b>Submit</b> to submit your experiment.
         </div>
         
     </div>
