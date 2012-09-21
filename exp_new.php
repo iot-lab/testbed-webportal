@@ -418,7 +418,7 @@ if(!$_SESSION['is_auth']) {
                         $("#help3").show();
 
                         displayAssociation();
-                }
+                } 
                 return false;
             });
 
