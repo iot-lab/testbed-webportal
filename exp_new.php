@@ -292,7 +292,7 @@ if(!$_SESSION['is_auth']) {
                         //console.log(site_resources);
                         
 			for(var j = 0; j < site_resources.sites.length; j++) {
-				$("#div_resources_map").append('<a href="#" onclick="openMapPopup(\''+site_resources.sites[j].site+'\')" id="'+site_resources.sites[j].site+'_maps">'+site_resources.sites[j].site+' maps</a>');
+				$("#div_resources_map").append('<a href="#" onclick="openMapPopup(\''+site_resources.sites[j].site+'\')" id="'+site_resources.sites[j].site+'_maps">'+site_resources.sites[j].site.charAt(0).toUpperCase() + site_resources.sites[j].site.slice(1)+' map</a>');
 				$("#div_resources_map").append('<input id="'+site_resources.sites[j].site+'_list" value="" class="input-large" />');
 				$("#div_resources_map").append('<br/>');
 				
@@ -334,15 +334,8 @@ if(!$_SESSION['is_auth']) {
 
                 //var url = $(this).attr('action');
                 //$("#form_part1").serializeArray();
-
-                $("#form_part1").hide();
-                $("#form_part2").show();
         
                 $("#my_nodes").empty();
-                
-                $("#help1").hide();
-                $("#help2").hide();
-                $("#help3").show();
                 
                 //reset
                 exp_json = {};
@@ -416,7 +409,16 @@ if(!$_SESSION['is_auth']) {
                 }
 
                 //console.log(JSON.stringify(exp_json));
-                displayAssociation();
+                if(exp_json.nodes.length!=0) {
+                        $("#form_part1").hide();
+                        $("#form_part2").show();
+
+                        $("#help1").hide();
+                        $("#help2").hide();
+                        $("#help3").show();
+
+                        displayAssociation();
+                }
                 return false;
             });
 
