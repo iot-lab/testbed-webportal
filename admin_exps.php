@@ -17,7 +17,7 @@ if (isset($_GET['user'])) {
     $title = " of user ".$_GET['user'];
     $dashboard=$_GET['user'];
     $request_total.="&user=".$_GET['user'];
-    $request_profiles.="&user=".$_GET['user'];
+    $request_profiles.="?user=".$_GET['user'];
     $request_exps = 'function ( aoData ) { aoData.push( { "name": "user", "value": "'.$_GET['user'].'" } ); }';
 }
 ?>
@@ -107,7 +107,7 @@ if (isset($_GET['user'])) {
 
         // Retrieve profiles total 
         $.ajax({
-            url: "/rest/admin/profiles?user=<?php echo $_SESSION['login']; ?>",
+            url: "<?php echo $request_profiles; ?>",
             type: "GET",
             dataType: "text",
             contentType: "application/json; charset=utf-8",
