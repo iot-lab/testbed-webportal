@@ -205,7 +205,7 @@ if(!$_SESSION['is_auth']) {
         <div id="help3" class="alert alert-info">
             <img src="img/help.png"> You can associate nodes with profiles and/or firmwares by selecting items and click <b>Add Association</b>.
             
-            <br/><br/>Click <b>upload</b> button to add a firmware to the list.
+            <br/><br/>Click <b>Browse</b> button to add a firmware to the list.
             
             <br/><br/>When it's done, click <b>Submit</b> to submit your experiment.
         </div>
@@ -588,7 +588,7 @@ if(!$_SESSION['is_auth']) {
                         //url: "dump.php",
                         success: function (data_server) {
                             $("#expState").modal('show');
-                            $("#expStateMsg").html("<h3>Your experiment was successfully submitted</h3>");
+                            $("#expStateMsg").html("<h3>Your experiment has successfully been submitted</h3>");
                             $("#expStateMsg").append(data_server);
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrows) {
