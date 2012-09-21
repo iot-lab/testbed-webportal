@@ -175,21 +175,21 @@
             <form class="well form-horizontal" id="form_modify_password">
 
           <div class="control-group">
-            <label class="control-label" for="txt_current_password">Current password:</label>
+            <label class="control-label" for="txt_current_password">Current password :</label>
             <div class="controls">
                 <input id="form_modify_password_txt_current_password" class="input-xlarge" type="password" required="required"/>
             </div>
           </div>
 
           <div class="control-group">
-            <label class="control-label" for="txt_new_password">New password:</label>
+            <label class="control-label" for="txt_new_password">New password :</label>
             <div class="controls">
                 <input id="form_modify_password_txt_new_password" class="input-xlarge" type="password" required="required"/>
             </div>
           </div>
 
           <div class="control-group">
-            <label class="control-label" for="txt_cnew_password">Confirm New password:</label>
+            <label class="control-label" for="txt_cnew_password">Confirm new password :</label>
             <div class="controls">
                 <input id="form_modify_password_txt_cnew_password" class="input-xlarge" type="password" required="required"/>
             </div>
@@ -213,7 +213,7 @@
             <form class="well form-horizontal" id="form_modify_ssh">
 
           <div class="control-group">
-            <label class="control-label" for="txt_ssh">SSH Key:</label>
+            <label class="control-label" for="txt_ssh">SSH Key :</label>
             <div class="controls">
                 <textarea id="form_modify_ssh_txt_ssh" class="input-xlarge" rows="3"></textarea>
             </div>
