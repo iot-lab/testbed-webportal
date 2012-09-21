@@ -125,12 +125,12 @@ include("header.php") ?>
                     json_exp = rebuildJson(data);
     
                     //then nodes without association
-                    for(l=0; l<data.nodes.length; l++) {
+                    for(var l=0; l<data.nodes.length; l++) {
                         find = false;
   
                         if(data.type == "physical") {
   
-                            for(z=0; z<json_exp.length && !find; z++){
+                            for(var z=0; z<json_exp.length && !find; z++){
                                 if(data.nodes[l] == json_exp[z].node) {
                                     find = true;
                                 }
@@ -141,7 +141,7 @@ include("header.php") ?>
                             }
                         }
                         else {
-                            for(z=0; z<json_exp.length && !find; z++){
+                            for(var z=0; z<json_exp.length && !find; z++){
                                 if(data.nodes[l].alias == json_exp[z].node) {
                                     find = true;
                                 }
@@ -157,7 +157,7 @@ include("header.php") ?>
                     //display
                     $("#detailsExpRow").html("");
                     
-                    for(k = 0; k < json_exp.length; k++) {
+                    for(var k = 0; k < json_exp.length; k++) {
                         
                         if(data.type == "physical") {
                             $("#detailsExpRow").append(
@@ -166,7 +166,7 @@ include("header.php") ?>
                             "<td>"+displayVar(json_exp[k].firmwarename)+"</td></tr>");
                         }
                         else {
-                            for(k = 0; k < data.nodes.length; k++) {
+                            for(var k = 0; k < data.nodes.length; k++) {
                                 var archi = data.nodes[k].properties.archi;
                                 
                                 var site = "any";
@@ -187,7 +187,7 @@ include("header.php") ?>
                                     ntype = "mobile";
                                 }
                                 
-                                $("#detailsExpRow").append("<tr><td>"+archi+"/"+site+"/"+nbnodes+"/"+ntype+"</td><td>"+json_exp[k].profilename+"</td><td>"+json_exp[k].firmwarename+"</td></tr>")
+                                $("#detailsExpRow").append("<tr><td>"+archi+"/"+site+"/"+nbnodes+"/"+ntype+"</td><td>"+json_exp[k].profilename+"</td><td>"+json_exp[k].firmwarename+"</td></tr>");
                             }
                         }
                     }
@@ -310,7 +310,7 @@ include("header.php") ?>
                     $("#btnCancel").attr("disabled",true);
                 },
                 error:function(XMLHttpRequest, textStatus, errorThrows){
-                    alert("error: " + errorThrows)
+                    alert("error: " + errorThrows);
                 }
             });
         }
@@ -339,7 +339,7 @@ include("header.php") ?>
             // closure to capture the file information.
             reader.onload = (function (theFile) {
                 return function (e) {
-                    binary = e.target.result
+                    binary = e.target.result;
                 };
             })(f);
 
