@@ -79,10 +79,10 @@ if(!$_SESSION['is_auth']) {
                                 <div class="span9" style="margin:0px"><div class="" id="div_resources_map"></div></div>
 
                         </div>
-                        <div class="row-fluid">
+                        <!-- <div class="row-fluid">
                                 <div class="span1" style="text-align:center"><input type="radio" name="resources_type" id="optionsRadiosType" value="alias"></div>
-                                <div class="span2" style="margin:0px;padding-top:3px">by type</div>
-                        </div>
+                                 <div class="span2" style="margin:0px;padding-top:3px">by type</div>
+                        </div> -->
                         <div class="row-fluid">
                                 <div class="span12" style="margin:0px;padding-top:3px">
                         
