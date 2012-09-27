@@ -76,12 +76,12 @@ if(!$_SESSION['is_auth']) {
                         <div class="row-fluid">
                                 <div class="span1" style="text-align:center"><input type="radio" name="resources_type" id="optionsRadiosMaps" value="physical" checked></div>
                                 <div class="span2" style="margin:0px;padding-top:3px">from maps</div>
-                                <div class="span9" style="margin:0px"><div class="" id="div_resources_map"></div></div>
+                                <div class="span9" style="margin:0px"><div class="" id="div_resources_map"><table id="div_resources_map_tbl"></table></div></div>
 
                         </div>
-                        <!-- <div class="row-fluid">
+                       <!-- <div class="row-fluid">
                                 <div class="span1" style="text-align:center"><input type="radio" name="resources_type" id="optionsRadiosType" value="alias"></div>
-                                 <div class="span2" style="margin:0px;padding-top:3px">by type</div>
+                                <div class="span2" style="margin:0px;padding-top:3px">by type</div>
                         </div> -->
                         <div class="row-fluid">
                                 <div class="span12" style="margin:0px;padding-top:3px">
@@ -292,9 +292,7 @@ if(!$_SESSION['is_auth']) {
                         //console.log(site_resources);
                         
 			for(var j = 0; j < site_resources.sites.length; j++) {
-				$("#div_resources_map").append('<a href="#" onclick="openMapPopup(\''+site_resources.sites[j].site+'\')" id="'+site_resources.sites[j].site+'_maps">'+site_resources.sites[j].site.charAt(0).toUpperCase() + site_resources.sites[j].site.slice(1)+' map</a>');
-				$("#div_resources_map").append('<input id="'+site_resources.sites[j].site+'_list" value="" class="input-large" />');
-				$("#div_resources_map").append('<br/>');
+				$("#div_resources_map_tbl").append('<tr><td><a href="#" onclick="openMapPopup(\''+site_resources.sites[j].site+'\')" id="'+site_resources.sites[j].site+'_maps">'+site_resources.sites[j].site.charAt(0).toUpperCase() + site_resources.sites[j].site.slice(1)+' map</a></td><td><input id="'+site_resources.sites[j].site+'_list" value="" class="input-large" /></td></tr>');
 				
 			}
 
@@ -886,7 +884,7 @@ if(!$_SESSION['is_auth']) {
    
 
 function openMapPopup(site) {
-	window.open('maps.php?site='+site, '', 'resizable=yes, location=no, width=500, height=500, menubar=no, status=no, scrollbars=no, menubar=no');
+	window.open('maps.php?site='+site, '', 'resizable=yes, location=no, width=800, height=600, menubar=no, status=no, scrollbars=no, menubar=no');
 }
             
         </script>
