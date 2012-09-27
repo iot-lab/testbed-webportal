@@ -34,6 +34,7 @@ body {
             <div ID='div3d' style=" height:400px;background-color:#202020;z-index:-1" oncontextmenu="return false;"></div>
 
             <div ID='infobox' style="text-align:center"></div>
+	    <div><img src="img/node_alive.png"> Alive - <img src="img/node_down.png"> Down</div>
         </div>
 </div>        
 
