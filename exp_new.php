@@ -197,7 +197,7 @@ if(!$_SESSION['is_auth']) {
         </div>
         
         <div id="help2" class="alert alert-info">
-            <img src="img/help.png"> You can choose the resources from the maps, or directly entering their numbers. 
+            <img src="img/help.png"> You can choose the resources from the maps, or directly enter their numbers. 
             <br/><br/>Then click <b>Next</b> to go to the firmwares/profiles associations page.
         </div>
         
