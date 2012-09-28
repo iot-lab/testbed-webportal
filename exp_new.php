@@ -138,7 +138,7 @@ if(!$_SESSION['is_auth']) {
                 
                 <button id="btn_previous" class="btn">Previous</button>
                 
-                <h3>Managing associations</h3>
+                <h3>Manage associations</h3>
               
                     <table>
                         <thead>
@@ -197,8 +197,7 @@ if(!$_SESSION['is_auth']) {
         </div>
         
         <div id="help2" class="alert alert-info">
-            <img src="img/help.png"> You can choose <b>physical</b> resources (with node name) or by <b>alias</b> (with properties). 
-            <br/><br/>For <b>physical</b> resources you can choose your nodes on a map. 
+            <img src="img/help.png"> You can choose the resources from the maps, or directly entering their numbers. 
             <br/><br/>Then click <b>Next</b> to go to the firmwares/profiles associations page.
         </div>
         
