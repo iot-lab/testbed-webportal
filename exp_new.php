@@ -192,7 +192,7 @@ if(!$_SESSION['is_auth']) {
 
     <div class="span3">
         <div id="help1" class="alert alert-info">
-            <img src="img/help.png"> To create a new experiment you can : set a <b>name</b>, 
+            <img src="img/help.png"> To create a new experiment you can: set a <b>name</b>, 
             set a <b>duration</b>, run it <b>as soon as possible</b> or <b>scheduled</b>.
         </div>
         

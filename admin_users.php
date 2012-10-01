@@ -59,49 +59,49 @@ include("header.php") ?>
                <div class="alert alert-error" id="div_error_add" style="display:none"></div>
 
               <div class="control-group">
-                <label class="control-label" for="txt_firstname">First Name :</label>
+                <label class="control-label" for="txt_firstname">First Name:</label>
                 <div class="controls">
                     <input id="txt_firstname" type="text" class="input-xlarge" required="required"/>
                 </div>
               </div>
 
               <div class="control-group">
-                <label class="control-label" for="txt_lastname">Last Name :</label>
+                <label class="control-label" for="txt_lastname">Last Name:</label>
                 <div class="controls">
                     <input id="txt_lastname" type="text" class="input-xlarge" required="required"/>
                 </div>
               </div>
 
               <div class="control-group">
-                <label class="control-label" for="txt_howmany">How many accounts :</label>
+                <label class="control-label" for="txt_howmany">How many accounts:</label>
                 <div class="controls">
                     <input id="txt_howmany" type="text" class="input-xlarge" required="required" value="1"/>
                 </div>
               </div>
 
               <div class="control-group">
-                <label class="control-label" for="txt_email">Email :</label>
+                <label class="control-label" for="txt_email">Email:</label>
                 <div class="controls">
                     <input id="txt_email" type="email" class="input-xlarge" required="required"/>
                 </div>
               </div>
 
               <div class="control-group">
-                <label class="control-label" for="txt_structure">Structure :</label>
+                <label class="control-label" for="txt_structure">Structure:</label>
                 <div class="controls">
                     <input id="txt_structure" type="text" class="input-xlarge" required="required" />
                 </div>
               </div>
 
               <div class="control-group">
-                <label class="control-label" for="txt_city">City :</label>
+                <label class="control-label" for="txt_city">City:</label>
                 <div class="controls">
                     <input id="txt_city" type="text" class="input-xlarge" required="required" />
                 </div>
               </div>
 
               <div class="control-group">
-                <label class="control-label" for="txt_country">Country :</label>
+                <label class="control-label" for="txt_country">Country:</label>
 	            <div class="controls">
 					<select id="txt_country" required="required">
 	            		<option value="">Country...</option>
@@ -390,63 +390,63 @@ include("header.php") ?>
                
 
               <div class="control-group">
-                <label class="control-label" for="txt_firstname_e">First Name :</label>
+                <label class="control-label" for="txt_firstname_e">First Name:</label>
                 <div class="controls">
                     <input id="txt_firstname_e" type="text" class="input-xlarge" required="required"/>
                 </div>
               </div>
 
               <div class="control-group">
-                <label class="control-label" for="txt_lastname_e">Last Name :</label>
+                <label class="control-label" for="txt_lastname_e">Last Name:</label>
                 <div class="controls">
                     <input id="txt_lastname_e" type="text" class="input-xlarge" required="required"/>
                 </div>
               </div>
 
               <div class="control-group">
-                <label class="control-label" for="txt_login_e">Login :</label>
+                <label class="control-label" for="txt_login_e">Login:</label>
                 <div class="controls">
                     <input id="txt_login_e" type="text" class="input-xlarge" required="required" disabled="disabled"/>
                 </div>
               </div>
 
               <div class="control-group">
-                <label class="control-label" for="txt_email_e">Email :</label>
+                <label class="control-label" for="txt_email_e">Email:</label>
                 <div class="controls">
                     <input id="txt_email_e" type="email" class="input-xlarge" required="required"/>
                 </div>
               </div>
 
               <div class="control-group">
-                <label class="control-label" for="txt_structure_e">Structure :</label>
+                <label class="control-label" for="txt_structure_e">Structure:</label>
                 <div class="controls">
                     <input id="txt_structure_e" type="text" class="input-xlarge" required="required" />
                 </div>
               </div>
 
               <div class="control-group">
-                <label class="control-label" for="txt_city_e">City :</label>
+                <label class="control-label" for="txt_city_e">City:</label>
                 <div class="controls">
                     <input id="txt_city_e" type="text" class="input-xlarge" required="required" />
                 </div>
               </div>
 
               <div class="control-group">
-                <label class="control-label" for="txt_country_e">Country :</label>
+                <label class="control-label" for="txt_country_e">Country:</label>
                 <div class="controls">
                     <input id="txt_country_e" type="text" class="input-xlarge" required="required" />
                 </div>
               </div>
 
               <div class="control-group">
-                <label class="control-label" for="txt_sshkey_e">SSH Key :</label>
+                <label class="control-label" for="txt_sshkey_e">SSH Key:</label>
                 <div class="controls">
                     <textarea id="txt_sshkey_e" class="input-xlarge" rows="3" required="required"></textarea>
                 </div>
               </div>
               
                <div class="control-group">
-                <label class="control-label" for="txt_motivation_e">Motivation :</label>
+                <label class="control-label" for="txt_motivation_e">Motivation:</label>
                 <div class="controls">
                     <textarea id="txt_motivation_e" class="input-xlarge" rows="3" required="required"></textarea>
                 </div>

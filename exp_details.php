@@ -41,7 +41,7 @@ include("header.php") ?>
         
         <form id="frm_actions">
 
-            <b>Actions on selected nodes : </b>
+            <b>Actions on selected nodes: </b>
             
             <select id="action" class="input-small">
                 <option value="start">Start</option>
@@ -53,7 +53,7 @@ include("header.php") ?>
             
             <button id="btn_send" class="btn" type="submit">Send</button>
             
-            <div id="firmware" style="display:none">firmware : <input type="file" id="files" name="files[]" multiple /></div>
+            <div id="firmware" style="display:none">firmware: <input type="file" id="files" name="files[]" multiple /></div>
             
             <div id="loader" style="display:none"><img src="img/ajax-loader.gif"></div>
             <div id="state" class="alert" style="display:none"></div>
@@ -108,13 +108,13 @@ include("header.php") ?>
                     $("#detailsExpSummary").html(
                     "<b>Experiment:</b> <a href=\"monika?job=" + id + "\">" + id + "</a><br/>");
                     $("#detailsExpSummary").append(
-                    "<b>State :</b> " + data.state + "<br/>");
+                    "<b>State:</b> " + data.state + "<br/>");
                     $("#detailsExpSummary").append(
-                    "<b>Name :</b> " + exp_name + "<br/>");
+                    "<b>Name:</b> " + exp_name + "<br/>");
                     $("#detailsExpSummary").append(
-                    "<b>Duration (min) :</b> " + data.duration + "<br/>");
+                    "<b>Duration (min):</b> " + data.duration + "<br/>");
                     $("#detailsExpSummary").append(
-                    "<b>Number of nodes :</b> " + data.nodes.length + "<br/>");
+                    "<b>Number of nodes:</b> " + data.nodes.length + "<br/>");
         
         
                     if(data.state != "Running") {

@@ -58,10 +58,10 @@ include("header.php") ?>
                     //console.log(data);
 
                     $("#detailsExpSummary").html("<b>Experiment:</b> " + id + "<br/>");
-                    $("#detailsExpSummary").append("<b>Owner :</b> " + data.owner + "<br/>");
-                    $("#detailsExpSummary").append("<b>Name :</b> " + data.name + "<br/>");
-                    $("#detailsExpSummary").append("<b>Duration :</b> " + data.duration + "<br/>");
-                    $("#detailsExpSummary").append("<b>Number of Nodes :</b> " + data.nodes.length + "<br/>");
+                    $("#detailsExpSummary").append("<b>Owner:</b> " + data.owner + "<br/>");
+                    $("#detailsExpSummary").append("<b>Name:</b> " + data.name + "<br/>");
+                    $("#detailsExpSummary").append("<b>Duration:</b> " + data.duration + "<br/>");
+                    $("#detailsExpSummary").append("<b>Number of Nodes:</b> " + data.nodes.length + "<br/>");
         
                     state = data.state;
                     if(state == "Running" || state == "Waiting") {

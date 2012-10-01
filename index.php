@@ -343,14 +343,14 @@ include("header.php");
           </div>
 
           <div class="control-group">
-            <label class="control-label" for="txt_sshkey">SSH public key :</label>
+            <label class="control-label" for="txt_sshkey">SSH public key:</label>
             <div class="controls">
                  <textarea id="txt_sshkey" class="input-xlarge" id="textarea" rows="3"></textarea>
             </div>
           </div>
 
           <div class="control-group">
-            <label class="control-label" for="txt_motivation">Motivation :</label>
+            <label class="control-label" for="txt_motivation">Motivation:</label>
             <div class="controls">
                 <textarea id="txt_motivation" class="input-xlarge" id="textarea" rows="3" required="required"></textarea>
             </div>
@@ -359,7 +359,7 @@ include("header.php");
 
 
           <div class="control-group" id="cg_captcha">
-            <label class="control-label" for="txt_motivation">Anti-spam :</label>
+            <label class="control-label" for="txt_motivation">Anti-spam:</label>
             <div class="controls">
                 <input id="captcha" class="input-xlarge" name="captcha"  />
                 <br/>

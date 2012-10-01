@@ -52,7 +52,7 @@ include("header.php") ?>
           </p>-->
           
         <div class="alert alert-info">
-            <img src="img/help.png"> Click on an experiment to manage it or click <b>New Experiment</b> to create a new one.
+            <img src="img/help.png"> Click on an experiment to manage it or click <b>New Experiment</b> to start a new one.
         </div>
           
       </div>
