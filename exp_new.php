@@ -413,6 +413,7 @@ if(!$_SESSION['is_auth']) {
                         $("#help1").hide();
                         $("#help2").hide();
                         $("#help3").show();
+                        $("#txt_notif").hide();
 
                         displayAssociation();
                 } else {
@@ -438,9 +439,19 @@ if(!$_SESSION['is_auth']) {
 
                 $("#my_profiles option:selected").removeAttr("selected");
                 $("#my_firmwares option:selected").removeAttr("selected");
-
-
-                if ( nodes_set == null || (nodes_set == null && profil_set == null) || (nodes_set == null && firmware_set == null) ) {
+ 
+                var error = false;
+                
+                if( nodes_set == null) {    //no node selected
+                    error = true;
+                }
+                else {                      //no profile or firmware selected
+                    if(profil_set == null && firmware_set == null) {
+                        error = true;
+                    }
+                }
+                
+                if (error) {
                     alert("Please select nodes and a profile and/or a firmware");
                     return false;
                 }
