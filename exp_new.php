@@ -600,14 +600,12 @@ if(!$_SESSION['is_auth']) {
                         //data: "data="+datab,
                         //url: "dump.php",
                         success: function (data_server) {
-                            $("#expState").modal('show');
-                            $("#expStateMsg").html("<h3>Your experiment has successfully been submitted</h3>");
-                            $("#expStateMsg").append(data_server);
+                            displaySubmitState(data_server);
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrows) {
                             $("#expState").modal('show');
                             $("#expStateMsg").html("<h3 style='color:red'>Error</h3>");
-                            $("#expStateMsg").append(textStatus + ": " + errorThrows);
+                            $("#expStateMsg").append(textStatus + ": " + errorThrows + "<br/>" + XMLHttpRequest.responseText);
                         }
                     });
                 }
@@ -620,14 +618,12 @@ if(!$_SESSION['is_auth']) {
                         contentType: "application/json; charset=utf-8",
                         url: "/rest/experiment?body",
                         success: function (data_server) {
-                            $("#expState").modal('show');
-                            $("#expStateMsg").html("<h3>Your experiment has successfully been submitted</h3>");
-                            $("#expStateMsg").append(data_server);
+                            displaySubmitState(data_server);
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrows) {
                             $("#expState").modal('show');
                             $("#expStateMsg").html("<h3 style='color:red'>Error</h3>");
-                            $("#expStateMsg").append(textStatus + ": " + errorThrows);
+                            $("#expStateMsg").append(textStatus + ": " + errorThrows + "<br/>" + XMLHttpRequest.responseText);
                         }
                     });
                     
@@ -837,6 +833,20 @@ if(!$_SESSION['is_auth']) {
                     $("#div_resources_map").hide();
                 }
             });
+
+
+        function displaySubmitState(data_server) {
+            $("#expState").modal('show');
+            $("#expStateMsg").html("<h3>Your experiment has successfully been submitted</h3>");
+            var info = JSON.parse(data_server);
+            
+            if(info.code == 400)
+            {
+                $("#expStateMsg").html("<h3 style='color:red'>Error</h3>");
+                $("#expStateMsg").append(info.title + "<br/>" + info.message);
+            }
+            $("#expStateMsg").append("Experiment Id : " + info.id);
+        }
 
 
             function removeAssociation(index) {
