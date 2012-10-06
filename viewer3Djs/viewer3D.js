@@ -87,6 +87,7 @@ function init() {
         particle.position.z = nodes[i][3] - zcenter;
         particle.uid = nodes[i][4];
         particle.state = nodes[i][5];
+        particle.used = nodes[i][6];
         particle.position.multiplyScalar(10);
         particle.scale.x = particle.scale.y = 1;
         scene.add(particle);
@@ -238,7 +239,13 @@ function myrender() {
             else {
                 objects[i].material.color.setHex(0xFF3030);
             }
+            
+            if(objects[i].used == "used") {
+                objects[i].material.color.setHex(0x9943BE);
+            }
         }
+        
+        
     }
     renderer.render(scene, camera);
 }

@@ -34,7 +34,7 @@ body {
             <div ID='div3d' style=" height:500px;background-color:#202020;z-index:-1" oncontextmenu="return false;"></div>
 
             <div ID='infobox' style="text-align:center"></div>
-	    <div style="text-align:right"><img src="img/node_alive.png"> Alive - <img src="img/node_down.png"> Down - <img src="img/node_selected.png"> Selected</div>
+        <div style="text-align:right"><img src="img/node_alive.png"> Alive - <img src="img/node_down.png"> Down - <img src="img/node_selected.png"> Selected - <img src="img/node_used.png"> Used</div>
         </div>
 </div>        
 
@@ -44,8 +44,43 @@ body {
 <script type="text/javascript">
 
     var site = <?php echo '"'.$site.'"' ?>;
+    var used = [];
+
 
     $(document).ready(function(){
+        
+        
+        $.ajax({
+            url: "/rest/experiments?busy",
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: "",
+            success:function(data){
+                used = data.used;
+                loadResources();
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrows){
+                alert(errorThrows);
+            }
+        });
+        
+    });
+
+
+    function loadData() {
+        var list = document.getElementById("nodebox");
+        list.value = window.opener.document.getElementById(site+"_list").value;
+        parseNodebox();
+    }; 
+
+    function save() {
+        window.opener.document.getElementById(site+"_list").value = document.getElementById("nodebox").value;
+        window.close();
+    }
+
+
+    function loadResources() {
         $.ajax({
             url: "/rest/experiments?resources",
             type: "GET",
@@ -68,6 +103,13 @@ body {
                         n.push(parseFloat(data.resources[i].z));
                         n.push(data.resources[i].uid);
                         n.push(data.resources[i].state);
+                        
+                        for(x=0; x<used.length; x++) {
+                            if(data.resources[i].network_address == used[x]) {
+                                n.push("used");
+                            }
+                        }
+                        
                         nodes.push(n);
                     }
                 }
@@ -79,20 +121,7 @@ body {
                 alert(errorThrows);
             }
         });
-    });
-
-
-    function loadData() {
-        var list = document.getElementById("nodebox");
-        list.value = window.opener.document.getElementById(site+"_list").value;
-        parseNodebox();
-    }; 
-
-    function save() {
-        window.opener.document.getElementById(site+"_list").value = document.getElementById("nodebox").value;
-        window.close();
-    }
-
+    }    
 
     <?php if (isset($_SESSION['basic_value'])) { ?>
 
