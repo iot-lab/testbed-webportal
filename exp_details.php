@@ -256,13 +256,13 @@ include("header.php") ?>
                         contentType: "multipart/form-data; boundary="+boundary,
                         
                         success: function (data) {
-                            $("#state").html("OK : " + JSON.stringify(data.success));
+                            $("#state").html("<b>Update</b> successful for node(s): " + + JSON.stringify(data.success));
                             $("#state").removeClass("alert-error");
                             $("#state").addClass("alert-success");
                             $("#state").show();
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrows) {
-                            $("#state").html(textStatus);
+                            $("#state").html(textStatus + " : " + errorThrows +  " : " +  XMLHttpRequest.responseText);
                             $("#state").removeClass("alert-success");
                             $("#state").addClass("alert-error");
                             $("#state").show();
@@ -277,13 +277,13 @@ include("header.php") ?>
                         contentType: "application/json; charset=utf-8",
                         url: "/rest/experiment/"+id+"/nodes?"+command+""+battery,
                         success: function (data) {
-                            $("#state").html("OK : " + JSON.stringify(data.success));
+                            $("#state").html("<b>"+command + "</b> successful for node(s): " + JSON.stringify(data.success));
                             $("#state").removeClass("alert-error");
                             $("#state").addClass("alert-success");
                             $("#state").show();
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrows) {
-                            $("#state").html(textStatus);
+                            $("#state").html(textStatus + " : " + errorThrows +  " : " +  XMLHttpRequest.responseText);
                             $("#state").removeClass("alert-success");
                             $("#state").addClass("alert-error");
                             $("#state").show();
