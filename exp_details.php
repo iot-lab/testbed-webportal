@@ -256,7 +256,7 @@ include("header.php") ?>
                         contentType: "multipart/form-data; boundary="+boundary,
                         
                         success: function (data) {
-                            $("#state").html("<b>Update</b> successful for node(s): " + + JSON.stringify(data.success));
+                            $("#state").html("<b>Update</b> successful for node(s): " + JSON.stringify(data.success));
                             $("#state").removeClass("alert-error");
                             $("#state").addClass("alert-success");
                             $("#state").show();
