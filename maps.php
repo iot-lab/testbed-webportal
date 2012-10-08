@@ -44,29 +44,11 @@ body {
 <script type="text/javascript">
 
     var site = <?php echo '"'.$site.'"' ?>;
-    var used = [];
-
 
     $(document).ready(function(){
         
-        
-        $.ajax({
-            url: "/rest/experiments?busy",
-            type: "GET",
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            data: "",
-            success:function(data){
-                used = data.used;
-                loadResources();
-            },
-            error:function(XMLHttpRequest, textStatus, errorThrows){
-                alert(errorThrows);
-            }
-        });
-        
-    });
-
+       loadResources();
+   });
 
     function loadData() {
         var list = document.getElementById("nodebox");
@@ -103,13 +85,6 @@ body {
                         n.push(parseFloat(data.resources[i].z));
                         n.push(data.resources[i].uid);
                         n.push(data.resources[i].state);
-                        
-                        for(x=0; x<used.length; x++) {
-                            if(data.resources[i].network_address == used[x]) {
-                                n.push("used");
-                            }
-                        }
-                        
                         nodes.push(n);
                     }
                 }

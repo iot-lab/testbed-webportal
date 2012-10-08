@@ -87,7 +87,6 @@ function init() {
         particle.position.z = nodes[i][3] - zcenter;
         particle.uid = nodes[i][4];
         particle.state = nodes[i][5];
-        particle.used = nodes[i][6];
         particle.position.multiplyScalar(10);
         particle.scale.x = particle.scale.y = 1;
         scene.add(particle);
@@ -233,15 +232,14 @@ function myrender() {
             objects[i].material.color.setHex(0x0099CC);
         }
         else {
-            if(objects[i].state == "Alive") {
+            if(objects[i].state == "Busy") {
+                objects[i].material.color.setHex(0x9943BE);
+            }
+            else if(objects[i].state == "Alive") {
                 objects[i].material.color.setHex(0x7FFF00);
             }
             else {
                 objects[i].material.color.setHex(0xFF3030);
-            }
-            
-            if(objects[i].used == "used") {
-                objects[i].material.color.setHex(0x9943BE);
             }
         }
         
