@@ -34,7 +34,7 @@ body {
             <div ID='div3d' style=" height:500px;background-color:#202020;z-index:-1" oncontextmenu="return false;"></div>
 
             <div ID='infobox' style="text-align:center"></div>
-        <div style="text-align:right"><img src="img/node_alive.png"> Alive - <img src="img/node_down.png"> Down - <img src="img/node_selected.png"> Selected - <img src="img/node_used.png"> Used</div>
+        <div style="text-align:right"><img src="img/node_alive.png"> Alive - <img src="img/node_down.png"> Down - <img src="img/node_selected.png"> Selected - <img src="img/node_used.png"> Busy</div>
         </div>
 </div>        
 
