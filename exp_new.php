@@ -331,7 +331,7 @@ if(!$_SESSION['is_auth']) {
 
                 var regExp = /^[0-9A-z]*$/; ;
                 if(regExp.test($("#txt_name").val()) == false){
-                   alert("You must set a experiment name with only word characters [0-9A-Za-z_]");
+                   alert("You must set a experiment name with only alphanumeric characters [0-9A-Za-z_]");
                    return false;
                 }
 
