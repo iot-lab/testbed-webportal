@@ -329,6 +329,12 @@ if(!$_SESSION['is_auth']) {
 
                 e.preventDefault();
 
+                var regExp = /^[0-9A-z]*$/; ;
+                if(regExp.test($("#txt_name").val()) == false){
+                   alert("You must set a experiment name with only word characters [0-9A-Za-z_]");
+                   return false;
+                }
+
                 //var url = $(this).attr('action');
                 //$("#form_part1").serializeArray();
         
