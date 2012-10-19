@@ -79,10 +79,10 @@ if(!$_SESSION['is_auth']) {
                                 <div class="span9" style="margin:0px"><div class="" id="div_resources_map"><table id="div_resources_map_tbl"></table></div></div>
 
                         </div>
-                       <!-- <div class="row-fluid">
+                       <div class="row-fluid">
                                 <div class="span1" style="text-align:center"><input type="radio" name="resources_type" id="optionsRadiosType" value="alias"></div>
                                 <div class="span2" style="margin:0px;padding-top:3px">by type</div>
-                        </div> -->
+                        </div> 
                         <div class="row-fluid">
                                 <div class="span12" style="margin:0px;padding-top:3px">
                         
@@ -111,7 +111,6 @@ if(!$_SESSION['is_auth']) {
 			                                        </td>
 			                                        <td>
 			                                            <select id="lst_site" class="input-medium site">
-			                                                <option value="any">Any</option>
 			                                            </select> 
 			                                        </td>
 			                                        <td>
@@ -373,10 +372,12 @@ if(!$_SESSION['is_auth']) {
                             row_rs.nbnodes = number;
                             row_rs.properties.archi = archi;
                             
-                            if(site != "any")   
-                                 row_rs.properties.site = site;
+                            row_rs.properties.site = site;
+                            
                             if(mobile)
                                 row_rs.properties.mobile = 1;
+                            else
+                                row_rs.properties.mobile = 0;
 
                             alias_nodes.push(row_rs);
 
@@ -895,9 +896,7 @@ if(!$_SESSION['is_auth']) {
 		            if(node.properties.mobile==1)
 		                  ntype = "mobile";
 		
-					var nsite="any";
-		            if(node.properties.site != undefined)
-		                  nsite = node.properties.site;
+                    nsite = node.properties.site;
 		
 		            $("#my_nodes").append(new Option(node.properties.archi+"/"+nsite+"/"+node.nbnodes+"/"+ntype,json_tmp[index].node));
 		
