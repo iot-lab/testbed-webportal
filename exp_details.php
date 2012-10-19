@@ -174,7 +174,7 @@ include("header.php") ?>
                                     site = data.nodes[k].properties.site;
                                 }
                                     
-                                var nbnodes = data.nodes[k].nbnodes;
+                                var nbnodes = data.nodes[k].properties.nbnodes;
                                 
                                 var mobile = false;
                                 
@@ -187,7 +187,7 @@ include("header.php") ?>
                                     ntype = "mobile";
                                 }
                                 
-                                $("#detailsExpRow").append("<tr><td></td><td>"+archi+"/"+site+"/"+nbnodes+"/"+ntype+"</td><td>"+json_exp[k].profilename+"</td><td>"+json_exp[k].firmwarename+"</td></tr>");
+                                $("#detailsExpRow").append("<tr><td>"+archi+"/"+site+"/"+nbnodes+"/"+ntype+"</td><td>"+json_exp[k].profilename+"</td><td>"+json_exp[k].firmwarename+"</td></tr>");
                             }
                         }
                     }
