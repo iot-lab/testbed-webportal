@@ -183,7 +183,7 @@ include("header.php") ?>
                                 }    
                                 
                                 var ntype = "fixe";
-                                if(mobile){
+                                if(mobile == "1"){
                                     ntype = "mobile";
                                 }
                                 
