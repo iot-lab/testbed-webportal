@@ -8,6 +8,9 @@ if(!$_SESSION['is_auth']) {
 
 include("header.php") ?>
 
+<link rel="stylesheet" href="css/datepicker.css" type="text/css"/>
+<link rel="stylesheet" href="css/timepicker.css" type="text/css"/>
+
     <div class="container" text-align="top">
     
    
@@ -21,7 +24,26 @@ include("header.php") ?>
         <p>
             <button class="btn btn-danger" id="btnCancel" onclick="cancelExperiment()">Cancel</button>
             <a href="scripts/exp_download_data.php?id=<?php echo $_GET['id']?>" class="btn" id="btnDownload">Download</a>
+            
         </p>
+        
+        <form class="well form" style="width:500px" id="frm_reload">
+            <button class="btn" id="btn_reload">Reload</button>
+            <div class="control-group">
+                <div class="controls">
+                    <div class="row-fluid">
+                        <input type="radio" id="radioStart" name="radioStart" value="asap" checked/>As soon as possible
+                    </div>
+                    <div class="row-fluid">
+                        <input type="radio" id="radioStart" name="radioStart" value="scheduled"/>Scheduled
+                        <input type="text" class="input-small" value="" id="dp1" name="dp1" disabled="disabled" style="display:none">
+                        <input class="dropdown-timepicker input-mini" data-provide="timepicker" type="text" id="tp1" name="tp1" disabled="disabled" style="display:none">
+                    </div>
+                </div>
+            </div>
+        </form>
+        
+
         
         <table class="table table-striped table-bordered table-condensed" style="width:500px" id="tbl_nodes">
         <thead>
@@ -73,6 +95,7 @@ include("header.php") ?>
         var state = "";
         var binary = "";
         var boundary = "AaB03x";
+        var scheduled = false;
         
         $(document).ready(function(){
 
@@ -83,6 +106,38 @@ include("header.php") ?>
                 $(this).hide();
             });
 
+            //date picker
+            var now = new Date();
+            $("#dp1").val(now.getMonth()+1 + "-" + now.getDate() + "-" + now.getFullYear());
+            
+            $('#dp1').datepicker({
+                format: 'mm-dd-yyyy'
+            });
+
+            $('.dropdown-timepicker').timepicker({
+                defaultTime: 'current',
+                minuteStep: 1,
+                disableFocus: true,
+                showMeridian: false,
+                template: 'dropdown'
+            });
+
+            //click on scheduled button 
+            $("input[name=radioStart]").change(function () {
+                if($(this).val()== "asap") {
+                    $("#dp1").attr("disabled","disabled");
+                    $("#dp1").hide();
+                    $("#tp1").attr("disabled","disabled");
+                    $("#tp1").hide();
+                    scheduled = false;
+                } else {                    
+                    $("#dp1").removeAttr("disabled");
+                    $("#dp1").show();
+                    $("#tp1").removeAttr("disabled");
+                    $("#tp1").show();
+                    scheduled = true;
+                }
+            });
 
             /* retrieve experiment details */
             $.ajax({
@@ -295,6 +350,53 @@ include("header.php") ?>
             
             //file upload event
             document.getElementById('files').addEventListener('change', handleFileSelect, false);
+            
+            
+            
+            $("#frm_reload").bind("submit",function(e){
+                e.preventDefault();
+                
+                var exp_json = {};
+                if(scheduled) {
+                    
+                    //parse date
+                    var tab_date = $("#dp1").val().split("-");
+                    var month = (tab_date[0] - 1);
+                    var day = tab_date[1];
+                    var year = tab_date[2];
+                    
+                    //parse hour
+                    var tab_hour = $("#tp1").val().split(":");
+                    var hour = tab_hour[0];
+                    var minute = tab_hour[1];
+                    
+                    //create date
+                    var schedule_date = new Date(year, month, day, hour, minute);
+                    var scheduled_timestamp = schedule_date.getTime()/1000;
+                    
+                    var d = new Date();
+                    var offset = d.getTimezoneOffset();
+                    exp_json.reservation = scheduled_timestamp - (offset*60);
+                }
+                
+                console.log(exp_json);
+                
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    data: JSON.stringify(exp_json),
+                    contentType: "application/json; charset=utf-8",
+                    url: "/rest/experiment/"+id+"/reload",
+                    success: function (data) {
+                        alert(data);
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrows) {
+                        alert(textStatus);
+                    }
+                });
+            });
+            
+            
     });
 
     function cancelExperiment(){
@@ -348,6 +450,9 @@ include("header.php") ?>
     }
 
     </script>
+
+        <script src="js/bootstrap-datepicker.js"></script>
+        <script src="js/bootstrap-timepicker.js"></script>
 
   </body>
 </html>
