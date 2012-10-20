@@ -386,7 +386,7 @@ include("header.php") ?>
                     dataType: "json",
                     data: JSON.stringify(exp_json),
                     contentType: "application/json; charset=utf-8",
-                    url: "/rest/experiment/"+id+"/reload",
+                    url: "/rest/experiment/"+id+"?reload",
                     success: function (data) {
                         alert(data);
                     },
