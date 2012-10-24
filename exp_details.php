@@ -30,16 +30,19 @@ include("header.php") ?>
         <form class="well form" style="width:500px" id="frm_reload">
             <button class="btn" id="btn_reload">Reload</button>
             <div class="control-group">
-                <div class="controls">
-                    <div class="row-fluid">
-                        <input type="radio" id="radioStart" name="radioStart" value="asap" checked/>As soon as possible
-                    </div>
-                    <div class="row-fluid">
-                        <input type="radio" id="radioStart" name="radioStart" value="scheduled"/>Scheduled
-                        <input type="text" class="input-small" value="" id="dp1" name="dp1" disabled="disabled" style="display:none">
-                        <input class="dropdown-timepicker input-mini" data-provide="timepicker" type="text" id="tp1" name="tp1" disabled="disabled" style="display:none">
-                    </div>
-                </div>
+					<label class="control-label" for="txt_start">Start:</label>
+					<div class="controls">
+						<div class="row-fluid">
+							<div class="span1" style="text-align:center"><input type="radio" id="radioStart" name="radioStart" value="asap" checked/></div>
+                            <div class="span8" style="margin:0px;padding-top:3px">As soon as possible</div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span1" style="text-align:center"><input type="radio" id="radioStart" name="radioStart" value="scheduled"/></div>
+                            <div class="span2" style="margin:0px;padding-top:3px">Scheduled</div>
+                            <div class="span2" style="margin:0px"><input type="text" class="input-small" value="" id="dp1" name="dp1" disabled="disabled" style="display:none"></div>
+                            <div class="span2"><input class="dropdown-timepicker input-mini" data-provide="timepicker" type="text" id="tp1" name="tp1" disabled="disabled" style="display:none"></div>
+                        </div>
+					</div>
             </div>
         </form>
         
@@ -49,9 +52,9 @@ include("header.php") ?>
         <thead>
             <tr>
                 <th></th>
-                <th>node</th>
-                <th>profile</th>
-                <th>firmware</th>
+                <th>Node</th>
+                <th>Profile</th>
+                <th>Firmware</th>
             </tr>
         </thead>
         <tbody id="detailsExpRow">
@@ -75,7 +78,7 @@ include("header.php") ?>
             
             <button id="btn_send" class="btn" type="submit">Send</button>
             
-            <div id="firmware" style="display:none">firmware: <input type="file" id="files" name="files[]" multiple /></div>
+            <div id="firmware" style="display:none">Firmware: <input type="file" id="files" name="files[]" multiple /></div>
             
             <div id="loader" style="display:none"><img src="img/ajax-loader.gif"></div>
             <div id="state" class="alert" style="display:none"></div>
