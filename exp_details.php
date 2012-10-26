@@ -27,7 +27,7 @@ include("header.php") ?>
             
         </p>
         
-        <form class="well form" style="width:500px" id="frm_reload">
+        <form class="well form-horizontal" style="width:500px" id="frm_reload">
             <button class="btn" id="btn_reload">Reload</button>
             <div class="control-group">
 					<label class="control-label" for="txt_start">Start:</label>
@@ -38,8 +38,8 @@ include("header.php") ?>
                         </div>
                         <div class="row-fluid">
                             <div class="span1" style="text-align:center"><input type="radio" id="radioStart" name="radioStart" value="scheduled"/></div>
-                            <div class="span2" style="margin:0px;padding-top:3px">Scheduled</div>
-                            <div class="span2" style="margin:0px"><input type="text" class="input-small" value="" id="dp1" name="dp1" disabled="disabled" style="display:none"></div>
+                            <div class="span3" style="margin:0px;padding-top:3px">Scheduled</div>
+                            <div class="span4" style="margin:0px;text-align:right;"><input type="text" class="input-small" value="" id="dp1" name="dp1" disabled="disabled" style="display:none"></div>
                             <div class="span2"><input class="dropdown-timepicker input-mini" data-provide="timepicker" type="text" id="tp1" name="tp1" disabled="disabled" style="display:none"></div>
                         </div>
 					</div>
@@ -161,18 +161,6 @@ include("header.php") ?>
                     else {
                         $("#btnCancel").attr("disabled",true);
                     }
-
-
-                    $("#detailsExpSummary").html(
-                    "<b>Experiment:</b> <a href=\"monika?job=" + id + "\">" + id + "</a><br/>");
-                    $("#detailsExpSummary").append(
-                    "<b>State:</b> " + data.state + "<br/>");
-                    $("#detailsExpSummary").append(
-                    "<b>Name:</b> " + exp_name + "<br/>");
-                    $("#detailsExpSummary").append(
-                    "<b>Duration (min):</b> " + data.duration + "<br/>");
-                    $("#detailsExpSummary").append(
-                    "<b>Number of nodes:</b> " + data.nodes.length + "<br/>");
         
         
                     if(data.state != "Running") {
@@ -181,6 +169,8 @@ include("header.php") ?>
         
         
                     json_exp = rebuildJson(data);
+
+                    
     
                     //then nodes without association
                     for(var l=0; l<data.nodes.length; l++) {
@@ -210,10 +200,19 @@ include("header.php") ?>
                             }
                         }    
                     }
+
+
+                    $("#detailsExpSummary").html("<b>Experiment:</b> <a href=\"monika?job=" + id + "\">" + id + "</a><br/>");
+                    $("#detailsExpSummary").append("<b>State:</b> " + data.state + "<br/>");
+                    $("#detailsExpSummary").append("<b>Name:</b> " + exp_name + "<br/>");
+                    $("#detailsExpSummary").append("<b>Duration (min):</b> " + data.duration + "<br/>");
                 
                     
                     //display
                     $("#detailsExpRow").html("");
+                    
+                    var nbTotalNodes=0;
+                    if(data.type == "physical") nbTotalNodes=data.nodes.length;                    
                     
                     for(var k = 0; k < json_exp.length; k++) {
                         
@@ -233,6 +232,7 @@ include("header.php") ?>
                                 }
                                     
                                 var nbnodes = data.nodes[k].nbnodes;
+                                nbTotalNodes += nbnodes;                                
                                 
                                 var mobile = false;
                                 
@@ -244,11 +244,12 @@ include("header.php") ?>
                                 if(mobile == "1"){
                                     ntype = "mobile";
                                 }
-                                
+
                                 $("#detailsExpRow").append("<tr><td></td><td>"+archi+"/"+site+"/"+nbnodes+"/"+ntype+"</td><td>"+json_exp[k].profilename+"</td><td>"+json_exp[k].firmwarename+"</td></tr>");
                             }
                         }
                     }
+                    $("#detailsExpSummary").append("<b>Number of nodes:</b> " + nbTotalNodes + "<br/>");
                 },
                 error:function(XMLHttpRequest, textStatus, errorThrows){
                     $("#detailsExpSummary").html("An error occurred while retrieving experiment #" + id + " details");
