@@ -157,9 +157,13 @@ include("header.php") ?>
                     state = data.state;
                     if(state == "Running" || state == "Waiting") {
                         $("#btnCancel").attr("disabled",false);
+                        $("#btnReload").attr("disabled",true);
+                        $("input[name=radioStart]").attr("disabled",true);
                     }
                     else {
                         $("#btnCancel").attr("disabled",true);
+                        $("#btnReload").attr("disabled",false);
+                        $("input[name=radioStart]").attr("disabled",false);
                     }
         
         
