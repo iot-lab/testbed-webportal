@@ -289,13 +289,13 @@ if(!$_SESSION['is_auth']) {
                         site_resources = JSON.parse(data_server);
                         //console.log(site_resources);
                         
-			for(var j = 0; j < site_resources.sites.length; j++) {
-				$("#div_resources_map_tbl").append('<tr><td><a href="#" onclick="openMapPopup(\''+site_resources.sites[j].site+'\')" id="'+site_resources.sites[j].site+'_maps">'+site_resources.sites[j].site.charAt(0).toUpperCase() + site_resources.sites[j].site.slice(1)+' map</a></td><td><input id="'+site_resources.sites[j].site+'_list" value="" class="input-large" /></td></tr>');
-				
-			}
+                        for(var j = 0; j < site_resources.sites.length; j++) {
+                            $("#div_resources_map_tbl").append('<tr><td><a href="#" onclick="openMapPopup(\''+site_resources.sites[j].site+'\')" id="'+site_resources.sites[j].site+'_maps">'+site_resources.sites[j].site.charAt(0).toUpperCase() + site_resources.sites[j].site.slice(1)+' map</a></td><td><input id="'+site_resources.sites[j].site+'_list" value="" class="input-large" /></td></tr>');
+                            
+                        }
 
 
-			for(var i = 0; i < site_resources.sites.length; i++) {
+                        for(var i = 0; i < site_resources.sites.length; i++) {
                             $("#lst_site").append(new Option(site_resources.sites[i].site, site_resources.sites[i].site));
                             
                             for(j = 0; j < site_resources.sites[i].nodes.length; j++) {
@@ -391,24 +391,24 @@ if(!$_SESSION['is_auth']) {
                 }
                 else {
 
-			exp_json.nodes = [];
-			$("#div_resources_map input").each(function(){
-				var site = $(this).attr("id").split('_')[0];
-				var val = $(this).attr("value");
-				if(val != "") {
-					var snodes = parseNodebox(val);
-	                       		for (i = 0; i < snodes.length; i++) {
-        		                    if(!isNaN(snodes[i]))
-                        	        	exp_json.nodes.push("node"+snodes[i]+"."+site+".senslab.info");
-                        		}
+                    exp_json.nodes = [];
+                    $("#div_resources_map input").each(function(){
+                        var site = $(this).attr("id").split('_')[0];
+                        var val = $(this).attr("value");
+                        if(val != "") {
+                            var snodes = parseNodebox(val);
+                                        for (i = 0; i < snodes.length; i++) {
+                                            if(!isNaN(snodes[i]))
+                                                exp_json.nodes.push("node"+snodes[i]+"."+site+".senslab.info");
+                                        }
 
-				}
-			});
+                        }
+                    });
 
               
-                   	for (i = 0; i < exp_json.nodes.length; i++) {
-                        	$("#my_nodes").append(new Option(exp_json.nodes[i], exp_json.nodes[i], false, false));
-                    	}
+                    for (i = 0; i < exp_json.nodes.length; i++) {
+                        $("#my_nodes").append(new Option(exp_json.nodes[i], exp_json.nodes[i], false, false));
+                    }
 
                 }
 
@@ -576,65 +576,42 @@ if(!$_SESSION['is_auth']) {
                 var mydata = JSON.stringify(exp_json);
                 var datab = "";
                 
-                if (exp_json.profileassociations != null || exp_json.firmwareassociations) {
-                    var boundary = "AaB03x";
+                var boundary = "AaB03x";
 
-                    //JSON
+                //JSON
+                datab += "--" + boundary + '\r\n';
+                datab += 'Content-Disposition: form-data; name="'+exp_json.name+'.json"; filename="'+exp_json.name+'.json"\r\n';
+                datab += 'Content-Type: application/json\r\n\r\n';
+                datab += mydata + '\r\n\r\n';
+                //datab += "--" + boundary + '\r\n';
+
+
+                for (var i = 0; i < binary.length; i++) {
                     datab += "--" + boundary + '\r\n';
-                    datab += 'Content-Disposition: form-data; name="'+exp_json.name+'.json"; filename="'+exp_json.name+'.json"\r\n';
-                    datab += 'Content-Type: application/json\r\n\r\n';
-                    datab += mydata + '\r\n\r\n';
-                    //datab += "--" + boundary + '\r\n';
-
-
-                    for (var i = 0; i < binary.length; i++) {
-                        datab += "--" + boundary + '\r\n';
-                        datab += 'Content-Disposition: form-data; name="' + binary[i].name + '"; filename="' + binary[i].name + '"\r\n';
-                        datab += 'Content-Type: text/plain\r\n\r\n';
-                        datab += binary[i].bin + '\r\n';
-                    }
-
-                    //add json
-                    datab += "--" + boundary + '--';
-
-                    $.ajax({
-                        type: "POST",
-                        dataType: "text",
-                        data: datab,
-                        url: "/rest/experiment",
-                        contentType: "multipart/form-data; boundary="+boundary,
-                        
-                        //data: "data="+datab,
-                        //url: "dump.php",
-                        success: function (data_server) {
-                            displaySubmitState(data_server);
-                        },
-                        error: function (XMLHttpRequest, textStatus, errorThrows) {
-                            $("#expState").modal('show');
-                            $("#expStateMsg").html("<h3 style='color:red'>Error</h3>");
-                            $("#expStateMsg").append(textStatus + ": " + errorThrows + "<br/>" + XMLHttpRequest.responseText);
-                        }
-                    });
+                    datab += 'Content-Disposition: form-data; name="' + binary[i].name + '"; filename="' + binary[i].name + '"\r\n';
+                    datab += 'Content-Type: text/plain\r\n\r\n';
+                    datab += binary[i].bin + '\r\n';
                 }
-                else
-                {
-                    $.ajax({
-                        type: "POST",
-                        dataType: "text",
-                        data: mydata,
-                        contentType: "application/json; charset=utf-8",
-                        url: "/rest/experiment?body",
-                        success: function (data_server) {
-                            displaySubmitState(data_server);
-                        },
-                        error: function (XMLHttpRequest, textStatus, errorThrows) {
-                            $("#expState").modal('show');
-                            $("#expStateMsg").html("<h3 style='color:red'>Error</h3>");
-                            $("#expStateMsg").append(textStatus + ": " + errorThrows + "<br/>" + XMLHttpRequest.responseText);
-                        }
-                    });
+
+                //add json
+                datab += "--" + boundary + '--';
+
+                $.ajax({
+                    type: "POST",
+                    dataType: "text",
+                    data: datab,
+                    url: "/rest/experiment",
+                    contentType: "multipart/form-data; boundary="+boundary,
                     
-                }
+                    success: function (data_server) {
+                        displaySubmitState(data_server);
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrows) {
+                        $("#expState").modal('show');
+                        $("#expStateMsg").html("<h3 style='color:red'>Error</h3>");
+                        $("#expStateMsg").append(textStatus + ": " + errorThrows + "<br/>" + XMLHttpRequest.responseText);
+                    }
+                });
 
                 return false;
             });
@@ -859,52 +836,52 @@ if(!$_SESSION['is_auth']) {
             function removeAssociation(index) {
                 json_tmp = rebuildJson(exp_json);
 
-				// looking for profile in json_tmp[index] 
-				if(JSON.stringify(json_tmp[index].profilename)!=undefined) {
-					for (var i=0;i<exp_json.profileassociations.length;i++) {
-						if(exp_json.profileassociations[i].profilename==json_tmp[index].profilename) {
-							for (var j=0; j<exp_json.profileassociations[i].nodes.length;j++)
-								if(exp_json.profileassociations[i].nodes[j]==json_tmp[index].node)
-									exp_json.profileassociations[i].nodes.splice(j,1);
-							if(exp_json.profileassociations[i].nodes.length==0)
-								exp_json.profileassociations.splice(i,1);
-						}
-					}
-					if(exp_json.profileassociations.length==0)
-						delete exp_json.profileassociations;
-				
-				}
-				// looking for firmware in json_tmp[index] 
-				if(JSON.stringify(json_tmp[index].firmwarename)!=undefined) {
-		                for (var i=0;i<exp_json.firmwareassociations.length;i++) {
-		                   if(exp_json.firmwareassociations[i].firmwarename==json_tmp[index].firmwarename) {
-		                        for (var j=0; j<exp_json.firmwareassociations[i].nodes.length;j++)
-		                            if(exp_json.firmwareassociations[i].nodes[j]==json_tmp[index].node)
-		                                exp_json.firmwareassociations[i].nodes.splice(j,1);
-							    if(exp_json.firmwareassociations[i].nodes.length==0)
-								    exp_json.firmwareassociations.splice(i,1);
-		                   }
-		                 }
-					     if(exp_json.firmwareassociations.length==0)
-						     delete exp_json.firmwareassociations;
-				}
-		
-				if(exp_json.type=="alias") {
-					
-					var node = exp_json.nodes[json_tmp[index].node];
-		            var ntype = "fixe";
-		            if(node.properties.mobile==1)
-		                  ntype = "mobile";
-		
+                // looking for profile in json_tmp[index] 
+                if(JSON.stringify(json_tmp[index].profilename)!=undefined) {
+                    for (var i=0;i<exp_json.profileassociations.length;i++) {
+                        if(exp_json.profileassociations[i].profilename==json_tmp[index].profilename) {
+                            for (var j=0; j<exp_json.profileassociations[i].nodes.length;j++)
+                                if(exp_json.profileassociations[i].nodes[j]==json_tmp[index].node)
+                                    exp_json.profileassociations[i].nodes.splice(j,1);
+                            if(exp_json.profileassociations[i].nodes.length==0)
+                                exp_json.profileassociations.splice(i,1);
+                        }
+                    }
+                    if(exp_json.profileassociations.length==0)
+                        delete exp_json.profileassociations;
+                
+                }
+                // looking for firmware in json_tmp[index] 
+                if(JSON.stringify(json_tmp[index].firmwarename)!=undefined) {
+                        for (var i=0;i<exp_json.firmwareassociations.length;i++) {
+                           if(exp_json.firmwareassociations[i].firmwarename==json_tmp[index].firmwarename) {
+                                for (var j=0; j<exp_json.firmwareassociations[i].nodes.length;j++)
+                                    if(exp_json.firmwareassociations[i].nodes[j]==json_tmp[index].node)
+                                        exp_json.firmwareassociations[i].nodes.splice(j,1);
+                                if(exp_json.firmwareassociations[i].nodes.length==0)
+                                    exp_json.firmwareassociations.splice(i,1);
+                           }
+                         }
+                         if(exp_json.firmwareassociations.length==0)
+                             delete exp_json.firmwareassociations;
+                }
+        
+                if(exp_json.type=="alias") {
+                    
+                    var node = exp_json.nodes[json_tmp[index].node];
+                    var ntype = "fixe";
+                    if(node.properties.mobile==1)
+                          ntype = "mobile";
+        
                     nsite = node.properties.site;
-		
-		            $("#my_nodes").append(new Option(node.properties.archi+"/"+nsite+"/"+node.nbnodes+"/"+ntype,json_tmp[index].node));
-		
-				} else {
-			        $("#my_nodes").append(new Option(json_tmp[index].node, json_tmp[index].node , false, false));
-				}
-		
-				displayAssociation();
+        
+                    $("#my_nodes").append(new Option(node.properties.archi+"/"+nsite+"/"+node.nbnodes+"/"+ntype,json_tmp[index].node));
+        
+                } else {
+                    $("#my_nodes").append(new Option(json_tmp[index].node, json_tmp[index].node , false, false));
+                }
+        
+                displayAssociation();
             }
    
 
