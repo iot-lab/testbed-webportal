@@ -68,15 +68,10 @@ include("header.php") ?>
         <p>
             <button class="btn btn-danger" id="btnCancel" onclick="cancelExperiment()">Cancel</button>
             <a href="scripts/exp_download_data.php?id=<?php echo $_GET['id']?>" class="btn" id="btnDownload">Download</a>
-<<<<<<< HEAD
-            
         </p>
         
         <form class="well form-horizontal" style="width:500px" id="frm_reload">
-=======
->>>>>>> refs/heads/develop
             <button class="btn" id="btn_reload">Reload</button>
-<<<<<<< HEAD
             <div class="control-group">
 					<label class="control-label" for="txt_start">Start:</label>
 					<div class="controls">
@@ -93,11 +88,6 @@ include("header.php") ?>
 					</div>
             </div>
         </form>
-        
-
-=======
-        </p>
->>>>>>> refs/heads/develop
         
         <table class="table table-striped table-bordered table-condensed" style="width:500px" id="tbl_nodes">
         <thead>
@@ -208,12 +198,20 @@ include("header.php") ?>
                     state = data.state;
                     if(state == "Running" || state == "Waiting") {
                         $("#btnCancel").attr("disabled",false);
+<<<<<<< HEAD
                         $("#btn_reload").attr("disabled",true);
+=======
+                        $("#btnReload").attr("disabled",true);
+>>>>>>> f76ad2cfd79ea59fab7ee4ce3dd038c3883e98f8
                         $("input[name=radioStart]").attr("disabled",true);
                     }
                     else {
                         $("#btnCancel").attr("disabled",true);
+<<<<<<< HEAD
                         $("#btn_reload").attr("disabled",false);
+=======
+                        $("#btnReload").attr("disabled",false);
+>>>>>>> f76ad2cfd79ea59fab7ee4ce3dd038c3883e98f8
                         $("input[name=radioStart]").attr("disabled",false);
                     }
 <<<<<<< HEAD
