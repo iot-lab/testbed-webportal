@@ -566,9 +566,13 @@ if(!$_SESSION['is_auth']) {
                     var schedule_date = new Date(year, month, day, hour, minute);
                     var scheduled_timestamp = schedule_date.getTime()/1000;
                     
+                    console.log("Locale date: " + scheduled_timestamp);
                     var d = new Date();
                     var offset = d.getTimezoneOffset();
-                    exp_json.reservation = scheduled_timestamp - (offset*60);
+                    console.log("Offset to GMT: " + offset);
+                    
+                    exp_json.reservation = scheduled_timestamp + (offset*60);
+                    console.log("GMT date: " + exp_json.reservation);
                 }
 
                 //console.log(JSON.stringify(exp_json));
