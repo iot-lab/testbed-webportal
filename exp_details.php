@@ -474,9 +474,7 @@ include("header.php") ?>
             var schedule_date = new Date(year, month, day, hour, minute);
             var scheduled_timestamp = schedule_date.getTime()/1000;
             
-            var d = new Date();
-            var offset = d.getTimezoneOffset();
-            exp_json.reservation = scheduled_timestamp - (offset*60);
+            exp_json.reservation = scheduled_timestamp;
         }
         
         $.ajax({
