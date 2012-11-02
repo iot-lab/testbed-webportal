@@ -710,7 +710,6 @@ include("header.php") ?>
         "nbUsersToAdd":$("#txt_howmany").val()
         };
         
-        console.log(userregister);
         
         $.ajax({
             url: "/rest/admin/users",
