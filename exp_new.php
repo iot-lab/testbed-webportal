@@ -289,24 +289,24 @@ if(!$_SESSION['is_auth']) {
                         site_resources = JSON.parse(data_server);
                         //console.log(site_resources);
                         
-                        for(var j = 0; j < site_resources.sites.length; j++) {
-                            $("#div_resources_map_tbl").append('<tr><td><a href="#" onclick="openMapPopup(\''+site_resources.sites[j].site+'\')" id="'+site_resources.sites[j].site+'_maps">'+site_resources.sites[j].site.charAt(0).toUpperCase() + site_resources.sites[j].site.slice(1)+' map</a></td><td><input id="'+site_resources.sites[j].site+'_list" value="" class="input-large" /></td></tr>');
+                        for(var j = 0; j < site_resources.items.length; j++) {
+                            $("#div_resources_map_tbl").append('<tr><td><a href="#" onclick="openMapPopup(\''+site_resources.items[j].site+'\')" id="'+site_resources.items[j].site+'_maps">'+site_resources.items[j].site.charAt(0).toUpperCase() + site_resources.items[j].site.slice(1)+' map</a></td><td><input id="'+site_resources.items[j].site+'_list" value="" class="input-large" /></td></tr>');
                             
                         }
 
 
-                        for(var i = 0; i < site_resources.sites.length; i++) {
-                            $("#lst_site").append(new Option(site_resources.sites[i].site, site_resources.sites[i].site));
+                        for(var i = 0; i < site_resources.items.length; i++) {
+                            $("#lst_site").append(new Option(site_resources.items[i].site, site_resources.items[i].site));
                             
-                            for(j = 0; j < site_resources.sites[i].nodes.length; j++) {
+                            for(j = 0; j < site_resources.items[i].resources.length; j++) {
                                 var find = false;
                                 for(var z = 0; z < $("#lst_archi option").length && !find; z++) {
-                                    if($("#lst_archi option")[z].value == site_resources.sites[i].nodes[j].archi) {
+                                    if($("#lst_archi option")[z].value == site_resources.items[i].resources[j].archi) {
                                         find = true;
                                     }
                                 }
                                 if(!find) {
-                                    $("#lst_archi").append(new Option(site_resources.sites[i].nodes[j].archi, site_resources.sites[i].nodes[j].archi));
+                                    $("#lst_archi").append(new Option(site_resources.items[i].resources[j].archi, site_resources.items[i].resources[j].archi));
                                 }
                             }
                         }
