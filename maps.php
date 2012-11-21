@@ -73,20 +73,20 @@ body {
             data: "",
             success:function(data){
               
-                for(i=0; i<data.length; i++) {
+                for(i=0; i<data.items.length; i++) {
                     var n = [];
                     
-                    if(data[i].site == site) {
+                    if(data.items[i].site == site) {
                         
-                        var nn = data[i].network_address;
+                        var nn = data.items[i].network_address;
                         var node_id = nn.substring(4,nn.indexOf("."));
                         
                         n.push(parseInt(node_id));
-                        n.push(parseFloat(data[i].x));
-                        n.push(parseFloat(data[i].y));
-                        n.push(parseFloat(data[i].z));
-                        n.push(data[i].uid);
-                        n.push(data[i].state);
+                        n.push(parseFloat(data.items[i].x));
+                        n.push(parseFloat(data.items[i].y));
+                        n.push(parseFloat(data.items[i].z));
+                        n.push(data.items[i].uid);
+                        n.push(data.items[i].state);
                         nodes.push(n);
                     }
                 }

@@ -101,11 +101,11 @@ include("header.php") ?>
                 data: "",
                 success:function(data){
                     
-                    for(i=0; i<data.length; i++) {
+                    for(i=0; i<data.items.length; i++) {
                         $("#nodesRow").append("<tr><td>"+
-                        "<input type=\"checkbox\" name=\"option1\" value=\""+data[i].network_address+"\"></td>"+
-                        "<td>"+data[i].network_address+"</td>"+
-                        "<td>"+data[i].state+"</td></tr>");
+                        "<input type=\"checkbox\" name=\"option1\" value=\""+data.items[i].network_address+"\"></td>"+
+                        "<td>"+data.items[i].network_address+"</td>"+
+                        "<td>"+data.items[i].state+"</td></tr>");
                     }
                     
                 },
