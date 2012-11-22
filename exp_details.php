@@ -1,4 +1,4 @@
-<?php 
+<?php  
 session_start();
 
 if(!$_SESSION['is_auth']) {
@@ -68,8 +68,26 @@ include("header.php") ?>
         <p>
             <button class="btn btn-danger" id="btnCancel" onclick="cancelExperiment()">Cancel</button>
             <a href="scripts/exp_download_data.php?id=<?php echo $_GET['id']?>" class="btn" id="btnDownload">Download</a>
-            <button class="btn" id="btn_reload">Reload</button>
         </p>
+        
+        <form class="well form-horizontal" style="width:500px" id="frm_reload">
+            <button class="btn" id="btn_reload">Reload</button>
+            <div class="control-group">
+					<label class="control-label" for="txt_start">Start:</label>
+					<div class="controls">
+						<div class="row-fluid">
+							<div class="span1" style="text-align:center"><input type="radio" id="radioStart" name="radioStart" value="asap" checked/></div>
+                            <div class="span8" style="margin:0px;padding-top:3px">As soon as possible</div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span1" style="text-align:center"><input type="radio" id="radioStart" name="radioStart" value="scheduled"/></div>
+                            <div class="span3" style="margin:0px;padding-top:3px">Scheduled</div>
+                            <div class="span4" style="margin:0px;text-align:right;"><input type="text" class="input-small" value="" id="dp1" name="dp1" disabled="disabled" style="display:none"></div>
+                            <div class="span2"><input class="dropdown-timepicker input-mini" data-provide="timepicker" type="text" id="tp1" name="tp1" disabled="disabled" style="display:none"></div>
+                        </div>
+					</div>
+            </div>
+        </form>
         
         <table class="table table-striped table-bordered table-condensed" style="width:500px" id="tbl_nodes">
         <thead>
@@ -180,14 +198,24 @@ include("header.php") ?>
                     state = data.state;
                     if(state == "Running" || state == "Waiting") {
                         $("#btnCancel").attr("disabled",false);
+<<<<<<< HEAD
                         $("#btn_reload").attr("disabled",true);
+=======
+                        $("#btnReload").attr("disabled",true);
+>>>>>>> f76ad2cfd79ea59fab7ee4ce3dd038c3883e98f8
                         $("input[name=radioStart]").attr("disabled",true);
                     }
                     else {
                         $("#btnCancel").attr("disabled",true);
+<<<<<<< HEAD
                         $("#btn_reload").attr("disabled",false);
+=======
+                        $("#btnReload").attr("disabled",false);
+>>>>>>> f76ad2cfd79ea59fab7ee4ce3dd038c3883e98f8
                         $("input[name=radioStart]").attr("disabled",false);
                     }
+<<<<<<< HEAD
+=======
 
 
                     $("#detailsExpSummary").html(
@@ -198,6 +226,7 @@ include("header.php") ?>
                     "<b>Name:</b> " + exp_name + "<br/>");
                     $("#detailsExpSummary").append(
                     "<b>Duration (min):</b> " + data.duration + "<br/>");
+>>>>>>> refs/heads/develop
         
         
                     if(data.state != "Running") {
@@ -207,6 +236,11 @@ include("header.php") ?>
         
                     json_exp = rebuildJson(data);
 
+<<<<<<< HEAD
+                    
+    
+=======
+>>>>>>> refs/heads/develop
                     //then nodes without association
                     for(var l=0; l<data.nodes.length; l++) {
                         find = false;
@@ -236,13 +270,27 @@ include("header.php") ?>
                         }    
                     }
 
+<<<<<<< HEAD
+
+                    $("#detailsExpSummary").html("<b>Experiment:</b> <a href=\"monika?job=" + id + "\">" + id + "</a><br/>");
+                    $("#detailsExpSummary").append("<b>State:</b> " + data.state + "<br/>");
+                    $("#detailsExpSummary").append("<b>Name:</b> " + exp_name + "<br/>");
+                    $("#detailsExpSummary").append("<b>Duration (min):</b> " + data.duration + "<br/>");
+=======
+>>>>>>> refs/heads/develop
                 
                     
                     //display
                     $("#detailsExpRow").html("");
+<<<<<<< HEAD
+                    
+                    var nbTotalNodes=0;
+                    if(data.type == "physical") nbTotalNodes=data.nodes.length;                    
+=======
 
                     var nbTotalNodes=0;
                     if(data.type == "physical") nbTotalNodes=data.nodes.length;
+>>>>>>> refs/heads/develop
                     
                     for(var k = 0; k < json_exp.length; k++) {
                         
@@ -262,7 +310,11 @@ include("header.php") ?>
                                 }
                                     
                                 var nbnodes = data.nodes[k].nbnodes;
+<<<<<<< HEAD
+                                nbTotalNodes += nbnodes;                                
+=======
                                 nbTotalNodes += nbnodes;
+>>>>>>> refs/heads/develop
                                 
                                 var mobile = false;
                                 
@@ -274,7 +326,7 @@ include("header.php") ?>
                                 if(mobile == "1"){
                                     ntype = "mobile";
                                 }
-                                
+
                                 $("#detailsExpRow").append("<tr><td></td><td>"+archi+"/"+site+"/"+nbnodes+"/"+ntype+"</td><td>"+json_exp[k].profilename+"</td><td>"+json_exp[k].firmwarename+"</td></tr>");
                             }
                         }
