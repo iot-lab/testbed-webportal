@@ -602,7 +602,20 @@ if(!$_SESSION['is_auth']) {
                     contentType: "multipart/form-data; boundary="+boundary,
                     
                     success: function (data_server) {
-                        displaySubmitState(data_server);
+                        
+                        $("#expState").modal('show');
+                        var info = JSON.parse(data_server);
+                        
+                        if(info.id) {
+                           
+                            $("#expStateMsg").html("<h3>Your experiment has successfully been submitted</h3>");
+                            $("#expStateMsg").append("Experiment Id : " + info.id);
+                        }
+                        else {
+                            $("#expStateMsg").html("<h3 style='color:red'>Error</h3>");
+                            $("#expStateMsg").append(info.error);
+                        }
+                        
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrows) {
                         $("#expState").modal('show');
@@ -815,21 +828,6 @@ if(!$_SESSION['is_auth']) {
                     $("#div_resources_map").hide();
                 }
             });
-
-
-        function displaySubmitState(data_server) {
-            $("#expState").modal('show');
-            $("#expStateMsg").html("<h3>Your experiment has successfully been submitted</h3>");
-            var info = JSON.parse(data_server);
-            
-            if(info.code == 400)
-            {
-                $("#expStateMsg").html("<h3 style='color:red'>Error</h3>");
-                $("#expStateMsg").append(info.title + "<br/>" + info.message);
-            }
-            $("#expStateMsg").append("Experiment Id : " + info.id);
-        }
-
 
             function removeAssociation(index) {
                 json_tmp = rebuildJson(exp_json);
