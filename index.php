@@ -354,18 +354,17 @@ include("header.php");
             <div class="controls">
                 <textarea id="txt_motivation" class="input-xxlarge" id="textarea" rows="5" required="required">
 Research domain (Radio communication, networking protocol, distributed applications, …):
-      
+
 
 What kind of experiments do you want to run with SensLAB:
-      
+
 
 Goal: (Verify something existing in large scale, New development, … (I don't know, but I would like more than only the 2nd info)
-         
+
 
 Network sensor previous experience (n00b, experiments with X platform, former SensLAB user, Guru, God)
-       
-                
-                
+
+
                 </textarea>
             </div>
           </div>
@@ -386,6 +385,16 @@ Network sensor previous experience (n00b, experiments with X platform, former Se
             </div>
           </div>
 
+          <div class="control-group">
+            <label class="control-label" for="txt_charter">Senslab Charter:</label>
+            <div class="controls">
+                <div class="row-fluid">
+                        <div class="span1" style="text-align:right"><input id="charter" class="input-xxlarge" name="charter" type="checkbox" required="required" />&nbsp;&nbsp;</div>
+                        <div class="span8" style="margin:0px;padding-top:4px">I read and I accept <a href="http://www.senslab.info/users/senslab-charter/">Senslab Terms of Service</a>.</div>
+                </div>
+            </div>
+          </div>
+          
 
             <button id="btn_signup" class="btn btn-primary" type="submit">Submit</button>
 
