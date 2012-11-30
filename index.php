@@ -55,35 +55,35 @@ include("header.php");
           <div class="control-group">
             <label class="control-label" for="txt_firstname">First Name:</label>
             <div class="controls">
-              <input id="txt_firstname" class="input-xlarge" type="text" required="required"  >
+              <input id="txt_firstname" class="input-xxlarge" type="text" required="required"  >
             </div>
           </div>
 
           <div class="control-group">
             <label class="control-label" for="txt_lastname">Last Name:</label>
             <div class="controls">
-              <input id="txt_lastname" class="input-xlarge" type="text" required="required" >
+              <input id="txt_lastname" class="input-xxlarge" type="text" required="required" >
             </div>
           </div>
 
           <div class="control-group">
             <label class="control-label" for="txt_email">Email:</label>
             <div class="controls">
-              <input id="txt_email" class="input-xlarge" type="email" required="required" >
+              <input id="txt_email" class="input-xxlarge" type="email" required="required"  value="&lt;Please fill with an academic or professional address&gt;" onFocus="clearEmailField();">
             </div>
           </div>
 
           <div class="control-group">
             <label class="control-label" for="txt_structure">Structure:</label>
             <div class="controls">
-              <input id="txt_structure" class="input-xlarge" type="text" required="required" >
+              <input id="txt_structure" class="input-xxlarge" type="text" required="required" >
             </div>
           </div>
 
           <div class="control-group">
             <label class="control-label" for="txt_city">City:</label>
             <div class="controls">
-              <input id="txt_city" class="input-xlarge" type="text" required="required" >
+              <input id="txt_city" class="input-xxlarge" type="text" required="required" >
             </div>
           </div>
 
@@ -345,14 +345,28 @@ include("header.php");
           <div class="control-group">
             <label class="control-label" for="txt_sshkey">SSH public key:</label>
             <div class="controls">
-                 <textarea id="txt_sshkey" class="input-xlarge" id="textarea" rows="3"></textarea>
+                 <textarea id="txt_sshkey" class="input-xxlarge" id="textarea" rows="3"></textarea>
             </div>
           </div>
 
           <div class="control-group">
             <label class="control-label" for="txt_motivation">Motivation:</label>
             <div class="controls">
-                <textarea id="txt_motivation" class="input-xlarge" id="textarea" rows="3" required="required"></textarea>
+                <textarea id="txt_motivation" class="input-xxlarge" id="textarea" rows="5" required="required">
+Research domain (Radio communication, networking protocol, distributed applications, …):
+      
+
+What kind of experiments do you want to run with SensLAB:
+      
+
+Goal: (Verify something existing in large scale, New development, … (I don't know, but I would like more than only the 2nd info)
+         
+
+Network sensor previous experience (n00b, experiments with X platform, former SensLAB user, Guru, God)
+       
+                
+                
+                </textarea>
             </div>
           </div>
 
@@ -361,7 +375,7 @@ include("header.php");
           <div class="control-group" id="cg_captcha">
             <label class="control-label" for="txt_motivation">Anti-spam:</label>
             <div class="controls">
-                <input id="captcha" class="input-xlarge" name="captcha"  />
+                <input id="captcha" class="input-xxlarge" name="captcha" type="text" required="required"  />
                 <br/>
                 <br/>
                     <a href="#" onclick="
@@ -524,6 +538,11 @@ include("header.php");
         $('#reset_div').hide();
         $('#signup_div').hide();
         $('#login_div').show();
+    }
+
+    function clearEmailField() {
+		var email=document.getElementById('txt_email').value;
+		if(email.indexOf("<")!=-1) document.getElementById('txt_email').value='';
     }
 
     </script>
