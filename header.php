@@ -79,6 +79,10 @@
         width:280px;
     }
 
+   body{
+       padding-top:90px;
+   }
+
 </style>
 
 </head>
@@ -97,7 +101,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-      <a class="brand" href="." style="color:#AAD400"><img src="img/banniere.png"></a>
+      <a class="brand" href="." style="color:#AAD400"><img src="img/banniere2.png" width="350px"></a>
       <div class="nav-collapse">
             <ul class="nav">
                 <li class="divider-vertical"></li>
