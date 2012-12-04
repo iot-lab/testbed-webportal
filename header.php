@@ -11,7 +11,7 @@
 <link href="css/bootstrap.css" rel="stylesheet">
 <style type="text/css">
   body {
-    padding-top: 60px;
+    padding-top: 185px;
     padding-bottom: 40px;
   }
 </style>
@@ -79,9 +79,28 @@
         width:280px;
     }
 
-   body{
-       padding-top:90px;
-   }
+   .navbar-fixed-top {
+		top:130px;
+	}
+
+	.sl-logo {
+		background-color: #ddd;
+		height: 130px;
+		position:fixed;
+		top:0;
+		width:100%;
+	}
+
+	.sl-logo a {
+		background:url('img/banniere2.png') no-repeat left;
+		margin-left: auto;
+		margin-right: auto;
+		display:block;
+		width:1170px;
+		height:100%;
+		text-decoration:none;
+	}
+   
 
 </style>
 
@@ -92,7 +111,7 @@
 <!-- ---------- -->
 <!--  MENU BAR  -->
 <!-- ---------- -->
-
+<div class="sl-logo"><a href="."></a></div>
 <div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
     <div class="container">
