@@ -45,7 +45,7 @@ include("header.php");
       </div>
       
       <div class="row" id="signup_div" style="display:none">
-        <div class="span12">
+        <div class="span8">
           <h2>Sign up</h2>
            
             <div class="alert alert-error" id="div_error_signup" style="display:none"></div>
@@ -352,20 +352,7 @@ include("header.php");
           <div class="control-group">
             <label class="control-label" for="txt_motivation">Motivation:</label>
             <div class="controls">
-                <textarea id="txt_motivation" class="input-xxlarge" id="textarea" rows="5" required="required">
-Research domain (Radio communication, networking protocol, distributed applications, …):
-
-
-What kind of experiments do you want to run with SensLAB:
-
-
-Goal: (Verify something existing in large scale, New development, … (I don't know, but I would like more than only the 2nd info)
-
-
-Network sensor previous experience (n00b, experiments with X platform, former SensLAB user, Guru, God)
-
-
-                </textarea>
+                <textarea id="txt_motivation" class="input-xxlarge" id="textarea" rows="5" required="required"></textarea>
             </div>
           </div>
 
@@ -390,7 +377,7 @@ Network sensor previous experience (n00b, experiments with X platform, former Se
             <div class="controls">
                 <div class="row-fluid">
                         <div class="span1" style="text-align:right"><input id="charter" class="input-xxlarge" name="charter" type="checkbox" required="required" />&nbsp;&nbsp;</div>
-                        <div class="span8" style="margin:0px;padding-top:4px">I read and I accept <a href="http://www.senslab.info/users/senslab-charter/">Senslab Terms of Service</a>.</div>
+                        <div class="span8" style="margin:0px;padding-top:4px">I read and I accept <a href="http://www.senslab.info/users/senslab-charter/" target="_blank">Senslab Terms of Service</a>.</div>
                 </div>
             </div>
           </div>
@@ -401,8 +388,18 @@ Network sensor previous experience (n00b, experiments with X platform, former Se
             </form>
             <a href="#" onClick="showReset()">Forgot your password?</a> - <a href="#" onClick="showLogin()">Login</a>
 
+        </div> <!-- span -->
+        <div class="span4">
+            <div class="alert alert-info" style="margin-top:430px;">
+                <img src="img/help.png"> <b>Motivation:</b><br/>
+- Research domain (Radio communication, networking protocol, distributed applications, …).<br/>
+- What kind of experiments do you want to run with SensLAB?<br/>
+- Goal: (Verify something existing in large scale, new development, …)<br/>
+- Network sensor previous experience (n00b, experiments with X platform, former SensLAB user, Guru, God)
+           </div>
         </div>
-      </div>
+        
+      </div><!-- row -->
       
 
 <?php include('footer.php') ?>
