@@ -120,7 +120,6 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-      <a class="brand" href="." style="color:#AAD400"><img src="img/banniere2.png" width="320px"></a>
       <div class="nav-collapse">
             <ul class="nav">
                 <li class="divider-vertical"></li>
@@ -147,9 +146,9 @@
                         <li><a href="drawgantt.php" target="_blank">View Gantt chart</a></li>
                     </ul>
                 </li>
+          		<li class="divider-vertical"></li>
       
           <?php if(isset($_SESSION['is_auth']) && $_SESSION['is_auth']) { ?>
-            <li class="divider-vertical"></li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo "".$_SESSION['login']."" ?> [logout] <b class="caret"></b></a>
                 <ul class="dropdown-menu">
