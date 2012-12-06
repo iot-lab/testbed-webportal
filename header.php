@@ -9,13 +9,6 @@
 
 <!-- Le styles -->
 <link href="css/bootstrap.css" rel="stylesheet">
-<style type="text/css">
-  body {
-    padding-top: 185px;
-    padding-bottom: 40px;
-  }
-</style>
-<link href="css/bootstrap-responsive.css" rel="stylesheet">
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
@@ -29,66 +22,52 @@
 <link rel="shortcut icon" href="img/favicon.png" />
 
 <style type="text/css">
-    h2,h3{
-        color: #AAD400;
-    }
+
+	h2,h3{
+		color: #AAD400;
+	}
     
-    .navbar .nav > li > a {
-        color: #fff;
-    }
-
-    .navbar .nav > li > a:hover {
-        color: #999;
-    }
-
-    .dropdown-menu > li > a:hover {
-        background-color: #AAD400;    
-    }
+	a {
+		color: #AAD400;
+	}
     
-    a {
-        color: #AAD400;
-    }
+	a:hover {
+		color: #AAD400;
+		text-decoration:underline;
+	}
     
-    a:hover {
-        color: #AAD400;
-        text-decoration:underline;
-    }
-    
-    input:focus, textarea:focus {
-        border-color: rgba(170, 212, 0, 0.8);
-        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(170, 212, 0, 0.6);
-        outline: 0 none;
-    }
+	input:focus, textarea:focus {
+		border-color: rgba(170, 212, 0, 0.8);
+		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(170, 212, 0, 0.6);
+		outline: 0 none;
+	}
 
-    .progress .bar {
-        background-color: #AAD400;
-        background-image: -moz-linear-gradient(center top , #BEED00, #85A600);
-    }
+	.progress .bar {
+		background-color: #AAD400;
+		background-image: -moz-linear-gradient(center top , #BEED00, #85A600);
+	}
 
-    select {
-        background-color: #ffffff;
-        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-        -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-        -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
-        -moz-transition: border 0.2s linear 0s, box-shadow 0.2s linear 0;
-        -ms-transition: border linear 0.2s, box-shadow linear 0.2s;
-        -o-transition: border linear 0.2s, box-shadow linear 0.2s;
-        transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
-        border-radius: 3px 3px 3px 3px;
-        width:280px;
-    }
-
-   .navbar-fixed-top {
-		top:130px;
+	select {
+		background-color: #ffffff;
+		-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+		-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+		box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+		-webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+		-moz-transition: border 0.2s linear 0s, box-shadow 0.2s linear 0;
+		-ms-transition: border linear 0.2s, box-shadow linear 0.2s;
+		-o-transition: border linear 0.2s, box-shadow linear 0.2s;
+		transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+		border-radius: 3px 3px 3px 3px;
+		width:280px;
 	}
 
 	.sl-logo {
-		background-color: #ddd;
-		height: 130px;
+		background-color: #f7f7f7;
+		height: 112px;
 		position:fixed;
 		top:0;
 		width:100%;
+		z-index:1000;
 	}
 
 	.sl-logo a {
@@ -96,14 +75,70 @@
 		margin-left: auto;
 		margin-right: auto;
 		display:block;
-		width:1170px;
+		width:960px;
 		height:100%;
 		text-decoration:none;
 	}
-   
+	
+	.navbar-fixed-top {
+		top:112px;
+	}
+	   
+	.navbar-inner {
+		min-height:31px;
+		padding-top:20px;
+		background: #454546;
+		border-radius:0px;
+	}
+	
+	.navbar-inner .container {
+		width:960px;
+	}
+	
+	.navbar .nav > li {
+		margin-right: 8px;
+	}
+	
+	.navbar .nav > li > a {
+		-moz-border-bottom-colors: none;
+		-moz-border-left-colors: none;
+		-moz-border-right-colors: none;
+		-moz-border-top-colors: none;
+		background: none repeat scroll 0 0 #333333;
+		border-color: #555555 #555555 -moz-use-text-color;
+		border-image: none;
+		border-style: solid solid none;
+		border-width: 1px 1px medium;
+		border-radius: 6px 6px 0 0;
+		color: #ABAAAA;
+		display: block;
+		line-height: 30px;
+		padding: 0 10px;
+		font-family: Tahoma,Arial,Helvetica,sans-serif;
+	}
+	
 
+    .navbar .nav > li > a:hover {
+		background: none repeat scroll 0 0 #222222;
+		color: #fff;
+    }
+
+    .dropdown-menu > li > a:hover {
+        background-color: #AAD400;    
+    }
+    
+	.dropdown .caret {
+		margin-top: 14px;
+	}
 </style>
 
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<style type="text/css">
+	body {
+		padding-top: 180px;
+		padding-bottom: 40px;
+	}
+</style>
 </head>
 
 <body>
@@ -122,23 +157,17 @@
       </a>
       <div class="nav-collapse">
             <ul class="nav">
-                <li class="divider-vertical"></li>
                 <?php if(isset($_SESSION['is_auth']) && $_SESSION['is_auth']) { ?>
                     <li><a href="."><i class="icon-home icon-white"></i> Home</a></li>  
-                    <li class="divider-vertical"></li>
                     <li><a href="exp_new.php">New Experiment</a></li>
-                    <li class="divider-vertical"></li>
                     <li><a data-toggle="modal" href="#profiles_modal" onClick="loadProfiles()">Manage Profiles</a></li>
                 <?php } else { ?>
                     <li><a href="#" onClick="showLogin()">Login</a></li>
-                    <li class="divider-vertical"></li>
                     <li><a href="#" onClick="showSignup()">Sign up</a></li>
                  <?php } ?>
-                <li class="divider-vertical"></li>
             </ul> 
             
       <ul class="nav pull-right">
-                <li class="divider-vertical"></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Testbed activity <b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -146,7 +175,6 @@
                         <li><a href="drawgantt.php" target="_blank">View Gantt chart</a></li>
                     </ul>
                 </li>
-          		<li class="divider-vertical"></li>
       
           <?php if(isset($_SESSION['is_auth']) && $_SESSION['is_auth']) { ?>
             <li class="dropdown">
@@ -157,7 +185,6 @@
                     <li><a href="logout.php">Logout</a></li>
                 </ul>
             </li>
-            <li class="divider-vertical"></li>
           <?php } ?>
       
           <?php if(isset($_SESSION['is_admin']) && $_SESSION['is_admin']) { ?>
@@ -169,7 +196,6 @@
                 <li><a href="admin_nodes.php">Nodes</a></li>
               </ul>
             </li>
-            <li class="divider-vertical"></li>
           <?php } ?>
       </ul>
       </div><!--/.nav-collapse -->
