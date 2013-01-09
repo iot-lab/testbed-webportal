@@ -162,8 +162,8 @@
                     <li><a href="exp_new.php">New Experiment</a></li>
                     <li><a data-toggle="modal" href="#profiles_modal" onClick="loadProfiles()">Manage Profiles</a></li>
                 <?php } else { ?>
-                    <li><a href="#" onClick="showLogin()">Login</a></li>
-                    <li><a href="#" onClick="showSignup()">Sign up</a></li>
+                    <li><a href="#login" onClick="showLogin()">Login</a></li>
+                    <li><a href="#signup" onClick="showSignup()">Sign up</a></li>
                  <?php } ?>
             </ul> 
             
