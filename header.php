@@ -130,6 +130,11 @@
 	.dropdown .caret {
 		margin-top: 14px;
 	}
+
+   .navbar .nav > li > a {
+	   border-style: none;
+   }
+
 </style>
 
 <link href="css/bootstrap-responsive.css" rel="stylesheet">

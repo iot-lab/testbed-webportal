@@ -69,7 +69,9 @@ include("header.php");
           <div class="control-group">
             <label class="control-label" for="txt_email">Email:</label>
             <div class="controls">
+                <span style="color:orange">Please fill with an <b>academic</b> or <b>professional</b> address in order to validate your account</span>
               <input id="txt_email" class="input-xxlarge" type="email" required="required"  value="&lt;Please fill with an academic or professional address&gt;" onFocus="clearEmailField();">
+                
             </div>
           </div>
 
