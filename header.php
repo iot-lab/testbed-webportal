@@ -264,15 +264,62 @@
            <div class="alert alert-error" id="div_error_ssh" style="display:none"></div>
            
             <form class="well form-horizontal" id="form_modify_ssh">
+				<div class="tabbable">
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="#tab_SSH1" data-toggle="tab">SSH Key 1</a></li>
+						<li><a href="#tab_SSH2" data-toggle="tab">SSH Key 2</a></li>
+						<li><a href="#tab_SSH3" data-toggle="tab">SSH Key 3</a></li>
+						<li><a href="#tab_SSH4" data-toggle="tab">SSH Key 4</a></li>
+						<li><a href="#tab_SSH5" data-toggle="tab">SSH Key 5</a></li>
+					</ul>
 
-          <div class="control-group">
-            <label class="control-label" for="txt_ssh">SSH Key:</label>
-            <div class="controls">
-                <textarea id="form_modify_ssh_txt_ssh" class="input-xlarge" rows="3"></textarea>
-            </div>
-          </div>
+					<div class="tab-content">
+						<div class="tab-pane active" id="tab_SSH1">
+							<div class="control-group">
+								<label class="control-label" for="form_modify_ssh_txt_ssh1">SSH Key 1:</label>
+									<div class="controls">
+										<textarea id="form_modify_ssh_txt_ssh" class="input-xlarge" rows="3"></textarea>
+									</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab_SSH2">
+							<div class="control-group">
+								<label class="control-label" for="form_modify_ssh_txt_ssh2">SSH Key 2:</label>
+								<div class="controls">
+									<textarea id="form_modify_ssh_txt_ssh2" class="input-xlarge" rows="3"></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab_SSH3">
+							<div class="control-group">
+								<label class="control-label" for="form_modify_ssh_txt_ssh3">SSH Key 3:</label>
+								<div class="controls">
+									<textarea id="form_modify_ssh_txt_ssh3" class="input-xlarge" rows="3"></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab_SSH4">
+							<div class="control-group">
+								<label class="control-label" for="form_modify_ssh_txt_ssh4">SSH Key 4:</label>
+								<div class="controls">
+									<textarea id="form_modify_ssh_txt_ssh4" class="input-xlarge" rows="3"></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab_SSH5">
+							<div class="control-group">
+								<label class="control-label" for="form_modify_ssh_txt_ssh5">SSH Key 5:</label>
+								<div class="controls">
+									<textarea id="form_modify_ssh_txt_ssh5" class="input-xlarge" rows="3"></textarea>
+								</div>
+							</div>
+						</div>
 
-            <button id="form_modify_ssh_btn_modify" class="btn btn-primary" type="submit">Modify</button>
+					</div>
+				</div>
+
+				<button id="form_modify_ssh_btn_modify" class="btn btn-primary" type="submit">Modify</button>
+
             </form>
         </div>
     </div>
@@ -440,9 +487,16 @@ var SSHKeysLoaded = false;
             
             e.preventDefault();
             
-            var user = {
-                "sshkeys":$("#form_modify_ssh_txt_ssh").val()
-            };
+            var userStr = '({"sshkeys":["'+$("#form_modify_ssh_txt_ssh").val()+'"';
+
+            if($("#form_modify_ssh_txt_ssh2").val()!="") userStr += ',"'+$("#form_modify_ssh_txt_ssh2").val()+'"';
+            if($("#form_modify_ssh_txt_ssh3").val()!="") userStr += ',"'+$("#form_modify_ssh_txt_ssh3").val()+'"';
+            if($("#form_modify_ssh_txt_ssh4").val()!="") userStr += ',"'+$("#form_modify_ssh_txt_ssh4").val()+'"';
+            if($("#form_modify_ssh_txt_ssh5").val()!="") userStr += ',"'+$("#form_modify_ssh_txt_ssh5").val()+'"';
+
+            userStr += ']})';
+
+            var user = eval(userStr);
             
             $.ajax({
                 url: "/rest/users/"+<?php echo '"'.$_SESSION['login'].'"'?>+"/sshkeys",
@@ -573,7 +627,12 @@ var SSHKeysLoaded = false;
                 dataType: "text",
                 success:function(data){
                     $("#div_error_ssh").hide();
-                    $("#form_modify_ssh_txt_ssh").val(data);
+                    var sshkeys=JSON.parse(data);
+                    $("#form_modify_ssh_txt_ssh").val(sshkeys.sshkeys[0]);
+                    if(sshkeys.sshkeys.length>1) $("#form_modify_ssh_txt_ssh2").val(sshkeys.sshkeys[1]);
+                    if(sshkeys.sshkeys.length>2) $("#form_modify_ssh_txt_ssh3").val(sshkeys.sshkeys[2]);
+                    if(sshkeys.sshkeys.length>3) $("#form_modify_ssh_txt_ssh4").val(sshkeys.sshkeys[3]);
+                    if(sshkeys.sshkeys.length>4) $("#form_modify_ssh_txt_ssh5").val(sshkeys.sshkeys[4]);
                     SSHKeysLoaded=true;
                 },
                 error:function(XMLHttpRequest, textStatus, errorThrows){

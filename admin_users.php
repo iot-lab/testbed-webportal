@@ -758,20 +758,52 @@ include("header.php") ?>
                     <input id="txt_country_e" type="text" class="input-xlarge" required="required" />
                 </div>
               </div>
-
-              <div class="control-group">
-                <label class="control-label" for="txt_sshkey_e">SSH Key:</label>
-                <div class="controls">
-                    <textarea id="txt_sshkey_e" class="input-xlarge" rows="3" required="required"></textarea>
-                </div>
-              </div>
               
                <div class="control-group">
                 <label class="control-label" for="txt_motivation_e">Motivation:</label>
                 <div class="controls">
-                    <textarea id="txt_motivation_e" class="input-xlarge" rows="3" required="required"></textarea>
+                    <textarea id="txt_motivation_e" class="input-xlarge" rows="3"></textarea>
                 </div>
               </div>
+              <div class="tabbable">
+              	<ul class="nav nav-tabs">
+					<li class="active"><a href="#tab_SSH1_e" data-toggle="tab">SSH Key 1</a></li>
+                	<li><a href="#tab_SSH2_e" data-toggle="tab">SSH Key 2</a></li>
+					<li><a href="#tab_SSH3_e" data-toggle="tab">SSH Key 3</a></li>
+					<li><a href="#tab_SSH4_e" data-toggle="tab">SSH Key 4</a></li>
+					<li><a href="#tab_SSH5_e" data-toggle="tab">SSH Key 5</a></li>
+				</ul>
+
+				<div class="tab-content">
+					<div class="tab-pane active" id="tab_SSH1_e">
+						<div class="control-group">
+							<textarea id="txt_sshkey_e" class="input-xlarge" rows="3" style="width:464px;"></textarea>
+						</div>
+					</div>
+					<div class="tab-pane" id="tab_SSH2_e">
+						<div class="control-group">
+							<textarea id="txt_sshkey_e2" class="input-xlarge" rows="3" style="width:464px;"></textarea>
+						</div>
+					</div>
+					<div class="tab-pane" id="tab_SSH3_e">
+						<div class="control-group">
+							<textarea id="txt_sshkey_e3" class="input-xlarge" rows="3" style="width:464px;"></textarea>
+						</div>
+					</div>
+					<div class="tab-pane" id="tab_SSH4_e">
+						<div class="control-group">
+							<textarea id="txt_sshkey_e4" class="input-xlarge" rows="3" style="width:464px;"></textarea>
+						</div>
+					</div>
+					<div class="tab-pane" id="tab_SSH5_e">
+						<div class="control-group">
+							<textarea id="txt_sshkey_e5" class="input-xlarge" rows="3" style="width:464px;"></textarea>
+						</div>
+					</div>
+
+				</div>
+			  </div>              
+              
               
             </div>
             
@@ -848,7 +880,11 @@ include("header.php") ?>
                     selectedUser = users[userId];
                     $('#s_login_e').html(selectedUser.login);
                     $('#s_id_e').html(userId);
-                    $('#txt_sshkey_e').val(selectedUser.sshPublicKey);
+                    $('#txt_sshkey_e').val(selectedUser.sshPublicKeys[0]);
+                    $('#txt_sshkey_e2').val(selectedUser.sshPublicKeys[1]);
+                    $('#txt_sshkey_e3').val(selectedUser.sshPublicKeys[2]);
+                    $('#txt_sshkey_e4').val(selectedUser.sshPublicKeys[3]);
+                    $('#txt_sshkey_e5').val(selectedUser.sshPublicKeys[4]);
                     $('#txt_firstname_e').val(selectedUser.firstName);
                     $('#txt_lastname_e').val(selectedUser.lastName);
                     $('#txt_login_e').val(selectedUser.login);
@@ -981,7 +1017,17 @@ include("header.php") ?>
         selectedUser.lastName = $("#txt_lastname_e").val();
         selectedUser.login = $("#txt_login_e").val();
         selectedUser.email = $("#txt_email_e").val();
-        selectedUser.sshPublicKey = $("#txt_sshkey_e").val();
+
+
+        var sshKeys='["'+$("#txt_sshkey_e").val()+'"';
+        if($("#txt_sshkey_e2").val()!="") sshKeys += ',"'+$("#txt_sshkey_e2").val()+'"';
+        if($("#txt_sshkey_e3").val()!="") sshKeys += ',"'+$("#txt_sshkey_e3").val()+'"';
+        if($("#txt_sshkey_e4").val()!="") sshKeys += ',"'+$("#txt_sshkey_e4").val()+'"';
+        if($("#txt_sshkey_e5").val()!="") sshKeys += ',"'+$("#txt_sshkey_e5").val()+'"';
+        sshKeys+=']';
+        selectedUser.sshPublicKeys=eval(sshKeys);
+
+        
         selectedUser.motivations = $("#txt_motivation_e").val();
         selectedUser.structure = $("#txt_structure_e").val();
         selectedUser.city = $("#txt_city_e").val();
