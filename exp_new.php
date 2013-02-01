@@ -196,7 +196,10 @@ if(!$_SESSION['is_auth']) {
         </div>
         
         <div id="help2" class="alert alert-info">
-            <img src="img/help.png"> You can choose the resources from the maps, or directly enter their numbers. 
+            <img src="img/help.png"> You have two ways to choose the resources : 
+<br/><br/>From the maps, or directly entering their numbers. 
+<br/><br/>By type. Take care of building a consistent request (correct number of nodes...), otherwise it will be rejected. You can go to <i>Testbed activity -> View nodes status</i> to check the properties of the nodes.
+If you select mobile nodes on train, every nodes of the train will be reserved.
             <br/><br/>Then click <b>Next</b> to go to the firmwares/profiles associations page.
         </div>
         
