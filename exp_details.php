@@ -8,6 +8,9 @@ if(!$_SESSION['is_auth']) {
 
 include("header.php") ?>
 
+<link rel="stylesheet" href="css/datepicker.css" type="text/css"/>
+<link rel="stylesheet" href="css/timepicker.css" type="text/css"/>
+
     <div class="container" text-align="top">
     
    
@@ -15,12 +18,57 @@ include("header.php") ?>
 
     <h2>Experiment Details</h2>
 
+
+    <div class="modal hide" id="expState">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" onClick="redirectDashboard();">×</button>
+        <h3>Experiment state</h3>
+      </div>
+      <div class="modal-body">
+        <p id="expStateMsg"></p>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal" onClick="redirectDashboard();">Close</a>
+      </div>
+    </div>
+
+
+    <div class="modal hide" id="expReload">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" onClick="">×</button>
+        <h3>Reload</h3>
+        
+      <div class="modal-body">
+
+            <div class="control-group">
+            <label class="control-label" for="txt_start">Start:</label>
+            <div class="controls">
+            <div class="row-fluid">
+                <div class="span1" style="text-align:center"><input type="radio" id="radioStart" name="radioStart" value="asap" checked/></div>
+                            <div class="span8" style="margin:0px;padding-top:3px">As soon as possible</div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span1" style="text-align:center"><input type="radio" id="radioStart" name="radioStart" value="scheduled"/></div>
+                            <div class="span3" style="margin:0px;padding-top:3px">Scheduled</div>
+                            <div class="span4" style="margin:0px;text-align:right;"><input type="text" class="input-small" value="" id="dp1" name="dp1" disabled="disabled" style="display:none"></div>
+                            <div class="span2"><input class="dropdown-timepicker input-mini" data-provide="timepicker" type="text" id="tp1" name="tp1" disabled="disabled" style="display:none"></div>
+                        </div>
+            </div>
+            </div>
+            </div>
+            <a href="#" class="btn" data-dismiss="modal" onClick="submitReload();">Reload</a>
+
+      </div>
+    </div>
+
+
     <div id="detailsExp">
         <p id="detailsExpSummary"></p>
         
         <p>
             <button class="btn btn-danger" id="btnCancel" onclick="cancelExperiment()">Cancel</button>
             <a href="scripts/exp_download_data.php?id=<?php echo $_GET['id']?>" class="btn" id="btnDownload">Download</a>
+            <button class="btn" id="btn_reload">Reload</button>
         </p>
         
         <table class="table table-striped table-bordered table-condensed" style="width:500px" id="tbl_nodes">
@@ -73,6 +121,7 @@ include("header.php") ?>
         var state = "";
         var binary = "";
         var boundary = "AaB03x";
+        var scheduled = false;
         
         $(document).ready(function(){
 
@@ -83,6 +132,38 @@ include("header.php") ?>
                 $(this).hide();
             });
 
+            //date picker
+            var now = new Date();
+            $("#dp1").val(now.getMonth()+1 + "-" + now.getDate() + "-" + now.getFullYear());
+            
+            $('#dp1').datepicker({
+                format: 'mm-dd-yyyy'
+            });
+
+            $('.dropdown-timepicker').timepicker({
+                defaultTime: 'current',
+                minuteStep: 1,
+                disableFocus: true,
+                showMeridian: false,
+                template: 'dropdown'
+            });
+
+            //click on scheduled button 
+            $("input[name=radioStart]").change(function () {
+                if($(this).val()== "asap") {
+                    $("#dp1").attr("disabled","disabled");
+                    $("#dp1").hide();
+                    $("#tp1").attr("disabled","disabled");
+                    $("#tp1").hide();
+                    scheduled = false;
+                } else {                    
+                    $("#dp1").removeAttr("disabled");
+                    $("#dp1").show();
+                    $("#tp1").removeAttr("disabled");
+                    $("#tp1").show();
+                    scheduled = true;
+                }
+            });
 
             /* retrieve experiment details */
             $.ajax({
@@ -99,9 +180,13 @@ include("header.php") ?>
                     state = data.state;
                     if(state == "Running" || state == "Waiting") {
                         $("#btnCancel").attr("disabled",false);
+                        $("#btn_reload").attr("disabled",true);
+                        $("input[name=radioStart]").attr("disabled",true);
                     }
                     else {
                         $("#btnCancel").attr("disabled",true);
+                        $("#btn_reload").attr("disabled",false);
+                        $("input[name=radioStart]").attr("disabled",false);
                     }
 
 
@@ -113,8 +198,6 @@ include("header.php") ?>
                     "<b>Name:</b> " + exp_name + "<br/>");
                     $("#detailsExpSummary").append(
                     "<b>Duration (min):</b> " + data.duration + "<br/>");
-                    $("#detailsExpSummary").append(
-                    "<b>Number of nodes:</b> " + data.nodes.length + "<br/>");
         
         
                     if(data.state != "Running") {
@@ -123,7 +206,7 @@ include("header.php") ?>
         
         
                     json_exp = rebuildJson(data);
-    
+
                     //then nodes without association
                     for(var l=0; l<data.nodes.length; l++) {
                         find = false;
@@ -152,10 +235,14 @@ include("header.php") ?>
                             }
                         }    
                     }
+
                 
                     
                     //display
                     $("#detailsExpRow").html("");
+
+                    var nbTotalNodes=0;
+                    if(data.type == "physical") nbTotalNodes=data.nodes.length;
                     
                     for(var k = 0; k < json_exp.length; k++) {
                         
@@ -174,7 +261,8 @@ include("header.php") ?>
                                     site = data.nodes[k].properties.site;
                                 }
                                     
-                                var nbnodes = data.nodes[k].properties.nbnodes;
+                                var nbnodes = data.nodes[k].nbnodes;
+                                nbTotalNodes += nbnodes;
                                 
                                 var mobile = false;
                                 
@@ -183,14 +271,15 @@ include("header.php") ?>
                                 }    
                                 
                                 var ntype = "fixe";
-                                if(mobile){
+                                if(mobile == "1"){
                                     ntype = "mobile";
                                 }
                                 
-                                $("#detailsExpRow").append("<tr><td>"+archi+"/"+site+"/"+nbnodes+"/"+ntype+"</td><td>"+json_exp[k].profilename+"</td><td>"+json_exp[k].firmwarename+"</td></tr>");
+                                $("#detailsExpRow").append("<tr><td></td><td>"+archi+"/"+site+"/"+nbnodes+"/"+ntype+"</td><td>"+json_exp[k].profilename+"</td><td>"+json_exp[k].firmwarename+"</td></tr>");
                             }
                         }
                     }
+                    $("#detailsExpSummary").append("<b>Number of nodes:</b> " + nbTotalNodes + "<br/>");
                 },
                 error:function(XMLHttpRequest, textStatus, errorThrows){
                     $("#detailsExpSummary").html("An error occurred while retrieving experiment #" + id + " details");
@@ -295,7 +384,14 @@ include("header.php") ?>
             
             //file upload event
             document.getElementById('files').addEventListener('change', handleFileSelect, false);
+            
+            
+            $("#btn_reload").click(function(e){
+                $("#expReload").modal("show");
+            });
+            
     });
+
 
     function cancelExperiment(){
         if(confirm("Cancel Experiment?")) {
@@ -347,7 +443,60 @@ include("header.php") ?>
         }
     }
 
+    function submitReload() {
+        var exp_json = {};
+        if(scheduled) {
+            //parse date
+            var tab_date = $("#dp1").val().split("-");
+            var month = (tab_date[0] - 1);
+            var day = tab_date[1];
+            var year = tab_date[2];
+            
+            //parse hour
+            var tab_hour = $("#tp1").val().split(":");
+            var hour = tab_hour[0];
+            var minute = tab_hour[1];
+            
+            //create date
+            var schedule_date = new Date(year, month, day, hour, minute);
+            var scheduled_timestamp = schedule_date.getTime()/1000;
+            
+            exp_json.reservation = scheduled_timestamp;
+        }
+        
+        $.ajax({
+            type: "POST",
+            dataType: "text",
+            data: JSON.stringify(exp_json),
+            contentType: "application/json; charset=utf-8",
+            url: "/rest/experiment/"+id+"?reload",
+            success: function (data_server) {
+                $("#expState").modal('show');
+                var info = JSON.parse(data_server);
+                
+                if(info.id) {
+                   
+                    $("#expStateMsg").html("<h3>Your experiment has successfully been submitted</h3>");
+                    $("#expStateMsg").append("Experiment Id : " + info.id);
+                }
+                else {
+                    $("#expStateMsg").html("<h3 style='color:red'>Error</h3>");
+                    $("#expStateMsg").append(info.error);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrows) {
+                $("#expState").modal('show');
+                $("#expStateMsg").html("<h3 style='color:red'>Error</h3>");
+                $("#expStateMsg").append(textStatus + ": " + errorThrows + "<br/>" + XMLHttpRequest.responseText);
+            }
+        });
+    }
+
+
     </script>
+
+        <script src="js/bootstrap-datepicker.js"></script>
+        <script src="js/bootstrap-timepicker.js"></script>
 
   </body>
 </html>

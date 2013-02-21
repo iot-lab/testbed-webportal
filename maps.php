@@ -2,14 +2,12 @@
 <html>
 <head>
 <title>Maps</title>
-</head>
 <?php 
 session_start();
 $site = $_GET['site'];
 ?>
 
 
-<body>
 <script src="js/jquery.js"></script>
 
 <style type="text/css">
@@ -24,6 +22,13 @@ body {
 </style>
 
 
+<script type="text/javascript" src="viewer3Djs/Three.js"></script>
+<script type="text/javascript" src="viewer3Djs/viewer3D.js"></script>
+
+</head>
+
+
+<body>
     <div class="row" id="maps">
         <div class="span8 offset2">
             <div id='selectionbox' style="text-align:center;padding:2px">
@@ -38,15 +43,12 @@ body {
         </div>
 </div>        
 
-<script type="text/javascript" src="viewer3Djs/Three.js"></script>
-<script type="text/javascript" src="viewer3Djs/viewer3D.js"></script>
 
 <script type="text/javascript">
 
     var site = <?php echo '"'.$site.'"' ?>;
 
     $(document).ready(function(){
-        
        loadResources();
    });
 
@@ -70,21 +72,21 @@ body {
             contentType: "application/json; charset=utf-8",
             data: "",
             success:function(data){
-               console.log(data);
-                for(i=0; i<data.resources.length; i++) {
+              
+                for(i=0; i<data.items.length; i++) {
                     var n = [];
                     
-                    if(data.resources[i].site == site) {
+                    if(data.items[i].site == site) {
                         
-                        var nn = data.resources[i].network_address;
+                        var nn = data.items[i].network_address;
                         var node_id = nn.substring(4,nn.indexOf("."));
                         
                         n.push(parseInt(node_id));
-                        n.push(parseFloat(data.resources[i].x));
-                        n.push(parseFloat(data.resources[i].y));
-                        n.push(parseFloat(data.resources[i].z));
-                        n.push(data.resources[i].uid);
-                        n.push(data.resources[i].state);
+                        n.push(parseFloat(data.items[i].x));
+                        n.push(parseFloat(data.items[i].y));
+                        n.push(parseFloat(data.items[i].z));
+                        n.push(data.items[i].uid);
+                        n.push(data.items[i].state);
                         nodes.push(n);
                     }
                 }

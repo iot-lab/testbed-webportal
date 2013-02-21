@@ -9,13 +9,6 @@
 
 <!-- Le styles -->
 <link href="css/bootstrap.css" rel="stylesheet">
-<style type="text/css">
-  body {
-    padding-top: 60px;
-    padding-bottom: 40px;
-  }
-</style>
-<link href="css/bootstrap-responsive.css" rel="stylesheet">
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
@@ -29,58 +22,128 @@
 <link rel="shortcut icon" href="img/favicon.png" />
 
 <style type="text/css">
-    h2,h3{
-        color: #AAD400;
-    }
+
+	h2,h3{
+		color: #AAD400;
+	}
     
-    .navbar .nav > li > a {
-        color: #fff;
-    }
+	a {
+		color: #AAD400;
+	}
+    
+	a:hover {
+		color: #AAD400;
+		text-decoration:underline;
+	}
+    
+	input:focus, textarea:focus {
+		border-color: rgba(170, 212, 0, 0.8);
+		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(170, 212, 0, 0.6);
+		outline: 0 none;
+	}
+
+	.progress .bar {
+		background-color: #AAD400;
+		background-image: -moz-linear-gradient(center top , #BEED00, #85A600);
+	}
+
+	select {
+		background-color: #ffffff;
+		-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+		-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+		box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+		-webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+		-moz-transition: border 0.2s linear 0s, box-shadow 0.2s linear 0;
+		-ms-transition: border linear 0.2s, box-shadow linear 0.2s;
+		-o-transition: border linear 0.2s, box-shadow linear 0.2s;
+		transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+		border-radius: 3px 3px 3px 3px;
+		width:280px;
+	}
+
+	.sl-logo {
+		background-color: #f7f7f7;
+		height: 112px;
+		position:fixed;
+		top:0;
+		width:100%;
+		z-index:1000;
+	}
+
+	.sl-logo a {
+		background:url('img/banniere2.png') no-repeat left;
+		margin-left: auto;
+		margin-right: auto;
+		display:block;
+		width:960px;
+		height:100%;
+		text-decoration:none;
+	}
+	
+	.navbar-fixed-top {
+		top:112px;
+	}
+	   
+	.navbar-inner {
+		min-height:31px;
+		padding-top:20px;
+		background: #454546;
+		border-radius:0px;
+	}
+	
+	.navbar-inner .container {
+		width:960px;
+	}
+	
+	.navbar .nav > li {
+		margin-right: 8px;
+	}
+	
+	.navbar .nav > li > a {
+		-moz-border-bottom-colors: none;
+		-moz-border-left-colors: none;
+		-moz-border-right-colors: none;
+		-moz-border-top-colors: none;
+		background: none repeat scroll 0 0 #333333;
+		border-color: #555555 #555555 -moz-use-text-color;
+		border-image: none;
+		border-style: solid solid none;
+		border-width: 1px 1px medium;
+		border-radius: 6px 6px 0 0;
+		color: #ABAAAA;
+		display: block;
+		line-height: 30px;
+		padding: 0 10px;
+		font-family: Tahoma,Arial,Helvetica,sans-serif;
+	}
+	
 
     .navbar .nav > li > a:hover {
-        color: #999;
+		background: none repeat scroll 0 0 #222222;
+		color: #fff;
     }
 
     .dropdown-menu > li > a:hover {
         background-color: #AAD400;    
     }
     
-    a {
-        color: #AAD400;
-    }
-    
-    a:hover {
-        color: #AAD400;
-        text-decoration:underline;
-    }
-    
-    input:focus, textarea:focus {
-        border-color: rgba(170, 212, 0, 0.8);
-        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(170, 212, 0, 0.6);
-        outline: 0 none;
-    }
+	.dropdown .caret {
+		margin-top: 14px;
+	}
 
-    .progress .bar {
-        background-color: #AAD400;
-        background-image: -moz-linear-gradient(center top , #BEED00, #85A600);
-    }
-
-    select {
-        background-color: #ffffff;
-        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-        -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-        -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
-        -moz-transition: border 0.2s linear 0s, box-shadow 0.2s linear 0;
-        -ms-transition: border linear 0.2s, box-shadow linear 0.2s;
-        -o-transition: border linear 0.2s, box-shadow linear 0.2s;
-        transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
-        border-radius: 3px 3px 3px 3px;
-        width:280px;
-    }
+   .navbar .nav > li > a {
+	   border-style: none;
+   }
 
 </style>
 
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<style type="text/css">
+	body {
+		padding-top: 180px;
+		padding-bottom: 40px;
+	}
+</style>
 </head>
 
 <body>
@@ -88,7 +151,7 @@
 <!-- ---------- -->
 <!--  MENU BAR  -->
 <!-- ---------- -->
-
+<div class="sl-logo"><a href="."></a></div>
 <div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
     <div class="container">
@@ -97,26 +160,19 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-      <a class="brand" href="." style="color:#AAD400"><img src="img/banniere.png"></a>
       <div class="nav-collapse">
             <ul class="nav">
-                <li class="divider-vertical"></li>
                 <?php if(isset($_SESSION['is_auth']) && $_SESSION['is_auth']) { ?>
                     <li><a href="."><i class="icon-home icon-white"></i> Home</a></li>  
-                    <li class="divider-vertical"></li>
                     <li><a href="exp_new.php">New Experiment</a></li>
-                    <li class="divider-vertical"></li>
                     <li><a data-toggle="modal" href="#profiles_modal" onClick="loadProfiles()">Manage Profiles</a></li>
                 <?php } else { ?>
-                    <li><a href="#" onClick="showLogin()">Login</a></li>
-                    <li class="divider-vertical"></li>
-                    <li><a href="#" onClick="showSignup()">Sign up</a></li>
+                    <li><a href="#login" onClick="showLogin()">Login</a></li>
+                    <li><a href="#signup" onClick="showSignup()">Sign up</a></li>
                  <?php } ?>
-                <li class="divider-vertical"></li>
             </ul> 
             
       <ul class="nav pull-right">
-                <li class="divider-vertical"></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Testbed activity <b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -126,7 +182,6 @@
                 </li>
       
           <?php if(isset($_SESSION['is_auth']) && $_SESSION['is_auth']) { ?>
-            <li class="divider-vertical"></li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo "".$_SESSION['login']."" ?> [logout] <b class="caret"></b></a>
                 <ul class="dropdown-menu">
@@ -135,7 +190,6 @@
                     <li><a href="logout.php">Logout</a></li>
                 </ul>
             </li>
-            <li class="divider-vertical"></li>
           <?php } ?>
       
           <?php if(isset($_SESSION['is_admin']) && $_SESSION['is_admin']) { ?>
@@ -147,7 +201,6 @@
                 <li><a href="admin_nodes.php">Nodes</a></li>
               </ul>
             </li>
-            <li class="divider-vertical"></li>
           <?php } ?>
       </ul>
       </div><!--/.nav-collapse -->
@@ -211,15 +264,62 @@
            <div class="alert alert-error" id="div_error_ssh" style="display:none"></div>
            
             <form class="well form-horizontal" id="form_modify_ssh">
+				<div class="tabbable">
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="#tab_SSH1" data-toggle="tab">SSH Key 1</a></li>
+						<li><a href="#tab_SSH2" data-toggle="tab">SSH Key 2</a></li>
+						<li><a href="#tab_SSH3" data-toggle="tab">SSH Key 3</a></li>
+						<li><a href="#tab_SSH4" data-toggle="tab">SSH Key 4</a></li>
+						<li><a href="#tab_SSH5" data-toggle="tab">SSH Key 5</a></li>
+					</ul>
 
-          <div class="control-group">
-            <label class="control-label" for="txt_ssh">SSH Key:</label>
-            <div class="controls">
-                <textarea id="form_modify_ssh_txt_ssh" class="input-xlarge" rows="3"></textarea>
-            </div>
-          </div>
+					<div class="tab-content">
+						<div class="tab-pane active" id="tab_SSH1">
+							<div class="control-group">
+								<label class="control-label" for="form_modify_ssh_txt_ssh1">SSH Key 1:</label>
+									<div class="controls">
+										<textarea id="form_modify_ssh_txt_ssh" class="input-xlarge" rows="3"></textarea>
+									</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab_SSH2">
+							<div class="control-group">
+								<label class="control-label" for="form_modify_ssh_txt_ssh2">SSH Key 2:</label>
+								<div class="controls">
+									<textarea id="form_modify_ssh_txt_ssh2" class="input-xlarge" rows="3"></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab_SSH3">
+							<div class="control-group">
+								<label class="control-label" for="form_modify_ssh_txt_ssh3">SSH Key 3:</label>
+								<div class="controls">
+									<textarea id="form_modify_ssh_txt_ssh3" class="input-xlarge" rows="3"></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab_SSH4">
+							<div class="control-group">
+								<label class="control-label" for="form_modify_ssh_txt_ssh4">SSH Key 4:</label>
+								<div class="controls">
+									<textarea id="form_modify_ssh_txt_ssh4" class="input-xlarge" rows="3"></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab_SSH5">
+							<div class="control-group">
+								<label class="control-label" for="form_modify_ssh_txt_ssh5">SSH Key 5:</label>
+								<div class="controls">
+									<textarea id="form_modify_ssh_txt_ssh5" class="input-xlarge" rows="3"></textarea>
+								</div>
+							</div>
+						</div>
 
-            <button id="form_modify_ssh_btn_modify" class="btn btn-primary" type="submit">Modify</button>
+					</div>
+				</div>
+
+				<button id="form_modify_ssh_btn_modify" class="btn btn-primary" type="submit">Modify</button>
+
             </form>
         </div>
     </div>
@@ -387,9 +487,16 @@ var SSHKeysLoaded = false;
             
             e.preventDefault();
             
-            var user = {
-                "sshkeys":$("#form_modify_ssh_txt_ssh").val()
-            };
+            var userStr = '({"sshkeys":["'+$("#form_modify_ssh_txt_ssh").val()+'"';
+
+            if($("#form_modify_ssh_txt_ssh2").val()!="") userStr += ',"'+$("#form_modify_ssh_txt_ssh2").val()+'"';
+            if($("#form_modify_ssh_txt_ssh3").val()!="") userStr += ',"'+$("#form_modify_ssh_txt_ssh3").val()+'"';
+            if($("#form_modify_ssh_txt_ssh4").val()!="") userStr += ',"'+$("#form_modify_ssh_txt_ssh4").val()+'"';
+            if($("#form_modify_ssh_txt_ssh5").val()!="") userStr += ',"'+$("#form_modify_ssh_txt_ssh5").val()+'"';
+
+            userStr += ']})';
+
+            var user = eval(userStr);
             
             $.ajax({
                 url: "/rest/users/"+<?php echo '"'.$_SESSION['login'].'"'?>+"/sshkeys",
@@ -520,7 +627,12 @@ var SSHKeysLoaded = false;
                 dataType: "text",
                 success:function(data){
                     $("#div_error_ssh").hide();
-                    $("#form_modify_ssh_txt_ssh").val(data);
+                    var sshkeys=JSON.parse(data);
+                    $("#form_modify_ssh_txt_ssh").val(sshkeys.sshkeys[0]);
+                    if(sshkeys.sshkeys.length>1) $("#form_modify_ssh_txt_ssh2").val(sshkeys.sshkeys[1]);
+                    if(sshkeys.sshkeys.length>2) $("#form_modify_ssh_txt_ssh3").val(sshkeys.sshkeys[2]);
+                    if(sshkeys.sshkeys.length>3) $("#form_modify_ssh_txt_ssh4").val(sshkeys.sshkeys[3]);
+                    if(sshkeys.sshkeys.length>4) $("#form_modify_ssh_txt_ssh5").val(sshkeys.sshkeys[4]);
                     SSHKeysLoaded=true;
                 },
                 error:function(XMLHttpRequest, textStatus, errorThrows){

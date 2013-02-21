@@ -12,55 +12,57 @@ include("header.php") ?>
     
    
 <div class="row">
+        <div class="span9">
 
-    <h2>Manage nodes</h2>
-
-    <div id="allNodes">
-        
-        
-        <table class="table table-striped table-bordered table-condensed" style="width:500px" id="tbl_nodes">
-        <thead>
-            <tr>
-                <th></th>
-                <th>node</th>
-                <th>state</th>
-            </tr>
-        </thead>
-        <tbody id="nodesRow">
-        </tbody>
-        </table>
-        
-        <p><a href="javascript:selectAll();">Select All</a> - <a href="javascript:unSelectAll();">Unselect All</a></p>
-        
-        
-        <form id="frm_actions">
-
-            <b>Actions on selected nodes: </b>
-            
-            <select id="part" class="input-medium">
-                <option value="opennodes">Open Node</option>
-                <option value="controlnodes">Control Node</option>
-                <option value="gatewaynodes">Gateway</option>
-            </select>
-            
-            <select id="action" class="input-small">
-                <option value="start">Start</option>
-                <!-- <option value="start" data-battery="battery">Start (battery)</option> -->
-                <option value="stop">Stop</option>
-                <option value="reset">Reset</option>
-                <!-- <option value="update">Update</option> -->
-            </select>
-            
-            <button id="btn_send" class="btn" type="submit">Send</button>
-            
-            <div id="firmware" style="display:none">firmware: <input type="file" id="files" name="files[]" multiple /></div>
-            
-            <div id="loader" style="display:none"><img src="img/ajax-loader.gif"></div>
-            <div id="state" class="alert" style="display:none"></div>
-            
-        </form>
-        
-    </div>
+		    <h2>Manage nodes</h2>
+		
+		    <div id="allNodes">
+		        
+		        
+		        <table class="table table-striped table-bordered table-condensed" style="width:500px" id="tbl_nodes">
+		        <thead>
+		            <tr>
+		                <th></th>
+		                <th>node</th>
+		                <th>state</th>
+		            </tr>
+		        </thead>
+		        <tbody id="nodesRow">
+		        </tbody>
+		        </table>
+		        
+		        <p><a href="javascript:selectAll();">Select All</a> - <a href="javascript:unSelectAll();">Unselect All</a></p>
+		        
+		        
+		        <form id="frm_actions">
+		
+		            <b>Actions on selected nodes: </b>
+		            
+		            <select id="part" class="input-medium">
+		                <option value="opennodes">Open Node</option>
+		                <option value="controlnodes">Control Node</option>
+		                <option value="gatewaynodes">Gateway</option>
+		            </select>
+		            
+		            <select id="action" class="input-small">
+		                <option value="start">Start</option>
+		                <!-- <option value="start" data-battery="battery">Start (battery)</option> -->
+		                <option value="stop">Stop</option>
+		                <option value="reset">Reset</option>
+		                <!-- <option value="update">Update</option> -->
+		            </select>
+		            
+		            <button id="btn_send" class="btn" type="submit">Send</button>
+		            
+		            <div id="firmware" style="display:none">firmware: <input type="file" id="files" name="files[]" multiple /></div>
+		            
+		            <div id="loader" style="display:none"><img src="img/ajax-loader.gif"></div>
+		            <div id="state" class="alert" style="display:none"></div>
+		            
+		        </form>
+		        
+		    </div>
+		</div>
 </div>
 
 
@@ -101,11 +103,11 @@ include("header.php") ?>
                 data: "",
                 success:function(data){
                     
-                    for(i=0; i<data.resources.length; i++) {
+                    for(var i=0; i<data.items.length; i++) {
                         $("#nodesRow").append("<tr><td>"+
-                        "<input type=\"checkbox\" name=\"option1\" value=\""+data.resources[i].network_address+"\"></td>"+
-                        "<td>"+data.resources[i].network_address+"</td>"+
-                        "<td>"+data.resources[i].state+"</td></tr>");
+                        "<input type=\"checkbox\" name=\"option1\" value=\""+data.items[i].network_address+"\"></td>"+
+                        "<td>"+data.items[i].network_address+"</td>"+
+                        "<td>"+data.items[i].state+"</td></tr>");
                     }
                     
                 },
@@ -124,7 +126,7 @@ include("header.php") ?>
                
                 var command = $("#action option:selected").val();
                 
-                var part = $("#part option:selected").val()
+                var part = $("#part option:selected").val();
                 
                 var battery = "";
                 if($("#action option:selected").attr("data-battery") == "battery") {
@@ -231,7 +233,7 @@ include("header.php") ?>
             // closure to capture the file information.
             reader.onload = (function (theFile) {
                 return function (e) {
-                    binary = e.target.result
+                    binary = e.target.result;
                 };
             })(f);
 

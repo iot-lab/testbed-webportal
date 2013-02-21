@@ -49,7 +49,7 @@ if(!$_SESSION['is_auth']) {
                 <div class="control-group">
                     <label class="control-label" for="txt_duration">Duration (minutes):</label>
                     <div class="controls">
-                        <input id="txt_duration" name="duration" type="number" class="input-small" value="20" required="required">
+                        <input id="txt_duration" name="duration" type="number" class="input-small" value="20" required="required" min="0">
                     </div>
                 </div>
                 
@@ -79,10 +79,10 @@ if(!$_SESSION['is_auth']) {
                                 <div class="span9" style="margin:0px"><div class="" id="div_resources_map"><table id="div_resources_map_tbl"></table></div></div>
 
                         </div>
-                       <!-- <div class="row-fluid">
+                       <div class="row-fluid">
                                 <div class="span1" style="text-align:center"><input type="radio" name="resources_type" id="optionsRadiosType" value="alias"></div>
                                 <div class="span2" style="margin:0px;padding-top:3px">by type</div>
-                        </div> -->
+                        </div> 
                         <div class="row-fluid">
                                 <div class="span12" style="margin:0px;padding-top:3px">
                         
@@ -111,11 +111,10 @@ if(!$_SESSION['is_auth']) {
 			                                        </td>
 			                                        <td>
 			                                            <select id="lst_site" class="input-medium site">
-			                                                <option value="any">Any</option>
 			                                            </select> 
 			                                        </td>
 			                                        <td>
-			                                            <input id="txt_fixe" type="number" class="input-mini number" value="1">
+			                                            <input id="txt_fixe" type="number" class="input-mini number" value="1" min="0">
 			                                        </td>
 			                                        <td>
 			                                            <input id="txt_mobile" type="checkbox" class="input-small mobile">
@@ -197,7 +196,10 @@ if(!$_SESSION['is_auth']) {
         </div>
         
         <div id="help2" class="alert alert-info">
-            <img src="img/help.png"> You can choose the resources from the maps, or directly enter their numbers. 
+            <img src="img/help.png"> You have two ways to choose the resources : 
+<br/><br/>From the maps, or directly entering their numbers. 
+<br/><br/>By type. Take care of building a consistent request (correct number of nodes...), otherwise it will be rejected. You can go to <i>Testbed activity -> View nodes status</i> to check the properties of the nodes.
+If you select mobile nodes on train, every nodes of the train will be reserved.
             <br/><br/>Then click <b>Next</b> to go to the firmwares/profiles associations page.
         </div>
         
@@ -290,24 +292,24 @@ if(!$_SESSION['is_auth']) {
                         site_resources = JSON.parse(data_server);
                         //console.log(site_resources);
                         
-			for(var j = 0; j < site_resources.sites.length; j++) {
-				$("#div_resources_map_tbl").append('<tr><td><a href="#" onclick="openMapPopup(\''+site_resources.sites[j].site+'\')" id="'+site_resources.sites[j].site+'_maps">'+site_resources.sites[j].site.charAt(0).toUpperCase() + site_resources.sites[j].site.slice(1)+' map</a></td><td><input id="'+site_resources.sites[j].site+'_list" value="" class="input-large" /></td></tr>');
-				
-			}
-
-
-			for(var i = 0; i < site_resources.sites.length; i++) {
-                            $("#lst_site").append(new Option(site_resources.sites[i].site, site_resources.sites[i].site));
+                        for(var j = 0; j < site_resources.items.length; j++) {
+                            $("#div_resources_map_tbl").append('<tr><td><a href="#" onclick="openMapPopup(\''+site_resources.items[j].site+'\')" id="'+site_resources.items[j].site+'_maps">'+site_resources.items[j].site.charAt(0).toUpperCase() + site_resources.items[j].site.slice(1)+' map</a></td><td><input id="'+site_resources.items[j].site+'_list" value="" class="input-large" /></td></tr>');
                             
-                            for(j = 0; j < site_resources.sites[i].nodes.length; j++) {
+                        }
+
+
+                        for(var i = 0; i < site_resources.items.length; i++) {
+                            $("#lst_site").append(new Option(site_resources.items[i].site, site_resources.items[i].site));
+                            
+                            for(j = 0; j < site_resources.items[i].resources.length; j++) {
                                 var find = false;
                                 for(var z = 0; z < $("#lst_archi option").length && !find; z++) {
-                                    if($("#lst_archi option")[z].value == site_resources.sites[i].nodes[j].archi) {
+                                    if($("#lst_archi option")[z].value == site_resources.items[i].resources[j].archi) {
                                         find = true;
                                     }
                                 }
                                 if(!find) {
-                                    $("#lst_archi").append(new Option(site_resources.sites[i].nodes[j].archi, site_resources.sites[i].nodes[j].archi));
+                                    $("#lst_archi").append(new Option(site_resources.items[i].resources[j].archi, site_resources.items[i].resources[j].archi));
                                 }
                             }
                         }
@@ -373,10 +375,12 @@ if(!$_SESSION['is_auth']) {
                             row_rs.nbnodes = number;
                             row_rs.properties.archi = archi;
                             
-                            if(site != "any")   
-                                 row_rs.properties.site = site;
+                            row_rs.properties.site = site;
+                            
                             if(mobile)
                                 row_rs.properties.mobile = 1;
+                            else
+                                row_rs.properties.mobile = 0;
 
                             alias_nodes.push(row_rs);
 
@@ -390,24 +394,24 @@ if(!$_SESSION['is_auth']) {
                 }
                 else {
 
-			exp_json.nodes = [];
-			$("#div_resources_map input").each(function(){
-				var site = $(this).attr("id").split('_')[0];
-				var val = $(this).attr("value");
-				if(val != "") {
-					var snodes = parseNodebox(val);
-	                       		for (i = 0; i < snodes.length; i++) {
-        		                    if(!isNaN(snodes[i]))
-                        	        	exp_json.nodes.push("node"+snodes[i]+"."+site+".senslab.info");
-                        		}
+                    exp_json.nodes = [];
+                    $("#div_resources_map input").each(function(){
+                        var site = $(this).attr("id").split('_')[0];
+                        var val = $(this).attr("value");
+                        if(val != "") {
+                            var snodes = parseNodebox(val);
+                                        for (i = 0; i < snodes.length; i++) {
+                                            if(!isNaN(snodes[i]))
+                                                exp_json.nodes.push("node"+snodes[i]+"."+site+".senslab.info");
+                                        }
 
-				}
-			});
+                        }
+                    });
 
               
-                   	for (i = 0; i < exp_json.nodes.length; i++) {
-                        	$("#my_nodes").append(new Option(exp_json.nodes[i], exp_json.nodes[i], false, false));
-                    	}
+                    for (i = 0; i < exp_json.nodes.length; i++) {
+                        $("#my_nodes").append(new Option(exp_json.nodes[i], exp_json.nodes[i], false, false));
+                    }
 
                 }
 
@@ -564,10 +568,8 @@ if(!$_SESSION['is_auth']) {
                     //create date
                     var schedule_date = new Date(year, month, day, hour, minute);
                     var scheduled_timestamp = schedule_date.getTime()/1000;
-                    
-                    var d = new Date();
-                    var offset = d.getTimezoneOffset();
-                    exp_json.reservation = scheduled_timestamp - (offset*60);
+                
+                    exp_json.reservation = scheduled_timestamp;
                 }
 
                 //console.log(JSON.stringify(exp_json));
@@ -575,65 +577,55 @@ if(!$_SESSION['is_auth']) {
                 var mydata = JSON.stringify(exp_json);
                 var datab = "";
                 
-                if (exp_json.profileassociations != null || exp_json.firmwareassociations) {
-                    var boundary = "AaB03x";
+                var boundary = "AaB03x";
 
-                    //JSON
+                //JSON
+                datab += "--" + boundary + '\r\n';
+                datab += 'Content-Disposition: form-data; name="'+exp_json.name+'.json"; filename="'+exp_json.name+'.json"\r\n';
+                datab += 'Content-Type: application/json\r\n\r\n';
+                datab += mydata + '\r\n\r\n';
+                //datab += "--" + boundary + '\r\n';
+
+
+                for (var i = 0; i < binary.length; i++) {
                     datab += "--" + boundary + '\r\n';
-                    datab += 'Content-Disposition: form-data; name="'+exp_json.name+'.json"; filename="'+exp_json.name+'.json"\r\n';
-                    datab += 'Content-Type: application/json\r\n\r\n';
-                    datab += mydata + '\r\n\r\n';
-                    //datab += "--" + boundary + '\r\n';
-
-
-                    for (var i = 0; i < binary.length; i++) {
-                        datab += "--" + boundary + '\r\n';
-                        datab += 'Content-Disposition: form-data; name="' + binary[i].name + '"; filename="' + binary[i].name + '"\r\n';
-                        datab += 'Content-Type: text/plain\r\n\r\n';
-                        datab += binary[i].bin + '\r\n';
-                    }
-
-                    //add json
-                    datab += "--" + boundary + '--';
-
-                    $.ajax({
-                        type: "POST",
-                        dataType: "text",
-                        data: datab,
-                        url: "/rest/experiment",
-                        contentType: "multipart/form-data; boundary="+boundary,
-                        
-                        //data: "data="+datab,
-                        //url: "dump.php",
-                        success: function (data_server) {
-                            displaySubmitState(data_server);
-                        },
-                        error: function (XMLHttpRequest, textStatus, errorThrows) {
-                            $("#expState").modal('show');
-                            $("#expStateMsg").html("<h3 style='color:red'>Error</h3>");
-                            $("#expStateMsg").append(textStatus + ": " + errorThrows + "<br/>" + XMLHttpRequest.responseText);
-                        }
-                    });
+                    datab += 'Content-Disposition: form-data; name="' + binary[i].name + '"; filename="' + binary[i].name + '"\r\n';
+                    datab += 'Content-Type: text/plain\r\n\r\n';
+                    datab += binary[i].bin + '\r\n';
                 }
-                else
-                {
-                    $.ajax({
-                        type: "POST",
-                        dataType: "text",
-                        data: mydata,
-                        contentType: "application/json; charset=utf-8",
-                        url: "/rest/experiment?body",
-                        success: function (data_server) {
-                            displaySubmitState(data_server);
-                        },
-                        error: function (XMLHttpRequest, textStatus, errorThrows) {
-                            $("#expState").modal('show');
-                            $("#expStateMsg").html("<h3 style='color:red'>Error</h3>");
-                            $("#expStateMsg").append(textStatus + ": " + errorThrows + "<br/>" + XMLHttpRequest.responseText);
-                        }
-                    });
+
+                //add json
+                datab += "--" + boundary + '--';
+
+                $.ajax({
+                    type: "POST",
+                    dataType: "text",
+                    data: datab,
+                    url: "/rest/experiment",
+                    contentType: "multipart/form-data; boundary="+boundary,
                     
-                }
+                    success: function (data_server) {
+                        
+                        $("#expState").modal('show');
+                        var info = JSON.parse(data_server);
+                        
+                        if(info.id) {
+                           
+                            $("#expStateMsg").html("<h3>Your experiment has successfully been submitted</h3>");
+                            $("#expStateMsg").append("Experiment Id : " + info.id);
+                        }
+                        else {
+                            $("#expStateMsg").html("<h3 style='color:red'>Error</h3>");
+                            $("#expStateMsg").append(info.error);
+                        }
+                        
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrows) {
+                        $("#expState").modal('show');
+                        $("#expStateMsg").html("<h3 style='color:red'>Error</h3>");
+                        $("#expStateMsg").append(textStatus + ": " + errorThrows + "<br/>" + XMLHttpRequest.responseText);
+                    }
+                });
 
                 return false;
             });
@@ -840,72 +832,55 @@ if(!$_SESSION['is_auth']) {
                 }
             });
 
-
-        function displaySubmitState(data_server) {
-            $("#expState").modal('show');
-            $("#expStateMsg").html("<h3>Your experiment has successfully been submitted</h3>");
-            var info = JSON.parse(data_server);
-            
-            if(info.code == 400)
-            {
-                $("#expStateMsg").html("<h3 style='color:red'>Error</h3>");
-                $("#expStateMsg").append(info.title + "<br/>" + info.message);
-            }
-            $("#expStateMsg").append("Experiment Id : " + info.id);
-        }
-
-
             function removeAssociation(index) {
                 json_tmp = rebuildJson(exp_json);
 
-				// looking for profile in json_tmp[index] 
-				if(JSON.stringify(json_tmp[index].profilename)!=undefined) {
-					for (var i=0;i<exp_json.profileassociations.length;i++) {
-						if(exp_json.profileassociations[i].profilename==json_tmp[index].profilename) {
-							for (var j=0; j<exp_json.profileassociations[i].nodes.length;j++)
-								if(exp_json.profileassociations[i].nodes[j]==json_tmp[index].node)
-									exp_json.profileassociations[i].nodes.splice(j,1);
-							if(exp_json.profileassociations[i].nodes.length==0)
-								exp_json.profileassociations.splice(i,1);
-						}
-					}
-					if(exp_json.profileassociations.length==0)
-						delete exp_json.profileassociations;
-				
-				}
-				// looking for firmware in json_tmp[index] 
-				if(JSON.stringify(json_tmp[index].firmwarename)!=undefined) {
-		                for (var i=0;i<exp_json.firmwareassociations.length;i++) {
-		                   if(exp_json.firmwareassociations[i].firmwarename==json_tmp[index].firmwarename) {
-		                        for (var j=0; j<exp_json.firmwareassociations[i].nodes.length;j++)
-		                            if(exp_json.firmwareassociations[i].nodes[j]==json_tmp[index].node)
-		                                exp_json.firmwareassociations[i].nodes.splice(j,1);
-							    if(exp_json.firmwareassociations[i].nodes.length==0)
-								    exp_json.firmwareassociations.splice(i,1);
-		                   }
-		                 }
-					     if(exp_json.firmwareassociations.length==0)
-						     delete exp_json.firmwareassociations;
-				}
-		
-				if(exp_json.type=="alias") {
-					
-					var node = exp_json.nodes[json_tmp[index].node];
-		            var ntype = "fixe";
-		            if(node.properties.mobile==1)
-		                  ntype = "mobile";
-		
-					var nsite="any";
-		            if(node.properties.site != undefined)
-		                  nsite = node.properties.site;
-		
-		            $("#my_nodes").append(new Option(node.properties.archi+"/"+nsite+"/"+node.nbnodes+"/"+ntype,json_tmp[index].node));
-		
-				} else {
-			        $("#my_nodes").append(new Option(json_tmp[index].node, json_tmp[index].node , false, false));
-				}
-		
-				displayAssociation();
+                // looking for profile in json_tmp[index] 
+                if(JSON.stringify(json_tmp[index].profilename)!=undefined) {
+                    for (var i=0;i<exp_json.profileassociations.length;i++) {
+                        if(exp_json.profileassociations[i].profilename==json_tmp[index].profilename) {
+                            for (var j=0; j<exp_json.profileassociations[i].nodes.length;j++)
+                                if(exp_json.profileassociations[i].nodes[j]==json_tmp[index].node)
+                                    exp_json.profileassociations[i].nodes.splice(j,1);
+                            if(exp_json.profileassociations[i].nodes.length==0)
+                                exp_json.profileassociations.splice(i,1);
+                        }
+                    }
+                    if(exp_json.profileassociations.length==0)
+                        delete exp_json.profileassociations;
+                
+                }
+                // looking for firmware in json_tmp[index] 
+                if(JSON.stringify(json_tmp[index].firmwarename)!=undefined) {
+                        for (var i=0;i<exp_json.firmwareassociations.length;i++) {
+                           if(exp_json.firmwareassociations[i].firmwarename==json_tmp[index].firmwarename) {
+                                for (var j=0; j<exp_json.firmwareassociations[i].nodes.length;j++)
+                                    if(exp_json.firmwareassociations[i].nodes[j]==json_tmp[index].node)
+                                        exp_json.firmwareassociations[i].nodes.splice(j,1);
+                                if(exp_json.firmwareassociations[i].nodes.length==0)
+                                    exp_json.firmwareassociations.splice(i,1);
+                           }
+                         }
+                         if(exp_json.firmwareassociations.length==0)
+                             delete exp_json.firmwareassociations;
+                }
+        
+                if(exp_json.type=="alias") {
+                    
+                    var node = exp_json.nodes[json_tmp[index].node];
+                    var ntype = "fixe";
+                    if(node.properties.mobile==1)
+                          ntype = "mobile";
+        
+                    nsite = node.properties.site;
+        
+                    $("#my_nodes").append(new Option(node.properties.archi+"/"+nsite+"/"+node.nbnodes+"/"+ntype,json_tmp[index].node));
+        
+                } else {
+                    $("#my_nodes").append(new Option(json_tmp[index].node, json_tmp[index].node , false, false));
+                }
+        
+                displayAssociation();
             }
    
 

@@ -10,6 +10,7 @@
 <?php if (isset($_SESSION['basic_value'])) { ?>
   <script type='text/javascript'>
         $.ajaxSetup({
+            cache: false,
             beforeSend: function (xhr) {
                 xhr.setRequestHeader('Authorization', 'Basic <?php echo $_SESSION['basic_value']; ?>')
             }
