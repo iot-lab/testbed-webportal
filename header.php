@@ -807,7 +807,7 @@ var SSHKeysLoaded = false;
             
             $("input[name='or_power']").val([my_profiles[i].power]);
             $("#cb_current").attr("checked",my_profiles[i].consumption.current);
-            $("#cb_voltage").attr("checked",my_profiles[i].consumption.votage);
+            $("#cb_voltage").attr("checked",my_profiles[i].consumption.voltage);
             $("#cb_power").attr("checked",my_profiles[i].consumption.power);
             
             $("#cb_temperature").attr("checked",my_profiles[i].sensor.temperature);
