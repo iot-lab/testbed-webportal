@@ -1,3 +1,8 @@
+<!-- ------ -->
+<!--  MAIN  -->
+<!-- ------ -->
+
+
 <div class="span3">
 	<div class="alert alert-info">
 		<img src="img/help.png"> To <b>create</b> a new profile click the <b>New</b> button, fill the form and click <b>Save</b>. 
@@ -24,113 +29,118 @@
 			<div class="controls">
 				<label class="radio inline"><input type="radio" name="or_nodearch" id="or_nodearch_wsn430" value="wsn430" data-target="#wsn430panel" checked>WSN 430</label>
 				<label class="radio inline"><input type="radio" name="or_nodearch" id="or_nodearch_m3" value="m3" data-target="#m3panel">M3</label>
-				<label class="radio inline"><input type="radio" name="or_nodearch" id="or_nodearch_a8" value="a8" data-target="#a8panel">A8</label>
+				<!-- <label class="radio inline"><input type="radio" name="or_nodearch" id="or_nodearch_a8" value="a8" data-target="#a8panel">A8</label> -->
 			</div>
 		</div>
-                   
+
+				
 		<div class="tab-content">
+
+<!-- --------------------- -->
+<!--  WSN430 PROFILE FORM  -->
+<!-- --------------------- -->
+                   
 			<div id="wsn430panel" class="tab-pane active">  	
 				<div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
 					<div class="control-group">
 						<label class="control-label">Power mode</label>
 						<div class="controls">
-							<label class="radio"><input type="radio" name="or_power" id="or_power_dc" value="dc" checked>dc</label>
-							<label class="radio"><input type="radio" name="or_power" id="or_power_battery" value="battery">battery</label>
+							<label class="radio"><input type="radio" name="or_power_wsn430" id="or_power_dc_wsn430" value="dc" checked>dc</label>
+							<label class="radio"><input type="radio" name="or_power_wsn430" id="or_power_battery_wsn430" value="battery">battery</label>
+						</div>
+					</div>
+				</div>
+				
+				<div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
+					<div class="control-group">
+						<label class="control-label" for="inlineCheckboxes">Consumption</label>
+						<div class="controls">
+							<label class="checkbox inline"><input type="checkbox" id="cb_current_wsn430" value="current"> current</label>
+							<label class="checkbox inline"><input type="checkbox" id="cb_voltage_wsn430" value="voltage"> voltage</label>
+							<label class="checkbox inline"><input type="checkbox" id="cb_power_wsn430" value="power"> power</label>
+						</div>
+					</div>
+	                 
+					<div class="control-group">
+						<label class="control-label" for="consumption_frequency_wsn430">Frequency (ms)</label>
+						<div class="controls">
+							<select id="consumption_frequency_wsn430" class="input-small">
+								<option value="70">70</option>
+								<option value="100">100</option>
+								<option value="500">500</option>
+								<option value="1000">1000</option>
+								<option value="5000">5000</option>
+							</select>
 						</div>
 					</div>
 				</div>
 
-				
-				
-				
-				
-				
-				
-                <div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
-                <div class="control-group">
-                    <label class="control-label" for="inlineCheckboxes">Consumption</label>
-                    <div class="controls">
-                      <label class="checkbox inline">
-                        <input type="checkbox" id="cb_current" value="current"> current
-                      </label>
-                      <label class="checkbox inline">
-                        <input type="checkbox" id="cb_voltage" value="voltage"> voltage
-                      </label>
-                      <label class="checkbox inline">
-                        <input type="checkbox" id="cb_power" value="power"> power
-                      </label>
-                    </div>
-                  </div>
-                 
-                <div class="control-group">
-                    <label class="control-label" for="consumption_frequency">Frequency (ms)</label>
-                    <div class="controls">
-                      <select id="consumption_frequency" class="input-small">
-                        <option value="70">70</option>
-                        <option value="100">100</option>
-                        <option value="500">500</option>
-                        <option value="1000">1000</option>
-                        <option value="5000">5000</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
 
+				<div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
+					<div class="control-group">
+						<label class="control-label" for="inlineCheckboxes">Sensors</label>
+						<div class="controls">
+							<label class="checkbox inline"><input type="checkbox" id="cb_luminosity_wsn430" value="luminosity"> luminosity</label>
+							<label class="checkbox inline"><input type="checkbox" id="cb_temperature_wsn430" value="temperature"> temperature</label>
+						</div>
+					</div>
+	
+					<div class="control-group">
+						<label class="control-label" for="sensor_frequency_wsn430">Frequency (ms)</label>
+						<div class="controls">
+							<select id="sensor_frequency_wsn430" class="input-small">
+								<option value="5000">5000</option>
+								<option value="10000">10000</option>
+								<option value="30000">30000</option>
+							</select>
+						</div>
+					</div>
+				</div> 
 
-                <div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
-                <div class="control-group">
-                    <label class="control-label" for="inlineCheckboxes">Sensors</label>
-                    <div class="controls">
-                      <label class="checkbox inline">
-                        <input type="checkbox" id="cb_luminosity" value="luminosity"> luminosity
-                      </label>
-                      <label class="checkbox inline">
-                        <input type="checkbox" id="cb_temperature" value="temperature"> temperature
-                      </label>
-                    </div>
-                  </div>
+				<div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
+					<div class="control-group">
+						<label class="control-label" for="inlineCheckboxes">Radio</label>
+						<div class="controls">
+							<label class="checkbox inline"><input type="checkbox" id="cb_rssi_wsn430" value="luminosity"> rssi</label>
+						</div>
+					</div>
+	
+					<div class="control-group">
+						<label class="control-label" for="radio_frequency_wsn430">Frequency (ms)</label>
+						<div class="controls">
+							<select id="radio_frequency_wsn430" class="input-small">
+								<option value="500">500</option>
+								<option value="1000">1000</option>
+								<option value="5000">5000</option>
+								<option value="10000">10000</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+              
 
-                <div class="control-group">
-                    <label class="control-label" for="sensor_frequency">Frequency (ms)</label>
-                    <div class="controls">
-                      <select id="sensor_frequency" class="input-small">
-                        <option value="5000">5000</option>
-                        <option value="10000">10000</option>
-                        <option value="30000">30000</option>
-                      </select>
-                    </div>
-                  </div>
-                </div> 
-
-                <div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
-                <div class="control-group">
-                    <label class="control-label" for="inlineCheckboxes">Radio</label>
-                    <div class="controls">
-                      <label class="checkbox inline">
-                        <input type="checkbox" id="cb_rssi" value="luminosity"> rssi
-                      </label>
-                    </div>
-                  </div>
-
-                <div class="control-group">
-                    <label class="control-label" for="radio_frequency">Frequency (ms)</label>
-                    <div class="controls">
-                      <select id="radio_frequency" class="input-small">
-                        <option value="500">500</option>
-                        <option value="1000">1000</option>
-                        <option value="5000">5000</option>
-                        <option value="10000">10000</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
+<!-- ----------------- -->
+<!--  M3 PROFILE FORM  -->
+<!-- ----------------- -->	
              
-              <div class="tab-pane" id="m3panel">M3 - NYI</div>
-              <div class="tab-pane" id="a8panel">A8 - NYI</div>
-            </div>
-             
+			<div class="tab-pane" id="m3panel">M3 - NYI</div>
+			<!-- postfixer tous les id et les noms des input avec _m3 comme _wsn430 plus haut -->
+              
 
+<!-- ----------------- -->
+<!--  A8 PROFILE FORM  -->
+<!-- ----------------- -->	
+              
+              
+			<!-- <div class="tab-pane" id="a8panel">A8 - NYI</div>  -->
+			
+<!-- ---------- -->
+<!--  MAIN  END -->
+<!-- ---------- -->			
+			
+			
+		</div>
 		<button id="btn_submit" class="btn btn-primary" type="submit">Save</button>
 
 	</form>
@@ -245,21 +255,21 @@ function loadProfile() {
         $("#or_nodearch_"+nodearch+"").tab('show');
         
         if(nodearch=="wsn430") {
-	        $('#consumption_frequency').val(my_profiles[i].consumption.frequency);
-	        $('#sensor_frequency').val(my_profiles[i].sensor.frequency);
-	        $('#radio_frequency').val(my_profiles[i].radio.frequency);
+	        $('#consumption_frequency_wsn430').val(my_profiles[i].consumption.frequency);
+	        $('#sensor_frequency_wsn430').val(my_profiles[i].sensor.frequency);
+	        $('#radio_frequency_wsn430').val(my_profiles[i].radio.frequency);
 	        
-	        $("input[name='or_power']").val([my_profiles[i].power]);
-	        $("#cb_current").attr("checked",my_profiles[i].consumption.current);
-	        $("#cb_voltage").attr("checked",my_profiles[i].consumption.votage);
-	        $("#cb_power").attr("checked",my_profiles[i].consumption.power);
+	        $("input[name='or_power_wsn430']").val([my_profiles[i].power]);
+	        $("#cb_current_wsn430").attr("checked",my_profiles[i].consumption.current);
+	        $("#cb_voltage_wsn430").attr("checked",my_profiles[i].consumption.voltage);
+	        $("#cb_power_wsn430").attr("checked",my_profiles[i].consumption.power);
 	        
-	        $("#cb_temperature").attr("checked",my_profiles[i].sensor.temperature);
-	        $("#cb_luminosity").attr("checked",my_profiles[i].sensor.luminosity);
+	        $("#cb_temperature_wsn430").attr("checked",my_profiles[i].sensor.temperature);
+	        $("#cb_luminosity_wsn430").attr("checked",my_profiles[i].sensor.luminosity);
 	        
-	        $("#cb_rssi").attr("checked",my_profiles[i].radio.rssi);
+	        $("#cb_rssi_wsn430").attr("checked",my_profiles[i].radio.rssi);
         } else if (nodearch=="m3") {
-        } else if (nodearch=="a8") {
+        //TODO } else if (nodearch=="a8") {
         } else {
         }
     }
@@ -318,27 +328,27 @@ $("#form_part").bind("submit", function (e) {
     if(nodearch == "wsn430") {
 
 	    consumption = {
-	        "current":$('#cb_current').is(':checked'),
-	        "voltage":$('#cb_voltage').is(':checked'),
-	        "power":$('#cb_power').is(':checked'),
-	        "frequency":$('#consumption_frequency').val()
+	        "current":$('#cb_current_wsn430').is(':checked'),
+	        "voltage":$('#cb_voltage_wsn430').is(':checked'),
+	        "power":$('#cb_power_wsn430').is(':checked'),
+	        "frequency":$('#consumption_frequency_wsn430').val()
 	    };
 	
 	    sensor = {
-	        "luminosity":$('#cb_luminosity').is(':checked'),
-	        "temperature":$('#cb_temperature').is(':checked'),
-	        "frequency":$('#sensor_frequency').val()
+	        "luminosity":$('#cb_luminosity_wsn430').is(':checked'),
+	        "temperature":$('#cb_temperature_wsn430').is(':checked'),
+	        "frequency":$('#sensor_frequency_wsn430').val()
 	    };
 	
 	    radio = {
-	        "rssi":$('#cb_rssi').is(':checked'),
-	        "frequency":$('#radio_frequency').val()
+	        "rssi":$('#cb_rssi_wsn430').is(':checked'),
+	        "frequency":$('#radio_frequency_wsn430').val()
 	    };
 	
 	    profile_json = {
 	        "profilename":$("#profiles_txt_name").val(),
 	        "nodearch":nodearch,
-	        "power":$("input[name=or_power]:checked").val(),
+	        "power":$("input[name=or_power_wsn430]:checked").val(),
 	        "consumption":consumption,
 	        "sensor":sensor,
 	        "radio":radio
