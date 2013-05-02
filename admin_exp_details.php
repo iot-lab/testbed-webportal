@@ -71,7 +71,7 @@ include("header.php") ?>
                         $("#btnCancel").attr("disabled",true);
                     }
         
-                    json_exp = rebuildJson(data);
+                    json_exp = rebuildJson(data,[],true);
                     
 //then nodes without association
                     for(l=0; l<data.nodes.length; l++) {

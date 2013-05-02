@@ -17,6 +17,7 @@ include("header.php") ?>
 <div class="row">
 
     <h2>Experiment Details</h2>
+        <div class="alert alert-error" id="div_msg" style="display:none"></div>
 
 
     <div class="modal hide" id="expState">
@@ -75,9 +76,10 @@ include("header.php") ?>
         <thead>
             <tr>
                 <th></th>
-                <th>node</th>
-                <th>profile</th>
-                <th>firmware</th>
+                <th>Node</th>
+                <th>Profile</th>
+                <th>Firmware</th>
+                <th>Deployment</th>
             </tr>
         </thead>
         <tbody id="detailsExpRow">
@@ -115,7 +117,8 @@ include("header.php") ?>
     <?php include('footer.php') ?>
 
     <script type="text/javascript">
-        
+
+    	var json_log = [];
         var json_exp = [];
         var id = <?php echo $_GET['id']?>;
         var state = "";
@@ -172,6 +175,32 @@ include("header.php") ?>
                 data: {},
                 dataType: "json",
                 success:function(data){
+                    
+					if(data.state !="Waiting" && data.type !="alias") {
+	                	$.ajax({
+	                        url: "/rest/experiment/" + id+"?result",
+	                        type: "GET",
+	                        data: {},
+	                        dataType: "json",
+	                        async: false,
+	
+	                        success:function(data){
+								json_log=data;
+	                        },
+	                        error:function(XMLHttpRequest, textStatus, errorThrows){
+	                            $("#div_msg").html("The log file for experiment #" + id + " is not available");
+	                            $("#div_msg").removeClass("alert-success");
+	                            $("#div_msg").addClass("alert-error");
+	                            $("#div_msg").show();
+	                        }
+	                    });
+					} else {
+						$("#div_msg").html("The log file for experiment #" + id + " is not available yet");
+	                    $("#div_msg").removeClass("alert-success");
+	                    $("#div_msg").addClass("alert-error");
+	                    $("#div_msg").show();
+
+					}
 
                     var exp_name = "";
                     if(data.name != null)
@@ -205,79 +234,35 @@ include("header.php") ?>
                     }
         
         
-                    json_exp = rebuildJson(data);
-
-                    //then nodes without association
-                    for(var l=0; l<data.nodes.length; l++) {
-                        find = false;
-  
-                        if(data.type == "physical") {
-  
-                            for(var z=0; z<json_exp.length && !find; z++){
-                                if(data.nodes[l] == json_exp[z].node) {
-                                    find = true;
-                                }
-                            }
-                            
-                            if(!find) {
-                                json_exp.push({"node": data.nodes[l],"profilename":"","firmwarename":""});
-                            }
-                        }
-                        else {
-                            for(var z=0; z<json_exp.length && !find; z++){
-                                if(data.nodes[l].alias == json_exp[z].node) {
-                                    find = true;
-                                }
-                            }
-                            
-                            if(!find) {
-                                json_exp.push({"node": data.nodes[l].alias,"profilename":"","firmwarename":""});
-                            }
-                        }    
-                    }
-
-                
+                    json_exp = rebuildJson(data,json_log,true);                
                     
                     //display
                     $("#detailsExpRow").html("");
 
                     var nbTotalNodes=0;
                     if(data.type == "physical") nbTotalNodes=data.nodes.length;
+					var nodename="";
+					var checkbox="";
+					var state="";
                     
                     for(var k = 0; k < json_exp.length; k++) {
-                        
-                        if(data.type == "physical") {
-                            $("#detailsExpRow").append(
-                            "<tr><td><input type=\"checkbox\" name=\"option1\" value=\""+json_exp[k].node+"\"></td>"+
-                            "<td>"+json_exp[k].node+"</td><td>"+displayVar(json_exp[k].profilename)+"</td>"+
-                            "<td>"+displayVar(json_exp[k].firmwarename)+"</td></tr>");
-                        }
-                        else {
-                            for(var k = 0; k < data.nodes.length; k++) {
-                                var archi = data.nodes[k].properties.archi;
-                                
-                                var site = "any";
-                                if(data.nodes[k].properties.site != null) {
-                                    site = data.nodes[k].properties.site;
-                                }
-                                    
-                                var nbnodes = data.nodes[k].nbnodes;
-                                nbTotalNodes += nbnodes;
-                                
-                                var mobile = false;
-                                
-                                if(data.nodes[k].properties.mobile != null) {
-                                    mobile = data.nodes[k].properties.mobile;
-                                }    
-                                
-                                var ntype = "fixe";
-                                if(mobile == "1"){
-                                    ntype = "mobile";
-                                }
-                                
-                                $("#detailsExpRow").append("<tr><td></td><td>"+archi+"/"+site+"/"+nbnodes+"/"+ntype+"</td><td>"+json_exp[k].profilename+"</td><td>"+json_exp[k].firmwarename+"</td></tr>");
-                            }
-                        }
+						if(data.type == "physical") {
+	                        nodename = json_exp[k].node;
+	                        checkbox = "<input type=\"checkbox\" name=\"option1\" value=\""+json_exp[k].node+"\">";
+	                        state = "<td style='"+displayVar(json_exp[k].style)+"'>"+displayVar(json_exp[k].state)+"</td></tr>";
+						} else {
+							var archi = data.nodes[k].properties.archi;
+	
+							var site = ((data.nodes[k].properties.site != null)?data.nodes[k].properties.site:"any");
+							var ntype = ((data.nodes[k].properties.mobile != null && data.nodes[k].properties.mobile== "1")?"mobile":"fixe");
+							var nbnodes = data.nodes[k].nbnodes;
+							nbTotalNodes += nbnodes;
+
+							nodename = archi+"/"+site+"/"+nbnodes+"/"+ntype;
+							checkbox = "";
+							state = "<td>Not available</td>";
+						}
+						$("#detailsExpRow").append("<tr><td>"+checkbox+"</td><td>"+nodename+"</td><td>"+displayVar(json_exp[k].profilename)+"</td><td>"+displayVar(json_exp[k].firmwarename)+"</td>"+state+"</tr>");
                     }
                     $("#detailsExpSummary").append("<b>Number of nodes:</b> " + nbTotalNodes + "<br/>");
                 },
