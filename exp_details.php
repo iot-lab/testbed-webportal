@@ -66,13 +66,13 @@ include("header.php") ?>
     <div id="detailsExp">
         <p id="detailsExpSummary"></p>
         
-        <p>
+        <p id="expButtons">
             <button class="btn btn-danger" id="btnCancel" onclick="cancelExperiment()">Cancel</button>
             <a href="scripts/exp_download_data.php?id=<?php echo $_GET['id']?>" class="btn" id="btnDownload">Download</a>
-            <button class="btn" id="btn_reload">Reload</button>
+            <button class="btn" id="btnReload">Reload</button>
         </p>
         
-        <table class="table table-striped table-bordered table-condensed" style="width:500px" id="tbl_nodes">
+        <table class="table table-striped table-bordered table-condensed" style="width:500px" id="tblNodes">
         <thead>
             <tr>
                 <th></th>
@@ -86,10 +86,10 @@ include("header.php") ?>
         </tbody>
         </table>
         
-        <p><a href="javascript:selectAll();">Select All</a> - <a href="javascript:unSelectAll();">Unselect All</a></p>
         
         
-        <form id="frm_actions">
+        <form id="frmActions">
+        	<p><a href="javascript:selectAll();">Select All</a> - <a href="javascript:unSelectAll();">Unselect All</a></p>
 
             <b>Actions on selected nodes: </b>
             
@@ -105,10 +105,10 @@ include("header.php") ?>
             
             <div id="firmware" style="display:none">firmware: <input type="file" id="files" name="files[]" multiple /></div>
             
-            <div id="loader" style="display:none"><img src="img/ajax-loader.gif"></div>
             <div id="state" class="alert" style="display:none"></div>
             
         </form>
+        <div id="loader" style="display:none"><img src="img/ajax-loader.gif"></div>
         
     </div>
 </div>
@@ -118,7 +118,6 @@ include("header.php") ?>
 
     <script type="text/javascript">
 
-    	var json_log = [];
         var json_exp = [];
         var id = <?php echo $_GET['id']?>;
         var state = "";
@@ -127,6 +126,9 @@ include("header.php") ?>
         var scheduled = false;
         
         $(document).ready(function(){
+			$("#frmActions").hide();
+			$("#expButtons").hide();
+			$("#tblNodes").hide();
 
             $("#loader").ajaxStart(function(){
                 $(this).show();
@@ -175,32 +177,6 @@ include("header.php") ?>
                 data: {},
                 dataType: "json",
                 success:function(data){
-                    
-					if(data.state !="Waiting" && data.type !="alias") {
-	                	$.ajax({
-	                        url: "/rest/experiment/" + id+"?result",
-	                        type: "GET",
-	                        data: {},
-	                        dataType: "json",
-	                        async: false,
-	
-	                        success:function(data){
-								json_log=data;
-	                        },
-	                        error:function(XMLHttpRequest, textStatus, errorThrows){
-	                            $("#div_msg").html("The log file for experiment #" + id + " is not available");
-	                            $("#div_msg").removeClass("alert-success");
-	                            $("#div_msg").addClass("alert-error");
-	                            $("#div_msg").show();
-	                        }
-	                    });
-					} else {
-						$("#div_msg").html("The log file for experiment #" + id + " is not available yet");
-	                    $("#div_msg").removeClass("alert-success");
-	                    $("#div_msg").addClass("alert-error");
-	                    $("#div_msg").show();
-
-					}
 
                     var exp_name = "";
                     if(data.name != null)
@@ -209,32 +185,25 @@ include("header.php") ?>
                     state = data.state;
                     if(state == "Running" || state == "Waiting") {
                         $("#btnCancel").attr("disabled",false);
-                        $("#btn_reload").attr("disabled",true);
+                        $("#btnReload").attr("disabled",true);
                         $("input[name=radioStart]").attr("disabled",true);
                     }
                     else {
                         $("#btnCancel").attr("disabled",true);
-                        $("#btn_reload").attr("disabled",false);
+                        $("#btnReload").attr("disabled",false);
                         $("input[name=radioStart]").attr("disabled",false);
                     }
 
 
-                    $("#detailsExpSummary").html(
-                    "<b>Experiment:</b> <a href=\"monika?job=" + id + "\">" + id + "</a><br/>");
-                    $("#detailsExpSummary").append(
-                    "<b>State:</b> " + data.state + "<br/>");
-                    $("#detailsExpSummary").append(
-                    "<b>Name:</b> " + exp_name + "<br/>");
-                    $("#detailsExpSummary").append(
-                    "<b>Duration (min):</b> " + data.duration + "<br/>");
+                    $("#detailsExpSummary").html("<b>Experiment:</b> <a href=\"monika?job=" + id + "\">" + id + "</a><br/>");
+                    $("#detailsExpSummary").append("<b>State:</b> " + data.state + "<br/>");
+                    $("#detailsExpSummary").append("<b>Name:</b> " + exp_name + "<br/>");
+                    $("#detailsExpSummary").append("<b>Duration (min):</b> " + data.duration + "<br/>");
+                    $("#detailsExpSummary").append("<b>Number of nodes:</b> ");
+
+        			$("#expButtons").show();
         
-        
-                    if(data.state != "Running") {
-                        $("#frm_actions").hide();
-                    }
-        
-        
-                    json_exp = rebuildJson(data,json_log,true);                
+                    json_exp = rebuildJson(data,true);                
                     
                     //display
                     $("#detailsExpRow").html("");
@@ -264,7 +233,15 @@ include("header.php") ?>
 						}
 						$("#detailsExpRow").append("<tr><td>"+checkbox+"</td><td>"+nodename+"</td><td>"+displayVar(json_exp[k].profilename)+"</td><td>"+displayVar(json_exp[k].firmwarename)+"</td>"+state+"</tr>");
                     }
-                    $("#detailsExpSummary").append("<b>Number of nodes:</b> " + nbTotalNodes + "<br/>");
+                    $("#detailsExpSummary").append(nbTotalNodes + "<br/>");
+                    if(state == "Running") {
+                        $("input[name=option1]").attr("disabled",false);
+                        $("#frmActions").show();
+                    }else {
+                        $("input[name=option1]").attr("disabled",true);
+                        $("#frmActions").hide();
+                    }
+        			$("#tblNodes").show();
                 },
                 error:function(XMLHttpRequest, textStatus, errorThrows){
                     $("#detailsExpSummary").html("An error occurred while retrieving experiment #" + id + " details");
@@ -285,7 +262,7 @@ include("header.php") ?>
             
             
             /* actions on nodes */
-            $("#frm_actions").bind("submit",function(e){
+            $("#frmActions").bind("submit",function(e){
                 e.preventDefault();
                
                 $("#state").hide();
@@ -299,7 +276,7 @@ include("header.php") ?>
                 
                 
                 var lnodes = [];
-                $("#tbl_nodes :checked").each(function(){
+                $("#tblNodes :checked").each(function(){
                     lnodes.push($(this).val());
                 });
                 
@@ -371,7 +348,7 @@ include("header.php") ?>
             document.getElementById('files').addEventListener('change', handleFileSelect, false);
             
             
-            $("#btn_reload").click(function(e){
+            $("#btnReload").click(function(e){
                 $("#expReload").modal("show");
             });
             
@@ -398,13 +375,13 @@ include("header.php") ?>
     }
     
     function selectAll() {
-        $("#tbl_nodes :checkbox").each(function(){
+        $("#tblNodes :checkbox").each(function(){
             $(this).attr('checked', true);
         });
     }
     
     function unSelectAll() {
-        $("#tbl_nodes :checkbox").each(function(){
+        $("#tblNodes :checkbox").each(function(){
             $(this).attr('checked', false);
         });
     }

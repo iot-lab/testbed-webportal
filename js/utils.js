@@ -22,28 +22,11 @@ function redirectDashboard() {
 }
 
 // Rebuild profile and firmware json
-function rebuildJson(exp_json,log_json=[],showEmptyAssociations=false) {
+function rebuildJson(exp_json,showEmptyAssociations) {
 	
-	/*if(!log_json) log_json=[];
-	if(!showEmptyAssociations) showEmptyAssociations= false;*/
 
-	// log treatment
-    var json_log = [];
-
-    if(log_json["0"])
-            for(var k = 0; k < log_json["0"].length; k++) {
-                json_log[log_json["0"][k]]= [];
-                json_log[log_json["0"][k]]['state']="Success";
-                json_log[log_json["0"][k]]['style']="background-color:#DFF0D8;color:#468847";
-            }
-    if(log_json["1"])
-            for(var k = 0; k < log_json["1"].length; k++) {
-                json_log[log_json["1"][k]]= [];
-                json_log[log_json["1"][k]]['state']="Failure";
-                json_log[log_json["1"][k]]['style']="background-color:#F2DEDE;color:#B94A48";
-            }            
-                                                                    
-                                                                    
+	if(!showEmptyAssociations) showEmptyAssociations= false;
+                                             
     json_tmp = [];
     
     //build a more simple json for parsing
@@ -51,13 +34,9 @@ function rebuildJson(exp_json,log_json=[],showEmptyAssociations=false) {
     {
         for(var i = 0; i < exp_json.profileassociations.length; i++) {
             for(var j = 0; j < exp_json.profileassociations[i].nodes.length;j++){
-            	var state = (json_log[exp_json.profileassociations[i].nodes[j]]?json_log[exp_json.profileassociations[i].nodes[j]]['state']:"Not available");
-            	var style = (json_log[exp_json.profileassociations[i].nodes[j]]?json_log[exp_json.profileassociations[i].nodes[j]]['style']:"");
-                json_tmp.push({
+            	json_tmp.push({
                     "node": exp_json.profileassociations[i].nodes[j],
-                    "profilename":exp_json.profileassociations[i].profilename,
-                    "state":state,
-                    "style":style});
+                    "profilename":exp_json.profileassociations[i].profilename});
             }
         }
     }
@@ -77,15 +56,44 @@ function rebuildJson(exp_json,log_json=[],showEmptyAssociations=false) {
                 
                 if(!find)
                 {
-                	var state = (json_log[exp_json.firmwareassociations[i].nodes[j]]?json_log[exp_json.firmwareassociations[i].nodes[j]]['state']:"Not available");
-                    var style = (json_log[exp_json.firmwareassociations[i].nodes[j]]?json_log[exp_json.firmwareassociations[i].nodes[j]]['style']:"");
                     json_tmp.push({
                         "node": exp_json.firmwareassociations[i].nodes[j],
-                        "firmwarename":exp_json.firmwareassociations[i].firmwarename,
+                        "firmwarename":exp_json.firmwareassociations[i].firmwarename});
+                }
+            }
+        }
+    }
+    
+    if(exp_json.deploymentresults != null) {
+        for(var i = 0; i < exp_json.deploymentresults.length; i++) {
+            for(var j = 0; j < exp_json.deploymentresults[i].nodes.length;j++){
+
+                var find = false;
+                for(var k = 0; k < json_tmp.length && !find; k++) {
+                    if(json_tmp[k].node == exp_json.deploymentresults[i].nodes[j])
+                    {
+                        var state = exp_json.deploymentresults[i].state;
+                        json_tmp[k].state = state=="0"?"Success":"Failure";
+                        json_tmp[k].style = state=="0"?"background-color:#DFF0D8;color:#468847":"background-color:#F2DEDE;color:#B94A48";
+                        find = true;
+                    }
+                }
+
+                if(!find)
+                {
+                    var state = exp_json.deploymentresults[i].state=="0"?"Success":"Failure";
+                    var style = exp_json.deploymentresults[i].state=="0"?"background-color:#DFF0D8;color:#468847":"background-color:#F2DEDE;color:#B94A48";
+                    json_tmp.push({
+                        "node": exp_json.deploymentresults[i].nodes[j],
                         "state":state,
                         "style":style});
                 }
             }
+        }
+    } else {
+        for(var k = 0; k < json_tmp.length; k++) {
+                json_tmp[k].state = "Not available";
+                json_tmp[k].style = "";
         }
     }
     
@@ -103,9 +111,7 @@ function rebuildJson(exp_json,log_json=[],showEmptyAssociations=false) {
 	            }
 	
 	            if(!find) {
-	            	var state = (json_log[exp_json.nodes[l]]?json_log[exp_json.nodes[l]]['state']:"Not available");
-	                var style = (json_log[exp_json.nodes[l]]?json_log[exp_json.nodes[l]]['style']:"");
-	                json_tmp.push({"node": exp_json.nodes[l],"profilename":"","firmwarename":"","state":state,"style":style});
+	                json_tmp.push({"node": exp_json.nodes[l],"profilename":"","firmwarename":"","state":"Not available","style":""});
 	            }
 	        }
 	        else {
@@ -116,7 +122,7 @@ function rebuildJson(exp_json,log_json=[],showEmptyAssociations=false) {
 	            }
 	
 	            if(!find) {
-	                json_tmp.push({"node": exp_json.nodes[l].alias,"profilename":"","firmwarename":""});
+	                json_tmp.push({"node": exp_json.nodes[l].alias,"profilename":"","firmwarename":"","state":"Not available","style":""});
 	            }
 	        }
 	    }
