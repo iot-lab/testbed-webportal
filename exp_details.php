@@ -105,7 +105,8 @@ include("header.php") ?>
             
             <div id="firmware" style="display:none">firmware: <input type="file" id="files" name="files[]" multiple /></div>
             
-            <div id="state" class="alert" style="display:none"></div>
+            <div id="stateSuccess" class="alert alert-success" style="display:none"></div>
+            <div id="stateFailure" class="alert alert-failure" style="display:none"></div>
             
         </form>
         <div id="loader" style="display:none"><img src="img/ajax-loader.gif"></div>
@@ -120,7 +121,7 @@ include("header.php") ?>
 
         var json_exp = [];
         var id = <?php echo $_GET['id']?>;
-        var state = "";
+        var expState = "";
         var binary = "";
         var boundary = "AaB03x";
         var scheduled = false;
@@ -182,8 +183,8 @@ include("header.php") ?>
                     if(data.name != null)
                         exp_name = data.name;
 
-                    state = data.state;
-                    if(state == "Running" || state == "Waiting") {
+                    expState = data.state;
+                    if(expState == "Running" || expState == "Waiting") {
                         $("#btnCancel").attr("disabled",false);
                         $("#btnReload").attr("disabled",true);
                         $("input[name=radioStart]").attr("disabled",true);
@@ -196,7 +197,7 @@ include("header.php") ?>
 
 
                     $("#detailsExpSummary").html("<b>Experiment:</b> <a href=\"monika?job=" + id + "\">" + id + "</a><br/>");
-                    $("#detailsExpSummary").append("<b>State:</b> " + data.state + "<br/>");
+                    $("#detailsExpSummary").append("<b>State:</b> " + expState + "<br/>");
                     $("#detailsExpSummary").append("<b>Name:</b> " + exp_name + "<br/>");
                     $("#detailsExpSummary").append("<b>Duration (min):</b> " + data.duration + "<br/>");
                     $("#detailsExpSummary").append("<b>Number of nodes:</b> ");
@@ -234,7 +235,7 @@ include("header.php") ?>
 						$("#detailsExpRow").append("<tr><td>"+checkbox+"</td><td>"+nodename+"</td><td>"+displayVar(json_exp[k].profilename)+"</td><td>"+displayVar(json_exp[k].firmwarename)+"</td>"+state+"</tr>");
                     }
                     $("#detailsExpSummary").append(nbTotalNodes + "<br/>");
-                    if(state == "Running") {
+                    if(expState == "Running") {
                         $("input[name=option1]").attr("disabled",false);
                         $("#frmActions").show();
                     }else {
@@ -265,7 +266,8 @@ include("header.php") ?>
             $("#frmActions").bind("submit",function(e){
                 e.preventDefault();
                
-                $("#state").hide();
+                $("#stateFailure").hide();
+                $("#stateSuccess").hide();
                
                 var command = $("#action option:selected").val();
                 
@@ -307,16 +309,18 @@ include("header.php") ?>
                         contentType: "multipart/form-data; boundary="+boundary,
                         
                         success: function (data) {
-                            $("#state").html("<b>Update</b> successful for node(s): " + JSON.stringify(data.success));
-                            $("#state").removeClass("alert-error");
-                            $("#state").addClass("alert-success");
-                            $("#state").show();
+                            if(data["0"]) {
+                            	$("#stateSuccess").html("<b>Update</b> successful for node(s): " + JSON.stringify(data["0"]));
+                            	$("#stateSuccess").show();
+                            }
+                            if(data["1"]) {
+                            	$("#stateFailure").html("<b>Update</b> failed for node(s): " + JSON.stringify(data["1"]));
+                            	$("#stateFailure").show();
+                            }
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrows) {
-                            $("#state").html(textStatus + " : " + errorThrows +  " : " +  XMLHttpRequest.responseText);
-                            $("#state").removeClass("alert-success");
-                            $("#state").addClass("alert-error");
-                            $("#state").show();
+                            $("#stateFailure").html(textStatus + " : " + errorThrows +  " : " +  XMLHttpRequest.responseText);
+                            $("#stateFailure").show();
                         }
                     });
                 }
@@ -328,10 +332,14 @@ include("header.php") ?>
                         contentType: "application/json; charset=utf-8",
                         url: "/rest/experiment/"+id+"/nodes?"+command+""+battery,
                         success: function (data) {
-                            $("#state").html("<b>"+command + "</b> successful for node(s): " + JSON.stringify(data.success));
-                            $("#state").removeClass("alert-error");
-                            $("#state").addClass("alert-success");
-                            $("#state").show();
+                            if(data["0"]) {
+                            	$("#stateSuccess").html("<b>"+command + "</b> successful for node(s): " + JSON.stringify(data["0"]));
+                            	$("#stateSuccess").show();
+                            }
+                            if(data["1"]) {
+                            	$("#stateFailure").html("<b>"+command + "</b> failed for node(s): " + JSON.stringify(data["1"]));
+                            	$("#stateFailure").show();
+                            }
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrows) {
                             $("#state").html(textStatus + " : " + errorThrows +  " : " +  XMLHttpRequest.responseText);
