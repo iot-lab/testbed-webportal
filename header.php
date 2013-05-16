@@ -165,7 +165,7 @@
                 <?php if(isset($_SESSION['is_auth']) && $_SESSION['is_auth']) { ?>
                     <li><a href="."><i class="icon-home icon-white"></i> Home</a></li>  
                     <li><a href="exp_new.php">New Experiment</a></li>
-                    <li><a id='profilesModalLink' data-toggle="modal" data-target="#profiles_modal">Manage Profiles</a></li>
+                    <li><a id='profilesModalLink' data-toggle="modal" data-target="#profiles_modal" style="cursor:pointer">Manage Profiles</a></li>
                 <?php } else { ?>
                     <li><a href="#login" onClick="showLogin()">Login</a></li>
                     <li><a href="#signup" onClick="showSignup()">Sign up</a></li>
