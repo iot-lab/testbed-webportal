@@ -122,9 +122,10 @@ include("header.php") ?>
         var json_exp = [];
         var id = <?php echo $_GET['id']?>;
         var expState = "";
-        var binary = "";
+        var binary = [];
         var boundary = "AaB03x";
         var scheduled = false;
+        var exp_name = "";
         
         $(document).ready(function(){
 			$("#frmActions").hide();
@@ -179,7 +180,6 @@ include("header.php") ?>
                 dataType: "json",
                 success:function(data){
 
-                    var exp_name = "";
                     if(data.name != null)
                         exp_name = data.name;
 
@@ -286,16 +286,16 @@ include("header.php") ?>
                     //JSON
                     var datab = "";
                     datab += "--" + boundary + '\r\n';
-                    datab += 'Content-Disposition: form-data; name="test.json"; filename="test.json"\r\n';
+                    datab += 'Content-Disposition: form-data; name="'+exp_name+'.json"; filename="'+exp_name+'.json"\r\n';
                     datab += 'Content-Type: application/json\r\n\r\n';
                     datab += JSON.stringify(lnodes) + '\r\n\r\n';
                     //datab += "--" + boundary + '\r\n';
 
                     //firmware
                     datab += "--" + boundary + '\r\n';
-                    datab += 'Content-Disposition: form-data; name="test.hex"; filename="test.hex"\r\n';
-                    datab += 'Content-Type: text/plain\r\n\r\n';
-                    datab += binary + '\r\n';
+                    datab += 'Content-Disposition: form-data; name="' + binary[0].name + '"; filename="' + binary[0].name + '"\r\n';
+                    datab += 'Content-Type: application/octet-stream\r\n\r\n';
+                    datab += binary[0].bin + '\r\n';
 
 
                     //add json
@@ -323,6 +323,7 @@ include("header.php") ?>
                             $("#stateFailure").show();
                         }
                     });
+                    binary = [];
                 }
                 else {
                     $.ajax({
@@ -405,11 +406,15 @@ include("header.php") ?>
             // closure to capture the file information.
             reader.onload = (function (theFile) {
                 return function (e) {
-                    binary = e.target.result;
+
+                    binary.push({
+                        "name": theFile.name,
+                        "bin": e.target.result
+                    });
                 };
             })(f);
-
-            reader.readAsText(f);
+			if(f.name.indexOf(".elf",f.name.length -4)!=-1) reader.readAsDataURL(f);
+			else reader.readAsText(f);
         }
     }
 
