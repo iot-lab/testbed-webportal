@@ -590,7 +590,7 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                 for (var i = 0; i < binary.length; i++) {
                     datab += "--" + boundary + '\r\n';
                     datab += 'Content-Disposition: form-data; name="' + binary[i].name + '"; filename="' + binary[i].name + '"\r\n';
-                    datab += 'Content-Type: text/plain\r\n\r\n';
+                    datab += 'Content-Type: application/octet-stream\r\n\r\n';
                     datab += binary[i].bin + '\r\n';
                 }
 
@@ -684,8 +684,8 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                             $("#my_firmwares").append(new Option(theFile.name, theFile.name, false, false));
                         };
                     })(f);
-
-                    reader.readAsText(f);
+					if(f.name.indexOf(".elf",f.name.length -4)!=-1) reader.readAsDataURL(f);
+					else reader.readAsText(f);
                 }
             }
             
