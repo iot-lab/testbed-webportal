@@ -67,6 +67,7 @@ include("header.php") ?>
 <script type="text/javascript">
 
     var oTable;
+    var dateSrv = <?php echo time(); ?>*1000; // server time in milliseconds 
     
     $(document).ready(function(){
        
@@ -155,11 +156,17 @@ include("header.php") ?>
                             state = "<span class='label'>"+state+"</span>";
                         } else if( state == "Running" || state == "Finishing" || state == "Resuming" || state == "toError" ) { // running 
                             state = "<span class='label label-success'>"+state+"</span>";
-                            //setTimeout(function(){checkState(obj.aData['id'],1,obj.aData['date'],obj.aData['duration']);},(new Date(Date.now()))-(new Date(obj.aData['date']))+obj.aData['duration']*1000-10000); /* TODO verif */ 
+							var dateExp = new Date(obj.aData['date']).getTime(); // start date in milliseconds 
+							var durationExp = obj.aData['duration']*60000; // experiment duration in milliseconds 
+							setTimeout(function(){checkState(obj.aData['id'],1,durationExp);},durationExp-(dateSrv-dateExp));
+							//console.log(obj.aData['id']+" is Running; refresh in "+(durationExp-(dateSrv-dateExp))/1000+" s.");
                         } else if( state == "Waiting" || state=="Launching" || state=="Suspended"
                             || state == "Hold" || state=="toAckReservation" || state=="toLaunch" ) { // upcomming 
                             state = "<span class='label label-info'>"+state+"</span>";
-                            //setTimeout(function(){checkState(obj.aData['id'],0,obj.aData['date'],obj.aData['duration']);},(new Date(obj.aData['date']))-(new Date(Date.now()))-10000); /* TODO verif */
+							var dateExp = new Date(obj.aData['date']).getTime(); // start date in milliseconds 
+							var durationExp = obj.aData['duration']*60000; // experiment duration in milliseconds    
+                            setTimeout(function(){checkState(obj.aData['id'],0,durationExp);},dateExp-dateSrv);
+							//console.log(obj.aData['id']+" is Waiting; refresh in "+(dateExp-dateSrv)/1000+" ms."); 
                         }
                         return state;
                  }
@@ -204,7 +211,8 @@ include("header.php") ?>
        //window.alert(document.getElementById("my_profiles_modal").options.length);
     });
     
-	function checkState(id,currentState,date,duration) {
+	function checkState(id,currentState,duration) {
+		if(currentState==2) return; // no refresh for terminated experiments 
 		// Retrieve exp state
 		$.ajax({
 			url: "/rest/experiment/"+id+"?state",
@@ -218,18 +226,21 @@ include("header.php") ?>
 				if( state == "Waiting" || state=="Launching" || state=="Suspended" || state == "Hold" || state=="toAckReservation" || state=="toLaunch" ) newState=0;
 				else if( state == "Running" || state == "Finishing" || state == "Resuming" || state == "toError" ) newState=1;
 				
-				if (currentState == newState) setTimeout(function(){checkState(id,currentState,date,duration);},2000); // no state change, still upcomming or running, refresh again
-				else if (currentState == 0 && newState == 1) { // state change from upcomming to running, refresh again
-					setTimeout(function(){checkState(id,1,date,duration);},(new Date(Date.now()))-(new Date(date))+duration*1000-10000); /* TODO verif */
+				if (currentState == newState) setTimeout(function(){checkState(id,currentState,duration);},2000); // no state change, still upcomming or running, refresh again 
+				else if (currentState == 0 && newState == 1) { // state change from upcomming to running, refresh in "duration" ms 
+					setTimeout(function(){checkState(id,1,duration);},duration-2000);
+					//console.log(id+" is now running; refresh in "+(duration-2000)/1000+" s.");
 					$("#"+id+" td span").removeClass("label-info");
 					$("#"+id+" td span").addClass("label-success");
-					$("#"+id+" td span").html(state);
-				} else { // state change from upcomming or running to terminated, stop refreshing
+					$("#"+id+" td span").html(state);					
+					updateBadges("expUpcoming","expRunning"); /* change badges in Personal Dashboard */
+				} else { // state change from upcomming or running to terminated, stop refreshing 
 					$("#"+id+" td span").removeClass("label-info");
 					$("#"+id+" td span").removeClass("label-success");
 					$("#"+id+" td span").removeClass("label-important");
 					if(state == "Error")  $("#"+id+" td span").addClass("label-important");
 					$("#"+id+" td span").html(state);
+					updateBadges((currentState==0?"expUpcoming":"expRuning"),"Terminated"); /* change badges in Personal Dashboard */
 				}
 			},
 			error: function (XMLHttpRequest, textStatus, errorThrows) {
@@ -240,7 +251,13 @@ include("header.php") ?>
 			}
 		});
 	}
-    
+
+	function updateBadges(fromState,toState) { // remove 1 exp from fromState badge to toState badge 
+		var nbExp=$("#"+fromState+"").text();
+		$("#"+fromState+"").text(--nbExp);
+		nbExp=$("#"+toState+"").text();
+		$("#"+toState+"").text(++nbExp);
+	}
 </script>
 
 </body>
