@@ -53,10 +53,11 @@ if (isset($_GET['user'])) {
           <ul>
                 <li><span id="expRunning" class="badge badge-success">&nbsp;</span> running</li>
                 <li><span id="expUpcoming" class="badge badge-info">&nbsp;</span> upcoming</li>
-                <li><span id="expPast" class="badge">&nbsp;</span> past</li>
+                <li><span id="expTerminated" class="badge">&nbsp;</span> terminated</li>
           </ul>
           <p><i class="icon-th"></i> Profiles: <span id="nb_profiles">&nbsp;</span></p>
-           
+		  <h2>Search for an experiment</h2>
+          <input type="text" id="expNum"/><input type="button" value="Show details" onClick='window.location.href="admin_exp_details.php?id="+document.getElementById("expNum").value;'/>
         </div>
     </div>
 
@@ -89,7 +90,7 @@ if (isset($_GET['user'])) {
                 var total = data.running+data.upcoming+data.terminated;
                 $("#expRunning").text(data.running);
                 $("#expUpcoming").text(data.upcoming);
-                $("#expPast").text(data.terminated);
+                $("#expTerminated").text(data.terminated);
                 $("#expTotal").text(total);
             },
             error:function(XMLHttpRequest, textStatus, errorThrows){
@@ -121,7 +122,7 @@ if (isset($_GET['user'])) {
         // Manage experiment list
         oTable = $('#tbl_exps').dataTable({
             "sDom": "<'row'<'span7'l><'span7'f>r>t<'row'<'span7'i><'span7'p>>",
-            "bProcessing": true,
+            "bProcessing": false,
             "bServerSide": true,
             "sAjaxSource": "scripts/admin_exp_list.php",
             "fnServerParams": <?php echo $request_exps; ?>,
@@ -166,7 +167,7 @@ if (isset($_GET['user'])) {
             "sAjaxDataProp": "items",
             "sPaginationType": "bootstrap",
             "bLengthChange": true,
-            "bFilter": false,
+            "bFilter": true,
             "bSort": false,
             "bInfo": true,
             "bAutoWidth": false,
@@ -190,6 +191,17 @@ if (isset($_GET['user'])) {
         
         $('#div_msg').hide();
         $('#tbl_exps').show();
+
+        // filters by state for experiments list 
+		$('.dataTables_filter').html('<label>Filter: <select id="filter_by_state" style="margin-top:7px;"><option value="All">All</option><option value="Running">Running</option><option value="Upcoming">Upcoming</option><option value="Terminated">Terminated</option></select></label>');
+		$('#filter_by_state').change(function() {
+			oTable.fnFilter($(this).val());
+		});
+
+		// search for an experiment input 
+        $('#expNum').bind('keyup', function(e) {
+                if(e.keyCode==13) window.location.href="admin_exp_details.php?id="+$(this).val();
+        });
         
     });
     

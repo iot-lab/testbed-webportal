@@ -42,7 +42,7 @@ include("header.php") ?>
         <ul>
             <li><span id="expRunning" class="badge badge-success">&nbsp;</span> running</li>
             <li><span id="expUpcoming" class="badge badge-info">&nbsp;</span> upcoming</li>
-            <li><span id="expPast" class="badge">&nbsp;</span> past</li>
+            <li><span id="expTerminated" class="badge">&nbsp;</span> terminated</li>
         </ul>
           <p><i class="icon-th"></i> Profiles: <span id="nb_profiles">&nbsp;</span></p>
           <!--<p><i class="icon-home"></i> Home's quota: 60% (600/1000Mo)
@@ -62,8 +62,8 @@ include("header.php") ?>
     <?php include('footer.php') ?>
 
 <link href="css/datatable.css" rel="stylesheet">
-<script type="text/javascript" language="javascript" src="js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" language="javascript" src="js/datatable.js"></script>
+<script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="js/datatable.js"></script>
 <script type="text/javascript">
 
     var oTable;
@@ -88,7 +88,7 @@ include("header.php") ?>
                 var total = data.running+data.upcoming+data.terminated;
                 $("#expRunning").text(data.running);
                 $("#expUpcoming").text(data.upcoming);
-                $("#expPast").text(data.terminated);
+                $("#expTerminated").text(data.terminated);
                 $("#expTotal").text(total);
             },
             error:function(XMLHttpRequest, textStatus, errorThrows){
@@ -124,7 +124,7 @@ include("header.php") ?>
         // Manage experiment list 
         oTable = $('#tbl_exps').dataTable({
             "sDom": "<'row'<'span7'l><'span7'f>r>t<'row'<'span7'i><'span7'p>>",
-            "bProcessing": true,
+            "bProcessing": false,
             "bServerSide": true,
             "sAjaxSource": "scripts/exp_list.php",
             "aoColumns": [
@@ -155,9 +155,11 @@ include("header.php") ?>
                             state = "<span class='label'>"+state+"</span>";
                         } else if( state == "Running" || state == "Finishing" || state == "Resuming" || state == "toError" ) { // running 
                             state = "<span class='label label-success'>"+state+"</span>";
+                            //setTimeout(function(){checkState(obj.aData['id'],1,obj.aData['date'],obj.aData['duration']);},(new Date(Date.now()))-(new Date(obj.aData['date']))+obj.aData['duration']*1000-10000); /* TODO verif */ 
                         } else if( state == "Waiting" || state=="Launching" || state=="Suspended"
                             || state == "Hold" || state=="toAckReservation" || state=="toLaunch" ) { // upcomming 
                             state = "<span class='label label-info'>"+state+"</span>";
+                            //setTimeout(function(){checkState(obj.aData['id'],0,obj.aData['date'],obj.aData['duration']);},(new Date(obj.aData['date']))-(new Date(Date.now()))-10000); /* TODO verif */
                         }
                         return state;
                  }
@@ -167,13 +169,15 @@ include("header.php") ?>
             "bPaginate": true,
             "sPaginationType": "bootstrap",
             "bLengthChange": true,
-            "bFilter": false,
+            "bFilter": true,
             "bSort": false,
             "bInfo": true,
             "bAutoWidth": false,
             "fnInitComplete": function(oSettings, json) {
                 $('#tbl_exps tbody tr').each(function(){
                     this.setAttribute('title','Click to see details');
+                    var aData = oTable.fnGetData( this );
+                    this.setAttribute('id',aData['id']);
                 });
                 $('#tbl_exps tbody tr[title]').tooltip( {
                     "delay": 0,
@@ -190,11 +194,52 @@ include("header.php") ?>
         });
         $('#div_msg').hide();
         $('#tbl_exps').show();
-       
+
+        // filters by state for experiments list 
+		$('.dataTables_filter').html('<label>Filter: <select id="filter_by_state" style="margin-top:7px;"><option value="All">All</option><option value="Running">Running</option><option value="Upcoming">Upcoming</option><option value="Terminated">Terminated</option></select></label>');
+		$('#filter_by_state').change(function() {
+			oTable.fnFilter($(this).val());
+		});
 
        //window.alert(document.getElementById("my_profiles_modal").options.length);
     });
-
+    
+	function checkState(id,currentState,date,duration) {
+		// Retrieve exp state
+		$.ajax({
+			url: "/rest/experiment/"+id+"?state",
+			type: "GET",
+			dataType: "JSON",
+			contentType: "application/json; charset=utf-8",
+			success: function (data) {
+				// state : 0 = upcomming ; 1 = running ; 2 = terminated
+				var newState=2;
+				var state = data['state'];
+				if( state == "Waiting" || state=="Launching" || state=="Suspended" || state == "Hold" || state=="toAckReservation" || state=="toLaunch" ) newState=0;
+				else if( state == "Running" || state == "Finishing" || state == "Resuming" || state == "toError" ) newState=1;
+				
+				if (currentState == newState) setTimeout(function(){checkState(id,currentState,date,duration);},2000); // no state change, still upcomming or running, refresh again
+				else if (currentState == 0 && newState == 1) { // state change from upcomming to running, refresh again
+					setTimeout(function(){checkState(id,1,date,duration);},(new Date(Date.now()))-(new Date(date))+duration*1000-10000); /* TODO verif */
+					$("#"+id+" td span").removeClass("label-info");
+					$("#"+id+" td span").addClass("label-success");
+					$("#"+id+" td span").html(state);
+				} else { // state change from upcomming or running to terminated, stop refreshing
+					$("#"+id+" td span").removeClass("label-info");
+					$("#"+id+" td span").removeClass("label-success");
+					$("#"+id+" td span").removeClass("label-important");
+					if(state == "Error")  $("#"+id+" td span").addClass("label-important");
+					$("#"+id+" td span").html(state);
+				}
+			},
+			error: function (XMLHttpRequest, textStatus, errorThrows) {
+				$("#div_msg").removeClass("alert-success");
+				$("#div_msg").addClass("alert-error");
+				$("#div_msg").show();
+				$("#div_msg").html("An error occurred while refreshing experiment states: " + errorThrows);
+			}
+		});
+	}
     
 </script>
 
