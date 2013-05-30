@@ -124,9 +124,73 @@
 <!--  M3 PROFILE FORM  -->
 <!-- ----------------- -->	
              
-			<div class="tab-pane" id="m3panel">M3 - NYI</div>
+			<div class="tab-pane" id="m3panel">
 			<!-- postfixer tous les id et les noms des input avec _m3 comme _wsn430 plus haut -->
-              
+				<div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
+					<div class="control-group">
+						<label class="control-label">Power mode</label>
+						<div class="controls">
+							<label class="radio"><input type="radio" name="or_power_m3" id="or_power_dc_m3" value="dc" checked>dc</label>
+							<label class="radio"><input type="radio" name="or_power_m3" id="or_power_battery_m3" value="battery">battery</label>
+						</div>
+					</div>
+				</div>
+
+				<div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
+					<div class="control-group">
+						<label class="control-label" for="inlineCheckboxes">Consumption</label>
+						<div class="controls">
+							<label class="checkbox inline"><input type="checkbox" id="cb_current_m3" value="current"> current</label>
+							<label class="checkbox inline"><input type="checkbox" id="cb_voltage_m3" value="voltage"> voltage</label>
+							<label class="checkbox inline"><input type="checkbox" id="cb_power_m3" value="power"> power</label>
+						</div>
+					</div>
+	                 
+					<div class="control-group">
+						<label class="control-label" for="consumption_source_m3">Source</label>
+						<div class="controls">
+							<select id="consumption_source_m3" class="input-small">
+								<option id="3V" value="3,3V">3,3V</option>
+								<option id="5V" value="5V">5V</option>
+								<option id="BATT" value="BATT">Battery</option>
+							</select>
+						</div>
+					</div>
+	                 
+					<div class="control-group">
+						<label class="control-label" for="consumption_period_m3">Period (&micro;s)</label>
+						<div class="controls">
+							<select id="consumption_period_m3" class="input-small">
+								<option value="140">140</option>
+								<option value="204">204</option>
+								<option value="332">332</option>
+								<option value="588">588</option>
+								<option value="1100">1100</option>
+								<option value="2116">2116</option>
+								<option value="4156">4156</option>
+								<option value="8244">8244</option>
+							</select>
+						</div>
+					</div>
+	                 
+					<div class="control-group">
+						<label class="control-label" for="consumption_average_m3">Average</label>
+						<div class="controls">
+							<select id="consumption_average_m3" class="input-small">
+								<option value="1">1</option>
+								<option value="4">4</option>
+								<option value="16">16</option>
+								<option value="64">64</option>
+								<option value="128">428</option>
+								<option value="256">256</option>
+								<option value="512">512</option>
+								<option value="1024">1024</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				
+			</div>              
 
 <!-- ----------------- -->
 <!--  A8 PROFILE FORM  -->
@@ -161,8 +225,7 @@ var profilesLoaded = false;
 /* ************ */
 $(document).ready(function(){
 
-
-	//prepare form for the new profile
+	// prepare form for the new profile
 	$("#btn_new").click(function(){
 	    $("#profiles_txt_name").val("new_profile");
 	    
@@ -174,13 +237,16 @@ $(document).ready(function(){
 	$('input[name="or_nodearch"]').click(function () {
 	    $(this).tab('show');
 	});
+
+	// enable/disable source select when changing power mode for M3 architecture 
+	$('input[name="or_power_m3"]').change(function () {
+		$("#consumption_source_m3").prop('disabled',($('input[type=radio][name=or_power_m3]:checked').attr('value') == "battery"));
+	});
 	
 	loadProfiles();
 
 
 });
-
-
 
 
 
@@ -269,8 +335,16 @@ function loadProfile() {
 	        
 	        $("#cb_rssi_wsn430").attr("checked",my_profiles[i].radio.rssi);
         } else if (nodearch=="m3") {
-        //TODO } else if (nodearch=="a8") {
-        } else {
+	        $('#consumption_period_m3').val(my_profiles[i].consumption.period);
+	        $('#consumption_source_m3').val(my_profiles[i].consumption.source);
+	        $('#consumption_average_m3').val(my_profiles[i].consumption.average);
+	        
+	        $("input[name='or_power_m3']").val([my_profiles[i].power]);
+	        $("#cb_current_m3").attr("checked",my_profiles[i].consumption.current);
+	        $("#cb_voltage_m3").attr("checked",my_profiles[i].consumption.voltage);
+	        $("#cb_power_m3").attr("checked",my_profiles[i].consumption.power);
+	        $("#consumption_source_m3").prop('disabled',($('input[type=radio][name=or_power_m3]:checked').attr('value') == "battery"));
+        //TODO } else if (nodearch=="a8") { 
         }
     }
     
@@ -281,29 +355,30 @@ function loadProfile() {
 /* ************************* */
 $("#btn_delete").click(function(){
     var profile_name = $("#my_profiles_modal").val();
-    $.ajax({
-        type: "DELETE",
-        dataType: "text",
-        contentType: "application/json; charset=utf-8",
-        url: "/rest/profile/"+profile_name,
-        success: function (data_server) {
-            
-            $("#my_profiles_modal option:selected").remove();
-            
-            $("#div_error_profiles").html("Delete ok");
-            $("#div_error_profiles").show();
-            $("#div_error_profiles").removeClass("alert-error");
-            $("#div_error_profiles").addClass("alert-success");
-            setTimeout( "$('#div_error_profiles').hide()", 2000); 
-        },
-        error: function (XMLHttpRequest, textStatus, errorThrows) {
-            $("#div_error_profiles").html(errorThrows);
-            $("#div_error_profiles").show();
-            $("#div_error_profiles").removeClass("alert-success");
-            $("#div_error_profiles").addClass("alert-error");
-        }
-    });
-    
+    if(confirm("Delete "+profile_name+" profile?")) {
+	    $.ajax({
+	        type: "DELETE",
+	        dataType: "text",
+	        contentType: "application/json; charset=utf-8",
+	        url: "/rest/profile/"+profile_name,
+	        success: function (data_server) {
+	            
+	            $("#my_profiles_modal option:selected").remove();
+	            
+	            $("#div_error_profiles").html("Delete ok");
+	            $("#div_error_profiles").show();
+	            $("#div_error_profiles").removeClass("alert-error");
+	            $("#div_error_profiles").addClass("alert-success");
+	            setTimeout( "$('#div_error_profiles').hide()", 2000); 
+	        },
+	        error: function (XMLHttpRequest, textStatus, errorThrows) {
+	            $("#div_error_profiles").html(errorThrows);
+	            $("#div_error_profiles").show();
+	            $("#div_error_profiles").removeClass("alert-success");
+	            $("#div_error_profiles").addClass("alert-error");
+	        }
+	    });
+    }
 });
 
 /* ****************************** */
@@ -354,10 +429,21 @@ $("#form_part").bind("submit", function (e) {
 	        "radio":radio
 	    };
     } else if (nodearch == "m3") {
+
+	    consumption = {
+	        "current":$('#cb_current_m3').is(':checked'),
+	        "voltage":$('#cb_voltage_m3').is(':checked'),
+	        "power":$('#cb_power_m3').is(':checked'),
+	        "period":$('#consumption_period_m3').val(),
+	        "average":$('#consumption_average_m3').val(),
+	        "source":($("input[name=or_power_m3]:checked").val() == 'battery')?"BATT":$('#consumption_source_m3').val()
+	    };
 	
 	    profile_json = {
 	        "profilename":$("#profiles_txt_name").val(),
-	        "nodearch":nodearch
+	        "nodearch":nodearch,
+	        "power":$("input[name=or_power_m3]:checked").val(),
+	        "consumption":consumption
 	    };
 
     } else {
