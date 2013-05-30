@@ -86,6 +86,7 @@ include("header.php") ?>
         var state = "";
         var binary = [];
         var boundary = "AaB03x";
+        var sites = [];
         
         $(document).ready(function(){
 			$("#frmActions").hide();
@@ -125,6 +126,7 @@ include("header.php") ?>
                                 "<td>"+data[i].archi+"</td>"+
                                 "<td>"+data[i].mobile+"</td>"+
                                 "<td>"+data[i].state+"</td></tr>");
+                        if(sites.indexOf(data[i].site)==-1) sites.push(data[i].site);
                     }
                     
                     oTable = $('#tblNodes').dataTable({
@@ -140,34 +142,21 @@ include("header.php") ?>
                     
                     $("#frmActions").show();
         			$("#tblNodes").show();
+
+        			// create map site list links 
+        			for(var j = 0; j < sites.length; j++)
+                        $("#div_resources_map_tbl").append('<tr><td><a href="#" onclick="openMapPopup(\''+sites[j]+'\')" id="'+sites[j]+'_maps">'+sites[j].charAt(0).toUpperCase() + sites[j].slice(1)+' map</a></td><td><input id="'+sites[j]+'_list" value="" class="input-large" /></td></tr>');
+                    $("#div_resources_map_tbl").append('<tr><td colspan="2"><button class="btn btn-add pull-right" id="searchButton" style="margin-left:5px;">Search</button><button class="btn btn-add pull-right" id="clearButton">Clear</button></td></tr>');
+					$("#searchButton").click(function() { oTable.fnDraw(); });
+					$("#clearButton").click(function() {
+						$("#div_resources_map input").each(function(){ $(this).val(""); });
+						oTable.fnDraw();
+					});
                     
                     
                 },
                 error:function(XMLHttpRequest, textStatus, errorThrows){
                     $("#div_msg").html("An error occurred while retrieving nodes list");
-                    $("#div_msg").show();
-                }
-            });
-
-            //get sites resources 
-            $.ajax({
-                type: "GET",
-                dataType: "text",
-                contentType: "application/json; charset=utf-8",
-                url: "/rest/experiments?sites",
-                success: function (data_server) {
-                    site_resources = JSON.parse(data_server);                    
-                    for(var j = 0; j < site_resources.items.length; j++)
-                        $("#div_resources_map_tbl").append('<tr><td><a href="#" onclick="openMapPopup(\''+site_resources.items[j].site+'\')" id="'+site_resources.items[j].site+'_maps">'+site_resources.items[j].site.charAt(0).toUpperCase() + site_resources.items[j].site.slice(1)+' map</a></td><td><input id="'+site_resources.items[j].site+'_list" value="" class="input-large" /></td></tr>');
-                    $("#div_resources_map_tbl").append('<tr><td colspan="2"><button class="btn btn-add pull-right" id="searchButton" style="margin-left:5px;">Search</button><button class="btn btn-add pull-right" id="clearButton">Clear</button></td></tr>');
-                    $("#searchButton").click(function() { oTable.fnDraw(); });
-					$("#clearButton").click(function() {
-						$("#div_resources_map input").each(function(){ $(this).val(""); });
-						oTable.fnDraw();
-					});                    
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrows) {
-                    $("#div_msg").html(errorThrows);
                     $("#div_msg").show();
                 }
             });
