@@ -150,9 +150,8 @@
 						<label class="control-label" for="consumption_source_m3">Source</label>
 						<div class="controls">
 							<select id="consumption_source_m3" class="input-small">
-								<option id="3V" value="3,3V">3,3V</option>
+								<option id="3V" value="3.3V">3.3V</option>
 								<option id="5V" value="5V">5V</option>
-								<option id="BATT" value="BATT">Battery</option>
 							</select>
 						</div>
 					</div>
