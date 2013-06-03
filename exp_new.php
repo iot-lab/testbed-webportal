@@ -198,7 +198,7 @@ if(!$_SESSION['is_auth']) {
         <div id="help2" class="alert alert-info">
             <img src="img/help.png"> You have two ways to choose the resources : 
 <br/><br/>From the maps, or directly entering their numbers. 
-<br/><br/>By type. Take care of building a consistent request (correct number of nodes...), otherwise it will be rejected. You can go to <i>Testbed activity -> View nodes status</i> to check the properties of the nodes.
+<br/><br/>By type. Take care of building a consistent request (correct number of nodes...), otherwise it will be rejected. You can go to <i>Testbed activity &rarr; View nodes status</i> to check the properties of the nodes.
 If you select mobile nodes on train, every nodes of the train will be reserved.
             <br/><br/>Then click <b>Next</b> to go to the firmwares/profiles associations page.
         </div>
@@ -232,17 +232,18 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                 "duration": 20
             };
             
-            //profiles
-            var my_profiles = [];
+            //user profiles name and nodearch 
+            var user_profiles = {};
+            //user firmwares name and nodearch 
+            var user_firmwares = {};
+            //all nodes network address and nodearch 
+            var sites_nodes = {};
 
             //firmwares
             var binary = [];
 
             //scheduled exp
             var scheduled = false;
-
-            //sites resources json
-            var site_resources = [];
 
             var alias_nodes = [];
 
@@ -254,6 +255,7 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                 $("#txt_notif").hide();
                 $("#expState").modal('hide');
                 $("#form_part2").hide();
+                $("#div_resources_type").hide();
 
                 $("#help1").show();
                 $("#help2").show();
@@ -280,47 +282,11 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                 //file upload event
                 document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
+                //get user profiles 
                 getProfiles();
 
-                //get sites resources
-                $.ajax({
-                    type: "GET",
-                    dataType: "text",
-                    contentType: "application/json; charset=utf-8",
-                    url: "/rest/experiments?sites",
-                    success: function (data_server) {
-                        site_resources = JSON.parse(data_server);
-                        //console.log(site_resources);
-                        
-                        for(var j = 0; j < site_resources.items.length; j++) {
-                            $("#div_resources_map_tbl").append('<tr><td><a href="#" onclick="openMapPopup(\''+site_resources.items[j].site+'\')" id="'+site_resources.items[j].site+'_maps">'+site_resources.items[j].site.charAt(0).toUpperCase() + site_resources.items[j].site.slice(1)+' map</a></td><td><input id="'+site_resources.items[j].site+'_list" value="" class="input-large" /></td></tr>');
-                            
-                        }
-
-
-                        for(var i = 0; i < site_resources.items.length; i++) {
-                            $("#lst_site").append(new Option(site_resources.items[i].site, site_resources.items[i].site));
-                            
-                            for(j = 0; j < site_resources.items[i].resources.length; j++) {
-                                var find = false;
-                                for(var z = 0; z < $("#lst_archi option").length && !find; z++) {
-                                    if($("#lst_archi option")[z].value == site_resources.items[i].resources[j].archi) {
-                                        find = true;
-                                    }
-                                }
-                                if(!find) {
-                                    $("#lst_archi").append(new Option(site_resources.items[i].resources[j].archi, site_resources.items[i].resources[j].archi));
-                                }
-                            }
-                        }
-                    },
-                    error: function (XMLHttpRequest, textStatus, errorThrows) {
-                        $("#txt_notif_msg").html(errorThrows);
-                        $("#txt_notif").show();
-                        $("#txt_notif").removeClass("alert-success");
-                        $("#txt_notif").addClass("alert-error");
-                    }
-                });
+                //get sites nodes 
+                getNodes();
             });
 
 
@@ -366,21 +332,16 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                         var number = $(row).find(".number").val();
                         var mobile = $(row).find(".mobile").is(':checked');
                         
-                        var ntype = "fixe";
-                        if(mobile){
-                            ntype = "mobile";
-                        }
+                        var ntype = mobile?"mobile":"fixe";
+
                         
                         if(number != 0) {
                             row_rs.nbnodes = number;
                             row_rs.properties.archi = archi;
                             
                             row_rs.properties.site = site;
-                            
-                            if(mobile)
-                                row_rs.properties.mobile = 1;
-                            else
-                                row_rs.properties.mobile = 0;
+
+                            row_rs.properties.mobile = mobile?1:0;
 
                             alias_nodes.push(row_rs);
 
@@ -399,23 +360,19 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                         var site = $(this).attr("id").split('_')[0];
                         var val = $(this).attr("value");
                         if(val != "") {
-                            var snodes = parseNodebox(val);
-                                        for (i = 0; i < snodes.length; i++) {
-                                            if(!isNaN(snodes[i]))
-                                                exp_json.nodes.push("node"+snodes[i]+"."+site+".senslab.info");
-                                        }
-
+                            var snodes = expand(val.split(","));
+                            for (i = 0; i < snodes.length; i++) {
+                            	if(!isNaN(snodes[i]) && (("node"+snodes[i]+"."+site+".senslab.info") in sites_nodes)) {
+                                	exp_json.nodes.push("node"+snodes[i]+"."+site+".senslab.info");
+                                    $("#my_nodes").append(new Option("node"+snodes[i]+"."+site+".senslab.info", "node"+snodes[i]+"."+site+".senslab.info", false, false));
+                            	}
+                            }
                         }
                     });
 
-              
-                    for (i = 0; i < exp_json.nodes.length; i++) {
-                        $("#my_nodes").append(new Option(exp_json.nodes[i], exp_json.nodes[i], false, false));
-                    }
-
                 }
 
-                //console.log(JSON.stringify(exp_json));
+                //console.log(exp_json);
                 if(exp_json.nodes.length!=0) {
                         $("#form_part1").hide();
                         $("#form_part2").show();
@@ -441,91 +398,78 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
             /* ****************** */
             $("#btn_assoc").click(function () {
 
-                //get selected item and remove
+                //get selected item 
                 var nodes_set = $("#my_nodes").val();
                 var profil_set = $("#my_profiles").val();
                 var firmware_set = $("#my_firmwares").val();
-
-
-                $("#my_profiles option:selected").removeAttr("selected");
-                $("#my_firmwares option:selected").removeAttr("selected");
  
-                var error = false;
-                
-                if( nodes_set == null) {    //no node selected
-                    error = true;
-                }
-                else {                      //no profile or firmware selected
-                    if(profil_set == null && firmware_set == null) {
-                        error = true;
-                    }
-                }
-                
-                if (error) {
+				// check if at least a node and a firmware/profile are selected 
+                if ((nodes_set == null) || (profil_set == null && firmware_set == null)) {
                     alert("Please select nodes and a profile and/or a firmware");
                     return false;
                 }
+
+				// check if selected profile/firmware is OK for the selected node architecture 
+				// get profile and firmware architecture 
+                var profileNodearch = ((profil_set in user_profiles)?user_profiles[profil_set]:null);
+				var fwNodearch = ((firmware_set in user_firmwares)?user_firmwares[firmware_set]:null);
+        		// profile and firware are compatible ? 
+                if (profileNodearch!=null && fwNodearch!=null && profileNodearch != fwNodearch) {
+                    alert("The profile and the firmware are not for the same architecture.");
+                    return false;
+                }
+				// for each selected node, check the architecture 
+				for (var i = 0 ; i < nodes_set.length ; i++) {
+					if(profileNodearch != null && sites_nodes[nodes_set[i]].indexOf(profileNodearch)==-1) {
+	                    alert("The profile is not compatible with some nodes architecture.");
+	                    return false;
+					} 
+					if(fwNodearch != null && sites_nodes[nodes_set[i]].indexOf(fwNodearch)==-1) {
+	                    alert("The firmware is not compatible with some nodes architecture.");
+	                    return false;
+					}
+				}
+                
+
+				// everything is OK, let's do the job 
+                $("#my_profiles option:selected").removeAttr("selected");
+                $("#my_firmwares option:selected").removeAttr("selected");
                 $("#my_nodes option:selected").remove();
 
 
                 if(profil_set != null) {
                     
                     //init some vars
-                    if (exp_json.profileassociations == null) {
-                        exp_json.profileassociations = [];
-                    }
-                    
-                    //retrieve profile index
-                    var find = false;
-                    var index = -1;
-                    for (var i = 0; i < my_profiles.length && index == -1; i++) {
-                        if (my_profiles[i].profilename == profil_set) {
-                            find = true;
-                            index = i;
-                            break;
-                        }
-                    }
+                    if (exp_json.profileassociations == null) exp_json.profileassociations = [];
 
                     var find = false;
                     //if profile already exist in the table
-                    for (i = 0; i < exp_json.profileassociations.length; i++) {
+                    for (i = 0; i < exp_json.profileassociations.length && !find ; i++) {
                         if (exp_json.profileassociations[i].profilename == profil_set) {
                             exp_json.profileassociations[i].nodes = exp_json.profileassociations[i].nodes.concat(nodes_set);
                             find = true;
                         }
                     }
 
-                    if (!find) {
-                        exp_json.profileassociations.push({
-                            "profilename": profil_set,
-                            "nodes": nodes_set
-                        });
-                    }
+                    if (!find) exp_json.profileassociations.push({"profilename": profil_set,"nodes": nodes_set});
                 }
 
                 if(firmware_set != null) {
                     
                     //init some vars
-                    if(exp_json.firmwareassociations == null) {
-                        exp_json.firmwareassociations = [];
-                    }
+                    if(exp_json.firmwareassociations == null)  exp_json.firmwareassociations = [];
                 
                     
-                    find = false;
+                    var find = false;
                     //if firmware already exist in the table
-                    for (i = 0; i < exp_json.firmwareassociations.length; i++) {
+                    for (i = 0; i < exp_json.firmwareassociations.length && !find ; i++) {
                         if (exp_json.firmwareassociations[i].firmwarename == firmware_set) {
                             exp_json.firmwareassociations[i].nodes = exp_json.firmwareassociations[i].nodes.concat(nodes_set);
                             find = true;
                         }
                     }
 
-                    if (!find) {
-                        exp_json.firmwareassociations.push({
-                            "firmwarename": firmware_set,
-                            "nodes": nodes_set
-                        });
-                    }
+                    if (!find) exp_json.firmwareassociations.push({"firmwarename": firmware_set,"nodes": nodes_set});
                 }
 
                 //console.log(JSON.stringify(exp_json));
@@ -629,15 +573,175 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
 
                 return false;
             });
+            
+
+            /* ****************** */
+            /*   ajax functions   */
+            /* ****************** */
+            function getProfiles() { //get all user profiles 
+                $.ajax({
+                    type: "GET",
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    url: "/rest/profiles",
+                    success: function (data_server) {
+                        
+                        if(data_server == "") return false; // no profile 
+                        
+                        //fill profiles list
+                        for(var i = 0; i < data_server.length; i++) {
+                            $("#my_profiles").append(new Option(data_server[i].profilename,data_server[i].profilename));
+                            user_profiles[data_server[i].profilename]=data_server[i].nodearch;
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrows) {
+                        $("#txt_notif_msg").html(errorThrows);
+                        $("#txt_notif").show();
+                        $("#txt_notif").removeClass("alert-success");
+                        $("#txt_notif").addClass("alert-error");
+                    }
+                });
+            }
+
+			function getNodes() { // get all sites nodes 
+	            $.ajax({
+	                type: "GET",
+	                dataType: "json",
+	                contentType: "application/json; charset=utf-8",
+	                url: "/rest/admin/resourcesproperties",
+	                success: function (data_server) {
+	                    var sites = [];
+	                    var archis= [];
+	
+	                    for (var i in data_server) {
+	                            if(sites.indexOf(data_server[i].site)==-1) {
+	                                sites.push(data_server[i].site);
+	                                $("#div_resources_map_tbl").append('<tr><td><a href="#" onclick="openMapPopup(\''+data_server[i].site+'\')" id="'+data_server[i].site+'_maps">'+data_server[i].site.charAt(0).toUpperCase() + data_server[i].site.slice(1)+' map</a></td><td><input id="'+data_server[i].site+'_list" value="" class="input-large" /></td></tr>');
+	                                $("#lst_site").append(new Option(data_server[i].site, data_server[i].site));
+	                            }
+	                            if(archis.indexOf(data_server[i].archi)==-1) {
+	                                archis.push(data_server[i].archi);
+	                                $("#lst_archi").append(new Option(data_server[i].archi, data_server[i].archi));
+	                            }
+	                            sites_nodes[data_server[i].network_address]=data_server[i].archi;
+	                    }
+	                 },
+	                error: function (XMLHttpRequest, textStatus, errorThrows) {
+	                    $("#txt_notif_msg").html(errorThrows);
+	                    $("#txt_notif").show();
+	                    $("#txt_notif").removeClass("alert-success");
+	                    $("#txt_notif").addClass("alert-error");
+	                }
+	            });
+			}
 
 
+            /* ******************* */
+            /*   others function   */
+            /* ******************* */
+            
+            //click on add row alias resources
+            $("#btn_add").click(function(){
+                var t = $("#resources_row").clone();
+                $(t).find(".number").val(1);
+                var t = $("#resources_table").append(t);     
+                return false;
+            });
+            
+            
+            //click on remove row alias resources
+            function removeRow(btnDelete) {
+                if($("#resources_table tr").length != 1) $(btnDelete).parent().parent().remove();
+            }
+            
+            //refresh profile list
+            $("#btn_refresh").click(function(){
+                $("#my_profiles option").remove();
+                getProfiles();
+                return false;
+            });
+            
+            //click on previous button
+            $("#btn_previous").click(function(){
+                $("#form_part2").hide();
+                $("#form_part1").show();
+                
+                $("#help1").show();
+                $("#help2").show();
+                $("#help3").hide();
 
-            /* ************ */
-            /*   function   */
-            /* ************ */
+                $("#my_nodes").val([]);
+                $("#my_profiles").val([]);
+                $("#my_firmware").val([]);
+                
+                return false;
+            });
+            
+            //click on scheduled button 
+            $("input[name=radioStart]").change(function () {
+                if($(this).val()== "asap") {                   
+                    $("#dp1").attr("disabled","disabled");
+                    $("#dp1").hide();
+                    $("#tp1").attr("disabled","disabled");
+                    $("#tp1").hide();
+                    scheduled = false;
+                } else {                    
+                    $("#dp1").removeAttr("disabled");
+                    $("#dp1").show();
+                    $("#tp1").removeAttr("disabled");
+                    $("#tp1").show();
+                    scheduled = true;
+                }
+            });
+            
+            //click on ressources type radio button
+            $("input[name=resources_type]").change(function () {
+                if ($(this).val() == "physical") {
+                    $("#div_resources_type").hide();
+                    $("#div_resources_map").show();
+                } else {
+                    $("#div_resources_type").show();
+                    $("#div_resources_map").hide();
+                }
+            });
+            
+            //click on a node in select  will remove non compatible profiles and firmwares 
+            $("#my_nodes").change(function(){
+                var nodearch = sites_nodes[$("#my_nodes").val()[0]].split(':')[0];
+                disableOptions(nodearch,"my_profiles",user_profiles);
+                disableOptions(nodearch,"my_firmwares",user_firmwares);
+                return false;
+            });
 
-            // expand a list of nodes containing dash intervals
-            // 1-3,5,9 -> 1,2,3,5,9
+            function disableOptions(nodearch,select,infos) {
+                var set = document.getElementById(select).options;
+				for (var i = 0 ; i < set.length ; i++) {
+					if(infos[set[i].value].indexOf(nodearch)!=-1) {
+						set[i].removeAttribute('disabled');
+						set[i].innerHTML=set[i].value;
+					} else {
+						if(set[i].selected) set[i].selected=false;
+						set[i].setAttribute('disabled','disabled');
+						set[i].innerHTML="<i>"+set[i].value+"</i>";
+					}
+				}
+            }
+
+            function enableOptions() {
+                set = document.getElementById("my_profiles").options;
+				for (var i = 0 ; i < set.length ; i++) {
+					set[i].removeAttribute('disabled');
+					set[i].innerHTML=set[i].value;
+				}
+                set = document.getElementById("my_firmwares").options;
+				for (var i = 0 ; i < set.length ; i++) {
+					set[i].removeAttribute('disabled');
+					set[i].innerHTML=set[i].value;
+				}
+            }
+
+            // expand a list of nodes containing dash intervals 
+            // 1-3,5,9 -> 1,2,3,5,9 
             function expand(factExp) {
                 exp = [];
                 for (var i = 0; i < factExp.length; i++) {
@@ -656,10 +760,6 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                 return exp;
             }
 
-            function parseNodebox(input) {
-                return expand(input.split(","));
-            }
-
             function sortfunction(a, b) {
                 return (a - b); //causes an array to be sorted numerically and ascending
             }
@@ -675,17 +775,17 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                     // closure to capture the file information.
                     reader.onload = (function (theFile) {
                         return function (e) {
-
-                            binary.push({
-                                "name": theFile.name,
-                                "bin": e.target.result
-                            });
-
+                            binary.push({"name": theFile.name,"bin": e.target.result});
                             $("#my_firmwares").append(new Option(theFile.name, theFile.name, false, false));
                         };
                     })(f);
-					if(f.name.indexOf(".elf",f.name.length -4)!=-1) reader.readAsDataURL(f);
-					else reader.readAsText(f);
+					if(f.name.indexOf(".elf",f.name.length -4)!=-1) {
+						reader.readAsDataURL(f);
+						user_firmwares[f.name]="m3";
+					} else {
+						reader.readAsText(f);
+						user_firmwares[f.name]="wsn430";
+					} 
                 }
             }
             
@@ -710,128 +810,21 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                             
                             if(json_tmp[k].node == exp_json.nodes[z].alias) {
                                 var archi = exp_json.nodes[z].properties.archi;
-                                
-                                var site = "any";
-                                if(exp_json.nodes[z].properties.site != null)
-                                    site = exp_json.nodes[z].properties.site;
-                                    
+                                var site = (exp_json.nodes[z].properties.site != null)?exp_json.nodes[z].properties.site:"any";
                                 var nbnodes = exp_json.nodes[z].nbnodes;
-                                
-                                var mobile = false;
-                                if(exp_json.nodes[z].properties.mobile != null) {
-                                    mobile = exp_json.nodes[z].properties.mobile;
-                                }
-                                
-                                var ntype = "fixe";
-                                if(mobile){
-                                    ntype = "mobile";
-                                }
-                                
+                                var mobile = (exp_json.nodes[z].properties.mobile != null)?exp_json.nodes[z].properties.mobile:false;
+                                var ntype = mobile?"mobile":"fixe";
                                 $("#my_assoc").append("<tr><td>"+archi+"/"+site+"/"+nbnodes+"/"+ntype+"</td><td>"+json_tmp[k].profilename+"</td><td>"+json_tmp[k].firmwarename+"</td><td><a href='#' onClick='removeAssociation("+k+")'><img src='img/del.png'></img></a></td></tr>");
                             }
                         }
                     }
                 }
-            }
-            
-            //click on add row alias resources
-            $("#btn_add").click(function(){
-                var t = $("#resources_row").clone();
-                $(t).find(".number").val(1);
-                var t = $("#resources_table").append(t);
-                
-                
-                return false;
-            });
-            
-            
-            //click on remove row alias resources
-            function removeRow(btnDelete) {
-                if($("#resources_table tr").length != 1) {
-                    $(btnDelete).parent().parent().remove();
-                }
-            }
-            
-            //refresh profile list
-            $("#btn_refresh").click(function(){
-                $("#my_profiles option").remove();
-                getProfiles();
-                return false;
-            });
-            
-            
-            function getProfiles() {
-                
-                //get all profiles
-                $.ajax({
-                    type: "GET",
-                    dataType: "text",
-                    contentType: "application/json; charset=utf-8",
-                    url: "/rest/profiles",
-                    success: function (data_server) {
-                        
-                        if(data_server == "") {
-                            //no profile
-                            return false;
-                        }
-                        
-                        my_profiles = JSON.parse(data_server);
-                        
-                        //fill profiles list
-                        for(var i = 0; i < my_profiles.length; i++) {
-                            $("#my_profiles").append(new Option(my_profiles[i].profilename,my_profiles[i].profilename));
-                        }
-                    },
-                    error: function (XMLHttpRequest, textStatus, errorThrows) {
-                        $("#txt_notif_msg").html(errorThrows);
-                        $("#txt_notif").show();
-                        $("#txt_notif").removeClass("alert-success");
-                        $("#txt_notif").addClass("alert-error");
-                    }
-                });
-            }
-            
-            //click on previous button
-            $("#btn_previous").click(function(){
-                $("#form_part2").hide();
-                $("#form_part1").show();
-                
-                $("#help1").show();
-                $("#help2").show();
-                $("#help3").hide();
-                
-                return false;
-            });
-            
-            //click on scheduled button 
-            $("input[name=radioStart]").change(function () {
-                if($(this).val()== "asap") {                   
-                    $("#dp1").attr("disabled","disabled");
-                    $("#dp1").hide();
-                    $("#tp1").attr("disabled","disabled");
-                    $("#tp1").hide();
-                    scheduled = false;
-                } else {                    
-                    $("#dp1").removeAttr("disabled");
-                    $("#dp1").show();
-                    $("#tp1").removeAttr("disabled");
-                    $("#tp1").show();
-                    scheduled = true;
-                }
-            });
-            
-            //click on ressources type radio button
-            $("#div_resources_type").hide();
-            $("input[name=resources_type]").change(function () {
-                if ($(this).val() == "physical") {
-                    $("#div_resources_type").hide();
-                    $("#div_resources_map").show();
-                } else {
-                    $("#div_resources_type").show();
-                    $("#div_resources_map").hide();
-                }
-            });
 
+                // clear all disabled options 
+                enableOptions();
+
+            }
+            
             function removeAssociation(index) {
                 json_tmp = rebuildJson(exp_json);
 
@@ -865,17 +858,11 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                              delete exp_json.firmwareassociations;
                 }
         
-                if(exp_json.type=="alias") {
-                    
+                if(exp_json.type=="alias") {                    
                     var node = exp_json.nodes[json_tmp[index].node];
-                    var ntype = "fixe";
-                    if(node.properties.mobile==1)
-                          ntype = "mobile";
-        
-                    nsite = node.properties.site;
-        
+                    var ntype = (node.properties.mobile==1)?"mobile":"fixe";        
+                    var nsite = node.properties.site;        
                     $("#my_nodes").append(new Option(node.properties.archi+"/"+nsite+"/"+node.nbnodes+"/"+ntype,json_tmp[index].node));
-        
                 } else {
                     $("#my_nodes").append(new Option(json_tmp[index].node, json_tmp[index].node , false, false));
                 }
@@ -884,9 +871,9 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
             }
    
 
-function openMapPopup(site) {
-	window.open('maps.php?site='+site, '', 'resizable=yes, location=no, width=800, height=600, menubar=no, status=no, scrollbars=no, menubar=no');
-}
+			function openMapPopup(site) {
+				window.open('maps.php?site='+site, '', 'resizable=yes, location=no, width=800, height=600, menubar=no, status=no, scrollbars=no, menubar=no');
+			}
             
         </script>
         
