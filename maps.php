@@ -34,6 +34,7 @@ body {
             <div id='selectionbox' style="text-align:center;padding:2px">
             Selected Nodes <input type="text" placeholder="1-10,24,25" class="input-medium" id='nodebox'/>
             <button class="btn" id="btnSave" onClick="save()" value="Save"/>Save</button>
+            <button class="btn" id="btnAllFree" onClick="allFree()" value="Save"/>All Free Nodes</button>
             </div>
 
             <div ID='div3d' style=" height:500px;background-color:#202020;z-index:-1" oncontextmenu="return false;"></div>
@@ -47,6 +48,8 @@ body {
 <script type="text/javascript">
 
     var site = <?php echo '"'.$site.'"' ?>;
+
+    var all_nodes;
 
     $(document).ready(function(){
        loadResources();
@@ -73,6 +76,8 @@ body {
             data: "",
             success:function(data){
               
+                all_nodes = data;
+
                 for(i=0; i<data.items.length; i++) {
                     var n = [];
                     
@@ -99,6 +104,22 @@ body {
             }
         });
     }    
+
+    function allFree() {
+       var free_list = "";
+       for(i=0; i<all_nodes.items.length; i++) {
+           var n = [];
+                    
+           if(all_nodes.items[i].site == site && all_nodes.items[i].state == "Alive") {
+                       
+               var nn = all_nodes.items[i].network_address;
+               var node_id = nn.substring(4,nn.indexOf("."));
+                        
+               free_list += node_id + ",";
+             }
+       }
+       $("#nodebox").val(free_list);
+    }
 
     <?php if (isset($_SESSION['basic_value'])) { ?>
 
