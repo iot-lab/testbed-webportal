@@ -865,9 +865,9 @@ include("header.php") ?>
                     '<td>'+ formatCreateTimeStamp(val.createTimeStamp) +'</td>'+
                     '<td><a href="#" class="btn btn-valid '+btnValidClass+'" data="'+i+'" data-state="'+val.validate+'" onClick="validateUser('+i+')">'+btnValidValue+'</a></td>' +
                     '<td><a href="#" class="btn btn-admin '+btnAdminClass+'" data="'+i+'" data-state="'+val.admin+'" onClick="setAdmin('+i+')">'+btnAdminValue+'</a></td>' +
-                    '<td><a href="admin_exps.php?user='+val.login+'" class="btn btn-view">Exp</a> ' +
-                        '<a href="#" class="btn btn-edit" data-toggle="modal" data="'+i+'">Edit</a> ' +
-                        '<a href="#" class="btn btn-del btn-danger" data="'+i+'" onClick="deleteUser('+i+')">Delete</a></td>'
+                    '<td><a href="admin_exps.php?user='+val.login+'" class="btn btn-view" title="Experiments"><i class="icon icon-list"></i></a> ' +
+                        '<a href="#" class="btn btn-edit" data-toggle="modal" data="'+i+'" title="Edit"><i class="icon icon-pencil"></i></a> ' +
+                        '<a href="#" class="btn btn-del btn-danger" data="'+i+'" onClick="deleteUser('+i+')" title="Delete"><i class="icon-white icon-remove"></i></a></td>'
                     +'</tr>');
                     $("tr[data="+i+"] .btn-valid").width(50);
                     $("tr[data="+i+"] .btn-admin").width(50);
