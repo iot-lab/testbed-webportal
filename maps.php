@@ -117,6 +117,9 @@ body {
              }
        }
        $("#nodebox").val(free_list);
+       parseNodebox();
+       myrender();
+
     }
 
     <?php if (isset($_SESSION['basic_value'])) { ?>
