@@ -36,8 +36,8 @@ include("header.php") ?>
                             <th>LastName</th>
                             <th>Email</th>
                             <th>Creation date</th>
-                            <th width='50px'>isValid</th>
-                            <th width='50px'>isAdmin</th>
+                            <th width='50px'>State</th>
+                            <th width='50px'>Role</th>
                             <th>Options</th>
                         </tr>
                     </thead>
