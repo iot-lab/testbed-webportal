@@ -149,9 +149,9 @@ if(!$_SESSION['is_auth']) {
                         </thead>
                         <tbody>
                             <tr>
-                                <td><select id="my_nodes" size="15" multiple></select></td>
-                                <td><select id="my_profiles" size="15"></select></td>
-                                <td><select id="my_firmwares" size="15"></select></td>
+                                <td><select id="my_nodes" size="15" multiple><optgroup label="WSN430" id="wsn430Nodes"></optgroup><optgroup label="M3" id="m3Nodes"></optgroup><!--<optgroup label="A8" id="a8Nodes"></optgroup>--></select></td>
+                                <td><select id="my_profiles" size="15"><optgroup label="WSN430" id="wsn430Profiles"></optgroup><optgroup label="M3" id="m3Profiles"></optgroup><!--<optgroup label="A8" id="a8Profiles"></optgroup>--></select></td>
+                                <td><select id="my_firmwares" size="15"><optgroup label="WSN430" id="wsn430Firmwares"></optgroup><optgroup label="M3" id="m3Firmwares"></optgroup><!--<optgroup label="A8" id="a8Firmwares"></optgroup>--></select></td>
                             </tr>
                             <tr>
                                 <td></td>
@@ -305,8 +305,8 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
 
                 //var url = $(this).attr('action');
                 //$("#form_part1").serializeArray();
-        
-                $("#my_nodes").empty();
+
+                $("#my_nodes optgroup").empty(); 
                 
                 //reset
                 exp_json = {};
@@ -345,8 +345,8 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
 
                             alias_nodes.push(row_rs);
 
-                            $("#my_nodes").append(new Option(archi+"/"+site+"/"+number+"/"+ntype,alias_index));
-
+                            $("#"+archi.split(':')[0]+"Nodes").append(new Option(archi+"/"+site+"/"+number+"/"+ntype,alias_index)); 
+				console.log("#"+archi.split(':')[0]+"Nodes");
                             alias_index++;
                         }
                     }
@@ -362,9 +362,10 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                         if(val != "") {
                             var snodes = expand(val.split(","));
                             for (i = 0; i < snodes.length; i++) {
-                            	if(!isNaN(snodes[i]) && (("node"+snodes[i]+"."+site+".senslab.info") in sites_nodes)) {
-                                	exp_json.nodes.push("node"+snodes[i]+"."+site+".senslab.info");
-                                    $("#my_nodes").append(new Option("node"+snodes[i]+"."+site+".senslab.info", "node"+snodes[i]+"."+site+".senslab.info", false, false));
+                                var node_network_address;
+                            	if(!isNaN(snodes[i]) && ((node_network_address="node"+snodes[i]+"."+site+".senslab.info") in sites_nodes)) {
+                                	exp_json.nodes.push(node_network_address);
+                                    $("#"+sites_nodes[node_network_address]+"Nodes").append(new Option(node_network_address, node_network_address, false, false));
                             	}
                             }
                         }
@@ -418,6 +419,8 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                     alert("The profile and the firmware are not for the same architecture.");
                     return false;
                 }
+
+		if(exp_json.type=="psysical") {
 				// for each selected node, check the architecture 
 				for (var i = 0 ; i < nodes_set.length ; i++) {
 					if(profileNodearch != null && sites_nodes[nodes_set[i]].indexOf(profileNodearch)==-1) {
@@ -429,7 +432,7 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
 	                    return false;
 					}
 				}
-                
+                }
 
 				// everything is OK, let's do the job 
                 $("#my_profiles option:selected").removeAttr("selected");
@@ -590,7 +593,7 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                         
                         //fill profiles list
                         for(var i = 0; i < data_server.length; i++) {
-                            $("#my_profiles").append(new Option(data_server[i].profilename,data_server[i].profilename));
+                            $("#"+data_server[i].nodearch+"Profiles").append(new Option(data_server[i].profilename,data_server[i].profilename));
                             user_profiles[data_server[i].profilename]=data_server[i].nodearch;
                         }
                     },
@@ -616,14 +619,14 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
 	                    for (var i in data_server) {
 	                            if(sites.indexOf(data_server[i].site)==-1) {
 	                                sites.push(data_server[i].site);
-	                                $("#div_resources_map_tbl").append('<tr><td><a href="#" onclick="openMapPopup(\''+data_server[i].site+'\')" id="'+data_server[i].site+'_maps">'+data_server[i].site.charAt(0).toUpperCase() + data_server[i].site.slice(1)+' map</a></td><td><input id="'+data_server[i].site+'_list" value="" class="input-large" /></td></tr>');
+	                                $("#div_resources_map_tbl").append('<tr><td><a href="#" onclick="openMapPopup(\''+data_server[i].site+'\')" id="'+data_server[i].site+'_maps">'+data_server[i].site.charAt(0).toUpperCase() + data_server[i].site.slice(1)+' map</a></td><td><input type="text" id="'+data_server[i].site+'_list" value="" class="input-large" /></td></tr>');
 	                                $("#lst_site").append(new Option(data_server[i].site, data_server[i].site));
 	                            }
 	                            if(archis.indexOf(data_server[i].archi)==-1) {
 	                                archis.push(data_server[i].archi);
 	                                $("#lst_archi").append(new Option(data_server[i].archi, data_server[i].archi));
 	                            }
-	                            sites_nodes[data_server[i].network_address]=data_server[i].archi;
+	                            sites_nodes[data_server[i].network_address]=data_server[i].archi.split(':')[0];
 	                    }
 	                 },
 	                error: function (XMLHttpRequest, textStatus, errorThrows) {
@@ -694,7 +697,7 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                 }
             });
             
-            //click on ressources type radio button
+            //click on ressources type radio button 
             $("input[name=resources_type]").change(function () {
                 if ($(this).val() == "physical") {
                     $("#div_resources_type").hide();
@@ -707,37 +710,33 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
             
             //click on a node in select  will remove non compatible profiles and firmwares 
             $("#my_nodes").change(function(){
-                var nodearch = sites_nodes[$("#my_nodes").val()[0]].split(':')[0];
-                disableOptions(nodearch,"my_profiles",user_profiles);
-                disableOptions(nodearch,"my_firmwares",user_firmwares);
+                var nodearch = sites_nodes[$("#my_nodes").val()[0]];
+		if(nodearch==null) nodearch=($("#my_nodes option:selected").text()).split(':')[0];
+		console.log(nodearch);
+                $("#my_profiles optgroup").attr("disabled","disabled");
+                $("#my_profiles option").css("font-style","italic");
+                $("#my_firmwares optgroup").attr("disabled","disabled");
+                $("#my_firmwares option").css("font-style","italic");
+                $("#"+nodearch+"Profiles").removeAttr("disabled");
+                $("#"+nodearch+"Profiles option").css("font-style","");
+                $("#"+nodearch+"Firmwares").removeAttr("disabled");
+                $("#"+nodearch+"Firmwares option").css("font-style","");
+                // remove selected profile or firmware if non compatible architecture 
+                var profil_set = $("#my_profiles").val();
+                var firmware_set = $("#my_firmwares").val();
+                var profileNodearch = ((profil_set in user_profiles)?user_profiles[profil_set]:null);
+				var fwNodearch = ((firmware_set in user_firmwares)?user_firmwares[firmware_set]:null);
+				if(nodearch!=profileNodearch) $("#my_profiles option:selected").removeAttr("selected");
+				if(nodearch!=fwNodearch) $("#my_firmwares option:selected").removeAttr("selected");
+                
                 return false;
             });
 
-            function disableOptions(nodearch,select,infos) {
-                var set = document.getElementById(select).options;
-				for (var i = 0 ; i < set.length ; i++) {
-					if(infos[set[i].value].indexOf(nodearch)!=-1) {
-						set[i].removeAttribute('disabled');
-						set[i].innerHTML=set[i].value;
-					} else {
-						if(set[i].selected) set[i].selected=false;
-						set[i].setAttribute('disabled','disabled');
-						set[i].innerHTML="<i>"+set[i].value+"</i>";
-					}
-				}
-            }
-
             function enableOptions() {
-                set = document.getElementById("my_profiles").options;
-				for (var i = 0 ; i < set.length ; i++) {
-					set[i].removeAttribute('disabled');
-					set[i].innerHTML=set[i].value;
-				}
-                set = document.getElementById("my_firmwares").options;
-				for (var i = 0 ; i < set.length ; i++) {
-					set[i].removeAttribute('disabled');
-					set[i].innerHTML=set[i].value;
-				}
+                $("#my_profiles optgroup").removeAttr("disabled");
+                $("#my_profiles option").css("font-style","");
+                $("#my_firmwares optgroup").removeAttr("disabled");
+                $("#my_firmwares option").css("font-style","");
             }
 
             // expand a list of nodes containing dash intervals 
@@ -776,7 +775,7 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                     reader.onload = (function (theFile) {
                         return function (e) {
                             binary.push({"name": theFile.name,"bin": e.target.result});
-                            $("#my_firmwares").append(new Option(theFile.name, theFile.name, false, false));
+                            $("#"+user_firmwares[theFile.name]+"Firmwares").append(new Option(theFile.name, theFile.name, false, false));
                         };
                     })(f);
 					if(f.name.indexOf(".elf",f.name.length -4)!=-1) {
@@ -785,7 +784,7 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
 					} else {
 						reader.readAsText(f);
 						user_firmwares[f.name]="wsn430";
-					} 
+					} // TODO A8 
                 }
             }
             
@@ -860,11 +859,9 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
         
                 if(exp_json.type=="alias") {                    
                     var node = exp_json.nodes[json_tmp[index].node];
-                    var ntype = (node.properties.mobile==1)?"mobile":"fixe";        
-                    var nsite = node.properties.site;        
-                    $("#my_nodes").append(new Option(node.properties.archi+"/"+nsite+"/"+node.nbnodes+"/"+ntype,json_tmp[index].node));
+                    $("#"+node.properties.archi.split(':')[0]+"Nodes").append(new Option(node.properties.archi+"/"+node.properties.site+"/"+node.nbnodes+"/"+((node.properties.mobile==1)?"mobile":"fixe"),json_tmp[index].node)); // TODO 
                 } else {
-                    $("#my_nodes").append(new Option(json_tmp[index].node, json_tmp[index].node , false, false));
+                    $("#"+sites_nodes[json_tmp[index].node]+"Nodes").append(new Option(json_tmp[index].node, json_tmp[index].node , false, false));
                 }
         
                 displayAssociation();
