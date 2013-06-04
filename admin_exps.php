@@ -57,8 +57,10 @@ if (isset($_GET['user'])) {
           </ul>
           <p><i class="icon-th"></i> Profiles: <span id="nb_profiles">&nbsp;</span></p>
 		  <h2>Search for an experiment</h2>
-          <input type="text" id="expNum"/><input type="button" value="Show details" onClick='window.location.href="admin_exp_details.php?id="+document.getElementById("expNum").value;'/>
+<div class="form-horizontal">
+          <input type="text" class="input-mini" id="expNum"/> <input class="btn" type="button" value="Show details" onClick='window.location.href="admin_exp_details.php?id="+document.getElementById("expNum").value;'/>
         </div>
+	</div>
     </div>
 
 
