@@ -24,15 +24,15 @@
 <style type="text/css">
 
 	h2,h3{
-		color: #AAD400;
+		color: #86A219;
 	}
     
 	a {
-		color: #AAD400;
+		color: #86A219;
 	}
     
 	a:hover {
-		color: #AAD400;
+		color: #86A219;
 		text-decoration:underline;
 	}
     
@@ -43,7 +43,7 @@
 	}
 
 	.progress .bar {
-		background-color: #AAD400;
+		background-color: #86A219;
 		background-image: -moz-linear-gradient(center top , #BEED00, #85A600);
 	}
 
