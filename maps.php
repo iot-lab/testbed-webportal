@@ -2,6 +2,8 @@
 <html>
 <head>
 <title>Maps</title>
+<link href="css/bootstrap.css" rel="stylesheet">
+
 <?php 
 session_start();
 $site = $_GET['site'];
@@ -29,11 +31,10 @@ body {
 
 
 <body>
-    <div class="row" id="maps">
-        <div class="span8 offset2">
-            <div id='selectionbox' style="text-align:center;padding:2px">
+    <div id="maps">
+            <div id='selectionbox' style="text-align:center;padding:2px" class="form-horizontal">
             Selected Nodes <input type="text" placeholder="1-10,24,25" class="input-medium" id='nodebox'/>
-            <button class="btn" id="btnSave" onClick="save()" value="Save"/>Save</button>
+            <button class="btn btn-primary" id="btnSave" onClick="save()" value="Save"/>Save</button>
             <button class="btn" id="btnAllFree" onClick="allFree()" value="Save"/>All Free Nodes</button>
             </div>
 
@@ -41,7 +42,6 @@ body {
 
             <div ID='infobox' style="text-align:center"></div>
         <div style="text-align:right"><img src="img/node_alive.png"> Alive - <img src="img/node_down.png"> Down - <img src="img/node_selected.png"> Selected - <img src="img/node_used.png"> Busy</div>
-        </div>
 </div>        
 
 
@@ -111,10 +111,8 @@ body {
            var n = [];
                     
            if(all_nodes.items[i].site == site && all_nodes.items[i].state == "Alive") {
-                       
                var nn = all_nodes.items[i].network_address;
                var node_id = nn.substring(4,nn.indexOf("."));
-                        
                free_list += node_id + ",";
              }
        }
