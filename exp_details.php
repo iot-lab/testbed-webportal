@@ -132,11 +132,11 @@ include("header.php") ?>
 			$("#expButtons").hide();
 			$("#tblNodes").hide();
 
-            $("#loader").ajaxStart(function(){
-                $(this).show();
+            $(document).ajaxStart(function(){
+                $("#loader").show();
             });
-            $("#loader").ajaxStop(function(){
-                $(this).hide();
+            $(document).ajaxStop(function(){
+                $("#loader").hide();
             });
 
             //date picker

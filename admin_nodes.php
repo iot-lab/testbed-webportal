@@ -92,13 +92,16 @@ include("header.php") ?>
 			$("#frmActions").hide();
 			$("#tblNodes").hide();
 
-            $("#loader").ajaxStart(function(){
-                $(this).show();
-            });
-            $("#loader").ajaxStop(function(){
-                $(this).hide();
-            });
             
+       
+        $(document).ajaxStart(function(){
+            $("#loader").show();
+        });
+        $(document).ajaxStop(function(){
+            $("#loader").hide();
+        });
+
+
             /* actions list change */
             $("#action").change(function(){
                if($("#action").val() == "update") {
@@ -343,7 +346,7 @@ include("header.php") ?>
 		exp_json = [];
 		$("#div_resources_map input").each(function(){
 			var site = $(this).attr("id").split('_')[0];
-			var val = $(this).attr("value");
+			var val = $(this).val();
 			if(val != "") {
 				var snodes = expand(val.split(","));
 				for (var i = 0; i < snodes.length; i++) if(!isNaN(snodes[i])) exp_json.push("node"+snodes[i]+"."+site+".senslab.info");

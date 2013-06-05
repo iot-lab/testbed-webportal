@@ -346,7 +346,6 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                             alias_nodes.push(row_rs);
 
                             $("#"+archi.split(':')[0]+"Nodes").append(new Option(archi+"/"+site+"/"+number+"/"+ntype,alias_index)); 
-
                             alias_index++;
                         }
                     }
@@ -358,7 +357,7 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                     exp_json.nodes = [];
                     $("#div_resources_map input").each(function(){
                         var site = $(this).attr("id").split('_')[0];
-                        var val = $(this).attr("value");
+                        var val = $(this).val();
                         if(val != "") {
                             var snodes = expand(val.split(","));
                             for (i = 0; i < snodes.length; i++) {
@@ -373,7 +372,7 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
 
                 }
 
-                //console.log(exp_json);
+                console.log(exp_json);
                 if(exp_json.nodes.length!=0) {
                         $("#form_part1").hide();
                         $("#form_part2").show();
@@ -419,19 +418,20 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                     alert("The profile and the firmware are not for the same architecture.");
                     return false;
                 }
-				if(exp_json.type=="physical") {
-					// for each selected node, check the architecture 
-					for (var i = 0 ; i < nodes_set.length ; i++) {
-						if(profileNodearch != null && sites_nodes[nodes_set[i]].indexOf(profileNodearch)==-1) {
-		                    alert("The profile is not compatible with some nodes architecture.");
-		                    return false;
-						} 
-						if(fwNodearch != null && sites_nodes[nodes_set[i]].indexOf(fwNodearch)==-1) {
-		                    alert("The firmware is not compatible with some nodes architecture.");
-		                    return false;
-						}
+
+		if(exp_json.type=="psysical") {
+				// for each selected node, check the architecture 
+				for (var i = 0 ; i < nodes_set.length ; i++) {
+					if(profileNodearch != null && sites_nodes[nodes_set[i]].indexOf(profileNodearch)==-1) {
+	                    alert("The profile is not compatible with some nodes architecture.");
+	                    return false;
+					} 
+					if(fwNodearch != null && sites_nodes[nodes_set[i]].indexOf(fwNodearch)==-1) {
+	                    alert("The firmware is not compatible with some nodes architecture.");
+	                    return false;
 					}
 				}
+                }
 
 				// everything is OK, let's do the job 
                 $("#my_profiles option:selected").removeAttr("selected");
@@ -710,7 +710,8 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
             //click on a node in select  will remove non compatible profiles and firmwares 
             $("#my_nodes").change(function(){
                 var nodearch = sites_nodes[$("#my_nodes").val()[0]];
-                if(nodearch==null) nodearch=($("#my_nodes option:selected").text()).split(':')[0];
+		if(nodearch==null) nodearch=($("#my_nodes option:selected").text()).split(':')[0];
+		console.log(nodearch);
                 $("#my_profiles optgroup").attr("disabled","disabled");
                 $("#my_profiles option").css("font-style","italic");
                 $("#my_firmwares optgroup").attr("disabled","disabled");

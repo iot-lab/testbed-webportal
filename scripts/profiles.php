@@ -310,22 +310,22 @@ function loadProfile() {
 	        $('#radio_frequency_wsn430').val(my_profiles[i].radio.frequency);
 	        
 	        $("input[name='or_power_wsn430']").val([my_profiles[i].power]);
-	        $("#cb_current_wsn430").attr("checked",my_profiles[i].consumption.current);
-	        $("#cb_voltage_wsn430").attr("checked",my_profiles[i].consumption.voltage);
-	        $("#cb_power_wsn430").attr("checked",my_profiles[i].consumption.power);
+	        $("#cb_current_wsn430").prop("checked",my_profiles[i].consumption.current);
+	        $("#cb_voltage_wsn430").prop("checked",my_profiles[i].consumption.voltage);
+	        $("#cb_power_wsn430").prop("checked",my_profiles[i].consumption.power);
 	        
-	        $("#cb_temperature_wsn430").attr("checked",my_profiles[i].sensor.temperature);
-	        $("#cb_luminosity_wsn430").attr("checked",my_profiles[i].sensor.luminosity);
+	        $("#cb_temperature_wsn430").prop("checked",my_profiles[i].sensor.temperature);
+	        $("#cb_luminosity_wsn430").prop("checked",my_profiles[i].sensor.luminosity);
 	        
-	        $("#cb_rssi_wsn430").attr("checked",my_profiles[i].radio.rssi);
+	        $("#cb_rssi_wsn430").prop("checked",my_profiles[i].radio.rssi);
         } else if (nodearch=="m3") {
 	        $('#consumption_period_m3').val(my_profiles[i].consumption.period);
 	        $('#consumption_average_m3').val(my_profiles[i].consumption.average);
 	        
 	        $("input[name='or_power_m3']").val([my_profiles[i].power]);
-	        $("#cb_current_m3").attr("checked",my_profiles[i].consumption.current);
-	        $("#cb_voltage_m3").attr("checked",my_profiles[i].consumption.voltage);
-	        $("#cb_power_m3").attr("checked",my_profiles[i].consumption.power);
+	        $("#cb_current_m3").prop("checked",my_profiles[i].consumption.current);
+	        $("#cb_voltage_m3").prop("checked",my_profiles[i].consumption.voltage);
+	        $("#cb_power_m3").prop("checked",my_profiles[i].consumption.power);
         //TODO } else if (nodearch=="a8") { 
         }
     }
@@ -377,28 +377,28 @@ $("#form_part").bind("submit", function (e) {
     }
 
     var nodearch = "wsn430";
-    if($('#or_nodearch_m3').is(':checked')) nodearch="m3";
-    else if($('#or_nodearch_a8').is(':checked')) nodearch="a8";
+    if($('#or_nodearch_m3').prop('checked')) nodearch="m3";
+    else if($('#or_nodearch_a8').prop('checked')) nodearch="a8";
 
     var profile_json = "";
 
     if(nodearch == "wsn430") {
 
 	    consumption = {
-	        "current":$('#cb_current_wsn430').is(':checked'),
-	        "voltage":$('#cb_voltage_wsn430').is(':checked'),
-	        "power":$('#cb_power_wsn430').is(':checked'),
+	        "current":$('#cb_current_wsn430').prop('checked'),
+	        "voltage":$('#cb_voltage_wsn430').prop('checked'),
+	        "power":$('#cb_power_wsn430').prop('checked'),
 	        "frequency":$('#consumption_frequency_wsn430').val()
 	    };
 	
 	    sensor = {
-	        "luminosity":$('#cb_luminosity_wsn430').is(':checked'),
-	        "temperature":$('#cb_temperature_wsn430').is(':checked'),
+	        "luminosity":$('#cb_luminosity_wsn430').prop('checked'),
+	        "temperature":$('#cb_temperature_wsn430').prop('checked'),
 	        "frequency":$('#sensor_frequency_wsn430').val()
 	    };
 	
 	    radio = {
-	        "rssi":$('#cb_rssi_wsn430').is(':checked'),
+	        "rssi":$('#cb_rssi_wsn430').prop('checked'),
 	        "frequency":$('#radio_frequency_wsn430').val()
 	    };
 	
@@ -413,9 +413,9 @@ $("#form_part").bind("submit", function (e) {
     } else if (nodearch == "m3") {
 
 	    consumption = {
-	        "current":$('#cb_current_m3').is(':checked'),
-	        "voltage":$('#cb_voltage_m3').is(':checked'),
-	        "power":$('#cb_power_m3').is(':checked'),
+	        "current":$('#cb_current_m3').prop('checked'),
+	        "voltage":$('#cb_voltage_m3').prop('checked'),
+	        "power":$('#cb_power_m3').prop('checked'),
 	        "period":$('#consumption_period_m3').val(),
 	        "average":$('#consumption_average_m3').val()
 	    };

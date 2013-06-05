@@ -135,6 +135,10 @@
 	   border-style: none;
    }
 
+   .alert-info {
+       border-color: #d9edf7;
+   }
+
 </style>
 
 <link href="css/bootstrap-responsive.css" rel="stylesheet">

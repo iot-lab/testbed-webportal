@@ -76,13 +76,17 @@ if (isset($_GET['user'])) {
     
     $(document).ready(function(){
         
-        $("#loader").ajaxStart(function(){
-            $(this).show();
-        });
-        $("#loader").ajaxStop(function(){
-            $(this).hide();
-        });
         
+	
+       
+        $(document).ajaxStart(function(){
+            $("#loader").show();
+        });
+        $(document).ajaxStop(function(){
+            $("#loader").hide();
+        });
+
+
         // Retrieve experiments total
         $.ajax({
             url: "<?php echo $request_total; ?>",
@@ -186,7 +190,7 @@ if (isset($_GET['user'])) {
             }
         });
 
-        $('#tbl_exps tbody tr').live('click',function () {
+        $('#tbl_exps tbody').on('click','tr',function () {
             var aData = oTable.fnGetData( this );
             window.location.href="admin_exp_details.php?id="+aData['id'];
         });

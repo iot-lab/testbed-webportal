@@ -52,12 +52,15 @@ include("header.php") ?>
 			$("#expButtons").hide();
 			$("#tblNodes").hide();
 
-            $("#loader").ajaxStart(function(){
-                $(this).show();
-            });
-            $("#loader").ajaxStop(function(){
-                $(this).hide();
-            });
+
+
+       
+        $(document).ajaxStart(function(){
+            $("#loader").show();
+        });
+        $(document).ajaxStop(function(){
+            $("#loader").hide();
+        });
 
             /* Retrieve experiment details */
             $.ajax({

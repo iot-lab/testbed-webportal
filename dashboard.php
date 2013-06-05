@@ -52,7 +52,7 @@ include("header.php") ?>
           </p>-->
           
         <div class="alert alert-info">
-            <img src="img/help.png"> Click on an experiment to manage it or click <b>New Experiment</b> to start a new one.
+            <img src="img/help.png"/> Click on an experiment to manage it or click <b>New Experiment</b> to start a new one.
         </div>
           
       </div>
@@ -72,11 +72,11 @@ var dateSrv = <?php echo time(); ?>*1000; // server date in milliseconds
     
     $(document).ready(function(){
        
-        $("#loader").ajaxStart(function(){
-            $(this).show();
+        $(document).ajaxStart(function(){
+            $("#loader").show();
         });
-        $("#loader").ajaxStop(function(){
-            $(this).hide();
+        $(document).ajaxStop(function(){
+            $("#loader").hide();
         });
        
        
@@ -195,7 +195,7 @@ var dateSrv = <?php echo time(); ?>*1000; // server date in milliseconds
             }
         });
 
-        $('#tbl_exps tbody tr').live('click',function () {
+        $('#tbl_exps tbody').on('click','tr', function () {
             var aData = oTable.fnGetData( this );
             window.location.href="exp_details.php?id="+aData['id'];
         });
