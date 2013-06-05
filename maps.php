@@ -38,7 +38,15 @@ body {
             <button class="btn" id="btnAllFree" onClick="allFree()" value="Save"/>All Free Nodes</button>
             </div>
 
-            <div ID='div3d' style=" height:500px;background-color:#202020;z-index:-1" oncontextmenu="return false;"></div>
+<ul class="nav nav-tabs">
+  <li><a href="javascript:displayFixe()" data-toggle="tab">Fixe</a></li>
+  <li><a href="javascript:displayMobile()" data-toggle="tab">Mobile</a></li>
+</ul>
+
+		
+	    <div id="trails">
+               <div id='div3d' style=" height:450px;background-color:#202020;z-index:-1" oncontextmenu="return false;"></div>
+	    </div>
 
             <div ID='infobox' style="text-align:center"></div>
         <div style="text-align:right"><img src="img/node_alive.png"> Alive - <img src="img/node_down.png"> Down - <img src="img/node_selected.png"> Selected - <img src="img/node_used.png"> Busy</div>
@@ -50,6 +58,7 @@ body {
     var site = <?php echo '"'.$site.'"' ?>;
 
     var all_nodes;
+    var bdd = [];
 
     $(document).ready(function(){
        loadResources();
@@ -75,8 +84,10 @@ body {
             contentType: "application/json; charset=utf-8",
             data: "",
             success:function(data){
-              
+             
                 all_nodes = data;
+		bdd['fixe'] = [];
+		bdd['mobile'] = [];
 
                 for(i=0; i<data.items.length; i++) {
                     var n = [];
@@ -85,17 +96,25 @@ body {
                         
                         var nn = data.items[i].network_address;
                         var node_id = nn.substring(4,nn.indexOf("."));
-                        
+                       
                         n.push(parseInt(node_id));
                         n.push(parseFloat(data.items[i].x));
                         n.push(parseFloat(data.items[i].y));
                         n.push(parseFloat(data.items[i].z));
                         n.push(data.items[i].uid);
                         n.push(data.items[i].state);
-                        nodes.push(n);
+                        
+                        if(data.items[i].mobile == 0) { 
+                           bdd['fixe'].push(n);
+                        }
+			else {
+			   bdd['mobile'].push(n);
+			}
                     }
                 }
                 
+		nodes = bdd['fixe'];		
+
                 init();
                 loadData();
             },
@@ -118,9 +137,23 @@ body {
        }
        $("#nodebox").val(free_list);
        parseNodebox();
-       myrender();
 
     }
+
+       function displayFixe() {
+                nodes = bdd['fixe'];
+                $("#trails").html("<div id='div3d' style='height:450px;background-color:#202020;z-index:-1' oncontextmenu='return false;'></div>");
+                init();
+		parseNodebox();
+        }
+
+
+	function displayMobile() {
+		nodes = bdd['mobile'];
+		$("#trails").html("<div id='div3d' style='height:450px;background-color:#202020;z-index:-1' oncontextmenu='return false;'></div>");
+		init();
+		parseNodebox();
+	}
 
     <?php if (isset($_SESSION['basic_value'])) { ?>
 

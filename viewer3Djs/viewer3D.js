@@ -8,8 +8,6 @@ var offX, offY;
 // Camera parameters
 phi = -100, theta = 0, distance = 130;
 var rcount = 0;
-// Text display
-var info, nodelist, help;
 
 // graphical nodes
 var objects = [];
@@ -23,6 +21,7 @@ var nodes = [];
 
 function init() {
     var particles, particle;
+    objects = [];
 
     div3d = document.getElementById('div3d');
     nodebox = document.getElementById('nodebox');
@@ -31,10 +30,7 @@ function init() {
     offY = div3d.offsetTop;
     offX = div3d.offsetLeft;
 
-    //titlebox.innerHTML = 'Grenoble Site ' + nodes.length + " nodes";
     infobox.innerHTML = 'Node info : ';
-
-    nodebox.value = "";
 
     camera = new THREE.PerspectiveCamera(75, window3DWidth / window3DHeight, 1, 10000);
 
