@@ -147,16 +147,6 @@
 					</div>
 	                 
 					<div class="control-group">
-						<label class="control-label" for="consumption_source_m3">Source</label>
-						<div class="controls">
-							<select id="consumption_source_m3" class="input-small">
-								<option id="3V" value="3.3V">3.3V</option>
-								<option id="5V" value="5V">5V</option>
-							</select>
-						</div>
-					</div>
-	                 
-					<div class="control-group">
 						<label class="control-label" for="consumption_period_m3">Period (&micro;s)</label>
 						<div class="controls">
 							<select id="consumption_period_m3" class="input-small">
@@ -235,11 +225,6 @@ $(document).ready(function(){
 	// init tab for node architecture 
 	$('input[name="or_nodearch"]').click(function () {
 	    $(this).tab('show');
-	});
-
-	// enable/disable source select when changing power mode for M3 architecture 
-	$('input[name="or_power_m3"]').change(function () {
-		$("#consumption_source_m3").prop('disabled',($('input[type=radio][name=or_power_m3]:checked').attr('value') == "battery"));
 	});
 	
 	loadProfiles();
@@ -335,14 +320,12 @@ function loadProfile() {
 	        $("#cb_rssi_wsn430").attr("checked",my_profiles[i].radio.rssi);
         } else if (nodearch=="m3") {
 	        $('#consumption_period_m3').val(my_profiles[i].consumption.period);
-	        $('#consumption_source_m3').val(my_profiles[i].consumption.source);
 	        $('#consumption_average_m3').val(my_profiles[i].consumption.average);
 	        
 	        $("input[name='or_power_m3']").val([my_profiles[i].power]);
 	        $("#cb_current_m3").attr("checked",my_profiles[i].consumption.current);
 	        $("#cb_voltage_m3").attr("checked",my_profiles[i].consumption.voltage);
 	        $("#cb_power_m3").attr("checked",my_profiles[i].consumption.power);
-	        $("#consumption_source_m3").prop('disabled',($('input[type=radio][name=or_power_m3]:checked').attr('value') == "battery"));
         //TODO } else if (nodearch=="a8") { 
         }
     }
@@ -434,8 +417,7 @@ $("#form_part").bind("submit", function (e) {
 	        "voltage":$('#cb_voltage_m3').is(':checked'),
 	        "power":$('#cb_power_m3').is(':checked'),
 	        "period":$('#consumption_period_m3').val(),
-	        "average":$('#consumption_average_m3').val(),
-	        "source":($("input[name=or_power_m3]:checked").val() == 'battery')?"BATT":$('#consumption_source_m3').val()
+	        "average":$('#consumption_average_m3').val()
 	    };
 	
 	    profile_json = {
