@@ -23,15 +23,21 @@
 
 <style type="text/css">
 
+	body {
+		font-size:13px;
+	}
+
 	h2,h3{
 		color: #86A219;
+		font-size:24px;
 	}
     
-	a {
+	a, a:focus {
+		text-decoration:none;
 		color: #86A219;
 	}
     
-	a:hover {
+	a:hover, a:active {
 		color: #86A219;
 		text-decoration:underline;
 	}
@@ -98,7 +104,7 @@
 	.navbar .nav > li {
 		margin-right: 8px;
 	}
-	
+
 	.navbar .nav > li > a {
 		-moz-border-bottom-colors: none;
 		-moz-border-left-colors: none;
@@ -107,37 +113,39 @@
 		background: none repeat scroll 0 0 #333333;
 		border-color: #555555 #555555 -moz-use-text-color;
 		border-image: none;
-		border-style: solid solid none;
+		border-style: none;
 		border-width: 1px 1px medium;
 		border-radius: 6px 6px 0 0;
 		color: #ABAAAA;
 		display: block;
-		line-height: 30px;
+		line-height: 31px;
 		padding: 0 10px;
 		font-family: Tahoma,Arial,Helvetica,sans-serif;
+		text-shadow:none;
 	}
 	
 
-    .navbar .nav > li > a:hover {
+    .navbar .nav > li > a:hover, .navbar .nav > li > a:focus {
 		background: none repeat scroll 0 0 #222222;
 		color: #fff;
     }
 
     .dropdown-menu > li > a:hover {
-        background-color: #AAD400;    
+		background: none repeat scroll 0 0 #82A619;
     }
     
 	.dropdown .caret {
-		margin-top: 14px;
+		margin-top: 24px;
 	}
 
-   .navbar .nav > li > a {
-	   border-style: none;
-   }
 
    .alert-info {
        border-color: #d9edf7;
    }
+
+	.btn-large {
+		font-size:14px;
+	}
 
 </style>
 
@@ -330,12 +338,12 @@
     
     <!--  MODAL WINDOW FOR MANAGING PROFILES -->
 
-    <div id="profiles_modal" class="modal hide fade" style="width:920px;margin:-290px 0 0 -460px;">
+    <div id="profiles_modal" class="modal hide fade" style="width:920px;margin-left:-460px;">
         <div class="modal-header">
           <a class="close" data-dismiss="modal">×</a>
           <h3>Manage Profiles</h3>
         </div>
-       <div class="modal-body" style="max-height:580px;">
+       <div class="modal-body" style="max-height:610px;">
 			<div class="alert alert-error" id="div_error_profiles" style="display:none"></div>
 			<div class="row" id="profiles_modal-body"></div>
        </div>

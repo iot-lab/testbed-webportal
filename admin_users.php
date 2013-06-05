@@ -48,13 +48,13 @@ include("header.php") ?>
 
       </div>
 
-        <div id="add_modal" class="modal hide fade" style="margin:-360px 0px 0px -300px;">
+        <div id="add_modal" class="modal hide fade" style="margin-left:-300px;">
             <div class="modal-header">
               <a class="close" data-dismiss="modal">X</a>
               <h3>Add user(s)</h3>
               
             </div>
-           <div class="modal-body" style="max-height:660px;">
+           <div class="modal-body" style="max-height:690px;">
                <div class="alert alert-error" id="div_error_add" style="display:none"></div>
 
                <div class="tabbable">
@@ -699,14 +699,14 @@ include("header.php") ?>
             
         </div>
 
-        <div id="edit_modal" class="modal hide fade" style="margin:-360px 0px 0px -300px;">
+        <div id="edit_modal" class="modal hide fade" style="margin-left:-300px;">
                 <form class="well form-horizontal" id="form_modify_user">
             <div class="modal-header">
               <a class="close" data-dismiss="modal">X</a>
               <h3>Edit user <span id="s_login_e"></span><span id="s_id_e" style="display:none"></span></h3>
               
             </div>
-           <div class="modal-body" style="max-height:530px;">
+           <div class="modal-body" style="max-height:610px;">
                <div class="alert alert-error" id="div_error_edit" style="display:none"></div>
                
 
@@ -777,27 +777,27 @@ include("header.php") ?>
 				<div class="tab-content">
 					<div class="tab-pane active" id="tab_SSH1_e">
 						<div class="control-group">
-							<textarea id="txt_sshkey_e" class="input-xlarge" rows="3" style="width:464px;"></textarea>
+							<textarea id="txt_sshkey_e" class="input-xlarge" rows="3" style="width:460px;"></textarea>
 						</div>
 					</div>
 					<div class="tab-pane" id="tab_SSH2_e">
 						<div class="control-group">
-							<textarea id="txt_sshkey_e2" class="input-xlarge" rows="3" style="width:464px;"></textarea>
+							<textarea id="txt_sshkey_e2" class="input-xlarge" rows="3" style="width:460px;"></textarea>
 						</div>
 					</div>
 					<div class="tab-pane" id="tab_SSH3_e">
 						<div class="control-group">
-							<textarea id="txt_sshkey_e3" class="input-xlarge" rows="3" style="width:464px;"></textarea>
+							<textarea id="txt_sshkey_e3" class="input-xlarge" rows="3" style="width:460px;"></textarea>
 						</div>
 					</div>
 					<div class="tab-pane" id="tab_SSH4_e">
 						<div class="control-group">
-							<textarea id="txt_sshkey_e4" class="input-xlarge" rows="3" style="width:464px;"></textarea>
+							<textarea id="txt_sshkey_e4" class="input-xlarge" rows="3" style="width:460px;"></textarea>
 						</div>
 					</div>
 					<div class="tab-pane" id="tab_SSH5_e">
 						<div class="control-group">
-							<textarea id="txt_sshkey_e5" class="input-xlarge" rows="3" style="width:464px;"></textarea>
+							<textarea id="txt_sshkey_e5" class="input-xlarge" rows="3" style="width:460px;"></textarea>
 						</div>
 					</div>
 
