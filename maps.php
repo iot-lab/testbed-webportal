@@ -26,6 +26,7 @@ body {
 
 <script type="text/javascript" src="viewer3Djs/Three.js"></script>
 <script type="text/javascript" src="viewer3Djs/viewer3D.js"></script>
+<script src="js/bootstrap.js"></script>
 
 </head>
 
@@ -38,9 +39,9 @@ body {
             <button class="btn" id="btnAllFree" onClick="allFree()" value="Save"/>All Free Nodes</button>
             </div>
 
-<ul class="nav nav-tabs">
-  <li><a href="javascript:displayFixe()" data-toggle="tab">Fixe</a></li>
-  <li><a href="javascript:displayMobile()" data-toggle="tab">Mobile</a></li>
+<ul id="tab_trails" class="nav nav-tabs">
+  <li><a href="#" data-toggle="tab" data-value="fixe">Fixe</a></li>
+  <li><a href="#" data-toggle="tab" data-value="mobile">Mobile</a></li>
 </ul>
 
 		
@@ -60,8 +61,24 @@ body {
     var all_nodes;
     var bdd = [];
 
+
+    $('#tab_trails a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+        var type = $(this).data("value");
+
+        nodes = bdd[type];
+        $("#trails").html("<div id='div3d' style='height:450px;background-color:#202020;z-index:-1' oncontextmenu='return false;'></div>");
+        init();
+        parseNodebox();
+    });
+
+    $('#tab_trails a:first').tab('show');
+
+
     $(document).ready(function(){
        loadResources();
+
    });
 
     function loadData() {
@@ -139,21 +156,6 @@ body {
        parseNodebox();
 
     }
-
-       function displayFixe() {
-                nodes = bdd['fixe'];
-                $("#trails").html("<div id='div3d' style='height:450px;background-color:#202020;z-index:-1' oncontextmenu='return false;'></div>");
-                init();
-		parseNodebox();
-        }
-
-
-	function displayMobile() {
-		nodes = bdd['mobile'];
-		$("#trails").html("<div id='div3d' style='height:450px;background-color:#202020;z-index:-1' oncontextmenu='return false;'></div>");
-		init();
-		parseNodebox();
-	}
 
     <?php if (isset($_SESSION['basic_value'])) { ?>
 
