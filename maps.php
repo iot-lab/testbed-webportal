@@ -3,13 +3,10 @@
 <head>
 <title>Maps</title>
 <link href="css/bootstrap.css" rel="stylesheet">
-
 <?php 
 session_start();
 $site = $_GET['site'];
 ?>
-
-
 <script src="js/jquery.js"></script>
 
 <style type="text/css">
@@ -39,11 +36,10 @@ body {
             <button class="btn" id="btnAllFree" onClick="allFree()" value="Save"/>All Free Nodes</button>
             </div>
 
-<ul id="tab_trails" class="nav nav-tabs">
-  <li><a href="#" data-toggle="tab" data-value="fixe">Fixe</a></li>
-  <li><a href="#" data-toggle="tab" data-value="mobile">Mobile</a></li>
-</ul>
-
+            <ul id="tab_trails" class="nav nav-tabs">
+                <li><a href="#" data-toggle="tab" data-value="fixe">Fixe</a></li>
+                <li><a href="#" data-toggle="tab" data-value="mobile">Mobile</a></li>
+            </ul>
 		
 	    <div id="trails">
                <div id='div3d' style=" height:450px;background-color:#202020;z-index:-1" oncontextmenu="return false;"></div>
@@ -159,11 +155,11 @@ body {
 
     <?php if (isset($_SESSION['basic_value'])) { ?>
 
-        $.ajaxSetup({
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader('Authorization', 'Basic <?php echo $_SESSION['basic_value']; ?>')
-            }
-        });
+    $.ajaxSetup({
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Basic <?php echo $_SESSION['basic_value']; ?>')
+        }
+    });
 
     <?php  } ?>
 
