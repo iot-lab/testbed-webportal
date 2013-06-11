@@ -152,7 +152,7 @@ include("header.php") ?>
                 minuteStep: 1,
                 disableFocus: true,
                 showMeridian: false,
-                template: 'modal'
+                template: 'dropdown'
             });
 
             //click on scheduled button 
