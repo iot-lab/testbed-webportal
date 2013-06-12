@@ -181,7 +181,7 @@ include("header.php") ?>
 
             /* retrieve experiment details */
             $.ajax({
-                url: "/rest/experiment/"+id,
+                url: "/rest/experiments/"+id,
                 type: "GET",
                 data: {},
                 dataType: "json",
@@ -313,7 +313,7 @@ include("header.php") ?>
                         type: "POST",
                         dataType: "json",
                         data: datab,
-                        url: "/rest/experiment/"+id+"/nodes?update",
+                        url: "/rest/experiments/"+id+"/nodes?update",
                         contentType: "multipart/form-data; boundary="+boundary,
                         
                         success: function (data) {
@@ -339,7 +339,7 @@ include("header.php") ?>
                         dataType: "json",
                         data: JSON.stringify(lnodes),
                         contentType: "application/json; charset=utf-8",
-                        url: "/rest/experiment/"+id+"/nodes?"+command+""+battery,
+                        url: "/rest/experiments/"+id+"/nodes?"+command+""+battery,
                         success: function (data) {
                             if(data["0"]) {
                             	$("#stateSuccess").html("<b>"+command + "</b> successful for node(s): " + JSON.stringify(data["0"]));
@@ -376,7 +376,7 @@ include("header.php") ?>
         if(confirm("Cancel Experiment?")) {
             
             $.ajax({
-                url: "/rest/experiment/" + id,
+                url: "/rest/experiments/" + id,
                 type: "DELETE",
                 contentType: "application/json",
                 dataType: "text",
@@ -453,7 +453,7 @@ include("header.php") ?>
             dataType: "text",
             data: JSON.stringify(exp_json),
             contentType: "application/json; charset=utf-8",
-            url: "/rest/experiment/"+id+"?reload",
+            url: "/rest/experiments/"+id+"?reload",
             success: function (data_server) {
                 $("#expState").modal('show');
                 var info = JSON.parse(data_server);
