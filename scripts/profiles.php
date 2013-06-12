@@ -206,6 +206,8 @@
 
 var my_profiles = [];
 var profilesLoaded = false;
+var edit = false;
+var index = -1;
 
 
 
@@ -370,12 +372,23 @@ $("#form_part").bind("submit", function (e) {
 
     e.preventDefault();
 
+    // check profile name 
     var regExp = /^[0-9A-z]*$/; ;
     if(regExp.test($("#profiles_txt_name").val()) == false){
        alert("You must set a profile name with only word characters [0-9A-Za-z_]");
        return false;
     }
 
+    //check profile existence 
+    for(var i = 0; i < $("#my_profiles_modal option").length; i++) {
+        if($($("#my_profiles_modal option")[i]).val() == $("#profiles_txt_name").val()) {
+            edit = true;
+            index = i;
+            break;
+        }
+    }
+
+    // construct JSON 
     var nodearch = "wsn430";
     if($('#or_nodearch_m3').prop('checked')) nodearch="m3";
     else if($('#or_nodearch_a8').prop('checked')) nodearch="a8";
@@ -435,15 +448,21 @@ $("#form_part").bind("submit", function (e) {
 	    };
 
     }
-    
+    if(edit) {
+        url = "/rest/profiles/"+profile_json.profilename;
+        type = "PUT";
+    } else {
+        url = "/rest/profiles";
+        type = "POST";
+    }
 
     //send edit or create request
     $.ajax({
-        type: "POST",
+        type: type,
         dataType: "text",
         data: JSON.stringify(profile_json),
         contentType: "application/json; charset=utf-8",
-        url: "/rest/profiles",
+        url: url,
         success: function (data_server) {
 
             var result_msg="";
