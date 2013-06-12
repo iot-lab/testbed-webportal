@@ -342,7 +342,7 @@ $("#btn_delete").click(function(){
 	        type: "DELETE",
 	        dataType: "text",
 	        contentType: "application/json; charset=utf-8",
-	        url: "/rest/profile/"+profile_name,
+	        url: "/rest/profiles/"+profile_name,
 	        success: function (data_server) {
 	            
 	            $("#my_profiles_modal option:selected").remove();
@@ -443,7 +443,7 @@ $("#form_part").bind("submit", function (e) {
         dataType: "text",
         data: JSON.stringify(profile_json),
         contentType: "application/json; charset=utf-8",
-        url: "/rest/profile",
+        url: "/rest/profiles",
         success: function (data_server) {
 
             var result_msg="";
