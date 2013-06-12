@@ -64,7 +64,7 @@ include("header.php") ?>
 
             /* Retrieve experiment details */
             $.ajax({
-                url: "/rest/admin/experiment/"+id,
+                url: "/rest/admin/experiments/"+id,
                 type: "GET",
                 data: {},
                 dataType: "json",
@@ -134,7 +134,7 @@ include("header.php") ?>
         if(confirm("Cancel Experiment?")) {
             
             $.ajax({
-                url: "/rest/admin/experiment/" + id,
+                url: "/rest/admin/experiments/" + id,
                 type: "DELETE",
                 contentType: "application/json",
                 dataType: "text",
