@@ -443,6 +443,7 @@ var SSHKeysLoaded = false;
         
             var user = {
                 "newPassword":$("#form_modify_password_txt_new_password").val(),
+                "confirmNewPassword":$("#form_modify_password_txt_cnew_password").val(),
                 "oldPassword":$("#form_modify_password_txt_current_password").val()
             };
             
