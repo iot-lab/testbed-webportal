@@ -38,7 +38,7 @@ include("header.php") ?>
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" onClick="">×</button>
         <h3>Reload</h3>
-        
+       </div>
       <div class="modal-body">
 
             <div class="control-group">
@@ -54,12 +54,19 @@ include("header.php") ?>
                             <div class="span4" style="margin:0px;text-align:right;"><input type="text" class="input-small" value="" id="dp1" name="dp1" disabled="disabled" style="display:none"></div>
                             <div class="span2"><input class="dropdown-timepicker input-mini" data-provide="timepicker" type="text" id="tp1" name="tp1" disabled="disabled" style="display:none"></div>
                         </div>
-            </div>
-            </div>
-            </div>
-            <a href="#" class="btn" data-dismiss="modal" onClick="submitReload();">Reload</a>
+            	</div>
 
-      </div>
+            </div>
+
+
+             <label class="control-label" for="txt_duration" style="display:inline">Duration (minutes):</label>
+             <input id="txt_duration" name="duration" type="number" class="input-mini" required="required" min="0">
+
+		<div class="modal-footer">
+            		<a href="#" class="btn" data-dismiss="modal" onClick="submitReload();">Reload</a>
+            	</div>
+	</div>
+
     </div>
 
 
@@ -184,6 +191,7 @@ include("header.php") ?>
                         exp_name = data.name;
 
                     expState = data.state;
+                    $("#txt_duration").val(data.duration);
                     if(expState == "Running" || expState == "Waiting") {
                         $("#btnCancel").attr("disabled",false);
                         $("#btnReload").attr("disabled",true);
@@ -202,7 +210,7 @@ include("header.php") ?>
                     $("#detailsExpSummary").append("<b>Duration (min):</b> " + data.duration + "<br/>");
                     $("#detailsExpSummary").append("<b>Number of nodes:</b> ");
 
-        			$("#expButtons").show();
+                    $("#expButtons").show();
         
                     json_exp = rebuildJson(data,true);                
                     
@@ -438,6 +446,7 @@ include("header.php") ?>
             
             exp_json.reservation = scheduled_timestamp;
         }
+            exp_json.duration = parseInt($("#txt_duration").val());
         
         $.ajax({
             type: "POST",
