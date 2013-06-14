@@ -110,13 +110,14 @@ include("header.php") ?>
 				var pending = 0;
 				var country = {};
 		
-				for(var user in data) {
-					if(data[user].admin) admin++;
+				var i = 0;
+				for(i=0;i<data.length;i++) {
+					if(data[i].admin) admin++;
 					
-					if(!data[user].validate) pending++;
+					if(!data[i].validate) pending++;
 					
-					if(country[data[user].country] == undefined) country[data[user].country] = 1;
-					else country[data[user].country] = country[data[user].country]+1;
+					if(country[data[i].country] == undefined) country[data[i].country] = 1;
+					else country[data[i].country] = country[data[i].country]+1;
 					
 				}
                 $('#usersTotal').html(data.length);
