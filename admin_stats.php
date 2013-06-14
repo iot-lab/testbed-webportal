@@ -50,7 +50,7 @@ include("header.php") ?>
         <div class="span6">
 			<h3>Users</h3>
 			
-			<i class="icon-user"></i> <span id="usersTotal" class="label"></span> users (with <span id="usersAdmin" class="label label-success"></span> admins and <span id="usersPending" class="label label-warning"></span> pending)
+			<i class="icon-user"></i> <span id="usersTotal" class="label label-info"></span> users (with <span id="usersAdmin" class="label"></span> admins and <span id="usersPending" class="label label-warning"></span> pending)
 			
 			<div class="row">
 				<h4>Country</h4>
@@ -63,7 +63,7 @@ include("header.php") ?>
         </div>
         <div class="span6">
           <h3>Experiments</h3>
-	      <i class="icon-cog"></i> <span id="expTotal" class="label"></span> experiments (with <span id="expRunning" class="label label-success">&nbsp;</span> running and <span id="expUpcoming" class="label label-info"></span> upcoming)
+	      <i class="icon-cog"></i> <span id="expTotal" class="label label-info"></span> experiments (with <span id="expRunning" class="label">&nbsp;</span> running and <span id="expUpcoming" class="label"></span> upcoming)
 		  <hr/>
 			
           <h3>Nodes</h3>
@@ -71,7 +71,7 @@ include("header.php") ?>
 	      <div class="accordion" id="accordion2">
 			<div class="accordion-group" style="border:0">
 				<div class="accordion-heading">
-					<i class="icon-download-alt"></i> <span id="nodesTotal" class="label"></span> nodes (with <span id="nodesFree" class="label label-success">&nbsp;</span> free and <span id="nodesUnavailable" class="label label-warning"></span> suspected or absent) 
+					<i class="icon-download-alt"></i> <span id="nodesTotal" class="label label-info"></span> nodes (with <span id="nodesFree" class="label">&nbsp;</span> free and <span id="nodesUnavailable" class="label label-warning"></span> suspected or absent) 
 					<a data-toggle="collapse" data-parent="#accordion2" href="#collapseOne" style="color:#333;text-decoration:none"><button class="btn"><b class="caret"></b></button></a>
 				</div>
 				<div id="collapseOne" class="accordion-body collapse">
@@ -195,7 +195,7 @@ include("header.php") ?>
                 $("#nodesUnavailable").text(unavailable);
 
                 for(var j in sites) {
-                	$("#sitesNodesDetails").append('<div style="width:250px;display:inline"><i class="icon-download-alt"></i> '+j+'</div> <span class="label">'+sites[j]["total"]+'</span> nodes (with <span class="label label-success">'+sites[j]["free"]+'</span> free and <span class="label label-warning">'+sites[j]["unavailable"]+'</span> suspected or absent)<br/>');
+                	$("#sitesNodesDetails").append('<div style="width:250px;display:inline"><i class="icon-download-alt"></i> '+j+'</div> <span class="label label-info">'+sites[j]["total"]+'</span> nodes (with <span class="label">'+sites[j]["free"]+'</span> free and <span class="label label-warning">'+sites[j]["unavailable"]+'</span> suspected or absent)<br/>');
             	}
                 
             },
