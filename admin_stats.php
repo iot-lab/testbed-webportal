@@ -115,7 +115,7 @@ include("header.php") ?>
 					
 					if(!data[user].validate) pending++;
 					
-					if(country[data[user].country] == undefined) country[data[user].country] = 0;
+					if(country[data[user].country] == undefined) country[data[user].country] = 1;
 					else country[data[user].country] = country[data[user].country]+1;
 					
 				}
