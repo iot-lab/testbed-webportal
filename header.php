@@ -211,6 +211,7 @@
                 <li><a href="admin_users.php">Users</a></li>
                 <li><a href="admin_exps.php">Experiments</a></li>
                 <li><a href="admin_nodes.php">Nodes</a></li>
+                <li><a href="admin_stats.php">Statistics</a></li>
               </ul>
             </li>
           <?php } ?>
