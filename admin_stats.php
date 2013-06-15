@@ -2,85 +2,84 @@
 session_start();
 
 if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
-    header("location: .");
-    exit();
+header("location: .");
+exit();
 }
-
 
 include("header.php") ?>
 
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript">
+  google.load('visualization', '1.0', {'packages':['corechart']});
+  google.load('visualization', '1.0', {'packages':['geochart']});
+  google.load('visualization', '1.0', {'packages':['gauge']});
+  // Set a callback to run when the Google Visualization API is loaded.
+  // google.setOnLoadCallback(drawChart);
+</script>
 
-      google.load('visualization', '1.0', {'packages':['corechart']});
-
-      // Set a callback to run when the Google Visualization API is loaded.
-      // google.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-
-        // Create the data table.
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Topping');
-        data.addColumn('number', 'Slices');
-        data.addRows(graph);
-
-        // Set chart options
-        var options = {'title':'Users Country',
-                       'width':400,
-                       'height':300};
-
-        // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-      }
-    </script>
-
-    <div class="container">
-      
-    <div class="row">
-        <div class="span12">
-          <h2>Statistics</h2>
-		  <div id="loader" style="display:none"><img src="img/ajax-loader.gif"></div>
-		  <div class="alert alert-error" id="div_msg" style="display:none"></div>
-        </div>
+<div class="container">
+  
+<div class="row">
+    <div class="span12">
+      <h2>Statistics</h2>
+      <div id="loader" style="display:none"><img src="img/ajax-loader.gif"></div>
+      <div class="alert alert-error" id="div_msg" style="display:none"></div>
     </div>
-      
-    <div class="row">
-        <div class="span6">
-			<h3>Users</h3>
-			
-			<i class="icon-user"></i> <span id="usersTotal" class="label label-info"></span> users (with <span id="usersAdmin" class="label"></span> admins and <span id="usersPending" class="label label-warning"></span> pending) <button class="btn" onClick="window.open('scripts/download_users.php','Download Senslab user list','width =400,height=200')">Download CSV</button>
-			
-			<div class="row">
-				<h4>Country</h4>
-				<div class="span5">
-					 <table id="country" class="table table-condensed table-striped table-borderd"></table>
-				</div>
-			</div>
-			
-			<div id="chart_div"></div>
+</div>
+  
+<div class="row">
+    <div class="span6">
+        <h3>Users</h3>
+        
+        <i class="icon-user"></i> <span id="usersTotal" class="badge badge-info"></span> users (with <span id="usersAdmin" class="badge"></span> admins and <span id="usersPending" class="badge badge-warning"></span> pending) <a href="scripts/download_users.php" class="btn">Download CSV</a>
+        
+        <div class="row">
+            <h4>Country</h4>
+            <div class="span5">
+                 <table id="country" class="table table-condensed table-striped table-borderd"></table>
+            </div>
         </div>
-        <div class="span6">
-          <h3>Experiments</h3>
-	      <i class="icon-cog"></i> <span id="expTotal" class="label label-info"></span> experiments (with <span id="expRunning" class="label">&nbsp;</span> running and <span id="expUpcoming" class="label"></span> upcoming)
-		  <hr/>
-			
-          <h3>Nodes</h3>
-	      <!-- <i class="icon-cog"></i> <span id="nodesTotal" class="label"></span> nodes (with <span id="nodesFree" class="label label-success">&nbsp;</span> alive and <span id="nodesUnavailable" class="label label-info"></span> suspected or absent) -->
-	      <div class="accordion" id="accordion2">
-			<div class="accordion-group" style="border:0">
-				<div class="accordion-heading">
-					<i class="icon-download-alt"></i> <span id="nodesTotal" class="label label-info"></span> nodes (with <span id="nodesFree" class="label">&nbsp;</span> alive and <span id="nodesUnavailable" class="label label-warning"></span> suspected or absent) 
-					<a data-toggle="collapse" data-parent="#accordion2" href="#collapseOne" style="color:#333;text-decoration:none"><button class="btn"><b class="caret"></b></button></a>
-				</div>
-				<div id="collapseOne" class="accordion-body collapse">
-					<div class="accordion-inner" id="sitesNodesDetails"></div>
-				</div>
-			</div>
-		  </div>
-        </div>
+        
+        <div id="chart_div"></div>
+        <div id="chart_divGeo"></div>
     </div>
+    <div class="span6">
+      <h3>Experiments</h3>
+      <i class="icon-cog"></i> <span id="expTotal" class="badge badge-info"></span> experiments (with <span id="expRunning" class="badge">&nbsp;</span> running and <span id="expUpcoming" class="badge"></span> upcoming)
+      
+    <select id="lst_exp" size="10">
+        <optgroup label="Running" id="Running"></optgroup>
+        <optgroup label="Upcoming" id="Upcoming"></optgroup>
+        <optgroup label="Waiting" id="Waiting"></optgroup>
+        <optgroup label="Launching" id="Launching"></optgroup>
+    </select>
+      
+      <button id="btnCancel" class="btn btn-danger">Cancel</button>
+      
+      <hr/>
+        
+      <h3>Nodes</h3>
+      <!-- <i class="icon-cog"></i> <span id="nodesTotal" class="label"></span> nodes (with <span id="nodesFree" class="label label-success">&nbsp;</span> alive and <span id="nodesUnavailable" class="label label-info"></span> suspected or absent) -->
+      <div class="accordion" id="accordion2">
+        <div class="accordion-group" style="border:0">
+            <div class="accordion-heading">
+                <i class="icon-download-alt"></i> <span id="nodesTotal" class="badge badge-info"></span> nodes (with <span id="nodesFree" class="badge">&nbsp;</span> alive and <span id="nodesUnavailable" class="badge badge-warning"></span> suspected or absent and <span id="nodesBusy" class="badge badge-inverse"></span> busy) 
+                <a data-toggle="collapse" data-parent="#accordion2" href="#collapseOne" style="color:#333;text-decoration:none"><button class="btn"><b class="caret"></b></button></a>
+            </div>
+            <div id="collapseOne" class="accordion-body collapse">
+                <div class="accordion-inner" id="sitesNodesDetails"></div>
+            </div>
+        </div>
+      </div>
+      
+      <hr/>
+      
+      <h3>System</h3>
+      <h4>Used on /senslab/experiments</h4>
+      <div id="chart_divGauge"></div>
+      
+    </div>
+</div>
 
 <?php include('footer.php') ?>
 
@@ -89,8 +88,7 @@ include("header.php") ?>
 
     var graph = [];
 
-    $(document).ready(function()
-    {
+    $(document).ready(function() {
 
         $(document).ajaxStart(function(){
             $("#loader").show();
@@ -106,31 +104,31 @@ include("header.php") ?>
             type: "GET",
             dataType: "json",
             success:function(data){
-				var admin = 0;
-				var pending = 0;
-				var country = {};
-		
-				var i = 0;
-				for(i=0;i<data.length;i++) {
-					if(data[i].admin) admin++;
-					
-					if(!data[i].validate) pending++;
-					
-					if(country[data[i].country] == undefined) country[data[i].country] = 1;
-					else country[data[i].country] = country[data[i].country]+1;
-					
-				}
+                var admin = 0;
+                var pending = 0;
+                var country = {};
+        
+                var i = 0;
+                for(i=0;i<data.length;i++) {
+                    if(data[i].admin) admin++;
+                    
+                    if(!data[i].validate) pending++;
+                    
+                    if(country[data[i].country] == undefined) country[data[i].country] = 1;
+                    else country[data[i].country] = country[data[i].country]+1;
+                    
+                }
                 $('#usersTotal').html(data.length);
-				$('#usersAdmin').html(admin);
-				$('#usersPending').html(pending);
-		
-				for(c in country) {
-					var ct = [c,country[c]];
-					graph.push(ct);
-					$("#country").append("<tr><td>" + c + "</td><td>" + country[c]+"</td></tr>");
-				}
-		
-				drawChart();
+                $('#usersAdmin').html(admin);
+                $('#usersPending').html(pending);
+        
+                for(c in country) {
+                    var ct = [c,country[c]];
+                    graph.push(ct);
+                    $("#country").append("<tr><td>" + c + "</td><td>" + country[c]+"</td></tr>");
+                }
+        
+                drawChart();
 
             },
             error:function(XMLHttpRequest, textStatus, errorThrows){
@@ -182,10 +180,10 @@ include("header.php") ?>
                     }
                     total++;
                     sites[data[i].site]["total"]++;
-                    if(data[i].state=="Alive") {
+                    if(data[i].state == "Alive") {
                         free++;
                         sites[data[i].site]["free"]++;
-                    } else if (data[i].state=="Suspected" || data[i].state=="Absent") {
+                    } else if (data[i].state == "Suspected" || data[i].state == "Absent") {
                         unavailable++;
                         sites[data[i].site]["unavailable"]++;
                     }
@@ -195,8 +193,8 @@ include("header.php") ?>
                 $("#nodesUnavailable").text(unavailable);
 
                 for(var j in sites) {
-                	$("#sitesNodesDetails").append('<i class="icon-ok"></i> <b>'+j+'</b> <span class="label label-info">'+sites[j]["total"]+'</span> nodes (with <span class="label">'+sites[j]["free"]+'</span> alive and <span class="label label-warning">'+sites[j]["unavailable"]+'</span> suspected or absent)<br/>');
-            	}
+                    $("#sitesNodesDetails").append('<i class="icon-ok"></i> <b>'+j+'</b> <span class="badge badge-info">'+sites[j]["total"]+'</span> nodes (with <span class="badge">'+sites[j]["free"]+'</span> alive and <span class="badge badge-warning">'+sites[j]["unavailable"]+'</span> suspected or absent)<br/>');
+                }
                 
             },
             error:function(XMLHttpRequest, textStatus, errorThrows){
@@ -204,9 +202,94 @@ include("header.php") ?>
                 $("#div_msg").show();
             }
         });
+        
+        // get running exp
+        $.ajax({
+            url: "/rest/experiments?state=Running,Upcoming,Launching,Waiting&limit=20&offset=0",
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: "",
+            success:function(data){
+                
+                var nodesBusy = 0;
+                
+                for(var i=0; i<data.items.length;i++) {
+                    $("#"+data.items[i].state).append(new Option(data.items[i].id+"/"+data.items[i].owner, data.items[i].id, true, true));
+                    
+                    if(data.items[i].state == "Running") {
+                        nodesBusy = nodesBusy + data.items[i].resources.length;
+                    }
+                }
+                $("#nodesBusy").html(nodesBusy);
+                
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrows){
+                $("#div_msg").html("An error occurred while retrieving experiment list");
+                $("#div_msg").show();
+            }
+        });        
+
+        $("#btnCancel").click(function(){
+                
+                var id = $('#lst_exp').find(":selected").val();
+                
+                if(confirm("Cancel Experiment?")) {
+                    $.ajax({
+                        url: "/rest/admin/experiments/" + id,
+                        type: "DELETE",
+                        contentType: "application/json",
+                        dataType: "text",
+                    
+                        success:function(data){
+                            alert("Cancel ok");
+                        },
+                        error:function(XMLHttpRequest, textStatus, errorThrows){
+                            alert("error: " + errorThrows)
+                        }
+                    });
+                }
+        });
+
     });
     
+  function drawChart() {
+
+    // Create the data table.
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Country');
+    data.addColumn('number', 'Users');
+    data.addRows(graph);
     
+    // Set chart options
+    var options = {'title':'Users Country',
+                   'width':400,
+                   'height':300};
+
+    // Instantiate and draw our chart, passing in some options.
+    var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+    chart.draw(data, options);
+    
+    //Geo graph
+    var dataGeo = google.visualization.arrayToDataTable(graph);
+    var chartGeo = new google.visualization.GeoChart(document.getElementById('chart_divGeo'));
+    chartGeo.draw(data, options);
+    
+    //Gauge graph
+    var optionsGauge = {
+          width: 400, height: 120,
+          redFrom: 90, redTo: 100,
+          yellowFrom:75, yellowTo: 90,
+          minorTicks: 5
+        };
+    
+    var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Disk', <?php echo (int)(100-(disk_free_space("/senslab/experiments")*100 / disk_total_space("/senslab/experiments"))) ?>],
+        ]);
+    var chartGauge = new google.visualization.Gauge(document.getElementById('chart_divGauge'));
+    chartGauge.draw(data, optionsGauge);
+  }
     
     </script>
 
