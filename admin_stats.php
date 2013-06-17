@@ -85,6 +85,7 @@ include("header.php") ?>
     <script type="text/javascript">
 
     var graph = [];
+    var sitesNodesBusy = {};
 
     $(document).ready(function() {
 
@@ -154,81 +155,105 @@ include("header.php") ?>
             }
         });
 
-        // get nodes list 
-        $.ajax({
-            url: "/rest/admin/resourcesproperties",
-            type: "GET",
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            data: "",
-            success:function(data){
 
-                var sites = new Object();
+        $.when( //a callback for complete busy nodes after 2 ajax requests
+            $.ajax({ // get nodes list
+                url: "/rest/admin/resourcesproperties",
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: "",
+                success:function(data){
 
-                var total = 0;
-                var free = 0;
-                var unavailable = 0;
-                
-                for(var i in data) {
-                    if(!sites[data[i].site]) {
-                        sites[data[i].site] = new Object();
-                        sites[data[i].site]["total"]=0;
-                        sites[data[i].site]["free"]=0;
-                        sites[data[i].site]["unavailable"]=0;
+                    var sites = new Object();
+
+                    var total = 0;
+                    var free = 0;
+                    var unavailable = 0;
+                    
+                    for(var i in data) {
+                        if(!sites[data[i].site]) {
+                            sites[data[i].site] = new Object();
+                            sites[data[i].site]["total"]=0;
+                            sites[data[i].site]["free"]=0;
+                            sites[data[i].site]["unavailable"]=0;
+                        }
+                        total++;
+                        sites[data[i].site]["total"]++;
+                        if(data[i].state == "Alive") {
+                            free++;
+                            sites[data[i].site]["free"]++;
+                        } else if (data[i].state == "Suspected" || data[i].state == "Absent") {
+                            unavailable++;
+                            sites[data[i].site]["unavailable"]++;
+                        }
                     }
-                    total++;
-                    sites[data[i].site]["total"]++;
-                    if(data[i].state == "Alive") {
-                        free++;
-                        sites[data[i].site]["free"]++;
-                    } else if (data[i].state == "Suspected" || data[i].state == "Absent") {
-                        unavailable++;
-                        sites[data[i].site]["unavailable"]++;
-                    }
-                }
-                $("#nodesTotal").text(total);
-                $("#nodesFree").text(free);
-                $("#nodesUnavailable").text(unavailable);
+                    $("#nodesTotal").text(total);
+                    $("#nodesFree").text(free);
+                    $("#nodesUnavailable").text(unavailable);
 
-                for(var j in sites) {
-                    $("#sitesNodesDetails").append('<i class="icon-ok"></i> <b>'+j+'</b> <span class="badge badge-info">'+sites[j]["total"]+'</span> nodes (with <span class="badge">'+sites[j]["free"]+'</span> alive and <span class="badge badge-warning">'+sites[j]["unavailable"]+'</span> unavailable)<br/>');
+                    for(var j in sites) {
+                        $("#sitesNodesDetails").append('<i class="icon-ok"></i> <b>'+j+'</b> <span class="badge badge-info">'+sites[j]["total"]+'</span> nodes (with <span class="badge">'+sites[j]["free"]+'</span> alive, <span class="badge" id="'+j+'_busy">-</span> busy and <span class="badge badge-warning">'+sites[j]["unavailable"]+'</span> unavailable)<br/>');
+                    }
+                    
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrows){
+                    $("#div_msg").html("An error occurred while retrieving nodes list");
+                    $("#div_msg").show();
                 }
-                
-            },
-            error:function(XMLHttpRequest, textStatus, errorThrows){
-                $("#div_msg").html("An error occurred while retrieving nodes list");
-                $("#div_msg").show();
+            }),
+            $.ajax({    //get running exps
+                url: "/rest/admin/experiments?state=Running,Upcoming,Launching,Waiting&limit=20&offset=0",
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: "",
+                success:function(data){
+                    
+                    var nodesBusy = 0;
+                    
+                    for(var i=0; i<data.items.length;i++) {
+                        
+                        if(data.items[i].state == "Running") {
+                            $("#Running").append(new Option(data.items[i].id+"/"+data.items[i].owner, data.items[i].id, true, true));
+                        }
+                        else {
+                            $("#Upcoming").append(new Option(data.items[i].id+"/"+data.items[i].owner, data.items[i].id, true, true));
+                        }
+                            
+                        if(data.items[i].state == "Running") {
+                            nodesBusy = nodesBusy + data.items[i].resources.length;
+                            
+                            //check the plateform resources busy
+                            for(var res=0;res<data.items[i].resources.length;res++) {
+                                
+                                var regex = /node(\d*)\.(\w*)\.senslab\.info/;
+                                match = regex.exec(data.items[i].resources[res]);
+                                
+                                var sitename = match[2];
+                                
+                                if(sitesNodesBusy[sitename] == undefined) {
+                                     sitesNodesBusy[sitename] = 1;   
+                                }
+                                else {
+                                    sitesNodesBusy[sitename]++;
+                                } 
+                            }
+                        }
+                    }
+                    $("#nodesBusy").html(nodesBusy);
+                    
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrows){
+                    $("#div_msg").html("An error occurred while retrieving experiment list");
+                    $("#div_msg").show();
+                }
+            })
+        ).then( function(){
+            for(site in sitesNodesBusy) {
+                $("#"+site+"_busy").html(sitesNodesBusy[site]);
             }
         });
-        
-        // get running exp
-        $.ajax({
-            url: "/rest/admin/experiments?state=Running,Upcoming,Launching,Waiting&limit=20&offset=0",
-            type: "GET",
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            data: "",
-            success:function(data){
-                
-                var nodesBusy = 0;
-                
-                for(var i=0; i<data.items.length;i++) {
-		    if(data.items[i].state == "Running")
-                    	$("#Running").append(new Option(data.items[i].id+"/"+data.items[i].owner, data.items[i].id, true, true));
-                    else 
-			$("#Upcoming").append(new Option(data.items[i].id+"/"+data.items[i].owner, data.items[i].id, true, true));
-                    if(data.items[i].state == "Running") {
-                        nodesBusy = nodesBusy + data.items[i].resources.length;
-                    }
-                }
-                $("#nodesBusy").html(nodesBusy);
-                
-            },
-            error:function(XMLHttpRequest, textStatus, errorThrows){
-                $("#div_msg").html("An error occurred while retrieving experiment list");
-                $("#div_msg").show();
-            }
-        });        
 
         $("#btnCancel").click(function(){
                 
