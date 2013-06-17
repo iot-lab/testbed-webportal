@@ -2,8 +2,12 @@
 
 session_start();
 
-if (!empty($_POST['captcha'])) {
-    if (empty($_SESSION['captcha']) || trim(strtolower($_POST['captcha'])) != $_SESSION['captcha']) {
+$data = json_decode(file_get_contents("php://input"),true);
+$captcha = $data['captcha'];
+unset($data['captcha']);
+
+if (!empty($captcha)) {
+    if (empty($_SESSION['captcha']) || trim(strtolower($captcha)) != $_SESSION['captcha']) {
         header('HTTP/1.1 403 Forbidden');
         exit();
     }
@@ -20,8 +24,6 @@ $headers = array(
 	'Content-Type: application/json',
 );
 
-unset($_POST['captcha']);
-$data = json_encode($_POST);
 
 $handle = curl_init();
 curl_setopt($handle, CURLOPT_URL, $url);
@@ -30,7 +32,7 @@ curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, false);
 curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($handle, CURLOPT_POST, true);
-curl_setopt($handle, CURLOPT_POSTFIELDS, $data);
+curl_setopt($handle, CURLOPT_POSTFIELDS, json_encode($data));
 $response = curl_exec($handle);
 $code = curl_getinfo($handle, CURLINFO_HTTP_CODE);
 
