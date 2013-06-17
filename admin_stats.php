@@ -46,12 +46,10 @@ include("header.php") ?>
     <div class="span6">
       <h3>Experiments</h3>
       <i class="icon-cog"></i> <span id="expTotal" class="badge badge-info"></span> experiments (with <span id="expRunning" class="badge">&nbsp;</span> running and <span id="expUpcoming" class="badge"></span> upcoming)
-      
+      <div class="row">&nbsp;</div>
     <select id="lst_exp" size="10">
         <optgroup label="Running" id="Running"></optgroup>
         <optgroup label="Upcoming" id="Upcoming"></optgroup>
-        <optgroup label="Waiting" id="Waiting"></optgroup>
-        <optgroup label="Launching" id="Launching"></optgroup>
     </select>
       
       <button id="btnCancel" class="btn btn-danger">Cancel</button>
@@ -63,7 +61,7 @@ include("header.php") ?>
       <div class="accordion" id="accordion2">
         <div class="accordion-group" style="border:0">
             <div class="accordion-heading">
-                <i class="icon-download-alt"></i> <span id="nodesTotal" class="badge badge-info"></span> nodes (with <span id="nodesFree" class="badge">&nbsp;</span> alive and <span id="nodesUnavailable" class="badge badge-warning"></span> suspected or absent and <span id="nodesBusy" class="badge badge-inverse"></span> busy) 
+                <i class="icon-download-alt"></i> <span id="nodesTotal" class="badge badge-info"></span> nodes (with <span id="nodesFree" class="badge">&nbsp;</span> alive, <span id="nodesBusy" class="badge"></span> busy and <span id="nodesUnavailable" class="badge badge-warning"></span> unavailable) 
                 <a data-toggle="collapse" data-parent="#accordion2" href="#collapseOne" style="color:#333;text-decoration:none"><button class="btn"><b class="caret"></b></button></a>
             </div>
             <div id="collapseOne" class="accordion-body collapse">
@@ -193,7 +191,7 @@ include("header.php") ?>
                 $("#nodesUnavailable").text(unavailable);
 
                 for(var j in sites) {
-                    $("#sitesNodesDetails").append('<i class="icon-ok"></i> <b>'+j+'</b> <span class="badge badge-info">'+sites[j]["total"]+'</span> nodes (with <span class="badge">'+sites[j]["free"]+'</span> alive and <span class="badge badge-warning">'+sites[j]["unavailable"]+'</span> suspected or absent)<br/>');
+                    $("#sitesNodesDetails").append('<i class="icon-ok"></i> <b>'+j+'</b> <span class="badge badge-info">'+sites[j]["total"]+'</span> nodes (with <span class="badge">'+sites[j]["free"]+'</span> alive and <span class="badge badge-warning">'+sites[j]["unavailable"]+'</span> unavailable)<br/>');
                 }
                 
             },
@@ -215,8 +213,10 @@ include("header.php") ?>
                 var nodesBusy = 0;
                 
                 for(var i=0; i<data.items.length;i++) {
-                    $("#"+data.items[i].state).append(new Option(data.items[i].id+"/"+data.items[i].owner, data.items[i].id, true, true));
-                    
+		    if(data.items[i].state == "Running")
+                    	$("#Running").append(new Option(data.items[i].id+"/"+data.items[i].owner, data.items[i].id, true, true));
+                    else 
+			$("#Upcoming").append(new Option(data.items[i].id+"/"+data.items[i].owner, data.items[i].id, true, true));
                     if(data.items[i].state == "Running") {
                         nodesBusy = nodesBusy + data.items[i].resources.length;
                     }
