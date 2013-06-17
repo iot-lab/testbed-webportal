@@ -138,7 +138,7 @@ include("header.php") ?>
        
         /* Retrieve experiments infos */
         $.ajax({
-            url: "/rest/experiments?total",
+            url: "/rest/admin/experiments?total",
             type: "GET",
             dataType: "json",
             success:function(data){
