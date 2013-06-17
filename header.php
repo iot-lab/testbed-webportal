@@ -391,16 +391,19 @@ var SSHKeysLoaded = false;
             
             e.preventDefault();
             
-            var userStr = '({"sshkeys":["'+$("#form_modify_ssh_txt_ssh").val()+'"';
 
-            if($("#form_modify_ssh_txt_ssh2").val()!="") userStr += ',"'+$("#form_modify_ssh_txt_ssh2").val()+'"';
-            if($("#form_modify_ssh_txt_ssh3").val()!="") userStr += ',"'+$("#form_modify_ssh_txt_ssh3").val()+'"';
-            if($("#form_modify_ssh_txt_ssh4").val()!="") userStr += ',"'+$("#form_modify_ssh_txt_ssh4").val()+'"';
-            if($("#form_modify_ssh_txt_ssh5").val()!="") userStr += ',"'+$("#form_modify_ssh_txt_ssh5").val()+'"';
-
-            userStr += ']})';
-
-            var user = eval(userStr);
+            
+            var sshKeys = [];
+    
+            sshKeys.push($("#form_modify_ssh_txt_ssh").val());
+            sshKeys.push($("#form_modify_ssh_txt_ssh2").val());
+            sshKeys.push($("#form_modify_ssh_txt_ssh3").val());
+            sshKeys.push($("#form_modify_ssh_txt_ssh4").val());
+            sshKeys.push($("#form_modify_ssh_txt_ssh5").val());
+            
+            var user = {};
+            user.sshkeys = sshKeys;
+            
             
             $.ajax({
                 url: "/rest/users/"+<?php echo '"'.$_SESSION['login'].'"'?>+"/sshkeys",
