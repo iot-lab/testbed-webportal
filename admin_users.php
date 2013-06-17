@@ -1019,14 +1019,15 @@ include("header.php") ?>
         selectedUser.email = $("#txt_email_e").val();
 
 
-        var sshKeys='["'+$("#txt_sshkey_e").val()+'"';
-        if($("#txt_sshkey_e2").val()!="") sshKeys += ',"'+$("#txt_sshkey_e2").val()+'"';
-        if($("#txt_sshkey_e3").val()!="") sshKeys += ',"'+$("#txt_sshkey_e3").val()+'"';
-        if($("#txt_sshkey_e4").val()!="") sshKeys += ',"'+$("#txt_sshkey_e4").val()+'"';
-        if($("#txt_sshkey_e5").val()!="") sshKeys += ',"'+$("#txt_sshkey_e5").val()+'"';
-        sshKeys+=']';
-        selectedUser.sshPublicKeys=eval(sshKeys);
-
+        var sshKeys = [];
+    
+        sshKeys.push($("#txt_sshkey_e").val());
+        sshKeys.push($("#txt_sshkey_e2").val());
+        sshKeys.push($("#txt_sshkey_e3").val());
+        sshKeys.push($("#txt_sshkey_e4").val());
+        sshKeys.push($("#txt_sshkey_e5").val());
+        
+        selectedUser.sshPublicKeys = sshKeys;
         
         selectedUser.motivations = $("#txt_motivation_e").val();
         selectedUser.structure = $("#txt_structure_e").val();
