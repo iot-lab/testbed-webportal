@@ -193,7 +193,7 @@ include("header.php") ?>
                     $("#nodesUnavailable").text(unavailable);
 
                     for(var j in sites) {
-                        $("#sitesNodesDetails").append('<i class="icon-ok"></i> <b>'+j+'</b> <span class="badge badge-info">'+sites[j]["total"]+'</span> nodes (with <span class="badge">'+sites[j]["free"]+'</span> alive, <span class="badge" id="'+j+'_busy">-</span> busy and <span class="badge badge-warning">'+sites[j]["unavailable"]+'</span> unavailable)<br/>');
+                        $("#sitesNodesDetails").append('<i class="icon-ok"></i> <b>'+j+'</b> <span class="badge badge-info">'+sites[j]["total"]+'</span> nodes (with <span class="badge">'+sites[j]["free"]+'</span> alive, <span class="badge" id="'+j+'_busy">0</span> busy and <span class="badge badge-warning">'+sites[j]["unavailable"]+'</span> unavailable)<br/>');
                     }
                     
                 },
