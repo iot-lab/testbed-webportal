@@ -203,7 +203,7 @@ include("header.php") ?>
         
         // get running exp
         $.ajax({
-            url: "/rest/experiments?state=Running,Upcoming,Launching,Waiting&limit=20&offset=0",
+            url: "/rest/admin/experiments?state=Running,Upcoming,Launching,Waiting&limit=20&offset=0",
             type: "GET",
             dataType: "json",
             contentType: "application/json; charset=utf-8",
