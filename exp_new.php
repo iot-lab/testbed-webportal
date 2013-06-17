@@ -547,7 +547,7 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                     type: "POST",
                     dataType: "text",
                     data: datab,
-                    url: "/rest/experiment",
+                    url: "/rest/experiments",
                     contentType: "multipart/form-data; boundary="+boundary,
                     
                     success: function (data_server) {

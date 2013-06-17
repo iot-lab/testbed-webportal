@@ -213,7 +213,7 @@ var dateSrv = <?php echo time(); ?>*1000; // server date in milliseconds
 	function checkState(id,currentState,date,duration) {
 		// Retrieve exp state
 		$.ajax({
-			url: "/rest/experiment/"+id+"?state",
+			url: "/rest/experiments/"+id+"?state",
 			type: "GET",
 			dataType: "JSON",
 			contentType: "application/json; charset=utf-8",
