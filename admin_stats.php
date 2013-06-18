@@ -27,7 +27,7 @@ include("header.php") ?>
     </div>
 </div>
   
-<div class="row">
+<div class="row" id="stats" style="display:none">
     <div class="span6">
         <h3>Users</h3>
         
@@ -43,6 +43,7 @@ include("header.php") ?>
         <div id="chart_div"></div>
         <div id="chart_divGeo"></div>
     </div>
+    
     <div class="span6">
       <h3>Experiments</h3>
       <i class="icon-cog"></i> <span id="expTotal" class="badge badge-info"></span> experiments (with <span id="expRunning" class="badge">&nbsp;</span> running and <span id="expUpcoming" class="badge"></span> upcoming)
@@ -55,7 +56,7 @@ include("header.php") ?>
       <button id="btnCancel" class="btn btn-danger">Cancel</button>
       
       <hr/>
-        
+      
       <h3>Nodes</h3>
       <!-- <i class="icon-cog"></i> <span id="nodesTotal" class="label"></span> nodes (with <span id="nodesFree" class="label label-success">&nbsp;</span> alive and <span id="nodesUnavailable" class="label label-info"></span> suspected or absent) -->
       <div class="accordion" id="accordion2">
@@ -75,8 +76,7 @@ include("header.php") ?>
       <h3>System</h3>
       <h4>Used on /senslab/experiments</h4>
       <div id="chart_divGauge"></div>
-      
-    </div>
+        </div>
 </div>
 
 <?php include('footer.php') ?>
@@ -193,7 +193,7 @@ include("header.php") ?>
                     $("#nodesUnavailable").text(unavailable);
 
                     for(var j in sites) {
-                        $("#sitesNodesDetails").append('<i class="icon-ok"></i> <b>'+j+'</b> <span class="badge badge-info">'+sites[j]["total"]+'</span> nodes (with <span class="badge">'+sites[j]["free"]+'</span> alive, <span class="badge" id="'+j+'_busy">0</span> busy and <span class="badge badge-warning">'+sites[j]["unavailable"]+'</span> unavailable)<br/>');
+                        $("#sitesNodesDetails").append('<i class="icon-ok"></i> <b>'+j+'</b> <span class="badge badge-info">'+sites[j]["total"]+'</span> nodes (with <span class="badge">'+sites[j]["free"]+'</span> alive, <span class="badge" id="'+j+'Busy">0</span> busy and <span class="badge badge-warning">'+sites[j]["unavailable"]+'</span> unavailable)<br/>');
                     }
                     
                 },
@@ -241,7 +241,7 @@ include("header.php") ?>
                             }
                         }
                     }
-                    $("#nodesBusy").html(nodesBusy);
+                    $("#nodesBusy").text(nodesBusy);
                     
                 },
                 error:function(XMLHttpRequest, textStatus, errorThrows){
@@ -251,8 +251,9 @@ include("header.php") ?>
             })
         ).then( function(){
             for(site in sitesNodesBusy) {
-                $("#"+site+"_busy").html(sitesNodesBusy[site]);
+                $("#"+site+"Busy").text(sitesNodesBusy[site]);
             }
+            $("#stats").show();
         });
 
         $("#btnCancel").click(function(){
