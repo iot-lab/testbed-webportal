@@ -826,7 +826,7 @@ include("header.php") ?>
 	<input type="hidden" id="to" name="to" value=""/>
 	<label class="control-label">Subject:</label>
 	<div class="controls">
-		<input type="text" name="subjet" class="input-xlarge" value="SensLAB registration rejection" style="width:450px"/>
+		<input type="text" name="subjet" class="input-xlarge" value="SensLAB registration rejected" style="width:450px"/>
 	</div>
 </div>
 		              
