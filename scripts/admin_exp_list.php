@@ -2,7 +2,7 @@
 
 session_start();
 
-if(!$_SESSION['is_auth'] || ($_SESSION['login'] == "" || $_SESSION['password'] == "" || !$_SESSION['is_admin']))
+if(!$_SESSION['is_auth'] || ($_SESSION['login'] == "" || $_SESSION['password'] == "" || !$_SESSION['is_admin'])) 
 {
     header("HTTP/1.0 404 Not Found");
     exit();
