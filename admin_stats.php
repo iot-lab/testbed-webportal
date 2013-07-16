@@ -48,13 +48,16 @@ include("header.php") ?>
       <h3>Experiments</h3>
       <i class="icon-cog"></i> <span id="expTotal" class="badge badge-info"></span> experiments (with <span id="expRunning" class="badge">&nbsp;</span> running and <span id="expUpcoming" class="badge"></span> upcoming)
       <div class="row">&nbsp;</div>
+      <div class="row"><div class="span3">
     <select id="lst_exp" size="10">
         <optgroup label="Running" id="Running"></optgroup>
         <optgroup label="Upcoming" id="Upcoming"></optgroup>
-    </select>
-      
+    </select></div>
+      <div class="span3"><br/><br/>
+      <button id="btnDetails" class="btn btn-primary">Details</button><br/><br/>
       <button id="btnCancel" class="btn btn-danger">Cancel</button>
-      
+      </div>
+      </div>
       <hr/>
       
       <h3>Nodes</h3>
@@ -276,6 +279,14 @@ include("header.php") ?>
                     });
                 }
         });
+
+
+        $("#btnDetails").click(function(){
+                
+                var id = $('#lst_exp').find(":selected").val();
+                window.location.href="admin_exp_details.php?id="+id;
+        });
+        
 
     });
     
