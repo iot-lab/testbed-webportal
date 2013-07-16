@@ -700,13 +700,13 @@ include("header.php") ?>
         </div>
 
         <div id="edit_modal" class="modal hide fade" style="margin-left:-300px;">
-                <form class="well form-horizontal" id="form_modify_user">
             <div class="modal-header">
               <a class="close" data-dismiss="modal">X</a>
               <h3>Edit user <span id="s_login_e"></span><span id="s_id_e" style="display:none"></span></h3>
               
             </div>
-           <div class="modal-body" style="max-height:610px;">
+           <div class="modal-body" style="max-height:700px;">
+                <form class="well form-horizontal" id="form_modify_user">
                <div class="alert alert-error" id="div_error_edit" style="display:none"></div>
                
 
@@ -805,15 +805,51 @@ include("header.php") ?>
 			  </div>              
               
               
-            </div>
-            
-            <div class="modal-footer">
                    <button id="btn_modify" class="btn btn-primary" type="submit">Modify</button>
+                </form> 
             </div>
-                </form>
             
         </div>
         
+
+<div id="email_modal" class="modal hide fade" style="margin-left:-300px;">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Send mail to User</h3>
+  </div>
+  <div class="modal-body">
+ 
+<!-- Begin email modal -->
+<form id="sendMail" class="well" id="form_add_SA">
+	
+<div class="control-group">
+	<input type="hidden" id="to" name="to" value=""/>
+	<label class="control-label">Subject:</label>
+	<div class="controls">
+		<input type="text" name="subjet" class="input-xlarge" value="SensLAB registration rejection" style="width:450px"/>
+	</div>
+</div>
+		              
+<div class="control-group">
+	<label class="control-label">Message:</label>
+	<div class="controls">
+<textarea rows="7" style="width:450px" name="message">
+Dear user,
+
+Please consider re-filling the sign-up form, with an academic/professional (non- /*gmail/hotmail/yahoo/personal*/ ) mail address.
+For your information, I will reject this first subscription.
+
+Regards,</textarea>
+	</div>
+</div>
+<input type="submit" class="btn btn-primary"  value="Send Email" />
+	</form>
+    
+    
+  </div>
+</div>
+<!-- End email modal -->
+   
 
 <?php include('footer.php') ?>
 
@@ -826,11 +862,13 @@ include("header.php") ?>
     var oTable;
     var users = {};
     var selectedUser = {};
+    var userdelete;
 
     $(document).ready(function()
     {
         $('#add_modal').modal('hide');
         $('#edit_modal').modal('hide');
+        $('#delete_modal').modal('hide');
 
         /* Load data in the table */
         $.ajax({
@@ -867,6 +905,7 @@ include("header.php") ?>
                     '<td><a href="#" class="btn btn-admin '+btnAdminClass+'" data="'+i+'" data-state="'+val.admin+'" onClick="setAdmin('+i+')">'+btnAdminValue+'</a></td>' +
                     '<td><a href="admin_exps.php?user='+val.login+'" class="btn btn-view" title="Experiments"><i class="icon icon-list"></i></a> ' +
                         '<a href="#" class="btn btn-edit" data-toggle="modal" data="'+i+'" title="Edit"><i class="icon icon-pencil"></i></a> ' +
+                        '<a href="#" class="btn btn-email" onClick="showEmailUserModal('+i+')" data="'+i+'" title="Email"><i class="icon icon-envelope"></i></a> ' +
                         '<a href="#" class="btn btn-del btn-danger" data="'+i+'" onClick="deleteUser('+i+')" title="Delete"><i class="icon-white icon-remove"></i></a></td>'
                     +'</tr>');
                     $("tr[data="+i+"] .btn-valid").width(50);
@@ -917,10 +956,17 @@ include("header.php") ?>
         });
     });
     
+    /* mail to a user */
+    function showEmailUserModal(id) {
+        useremail = users[id];
+        $("#to").val(useremail.email);
+        $("#email_modal").modal('show');
+    };
+    
     /* Delete a user */
     function deleteUser(id) {
-        if(confirm("Delete user?")) {
-            var userdelete = users[id];
+	var userdelete = users[id];
+        if(confirm("Delete user "+userdelete.login+"?")) {
             $.ajax({
                 url: "/rest/admin/users/"+userdelete.login,
                 type: "DELETE",
@@ -935,10 +981,26 @@ include("header.php") ?>
                     alert("error: " + errorThrows);
                 }
             });
-        }
+	}
     };
     
-    
+    $("#sendMail").bind('submit', function(e){
+		e.preventDefault();
+        $.ajax({
+            url: "/scripts/send_mail.php",
+            type: "POST",
+            dataType: "text",
+            data: $(this).serialize(),
+            success:function(data){
+                alert("Mail sent");
+        	$("#email_modal").modal('hide');
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrows){
+				alert("error");
+            }
+        });
+    });
+        
     /* Toggle Valid state */
     function validateUser(id) {
         var state = $("tr[data="+id+"] .btn-valid").attr("data-state");
