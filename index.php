@@ -12,15 +12,15 @@ include("header.php");
     <div class="container">
 
       <div class="row" id="login_div">
-        <div class="span12">
-          <h2>Login</h2>
+        <div class="offset4 span4 well">
+          <h2>Please Log in</h2>
            
            <div class="alert alert-error" id="div_error_login" style="display:none"></div>
            
-            <form class="well form-inline" id="login_form">
-              Login: <input id="txt_login" type="text" class="input-small" placeholder="Login">
-              Password: <input id="txt_password" type="password" class="input-small" placeholder="Password">
-              <button id="btn_login" type="submit" class="btn btn-primary">Log in</button>
+            <form class="" id="login_form">
+              <input id="txt_login" type="text" class="span4" placeholder="Username">
+              <input id="txt_password" type="password" class="span4" placeholder="Password">
+              <button id="btn_login" type="submit" class="btn btn-primary btn-block">Log in</button>
             </form>
             
             <a href="#" onClick="showSignup()">Ask for an account</a> - <a href="#" onClick="showReset()">Forgot your password?</a>
