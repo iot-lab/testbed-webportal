@@ -20,7 +20,7 @@ include("header.php");
             <form class="" id="login_form">
               <input id="txt_login" type="text" class="span4" placeholder="Username">
               <input id="txt_password" type="password" class="span4" placeholder="Password">
-              <button id="btn_login" type="submit" class="btn btn-primary btn-block">Log in</button>
+              <button id="btn_login" type="submit" class="btn btn-info btn-block">Log in</button>
             </form>
             
             <a href="#" onClick="showSignup()">Ask for an account</a> - <a href="#" onClick="showReset()">Forgot your password?</a>
