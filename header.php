@@ -193,6 +193,8 @@
                     </ul>
                 </li>
       
+          <li><a href="/wiki">Documentation</a></li>
+
           <?php if(isset($_SESSION['is_auth']) && $_SESSION['is_auth']) { ?>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo "".$_SESSION['login']."" ?> [logout] <b class="caret"></b></a>
