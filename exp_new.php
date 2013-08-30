@@ -341,7 +341,7 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                             
                             row_rs.properties.site = site;
 
-                            row_rs.properties.mobile = mobile?1:0;
+                            row_rs.properties.mobile = mobile;
 
                             alias_nodes.push(row_rs);
 
