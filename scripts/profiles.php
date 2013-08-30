@@ -17,14 +17,14 @@
 </div>
 
 <div class="span6">           
-	<form class="well form-horizontal" id="form_part">
+	<form class="well form-horizontal" id="form_part" style="margin-bottom:10px">
 
-		<div class="control-group">
+		<div class="control-group" style="margin-bottom:10px">
 			<label class="control-label" for="txt_name">Name:</label>
 			<div class="controls"><input id="profiles_txt_name" type="text" class="input-xlarge" required="required"></div>
 		</div>
 
-		<div class="control-group">
+		<div class="control-group" style="margin-bottom:10px">
 			<label class="control-label">Node architecture</label>
 			<div class="controls">
 				<label class="radio inline"><input type="radio" name="or_nodearch" id="or_nodearch_wsn430" value="wsn430" data-target="#wsn430panel" checked>WSN 430</label>
@@ -42,17 +42,17 @@
                    
 			<div id="wsn430panel" class="tab-pane active">  	
 				<div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
-					<div class="control-group">
+					<div class="control-group" style="margin-bottom:10px">
 						<label class="control-label">Power mode</label>
 						<div class="controls">
-							<label class="radio"><input type="radio" name="or_power_wsn430" id="or_power_dc_wsn430" value="dc" checked>dc</label>
-							<label class="radio"><input type="radio" name="or_power_wsn430" id="or_power_battery_wsn430" value="battery">battery</label>
+							<label class="radio inline"><input type="radio" name="or_power_wsn430" id="or_power_dc_wsn430" value="dc" checked>dc</label>
+							<label class="radio inline"><input type="radio" name="or_power_wsn430" id="or_power_battery_wsn430" value="battery">battery</label>
 						</div>
 					</div>
 				</div>
 				
 				<div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
-					<div class="control-group">
+					<div class="control-group" style="margin-bottom:10px">
 						<label class="control-label" for="inlineCheckboxes">Consumption</label>
 						<div class="controls">
 							<label class="checkbox inline"><input type="checkbox" id="cb_current_wsn430" value="current"> current</label>
@@ -61,7 +61,7 @@
 						</div>
 					</div>
 	                 
-					<div class="control-group">
+					<div class="control-group" style="margin-bottom:10px">
 						<label class="control-label" for="consumption_frequency_wsn430">Frequency (ms)</label>
 						<div class="controls">
 							<select id="consumption_frequency_wsn430" class="input-small">
@@ -77,7 +77,7 @@
 
 
 				<div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
-					<div class="control-group">
+					<div class="control-group" style="margin-bottom:10px">
 						<label class="control-label" for="inlineCheckboxes">Sensors</label>
 						<div class="controls">
 							<label class="checkbox inline"><input type="checkbox" id="cb_luminosity_wsn430" value="luminosity"> luminosity</label>
@@ -85,7 +85,7 @@
 						</div>
 					</div>
 	
-					<div class="control-group">
+					<div class="control-group" style="margin-bottom:10px">
 						<label class="control-label" for="sensor_frequency_wsn430">Frequency (ms)</label>
 						<div class="controls">
 							<select id="sensor_frequency_wsn430" class="input-small">
@@ -98,14 +98,14 @@
 				</div> 
 
 				<div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
-					<div class="control-group">
+					<div class="control-group" style="margin-bottom:10px">
 						<label class="control-label" for="inlineCheckboxes">Radio</label>
 						<div class="controls">
 							<label class="checkbox inline"><input type="checkbox" id="cb_rssi_wsn430" value="luminosity"> rssi</label>
 						</div>
 					</div>
 	
-					<div class="control-group">
+					<div class="control-group" style="margin-bottom:10px">
 						<label class="control-label" for="radio_frequency_wsn430">Frequency (ms)</label>
 						<div class="controls">
 							<select id="radio_frequency_wsn430" class="input-small">
@@ -127,17 +127,17 @@
 			<div class="tab-pane" id="m3panel">
 			<!-- postfixer tous les id et les noms des input avec _m3 comme _wsn430 plus haut -->
 				<div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
-					<div class="control-group">
+					<div class="control-group" style="margin-bottom:10px">
 						<label class="control-label">Power mode</label>
 						<div class="controls">
-							<label class="radio"><input type="radio" name="or_power_m3" id="or_power_dc_m3" value="dc" checked>dc</label>
-							<label class="radio"><input type="radio" name="or_power_m3" id="or_power_battery_m3" value="battery">battery</label>
+							<label class="radio inline"><input type="radio" name="or_power_m3" id="or_power_dc_m3" value="dc" checked>dc</label>
+							<label class="radio inline"><input type="radio" name="or_power_m3" id="or_power_battery_m3" value="battery">battery</label>
 						</div>
 					</div>
 				</div>
 
 				<div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
-					<div class="control-group">
+					<div class="control-group" style="margin-bottom:10px">
 						<label class="control-label" for="inlineCheckboxes">Consumption</label>
 						<div class="controls">
 							<label class="checkbox inline"><input type="checkbox" id="cb_current_m3" value="current"> current</label>
@@ -146,7 +146,7 @@
 						</div>
 					</div>
 	                 
-					<div class="control-group">
+					<div class="control-group" style="margin-bottom:10px">
 						<label class="control-label" for="consumption_period_m3">Period (&micro;s)</label>
 						<div class="controls">
 							<select id="consumption_period_m3" class="input-small">
@@ -162,7 +162,7 @@
 						</div>
 					</div>
 	                 
-					<div class="control-group">
+					<div class="control-group" style="margin-bottom:10px">
 						<label class="control-label" for="consumption_average_m3">Average</label>
 						<div class="controls">
 							<select id="consumption_average_m3" class="input-small">
@@ -175,6 +175,55 @@
 								<option value="512">512</option>
 								<option value="1024">1024</option>
 							</select>
+						</div>
+					</div>
+				</div>
+
+				<div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;padding:5px 0px 0px 0px;margin:5px;">
+					<div class="control-group" style="margin-bottom:10px">
+						<label class="control-label" for="radio_mode_m3">Radio mode</label>
+						<div class="controls">
+							<label class="radio inline"><input type="radio" name="radio_mode_m3" id="radio_mode_measure_m3" value="measure"> measure</label>
+						</div>
+					</div>
+	
+					<div class="control-group" style="margin-bottom:10px">
+						<label class="control-label" for="radio_channel_m3">Channel</label>
+						<div class="controls">
+							<select id="radio_channel_m3" class="input-small">
+								<?php for ($i=11; $i<27; $i++) echo "<option value='$i'>$i</option>";?>
+							</select>
+						</div>
+					</div>
+	
+					<div class="control-group" style="margin-bottom:10px">
+						<label class="control-label" for="radio_power_m3">Power (unit?)</label>
+						<div class="controls">
+							<select id="radio_power_m3" class="input-small">
+								<option value="3">3</option>
+								<option value="2.8">2.8</option>
+								<option value="2.3">2.3</option>
+								<option value="1.8">1.8</option>
+								<option value="1.3">1.3</option>
+								<option value="0.7">0.7</option>
+								<option value="0">0</option>
+								<option value="-1">-1</option>
+								<option value="-2">-2</option>
+								<option value="-3">-3</option>
+								<option value="-4">-4</option>
+								<option value="-5">-5</option>
+								<option value="-7">-7</option>
+								<option value="-9">-9</option>
+								<option value="-12">-12</option>
+								<option value="-17">-17</option>
+							</select>
+						</div>
+					</div>
+	
+					<div class="control-group" style="margin-bottom:10px">
+						<label class="control-label" for="radio_frequency_m3">Frequency (ms)</label>
+						<div class="controls">
+							<input type="text" id="radio_frequency_m3" class="input-small"/>
 						</div>
 					</div>
 				</div>
@@ -328,6 +377,11 @@ function loadProfile() {
 	        $("#cb_current_m3").prop("checked",my_profiles[i].consumption.current);
 	        $("#cb_voltage_m3").prop("checked",my_profiles[i].consumption.voltage);
 	        $("#cb_power_m3").prop("checked",my_profiles[i].consumption.power);
+	        
+	        $("input[name='radio_mode_m3']").val([my_profiles[i].radio.mode]);
+	        $("#radio_channel_m3").val(my_profiles[i].radio.channel);
+	        $("#radio_power_m3").val(my_profiles[i].radio.power);
+	        $("#radio_frequency_m3").val(my_profiles[i].radio.frequency);
         //TODO } else if (nodearch=="a8") { 
         }
     }
@@ -432,12 +486,27 @@ $("#form_part").bind("submit", function (e) {
 	        "period":$('#consumption_period_m3').val(),
 	        "average":$('#consumption_average_m3').val()
 	    };
+
+	    radio_mode = $("input[name=radio_mode_m3]:checked").val();
+	    frequency = $('#radio_frequency_m3').val();
+	    if(radio_mode == "measure" && (frequency<2 || frequency>499)){
+	       alert("You must set a valid Radio frequency : range 2..499");
+	       return false;
+	    }
+	
+	    radio = {
+	    	"mode":$("input[name=radio_mode_m3]:checked").val(),
+	        "channel":$('#radio_channel_m3').val(),
+	        "power":$('#radio_power_m3').val(),
+	        "frequency":$('#radio_frequency_m3').val()
+	    };
 	
 	    profile_json = {
 	        "profilename":$("#profiles_txt_name").val(),
 	        "nodearch":nodearch,
 	        "power":$("input[name=or_power_m3]:checked").val(),
-	        "consumption":consumption
+	        "consumption":consumption,
+	        "radio":radio
 	    };
 
     } else {
