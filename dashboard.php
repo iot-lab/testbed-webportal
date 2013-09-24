@@ -102,17 +102,12 @@ var dateSrv = <?php echo time(); ?>*1000; // server date in milliseconds
 
         // Retrieve profiles total 
         $.ajax({
-            url: "/rest/profiles",
+            url: "/rest/profiles?total",
             type: "GET",
-            dataType: "text",
+            dataType: "json",
             contentType: "application/json; charset=utf-8",
-            success: function (data) {
-                var nb_profiles = 0;
-                if (data!="") {
-                    my_profiles = JSON.parse(data);
-                    nb_profiles = my_profiles.length;
-                }                
-                $("#nb_profiles").text(nb_profiles);
+            success: function (data) {               
+                $("#nb_profiles").text(data.total);
             },
             error: function (XMLHttpRequest, textStatus, errorThrows) {
                 $("#div_msg").removeClass("alert-success");
