@@ -183,60 +183,69 @@
 					<div class="control-group" style="margin-bottom:10px">
 						<label class="control-label" for="radio_mode_m3">Radio mode</label>
 						<div class="controls">
-							<label class="radio inline"><input type="radio" name="radio_mode_m3" id="radio_mode_measure_m3" value="measure"> measure</label>
+							<label class="checkbox inline"><input type="checkbox" name="radio_mode_m3" id="radio_mode_none_m3" data-target="#m3RadioNonePanel" value="none" checked> none</label>
+							<label class="checkbox inline"><input type="checkbox" name="radio_mode_m3" id="radio_mode_measure_m3" data-target="#m3RadioMeasurePanel" value="measure"> measure</label>
 						</div>
 					</div>
-	
-					<div class="control-group" style="margin-bottom:10px">
-						<label class="control-label" for="radio_channel_m3">Channel</label>
-						<div class="controls">
-							<select id="radio_channel_m3" class="input-small">
-								<?php for ($i=11; $i<27; $i++) echo "<option value='$i'>$i</option>";?>
-							</select>
+					<div class="tab-content">
+						<div id="m3RadioNonePanel" class="tab-pane active">
+						
 						</div>
-					</div>
 	
-					<div class="control-group" style="margin-bottom:10px">
-						<label class="control-label" for="radio_power_m3">Power (unit?)</label>
-						<div class="controls">
-							<select id="radio_power_m3" class="input-small">
-								<option value="3">3</option>
-								<option value="2.8">2.8</option>
-								<option value="2.3">2.3</option>
-								<option value="1.8">1.8</option>
-								<option value="1.3">1.3</option>
-								<option value="0.7">0.7</option>
-								<option value="0">0</option>
-								<option value="-1">-1</option>
-								<option value="-2">-2</option>
-								<option value="-3">-3</option>
-								<option value="-4">-4</option>
-								<option value="-5">-5</option>
-								<option value="-7">-7</option>
-								<option value="-9">-9</option>
-								<option value="-12">-12</option>
-								<option value="-17">-17</option>
-							</select>
-						</div>
-					</div>
-	
-					<div class="control-group" style="margin-bottom:10px">
-						<label class="control-label" for="radio_frequency_m3">Frequency (ms)</label>
-						<div class="controls">
-							<input type="text" id="radio_frequency_m3" class="input-small"/>
+						<div id="m3RadioMeasurePanel" class="tab-pane">
+							<div class="control-group" style="margin-bottom:10px">
+								<label class="control-label" for="radio_channel_m3">Channel</label>
+								<div class="controls">
+									<select id="radio_channel_m3" class="input-small">
+										<?php for ($i=11; $i<27; $i++) echo "<option value='$i'>$i</option>";?>
+									</select>
+								</div>
+							</div>
+			
+							<div class="control-group" style="margin-bottom:10px">
+								<label class="control-label" for="radio_power_m3">Power (unit?)</label>
+								<div class="controls">
+									<select id="radio_power_m3" class="input-small">
+										<option value="3">3</option>
+										<option value="2.8">2.8</option>
+										<option value="2.3">2.3</option>
+										<option value="1.8">1.8</option>
+										<option value="1.3">1.3</option>
+										<option value="0.7">0.7</option>
+										<option value="0">0</option>
+										<option value="-1">-1</option>
+										<option value="-2">-2</option>
+										<option value="-3">-3</option>
+										<option value="-4">-4</option>
+										<option value="-5">-5</option>
+										<option value="-7">-7</option>
+										<option value="-9">-9</option>
+										<option value="-12">-12</option>
+										<option value="-17">-17</option>
+									</select>
+								</div>
+							</div>
+			
+							<div class="control-group" style="margin-bottom:10px">
+								<label class="control-label" for="radio_frequency_m3">Frequency (ms)</label>
+								<div class="controls">
+									<input type="text" id="radio_frequency_m3" class="input-small"/>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 				
 			</div>              
 
+			
 <!-- ----------------- -->
 <!--  A8 PROFILE FORM  -->
 <!-- ----------------- -->	
               
-              
 			<!-- <div class="tab-pane" id="a8panel">A8 - NYI</div>  -->
-			
+
+
 <!-- ---------- -->
 <!--  MAIN  END -->
 <!-- ---------- -->			
@@ -275,6 +284,11 @@ $(document).ready(function(){
 	
 	// init tab for node architecture 
 	$('input[name="or_nodearch"]').click(function () {
+	    $(this).tab('show');
+	});
+	
+	// init tab for m3 radio mode 
+	$('input[name="radio_mode_m3"]').click(function () {
 	    $(this).tab('show');
 	});
 	
@@ -377,11 +391,16 @@ function loadProfile() {
 	        $("#cb_current_m3").prop("checked",my_profiles[i].consumption.current);
 	        $("#cb_voltage_m3").prop("checked",my_profiles[i].consumption.voltage);
 	        $("#cb_power_m3").prop("checked",my_profiles[i].consumption.power);
-	        
-	        $("input[name='radio_mode_m3']").val([my_profiles[i].radio.mode]);
-	        $("#radio_channel_m3").val(my_profiles[i].radio.channel);
-	        $("#radio_power_m3").val(my_profiles[i].radio.power);
-	        $("#radio_frequency_m3").val(my_profiles[i].radio.frequency);
+
+	       	if (my_profiles[i].radio!=null) {
+		        //$("#radio_mode_measure_m3").prop("checked",my_profiles[i].radio.mode);
+		        $("input[name='radio_mode_m3']").val([my_profiles[i].radio.mode]);
+		        $("#radio_channel_m3").val(my_profiles[i].radio.channel);
+		        $("#radio_power_m3").val(my_profiles[i].radio.power);
+		        $("#radio_frequency_m3").val(my_profiles[i].radio.frequency);
+	       	} else {
+	       		$("#radio_mode_none_m3").prop("checked",true);
+	       	}
         //TODO } else if (nodearch=="a8") { 
         }
     }
@@ -487,7 +506,7 @@ $("#form_part").bind("submit", function (e) {
 	        "average":$('#consumption_average_m3').val()
 	    };
 
-	    radio_mode = $("input[name=radio_mode_m3]:checked").val();
+	    radio_mode = $('#radio_mode_measure_m3').prop('checked');
 	    frequency = $('#radio_frequency_m3').val();
 	    if(radio_mode == "measure" && (frequency<2 || frequency>499)){
 	       alert("You must set a valid Radio frequency : range 2..499");
@@ -495,7 +514,7 @@ $("#form_part").bind("submit", function (e) {
 	    }
 	
 	    radio = {
-	    	"mode":$("input[name=radio_mode_m3]:checked").val(),
+	    	"mode":radio_mode,
 	        "channel":$('#radio_channel_m3').val(),
 	        "power":$('#radio_power_m3').val(),
 	        "frequency":$('#radio_frequency_m3').val()
@@ -505,9 +524,9 @@ $("#form_part").bind("submit", function (e) {
 	        "profilename":$("#profiles_txt_name").val(),
 	        "nodearch":nodearch,
 	        "power":$("input[name=or_power_m3]:checked").val(),
-	        "consumption":consumption,
-	        "radio":radio
+	        "consumption":consumption
 	    };
+	    if(radio_mode!="none") profile_json.radio=radio;
 
     } else {
 	
