@@ -76,12 +76,26 @@ if(!$_SESSION['is_auth']) {
                         <div class="row-fluid">
                                 <div class="span1" style="text-align:center"><input type="radio" name="resources_type" id="optionsRadiosMaps" value="physical" checked></div>
                                 <div class="span2" style="margin:0px;padding-top:3px">from maps</div>
-                                <div class="span9" style="margin:0px"><div class="" id="div_resources_map"><table id="div_resources_map_tbl"></table></div></div>
+                                <div class="span1" style="text-align:center"><input type="radio" name="resources_type" id="optionsRadiosType" value="alias"></div>
+                                <div class="span2" style="margin:0px;padding-top:3px">by type</div>
+                                
 
                         </div>
                        <div class="row-fluid">
-                                <div class="span1" style="text-align:center"><input type="radio" name="resources_type" id="optionsRadiosType" value="alias"></div>
-                                <div class="span2" style="margin:0px;padding-top:3px">by type</div>
+                       			<div class="span9" style="margin:0px;padding-top:3px">
+                       				<div class="" id="div_resources_map">
+                       					<table>
+			                                <thead style="text-align:left">
+			                                	<tr>
+			                                        <th>Sites</th>
+			                                        <th style="padding-left:30px;">Architectures and IDs</th>
+			                                    </tr>
+			                                </thead>
+			                                <tbody id="div_resources_map_tbl">
+			                                </tbody>
+			                            </table>
+                       				</div>
+                       			</div>
                         </div> 
                         <div class="row-fluid">
                                 <div class="span12" style="margin:0px;padding-top:3px">
@@ -149,9 +163,9 @@ if(!$_SESSION['is_auth']) {
                         </thead>
                         <tbody>
                             <tr>
-                                <td><select id="my_nodes" size="15" multiple><optgroup label="WSN430" id="wsn430Nodes"></optgroup><optgroup label="M3" id="m3Nodes"></optgroup><!--<optgroup label="A8" id="a8Nodes"></optgroup>--></select></td>
-                                <td><select id="my_profiles" size="15"><optgroup label="WSN430" id="wsn430Profiles"></optgroup><optgroup label="M3" id="m3Profiles"></optgroup><!--<optgroup label="A8" id="a8Profiles"></optgroup>--></select></td>
-                                <td><select id="my_firmwares" size="15"><optgroup label="WSN430" id="wsn430Firmwares"></optgroup><optgroup label="M3" id="m3Firmwares"></optgroup><!--<optgroup label="A8" id="a8Firmwares"></optgroup>--></select></td>
+                                <td><select id="my_nodes" size="15" multiple><optgroup label="WSN430" id="wsn430Nodes"></optgroup><optgroup label="M3" id="m3Nodes"></optgroup><optgroup label="A8" id="a8Nodes"></optgroup></select></td>
+                                <td><select id="my_profiles" size="15"><optgroup label="WSN430" id="wsn430Profiles"></optgroup><optgroup label="M3" id="m3Profiles"></optgroup><optgroup label="A8" id="a8Profiles"></optgroup></select></td>
+                                <td><select id="my_firmwares" size="15"><optgroup label="WSN430" id="wsn430Firmwares"></optgroup><optgroup label="M3" id="m3Firmwares"></optgroup><optgroup label="A8" id="a8Firmwares"></optgroup></select></td>
                             </tr>
                             <tr>
                                 <td></td>
@@ -355,14 +369,16 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                 else {
 
                     exp_json.nodes = [];
-                    $("#div_resources_map input").each(function(){
+                    $("#div_resources_map_tbl input").each(function(){
                         var site = $(this).attr("id").split('_')[0];
+                        var archi =  $(this).attr("id").split('_')[1].split(":")[0];
                         var val = $(this).val();
                         if(val != "") {
                             var snodes = expand(val.split(","));
+                            console.log(sites_nodes);
                             for (i = 0; i < snodes.length; i++) {
                                 var node_network_address;
-                            	if(!isNaN(snodes[i]) && ((node_network_address="node"+snodes[i]+"."+site+".senslab.info") in sites_nodes)) {
+                            	if(!isNaN(snodes[i]) && ((node_network_address=archi+"-"+snodes[i]+"."+site+".iot-lab.info") in sites_nodes)) {
                                 	exp_json.nodes.push(node_network_address);
                                     $("#"+sites_nodes[node_network_address]+"Nodes").append(new Option(node_network_address, node_network_address, false, false));
                             	}
@@ -616,14 +632,20 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
 	                    var archis= [];
 	
 	                    for (var i in data_server) {
-	                            if(sites.indexOf(data_server[i].site)==-1) {
+	                            if(sites.indexOf(data_server[i].site)==-1) { // unknown site, adding it 
 	                                sites.push(data_server[i].site);
-	                                $("#div_resources_map_tbl").append('<tr><td><a href="#" onclick="openMapPopup(\''+data_server[i].site+'\')" id="'+data_server[i].site+'_maps">'+data_server[i].site.charAt(0).toUpperCase() + data_server[i].site.slice(1)+' map</a></td><td><input type="text" id="'+data_server[i].site+'_list" value="" class="input-large" /></td></tr>');
+	                                // filling the "by type" form 
 	                                $("#lst_site").append(new Option(data_server[i].site, data_server[i].site));
+	                                // filling the "from maps" form 
+	                                $("#div_resources_map_tbl").append('<tr valign="top" style="border: 1px solid #CCCCCC;color:#555555"><td style="width:150px;"><a href="#" onclick="openMapPopup(\''+data_server[i].site+'\')" id="'+data_server[i].site+'_maps">'+data_server[i].site.charAt(0).toUpperCase() + data_server[i].site.slice(1)+' map</a></td><td id="'+data_server[i].site+'_archis" style="text-align:right;"></td></tr>');
 	                            }
-	                            if(archis.indexOf(data_server[i].archi)==-1) {
+	                            if(archis.indexOf(data_server[i].archi)==-1) { // unknown archi, adding it 
 	                                archis.push(data_server[i].archi);
+	                                // filling the "by type" form 
 	                                $("#lst_archi").append(new Option(data_server[i].archi, data_server[i].archi));
+	                                // filling the "from maps" form 
+	                                $("#"+data_server[i].site+"_archis").append(data_server[i].archi+'&nbsp;&nbsp;<input type="text" id="'+data_server[i].site+"_"+data_server[i].archi+'_list" value="" class="input-large" />');
+	                                //$("#div_resources_map_tbl").append('<tr><td><a href="#" onclick="openMapPopup(\''+data_server[i].site+'\')" id="'+data_server[i].site+'_maps">'+data_server[i].site.charAt(0).toUpperCase() + data_server[i].site.slice(1)+' map</a></td><td><input type="text" id="'+data_server[i].site+'_list" value="" class="input-large" /></td></tr>');
 	                            }
 	                            sites_nodes[data_server[i].network_address]=data_server[i].archi.split(':')[0];
 	                    }
