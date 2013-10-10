@@ -5,24 +5,26 @@ include("header.php");
 
 ?>
 
-	<div class="container">
-
-      <div class="row" id="login_div">
-        <div class="span12">
+	<div class="container" style="width:1210px" id="container_drawgantt">
 			<iframe onload="resizeFrame(document.getElementById('childframe'))"  src="/drawgantt" width="100%" frameborder="0" id="childframe"></iframe>
-        </div>
-
-      </div>
+    </div>
       
       
 
 <?php include('footer.php') ?>
 
     <script type="text/javascript">
+    
+		function resizeFrame(f) {
+			var height=document.documentElement.clientHeight - document.getElementById("container_drawgantt").offsetTop - 50;
+			f.style.height = height + "px";
+		}
 
-        function resizeFrame(f) {
-              f.style.height = (f.contentWindow.document.body.scrollHeight + 50) + "px";
-        }
+		function getPos(el) {
+			// yay readability
+			for (var lx=0, ly=0; el != null; lx += el.offsetLeft, ly += el.offsetTop, el = el.offsetParent);
+			return {x: lx,y: ly};
+		}
 
         function showSignup() {
             window.location.href=".";
