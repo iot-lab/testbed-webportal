@@ -375,7 +375,6 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                         var val = $(this).val();
                         if(val != "") {
                             var snodes = expand(val.split(","));
-                            console.log(sites_nodes);
                             for (i = 0; i < snodes.length; i++) {
                                 var node_network_address;
                             	if(!isNaN(snodes[i]) && ((node_network_address=archi+"-"+snodes[i]+"."+site+".iot-lab.info") in sites_nodes)) {
