@@ -1,24 +1,23 @@
-<?php 
+<?php
 session_start();
 
-if(!$_SESSION['is_auth']) {
-header("location: .");
-exit();
+if(!isset($_SESSION['is_auth']) || !$_SESSION['is_auth']) {
+	header("location: .");
+	exit();
 }
 
-include("header.php") ?>
+include("header.php");
+?>
 
 <div class="container" text-align="top">
 
 
 <div class="row">
-    <div class="span9">
+    <div class="col-md-8">
         
         <h2>Experiment List</h2>
         
-        <div style="text-align:center;margin-bottom:20px"><a href="exp_new.php" class="btn btn-new btn input-large btn-large">New Experiment</a></div>        
-
-        <div class="alert alert-error" id="div_msg" style="display:none"></div>
+        <div class="alert alert-danger" id="div_msg" style="display:none"></div>
         <table id="tbl_exps" class="table table-bordered table-striped table-condensed" style="display:none">
             <thead>
                 <tr>
@@ -33,18 +32,17 @@ include("header.php") ?>
             <tbody>
             </tbody>
         </table>
-        <div id="loader" style="display:none"><img src="img/ajax-loader.gif"></div>
     </div>
 
-    <div class="span4">
+    <div class="col-md-4">
       <h2>Personal dashboard</h2>
-      <p><i class="icon-cog"></i> Experiments: <span id="expTotal">&nbsp;</span></p>
+      <p><span class="glyphicon glyphicon-cog"></span> Experiments: <span id="expTotal">&nbsp;</span></p>
         <ul>
             <li><span id="expRunning" class="badge badge-success">&nbsp;</span> running</li>
             <li><span id="expUpcoming" class="badge badge-info">&nbsp;</span> upcoming</li>
             <li><span id="expTerminated" class="badge">&nbsp;</span> terminated</li>
         </ul>
-          <p><i class="icon-th"></i> Profiles: <span id="nb_profiles">&nbsp;</span></p>
+          <p><span class="glyphicon glyphicon-th"></span> Profiles: <span id="nb_profiles">&nbsp;</span></p>
           <!--<p><i class="icon-home"></i> Home's quota: 60% (600/1000Mo)
             <div class="progress" style="width:200px">
               <div class="bar" style="width: 60%;"></div>
@@ -54,14 +52,16 @@ include("header.php") ?>
         <div class="alert alert-info">
             <img src="img/help.png"/> Click on an experiment to manage it or click <b>New Experiment</b> to start a new one.
         </div>
+        <div id="loader" style="display:none"><img src="img/ajax-loader.gif"></div>
           
       </div>
 
 </div>
-    
-    <?php include('footer.php') ?>
+ 
+</div> <!-- container -->   
 
 <link href="css/datatable.css" rel="stylesheet">
+<link href="css/datatable-custom.css" rel="stylesheet">
 <script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="js/datatable.js"></script>
 <script type="text/javascript">
@@ -78,6 +78,10 @@ var dateSrv = <?php echo time(); ?>*1000; // server date in milliseconds
         $(document).ajaxStop(function(){
             $("#loader").hide();
         });
+
+
+        $("#dashboard").addClass("active");
+        $("#dashboard2").addClass("active");
        
        
         // Retrieve experiments total 
@@ -94,7 +98,7 @@ var dateSrv = <?php echo time(); ?>*1000; // server date in milliseconds
             },
             error:function(XMLHttpRequest, textStatus, errorThrows){
                 $("#div_msg").removeClass("alert-success");
-                $("#div_msg").addClass("alert-error");
+                $("#div_msg").addClass("alert-danger");
                 $("#div_msg").show();
                 $("#div_msg").html("An error occurred while retrieving your experiment list: " + errorThrows);
             }
@@ -106,12 +110,12 @@ var dateSrv = <?php echo time(); ?>*1000; // server date in milliseconds
             type: "GET",
             dataType: "json",
             contentType: "application/json; charset=utf-8",
-            success: function (data) {               
+            success: function (data) {
                 $("#nb_profiles").text(data.total);
             },
             error: function (XMLHttpRequest, textStatus, errorThrows) {
                 $("#div_msg").removeClass("alert-success");
-                $("#div_msg").addClass("alert-error");
+                $("#div_msg").addClass("alert-danger");
                 $("#div_msg").show();
                 $("#div_msg").html("An error occurred while retrieving your profile list: " + errorThrows);
             }
@@ -119,7 +123,7 @@ var dateSrv = <?php echo time(); ?>*1000; // server date in milliseconds
 
         // Manage experiment list 
         oTable = $('#tbl_exps').dataTable({
-            "sDom": "<'row'<'span7'l><'span7'f>r>t<'row'<'span7'i><'span7'p>>",
+            "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",
             "bProcessing": false,
             "bServerSide": true,
             "sAjaxSource": "scripts/exp_list.php",
@@ -146,9 +150,9 @@ var dateSrv = <?php echo time(); ?>*1000; // server date in milliseconds
                  "fnRender": function(obj) {
                         var state = obj.aData['state'];
                         if ( state == "Error" ) { // terminated error 
-                            state = "<span class='label label-important'>"+state+"</span>";
+                            state = "<span class='label label-danger'>"+state+"</span>";
                         } else if( state == "Terminated" ) { // terminated OK 
-                            state = "<span class='label'>"+state+"</span>";
+                            state = "<span class='label label-default'>"+state+"</span>";
                         } else if( state == "Running" || state == "Finishing" || state == "Resuming" || state == "toError" ) { // running 
                             state = "<span class='label label-success'>"+state+"</span>";
 			    var dateExp = new Date(obj.aData['date']).getTime(); // start date in milliseconds
@@ -231,8 +235,8 @@ var dateSrv = <?php echo time(); ?>*1000; // server date in milliseconds
 				} else { // state change from upcomming or running to terminated, stop refreshing
 					$("#"+id+" td span").removeClass("label-info");
 					$("#"+id+" td span").removeClass("label-success");
-					$("#"+id+" td span").removeClass("label-important");
-					if(state == "Error")  $("#"+id+" td span").addClass("label-important");
+					$("#"+id+" td span").removeClass("label-danger");
+					if(state == "Error")  $("#"+id+" td span").addClass("label-danger");
 					$("#"+id+" td span").html(state);
 					/* change badges in Personal Dashboard */
 					changeBadges((currentState==0?"expUpcoming":"expRunning"),"expTerminated");
@@ -240,7 +244,7 @@ var dateSrv = <?php echo time(); ?>*1000; // server date in milliseconds
 			},
 			error: function (XMLHttpRequest, textStatus, errorThrows) {
 				$("#div_msg").removeClass("alert-success");
-				$("#div_msg").addClass("alert-error");
+				$("#div_msg").addClass("alert-danger");
 				$("#div_msg").show();
 				$("#div_msg").html("An error occurred while refreshing experiment states: " + errorThrows);
 			}
@@ -259,6 +263,4 @@ var dateSrv = <?php echo time(); ?>*1000; // server date in milliseconds
 
     
 </script>
-
-</body>
-</html>
+<?php include('footer.php') ?>

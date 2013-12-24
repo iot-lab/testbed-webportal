@@ -1,13 +1,13 @@
-<?php 
+<?php
 session_start();
 
-if(!$_SESSION['is_auth']) {
-    header("location: .");
-    exit();
+if(!isset($_SESSION['is_auth']) || !$_SESSION['is_auth']) {
+	header("location: .");
+	exit();
 }
-?>
 
-<?php include("header.php") ?>
+include("header.php");
+?>
 
 <link rel="stylesheet" href="css/datepicker.css" type="text/css"/>
 <link rel="stylesheet" href="css/timepicker.css" type="text/css"/>
@@ -17,74 +17,79 @@ if(!$_SESSION['is_auth']) {
         <h2>New experiment</h2>
                 
         <div class="row">
-            <div class="span9">
+            <div class="col-md-9">
                 
             <div class="alert" id="txt_notif">
                 <button class="close" data-dismiss="alert">×</button>
                 <p id="txt_notif_msg"></p>
             </div>
+            
+            
+            
+    <!--  MODAL WINDOW FOR EXP STATE -->
 
-        <div class="modal hide" id="expState">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" onClick="redirectDashboard();">×</button>
-            <h3>Experiment state</h3>
-          </div>
-          <div class="modal-body">
-            <p id="expStateMsg"></p>
-          </div>
-          <div class="modal-footer">
-            <a href="#" class="btn" data-dismiss="modal" onClick="redirectDashboard();">Close</a>
-          </div>
-        </div>
+    <div id="expState" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myModalLabel">
+		<div class="modal-dialog">
+			<div class="modal-content">
+		        <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onClick="redirectDashboard();">&times;</button>
+					<h3>Experiment state</h3>
+		        </div>
+				<div class="modal-body">
+					<p id="expStateMsg"></p>
+				</div>
+				<div class="modal-footer">
+					<a href="#" class="btn btn-default" data-dismiss="modal" onClick="redirectDashboard();">Close</a>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    
+    
 
-            <form class="well form-horizontal" id="form_part1">
+            <form class="well form-horizontal form-inline" id="form_part1">
 
                 <h3>Configure your experiment</h3>
-                <div class="control-group">
-                    <label class="control-label" for="txt_name">Name:</label>
-                    <div class="controls">
-                        <input id="txt_name" name="name" type="text" class="input-large">
+                <div class="form-group" style="width:100%;padding-bottom:10px">
+                    <label class="col-md-3 control-label" for="txt_name">Name:</label>
+                    <div class="col-md-4">
+                        <input id="txt_name" name="name" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="control-group">
-                    <label class="control-label" for="txt_duration">Duration (minutes):</label>
-                    <div class="controls">
-                        <input id="txt_duration" name="duration" type="number" class="input-small" value="20" required="required" min="0">
+                <div class="form-group" style="width:100%;padding-bottom:10px">
+                    <label class="col-md-3 control-label" for="txt_duration">Duration (minutes):</label>
+                    <div class="col-md-2">
+                        <input id="txt_duration" name="duration" type="number" class="form-control" value="20" required="required" min="0">
                     </div>
                 </div>
                 
-                <div class="control-group">
-					<label class="control-label" for="txt_start">Start:</label>
-					<div class="controls">
+                <div class="form-group" style="width:100%;padding-bottom:10px;min-height:75px">
+					<label class="col-md-3 control-label" for="txt_start">Start:</label>
+					<div class="col-md-9">
 						<div class="row-fluid">
-							<div class="span1" style="text-align:center"><input type="radio" id="radioStart" name="radioStart" value="asap" checked/></div>
-                            <div class="span8" style="margin:0px;padding-top:3px">As soon as possible</div>
-                        </div>
-                        <div class="row-fluid">
-                            <div class="span1" style="text-align:center"><input type="radio" id="radioStart" name="radioStart" value="scheduled"/></div>
-                            <div class="span2" style="margin:0px;padding-top:3px">Scheduled</div>
-                            <div class="span2" style="margin:0px"><input type="text" class="input-small" value="" id="dp1" name="dp1" disabled="disabled" style="display:none"></div>
-                            <div class="span2"><input class="dropdown-timepicker input-mini" data-provide="timepicker" type="text" id="tp1" name="tp1" disabled="disabled" style="display:none"></div>
-                        </div>
+							<label class="radio"><input type="radio" id="radioStart" name="radioStart" value="asap" checked/> As soon as possible</label><br/>
+						</div>
+						<div class="row-fluid">
+							<label class="col-md-3 radio"><input type="radio" id="radioStart" name="radioStart" value="scheduled"/> Scheduled</label>
+							<div class="col-md-8">
+		                           <div class="col-md-5" style="margin:0px"><input type="text" class="form-control" value="" id="dp1" name="dp1" disabled="disabled" style="display:none"></div>
+		                           <div class="col-md-4"><input class="dropdown-timepicker form-control" data-provide="timepicker" type="text" id="tp1" name="tp1" disabled="disabled" style="display:none"></div>
+							</div>
+						</div>
 					</div>
 				</div>
                 
                 <h3>Choose your nodes</h3>
-                <div class="control-group">
-                    <label class="control-label">Resources:</label>
-                    <div class="controls">
-                        <div class="row-fluid">
-                                <div class="span1" style="text-align:center"><input type="radio" name="resources_type" id="optionsRadiosMaps" value="physical" checked></div>
-                                <div class="span2" style="margin:0px;padding-top:3px">from maps</div>
-                                <div class="span1" style="text-align:center"><input type="radio" name="resources_type" id="optionsRadiosType" value="alias"></div>
-                                <div class="span2" style="margin:0px;padding-top:3px">by type</div>
-                                
+                <div class="form-group" style="width:100%;padding-bottom:10px">
+                    <label class="col-lg-3 control-label">Resources:</label>
+                    <div class="col-lg-9">
+                        <label class="radio"><input type="radio" name="resources_type" id="optionsRadiosMaps" value="physical" checked> from maps</label>&nbsp;&nbsp;
+                        <label class="radio"><input type="radio" name="resources_type" id="optionsRadiosType" value="alias"> by type</label>
 
-                        </div>
-                       <div class="row-fluid">
-                       			<div class="span9" style="margin:0px;padding-top:3px">
+					<div class="col-md-12">
+                       			<div class="col-md-12" style="margin:0px;padding:0px;padding-top:3px">
                        				<div class="" id="div_resources_map">
-                       					<table>
+                       					<table style="width:100%">
 			                                <thead style="text-align:left">
 			                                	<tr>
 			                                        <th>Sites</th>
@@ -96,18 +101,18 @@ if(!$_SESSION['is_auth']) {
 			                            </table>
                        				</div>
                        			</div>
-                        </div> 
+                        </div>
                         <div class="row-fluid">
-                                <div class="span12" style="margin:0px;padding-top:3px">
+                                <div class="col-md-12" style="margin:0px;padding:0px;padding-top:8px;">
                         
                             
 			                        <!-- by alias -->
 			                        <div class="" id="div_resources_type">
 			                            
-			                            <table style="text-align:center">
+			                            <table style="width:100%;text-align:center">
 			                                <thead>
 			                                    <tr>
-			                                        <th><button id="btn_add" class="btn" style="width:50px">+</button></th>
+			                                        <th><button id="btn_add" class="btn btn-default" style="width:50px">+</button></th>
 			                                        <th>Archi</th>
 			                                        <th>Site</th>
 			                                        <th>Number</th>
@@ -117,21 +122,21 @@ if(!$_SESSION['is_auth']) {
 			                                <tbody id="resources_table">
 			                                    <tr id="resources_row">
 			                                        <td>
-			                                            <button class="btn" style="width:50px" onclick="removeRow(this);return false;">-</button>
+			                                            <button class="btn btn-default" style="width:50px" onclick="removeRow(this);return false;">-</button>
 			                                        </td>
 			                                        <td>
-			                                            <select id="lst_archi" class="input-medium archi">
+			                                            <select id="lst_archi" class="form-control archi">
 			                                            </select>
 			                                        </td>
 			                                        <td>
-			                                            <select id="lst_site" class="input-medium site">
+			                                            <select id="lst_site" class="form-control site">
 			                                            </select> 
 			                                        </td>
-			                                        <td>
-			                                            <input id="txt_fixe" type="number" class="input-mini number" value="1" min="0">
+			                                        <td width="75px;">
+			                                            <input id="txt_fixe" type="number" class="form-control number" value="1" min="0">
 			                                        </td>
-			                                        <td>
-			                                            <input id="txt_mobile" type="checkbox" class="input-small mobile">
+			                                        <td align="center">
+			                                            <input id="txt_mobile" type="checkbox" class="form-control mobile">
 			                                        </td>
 			                                    </tr>
 			                                </tbody>
@@ -140,8 +145,7 @@ if(!$_SESSION['is_auth']) {
 			                        </div>
 			                   </div>
 			              </div>
-                        
-                    </div>
+                        </div>
                 </div>
                 <button id="btn_submit" class="btn btn-primary" type="submit">Next</button>
             </form>
@@ -149,39 +153,33 @@ if(!$_SESSION['is_auth']) {
             <form class="well form-horizontal" id="form_part2">
                 
                 
-                <button id="btn_previous" class="btn">Previous</button>
+                <button id="btn_previous" class="btn btn-default">Previous</button>
                 
                 <h3>Manage associations</h3>
+                
+               	<div class="row form-group">
+               		<div class=col-md-4>
+               			<label class="control-label">Node(s)</label>
+               			<select class="form-control" id="my_nodes" size="15" multiple style="margin-bottom:5px;"><optgroup label="WSN430" id="wsn430Nodes"></optgroup><optgroup label="M3" id="m3Nodes"></optgroup><optgroup label="A8" id="a8Nodes"></optgroup></select>
+               		</div>
+               		<div class=col-md-4>
+               			<label class="control-label">Profile(s)</label>
+               			<select class="form-control" id="my_profiles" size="15" style="margin-bottom:5px;"><optgroup label="WSN430" id="wsn430Profiles"></optgroup><optgroup label="M3" id="m3Profiles"></optgroup><optgroup label="A8" id="a8Profiles"></optgroup></select>
+               			<button id="btn_refresh" class="btn btn-default">Refresh</button>
+               		</div>
+               		<div class=col-md-4>
+               			<label class="control-label">Firmware(s)</label>
+               			<select class="form-control" id="my_firmwares" size="15" style="margin-bottom:5px;"><optgroup label="WSN430" id="wsn430Firmwares"></optgroup><optgroup label="M3" id="m3Firmwares"></optgroup><optgroup label="A8" id="a8Firmwares"></optgroup></select>
+               			<input type="file" id="files" name="files[]" multiple />
+               		</div>         	
+               	</div>
+                
+               	<div class="row form-group">   
+               		<button id="btn_assoc" class="btn btn-default">Add Association</button>        	
+               	</div>
               
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Node</th>
-                                <th>Profile</th>
-                                <th>Firmware</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><select id="my_nodes" size="15" multiple><optgroup label="WSN430" id="wsn430Nodes"></optgroup><optgroup label="M3" id="m3Nodes"></optgroup><optgroup label="A8" id="a8Nodes"></optgroup></select></td>
-                                <td><select id="my_profiles" size="15"><optgroup label="WSN430" id="wsn430Profiles"></optgroup><optgroup label="M3" id="m3Profiles"></optgroup><optgroup label="A8" id="a8Profiles"></optgroup></select></td>
-                                <td><select id="my_firmwares" size="15"><optgroup label="WSN430" id="wsn430Firmwares"></optgroup><optgroup label="M3" id="m3Firmwares"></optgroup><optgroup label="A8" id="a8Firmwares"></optgroup></select></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><button id="btn_refresh" class="btn">Refresh</button></td>
-                                <td><input type="file" id="files" name="files[]" multiple /></td>
-                            </tr>
-                            <tr>
-                                <td><button id="btn_assoc" class="btn">Add Association</button></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table>
+
                     
-                    
-                    <p>
                         <table style="width:700px" class="table table-striped table-bordered table-condensed">
                             <thead>
                                 <tr>
@@ -193,7 +191,6 @@ if(!$_SESSION['is_auth']) {
                             </thead>
                             <tbody id="my_assoc"></tbody>
                         </table>
-                    </p>
                     
                 <hr/>
                 
@@ -203,7 +200,7 @@ if(!$_SESSION['is_auth']) {
             
 </div> <!-- span -->
 
-    <div class="span3">
+    <div class="col-md-3">
         <div id="help1" class="alert alert-info">
             <img src="img/help.png"> To create a new experiment you can: set a <b>name</b>, 
             set a <b>duration</b>, run it <b>as soon as possible</b> or <b>scheduled</b>.
@@ -229,10 +226,9 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
 
 </div> <!-- row -->   
     
-            
-        <?php include('footer.php') ?>
-        
-        </div>
+
+ 
+</div> <!-- container -->   
         
         <script type="text/javascript">
 
@@ -265,6 +261,8 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
             /*   on ready   */
             /* ************ */
             $(document).ready(function () {
+                $("#exp_new").addClass("active");
+                $("#exp_new2").addClass("active");
 
                 $("#txt_notif").hide();
                 $("#expState").modal('hide');
@@ -375,6 +373,7 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                         var val = $(this).val();
                         if(val != "") {
                             var snodes = expand(val.split(","));
+                            console.log(sites_nodes);
                             for (i = 0; i < snodes.length; i++) {
                                 var node_network_address;
                             	if(!isNaN(snodes[i]) && ((node_network_address=archi+"-"+snodes[i]+"."+site+".iot-lab.info") in sites_nodes)) {
@@ -402,7 +401,7 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                     $("#txt_notif_msg").html("You have to choose at least one node.");
                     $("#txt_notif").show();
                     $("#txt_notif").removeClass("alert-success");
-                    $("#txt_notif").addClass("alert-error");
+                    $("#txt_notif").addClass("alert-danger");
                 }
                 return false;
             });
@@ -572,18 +571,18 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                         
                         if(info.id) {
                            
-                            $("#expStateMsg").html("<h3>Your experiment has successfully been submitted</h3>");
+                            $("#expStateMsg").html("<h4>Your experiment has successfully been submitted</h4>");
                             $("#expStateMsg").append("Experiment Id : " + info.id);
                         }
                         else {
-                            $("#expStateMsg").html("<h3 style='color:red'>Error</h3>");
+                            $("#expStateMsg").html("<h4 style='color:red'>Error</h4>");
                             $("#expStateMsg").append(info.error);
                         }
                         
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrows) {
                         $("#expState").modal('show');
-                        $("#expStateMsg").html("<h3 style='color:red'>Error</h3>");
+                        $("#expStateMsg").html("<h4 style='color:red'>Error</h4>");
                         $("#expStateMsg").append(textStatus + ": " + errorThrows + "<br/>" + XMLHttpRequest.responseText);
                     }
                 });
@@ -615,7 +614,7 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                         $("#txt_notif_msg").html(errorThrows);
                         $("#txt_notif").show();
                         $("#txt_notif").removeClass("alert-success");
-                        $("#txt_notif").addClass("alert-error");
+                        $("#txt_notif").addClass("alert-danger");
                     }
                 });
             }
@@ -633,18 +632,18 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
 	                    for (var i in data_server) {
 	                            if(sites.indexOf(data_server[i].site)==-1) { // unknown site, adding it 
 	                                sites.push(data_server[i].site);
+	                                //$("#div_resources_map_tbl").append('<tr><td><a href="#" onclick="openMapPopup(\''+data_server[i].site+'\')" id="'+data_server[i].site+'_maps">'+data_server[i].site.charAt(0).toUpperCase() + data_server[i].site.slice(1)+' map</a></td><td><input type="text" id="'+data_server[i].site+'_list" value="" class="form-control" /></td></tr>');
 	                                // filling the "by type" form 
 	                                $("#lst_site").append(new Option(data_server[i].site, data_server[i].site));
 	                                // filling the "from maps" form 
-	                                $("#div_resources_map_tbl").append('<tr valign="top" style="border: 1px solid #CCCCCC;color:#555555"><td style="width:150px;"><a href="#" onclick="openMapPopup(\''+data_server[i].site+'\')" id="'+data_server[i].site+'_maps">'+data_server[i].site.charAt(0).toUpperCase() + data_server[i].site.slice(1)+' map</a></td><td id="'+data_server[i].site+'_archis" style="text-align:right;"></td></tr>');
+									$("#div_resources_map_tbl").append('<tr valign="top" style="border: 1px solid #CCCCCC;color:#555555"><td style="width:150px;"><a href="#" onclick="openMapPopup(\''+data_server[i].site+'\')" id="'+data_server[i].site+'_maps">'+data_server[i].site.charAt(0).toUpperCase() + data_server[i].site.slice(1)+' map</a></td><td id="'+data_server[i].site+'_archis" style="text-align:right;"></td></tr>');
 	                            }
 	                            if(archis.indexOf(data_server[i].archi)==-1) { // unknown archi, adding it 
 	                                archis.push(data_server[i].archi);
-	                                // filling the "by type" form 
+									// filling the "by type" form 
 	                                $("#lst_archi").append(new Option(data_server[i].archi, data_server[i].archi));
-	                                // filling the "from maps" form 
-	                                $("#"+data_server[i].site+"_archis").append(data_server[i].archi+'&nbsp;&nbsp;<input type="text" id="'+data_server[i].site+"_"+data_server[i].archi+'_list" value="" class="input-large" />');
-	                                //$("#div_resources_map_tbl").append('<tr><td><a href="#" onclick="openMapPopup(\''+data_server[i].site+'\')" id="'+data_server[i].site+'_maps">'+data_server[i].site.charAt(0).toUpperCase() + data_server[i].site.slice(1)+' map</a></td><td><input type="text" id="'+data_server[i].site+'_list" value="" class="input-large" /></td></tr>');
+									// filling the "from maps" form 
+	                                $("#"+data_server[i].site+"_archis").append(data_server[i].archi+'&nbsp;&nbsp;<input type="text" id="'+data_server[i].site+"_"+data_server[i].archi+'_list" value="" class="form-control" style="width:70%" />');
 	                            }
 	                            sites_nodes[data_server[i].network_address]=data_server[i].archi.split(':')[0];
 	                    }
@@ -653,7 +652,7 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
 	                    $("#txt_notif_msg").html(errorThrows);
 	                    $("#txt_notif").show();
 	                    $("#txt_notif").removeClass("alert-success");
-	                    $("#txt_notif").addClass("alert-error");
+	                    $("#txt_notif").addClass("alert-danger");
 	                }
 	            });
 			}
@@ -731,8 +730,8 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
             //click on a node in select  will remove non compatible profiles and firmwares 
             $("#my_nodes").change(function(){
                 var nodearch = sites_nodes[$("#my_nodes").val()[0]];
-		if(nodearch==null) nodearch=($("#my_nodes option:selected").text()).split(':')[0];
-		console.log(nodearch);
+				if(nodearch==null) nodearch=($("#my_nodes option:selected").text()).split(':')[0];
+				console.log(nodearch);
                 $("#my_profiles optgroup").attr("disabled","disabled");
                 $("#my_profiles option").css("font-style","italic");
                 $("#my_firmwares optgroup").attr("disabled","disabled");
@@ -889,7 +888,7 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
    
 
 			function openMapPopup(site) {
-				window.open('maps.php?site='+site, '', 'resizable=yes, location=no, width=800, height=600, menubar=no, status=no, scrollbars=no, menubar=no');
+				window.open('maps.php?site='+site, '', 'resizable=yes, location=no, width=800, height=700, menubar=no, status=no, scrollbars=no, menubar=no');
 			}
             
         </script>
@@ -897,5 +896,4 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
         <script src="js/bootstrap-datepicker.js"></script>
         <script src="js/bootstrap-timepicker.js"></script>
        
-        </body>
-</html>
+<?php include('footer.php') ?>

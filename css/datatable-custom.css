@@ -1,0 +1,77 @@
+div.dataTables_length label, div.dataTables_filter label {
+	width: 100%;
+}
+.dataTables_length>label>select,.dataTables_filter>label>select, .dataTables_filter>label>input {
+	background-color: #ffffff;
+	border: 1px solid #CCCCCC;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	-webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+	-moz-transition: border 0.2s linear 0s, box-shadow 0.2s linear 0;
+	-ms-transition: border linear 0.2s, box-shadow linear 0.2s;
+	-o-transition: border linear 0.2s, box-shadow linear 0.2s;
+	transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+	border-radius: 4px 4px 4px 4px;
+	width: 250px;
+	padding: 6px 12px;
+	height: 34px;
+	color: #555555;
+}
+.dataTables_length>label>select {
+	width: 100px;	
+}
+
+.pagination ul {
+	margin: 0 0 10px 25px;
+	padding: 0;
+	border-radius: 4px 4px 4px 4px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+	display: inline-block;
+	margin-bottom: 0;
+	margin-left: 0;
+}
+
+.pagination ul>li {
+	display: inline;
+	line-height: 20px;
+}
+
+.pagination ul>li>a,.pagination ul>li>span {
+	-moz-border-bottom-colors: none;
+	-moz-border-left-colors: none;
+	-moz-border-right-colors: none;
+	-moz-border-top-colors: none;
+	background-color: #FFFFFF;
+	border-color: #DDDDDD;
+	border-image: none;
+	border-style: solid;
+	border-width: 1px 1px 1px 0;
+	float: left;
+	line-height: 20px;
+	padding: 4px 12px;
+	text-decoration: none;
+}
+
+.pagination ul>li.disabled>a,.pagination ul>li.disabled>span,.pagination ul>li.active>a,.pagination ul>li.active>span
+	{
+	pointer-events: none;
+	cursor: default;
+	color: #999;
+}
+
+.pagination ul>li.active>a,.pagination ul>li.active>span {
+	background-color: #EEEEEE;
+}
+
+.pagination ul>li:first-child>a,.pagination ul>li:first-child>span {
+	border-bottom-left-radius: 4px;
+	border-left-width: 1px;
+	border-top-left-radius: 4px;
+}
+
+.pagination ul>li:last-child>a,.pagination ul>li:last-child>span {
+	border-bottom-right-radius: 4px;
+	border-right-width: 1px;
+	border-top-right-radius: 4px;
+}

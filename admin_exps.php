@@ -1,9 +1,9 @@
 <?php
 session_start();
 
-if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
-    header("location: .");
-    exit();
+if(!isset($_SESSION['is_auth']) || !$_SESSION['is_auth'] || !isset($_SESSION['is_admin']) || !$_SESSION['is_admin']) {
+	header("location: .");
+	exit();
 }
 
 include("header.php");
@@ -25,9 +25,9 @@ if (isset($_GET['user'])) {
     <div class="container">
       
     <div class="row">
-        <div class="span9">
+        <div class="col-md-8">
             <h2>Experiment List <?php echo $title; ?></h2>
-            <div class="alert alert-error" id="div_msg" style="display:none"></div>
+            <div class="alert alert-danger" id="div_msg" style="display:none"></div>
             <table id="tbl_exps" class="table table-bordered table-striped table-condensed" style="display:none">
                 <thead>
                     <tr>
@@ -47,26 +47,29 @@ if (isset($_GET['user'])) {
             <div id="loader" style="display:none"><img src="img/ajax-loader.gif"></div>
         </div>
           
-        <div class="span4">
+        <div class="col-md-4">
           <h2><?php echo $dashboard; ?> dashboard</h2>
-          <p><i class="icon-cog"></i> Experiments: <span id="expTotal">&nbsp;</span></p>
+          <p><span class="glyphicon glyphicon-cog"></span> Experiments: <span id="expTotal">&nbsp;</span></p>
           <ul>
                 <li><span id="expRunning" class="badge badge-success">&nbsp;</span> running</li>
                 <li><span id="expUpcoming" class="badge badge-info">&nbsp;</span> upcoming</li>
                 <li><span id="expTerminated" class="badge">&nbsp;</span> terminated</li>
           </ul>
-          <p><i class="icon-th"></i> Profiles: <span id="nb_profiles">&nbsp;</span></p>
+          <p><span class="glyphicon glyphicon-th"></span> Profiles: <span id="nb_profiles">&nbsp;</span></p>
 		  <h2>Search for an experiment</h2>
-<div class="form-horizontal">
-          <input type="text" class="input-mini" id="expNum"/> <input class="btn" type="button" value="Show details" onClick='window.location.href="admin_exp_details.php?id="+document.getElementById("expNum").value;'/>
-        </div>
+			<div class="form-horizontal">
+          		<div class="col-md-6"><input type="text" class="form-control" id="expNum"/></div>
+          		<div class="col-md-1"><input class="btn btn-default" type="button" value="Show details" onClick='window.location.href="admin_exp_details.php?id="+document.getElementById("expNum").value;'/></div>
+        	</div>
 	</div>
     </div>
 
 
-<?php include('footer.php') ?>
+ 
+</div> <!-- container -->   
 
 <link href="css/datatable.css" rel="stylesheet">
+<link href="css/datatable-custom.css" rel="stylesheet">
 <script type="text/javascript" language="javascript" src="js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" language="javascript" src="js/datatable.js"></script>
  
@@ -75,8 +78,9 @@ if (isset($_GET['user'])) {
     var oTable;
     
     $(document).ready(function(){
-        
-        
+
+        $("#admin").addClass("active");
+        $("#admin_exps").addClass("active");
 	
        
         $(document).ajaxStart(function(){
@@ -101,7 +105,7 @@ if (isset($_GET['user'])) {
             },
             error:function(XMLHttpRequest, textStatus, errorThrows){
                 $("#div_msg").removeClass("alert-success");
-                $("#div_msg").addClass("alert-error");
+                $("#div_msg").addClass("alert-danger");
                 $("#div_msg").show();
                 $("#div_msg").html("An error occurred while retrieving the experiment total");
             }
@@ -119,7 +123,7 @@ if (isset($_GET['user'])) {
             },
             error: function (XMLHttpRequest, textStatus, errorThrows) {
                 $("#div_msg").removeClass("alert-success");
-                $("#div_msg").addClass("alert-error");
+                $("#div_msg").addClass("alert-danger");
                 $("#div_msg").show();
                 $("#div_msg").html("An error occurred while retrieving the profile list");
             }
@@ -127,7 +131,7 @@ if (isset($_GET['user'])) {
 
         // Manage experiment list
         oTable = $('#tbl_exps').dataTable({
-            "sDom": "<'row'<'span7'l><'span7'f>r>t<'row'<'span7'i><'span7'p>>",
+            "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",
             "bProcessing": false,
             "bServerSide": true,
             "sAjaxSource": "scripts/admin_exp_list.php",
@@ -157,9 +161,9 @@ if (isset($_GET['user'])) {
                            "fnRender": function(obj) {
                                   var state = obj.aData['state'];
                                   if ( state == "Error" ) { // terminated error 
-                                      state = "<span class='label label-important'>"+state+"</span>";
+                                      state = "<span class='label label-danger'>"+state+"</span>";
                                   } else if( state == "Terminated" ) { // terminated OK 
-                                      state = "<span class='label'>"+state+"</span>";
+                                      state = "<span class='label label-default'>"+state+"</span>";
                                   } else if( state == "Running" || state == "Finishing" || state == "Resuming" || state == "toError" ) { // running 
                                       state = "<span class='label label-success'>"+state+"</span>";
                                   } else if( state == "Waiting" || state=="Launching" || state=="Suspended"
@@ -212,6 +216,4 @@ if (isset($_GET['user'])) {
     });
     
     </script>
-
-  </body>
-</html>
+<?php include('footer.php') ?>

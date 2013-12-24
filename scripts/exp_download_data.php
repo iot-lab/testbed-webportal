@@ -7,7 +7,7 @@ if(!$_SESSION['is_auth']) {
     exit();
 }
 
-$url = 'https://localhost/rest/experiments/'.$_GET['id'].'?data';
+$url = 'https://localhost/rest/experiment/'.$_GET['id'].'?data';
 
 $headers = array();
 

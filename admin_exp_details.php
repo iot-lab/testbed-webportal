@@ -1,12 +1,13 @@
-<?php 
+<?php
 session_start();
 
-if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
-    header("location: .");
-    exit();
+if(!isset($_SESSION['is_auth']) || !$_SESSION['is_auth'] || !isset($_SESSION['is_admin']) || !$_SESSION['is_admin']) {
+	header("location: .");
+	exit();
 }
 
-include("header.php") ?>
+include("header.php");
+?>
 
     <div class="container">
     
@@ -16,7 +17,7 @@ include("header.php") ?>
     <h2>Admin Experiment Details</h2>
 
     <div id="detailsExp">
-        <div class="alert alert-error" id="div_msg" style="display:none"></div>
+        <div class="alert alert-danger" id="div_msg" style="display:none"></div>
         <p id="detailsExpSummary"></p>
         
         <p id="expButtons"><button class="btn btn-danger" id="btnCancel" onclick="cancelExperiment()">Cancel</button></p>
@@ -37,9 +38,8 @@ include("header.php") ?>
     </div>
 </div>
 
-        
-        <?php include('footer.php') ?>
-
+ 
+</div> <!-- container -->   
 
     <script type="text/javascript">
         
@@ -49,6 +49,9 @@ include("header.php") ?>
         var state = "";
         
         $(document).ready(function(){
+
+            $("#admin").addClass("active");
+            
 			$("#expButtons").hide();
 			$("#tblNodes").hide();
 
@@ -150,7 +153,4 @@ include("header.php") ?>
     }
 
     </script>
-
-    </div>
-  </body>
-</html>
+<?php include('footer.php') ?>

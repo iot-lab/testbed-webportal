@@ -1,24 +1,25 @@
-<?php 
+<?php
 session_start();
 
-if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
-    header("location: .");
-    exit();
+if(!isset($_SESSION['is_auth']) || !$_SESSION['is_auth'] || !isset($_SESSION['is_admin']) || !$_SESSION['is_admin']) {
+	header("location: .");
+	exit();
 }
 
-include("header.php") ?>
+include("header.php");
+?>
 
     <div class="container" text-align="top">
     
    
 <div class="row">
-	<div class="span9">
+	<div class="col-md-8">
 
 		<h2>Manage nodes</h2>
           	
-		<a href="#" class="btn btn-add" id="refreshButton">Refresh Data Structure</a>
+		<a href="#" class="btn btn-default btn-add" id="refreshButton">Refresh Data Structure</a>
 
-		<div class="alert alert-error" id="div_msg" style="display:none"></div>
+		<div class="alert alert-danger" id="div_msg" style="display:none"></div>
 		<table class="table table-striped table-bordered table-condensed" id="tblNodes">
 			<thead>
 				<tr>
@@ -39,24 +40,34 @@ include("header.php") ?>
 			<p><a href="javascript:selectAll();">Select All</a> - <a href="javascript:unSelectAll();">Unselect All</a></p>
 
 			<b>Actions on selected nodes: </b>
+            
+            <div class="row">
+            	<div class="col-md-3">
+		            <select id="part" class="form-control">
+						<option value="opennodes">Open Node</option>
+						<option value="controlnodes">Control Node</option>
+						<option value="gatewaynodes">Gateway</option>
+					</select>
+					<div id="firmware" style="display:none"><label for="files">Firmware: <input type="file" id="files" name="files[]" multiple /></label></div>
+            	</div>
+            	
+            	<div class="col-md-3">
+					<select id="action" class="form-control">
+						<option value="start">Start</option>
+						<!-- <option value="start" data-battery="battery">Start (battery)</option> -->
+						<option value="stop">Stop</option>
+						<option value="reset">Reset</option>
+						<!-- <option value="update">Update</option> -->
+					</select>
+            	</div>
+	            
+            	<div class="col-md-1">
+		            <button id="btn_send" class="btn btn-default" type="submit">Send</button>
+            	</div>
+            </div>
 		            
-			<select id="part" class="input-medium">
-				<option value="opennodes">Open Node</option>
-				<option value="controlnodes">Control Node</option>
-				<option value="gatewaynodes">Gateway</option>
-			</select>
 		            
-			<select id="action" class="input-small">
-				<option value="start">Start</option>
-				<!-- <option value="start" data-battery="battery">Start (battery)</option> -->
-				<option value="stop">Stop</option>
-				<option value="reset">Reset</option>
-				<!-- <option value="update">Update</option> -->
-			</select>
 		            
-			<button id="btn_send" class="btn" type="submit">Send</button>
-		            
-			<div id="firmware" style="display:none">firmware: <input type="file" id="files" name="files[]" multiple /></div>
 		            
 		            
             <div id="stateSuccess" class="alert alert-success" style="display:none"></div>
@@ -64,18 +75,21 @@ include("header.php") ?>
 		            
 		</form>
 		<div id="loader" style="display:none"><img src="img/ajax-loader.gif"></div>
+		<br/>
 	</div>
           
-	<div class="span4" id="searchDiv">
+	<div class="col-md-4" id="searchDiv">
 		<h2>Search for nodes</h2>
         <div class="" id="div_resources_map"><table id="div_resources_map_tbl"></table></div>
 	</div>
 </div>
 
 
-    <?php include('footer.php') ?>
+ 
+</div> <!-- container -->   
 
 <link href="css/datatable.css" rel="stylesheet">
+<link href="css/datatable-custom.css" rel="stylesheet">
 <script type="text/javascript" language="javascript" src="js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" language="javascript" src="js/datatable.js"></script>
 
@@ -89,6 +103,11 @@ include("header.php") ?>
         var sites = [];
         
         $(document).ready(function(){
+
+            $("#admin").addClass("active");
+            $("#admin_nodes").addClass("active");
+
+            
 			$("#frmActions").hide();
 			$("#tblNodes").hide();
 
@@ -133,7 +152,7 @@ include("header.php") ?>
                     }
                     
                     oTable = $('#tblNodes').dataTable({
-                        "sDom": "<'row'<'span7'l><'span7'f>r>t<'row'<'span7'i><'span7'p>>",
+                        "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",
                         "bPaginate": true,
                         "sPaginationType": "bootstrap",
                         "bLengthChange": true,
@@ -147,8 +166,8 @@ include("header.php") ?>
         			$("#tblNodes").show();
                                    
                     for(var j = 0; j < sites.length; j++)
-                        $("#div_resources_map_tbl").append('<tr><td><a href="#" onclick="openMapPopup(\''+sites[j]+'\')" id="'+sites[j]+'_maps">'+sites[j].charAt(0).toUpperCase() + sites[j].slice(1)+' map</a></td><td><input type="text" id="'+sites[j]+'_list" value="" class="input-large" /></td></tr>');
-                    $("#div_resources_map_tbl").append('<tr><td colspan="2"><button class="btn btn-add pull-right" id="searchButton" style="margin-left:5px;">Search</button><button class="btn btn-add pull-right" id="clearButton">Clear</button></td></tr>');
+                        $("#div_resources_map_tbl").append('<tr><td><a href="#" onclick="openMapPopup(\''+sites[j]+'\')" id="'+sites[j]+'_maps">'+sites[j].charAt(0).toUpperCase() + sites[j].slice(1)+' map</a></td><td><input type="text" id="'+sites[j]+'_list" value="" class="form-control" /></td></tr>');
+                    $("#div_resources_map_tbl").append('<tr><td colspan="2"><button class="btn btn-default btn-add pull-right" id="searchButton" style="margin-left:5px;">Search</button><button class="btn btn-default btn-add pull-right" id="clearButton">Clear</button></td></tr>');
                     $("#searchButton").click(function() { oTable.fnDraw(); });
 					$("#clearButton").click(function() {
 						$("#div_resources_map input").each(function(){ $(this).val(""); });
@@ -383,6 +402,4 @@ include("header.php") ?>
     
 
     </script>
-
-  </body>
-</html>
+<?php include('footer.php') ?>

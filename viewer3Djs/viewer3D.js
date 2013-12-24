@@ -8,6 +8,8 @@ var offX, offY;
 // Camera parameters
 phi = -100, theta = 0, distance = 130;
 var rcount = 0;
+// Text display
+var info, nodelist, help;
 
 // graphical nodes
 var objects = [];
@@ -15,22 +17,23 @@ var objects = [];
 // list of selected nodes
 var selectedNodes = [];
 
-var div3d, nodebox, infobox;
+var div3d, nodeboxes, infobox;
 
 var nodes = [];
 
 function init() {
-    var particles, particle;
-    objects = [];
+    var particle;
 
     div3d = document.getElementById('div3d');
-    nodebox = document.getElementById('nodebox');
+    nodeboxes = document.getElementsByName('nodebox');
     infobox = document.getElementById('infobox');
     titlebox = document.getElementById('titlebox');
     offY = div3d.offsetTop;
     offX = div3d.offsetLeft;
 
+    //titlebox.innerHTML = 'Grenoble Site ' + nodes.length + " nodes";
     infobox.innerHTML = 'Node info : ';
+
 
     camera = new THREE.PerspectiveCamera(75, window3DWidth / window3DHeight, 1, 10000);
 
@@ -83,12 +86,13 @@ function init() {
         particle.position.z = nodes[i][3] - zcenter;
         particle.uid = nodes[i][4];
         particle.state = nodes[i][5];
+        particle.archi = nodes[i][6];
         particle.position.multiplyScalar(10);
         particle.scale.x = particle.scale.y = 1;
         scene.add(particle);
         v = new THREE.Vertex(particle.position);
         geometry.vertices.push(v);
-        objects.push(particle)
+        objects.push(particle);
     
     }
 
@@ -96,7 +100,8 @@ function init() {
     // a projector is needed to find which node is under the mouse
     projector = new THREE.Projector();
 
-    nodebox.onkeyup = parseNodebox;
+    for (var i=0;i<nodeboxes.length;i++) nodeboxes[i].onkeyup = parseNodebox;
+    
     // set mouse event handlers
     div3d.onmousedown = OnMouseDown;
     div3d.onmouseup = OnMouseUp;
@@ -123,37 +128,41 @@ function set3dsize() {
 }
 
 function sortfunction(a, b) {
-    return (a - b) //causes an array to be sorted numerically and ascending
+    return (a - b); //causes an array to be sorted numerically and ascending
 }
 
 // factorize the expanded list in selectedNode to produce dash intervals
 // 1,2,3,5,9  -> 1-3,5,9
-function factorize() {
+function factorize(nodes) {
     var fact = [];
     var previous = 0;
     var intervalStart = 0;
-    selectedNodes.sort(sortfunction);
-    for (j = 0; j < selectedNodes.length; j++) {
+    nodes.sort(sortfunction);
+    for (var j = 0; j < nodes.length; j++) {
         if (intervalStart) {
             // we are in an interval
-            if (selectedNodes[j] == previous + 1) {
+            var previousTemp = previous;
+            previousTemp++;
+            if (nodes[j] == previousTemp) {
                 // interval grows
-                previous += 1;
+                previous ++;
             } else {
                 // end of interval
                 fact.push(intervalStart + "-" + previous);
                 intervalStart = 0;
-                previous = selectedNodes[j];
+                previous = nodes[j];
             }
         } else {
             // we are not in an interval
-            if (selectedNodes[j] == previous + 1) {
+            var previousTemp = previous;
+            previousTemp++;
+            if (nodes[j] == previousTemp) {
                 // let's begin an interval
                 intervalStart = previous;
-                previous += 1;
+                previous ++;
             } else {
                 if (previous) fact.push(previous);
-                previous = selectedNodes[j];
+                previous = nodes[j];
             }
         }
     } // for end 
@@ -172,10 +181,10 @@ function factorize() {
 // 1-3,5,9 -> 1,2,3,5,9
 function expand(factExp) {
     exp = [];
-    for (i = 0; i < factExp.length; i++) {
+    for (var i = 0; i < factExp.length; i++) {
         dashExpression = factExp[i].split("-");
         if (dashExpression.length == 2) {
-            for (j = parseInt(dashExpression[0]); j < (parseInt(dashExpression[1]) + 1); j++)
+            for (var j = parseInt(dashExpression[0]); j < (parseInt(dashExpression[1]) + 1); j++)
                 exp.push(j);
         } else exp.push(parseInt(factExp[i]));
     }
@@ -185,8 +194,15 @@ function expand(factExp) {
 }
 
 function parseNodebox() {
-    input = nodebox.value;
-    selectedNodes = expand(input.split(","));
+    var input = [];
+    for (var i=0;i<nodeboxes.length;i++) {
+    	var tempInput=nodeboxes[i].value;
+    	tempInput = expand(tempInput.split(","));
+        var archi = nodeboxes[i].id.substring(0,nodeboxes[i].id.indexOf(":"));
+    	for (var j=0;j<tempInput.length;j++) tempInput[j]=archi+"-"+tempInput[j];
+    	input = input.concat(tempInput);
+    }
+    selectedNodes = input;
     myrender();
 }
 
@@ -222,7 +238,8 @@ function myrender() {
     camera.lookAt(scene.position);
     camera.updateMatrix();
 
-    for (i = 0; i < objects.length; i++) {
+    for (var i = 0; i < objects.length; i++) {
+    	
         
         if (selectedNodes.indexOf(objects[i].name) != -1) {
             objects[i].material.color.setHex(0x0099CC);
@@ -281,7 +298,7 @@ function findNodeUnderMouse(event) {
 function displayNodeInfo(e) {
     obj = findNodeUnderMouse(e);
 
-    if (obj) infobox.innerHTML = 'Node info : number ' + obj.object.name + " with id " + obj.object.uid;
+    if (obj) infobox.innerHTML = 'Node info : number ' + obj.object.name + " with archi " + obj.object.archi;
     //    else infobox.innerHTML = e.clientX + "," + e.clientY + " - " + offX + "," + offY;
 }
 
@@ -291,7 +308,25 @@ function toggleNode(obj) {
     i = selectedNodes.indexOf(nodeId);
     if (i == -1) selectedNodes.push(nodeId);
     else selectedNodes.splice(i, 1);
-    nodebox.value = factorize().join(",");
+
+    
+    // archi ?
+    // split selectedNodes for archis separation
+    for (var i=0;i<nodeboxes.length;i++) {
+    	if(obj.object.archi==nodeboxes[i].id.substring(0,nodeboxes[i].id.indexOf('_'))) {
+    		// right nodebox
+    		// select nodes from selectedNodes with archi = archi and remove the prefix 
+    		var nodesArchis = [];
+    		for (var j=0;j<selectedNodes.length;j++) {
+    			var archi = selectedNodes[j].substring(0,selectedNodes[j].indexOf('-'));
+    			if(archi == obj.object.archi.substring(0,obj.object.archi.indexOf(':'))) {
+    				nodesArchis.push(selectedNodes[j].substring(selectedNodes[j].indexOf('-')+1,selectedNodes[j].length));
+    			}
+    		}
+    		// factorize only this one
+    		nodeboxes[i].value= factorize(nodesArchis).join(",");
+    	}
+    }
     myrender();
 }
 
@@ -300,7 +335,7 @@ function toggleNode(obj) {
 //
 function OnMouseDown(e) {
     var clickType = 'LEFT';
-    if (e.type != sTestEventType) return true
+    if (e.type != sTestEventType) return true;
     if (e.which) {
         if (e.which == 3) clickType = 'RIGHT';
         if (e.which == 2) clickType = 'MIDDLE';

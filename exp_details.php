@@ -1,15 +1,17 @@
-<?php 
+<?php
 session_start();
 
 if(!$_SESSION['is_auth']) {
-    header("location: .");
-    exit();
+	header("location: .");
+	exit();
 }
 
-include("header.php") ?>
+include("header.php");
+?>
 
 <link rel="stylesheet" href="css/datepicker.css" type="text/css"/>
 <link rel="stylesheet" href="css/timepicker.css" type="text/css"/>
+<link rel="stylesheet" href="css/datetimepicker-custom.css" type="text/css"/>
 
     <div class="container" text-align="top">
     
@@ -17,57 +19,67 @@ include("header.php") ?>
 <div class="row">
 
     <h2>Experiment Details</h2>
-        <div class="alert alert-error" id="div_msg" style="display:none"></div>
+        <div class="alert alert-danger" id="div_msg" style="display:none"></div>
 
 
-    <div class="modal hide" id="expState">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" onClick="redirectDashboard();">×</button>
-        <h3>Experiment state</h3>
-      </div>
-      <div class="modal-body">
-        <p id="expStateMsg"></p>
-      </div>
-      <div class="modal-footer">
-        <a href="#" class="btn" data-dismiss="modal" onClick="redirectDashboard();">Close</a>
-      </div>
-    </div>
+    <!--  MODAL WINDOW FOR EXP STATE -->
 
+    <div id="expState" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myModalLabel">
+		<div class="modal-dialog">
+			<div class="modal-content">
+		        <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onClick="redirectDashboard();">&times;</button>
+					<h3>Experiment state</h3>
+		        </div>
+				<div class="modal-body">
+					<p id="expStateMsg"></p>
+				</div>
+				<div class="modal-footer">
+					<a href="#" class="btn btn-default" data-dismiss="modal" onClick="redirectDashboard();">Close</a>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    
+    
 
-    <div class="modal hide" id="expReload">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" onClick="">×</button>
-        <h3>Reload</h3>
-       </div>
-      <div class="modal-body">
+    <!--  MODAL WINDOW FOR EXP RELOAD -->
 
-            <div class="control-group">
-            <label class="control-label" for="txt_start">Start:</label>
-            <div class="controls">
-            <div class="row-fluid">
-                <div class="span1" style="text-align:center"><input type="radio" id="radioStart" name="radioStart" value="asap" checked/></div>
-                            <div class="span8" style="margin:0px;padding-top:3px">As soon as possible</div>
-                        </div>
-                        <div class="row-fluid">
-                            <div class="span1" style="text-align:center"><input type="radio" id="radioStart" name="radioStart" value="scheduled"/></div>
-                            <div class="span3" style="margin:0px;padding-top:3px">Scheduled</div>
-                            <div class="span4" style="margin:0px;text-align:right;"><input type="text" class="input-small" value="" id="dp1" name="dp1" disabled="disabled" style="display:none"></div>
-                            <div class="span2"><input class="dropdown-timepicker input-mini" data-provide="timepicker" type="text" id="tp1" name="tp1" disabled="disabled" style="display:none"></div>
-                        </div>
-            	</div>
-
-            </div>
-
-
-             <label class="control-label" for="txt_duration" style="display:inline">Duration (minutes):</label>
-             <input id="txt_duration" name="duration" type="number" class="input-mini" required="required" min="0">
-
-		<div class="modal-footer">
-            		<a href="#" class="btn" data-dismiss="modal" onClick="submitReload();">Reload</a>
-            	</div>
-	</div>
-
-    </div>
+    <div id="expReload" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myModalLabel">
+		<div class="modal-dialog">
+			<div class="modal-content">
+		        <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h3>Reload</h3>
+		        </div>
+				<div class="modal-body" style="height:200px;">	                
+	                <div class="form-group row">
+						<label class="col-md-3 control-label" for="txt_start" style="padding-top:8px;">Start:</label>
+						<div class="col-md-8">
+							<label class="radio inline"><input type="radio" id="radioStart" name="radioStart" value="asap" checked/>As soon as possible</label>
+							<label class="radio inline"><input type="radio" id="radioStart" name="radioStart" value="scheduled"/>Scheduled</label>
+						</div>
+					</div>	                
+	                <div class="form-group row">
+						<div class="col-md-8 col-md-offset-3">
+	                            <div class="col-md-4" style="margin:0px"><input type="text" class="form-control" value="" id="dp1" name="dp1" disabled="disabled" style="display:none;z-index:1041;"></div>
+	                            <div class="col-md-4"><input class="dropdown-timepicker form-control" data-provide="timepicker" type="text" id="tp1" name="tp1" disabled="disabled" style="display:none;z-index:1041;"></div>
+						</div>
+	                </div>
+	                <div class="form-group row">
+	                    <label class="col-md-3 control-label" for="txt_duration" style="padding-top:8px;padding-right:0px;">Duration (minutes):</label>
+	                    <div class="col-md-2">
+	                        <input id="txt_duration" name="duration" type="number" class="form-control" value="20" required="required" min="0">
+	                    </div>
+	                </div>
+					<br/>
+				</div>
+				<div class="modal-footer">
+					<a href="#" class="btn btn-default" data-dismiss="modal" onClick="submitReload();">Reload</a>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
 
     <div id="detailsExp">
@@ -75,8 +87,8 @@ include("header.php") ?>
         
         <p id="expButtons">
             <button class="btn btn-danger" id="btnCancel" onclick="cancelExperiment()">Cancel</button>
-            <a href="scripts/exp_download_data.php?id=<?php echo $_GET['id']?>" class="btn" id="btnDownload">Download</a>
-            <button class="btn" id="btnReload">Reload</button>
+            <a href="scripts/exp_download_data.php?id=<?php echo $_GET['id']?>" class="btn btn-default" id="btnDownload">Download</a>
+            <button class="btn btn-default" id="btnReload">Reload</button>
         </p>
         
         <table class="table table-striped table-bordered table-condensed" style="width:500px" id="tblNodes">
@@ -100,29 +112,34 @@ include("header.php") ?>
 
             <b>Actions on selected nodes: </b>
             
-            <select id="action" class="input-small">
-                <option value="start">Start</option>
-                <option value="start" data-battery="battery">Start (battery)</option>
-                <option value="stop">Stop</option>
-                <option value="reset">Reset</option>
-                <option value="update">Update</option>
-            </select>
+            <div class="row">
+            	<div class="col-md-3">
+		            <select id="action" class="form-control">
+		                <option value="start">Start</option>
+		                <option value="start" data-battery="battery">Start (battery)</option>
+		                <option value="stop">Stop</option>
+		                <option value="reset">Reset</option>
+		                <option value="update">Update</option>
+		            </select>
+		            <div id="firmware" style="display:none"><label for="files">Firmware: <input type="file" id="files" name="files[]" /></label></div>
+            	</div>
+	            
+            	<div class="col-md-1">
+		            <button id="btn_send" class="btn btn-default" type="submit">Send</button>
+            	</div>
+            </div>
             
-            <button id="btn_send" class="btn" type="submit">Send</button>
-            
-            <div id="firmware" style="display:none">firmware: <input type="file" id="files" name="files[]" multiple /></div>
-            
-            <div id="stateSuccess" class="alert alert-success" style="display:none"></div>
-            <div id="stateFailure" class="alert alert-failure" style="display:none"></div>
+            <div id="stateSuccess" class="alert alert-success" style="display:none;margin-top:2px:"></div>
+            <div id="stateFailure" class="alert alert-failure" style="display:none;margin-top:2px:"></div>
             
         </form>
         <div id="loader" style="display:none"><img src="img/ajax-loader.gif"></div>
-        
+		<br/>
     </div>
-</div>
 
-
-    <?php include('footer.php') ?>
+</div> <!-- row -->
+ 
+</div> <!-- container -->   
 
     <script type="text/javascript">
 
@@ -191,8 +208,7 @@ include("header.php") ?>
                         exp_name = data.name;
 
                     expState = data.state;
-                    $("#txt_duration").val(data.duration);
-                    if(expState == "Running" || expState == "Waiting") {
+                    if(expState == "Running" || expState == "Waiting" || expState == "Launching") {
                         $("#btnCancel").attr("disabled",false);
                         $("#btnReload").attr("disabled",true);
                         $("input[name=radioStart]").attr("disabled",true);
@@ -210,7 +226,7 @@ include("header.php") ?>
                     $("#detailsExpSummary").append("<b>Duration (min):</b> " + data.duration + "<br/>");
                     $("#detailsExpSummary").append("<b>Number of nodes:</b> ");
 
-                    $("#expButtons").show();
+        			$("#expButtons").show();
         
                     json_exp = rebuildJson(data,true);                
                     
@@ -353,7 +369,7 @@ include("header.php") ?>
                         error: function (XMLHttpRequest, textStatus, errorThrows) {
                             $("#state").html(textStatus + " : " + errorThrows +  " : " +  XMLHttpRequest.responseText);
                             $("#state").removeClass("alert-success");
-                            $("#state").addClass("alert-error");
+                            $("#state").addClass("alert-danger");
                             $("#state").show();
                         }
                     });
@@ -446,7 +462,6 @@ include("header.php") ?>
             
             exp_json.reservation = scheduled_timestamp;
         }
-            exp_json.duration = parseInt($("#txt_duration").val());
         
         $.ajax({
             type: "POST",
@@ -460,17 +475,17 @@ include("header.php") ?>
                 
                 if(info.id) {
                    
-                    $("#expStateMsg").html("<h3>Your experiment has successfully been submitted</h3>");
+                    $("#expStateMsg").html("<h4>Your experiment has successfully been submitted</h4>");
                     $("#expStateMsg").append("Experiment Id : " + info.id);
                 }
                 else {
-                    $("#expStateMsg").html("<h3 style='color:red'>Error</h3>");
+                    $("#expStateMsg").html("<h4 style='color:red'>Error</h4>");
                     $("#expStateMsg").append(info.error);
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrows) {
                 $("#expState").modal('show');
-                $("#expStateMsg").html("<h3 style='color:red'>Error</h3>");
+                $("#expStateMsg").html("<h4 style='color:red'>Error</h4>");
                 $("#expStateMsg").append(textStatus + ": " + errorThrows + "<br/>" + XMLHttpRequest.responseText);
             }
         });
@@ -482,5 +497,4 @@ include("header.php") ?>
         <script src="js/bootstrap-datepicker.js"></script>
         <script src="js/bootstrap-timepicker.js"></script>
 
-  </body>
-</html>
+<?php include('footer.php') ?>

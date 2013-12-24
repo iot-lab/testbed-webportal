@@ -1,12 +1,13 @@
 <?php
 session_start();
 
-if(!$_SESSION['is_auth'] || !$_SESSION['is_admin'] ) {
-header("location: .");
-exit();
+if(!isset($_SESSION['is_auth']) || !$_SESSION['is_auth'] || !isset($_SESSION['is_admin']) || !$_SESSION['is_admin']) {
+	header("location: .");
+	exit();
 }
 
-include("header.php") ?>
+include("header.php");
+?>
 
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript">
@@ -20,23 +21,23 @@ include("header.php") ?>
 <div class="container">
   
 <div class="row">
-    <div class="span12">
+    <div class="col-md-12">
       <h2>Statistics</h2>
       <div id="loader" style="display:none"><img src="img/ajax-loader.gif"></div>
-      <div class="alert alert-error" id="div_msg" style="display:none"></div>
+      <div class="alert alert-danger" id="div_msg" style="display:none"></div>
     </div>
 </div>
   
 <div class="row" id="stats" style="display:none">
-    <div class="span6">
+    <div class="col-md-6">
         <h3>Users</h3>
         
-        <i class="icon-user"></i> <span id="usersTotal" class="badge badge-info"></span> users (with <span id="usersAdmin" class="badge"></span> admins and <span id="usersPending" class="badge badge-warning"></span> pending) <a href="scripts/download_users.php" class="btn">Download CSV</a>
+        <span class="glyphicon glyphicon-user"></span> <span id="usersTotal" class="badge badge-info"></span> users (with <span id="usersAdmin" class="badge"></span> admins and <span id="usersPending" class="badge badge-warning"></span> pending) <a href="scripts/download_users.php" class="btn btn-default">Download CSV</a>
         
         <div class="row">
             <h4>Country</h4>
-            <div class="span5">
-                 <table id="country" class="table table-condensed table-striped table-borderd"></table>
+            <div class="col-md-5">
+                 <table id="country" class="table table-condensed table-striped table-bordered"></table>
             </div>
         </div>
         
@@ -44,19 +45,22 @@ include("header.php") ?>
         <div id="chart_divGeo"></div>
     </div>
     
-    <div class="span6">
+    <div class="col-md-6">
       <h3>Experiments</h3>
-      <i class="icon-cog"></i> <span id="expTotal" class="badge badge-info"></span> experiments (with <span id="expRunning" class="badge">&nbsp;</span> running and <span id="expUpcoming" class="badge"></span> upcoming)
+      <span class="glyphicon glyphicon-cog"></span> <span id="expTotal" class="badge badge-info"></span> experiments (with <span id="expRunning" class="badge">&nbsp;</span> running and <span id="expUpcoming" class="badge"></span> upcoming)
       <div class="row">&nbsp;</div>
-      <div class="row"><div class="span3">
-    <select id="lst_exp" size="10">
-        <optgroup label="Running" id="Running"></optgroup>
-        <optgroup label="Upcoming" id="Upcoming"></optgroup>
-    </select></div>
-      <div class="span3"><br/><br/>
-      <button id="btnDetails" class="btn btn-primary">Details</button><br/><br/>
-      <button id="btnCancel" class="btn btn-danger">Cancel</button>
-      </div>
+      <div class="row">
+      	<div class="col-md-6">
+		    <select id="lst_exp" size="10" class="form-control">
+		        <optgroup label="Running" id="Running"></optgroup>
+		        <optgroup label="Upcoming" id="Upcoming"></optgroup>
+		    </select>
+    	</div>
+	    <div class="col-md-3">
+ 		  <br/><br/>
+	      <button id="btnDetails" class="btn btn-primary">Details</button><br/><br/>
+	      <button id="btnCancel" class="btn btn-danger">Cancel</button>
+        </div>
       </div>
       <hr/>
       
@@ -65,8 +69,8 @@ include("header.php") ?>
       <div class="accordion" id="accordion2">
         <div class="accordion-group" style="border:0">
             <div class="accordion-heading">
-                <i class="icon-download-alt"></i> <span id="nodesTotal" class="badge badge-info"></span> nodes (with <span id="nodesFree" class="badge">&nbsp;</span> alive, <span id="nodesBusy" class="badge"></span> busy and <span id="nodesUnavailable" class="badge badge-warning"></span> unavailable) 
-                <a data-toggle="collapse" data-parent="#accordion2" href="#collapseOne" style="color:#333;text-decoration:none"><button class="btn"><b class="caret"></b></button></a>
+                <span class="glyphicon glyphicon-alt"></span> <span id="nodesTotal" class="badge badge-info"></span> nodes (with <span id="nodesFree" class="badge">&nbsp;</span> alive, <span id="nodesBusy" class="badge"></span> busy and <span id="nodesUnavailable" class="badge badge-warning"></span> unavailable) 
+                <a data-toggle="collapse" data-parent="#accordion2" href="#collapseOne" style="color:#333;text-decoration:none"><button class="btn btn-default"><b class="caret"></b></button></a>
             </div>
             <div id="collapseOne" class="accordion-body collapse">
                 <div class="accordion-inner" id="sitesNodesDetails"></div>
@@ -82,7 +86,6 @@ include("header.php") ?>
         </div>
 </div>
 
-<?php include('footer.php') ?>
 
  
     <script type="text/javascript">
@@ -91,6 +94,9 @@ include("header.php") ?>
     var sitesNodesBusy = {};
 
     $(document).ready(function() {
+
+        $("#admin").addClass("active");
+        $("#admin_stats").addClass("active");
 
         $(document).ajaxStart(function(){
             $("#loader").show();
@@ -196,7 +202,7 @@ include("header.php") ?>
                     $("#nodesUnavailable").text(unavailable);
 
                     for(var j in sites) {
-                        $("#sitesNodesDetails").append('<i class="icon-ok"></i> <b>'+j+'</b> <span class="badge badge-info">'+sites[j]["total"]+'</span> nodes (with <span class="badge">'+sites[j]["free"]+'</span> alive, <span class="badge" id="'+j+'Busy">0</span> busy and <span class="badge badge-warning">'+sites[j]["unavailable"]+'</span> unavailable)<br/>');
+                        $("#sitesNodesDetails").append('<span class="glyphicon glyphicon-ok"></span> <b>'+j+'</b> <span class="badge badge-info">'+sites[j]["total"]+'</span> nodes (with <span class="badge">'+sites[j]["free"]+'</span> alive, <span class="badge" id="'+j+'Busy">0</span> busy and <span class="badge badge-warning">'+sites[j]["unavailable"]+'</span> unavailable)<br/>');
                     }
                     
                 },
@@ -313,6 +319,7 @@ include("header.php") ?>
     chartGeo.draw(data, options);
     
     //Gauge graph
+     /*
     var optionsGauge = {
           width: 400, height: 120,
           redFrom: 90, redTo: 100,
@@ -325,10 +332,9 @@ include("header.php") ?>
           ['Disk', <?php echo (int)(100-(disk_free_space("/senslab/experiments")*100 / disk_total_space("/senslab/experiments"))) ?>],
         ]);
     var chartGauge = new google.visualization.Gauge(document.getElementById('chart_divGauge'));
-    chartGauge.draw(data, optionsGauge);
+    chartGauge.draw(data, optionsGauge);*/
   }
     
     </script>
-
-  </body>
-</html>
+    
+<?php include('footer.php') ?>
