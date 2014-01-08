@@ -53,6 +53,26 @@ include('footer.php');
 	    /* ************ */
 	    $(document).ready(function(){
 
+		if(document.location.hash=="#logout") {
+		        $("#div_error_login_and_reset_forms").show();
+		        $("#div_error_login_and_reset_forms").removeClass("alert-danger");
+		        $("#div_error_login_and_reset_forms").addClass("alert-success");
+		        $("#div_error_login_and_reset_forms").html("You have been successfully logged out.");
+		        document.location.hash="";
+		} else if(document.location.hash=="#notlogin") {
+		        $("#div_error_login_and_reset_forms").show();
+		        $("#div_error_login_and_reset_forms").removeClass("alert-success");
+		        $("#div_error_login_and_reset_forms").addClass("alert-danger");
+		        $("#div_error_login_and_reset_forms").html("You need to be logged in to log out.");
+		        document.location.hash="";
+		} else if(document.location.hash=="#signup") {
+		        $("#div_error_login_and_reset_forms").show();
+		        $("#div_error_login_and_reset_forms").removeClass("alert-danger");
+		        $("#div_error_login_and_reset_forms").addClass("alert-success");
+		        $("#div_error_login_and_reset_forms").html("Your registration has been saved and submitted to validation by an administrator.");
+		        document.location.hash="";
+		}
+
 		$("#login").addClass('active');
 	
 	        // submit login 

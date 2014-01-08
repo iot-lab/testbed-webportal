@@ -157,14 +157,7 @@ include("header.php");
                 data: JSON.stringify(userregister),
                 contentType: "application/json; charset=utf-8",
                 success:function(data){
-                    $('#signup_form').each (function(){
-                        this.reset();
-                    });
-                    document.getElementById('captcha-img').src='scripts/captcha/captcha.php?'+Math.random();
-                    $("#div_error_signup").show();
-                    $("#div_error_signup").removeClass("alert-error");
-                    $("#div_error_signup").addClass("alert-success");
-                    $("#div_error_signup").html("Your registration has been saved and submitted to validation by an administrator.");
+		    window.location.href='/testbed/index.php#signup';
                 },
                 error:function(XMLHttpRequest, textStatus, errorThrows){
                     if(XMLHttpRequest.status == 409)

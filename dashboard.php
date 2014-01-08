@@ -202,10 +202,10 @@ var dateSrv = <?php echo time(); ?>*1000; // server date in milliseconds
         $('#tbl_exps').show();
 
         // filters by state for experiments list 
-		$('.dataTables_filter').html('<label>Filter: <select id="filter_by_state" style="margin-top:7px;"><option value="All">All</option><option value="Running">Running</option><option value="Upcoming">Upcoming</option><option value="Terminated">Terminated</option></select></label>');
-		$('#filter_by_state').change(function() {
-			oTable.fnFilter($(this).val());
-		});
+	$('.dataTables_filter').html('<label>Filter: <select id="filter_by_state" style="margin-top:7px;"><option value="All">All</option><option value="Running">Running</option><option value="Upcoming">Upcoming</option><option value="Terminated">Terminated</option></select></label>');
+	$('#filter_by_state').change(function() {
+		oTable.fnFilter($(this).val());
+	});
 
     });
     

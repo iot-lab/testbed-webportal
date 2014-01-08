@@ -528,9 +528,9 @@ Regards,</textarea>
                 data: JSON.stringify(user),
                 success:function(data){
                     if(state == "false") {
-                        oTable.fnUpdate('<a href="#" class="btn btn-valid" data="'+id+'" data-state="true" onClick="validateUser('+id+')">Valid</a>',id,5,true);
+                        oTable.fnUpdate('<a href="#" class="btn btn-default btn-valid" data="'+id+'" data-state="true" onClick="validateUser('+id+')">Valid</a>',id,5,true);
                     } else {
-                        oTable.fnUpdate('<a href="#" class="btn btn-valid btn-primary" data="'+id+'" data-state="false" onClick="validateUser('+id+')">Pending</a>',id,5,true);
+                        oTable.fnUpdate('<a href="#" class="btn btn-primary btn-valid" data="'+id+'" data-state="false" onClick="validateUser('+id+')">Pending</a>',id,5,true);
                     }
                     $("tr[data="+id+"] .btn-valid").width(50);
                 },
@@ -562,9 +562,9 @@ Regards,</textarea>
                 data: JSON.stringify(user),
                 success:function(data){
                     if(state == "false") {
-                        oTable.fnUpdate('<a href="#" class="btn btn-admin btn-warning" data="'+id+'" data-state="true" onClick="setAdmin('+id+')">Admin</a>',id,6,true);
+                        oTable.fnUpdate('<a href="#" class="btn btn-warning btn-admin" data="'+id+'" data-state="true" onClick="setAdmin('+id+')">Admin</a>',id,6,true);
                     } else {
-                        oTable.fnUpdate('<a href="#" class="btn btn-admin" data="'+id+'" data-state="false" onClick="setAdmin('+id+')">User</a>',id,6,true);
+                        oTable.fnUpdate('<a href="#" class="btn btn-default btn-admin" data="'+id+'" data-state="false" onClick="setAdmin('+id+')">User</a>',id,6,true);
                     }
                     $("tr[data="+id+"] .btn-admin").width(50);
                 },
