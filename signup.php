@@ -137,30 +137,30 @@ include("header.php");
 
         // submit sign up
         $('#signup_form').bind('submit', function(){
-        
-            var userregister = {
-            "firstName":$("#txt_firstname").val(),
-            "lastName":$("#txt_lastname").val(),
-            "email":$("#txt_email").val(),
-            "structure":$("#txt_structure").val(),
-            "city":$("#txt_city").val(),
-            "country":$("#txt_country").val(),
-            "sshPublicKey":$("#txt_sshkey").val(),
-            "motivations":$("#txt_motivation").val(),
-            "captcha":$("#captcha").val()
-            };
+
+		var userregister = {};
+		userregister.firstName=$("#txt_firstname").val();
+		userregister.lastName=$("#txt_lastname").val();
+		userregister.email=$("#txt_email").val();
+		userregister.structure=$("#txt_structure").val();
+		userregister.city=$("#txt_city").val();
+		userregister.country=$("#txt_country").val();
+		userregister.motivations=$("#txt_motivation").val();
+		userregister.captcha=$("#captcha").val();
+		userregister.sshPublicKeys=eval('["'+$("#txt_sshkey").val()+'"]');
             
             //console.log(userregister);
             
             $.ajax({
                 url: "scripts/captcha.php",
                 type: "POST",
-                data: userregister,
+                data: JSON.stringify(userregister),
+                contentType: "application/json; charset=utf-8",
                 success:function(data){
                     $('#signup_form').each (function(){
                         this.reset();
                     });
-                    document.getElementById('captcha-img').src='captcha/captcha.php?'+Math.random();
+                    document.getElementById('captcha-img').src='scripts/captcha/captcha.php?'+Math.random();
                     $("#div_error_signup").show();
                     $("#div_error_signup").removeClass("alert-error");
                     $("#div_error_signup").addClass("alert-success");
