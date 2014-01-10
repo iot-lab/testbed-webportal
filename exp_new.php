@@ -28,7 +28,7 @@ include("header.php");
     
     <!--  MODAL WINDOW FOR MANAGING PROFILES -->
 
-    <div id="profiles_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myModalLabel">
+    <div id="profiles_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
                 <div class="modal-dialog" style="width:920px;" >
                         <div class="modal-content">
                         <div class="modal-header">
@@ -180,7 +180,7 @@ include("header.php");
                		<div class=col-md-4>
                			<label class="control-label">Profile(s)</label>
                			<select class="form-control" id="my_profiles" size="15" style="margin-bottom:5px;"><optgroup label="WSN430" id="wsn430Profiles"></optgroup><optgroup label="M3" id="m3Profiles"></optgroup><optgroup label="A8" id="a8Profiles"></optgroup></select>
-				<button id='profilesModalLink' class="btn btn-default" data-toggle="modal" data-target="#profiles_modal" style="cursor:pointer">Manage Profiles</button>
+				<button id='profilesModalLink' class="btn btn-default" data-toggle="modal" data-target="#profiles_modal">Manage Profiles</button>
                		</div>
                		<div class=col-md-4>
                			<label class="control-label">Firmware(s)</label>
