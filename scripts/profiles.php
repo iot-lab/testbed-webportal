@@ -9,7 +9,7 @@
 		<br/><br/>To <b>edit</b> a profile, click on the profile name on the list, edit settings, and click <b>Save</b>.
 		<br/><br/>When finished, close the window by clicking <b>X</b>.
 	</div>
-	<select id="my_profiles_modal" size="15" class="form-control" style="margin-bottom:5px;"></select>
+	<select class="form-control" id="my_profiles_modal" size="15" style="margin-bottom:5px;"><optgroup label="WSN430" id="wsn430Profiles_modal"></optgroup><optgroup label="M3" id="m3Profiles_modal"></optgroup><optgroup label="A8" id="a8Profiles_modal"></optgroup></select>
 	<p>
 		<button class="btn btn-default" id="btn_new">New</button>
 		<button class="btn btn-danger" id="btn_delete">Delete</button>
@@ -329,7 +329,7 @@ function loadProfiles() {
                 
                 //fill profiles list
                 for(var i = 0; i < my_profiles.length; i++) {
-                    $("#my_profiles_modal").append(new Option(my_profiles[i].profilename,my_profiles[i].profilename));
+                	$("#"+my_profiles[i].nodearch+"Profiles_modal").append(new Option(my_profiles[i].profilename,my_profiles[i].profilename));
                 }
                 
                 //bind onClick event
@@ -571,7 +571,7 @@ $("#form_part").bind("submit", function (e) {
             
             if(!edit) {                
             	result_msg="Profile created.";
-                $("#my_profiles_modal").append(new Option(profile_json.profilename,profile_json.profilename));
+                $("#"+profile_json.nodearch+"Profiles_modal").append(new Option(profile_json.profilename,profile_json.profilename));
                 my_profiles.push(profile_json);
             } else {
             	result_msg="Profile edited.";

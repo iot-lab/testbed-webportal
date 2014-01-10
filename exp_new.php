@@ -25,6 +25,23 @@ include("header.php");
             </div>
             
             
+    
+    <!--  MODAL WINDOW FOR MANAGING PROFILES -->
+
+    <div id="profiles_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" style="width:920px;" >
+                        <div class="modal-content">
+                        <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onClick="refreshProfiles();">&times;</button>
+                                        <h3>Manage Profiles</h3>
+                        </div>
+                       <div class="modal-body">
+                                        <div class="alert alert-danger" id="div_error_profiles" style="display:none"></div>
+                                        <div class="row" id="profiles_modal-body"></div>
+                       </div>
+                        </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
             
     <!--  MODAL WINDOW FOR EXP STATE -->
 
@@ -44,8 +61,6 @@ include("header.php");
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-    
-    
 
             <form class="well form-horizontal form-inline" id="form_part1">
 
@@ -165,7 +180,7 @@ include("header.php");
                		<div class=col-md-4>
                			<label class="control-label">Profile(s)</label>
                			<select class="form-control" id="my_profiles" size="15" style="margin-bottom:5px;"><optgroup label="WSN430" id="wsn430Profiles"></optgroup><optgroup label="M3" id="m3Profiles"></optgroup><optgroup label="A8" id="a8Profiles"></optgroup></select>
-               			<button id="btn_refresh" class="btn btn-default">Refresh</button>
+				<button id='profilesModalLink' class="btn btn-default" data-toggle="modal" data-target="#profiles_modal" style="cursor:pointer">Manage Profiles</button>
                		</div>
                		<div class=col-md-4>
                			<label class="control-label">Firmware(s)</label>
@@ -232,6 +247,7 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
         
         <script type="text/javascript">
 
+
             /* ************ */
             /*  global var  */
             /* ************ */
@@ -261,6 +277,12 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
             /*   on ready   */
             /* ************ */
             $(document).ready(function () {
+		// profiles things
+		$('#profiles_modal').modal('hide');
+		$('#profilesModalLink').click(function(){loadProfilesModal();});
+		$('#profilesModalLink2').click(function(){loadProfilesModal();});
+
+		// exp_new things
                 $("#exp_new").addClass("active");
                 $("#exp_new2").addClass("active");
 
@@ -373,7 +395,6 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                         var val = $(this).val();
                         if(val != "") {
                             var snodes = expand(val.split(","));
-                            console.log(sites_nodes);
                             for (i = 0; i < snodes.length; i++) {
                                 var node_network_address;
                             	if(!isNaN(snodes[i]) && ((node_network_address=archi+"-"+snodes[i]+"."+site+".iot-lab.info") in sites_nodes)) {
@@ -386,7 +407,6 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
 
                 }
 
-                console.log(exp_json);
                 if(exp_json.nodes.length!=0) {
                         $("#form_part1").hide();
                         $("#form_part2").show();
@@ -676,13 +696,6 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                 if($("#resources_table tr").length != 1) $(btnDelete).parent().parent().remove();
             }
             
-            //refresh profile list
-            $("#btn_refresh").click(function(){
-                $("#my_profiles option").remove();
-                getProfiles();
-                return false;
-            });
-            
             //click on previous button
             $("#btn_previous").click(function(){
                 $("#form_part2").hide();
@@ -731,7 +744,7 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
             $("#my_nodes").change(function(){
                 var nodearch = sites_nodes[$("#my_nodes").val()[0]];
 				if(nodearch==null) nodearch=($("#my_nodes option:selected").text()).split(':')[0];
-				console.log(nodearch);
+				
                 $("#my_profiles optgroup").attr("disabled","disabled");
                 $("#my_profiles option").css("font-style","italic");
                 $("#my_firmwares optgroup").attr("disabled","disabled");
@@ -890,6 +903,32 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
 			function openMapPopup(site) {
 				window.open('maps.php?site='+site, '', 'resizable=yes, location=no, width=800, height=700, menubar=no, status=no, scrollbars=no, menubar=no');
 			}
+
+
+            
+            //refresh profile list
+            function refreshProfiles(){
+                $("#my_profiles option").remove();
+                getProfiles();
+                return false;
+            });
+
+	    // get modal form
+    function loadProfilesModal() {
+            $.ajax({
+              type: "GET",
+              url: "scripts/profiles.php",
+              success: function(html){
+                  $("#profiles_modal-body").html(html);
+              },
+              error:function(XMLHttpRequest, textStatus, errorThrows){
+                  $("#div_error_ssh").removeClass("alert-success");
+                  $("#div_error_ssh").addClass("alert-danger");
+                  $("#div_error_ssh").html("An error occurred while loading profiles.");
+                  $("#div_error_ssh").show();
+              }
+            });
+    }
             
         </script>
         
