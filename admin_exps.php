@@ -189,7 +189,8 @@ if (isset($_GET['user'])) {
                     "delay": 0,
                     "track": true,
                     "fade": 250,
-                    "placement": 'right'
+                    "placement": 'right',
+                    "container": 'body'
                 });
             }
         });

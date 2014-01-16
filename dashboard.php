@@ -189,7 +189,8 @@ var dateSrv = <?php echo time(); ?>*1000; // server date in milliseconds
                     "delay": 0,
                     "track": true,
                     "fade": 250,
-                    "placement": 'right'
+                    "placement": 'right',
+                    "container": 'body'
                 });
             }
         });
