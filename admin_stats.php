@@ -12,8 +12,8 @@ include("header.php");
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript">
   google.load('visualization', '1.0', {'packages':['corechart']});
-  google.load('visualization', '1.0', {'packages':['geochart']});
-  google.load('visualization', '1.0', {'packages':['gauge']});
+  google.load('visualization', '1', {'packages':['geochart']});
+  //google.load('visualization', '1.0', {'packages':['gauge']});
   // Set a callback to run when the Google Visualization API is loaded.
   // google.setOnLoadCallback(drawChart);
 </script>
@@ -314,7 +314,7 @@ include("header.php");
     chart.draw(data, options);
     
     //Geo graph
-    var dataGeo = google.visualization.arrayToDataTable(graph);
+    //var dataGeo = google.visualization.arrayToDataTable(graph);
     var chartGeo = new google.visualization.GeoChart(document.getElementById('chart_divGeo'));
     chartGeo.draw(data, options);
     
