@@ -286,10 +286,10 @@
                                    '<div class="modal-content">'+
                                        '<table>'+
                                            '<tr>'+
-                                               '<td><a href="#" data-action="incrementHour"><i class="icon-chevron-up"></i></a></td>'+
+                                               '<td><a href="#" data-action="incrementHour"><span class="glyphicon glyphicon-chevron-up"></span></a></td>'+
                                                '<td class="separator"></td>'+
-                                               '<td><a href="#" data-action="incrementMinute"><i class="icon-chevron-up"></i></a></td>'+
-                                               ( this.showMeridian ? '<td><a href="#" data-action="toggleMeridian"><i class="icon-chevron-up"></i></a></td>' : '' ) +
+                                               '<td><a href="#" data-action="incrementMinute"><span class="glyphicon glyphicon-chevron-up"></span></a></td>'+
+                                               ( this.showMeridian ? '<td><a href="#" data-action="toggleMeridian"><span class="glyphicon glyphicon-chevron-up"></span></a></td>' : '' ) +
                                            '</tr>'+
                                            '<tr>'+
                                                '<td class="bootstrap-timepicker-hour"></td> '+
@@ -298,10 +298,10 @@
                                                ( this.showMeridian ? '<td class="bootstrap-timepicker-meridian"></td>' : '' ) +
                                            '</tr>'+
                                            '<tr>'+
-                                               '<td><a href="#" data-action="decrementHour"><i class="icon-chevron-down"></i></a></td>'+
+                                               '<td><a href="#" data-action="decrementHour"><span class="glyphicon glyphicon-chevron-down"></span></a></td>'+
                                                '<td class="separator"></td>'+
-                                               '<td><a href="#" data-action="decrementMinute"><i class="icon-chevron-down"></i></a></td>'+
-                                               ( this.showMeridian ? '<td><a href="#" data-action="toggleMeridian"><i class="icon-chevron-down"></i></a></td>' : '' ) +
+                                               '<td><a href="#" data-action="decrementMinute"><span class="glyphicon glyphicon-chevron-down"></span></a></td>'+
+                                               ( this.showMeridian ? '<td><a href="#" data-action="toggleMeridian"><span class="glyphicon glyphicon-chevron-down"></span></a></td>' : '' ) +
                                            '</tr>'+
                                        '</table>'+
                                    '</div>'+
@@ -315,10 +315,10 @@
                     template = '<div class="bootstrap-timepicker dropdown-menu">'+
                                    '<table>'+
                                        '<tr>'+
-                                           '<td><a href="#" data-action="incrementHour"><i class="icon-chevron-up"></i></a></td>'+
+                                           '<td><a href="#" data-action="incrementHour"><span class="glyphicon glyphicon-chevron-up"></span></a></td>'+
                                            '<td class="separator"></td>'+
-                                           '<td><a href="#" data-action="incrementMinute"><i class="icon-chevron-up"></i></a></td>'+
-                                           ( this.showMeridian ? '<td><a href="#" data-action="toggleMeridian"><i class="icon-chevron-up"></i></a></td>' : '' ) +
+                                           '<td><a href="#" data-action="incrementMinute"><span class="glyphicon glyphicon-chevron-up"></span></a></td>'+
+                                           ( this.showMeridian ? '<td><a href="#" data-action="toggleMeridian"><span class="glyphicon glyphicon-chevron-up"></span></a></td>' : '' ) +
                                        '</tr>'+
                                        '<tr>'+
                                            '<td class="bootstrap-timepicker-hour"></td> '+
@@ -327,10 +327,10 @@
                                            ( this.showMeridian ? '<td class="bootstrap-timepicker-meridian"></td>' : '' ) +
                                        '</tr>'+
                                        '<tr>'+
-                                           '<td><a href="#" data-action="decrementHour"><i class="icon-chevron-down"></i></a></td>'+
+                                           '<td><a href="#" data-action="decrementHour"><span class="glyphicon glyphicon-chevron-down"></span></a></td>'+
                                            '<td class="separator"></td>'+
-                                           '<td><a href="#" data-action="decrementMinute"><i class="icon-chevron-down"></i></a></td>'+
-                                           ( this.showMeridian ? '<td><a href="#" data-action="toggleMeridian"><i class="icon-chevron-down"></i></a></td>' : '' ) +
+                                           '<td><a href="#" data-action="decrementMinute"><span class="glyphicon glyphicon-chevron-down"></span></a></td>'+
+                                           ( this.showMeridian ? '<td><a href="#" data-action="toggleMeridian"><span class="glyphicon glyphicon-chevron-down"></span></a></td>' : '' ) +
                                        '</tr>'+
                                    '</table>'+
                                '</div>';
