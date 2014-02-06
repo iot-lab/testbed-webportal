@@ -1,6 +1,12 @@
 <?php
+/* are we showing activity or testbed? */
+/* check the name of the file: stats, monika or drawgantt are for activity */
+$is_activity = ((strpos($_SERVER['PHP_SELF'],"/stats.php")!==FALSE) || (strpos($_SERVER['PHP_SELF'],"/drawgantt.php")!==FALSE) || (strpos($_SERVER['PHP_SELF'],"/monika.php")!==FALSE));
+
 $body_padding_top=51;
-if(isset($_SESSION['is_auth']) && $_SESSION['is_auth']) $body_padding_top=102;
+if(isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) $body_padding_top=102;
+
+
 ?>
 
 <!DOCTYPE html>
@@ -98,13 +104,20 @@ if(isset($_SESSION['is_auth']) && $_SESSION['is_auth']) $body_padding_top=102;
 			<?php include('./wp-menu/wp-menu.php'); ?>
 	
 			<ul class="nav navbar-nav navbar-right testbed">
+				<li class="dropdown <?php echo ($is_activity?'active':''); ?>">
+					<a href="./stats.php" class="testbed" title="Testbed activity" data-hover="dropdown"><span class="glyphicon glyphicon-info"></span> Activity <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li id="stats"><a href="./stats.php">Statistics</a></li>
+						<li id="monika"><a href="./monika.php">View nodes status</a></li>
+						<li id="drawgantt"><a href="./drawgantt.php">View gantt chart</a></li>
+					</ul>
+				</li>
 <?php if(isset($_SESSION['is_auth']) && $_SESSION['is_auth']) { ?>
-				<li class="dropdown active">
+				<li class="dropdown <?php echo ($is_activity?'':'active'); ?>">
 					<a href="./" class="testbed" title="Testbed" data-hover="dropdown"><span class="glyphicon glyphicon-wrench"></span> Testbed <b class="caret"></b></a>
 					<ul class="dropdown-menu">
 						<li id="dashboard"><a href="./dashboard.php"><span class="glyphicon glyphicon-list"></span> Dashboard</a></li>
 						<li id="exp_new"><a href="./exp_new.php"><span class="glyphicon glyphicon-file"></span> New Experiment</a></li>
-						<!--<li><a id='profilesModalLink2' data-toggle="modal" data-target="#profiles_modal" style="cursor:pointer"><span class="glyphicon glyphicon-cog"></span> Manage Profiles</a></li>-->
 						<li id="profiles"><a href="./profiles.php"><span class="glyphicon glyphicon-cog"></span> Manage Profiles</a></li>
 						<li class="divider"></li>
 						<li class="dropdown-header"><span class="glyphicon glyphicon-user"></span> <?php echo $_SESSION['login']; ?></li>
@@ -124,7 +137,7 @@ if(isset($_SESSION['is_auth']) && $_SESSION['is_auth']) $body_padding_top=102;
 
 	<!--  LOGGED IN NAV BAR  -->
 	
-<?php if(isset($_SESSION['is_auth']) && $_SESSION['is_auth']) { ?>
+<?php if(isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) { ?>
 	<div class="navbar navbar-default navbar-fixed-top navbar-grey" role="banner">
 		<div class="container">
 			<!-- Brand and toggle get grouped for better mobile display -->
@@ -154,7 +167,7 @@ if(isset($_SESSION['is_auth']) && $_SESSION['is_auth']) $body_padding_top=102;
 	                        <li id="admin_users"><a href="./admin_users.php">Users</a></li>
                         	<li id="admin_exps"><a href="./admin_exps.php">Experiments</a></li>
                         	<li id="admin_nodes"><a href="./admin_nodes.php">Nodes</a></li>
-                			<li id="admin_stats"><a href="./admin_stats.php">Statistics</a></li>
+                		<li id="admin_stats"><a href="./admin_stats.php">Statistics</a></li>
                     	</ul>
                 	</li>
 		</ul>

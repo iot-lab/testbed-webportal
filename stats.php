@@ -111,6 +111,8 @@ include("header.php") ?>
 
     <script type="text/javascript">
 
+    $("#stats").addClass("active");
+
     var oTable;
     var graph = [];
     var sitesNodesBusy = {};
