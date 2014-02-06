@@ -218,30 +218,30 @@ var dateSrv = <?php echo time(); ?>*1000; // server date in milliseconds
 			dataType: "JSON",
 			contentType: "application/json; charset=utf-8",
 			success: function (data) {
-				// state : 0 = upcomming ; 1 = running ; 2 = terminated
+				// state : 0 = upcomming ; 1 = running ; 2 = terminated 
 				var newState=2;
 				var state = data['state'];
 				if( state == "Waiting" || state=="Launching" || state=="Suspended" || state == "Hold" || state=="toAckReservation" || state=="toLaunch" ) newState=0;
 				else if( state == "Running" || state == "Finishing" || state == "Resuming" || state == "toError" ) newState=1;
 				
 				if (currentState == newState) setTimeout(function(){checkState(id,currentState,date,duration);},2000); // no state change, still upcomming or running, refresh again
-				else if (currentState == 0 && newState == 1) { // state change from upcomming to running, refresh again
+				else if (currentState == 0 && newState == 1) { // state change from upcomming to running, refresh again 
 					setTimeout(function(){checkState(id,1,date,duration);},duration-2000); /* TODO verif */
 					console.log(id+" is now running; refresh in "+(duration-2000)/1000+" s.");
 					$("#"+id+" td span").removeClass("label-info");
 					$("#"+id+" td span").addClass("label-success");
-					$("#"+id+" td span").html(state);
 					/* change badges in Personal Dashboard */
 					changeBadges("expUpcoming","expRunning");
-				} else { // state change from upcomming or running to terminated, stop refreshing
+				} else { // state change from upcomming or running to terminated or error, stop refreshing 
 					$("#"+id+" td span").removeClass("label-info");
 					$("#"+id+" td span").removeClass("label-success");
 					$("#"+id+" td span").removeClass("label-danger");
-					if(state == "Error")  $("#"+id+" td span").addClass("label-danger");
-					$("#"+id+" td span").html(state);
+					if(state == "Terminated")  $("#"+id+" td span").addClass("label-default");
+					else if(state == "Error")  $("#"+id+" td span").addClass("label-danger");
 					/* change badges in Personal Dashboard */
 					changeBadges((currentState==0?"expUpcoming":"expRunning"),"expTerminated");
 				}
+				$("#"+id+" td span").html(state);
 			},
 			error: function (XMLHttpRequest, textStatus, errorThrows) {
 				$("#div_msg").removeClass("alert-success");
