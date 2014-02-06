@@ -180,7 +180,8 @@ include("header.php");
                		<div class=col-md-4>
                			<label class="control-label">Profile(s)</label>
                			<select class="form-control" id="my_profiles" size="15" style="margin-bottom:5px;"><optgroup label="WSN430" id="wsn430Profiles"></optgroup><optgroup label="M3" id="m3Profiles"></optgroup><optgroup label="A8" id="a8Profiles"></optgroup></select>
-				<button id='profilesModalLink' class="btn btn-default" data-toggle="modal" data-target="#profiles_modal">Manage Profiles</button>
+						<button id='profilesModalLink' class="btn btn-default" data-toggle="modal" data-target="#profiles_modal">Manage Profiles</button>
+						<button class="btn btn-default" onClick="refreshProfiles();return false;">Refresh</button>
                		</div>
                		<div class=col-md-4>
                			<label class="control-label">Firmware(s)</label>
@@ -277,12 +278,12 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
             /*   on ready   */
             /* ************ */
             $(document).ready(function () {
-		// profiles things
-		$('#profiles_modal').modal('hide');
-		$('#profilesModalLink').click(function(){loadProfilesModal();});
-		$('#profilesModalLink2').click(function(){loadProfilesModal();});
-
-		// exp_new things
+				// profiles things
+				$('#profiles_modal').modal('hide');
+				$('#profilesModalLink').click(function(){loadProfilesModal();});
+				$('#profilesModalLink2').click(function(){loadProfilesModal();});
+		
+				// exp_new things
                 $("#exp_new").addClass("active");
                 $("#exp_new2").addClass("active");
 
@@ -453,18 +454,18 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                     return false;
                 }
 
-		if(exp_json.type=="psysical") {
-				// for each selected node, check the architecture 
-				for (var i = 0 ; i < nodes_set.length ; i++) {
-					if(profileNodearch != null && sites_nodes[nodes_set[i]].indexOf(profileNodearch)==-1) {
-	                    alert("The profile is not compatible with some nodes architecture.");
-	                    return false;
-					} 
-					if(fwNodearch != null && sites_nodes[nodes_set[i]].indexOf(fwNodearch)==-1) {
-	                    alert("The firmware is not compatible with some nodes architecture.");
-	                    return false;
+				if(exp_json.type=="psysical") {
+					// for each selected node, check the architecture 
+					for (var i = 0 ; i < nodes_set.length ; i++) {
+						if(profileNodearch != null && sites_nodes[nodes_set[i]].indexOf(profileNodearch)==-1) {
+		                    alert("The profile is not compatible with some nodes architecture.");
+		                    return false;
+						} 
+						if(fwNodearch != null && sites_nodes[nodes_set[i]].indexOf(fwNodearch)==-1) {
+		                    alert("The firmware is not compatible with some nodes architecture.");
+		                    return false;
+						}
 					}
-				}
                 }
 
 				// everything is OK, let's do the job 
@@ -911,24 +912,24 @@ If you select mobile nodes on train, every nodes of the train will be reserved.
                 $("#my_profiles option").remove();
                 getProfiles();
                 return false;
-            });
+            }
 
-	    // get modal form
-    function loadProfilesModal() {
-            $.ajax({
-              type: "GET",
-              url: "scripts/profiles.php",
-              success: function(html){
-                  $("#profiles_modal-body").html(html);
-              },
-              error:function(XMLHttpRequest, textStatus, errorThrows){
-                  $("#div_error_ssh").removeClass("alert-success");
-                  $("#div_error_ssh").addClass("alert-danger");
-                  $("#div_error_ssh").html("An error occurred while loading profiles.");
-                  $("#div_error_ssh").show();
-              }
-            });
-    }
+			 // get modal form
+		    function loadProfilesModal() {
+	            $.ajax({
+	              type: "GET",
+	              url: "scripts/profiles.php",
+	              success: function(html){
+	                  $("#profiles_modal-body").html(html);
+	              },
+	              error:function(XMLHttpRequest, textStatus, errorThrows){
+	                  $("#div_error_ssh").removeClass("alert-success");
+	                  $("#div_error_ssh").addClass("alert-danger");
+	                  $("#div_error_ssh").html("An error occurred while loading profiles.");
+	                  $("#div_error_ssh").show();
+	              }
+	            });
+    		}
             
         </script>
         
