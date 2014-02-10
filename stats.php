@@ -129,7 +129,7 @@ include("header.php") ?>
 
         /* Retrieve users infos */
         $.ajax({
-            url: "/testbed/scripts/admin_stats.php",
+            url: "/rest/stats",
             type: "GET",
             dataType: "json",
             success:function(data){
