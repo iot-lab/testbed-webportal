@@ -427,6 +427,7 @@ Regards,</textarea>
                     '<td><a href="admin_exps.php?user='+val.login+'" class="btn btn-default btn-view" title="Experiments"><span class="glyphicon glyphicon-list"></span></a> ' +
                         '<a href="#" class="btn btn-default btn-edit" data-toggle="modal" data="'+i+'" title="Edit"><span class="glyphicon glyphicon-pencil"></span></a> ' +
                         '<a href="#" class="btn btn-default btn-email" data-toggle="modal" data="'+i+'" title="Email"><span class="glyphicon glyphicon-envelope"></span></a> ' +
+                        '<a href="#" class="btn btn-danger btn-passwd" data="'+i+'" onClick="resetPasswd('+i+')" title="Reset password"><span class="glyphicon glyphicon-lock"></span></a> ' +
                         '<a href="#" class="btn btn-danger btn-del" data="'+i+'" onClick="deleteUser('+i+')" title="Delete"><span class="glyphicon glyphicon-remove"></span></a></td>'
                     +'</tr>');
                     $("tr[data="+i+"] .btn-valid").width(50);
@@ -507,7 +508,27 @@ Regards,</textarea>
             });
         }
     };
-    
+
+
+    /* Reset a user's password */
+    function resetPasswd(id) {
+        var userreset = users[id];
+        if(confirm("Reset password for user "+userreset.login+"?")) {
+            $.ajax({
+                url: "/rest/admin/users/"+userreset.login+"?resetpassword",
+                type: "PUT",
+                contentType: "application/json",
+                dataType: "text",
+
+                success:function(data){
+                        alert(userreset.login+"'s password has been reset");
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrows){
+                    alert("error: " + errorThrows);
+                }
+            });
+        }
+    };
     
     /* Toggle Valid state */
     function validateUser(id) {
