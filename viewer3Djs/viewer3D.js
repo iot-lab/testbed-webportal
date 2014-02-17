@@ -139,6 +139,8 @@ function factorize(nodes) {
     var intervalStart = 0;
     nodes.sort(sortfunction);
     for (var j = 0; j < nodes.length; j++) {
+        if(isNaN(nodes[j]))
+            continue;
         if (intervalStart) {
             // we are in an interval
             var previousTemp = previous;
@@ -285,7 +287,18 @@ function Zoom(delta) {
 
 // return the graphical node under the mouse
 function findNodeUnderMouse(event) {
-    var vector = new THREE.Vector3(((event.clientX - offX) / window3DWidth) * 2 - 1, -((event.clientY - offY) / window3DHeight) * 2 + 1, 0.5);
+
+    var target = event.target;
+    pos_x = event.clientX;
+    pos_y = event.clientY;
+    var rect = target.getBoundingClientRect();
+
+    var left = pos_x - rect.left - target.clientLeft + target.scrollLeft;
+    var top = pos_y - rect.top - target.clientTop + target.scrollTop;
+    var deviceX = left / target.clientWidth * 2 - 1;
+    var deviceY = -top / target.clientHeight * 2 + 1;
+    var vector = new THREE.Vector3(deviceX, deviceY, 0.5);
+
     projector.unprojectVector(vector, camera);
     var ray = new THREE.Ray(camera.position, vector.subSelf(camera.position).normalize());
     var intersects = ray.intersectObjects(objects);

@@ -39,7 +39,6 @@ body {
 	            	<div class="col-sm-6 col-md-6"><div class="row" id="inputs_nodebox"></div></div>
 		            <div class="col-sm-4 col-md-4">
 		            	<button class="btn btn-primary" id="btnSave" onClick="save()" value="Save">Save</button>
-		            	<button class="btn" id="btnAllFree" onClick="allFree()" value="Save">All Free Nodes</button>
 		            </div>
 	            </div>
             </div>
@@ -107,7 +106,7 @@ body {
             success:function(data){
               
                 all_nodes = data;
-				bdd['all'] = [];
+                bdd['all'] = [];
                 var archis= [];
 		
 
