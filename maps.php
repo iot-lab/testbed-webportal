@@ -98,7 +98,8 @@ body {
 
     function loadResources() {
         $.ajax({
-            url: "/rest/admin/resourcesproperties",
+            url: "/rest/experiments?resources",
+            //url: "/rest/admin/resourcesproperties",
             type: "GET",
             dataType: "json",
             contentType: "application/json; charset=utf-8",
@@ -110,30 +111,30 @@ body {
                 var archis= [];
 		
 
-                for(var i in data) {
+                for(i=0; i<data.items.length; i++) {
                     var n = [];
                     
-                    if(data[i].site == site) {
-                    	if(archis.indexOf(data[i].archi)==-1) { // unknown archi, adding it 
-                            archis.push(data[i].archi);
-                            bdd[data[i].archi] = [];
-                            $("#tab_trails").append('<li><a href="#" data-toggle="tab" data-value="'+data[i].archi+'">'+data[i].archi+'</a></li>');
-                            $("#inputs_nodebox").append('<div class="col-sm-4 col-md-4 text-right" style="padding:7px 12px;">'+data[i].archi+': </div><div class="col-sm-8 col-md-8"><input type="text" placeholder="1-10,24,25" class="form-control col-md-3" style="margin-bottom:4px;" id="'+data[i].archi+'_nodebox" name="nodebox"/></div>');
+                    if(data.items[i].site == site) {
+                    	if(archis.indexOf(data.items[i].archi)==-1) { // unknown archi, adding it 
+                            archis.push(data.items[i].archi);
+                            bdd[data.items[i].archi] = [];
+                            $("#tab_trails").append('<li><a href="#" data-toggle="tab" data-value="'+data.items[i].archi+'">'+data.items[i].archi+'</a></li>');
+                            $("#inputs_nodebox").append('<div class="col-sm-4 col-md-4 text-right" style="padding:7px 12px;">'+data.items[i].archi+': </div><div class="col-sm-8 col-md-8"><input type="text" placeholder="1-10,24,25" class="form-control col-md-3" style="margin-bottom:4px;" id="'+data.items[i].archi+'_nodebox" name="nodebox"/></div>');
                     	}
                         
-                        var nn = data[i].network_address;
+                        var nn = data.items[i].network_address;
                         var node_id = nn.substring(0,nn.indexOf("."));
                         
                         n.push(node_id);
-                        n.push(parseFloat(data[i].x));
-                        n.push(parseFloat(data[i].y));
-                        n.push(parseFloat(data[i].z));
-                        n.push(data[i].uid);
-                        n.push(data[i].state);
-                        n.push(data[i].archi);
+                        n.push(parseFloat(data.items[i].x));
+                        n.push(parseFloat(data.items[i].y));
+                        n.push(parseFloat(data.items[i].z));
+                        n.push(data.items[i].uid);
+                        n.push(data.items[i].state);
+                        n.push(data.items[i].archi);
                         nodes.push(n);
 
-                        bdd[data[i].archi].push(n);
+                        bdd[data.items[i].archi].push(n);
                         bdd['all'].push(n);
 
                     }
