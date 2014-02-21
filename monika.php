@@ -9,7 +9,7 @@ include("header.php");
 
     <div class="row" id="login_div">
     <div class="span12" heigth="800px">
-          <iframe onload="resizeFrame(document.getElementById('childframe'))" src="/monika" width="100%" frameborder="0" id="childframe"></iframe>
+          <iframe onload="resizeFrame(document.getElementById('childframe'))" src="/testbed/monika" width="100%" frameborder="0" id="childframe"></iframe>
     </div>
 
     </div>
@@ -20,20 +20,21 @@ include("header.php");
 <?php include('footer.php') ?>
 
     <script type="text/javascript">
-	$("#monika").addClass("active");
 
-	function resizeFrame(f) {
-		f.style.height = (f.contentWindow.document.body.scrollHeight + 50) + "px";
-	}
+		$("#monika").addClass("active");
 
-	function showSignup() {
-		window.location.href=".";
-	}
+        function resizeFrame(f) {
+              f.style.height = (f.contentWindow.document.body.scrollHeight + 50) + "px";
+        }
 
-	function showLogin() {
-		window.location.href=".";
-	}
 
+        function showSignup() {
+            window.location.href=".";
+        }
+
+        function showLogin() {
+            window.location.href=".";
+        }
     </script>
 
   </body>

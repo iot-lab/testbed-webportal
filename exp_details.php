@@ -220,7 +220,7 @@ include("header.php");
                     }
 
 
-                    $("#detailsExpSummary").html("<b>Experiment:</b> <a href=\"/monika?job=" + id + "\">" + id + "</a><br/>");
+                    $("#detailsExpSummary").html("<b>Experiment:</b> <a href=\"monika?job=" + id + "\">" + id + "</a><br/>");
                     $("#detailsExpSummary").append("<b>State:</b> " + expState + "<br/>");
                     $("#detailsExpSummary").append("<b>Name:</b> " + exp_name + "<br/>");
                     $("#detailsExpSummary").append("<b>Duration (min):</b> " + data.duration + "<br/>");
