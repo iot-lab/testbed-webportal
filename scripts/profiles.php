@@ -184,7 +184,7 @@
 						<label class="col-lg-4 control-label" for="radio_mode_m3">Radio mode</label>
 						<div class="col-lg-8">
 							<label class="radio"><input type="radio" name="radio_mode_m3" id="radio_mode_none_m3" value="none" data-target="#m3RadioNonePanel" checked> none</label>&nbsp;&nbsp;
-							<label class="radio"><input type="radio" name="radio_mode_m3" id="radio_mode_measure_m3" value="measure" data-target="#m3RadioMeasurePanel"> measure</label>
+							<label class="radio"><input type="radio" name="radio_mode_m3" id="radio_mode_measure_m3" value="rssi" data-target="#m3RadioMeasurePanel"> rssi</label>
 						</div>
 					</div>
 					
@@ -195,41 +195,25 @@
 	
 						<div id="m3RadioMeasurePanel" class="tab-pane">	
 							<div class="form-group" style="width:100%;margin-bottom:10px">
-								<label class="col-lg-4 control-label" for="radio_channel_m3">Channel</label>
+								<label class="col-lg-4 control-label" for="radio_channel_m3">Channels</label>
 								<div class="col-lg-8">
-									<select id="radio_channel_m3" class="form-control">
+									<select multiple id="radio_channel_m3" class="form-control" onchange="visibilityRadioNum();">
 										<option value='11'>11</option><option value='12'>12</option><option value='13'>13</option><option value='14'>14</option><option value='15'>15</option><option value='16'>16</option><option value='17'>17</option><option value='18'>18</option><option value='19'>19</option><option value='20'>20</option><option value='21'>21</option><option value='22'>22</option><option value='23'>23</option><option value='24'>24</option><option value='25'>25</option><option value='26'>26</option>							</select>
 								</div>
 							</div>
-			
 							<div class="form-group" style="width:100%;margin-bottom:10px">
-								<label class="col-lg-4 control-label" for="radio_power_m3">Power (unit?)</label>
+								<label class="col-lg-4 control-label" for="radio_period_m3">Period (ms)</label>
 								<div class="col-lg-8">
-									<select id="radio_power_m3" class="form-control">
-										<option value="3">3</option>
-										<option value="2.8">2.8</option>
-										<option value="2.3">2.3</option>
-										<option value="1.8">1.8</option>
-										<option value="1.3">1.3</option>
-										<option value="0.7">0.7</option>
-										<option value="0">0</option>
-										<option value="-1">-1</option>
-										<option value="-2">-2</option>
-										<option value="-3">-3</option>
-										<option value="-4">-4</option>
-										<option value="-5">-5</option>
-										<option value="-7">-7</option>
-										<option value="-9">-9</option>
-										<option value="-12">-12</option>
-										<option value="-17">-17</option>
-									</select>
+									<!--<input type="text" id="radio_period_m3" class="form-control"/>-->
+									<input type="number" id="radio_period_m3" class="form-control" min="1" max="65535" step="1"/>
 								</div>
 							</div>
-			
-							<div class="form-group" style="width:100%;margin-bottom:10px">
-								<label class="col-lg-4 control-label" for="radio_frequency_m3">Frequency (ms)</label>
+							<div class="form-group" style="width:100%;margin-bottom:10px" id="m3RadioNumChannel">
+								<label class="col-lg-4 control-label" for="radio_num_per_channel_m3">Number of measure per channel</label>
 								<div class="col-lg-8">
-									<input type="text" id="radio_frequency_m3" class="form-control"/>
+									<!--<input type="text" id="radio_num_per_channel_m3" value="0" class="form-control"/>-->
+									<input type="range" id="radio_num_per_channel_m3" value="1" max="255" min="1" step="1" onchange="updateRadioNum(this.value);"/>
+									<output for="radio_num_per_channel_m3" id="radio_num_m3"/>
 								</div>
 							</div>
 						</div>	
@@ -269,7 +253,24 @@ var my_profiles = [];
 var profilesLoaded = false;
 var edit = false;
 var index = -1;
+var radio_num = 0;
 
+function updateRadioNum(num) {
+	$("#radio_num_m3").val(num);
+}
+
+function visibilityRadioNum() {
+	var count = $("#radio_channel_m3 :selected").length;
+	if (count > 1) {
+		$("#m3RadioNumChannel").show();
+		radio_num = $("#radio_num_per_channel_m3").val()
+		$("#radio_num_m3").val(radio_num)
+	}
+	else {
+		$("#m3RadioNumChannel").hide();
+		radio_num = 0;
+	}
+}
 
 
 /* ************ */
@@ -296,6 +297,7 @@ $(document).ready(function(){
 	});
 	
 	loadProfiles();
+	visibilityRadioNum()
 
 
 });
@@ -347,6 +349,7 @@ function loadProfiles() {
     }
 }
 
+
 /* ******************************************* */
 /* load the selected profile and fill the form */
 /* ******************************************* */
@@ -373,34 +376,40 @@ function loadProfile() {
         $("#or_nodearch_"+nodearch+"").tab('show');
         
         if(nodearch=="wsn430") {
-	        $('#consumption_frequency_wsn430').val(my_profiles[i].consumption.frequency);
-	        $('#sensor_frequency_wsn430').val(my_profiles[i].sensor.frequency);
-	        $('#radio_frequency_wsn430').val(my_profiles[i].radio.frequency);
-	        
-	        $("input[name='or_power_wsn430']").val([my_profiles[i].power]);
-	        $("#cb_current_wsn430").prop("checked",my_profiles[i].consumption.current);
-	        $("#cb_voltage_wsn430").prop("checked",my_profiles[i].consumption.voltage);
-	        $("#cb_power_wsn430").prop("checked",my_profiles[i].consumption.power);
-	        
-	        $("#cb_temperature_wsn430").prop("checked",my_profiles[i].sensor.temperature);
-	        $("#cb_luminosity_wsn430").prop("checked",my_profiles[i].sensor.luminosity);
-	        
-	        $("#cb_rssi_wsn430").prop("checked",my_profiles[i].radio.rssi);
+        	$("input[name='or_power_wsn430']").val([my_profiles[i].power]);
+	       
+	        if(my_profiles[i].consumption!=null) {
+	        	$("#cb_current_wsn430").prop("checked",my_profiles[i].consumption.current);
+	        	$("#cb_voltage_wsn430").prop("checked",my_profiles[i].consumption.voltage);
+	        	$("#cb_power_wsn430").prop("checked",my_profiles[i].consumption.power);
+	        	$('#consumption_frequency_wsn430').val(my_profiles[i].consumption.frequency);
+	        }
+	        if(my_profiles[i].sensor!=null) {
+	        	$("#cb_temperature_wsn430").prop("checked",my_profiles[i].sensor.temperature);
+	        	$("#cb_luminosity_wsn430").prop("checked",my_profiles[i].sensor.luminosity);
+	        	$('#sensor_frequency_wsn430').val(my_profiles[i].sensor.frequency);
+	        }
+	        if(my_profiles[i].radio!=null) {
+	        	$("#cb_rssi_wsn430").prop("checked",my_profiles[i].radio.rssi);
+	        	$('#radio_frequency_wsn430').val(my_profiles[i].radio.frequency);
+        	}
         } else if (nodearch=="m3") {
-	        $('#consumption_period_m3').val(my_profiles[i].consumption.period);
-	        $('#consumption_average_m3').val(my_profiles[i].consumption.average);
-	        
 	        $("input[name='or_power_m3']").val([my_profiles[i].power]);
-	        $("#cb_current_m3").prop("checked",my_profiles[i].consumption.current);
-	        $("#cb_voltage_m3").prop("checked",my_profiles[i].consumption.voltage);
-	        $("#cb_power_m3").prop("checked",my_profiles[i].consumption.power);
-
+	        if(my_profiles[i].consumption!=null) {
+		        $('#consumption_period_m3').val(my_profiles[i].consumption.period);
+		        $('#consumption_average_m3').val(my_profiles[i].consumption.average);
+		        $("#cb_current_m3").prop("checked",my_profiles[i].consumption.current);
+		        $("#cb_voltage_m3").prop("checked",my_profiles[i].consumption.voltage);
+		        $("#cb_power_m3").prop("checked",my_profiles[i].consumption.power);
+            }
 	        if(my_profiles[i].radio!=null) {
 	        	$("input[name='radio_mode_m3']").val([my_profiles[i].radio.mode]);
-			$("input[name='radio_mode_m3']").tab('show');
-	        	$("#radio_channel_m3").val(my_profiles[i].radio.channel);
-	        	$("#radio_power_m3").val(my_profiles[i].radio.power);
-	        	$("#radio_frequency_m3").val(my_profiles[i].radio.frequency);
+				$("input[name='radio_mode_m3']").tab('show');
+	        	$("#radio_channel_m3").val(my_profiles[i].radio.channels);
+	        	$("#radio_period_m3").val(my_profiles[i].radio.period);
+	        	$("#radio_num_per_channel_m3").val(my_profiles[i].radio.num_per_channel);
+	        	$("#radio_num_m3").val(my_profiles[i].radio.num_per_channel);
+	        	visibilityRadioNum();
 	        } else {
 	        	$("#radio_mode_none_m3").prop("checked",true);
 			$("#radio_mode_none_m3").tab('show');
@@ -511,17 +520,17 @@ $("#form_part").bind("submit", function (e) {
 	    };
 
 	    radio_mode = $("input[name=radio_mode_m3]:checked").val();
-	    frequency = $('#radio_frequency_m3').val();
-	    if(radio_mode == "measure" && (frequency<2 || frequency>499)){
-			alert("You must set a valid Radio frequency : range 2..499");
-			return false;
-	    }
-	
+	    period = $('#radio_period_m3').val();
+	    if (radio_num == 0) {
+	    	num_per_channel = 0;
+	    } else {
+	    	num_per_channel = $("#radio_num_per_channel_m3").val();
+		}
 	    radio = {
 	    	"mode":radio_mode,
-	        "channel":$('#radio_channel_m3').val(),
-	        "power":$('#radio_power_m3').val(),
-	        "frequency":$('#radio_frequency_m3').val()
+	        "channels":$('#radio_channel_m3').val(),
+	        "period":period,
+	        "num_per_channel":num_per_channel
 	    };
 	
 	    profile_json = {
@@ -540,21 +549,21 @@ $("#form_part").bind("submit", function (e) {
 	    };
 
     }
-    if(edit) {
+    /*if(edit) {
         url = "/rest/profiles/"+profile_json.profilename;
         type = "PUT";
     } else {
         url = "/rest/profiles";
         type = "POST";
-    }    
+    }*/    
 
     //send edit or create request
     $.ajax({
-        type: type,
+        type: "POST",
         dataType: "text",
         data: JSON.stringify(profile_json),
         contentType: "application/json; charset=utf-8",
-        url: url,
+        url: "/rest/profiles/"+profile_json.profilename,
         success: function (data_server) {
 
             var result_msg="";
