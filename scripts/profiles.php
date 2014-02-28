@@ -16,7 +16,10 @@
 	</p>
 </div>
 
-<div class="col-md-8">           
+<div class="col-md-8">       
+
+        <div id="div_error_profiles" class="alert" tyle="display:none"></div>
+    
 	<form class="well form-horizontal form-inline" id="form_part" role="form">
 
 		<div class="form-group" style="width:100%;margin-bottom:10px">
@@ -198,14 +201,14 @@
 								<label class="col-lg-4 control-label" for="radio_channel_m3">Channels</label>
 								<div class="col-lg-8">
 									<select multiple id="radio_channel_m3" class="form-control" onchange="visibilityRadioNum();">
-										<option value='11'>11</option><option value='12'>12</option><option value='13'>13</option><option value='14'>14</option><option value='15'>15</option><option value='16'>16</option><option value='17'>17</option><option value='18'>18</option><option value='19'>19</option><option value='20'>20</option><option value='21'>21</option><option value='22'>22</option><option value='23'>23</option><option value='24'>24</option><option value='25'>25</option><option value='26'>26</option>							</select>
+										<option value='11' selected="selected">11</option><option value='12'>12</option><option value='13'>13</option><option value='14'>14</option><option value='15'>15</option><option value='16'>16</option><option value='17'>17</option><option value='18'>18</option><option value='19'>19</option><option value='20'>20</option><option value='21'>21</option><option value='22'>22</option><option value='23'>23</option><option value='24'>24</option><option value='25'>25</option><option value='26'>26</option>							</select>
 								</div>
 							</div>
 							<div class="form-group" style="width:100%;margin-bottom:10px">
 								<label class="col-lg-4 control-label" for="radio_period_m3">Period (ms)</label>
 								<div class="col-lg-8">
 									<!--<input type="text" id="radio_period_m3" class="form-control"/>-->
-									<input type="number" id="radio_period_m3" class="form-control" min="1" max="65535" step="1"/>
+									<input type="number" id="radio_period_m3" class="form-control" min="1" max="65535" step="1" value="1000"/>
 								</div>
 							</div>
 							<div class="form-group" style="width:100%;margin-bottom:10px" id="m3RadioNumChannel">
@@ -280,6 +283,7 @@ $(document).ready(function(){
 
 	// prepare form for the new profile
 	$("#btn_new").click(function(){
+            $("#form_part")[0].reset();
 	    $("#profiles_txt_name").val("new_profile");
 	    
 	    $("#my_profiles_modal option:selected").removeAttr("selected");
@@ -404,7 +408,7 @@ function loadProfile() {
             }
 	        if(my_profiles[i].radio!=null) {
 	        	$("input[name='radio_mode_m3']").val([my_profiles[i].radio.mode]);
-				$("input[name='radio_mode_m3']").tab('show');
+                        $("input[name='radio_mode_m3']").tab('show');
 	        	$("#radio_channel_m3").val(my_profiles[i].radio.channels);
 	        	$("#radio_period_m3").val(my_profiles[i].radio.period);
 	        	$("#radio_num_per_channel_m3").val(my_profiles[i].radio.num_per_channel);
@@ -439,7 +443,9 @@ $("#btn_delete").click(function(){
 	            $("#div_error_profiles").show();
 	            $("#div_error_profiles").removeClass("alert-danger");
 	            $("#div_error_profiles").addClass("alert-success");
-	            setTimeout( "$('#div_error_profiles').hide()", 2000); 
+	            setTimeout( "$('#div_error_profiles').hide()", 2000);
+
+                    $("#form_part")[0].reset();
 	        },
 	        error: function (XMLHttpRequest, textStatus, errorThrows) {
 	            $("#div_error_profiles").html(errorThrows);
@@ -593,10 +599,10 @@ $("#form_part").bind("submit", function (e) {
             setTimeout( "$('#div_error_profiles').hide()", 2000); 
         },
         error: function (XMLHttpRequest, textStatus, errorThrows) {
+            $("#div_error_profiles").show();
+            $("#div_error_profiles").html(XMLHttpRequest.responseText);
             $("#div_error_profiles").removeClass("alert-success");
             $("#div_error_profiles").addClass("alert-danger");
-            $("#div_error_profiles").html(errorThrows);
-            $("#div_error_profiles").show();
         }
     });
 
