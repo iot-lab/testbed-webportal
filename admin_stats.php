@@ -29,7 +29,7 @@ include("header.php");
     </div>
 </div>
 
-<div class="row" id="stats" style="display:none">
+<div class="row" id="div_stats" style="display:none">
     <div class="col-md-6">
         <h3>Users</h3>
 
@@ -273,10 +273,11 @@ $(document).ready(function () {
                 }
             })
         ).then(function () {
+
+            $("#div_stats").show();
             for (site in sitesNodesBusy) {
                 $("#" + site + "Busy").text(sitesNodesBusy[site]);
             }
-            $("#stats").show();
         });
 
     $("#btnCancel").click(function () {
