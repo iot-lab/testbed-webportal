@@ -484,7 +484,7 @@ $("#btn_delete").click(function () {
             url: "/rest/profiles/" + profile_name,
             success: function (data_server) {
 
-		loadProfiles();
+                loadProfiles();
 
                 $("#div_error_profiles").html("Profile deleted.");
                 $("#div_error_profiles").show();
