@@ -1,41 +1,42 @@
-<?php 
+<?php
 session_start();
 
 include("header.php");
 ?>
 
 
-    <div class="container">
+<div class="container">
 
     <div class="row" id="login_div">
-    <div class="span12" heigth="800px">
-          <iframe onload="resizeFrame(document.getElementById('childframe'))" src="/testbed/monika" width="100%" frameborder="0" id="childframe"></iframe>
-    </div>
+        <div class="span12" heigth="800px">
+            <iframe onload="resizeFrame(document.getElementById('childframe'))" src="/testbed/monika" width="100%"
+                    frameborder="0" id="childframe"></iframe>
+        </div>
 
     </div>
-      
-      
 
 
-<?php include('footer.php') ?>
+
+
+    <?php include('footer.php') ?>
 
     <script type="text/javascript">
 
-		$("#monika").addClass("active");
+        $("#monika").addClass("active");
 
         function resizeFrame(f) {
-              f.style.height = (f.contentWindow.document.body.scrollHeight + 50) + "px";
+            f.style.height = (f.contentWindow.document.body.scrollHeight + 50) + "px";
         }
 
 
         function showSignup() {
-            window.location.href=".";
+            window.location.href = ".";
         }
 
         function showLogin() {
-            window.location.href=".";
+            window.location.href = ".";
         }
     </script>
 
-  </body>
-</html>
+    </body>
+    </html>

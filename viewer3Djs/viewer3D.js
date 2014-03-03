@@ -1,5 +1,5 @@
 ﻿// Various global variables
-var mouseX = 0, mouseY = 0,camera, scene, renderer, projector;
+var mouseX = 0, mouseY = 0, camera, scene, renderer, projector;
 var sTestEventType = 'mousedown';
 //var window3DWidth = window.innerWidth * 0.8;
 //var window3DHeight=window.innerHeight*0.75;
@@ -46,7 +46,7 @@ function init() {
     window.addEventListener('resize', set3dsize, false);
     scene.add(camera);
     set3dsize();
-    
+
 
     var PI2 = Math.PI * 2;
     var geometry = new THREE.Geometry();
@@ -93,21 +93,21 @@ function init() {
         v = new THREE.Vertex(particle.position);
         geometry.vertices.push(v);
         objects.push(particle);
-    
+
     }
 
     debugaxis(10);
     // a projector is needed to find which node is under the mouse
     projector = new THREE.Projector();
 
-    for (var i=0;i<nodeboxes.length;i++) nodeboxes[i].onkeyup = parseNodebox;
-    
+    for (var i = 0; i < nodeboxes.length; i++) nodeboxes[i].onkeyup = parseNodebox;
+
     // set mouse event handlers
     div3d.onmousedown = OnMouseDown;
     div3d.onmouseup = OnMouseUp;
     div3d.onmousemove = displayNodeInfo;
     if (div3d.addEventListener)
-    /** DOMMouseScroll is for mozilla. */
+        /** DOMMouseScroll is for mozilla. */
         div3d.addEventListener('DOMMouseScroll', wheel, false);
     /** IE/Opera. */
     div3d.onmousewheel = div3d.onmousewheel = wheel;
@@ -139,7 +139,7 @@ function factorize(nodes) {
     var intervalStart = 0;
     nodes.sort(sortfunction);
     for (var j = 0; j < nodes.length; j++) {
-        if(isNaN(nodes[j]))
+        if (isNaN(nodes[j]))
             continue;
         if (intervalStart) {
             // we are in an interval
@@ -147,7 +147,7 @@ function factorize(nodes) {
             previousTemp++;
             if (nodes[j] == previousTemp) {
                 // interval grows
-                previous ++;
+                previous++;
             } else {
                 // end of interval
                 fact.push(intervalStart + "-" + previous);
@@ -161,7 +161,7 @@ function factorize(nodes) {
             if (nodes[j] == previousTemp) {
                 // let's begin an interval
                 intervalStart = previous;
-                previous ++;
+                previous++;
             } else {
                 if (previous) fact.push(previous);
                 previous = nodes[j];
@@ -191,18 +191,22 @@ function expand(factExp) {
         } else exp.push(parseInt(factExp[i]));
     }
     exp.sort(sortfunction);
-    for (var i = 1; i < exp.length; i++) { if (exp[i] == exp[i - 1]) { exp.splice(i--, 1); } }
+    for (var i = 1; i < exp.length; i++) {
+        if (exp[i] == exp[i - 1]) {
+            exp.splice(i--, 1);
+        }
+    }
     return exp;
 }
 
 function parseNodebox() {
     var input = [];
-    for (var i=0;i<nodeboxes.length;i++) {
-    	var tempInput=nodeboxes[i].value;
-    	tempInput = expand(tempInput.split(","));
-        var archi = nodeboxes[i].id.substring(0,nodeboxes[i].id.indexOf(":"));
-    	for (var j=0;j<tempInput.length;j++) tempInput[j]=archi+"-"+tempInput[j];
-    	input = input.concat(tempInput);
+    for (var i = 0; i < nodeboxes.length; i++) {
+        var tempInput = nodeboxes[i].value;
+        tempInput = expand(tempInput.split(","));
+        var archi = nodeboxes[i].id.substring(0, nodeboxes[i].id.indexOf(":"));
+        for (var j = 0; j < tempInput.length; j++) tempInput[j] = archi + "-" + tempInput[j];
+        input = input.concat(tempInput);
     }
     selectedNodes = input;
     myrender();
@@ -217,7 +221,7 @@ function debugaxis(axisLength) {
     //Create axis (point1, point2, colour)
     function createAxis(p1, p2, color) {
         var line, lineGeometry = new THREE.Geometry(),
-                    lineMat = new THREE.LineBasicMaterial({ color: color, lineWidth: 2 });
+            lineMat = new THREE.LineBasicMaterial({ color: color, lineWidth: 2 });
         lineGeometry.vertices.push(p1, p2);
         line = new THREE.Line(lineGeometry, lineMat);
         scene.add(line);
@@ -241,24 +245,24 @@ function myrender() {
     camera.updateMatrix();
 
     for (var i = 0; i < objects.length; i++) {
-    	
-        
+
+
         if (selectedNodes.indexOf(objects[i].name) != -1) {
             objects[i].material.color.setHex(0x0099CC);
         }
         else {
-            if(objects[i].state == "Busy") {
+            if (objects[i].state == "Busy") {
                 objects[i].material.color.setHex(0x9943BE);
             }
-            else if(objects[i].state == "Alive") {
+            else if (objects[i].state == "Alive") {
                 objects[i].material.color.setHex(0x7FFF00);
             }
             else {
                 objects[i].material.color.setHex(0xFF3030);
             }
         }
-        
-        
+
+
     }
     renderer.render(scene, camera);
 }
@@ -322,23 +326,23 @@ function toggleNode(obj) {
     if (i == -1) selectedNodes.push(nodeId);
     else selectedNodes.splice(i, 1);
 
-    
+
     // archi ?
     // split selectedNodes for archis separation
-    for (var i=0;i<nodeboxes.length;i++) {
-    	if(obj.object.archi==nodeboxes[i].id.substring(0,nodeboxes[i].id.indexOf('_'))) {
-    		// right nodebox
-    		// select nodes from selectedNodes with archi = archi and remove the prefix 
-    		var nodesArchis = [];
-    		for (var j=0;j<selectedNodes.length;j++) {
-    			var archi = selectedNodes[j].substring(0,selectedNodes[j].indexOf('-'));
-    			if(archi == obj.object.archi.substring(0,obj.object.archi.indexOf(':'))) {
-    				nodesArchis.push(selectedNodes[j].substring(selectedNodes[j].indexOf('-')+1,selectedNodes[j].length));
-    			}
-    		}
-    		// factorize only this one
-    		nodeboxes[i].value= factorize(nodesArchis).join(",");
-    	}
+    for (var i = 0; i < nodeboxes.length; i++) {
+        if (obj.object.archi == nodeboxes[i].id.substring(0, nodeboxes[i].id.indexOf('_'))) {
+            // right nodebox
+            // select nodes from selectedNodes with archi = archi and remove the prefix
+            var nodesArchis = [];
+            for (var j = 0; j < selectedNodes.length; j++) {
+                var archi = selectedNodes[j].substring(0, selectedNodes[j].indexOf('-'));
+                if (archi == obj.object.archi.substring(0, obj.object.archi.indexOf(':'))) {
+                    nodesArchis.push(selectedNodes[j].substring(selectedNodes[j].indexOf('-') + 1, selectedNodes[j].length));
+                }
+            }
+            // factorize only this one
+            nodeboxes[i].value = factorize(nodesArchis).join(",");
+        }
     }
     myrender();
 }
@@ -380,20 +384,20 @@ function wheel(event) {
         delta = event.wheelDelta / 120;
     } else if (event.detail) { /** Mozilla case. */
         /** In Mozilla, sign of delta is different than in IE.
-        * Also, delta is multiple of 3.
-        */
+         * Also, delta is multiple of 3.
+         */
         delta = -event.detail / 3;
     }
     /** If delta is nonzero, handle it.
-    * Basically, delta is now positive if wheel was scrolled up,
-    * and negative, if wheel was scrolled down.
-    */
+     * Basically, delta is now positive if wheel was scrolled up,
+     * and negative, if wheel was scrolled down.
+     */
     if (delta)
         Zoom(delta);
     /** Prevent default actions caused by mouse wheel.
-    * That might be ugly, but we handle scrolls somehow
-    * anyway, so don't bother here..
-    */
+     * That might be ugly, but we handle scrolls somehow
+     * anyway, so don't bother here..
+     */
     if (event.preventDefault)
         event.preventDefault();
     event.returnValue = false;

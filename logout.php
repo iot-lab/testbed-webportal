@@ -1,7 +1,7 @@
-<?php 
+<?php
 session_start();
-if(!isset($_SESSION['is_auth']) || !$_SESSION['is_auth']) {
-	header("location: /testbed/index.php#notlogin");
+if (!isset($_SESSION['is_auth']) || !$_SESSION['is_auth']) {
+    header("location: /testbed/index.php#notlogin");
     exit();
 }
 
