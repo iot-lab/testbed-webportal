@@ -326,11 +326,6 @@ function visibilityRadioNum() {
     }
 }
 
-function hideRadioPanel() {
-    $("#m3RadioNonePanel").hide();
-}
-
-
 /* ************ */
 /*   on ready   */
 /* ************ */
@@ -357,7 +352,7 @@ $(document).ready(function () {
     $('input[name="radio_mode_m3"]').click(function () {
         $(this).tab('show');
     });
-
+    visibilityRadioNum();
     loadProfiles();
 
 });
@@ -495,7 +490,7 @@ $("#btn_delete").click(function () {
             url: "/rest/profiles/" + profile_name,
             success: function (data_server) {
 
-		loadProfiles();
+		    loadProfiles();
                 //$("#my_profiles_modal option:selected").remove();
 
                 $("#div_error_profiles").html("Profile deleted.");
@@ -632,7 +627,7 @@ $("#form_part").bind("submit", function (e) {
         url: "/rest/profiles/" + profile_json.profilename,
         success: function (data_server) {
 
-           loadProfiles();
+            loadProfiles();
 
             var result_msg = "";
             var edit = false;
