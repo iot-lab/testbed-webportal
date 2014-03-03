@@ -3,12 +3,6 @@ session_start();
 
 include("header.php") ?>
 
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-<script type="text/javascript">
-    google.load('visualization', '1.0', {'packages': ['corechart']});
-    google.load('visualization', '1', {'packages': ['geochart']});
-</script>
-
 <div class="container">
 
     <div class="row">
@@ -223,7 +217,6 @@ include("header.php") ?>
 
 
                 // show stats
-                drawChart();
                 $("#statsExps").show();
                 $("#statsNodes").show();
                 $("#statsUsers").show();
@@ -235,27 +228,6 @@ include("header.php") ?>
         });
     });
 
-
-    function drawChart() {
-
-        // Create the data table.
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Country');
-        data.addColumn('number', 'Users');
-        data.addRows(graph);
-
-
-        // Instantiate and draw our chart, passing in some options.
-        var options = {'title': 'Users Country', 'width': 400, 'height': 300};
-        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-
-        //Geo graph
-        options = {'title': 'Users Country', 'width': 600, 'height': 400};
-        var chartGeo = new google.visualization.GeoChart(document.getElementById('chart_divGeo'));
-        chartGeo.draw(data, options);
-
-    }
 
 </script>
 
