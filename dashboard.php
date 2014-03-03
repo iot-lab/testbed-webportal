@@ -66,10 +66,14 @@ include("header.php");
 <script type="text/javascript" src="js/datatable.js"></script>
 <script type="text/javascript">
 
-    var oTable;
-
+var oTable;
 var dateSrv = <?php echo time(); ?>*1000; // server date in milliseconds
-    
+var isPageBeingRefreshed = false;    
+
+window.onbeforeunload = function() {
+    isPageBeingRefreshed = true;
+};
+
     $(document).ready(function(){
        
         $(document).ajaxStart(function(){
@@ -97,6 +101,14 @@ var dateSrv = <?php echo time(); ?>*1000; // server date in milliseconds
                 $("#expTotal").text(total);
             },
             error:function(XMLHttpRequest, textStatus, errorThrows){
+
+                if (!XMLHttpRequest.getAllResponseHeaders()) {
+                    XMLHttpRequest.abort();
+                    if (isPageBeingRefreshed) {
+                        return; // not an error
+                    }
+                }
+
                 $("#div_msg").removeClass("alert-success");
                 $("#div_msg").addClass("alert-danger");
                 $("#div_msg").show();
