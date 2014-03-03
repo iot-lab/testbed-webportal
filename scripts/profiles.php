@@ -212,7 +212,7 @@
         </div>
     </div>
 
-    <div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;margin:5px;">
+    <div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;margin:5px;" id="m3RadioMode">
         <div class="form-group" style="width:100%;margin-bottom:10px">
             <label class="col-lg-4 control-label" for="radio_mode_m3">Radio mode</label>
 
@@ -326,6 +326,10 @@ function visibilityRadioNum() {
     }
 }
 
+function hideRadioPanel() {
+    $("#m3RadioNonePanel").hide();
+}
+
 
 /* ************ */
 /*   on ready   */
@@ -338,6 +342,9 @@ $(document).ready(function () {
         $("#profiles_txt_name").val("new_profile");
 
         $("#my_profiles_modal option:selected").removeAttr("selected");
+
+        $("#m3panel").removeClass("active");
+        $("#wsn430panel").addClass("active");
 
     });
 
@@ -363,7 +370,11 @@ $(document).ready(function () {
 /* ************************************* */
 function loadProfiles() {
 
-    if (!profilesLoaded) {
+    $("#wsn430Profiles_modal").empty();
+    $("#m3Profiles_modal").empty();
+    $("#a8Profiles_modal").empty();
+
+    //if (!profilesLoaded) {
         $("#div_error_profiles").addClass("alert-success");
         $("#div_error_profiles").removeClass("alert-danger");
         $("#div_error_profiles").html("Loading your profiles ...");
@@ -382,7 +393,6 @@ function loadProfiles() {
                 }
 
                 my_profiles = JSON.parse(data_server);
-
                 //fill profiles list
                 for (var i = 0; i < my_profiles.length; i++) {
                     $("#" + my_profiles[i].nodearch + "Profiles_modal").append(new Option(my_profiles[i].profilename, my_profiles[i].profilename));
@@ -400,7 +410,7 @@ function loadProfiles() {
                 $("#div_error_profiles").addClass("alert-danger");
             }
         });
-    }
+    //}
 }
 
 
@@ -487,7 +497,8 @@ $("#btn_delete").click(function () {
             url: "/rest/profiles/" + profile_name,
             success: function (data_server) {
 
-                $("#my_profiles_modal option:selected").remove();
+		loadProfiles();
+                //$("#my_profiles_modal option:selected").remove();
 
                 $("#div_error_profiles").html("Profile deleted.");
                 $("#div_error_profiles").show();
@@ -623,6 +634,8 @@ $("#form_part").bind("submit", function (e) {
         url: "/rest/profiles/" + profile_json.profilename,
         success: function (data_server) {
 
+           loadProfiles();
+
             var result_msg = "";
             var edit = false;
             var index = -1;
@@ -635,14 +648,15 @@ $("#form_part").bind("submit", function (e) {
                 }
             }
 
-            if (!edit) {
+
+            /*if (!edit) {
                 result_msg = "Profile created.";
                 $("#" + profile_json.nodearch + "Profiles_modal").append(new Option(profile_json.profilename, profile_json.profilename));
                 my_profiles.push(profile_json);
             } else {
                 result_msg = "Profile edited.";
                 my_profiles[index] = profile_json;
-            }
+            }*/
             $("#div_error_profiles").removeClass("alert-danger");
             $("#div_error_profiles").addClass("alert-success");
             $("#div_error_profiles").html(result_msg);
@@ -655,6 +669,7 @@ $("#form_part").bind("submit", function (e) {
             $("#div_error_profiles").removeClass("alert-success");
             $("#div_error_profiles").addClass("alert-danger");
         }
+
     });
 
     return false;
