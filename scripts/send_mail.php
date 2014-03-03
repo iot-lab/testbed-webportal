@@ -12,7 +12,7 @@ if (!$_SESSION['is_admin']) {
     exit();
 }
 
-$headers = 'From: admin@senslab.info' . "\r\n";
+$headers = 'From: admin@iot-lab.info' . "\r\n";
 
 mail($_POST['to'], $_POST['subject'], $_POST['message'], $headers);
 

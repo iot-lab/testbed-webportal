@@ -11,10 +11,11 @@
             </div>
             <!-- .bottom-navigation -->
             <div class="footer-text col-sm-6 col-sm-pull-6">
-                Copyright &copy; 2014 FIT/IoTlab - All Rights Reserved
+                Copyright &copy; 2014 FIT/IoT-LAB - All Rights Reserved
+                <a href="/about-us/"> - ABOUT US</a>
+                <a href="mailto:admin@iot-lab.info"> - CONTACT US</a>
             </div>
             <!-- .footer-text -->
-
         </div>
         <!-- .row -->
     </div>

@@ -111,7 +111,7 @@ include("header.php");
                             <label>
                                 <input id="charter" class="form-control" name="charter" type="checkbox"
                                        required="required"/>I read and I accept <a
-                                    href="http://www.senslab.info/users/senslab-charter/" target="_blank">Senslab Terms
+                                    href="/charter/" target="_blank">IoT-LAB Terms
                                     of Service</a>.
                             </label>
                         </div>
@@ -132,9 +132,9 @@ include("header.php");
             <div class="alert alert-info" style="margin-top:430px;">
                 <img src="img/help.png"> <b>Motivation:</b><br/>
                 - Research domain (Radio communication, networking protocol, distributed applications, …).<br/>
-                - What kind of experiments do you want to run with SensLAB?<br/>
+                - What kind of experiments do you want to run with IoT-LAB ?<br/>
                 - Goal: (Verify something existing in large scale, new development, …)<br/>
-                - Network sensor previous experience (n00b, experiments with X platform, former SensLAB user, Guru, God)
+                - Network sensor previous experience (n00b, experiments with X platform, former IoT-LAB user, Guru, God)
             </div>
         </div>
 
