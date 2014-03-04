@@ -7,7 +7,6 @@
     <div class="alert alert-info">
         <img src="img/help.png"> To <b>create</b> a new profile click the <b>New</b> button, fill the form and click <b>Save</b>.
         <br/><br/>To <b>edit</b> a profile, click on the profile name on the list, edit settings, and click <b>Save</b>.
-        <br/><br/>When finished, close the window by clicking <b>X</b>.
     </div>
     <select class="form-control" id="my_profiles_modal" size="15" style="margin-bottom:5px;">
         <optgroup label="WSN430" id="wsn430Profiles_modal"></optgroup>
