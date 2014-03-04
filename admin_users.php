@@ -28,7 +28,7 @@ include("header.php");
     <div class="col-md-12">
         <div id="tbl_exps_processing" class="dataTables_processing">Processing...</div>
         <div class="alert alert-danger" id="div_msg" style="display:none">Loading ...</div>
-        <table id="tbl_users" class="table table-bordered table-striped table-condensed" style="display:none">
+        <table id="tbl_users" class="table table-striped table-condensed" style="display:none">
             <thead>
             <tr>
                 <th>Login</th>
