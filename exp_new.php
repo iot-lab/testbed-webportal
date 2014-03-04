@@ -220,7 +220,6 @@ include("header.php");
                 <button id='profilesModalLink' class="btn btn-default" data-toggle="modal"
                         data-target="#profiles_modal">Manage Profiles
                 </button>
-                <button class="btn btn-default" onClick="refreshProfiles();return false;">Refresh</button>
             </div>
             <div class=col-md-4>
                 <label class="control-label">Firmware(s)</label>
