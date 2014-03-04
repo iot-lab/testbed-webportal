@@ -68,6 +68,9 @@ if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) $body_
             font-weight: normal;
         }
 
+        .alert-info{
+            background-color:transparent;
+        }
 
     </style>
 
