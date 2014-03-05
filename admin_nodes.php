@@ -172,16 +172,15 @@ $(document).ready(function () {
             for (var i in data_server) {
                 if (sites.indexOf(data_server[i].site) == -1) { // unknown site, adding it
                     sites.push(data_server[i].site);
-                    $("#div_resources_map_tbl").append('<tr valign="top" style="border-top: 1px solid #CCCCCC;color:#555555">' +
-                        '<td style="width:150px;"><a href="#" onclick="openMapPopup(\'' + data_server[i].site + '\')" id="' + data_server[i].site + '_maps">' + data_server[i].site.charAt(0).toUpperCase() + data_server[i].site.slice(1) + ' map</a></td>' +
-                        '<td id="' + data_server[i].site + '_archis" style="text-align:right;padding-bottom:20px;padding-top:20px"></td>' +
-                        '</tr>');
+                    $("#div_resources_map_tbl").append('<tr valign="top" style="">' +
+                        '<td style="width:150px;"><a href="#" onclick="openMapPopup(\'' + data_server[i].site + '\')" id="' + data_server[i].site + '_maps">' + data_server[i].site.charAt(0).toUpperCase() + data_server[i].site.slice(1) + ' map</a></td></tr>' +
+                        '<tr id="' + data_server[i].site + '_archis" style="padding-bottom:20px;padding-top:20px"></tr>');
                 }
 
                 if (archis.indexOf(data_server[i].archi) == -1) { // unknown archi, adding it
                     archis.push(data_server[i].archi);
                     $("#" + data_server[i].site + "_archis").append("<tr>" +
-                        "<td>" + data_server[i].archi + '</td>' +
+                        "<td style=\"width:100px\">" + data_server[i].archi + '</td>' +
                         '<td><input type="text" id="' + data_server[i].site + "_" + data_server[i].archi + '_list" value="" class="form-control" style="width:70%" /></td>' +
                         '</tr>');
                 }
