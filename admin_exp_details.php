@@ -85,6 +85,7 @@ include("header.php");
                 state = data.state;
                 if (state == "Running" || state == "Waiting") {
                     $("#btnCancel").attr("disabled", false);
+                    if(state == "Running") $("#btnCancel").text("Stop");
                 }
                 else {
                     $("#btnCancel").attr("disabled", true);

@@ -249,6 +249,7 @@ $(document).ready(function () {
                 $("#btnCancel").attr("disabled", false);
                 $("#btnReload").attr("disabled", true);
                 $("input[name=radioStart]").attr("disabled", true);
+                if(expState == "Running") $("#btnCancel").text("Stop");
             }
             else {
                 $("#btnCancel").attr("disabled", true);
