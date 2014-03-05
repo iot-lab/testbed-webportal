@@ -322,7 +322,7 @@ function expand(factExp) {
 }
 
 function openMapPopup(site) {
-    window.open('maps.php?site=' + site, '', 'resizable=yes, location=no, width=800, height=600, menubar=no, status=no, scrollbars=no, menubar=no');
+    window.open('maps.php?site=' + site, '', 'resizable=yes, location=no, width=800, height=700, menubar=no, status=no, scrollbars=no, menubar=no');
 }
 
 
