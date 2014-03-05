@@ -49,21 +49,13 @@ include("header.php");
                             <option value="controlnodes">Control Node</option>
                             <option value="gatewaynodes">Gateway</option>
                         </select>
-
-                        <div id="firmware" style="display:none"><label for="files">Firmware: <input type="file"
-                                                                                                    id="files"
-                                                                                                    name="files[]"
-                                                                                                    multiple/></label>
-                        </div>
                     </div>
 
                     <div class="col-md-3">
                         <select id="action" class="form-control">
                             <option value="start">Start</option>
-                            <!-- <option value="start" data-battery="battery">Start (battery)</option> -->
                             <option value="stop">Stop</option>
                             <option value="reset">Reset</option>
-                            <!-- <option value="update">Update</option> -->
                         </select>
                     </div>
 
@@ -136,11 +128,11 @@ $(document).ready(function () {
         }
     });
 
-$(document).delegate("#searchButton","click",function () {
-                oTable.fnDraw();
-            });
+    $(document).delegate("#searchButton", "click", function () {
+        oTable.fnDraw();
+    });
 
-$("#div_resources_map_tbl").append('<tr><td colspan="2"><button class="btn btn-default btn-add pull-right" id="searchButton" style="margin-left:5px;">Search</button>');
+    $("#div_resources_map_tbl").append('<tr><td colspan="2"><button class="btn btn-default btn-add pull-right" id="searchButton" style="margin-left:5px;">Search</button>');
 
     // get nodes list
     $.ajax({
@@ -159,7 +151,6 @@ $("#div_resources_map_tbl").append('<tr><td colspan="2"><button class="btn btn-d
                     "<td>" + data[i].archi + "</td>" +
                     "<td>" + data[i].mobile + "</td>" +
                     "<td>" + data[i].state + "</td></tr>");
-                //if (sites.indexOf(data[i].site) == -1) sites.push(data[i].site);
             }
 
             oTable = $('#tblNodes').dataTable({
@@ -177,18 +168,22 @@ $("#div_resources_map_tbl").append('<tr><td colspan="2"><button class="btn btn-d
             $("#tblNodes").show();
 
             var archis = [];
-data_server = data;
-for (var i in data_server) {
+            data_server = data;
+            for (var i in data_server) {
                 if (sites.indexOf(data_server[i].site) == -1) { // unknown site, adding it
                     sites.push(data_server[i].site);
-                    $("#div_resources_map_tbl").append('<tr valign="top" style="border-top: 1px solid #CCCCCC;color:#555555"><td style="width:150px;"><a href="#" onclick="openMapPopup(\'' + data_server[i].site + '\')" id="' + data_server[i].site + '_maps">' + data_server[i].site.charAt(0).toUpperCase() + data_server[i].site.slice(1) + ' map</a></td><td id="' + data_server[i].site + '_archis" style="text-align:right;padding-bottom:20px;padding-top:20px"></td></tr>');
+                    $("#div_resources_map_tbl").append('<tr valign="top" style="border-top: 1px solid #CCCCCC;color:#555555">' +
+                        '<td style="width:150px;"><a href="#" onclick="openMapPopup(\'' + data_server[i].site + '\')" id="' + data_server[i].site + '_maps">' + data_server[i].site.charAt(0).toUpperCase() + data_server[i].site.slice(1) + ' map</a></td>' +
+                        '<td id="' + data_server[i].site + '_archis" style="text-align:right;padding-bottom:20px;padding-top:20px"></td>' +
+                        '</tr>');
                 }
 
                 if (archis.indexOf(data_server[i].archi) == -1) { // unknown archi, adding it
                     archis.push(data_server[i].archi);
-                    // filling the "by type" form
-                    // filling the "from maps" form
-                    $("#" + data_server[i].site + "_archis").append("<tr><td>" + data_server[i].archi + '</td><td><input type="text" id="' + data_server[i].site + "_" + data_server[i].archi + '_list" value="" class="form-control" style="width:70%" /></td></tr>');
+                    $("#" + data_server[i].site + "_archis").append("<tr>" +
+                        "<td>" + data_server[i].archi + '</td>' +
+                        '<td><input type="text" id="' + data_server[i].site + "_" + data_server[i].archi + '_list" value="" class="form-control" style="width:70%" /></td>' +
+                        '</tr>');
                 }
                 sites_nodes[data_server[i].network_address] = data_server[i].archi.split(':')[0];
             }
@@ -246,27 +241,27 @@ for (var i in data_server) {
         });
 
 
-            $.ajax({
-                type: "POST",
-                dataType: "json",
-                data: JSON.stringify(lnodes),
-                contentType: "application/json; charset=utf-8",
-                url: "/rest/admin/" + part + "?" + command + "" + battery,
-                success: function (data) {
-                    if (data["0"]) {
-                        $("#stateSuccess").html("<b>Update</b> successful for node(s): " + JSON.stringify(data["0"]));
-                        $("#stateSuccess").show();
-                    }
-                    if (data["1"]) {
-                        $("#stateFailure").html("<b>Update</b> failed for node(s): " + JSON.stringify(data["1"]));
-                        $("#stateFailure").show();
-                    }
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrows) {
-                    $("#stateFailure").html(textStatus + " : " + errorThrows + " : " + XMLHttpRequest.responseText);
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify(lnodes),
+            contentType: "application/json; charset=utf-8",
+            url: "/rest/admin/" + part + "?" + command + "" + battery,
+            success: function (data) {
+                if (data["0"]) {
+                    $("#stateSuccess").html("<b>Update</b> successful for node(s): " + JSON.stringify(data["0"]));
+                    $("#stateSuccess").show();
+                }
+                if (data["1"]) {
+                    $("#stateFailure").html("<b>Update</b> failed for node(s): " + JSON.stringify(data["1"]));
                     $("#stateFailure").show();
                 }
-            });
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrows) {
+                $("#stateFailure").html(textStatus + " : " + errorThrows + " : " + XMLHttpRequest.responseText);
+                $("#stateFailure").show();
+            }
+        });
     });
 
 });
