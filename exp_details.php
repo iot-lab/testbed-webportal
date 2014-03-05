@@ -116,7 +116,7 @@ include("header.php");
                 <button class="btn btn-default" id="btnReload">Reload</button>
             </p>
 
-            <table class="table table-striped table-bordered table-condensed" style="width:500px" id="tblNodes">
+            <table class="table table-striped table-bordered table-condensed" style="width:800px" id="tblNodes">
                 <thead>
                 <tr>
                     <th></th>
