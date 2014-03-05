@@ -186,6 +186,22 @@ var boundary = "AaB03x";
 var scheduled = false;
 var exp_name = "";
 
+jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+    "formatted_numbers-pre": function ( a ) {
+        a = (a==="-") ? 0 : a.replace( /.*-(\d*)\..*/g, "$1" );
+        return parseFloat( a );
+    },
+
+    "formatted_numbers-asc": function ( a, b ) {
+        return a - b;
+    },
+
+    "formatted_numbers-desc": function ( a, b ) {
+        return b - a;
+    }
+} );
+
+
 $(document).ready(function () {
     $("#frmActions").hide();
     $("#expButtons").hide();
@@ -308,7 +324,8 @@ $(document).ready(function () {
             $("#tblNodes").dataTable({
                 "bPaginate": false,
                 "bFilter": false,
-                 "aaSorting": [[ 1, "desc" ]]
+                "aaSorting": [[ 1, "asc" ]],
+                "aoColumnDefs":[{ "sType":"formatted_numbers", "aTargets":[ 1 ] }]
             });
         },
         error: function (XMLHttpRequest, textStatus, errorThrows) {

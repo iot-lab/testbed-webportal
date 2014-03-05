@@ -55,6 +55,21 @@ include("header.php");
     var id = <?php echo $_GET['id']?>;
     var state = "";
 
+jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+    "formatted_numbers-pre": function ( a ) {
+        a = (a==="-") ? 0 : a.replace( /.*-(\d*)\..*/g, "$1" );
+        return parseFloat( a );
+    },
+
+    "formatted_numbers-asc": function ( a, b ) {
+        return a - b;
+    },
+
+    "formatted_numbers-desc": function ( a, b ) {
+        return b - a;
+    }
+} );
+
     $(document).ready(function () {
 
         $("#admin").addClass("active");
@@ -134,7 +149,8 @@ include("header.php");
                 $("#tblNodes").dataTable({
                     "bPaginate": false,
                     "bFilter": false,
-                    "aaSorting": [[ 0, "desc" ]]
+                    "aaSorting": [[ 0, "asc" ]],
+                    "aoColumnDefs":[{ "sType":"formatted_numbers", "aTargets":[ 0 ] }]
                 });
             },
             error: function (XMLHttpRequest, textStatus, errorThrows) {
