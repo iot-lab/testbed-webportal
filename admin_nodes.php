@@ -106,6 +106,7 @@ var state = "";
 var binary = [];
 var boundary = "AaB03x";
 var sites = [];
+var sites_nodes = {};
 
 $(document).ready(function () {
 
@@ -135,6 +136,12 @@ $(document).ready(function () {
         }
     });
 
+$(document).delegate("#searchButton","click",function () {
+                oTable.fnDraw();
+            });
+
+$("#div_resources_map_tbl").append('<tr><td colspan="2"><button class="btn btn-default btn-add pull-right" id="searchButton" style="margin-left:5px;">Search</button>');
+
     // get nodes list
     $.ajax({
         url: "/rest/admin/resourcesproperties",
@@ -152,7 +159,7 @@ $(document).ready(function () {
                     "<td>" + data[i].archi + "</td>" +
                     "<td>" + data[i].mobile + "</td>" +
                     "<td>" + data[i].state + "</td></tr>");
-                if (sites.indexOf(data[i].site) == -1) sites.push(data[i].site);
+                //if (sites.indexOf(data[i].site) == -1) sites.push(data[i].site);
             }
 
             oTable = $('#tblNodes').dataTable({
@@ -169,18 +176,22 @@ $(document).ready(function () {
             $("#frmActions").show();
             $("#tblNodes").show();
 
-            for (var j = 0; j < sites.length; j++)
-                $("#div_resources_map_tbl").append('<tr><td><a href="#" onclick="openMapPopup(\'' + sites[j] + '\')" id="' + sites[j] + '_maps">' + sites[j].charAt(0).toUpperCase() + sites[j].slice(1) + ' map</a></td><td><input type="text" id="' + sites[j] + '_list" value="" class="form-control" /></td></tr>');
-            $("#div_resources_map_tbl").append('<tr><td colspan="2"><button class="btn btn-default btn-add pull-right" id="searchButton" style="margin-left:5px;">Search</button><button class="btn btn-default btn-add pull-right" id="clearButton">Clear</button></td></tr>');
-            $("#searchButton").click(function () {
-                oTable.fnDraw();
-            });
-            $("#clearButton").click(function () {
-                $("#div_resources_map input").each(function () {
-                    $(this).val("");
-                });
-                oTable.fnDraw();
-            });
+            var archis = [];
+data_server = data;
+for (var i in data_server) {
+                if (sites.indexOf(data_server[i].site) == -1) { // unknown site, adding it
+                    sites.push(data_server[i].site);
+                    $("#div_resources_map_tbl").append('<tr valign="top" style="border-top: 1px solid #CCCCCC;color:#555555"><td style="width:150px;"><a href="#" onclick="openMapPopup(\'' + data_server[i].site + '\')" id="' + data_server[i].site + '_maps">' + data_server[i].site.charAt(0).toUpperCase() + data_server[i].site.slice(1) + ' map</a></td><td id="' + data_server[i].site + '_archis" style="text-align:right;padding-bottom:20px;padding-top:20px"></td></tr>');
+                }
+
+                if (archis.indexOf(data_server[i].archi) == -1) { // unknown archi, adding it
+                    archis.push(data_server[i].archi);
+                    // filling the "by type" form
+                    // filling the "from maps" form
+                    $("#" + data_server[i].site + "_archis").append("<tr><td>" + data_server[i].archi + '</td><td><input type="text" id="' + data_server[i].site + "_" + data_server[i].archi + '_list" value="" class="form-control" style="width:70%" /></td></tr>');
+                }
+                sites_nodes[data_server[i].network_address] = data_server[i].archi.split(':')[0];
+            }
 
         },
         error: function (XMLHttpRequest, textStatus, errorThrows) {
@@ -189,28 +200,6 @@ $(document).ready(function () {
         }
     });
 
-    //get sites resources
-    /*$.ajax({
-     type: "GET",
-     dataType: "text",
-     contentType: "application/json; charset=utf-8",
-     url: "/rest/experiments?sites",
-     success: function (data_server) {
-     site_resources = JSON.parse(data_server);
-     for(var j = 0; j < site_resources.items.length; j++)
-     $("#div_resources_map_tbl").append('<tr><td><a href="#" onclick="openMapPopup(\''+site_resources.items[j].site+'\')" id="'+site_resources.items[j].site+'_maps">'+site_resources.items[j].site.charAt(0).toUpperCase() + site_resources.items[j].site.slice(1)+' map</a></td><td><input type="text" id="'+site_resources.items[j].site+'_list" value="" class="input-large" /></td></tr>');
-     $("#div_resources_map_tbl").append('<tr><td colspan="2"><button class="btn btn-add pull-right" id="searchButton" style="margin-left:5px;">Search</button><button class="btn btn-add pull-right" id="clearButton">Clear</button></td></tr>');
-     $("#searchButton").click(function() { oTable.fnDraw(); });
-     $("#clearButton").click(function() {
-     $("#div_resources_map input").each(function(){ $(this).val(""); });
-     oTable.fnDraw();
-     });
-     },
-     error: function (XMLHttpRequest, textStatus, errorThrows) {
-     $("#div_msg").html(errorThrows);
-     $("#div_msg").show();
-     }
-     });*/
 
     $("#refreshButton").click(function () {
         if (confirm("This can take a while. Are you sure?")) {
@@ -256,52 +245,7 @@ $(document).ready(function () {
             lnodes.push($(this).val());
         });
 
-        //console.log(lnodes);
 
-        if ($("#action").val() == "update") {
-            /* //JSON
-             var datab = "";
-             datab += "--" + boundary + '\r\n';
-             datab += 'Content-Disposition: form-data; name="'+exp_name+'.json"; filename="'+exp_name+'.json"\r\n';
-             datab += 'Content-Type: application/json\r\n\r\n';
-             datab += JSON.stringify(lnodes) + '\r\n\r\n';
-             //datab += "--" + boundary + '\r\n';
-
-             //firmware
-             datab += "--" + boundary + '\r\n';
-             datab += 'Content-Disposition: form-data; name="' + binary[0].name + '"; filename="' + binary[0].name + '"\r\n';
-             datab += 'Content-Type: application/octet-stream\r\n\r\n';
-             datab += binary[0].bin + '\r\n';
-
-
-             //add json
-             datab += "--" + boundary + '--';
-
-             $.ajax({
-             type: "POST",
-             dataType: "json",
-             data: datab,
-             url: "/rest/experiment/nodes?update",
-             contentType: "multipart/form-data; boundary="+boundary,
-             success: function (data) {
-             if(data["0"]) {
-             $("#stateSuccess").html("<b>Update</b> successful for node(s): " + JSON.stringify(data["0"]));
-             $("#stateSuccess").show();
-             }
-             if(data["1"]) {
-             $("#stateFailure").html("<b>Update</b> failed for node(s): " + JSON.stringify(data["1"]));
-             $("#stateFailure").show();
-             }
-             },
-             error: function (XMLHttpRequest, textStatus, errorThrows) {
-             $("#stateFailure").html(textStatus + " : " + errorThrows +  " : " +  XMLHttpRequest.responseText);
-             $("#stateFailure").show();
-             }
-             });
-             binary = [];
-             */
-        }
-        else {
             $.ajax({
                 type: "POST",
                 dataType: "json",
@@ -323,12 +267,8 @@ $(document).ready(function () {
                     $("#stateFailure").show();
                 }
             });
-        }
-        // return false;
     });
 
-    //file upload event
-    document.getElementById('files').addEventListener('change', handleFileSelect, false);
 });
 
 
@@ -344,28 +284,6 @@ function unSelectAll() {
     });
 }
 
-function handleFileSelect(evt) {
-    var files = evt.target.files; // fileList object
-
-    // loop through the FileList and render image files as thumbnails.
-    for (var i = 0, f; f = files[i]; i++) {
-
-        var reader = new FileReader();
-
-        // closure to capture the file information.
-        reader.onload = (function (theFile) {
-            return function (e) {
-
-                binary.push({
-                    "name": theFile.name,
-                    "bin": e.target.result
-                });
-            };
-        })(f);
-        if (f.name.indexOf(".elf", f.name.length - 4) != -1) reader.readAsDataURL(f);
-        else reader.readAsText(f);
-    }
-}
 
 // filtering function for map selection input (the "Search for nodes" part)
 $.fn.dataTableExt.afnFiltering.push(function (oSettings, aData, iDataIndex) {
@@ -374,9 +292,11 @@ $.fn.dataTableExt.afnFiltering.push(function (oSettings, aData, iDataIndex) {
     $("#div_resources_map input").each(function () {
         var site = $(this).attr("id").split('_')[0];
         var val = $(this).val();
+        var type = $(this).attr("id").split('_')[1];
+        var archi = type.split(':')[0];
         if (val != "") {
             var snodes = expand(val.split(","));
-            for (var i = 0; i < snodes.length; i++) if (!isNaN(snodes[i])) exp_json.push("node" + snodes[i] + "." + site + ".senslab.info");
+            for (var i = 0; i < snodes.length; i++) if (!isNaN(snodes[i])) exp_json.push(archi + "-" + snodes[i] + "." + site + ".iot-lab.info");
         }
     });
     if (exp_json.length == 0) return true;
