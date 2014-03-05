@@ -171,6 +171,11 @@ include("header.php");
 
 </div> <!-- container -->
 
+<link href="css/datatable.css" rel="stylesheet">
+<link href="css/datatable-custom.css" rel="stylesheet">
+<script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="js/datatable.js"></script>
+
 <script type="text/javascript">
 
 var json_exp = [];
@@ -185,6 +190,8 @@ $(document).ready(function () {
     $("#frmActions").hide();
     $("#expButtons").hide();
     $("#tblNodes").hide();
+
+
 
     $(document).ajaxStart(function () {
         $("#loader").show();
@@ -297,6 +304,11 @@ $(document).ready(function () {
                 $("#frmActions").hide();
             }
             $("#tblNodes").show();
+            $("#tblNodes").dataTable({
+                "bPaginate": false,
+                "bFilter": false,
+                 "aaSorting": [[ 1, "desc" ]]
+            });
         },
         error: function (XMLHttpRequest, textStatus, errorThrows) {
             $("#detailsExpSummary").html("An error occurred while retrieving experiment #" + id + " details");

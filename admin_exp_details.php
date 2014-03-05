@@ -43,6 +43,11 @@ include("header.php");
 
 </div> <!-- container -->
 
+<link href="css/datatable.css" rel="stylesheet">
+<link href="css/datatable-custom.css" rel="stylesheet">
+<script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="js/datatable.js"></script>
+
 <script type="text/javascript">
 
     var json_exp = [];
@@ -125,6 +130,11 @@ include("header.php");
                 }
                 $("#detailsExpSummary").append(nbTotalNodes + "<br/>");
                 $("#tblNodes").show();
+                $("#tblNodes").dataTable({
+                    "bPaginate": false,
+                    "bFilter": false,
+                    "aaSorting": [[ 0, "desc" ]]
+                });
             },
             error: function (XMLHttpRequest, textStatus, errorThrows) {
                 $("#div_msg").html("An error occurred while retrieving experiment #" + id + " details");
