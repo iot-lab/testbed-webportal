@@ -256,7 +256,6 @@ $(document).ready(function () {
         data: {},
         dataType: "json",
         success: function (data) {
-
             if (data.name != null)
                 exp_name = data.name;
 
@@ -321,12 +320,12 @@ $(document).ready(function () {
                 $("#frmActions").hide();
             }
             $("#tblNodes").show();
-            $("#tblNodes").dataTable({
+           /* $("#tblNodes").dataTable({
                 "bPaginate": false,
                 "bFilter": false,
                 "aaSorting": [[ 1, "asc" ]],
                 "aoColumnDefs":[{ "sType":"formatted_numbers", "aTargets":[ 1 ] }]
-            });
+            });*/
         },
         error: function (XMLHttpRequest, textStatus, errorThrows) {
             $("#detailsExpSummary").html("An error occurred while retrieving experiment #" + id + " details");

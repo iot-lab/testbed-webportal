@@ -146,12 +146,12 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
                 }
                 $("#detailsExpSummary").append(nbTotalNodes + "<br/>");
                 $("#tblNodes").show();
-                $("#tblNodes").dataTable({
+                /*$("#tblNodes").dataTable({
                     "bPaginate": false,
                     "bFilter": false,
                     "aaSorting": [[ 0, "asc" ]],
                     "aoColumnDefs":[{ "sType":"formatted_numbers", "aTargets":[ 0 ] }]
-                });
+                });*/
             },
             error: function (XMLHttpRequest, textStatus, errorThrows) {
                 $("#div_msg").html("An error occurred while retrieving experiment #" + id + " details");
