@@ -63,16 +63,16 @@ function rebuildJson(exp_json,showEmptyAssociations) {
             }
         }
     }
-    
+
     if(exp_json.deploymentresults != null) {
-        for(var i = 0; i < exp_json.deploymentresults.length; i++) {
-            for(var j = 0; j < exp_json.deploymentresults[i].nodes.length;j++){
+        
+         jQuery.each(exp_json.deploymentresults, function(state, nodes) {
+            for(var j = 0; j < nodes.length;j++){
 
                 var find = false;
                 for(var k = 0; k < json_tmp.length && !find; k++) {
-                    if(json_tmp[k].node == exp_json.deploymentresults[i].nodes[j])
+                    if(json_tmp[k].node == nodes[j])
                     {
-                        var state = exp_json.deploymentresults[i].state;
                         json_tmp[k].state = state=="0"?"Success":"Failure";
                         json_tmp[k].style = state=="0"?"background-color:#DFF0D8;color:#468847":"background-color:#F2DEDE;color:#B94A48";
                         find = true;
@@ -81,15 +81,14 @@ function rebuildJson(exp_json,showEmptyAssociations) {
 
                 if(!find)
                 {
-                    var state = exp_json.deploymentresults[i].state=="0"?"Success":"Failure";
-                    var style = exp_json.deploymentresults[i].state=="0"?"background-color:#DFF0D8;color:#468847":"background-color:#F2DEDE;color:#B94A48";
+                    var style = state=="0"?"background-color:#DFF0D8;color:#468847":"background-color:#F2DEDE;color:#B94A48";
                     json_tmp.push({
-                        "node": exp_json.deploymentresults[i].nodes[j],
-                        "state":state,
+                        "node": nodes[j],
+                        "state": state=="0"?"Success":"Failure",
                         "style":style});
                 }
             }
-        }
+        })
     } else {
         for(var k = 0; k < json_tmp.length; k++) {
                 json_tmp[k].state = "Not available";
