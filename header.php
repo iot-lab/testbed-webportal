@@ -78,6 +78,10 @@ if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) $body_
             font-weight: normal;
         }
 
+        h2{
+            color: #31708f;
+        }
+
     </style>
 
     <!--<script src='/wp-includes/js/jquery/jquery.js'></script>-->
