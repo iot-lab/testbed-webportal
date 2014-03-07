@@ -3,22 +3,6 @@
 <!-- ------ -->
 
 
-<div class="col-md-4">
-    <div class="alert alert-info">
-        <img src="img/help.png"> To <b>create</b> a new profile click the <b>New</b> button, fill the form and click <b>Save</b>.
-        <br/><br/>To <b>edit</b> a profile, click on the profile name on the list, edit settings, and click <b>Save</b>.
-    </div>
-    <select class="form-control" id="my_profiles_modal" size="15" style="margin-bottom:5px;">
-        <optgroup label="WSN430" id="wsn430Profiles_modal"></optgroup>
-        <optgroup label="M3" id="m3Profiles_modal"></optgroup>
-        <optgroup label="A8" id="a8Profiles_modal"></optgroup>
-    </select>
-
-    <p>
-        <button class="btn btn-default" id="btn_new">New</button>
-        <button class="btn btn-danger" id="btn_delete">Delete</button>
-    </p>
-</div>
 
 <div class="col-md-8">
 
@@ -280,6 +264,9 @@
 
 </div>
 
+
+
+
 <!-- ----------------- -->
 <!--  A8 PROFILE FORM  -->
 <!-- ----------------- -->
@@ -291,13 +278,29 @@
 <!--  MAIN  END -->
 <!-- ---------- -->
 
-
 </div>
-<button id="btn_submit" class="btn btn-primary" type="submit">Save</button>
 
 </form>
+
+
+<button class="btn btn-default" id="btn_new">New</button>
+<button id="btn_submit" class="btn btn-primary" type="submit">Save</button>
+<button class="btn btn-danger" id="btn_delete">Delete</button>
 </div>
 
+
+<div class="col-md-4">
+    <div class="alert alert-info">
+        <img src="img/help.png"> To <b>create</b> a new profile click the <b>New</b> button, fill the form and click <b>Save</b>.
+        <br/><br/>To <b>edit</b> a profile, click on the profile name on the list, edit settings, and click <b>Save</b>.
+    </div>
+    <select class="form-control" id="my_profiles_modal" size="15" style="margin-bottom:5px;">
+        <optgroup label="WSN430" id="wsn430Profiles_modal"></optgroup>
+        <optgroup label="M3" id="m3Profiles_modal"></optgroup>
+        <optgroup label="A8" id="a8Profiles_modal"></optgroup>
+    </select>
+
+</div>
 
 <script type="text/javascript">
 
@@ -506,13 +509,13 @@ $("#btn_delete").click(function () {
 /* ****************************** */
 /* submit a new or edited profile */
 /* ****************************** */
-$("#form_part").bind("submit", function (e) {
+$("#btn_submit").on("click", function (e) {
 
-    e.preventDefault();
+  //  e.preventDefault();
 
     // check profile name 
     var regExp = /^[0-9A-z]*$/;
-    ;
+
     if (regExp.test($("#profiles_txt_name").val()) == false) {
         alert("You must set a profile name with only word characters [0-9A-Za-z_]");
         return false;
