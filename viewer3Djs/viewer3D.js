@@ -203,7 +203,7 @@ function parseNodebox() {
     var input = [];
     for (var i = 0; i < nodeboxes.length; i++) {
         var tempInput = nodeboxes[i].value;
-        tempInput = expand(tempInput.split(","));
+        tempInput = expand(tempInput.split("+"));
         var archi = nodeboxes[i].id.substring(0, nodeboxes[i].id.indexOf(":"));
         for (var j = 0; j < tempInput.length; j++) tempInput[j] = archi + "-" + tempInput[j];
         input = input.concat(tempInput);
@@ -341,7 +341,7 @@ function toggleNode(obj) {
                 }
             }
             // factorize only this one
-            nodeboxes[i].value = factorize(nodesArchis).join(",");
+            nodeboxes[i].value = factorize(nodesArchis).join("+");
         }
     }
     myrender();
