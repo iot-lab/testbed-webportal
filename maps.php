@@ -123,7 +123,7 @@ $site = $_GET['site'];
                             archis.push(data.items[i].archi);
                             bdd[data.items[i].archi] = [];
                             $("#tab_trails").append('<li><a href="#" data-toggle="tab" data-value="' + data.items[i].archi + '">' + data.items[i].archi + '</a></li>');
-                            $("#inputs_nodebox").append('<div class="col-sm-4 col-md-4 text-right" style="padding:7px 12px;">' + data.items[i].archi + ': </div><div class="col-sm-8 col-md-8"><input type="text" placeholder="1-10+24+25" class="form-control col-md-3" style="margin-bottom:4px;" id="' + data.items[i].archi + '_nodebox" name="nodebox"/></div>');
+                            $("#inputs_nodebox").append('<div class="col-sm-4 col-md-4 text-right" style="padding:7px 12px;">' + data.items[i].archi + ': </div><div class="col-sm-8 col-md-8"><input type="text" placeholder="1-5+7" class="form-control col-md-3" style="margin-bottom:4px;" id="' + data.items[i].archi + '_nodebox" name="nodebox"/></div>');
                         }
 
                         var nn = data.items[i].network_address;
