@@ -36,7 +36,7 @@
 <!-- --------------------- -->
 
 <div id="wsn430panel" class="tab-pane active">
-    <div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;margin:5px;">
+    <div style="border-bottom: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;margin:5px;">
         <div class="form-group" style="width:100%;margin-bottom:10px">
             <label class="col-lg-4 control-label">Power mode</label>
 
@@ -49,7 +49,7 @@
         </div>
     </div>
 
-    <div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;margin:5px;">
+    <div style="border-bottom: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;margin:5px;">
         <div class="form-group" style="width:100%;margin-bottom:10px">
             <label class="col-lg-4 control-label" for="inlineCheckboxes">Consumption</label>
 
@@ -78,7 +78,7 @@
     </div>
 
 
-    <div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;margin:5px;">
+    <div style="border-bottom: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;margin:5px;">
         <div class="form-group" style="width:100%;margin-bottom:10px">
             <label class="col-lg-4 control-label" for="inlineCheckboxes">Sensors</label>
 
@@ -102,7 +102,7 @@
         </div>
     </div>
 
-    <div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;margin:5px;">
+    <div style="border-bottom: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;margin:5px;">
         <div class="form-group" style="width:100%;margin-bottom:10px">
             <label class="col-lg-4 control-label" for="inlineCheckboxes">Radio</label>
 
@@ -134,7 +134,7 @@
 
 <div class="tab-pane" id="m3panel">
     <!-- postfixer tous les id et les noms des input avec _m3 comme _wsn430 plus haut -->
-    <div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;margin:5px;">
+    <div style="border-bottom: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;margin:5px;">
         <div class="form-group" style="width:100%;margin-bottom:10px">
             <label class="col-lg-4 control-label">Power mode</label>
 
@@ -147,7 +147,7 @@
         </div>
     </div>
 
-    <div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;margin:5px;">
+    <div style="border-bottom: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;margin:5px;">
         <div class="form-group" style="width:100%;margin-bottom:10px">
             <label class="col-lg-4 control-label" for="inlineCheckboxes">Consumption</label>
 
@@ -195,7 +195,7 @@
         </div>
     </div>
 
-    <div style="border: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;margin:5px;" id="m3RadioMode">
+    <div style="border-bottom: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;margin:5px;" id="m3RadioMode">
         <div class="form-group" style="width:100%;margin-bottom:10px">
             <label class="col-lg-4 control-label" for="radio_mode_m3">Radio mode</label>
 
