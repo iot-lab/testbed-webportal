@@ -13,7 +13,7 @@
 <div class="form-group" style="width:100%;margin-bottom:10px">
     <label class="col-lg-4 control-label" for="txt_name">Name</label>
 
-    <div class="col-lg-8"><input id="profiles_txt_name" type="text" class="form-control" required="required"></div>
+    <div class="col-lg-3"><input id="profiles_txt_name" type="text" class="form-control" required="required"></div>
 </div>
 
 <div class="form-group" style="width:100%;margin-bottom:10px">
@@ -240,7 +240,7 @@
                 <div class="form-group" style="width:100%;margin-bottom:10px">
                     <label class="col-lg-4 control-label" for="radio_period_m3">Period (ms)</label>
 
-                    <div class="col-lg-8">
+                    <div class="col-lg-2">
                         <!--<input type="text" id="radio_period_m3" class="form-control"/>-->
                         <input type="number" id="radio_period_m3" class="form-control" min="1" max="65535" step="1"
                                value="1000"/>
