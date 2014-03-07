@@ -166,14 +166,14 @@ if (isset($_GET['user'])) {
                     "fnRender": function (obj) {
                         var state = obj.aData['state'];
                         if (state == "Error") { // terminated error
-                            state = "<span class='label label-danger'>" + state + "</span>";
+                            state = "<span class='label label-state label-danger'>" + state + "</span>";
                         } else if (state == "Terminated") { // terminated OK
-                            state = "<span class='label label-default'>" + state + "</span>";
+                            state = "<span class='label label-state label-default'>" + state + "</span>";
                         } else if (state == "Running" || state == "Finishing" || state == "Resuming" || state == "toError") { // running
-                            state = "<span class='label label-success'>" + state + "</span>";
+                            state = "<span class='label label-state label-success'>" + state + "</span>";
                         } else if (state == "Waiting" || state == "Launching" || state == "Suspended"
                             || state == "Hold" || state == "toAckReservation" || state == "toLaunch") { // upcomming
-                            state = "<span class='label label-info'>" + state + "</span>";
+                            state = "<span class='label label-state label-info'>" + state + "</span>";
                         }
                         return state;
                     }

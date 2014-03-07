@@ -166,11 +166,11 @@ $(document).ready(function () {
                 "fnRender": function (obj) {
                     var state = obj.aData['state'];
                     if (state == "Error") { // terminated error
-                        state = "<span class='label label-danger'>" + state + "</span>";
+                        state = "<span class='label label-state label-danger'>" + state + "</span>";
                     } else if (state == "Terminated") { // terminated OK
-                        state = "<span class='label label-default'>" + state + "</span>";
+                        state = "<span class='label label-state label-default'>" + state + "</span>";
                     } else if (state == "Running" || state == "Finishing" || state == "Resuming" || state == "toError") { // running
-                        state = "<span class='label label-success'>" + state + "</span>";
+                        state = "<span class='label label-state label-success'>" + state + "</span>";
                         var dateExp = new Date(obj.aData['date']).getTime(); // start date in milliseconds
                         var durationExp = obj.aData['duration'] * 60000; // experiment duration in milliseconds
                         setTimeout(function () {

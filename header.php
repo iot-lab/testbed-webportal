@@ -72,6 +72,12 @@ if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) $body_
             background-color:transparent;
         }
 
+        .label-state {
+            display: inline-block;
+            width: 100px;
+            font-weight: normal;
+        }
+
     </style>
 
     <!--<script src='/wp-includes/js/jquery/jquery.js'></script>-->
