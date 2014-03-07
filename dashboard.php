@@ -32,6 +32,10 @@ include("header.php");
                 <tbody>
                 </tbody>
             </table>
+
+
+            <div id="loader" style="display:none"><img src="img/ajax-loader.gif"></div>
+
         </div>
 
         <div class="col-md-4">
@@ -54,7 +58,6 @@ include("header.php");
                 <img src="img/help.png"/> Click on an experiment to manage it or click <b>New Experiment</b> to start a
                 new one.
             </div>
-            <div id="loader" style="display:none"><img src="img/ajax-loader.gif"></div>
 
         </div>
 
