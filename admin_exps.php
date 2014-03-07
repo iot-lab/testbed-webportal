@@ -29,7 +29,7 @@ if (isset($_GET['user'])) {
             <h2>Experiment List <?php echo $title; ?></h2>
 
             <div class="alert alert-danger" id="div_msg" style="display:none"></div>
-            <table id="tbl_exps" class="table table-bordered table-striped table-condensed" style="display:none">
+            <table id="tbl_exps" class="table table-striped table-condensed" style="display:none">
                 <thead>
                 <tr>
                     <th>ID</th>
