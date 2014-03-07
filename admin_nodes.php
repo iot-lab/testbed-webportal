@@ -289,7 +289,7 @@ $.fn.dataTableExt.afnFiltering.push(function (oSettings, aData, iDataIndex) {
         var type = $(this).attr("id").split('_')[1];
         var archi = type.split(':')[0];
         if (val != "") {
-            var snodes = expand(val.split(","));
+            var snodes = expand(val.split("+"));
             for (var i = 0; i < snodes.length; i++) if (!isNaN(snodes[i])) exp_json.push(archi + "-" + snodes[i] + "." + site + ".iot-lab.info");
         }
     });
