@@ -443,7 +443,7 @@ $("#form_part1").bind("submit", function (e) {
             var archi = $(this).attr("id").split('_')[1].split(":")[0];
             var val = $(this).val();
             if (val != "") {
-                var snodes = expand(val.split(","));
+                var snodes = expand(val.split("+"));
                 for (i = 0; i < snodes.length; i++) {
                     var node_network_address;
                     if (!isNaN(snodes[i]) && ((node_network_address = archi + "-" + snodes[i] + "." + site + ".iot-lab.info") in sites_nodes)) {
