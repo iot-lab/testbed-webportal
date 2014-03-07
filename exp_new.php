@@ -70,6 +70,28 @@ include("header.php");
     </div>
     <!-- /.modal -->
 
+
+    <!--  MODAL WINDOW FOR RESOURCES STATE -->
+
+    <div id="resourcesState" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myModalLabel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3>Resources state</h3>
+                </div>
+                <div class="modal-body">
+                    <p id="resourcesStateContent">test</p>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+
+
     <form class="well form-horizontal form-inline" id="form_part1">
 
         <h3>Configure your experiment</h3>
@@ -117,7 +139,7 @@ include("header.php");
         <h3>Choose your nodes</h3>
 
         <div class="form-group" style="width:100%;padding-bottom:10px">
-            <label class="col-lg-3 control-label">Resources:</label>
+            <label class="col-lg-3 control-label">Resources: <br/><a href="#" id="btnResourcesState">(state)</a></label>
 
             <div class="col-lg-9">
                 <label class="radio"><input type="radio" name="resources_type" id="optionsRadiosMaps" value="physical"
@@ -370,6 +392,14 @@ $(document).ready(function () {
 
     //get sites nodes
     getNodes();
+
+    $("#btnResourcesState").on("click",function(){
+        $("#resourcesState").modal();
+        $("#resourcesStateContent").text("Loading, please wait...");
+        getResourcesState();
+    });
+
+
 });
 
 
@@ -662,6 +692,46 @@ $("#form_part2").bind('submit', function (e) {
 /* ****************** */
 /*   ajax functions   */
 /* ****************** */
+
+
+function getResourcesState() { //get all user profiles
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        url: "/rest/experiments?id",
+        success: function (data) {
+
+            if (data == "") return false; // no profile
+            //$("#resourcesStateContent").html("<pre>" + JSON.stringify(data) + "</pre>");
+            $("#resourcesStateContent").text("");
+            for(i=0;i<data.items.length;i++) { //site
+                $.each(data.items[i], function(site, archis) {
+                    $("#resourcesStateContent").append("<h3>"+site+"</h3>");
+                    $.each(archis, function(archi, states) {
+                        $("#resourcesStateContent").append("<h4>"+archi+"</h4>");
+                        $.each(states, function(state, nodes) {
+                            var color = "label-default";
+                            if(state == "Alive") color = "label-success";
+                            if(state == "Suspected") color = "label-danger";
+                            if(state == "Busy") color = "label-warning";
+                            $("#resourcesStateContent").append('<li><span class="label '+color+'" style="display:inline-block;width:80px">'+state+'</span> '+ nodes +'</li>');
+                        });
+                    });
+                });
+            }
+
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrows) {
+            $("#txt_notif_msg").html(errorThrows);
+            $("#txt_notif").show();
+            $("#txt_notif").removeClass("alert-success");
+            $("#txt_notif").addClass("alert-danger");
+        }
+    });
+}
+
+
 function getProfiles() { //get all user profiles
     $.ajax({
         type: "GET",
@@ -711,7 +781,7 @@ function getNodes() { // get all sites nodes
                     // filling the "by type" form
                     $("#lst_archi").append(new Option(data_server[i].archi, data_server[i].archi));
                     // filling the "from maps" form
-                    $("#" + data_server[i].site + "_archis").append(data_server[i].archi + '&nbsp;&nbsp;<input type="text" id="' + data_server[i].site + "_" + data_server[i].archi + '_list" value="" class="form-control" style="width:70%" />');
+                    $("#" + data_server[i].site + "_archis").append(data_server[i].archi + '&nbsp;&nbsp;<input type="text" id="' + data_server[i].site + "_" + data_server[i].archi + '_list" value="" class="form-control" style="width:70%" placeholder="1-5+7" />');
                 }
                 sites_nodes[data_server[i].network_address] = data_server[i].archi.split(':')[0];
             }
