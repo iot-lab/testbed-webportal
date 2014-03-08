@@ -4,7 +4,7 @@
 
 
 
-<div class="col-md-8">
+<div class="col-md-9">
 
 <div id="div_error_profiles" class="alert" style="display:none"></div>
 
@@ -289,16 +289,21 @@
 </div>
 
 
-<div class="col-md-4">
-    <div class="alert alert-info">
-        <img src="img/help.png"> To <b>create</b> a new profile click the <b>New</b> button, fill the form and click <b>Save</b>.
-        <br/><br/>To <b>edit</b> a profile, click on the profile name on the list, edit settings, and click <b>Save</b>.
-    </div>
+<div class="col-md-3">
+
+
+    <label><b>Your profiles:</b></label>
     <select class="form-control" id="my_profiles_modal" size="15" style="margin-bottom:5px;">
         <optgroup label="WSN430" id="wsn430Profiles_modal"></optgroup>
         <optgroup label="M3" id="m3Profiles_modal"></optgroup>
         <optgroup label="A8" id="a8Profiles_modal"></optgroup>
     </select>
+
+
+    <div class="alert alert-info">
+        <img src="img/help.png"> To <b>create</b> a new profile click the <b>New</b> button, fill the form and click <b>Save</b>.
+        <br/><br/>To <b>edit</b> a profile, click on the profile name on the list, edit settings, and click <b>Save</b>.
+    </div>
 
 </div>
 
