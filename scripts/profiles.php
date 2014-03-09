@@ -4,9 +4,28 @@
 
 
 
-<div class="col-md-9">
+<div class="col-md-8">
 
-<div id="div_error_profiles" class="alert" style="display:none"></div>
+
+<div class="row">
+<div class="col-lg-12">
+
+<span><b>Select a profile:</b></span>
+<select class="form-control" id="my_profiles_modal" style="margin-bottom:5px;display:inline-block;width:200px">
+        <optgroup label="WSN430" id="wsn430Profiles_modal"></optgroup>
+        <optgroup label="M3" id="m3Profiles_modal"></optgroup>
+        <optgroup label="A8" id="a8Profiles_modal"></optgroup>
+    </select>
+
+<button id="btn_submit" class="btn btn-primary" type="submit">Save</button>
+<button class="btn btn-danger" id="btn_delete">Delete</button>
+|
+<button class="btn btn-default" id="btn_new">New</button>
+
+
+</div>
+</div>
+
 
 <form class="well form-horizontal form-inline" id="form_part" role="form">
 
@@ -283,27 +302,18 @@
 </form>
 
 
-<button class="btn btn-default" id="btn_new">New</button>
-<button id="btn_submit" class="btn btn-primary" type="submit">Save</button>
-<button class="btn btn-danger" id="btn_delete">Delete</button>
 </div>
 
 
-<div class="col-md-3">
-
-
-    <label><b>Your profiles:</b></label>
-    <select class="form-control" id="my_profiles_modal" size="15" style="margin-bottom:5px;">
-        <optgroup label="WSN430" id="wsn430Profiles_modal"></optgroup>
-        <optgroup label="M3" id="m3Profiles_modal"></optgroup>
-        <optgroup label="A8" id="a8Profiles_modal"></optgroup>
-    </select>
-
+<div class="col-md-4">
 
     <div class="alert alert-info">
         <img src="img/help.png"> To <b>create</b> a new profile click the <b>New</b> button, fill the form and click <b>Save</b>.
         <br/><br/>To <b>edit</b> a profile, click on the profile name on the list, edit settings, and click <b>Save</b>.
     </div>
+
+
+<div id="div_error_profiles" class="alert" style="display:none"></div>
 
 </div>
 
@@ -315,6 +325,8 @@ var profilesLoaded = false;
 var edit = false;
 var index = -1;
 var radio_num = 0;
+var profilename = "";
+
 
 function updateRadioNum(num) {
     $("#radio_num_m3").val(num);
@@ -341,7 +353,7 @@ $(document).ready(function () {
     // prepare form for the new profile
     $("#btn_new").click(function () {
         $("#form_part")[0].reset();
-        $("#profiles_txt_name").val("new_profile");
+        $("#profiles_txt_name").val("<name>");
 
         $("#my_profiles_modal option:selected").removeAttr("selected");
 
@@ -397,6 +409,14 @@ function loadProfiles() {
                 $("#my_profiles_modal").change(loadProfile);
                 //$("#div_error_profiles").hide();
                 profilesLoaded = true;
+
+                if(profilename != "") {
+                    $("#my_profiles_modal option[value="+profilename+"]").attr("selected","selected");
+                }
+                else {
+                    loadProfile();
+                }
+
             },
             error: function (XMLHttpRequest, textStatus, errorThrows) {
                 $("#div_error_profiles").html(errorThrows);
@@ -413,7 +433,10 @@ function loadProfiles() {
 /* ******************************************* */
 function loadProfile() {
 
-    var profilename = $(this).val();
+    profilename = $("#my_profiles_modal").val();
+    if(profilename == undefined) {
+        return;
+    }
 
     var index = -1;
 
@@ -491,6 +514,7 @@ $("#btn_delete").click(function () {
             url: "/rest/profiles/" + profile_name,
             success: function (data_server) {
 
+                profilename = "";
                 loadProfiles();
 
                 $("#div_error_profiles").html("Profile deleted.");
@@ -619,7 +643,7 @@ $("#btn_submit").on("click", function (e) {
         contentType: "application/json; charset=utf-8",
         url: "/rest/profiles/" + profile_json.profilename,
         success: function (data_server) {
-
+            profilename = profile_json.profilename;
             loadProfiles();
 
             $("#div_error_profiles").removeClass("alert-danger");
