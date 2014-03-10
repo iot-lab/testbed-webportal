@@ -57,7 +57,6 @@ if (isset($_GET['user'])) {
                 <li><span id="expUpcoming" class="badge badge-info">&nbsp;</span> upcoming</li>
                 <li><span id="expTerminated" class="badge">&nbsp;</span> terminated</li>
             </ul>
-            <p><span class="glyphicon glyphicon-th"></span> Profiles: <span id="nb_profiles">&nbsp;</span></p>
 
             <h2>Search for an experiment</h2>
 
