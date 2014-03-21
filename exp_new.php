@@ -139,7 +139,7 @@ include("header.php");
         <h3>Choose your nodes</h3>
 
         <div class="form-group" style="width:100%;padding-bottom:10px">
-            <label class="col-lg-3 control-label">Resources: <br/><a href="#" id="btnResourcesState">(state)</a></label>
+            <label class="col-lg-3 control-label">Resources: <br/><button class="btn btn-default btn-sm dropdown-toggle" id="btnResourcesState">resources state</button></label>
 
             <div class="col-lg-9">
                 <label class="radio"><input type="radio" name="resources_type" id="optionsRadiosMaps" value="physical"
@@ -393,7 +393,8 @@ $(document).ready(function () {
     //get sites nodes
     getNodes();
 
-    $("#btnResourcesState").on("click",function(){
+    $("#btnResourcesState").on("click",function(e){
+        e.preventDefault();
         $("#resourcesState").modal();
         $("#resourcesStateContent").text("Loading, please wait...");
         getResourcesState();
