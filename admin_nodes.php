@@ -203,7 +203,7 @@ $(document).ready(function () {
             $("#searchDiv").hide();
 
             $.ajax({
-                type: "POST",
+                type: "GET",
                 dataType: "json",
                 url: "/rest/admin/resourcesproperties",
                 success: function (data_server) {
