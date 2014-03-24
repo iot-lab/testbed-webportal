@@ -248,7 +248,6 @@ include("header.php");
                 <select class="form-control" id="my_firmwares" size="15" style="margin-bottom:5px;">
                     <optgroup label="WSN430" id="wsn430Firmwares"></optgroup>
                     <optgroup label="M3" id="m3Firmwares"></optgroup>
-                    <optgroup label="A8" id="a8Firmwares"></optgroup>
                 </select>
                 <input type="file" id="files" name="files[]" multiple/>
             </div>
