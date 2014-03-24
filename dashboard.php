@@ -153,9 +153,11 @@ $(document).ready(function () {
                 "fnRender": function (obj) {
                     var date = obj.aData['date'];
                     myDate = new Date(date * 1000);
+
                     if (myDate == "Invalid Date")
                         myDate = "As soon as possible";
-                    else myDate = myDate.toGMTString();
+                    else myDate = myDate.toLocaleString();
+
                     return myDate;
                 }
             },
@@ -174,23 +176,21 @@ $(document).ready(function () {
                         state = "<span class='label label-state label-default'>" + state + "</span>";
                     } else if (state == "Running" || state == "Finishing" || state == "Resuming" || state == "toError") { // running
                         state = "<span class='label label-state label-success'>" + state + "</span>";
-                        var dateExp = new Date(obj.aData['date']).getTime(); // start date in milliseconds
+                       /* var dateExp = new Date(obj.aData['gmtdate']).getTime(); // start date in milliseconds
                         var durationExp = obj.aData['duration'] * 60000; // experiment duration in milliseconds
                         setTimeout(function () {
                             checkState(obj.aData['id'], 1, dateExp, durationExp);
                         }, durationExp - (dateSrv - dateExp));
-                        /* TODO verif */
-                        console.log(obj.aData['id'] + " is Running; refresh in " + (durationExp - (dateSrv - dateExp)) / 1000 + " s.");
+                        console.log(obj.aData['id'] + " is Running; refresh in " + (durationExp - (dateSrv - dateExp)) / 1000 + " s.");*/
                     } else if (state == "Waiting" || state == "Launching" || state == "Suspended"
                         || state == "Hold" || state == "toAckReservation" || state == "toLaunch") { // upcomming
                         state = "<span class='label label-info'>" + state + "</span>";
-                        var dateExp = new Date(obj.aData['date']).getTime(); // start date in milliseconds
+                        /*var dateExp = new Date(obj.aData['gmtdate']).getTime(); // start date in milliseconds
                         var durationExp = obj.aData['duration'] * 60000; // experiment duration in milliseconds
                         setTimeout(function () {
                             checkState(obj.aData['id'], 0, dateExp, durationExp);
                         }, dateExp - dateSrv);
-                        /* TODO verif */
-                        console.log(obj.aData['id'] + " is Waiting; refresh in " + (dateExp - dateSrv) / 1000 + " s.");
+                        console.log(obj.aData['id'] + " is Waiting; refresh in " + (dateExp - dateSrv) / 1000 + " s.");*/
                     }
                     return state;
                 }
