@@ -31,7 +31,7 @@ curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, false);
 curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($handle, CURLOPT_POST, true);
-curl_setopt($handle, CURLOPT_POSTFIELDS, $data);
+curl_setopt($handle, CURLOPT_POSTFIELDS, json_encode($data));
 $response = curl_exec($handle);
 $code = curl_getinfo($handle, CURLINFO_HTTP_CODE);
 
