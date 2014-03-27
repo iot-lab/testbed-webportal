@@ -205,8 +205,8 @@
                     <option value="4">4</option>
                     <option value="16">16</option>
                     <option value="64">64</option>
-                    <option value="128">428</option>
                     <option value="256">256</option>
+                    <option value="128">428</option>
                     <option value="512">512</option>
                     <option value="1024">1024</option>
                 </select>
