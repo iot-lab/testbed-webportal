@@ -383,7 +383,7 @@ include("header.php");
                     <div class="form-group">
                         <input type="hidden" id="to" name="to" value=""/>
                         <label class="control-label">Subject:</label>
-                        <input type="text" name="subjet" class="form-control" value="SensLAB registration rejection"/>
+                        <input type="text" name="subject" class="form-control" value="IoT-LAB registration rejection"/>
                     </div>
                     <div class="form-group">
                         <label class="control-label">Message:</label>
