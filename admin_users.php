@@ -697,7 +697,7 @@ $("#sendMail").bind('submit', function (e) {
     e.preventDefault();
 
     $.ajax({
-        url: "/scripts/send_mail.php",
+        url: "scripts/send_mail.php",
         type: "POST",
         dataType: "text",
         data: $(this).serialize(),
