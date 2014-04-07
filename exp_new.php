@@ -803,6 +803,7 @@ function getNodes() { // get all sites nodes
         success: function (data_server) {
             var sites = [];
             var archis = [];
+            var archis_all = [];
 
             for (var i in data_server) {
                 if (sites.indexOf(data_server[i].site) == -1) { // unknown site, adding it
@@ -813,13 +814,18 @@ function getNodes() { // get all sites nodes
                     // filling the "from maps" form
                     $("#div_resources_map_tbl").append('<tr valign="top" style="border-top: 1px solid #CCCCCC;color:#555555"><td style="width:150px;"><a href="#" onclick="openMapPopup(\'' + data_server[i].site + '\')" id="' + data_server[i].site + '_maps">' + data_server[i].site.charAt(0).toUpperCase() + data_server[i].site.slice(1) + ' map</a></td><td id="' + data_server[i].site + '_archis" style="text-align:right;padding-bottom:20px;padding-top:20px"></td></tr>');
                 }
+
+                // filling the "from maps" form
                 if (archis.indexOf(data_server[i].site+"-"+data_server[i].archi) == -1) { // unknown archi, adding it
                     archis.push(data_server[i].site+"-"+data_server[i].archi);
-                    // filling the "by type" form
-                    $("#lst_archi").append(new Option(data_server[i].archi, data_server[i].archi));
-                    // filling the "from maps" form
                     $("#" + data_server[i].site + "_archis").append(data_server[i].archi + '&nbsp;&nbsp;<input type="text" id="' + data_server[i].site + "_" + data_server[i].archi + '_list" value="" class="form-control" style="width:70%" placeholder="1-5+7" />');
                 }
+
+                // filling the "by type" form
+                if(archis_all.indexOf(data_server[i].archi) == -1) {
+                    archis_all.push(data_server[i].archi);
+                    $("#lst_archi").append(new Option(data_server[i].archi, data_server[i].archi));
+                } 
                 sites_nodes[data_server[i].network_address] = data_server[i].archi.split(':')[0];
             }
         },
