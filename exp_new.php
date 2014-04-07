@@ -81,7 +81,7 @@ include("header.php");
                     <h3>Resources state</h3>
                 </div>
                 <div class="modal-body">
-                    <p id="resourcesStateContent">test</p>
+                    <p id="resourcesStateContent"></p>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -90,7 +90,28 @@ include("header.php");
     </div>
     <!-- /.modal -->
 
+    <!--  MODAL WINDOW FOR SUBMIT CONFIRM -->
 
+    <div id="submitConfirm" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myModalLabel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3>Confirm the submission</h3>
+                </div>
+                <div class="modal-body">
+                    <p>Did you really want to submit this experiment without any profile or firmware association?</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-primary" data-dismiss="modal" onClick="submitExp()">Yes</a>
+                    <a href="#" class="btn btn-default" data-dismiss="modal">No</a>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 
     <form class="well form-horizontal form-inline" id="form_part1">
 
@@ -593,12 +614,28 @@ $("#btn_assoc").click(function () {
 });
 
 
+
 /* ************* */
 /* submit part 2 */
 /* ************ */
 $("#form_part2").bind('submit', function (e) {
-
     e.preventDefault();
+    if(exp_json.profileassociations == undefined && exp_json.firmwareassociations == undefined) {
+        $("#submitConfirm").modal("show");
+    }
+    else {
+        submitExp();
+    }
+});
+
+/* ************* */
+/* submit exp    */
+/* ************ */
+function submitExp() {
+
+    if(exp_json.profileassociations == undefined && exp_json.firmwareassociations == undefined) {
+         //TODO: display button with cancel button or send button
+    }
 
     //set main properties
     exp_json.type = $("input[name=resources_type]:checked").val();
@@ -686,7 +723,7 @@ $("#form_part2").bind('submit', function (e) {
     });
 
     return false;
-});
+}
 
 
 /* ****************** */
