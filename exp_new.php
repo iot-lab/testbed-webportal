@@ -100,7 +100,7 @@ include("header.php");
                     <h3>Confirm the submission</h3>
                 </div>
                 <div class="modal-body">
-                    <p>Did you really want to submit this experiment without any profile or firmware association?</p>
+                    <p>Do you really want to submit experiment without any firmware or profile associations ?</p>
                 </div>
                 <div class="modal-footer">
                     <a href="#" class="btn btn-primary" data-dismiss="modal" onClick="submitExp()">Yes</a>
