@@ -123,7 +123,7 @@ include("header.php");
 
                                     <div class="col-lg-8">
                                         <select id="txt_country_SA" class="form-control"
-                                                required="required"><?php include '../scripts/countries.html'; ?>
+                                                required="required"><?php include 'scripts/countries.html'; ?>
                                         </select>
                                     </div>
                                 </div>
