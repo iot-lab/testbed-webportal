@@ -206,9 +206,11 @@ $(document).ready(function () {
         "bAutoWidth": false,
         "fnInitComplete": function (oSettings, json) {
             $('#tbl_exps tbody tr').each(function () {
+                if(aData == undefined) return;
                 this.setAttribute('title', 'Click to see details');
                 var aData = oTable.fnGetData(this);
                 this.setAttribute('id', aData['id']);
+                
             });
             $('#tbl_exps tbody tr[title]').tooltip({
                 "delay": 0,
