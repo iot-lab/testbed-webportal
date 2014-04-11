@@ -177,8 +177,8 @@ $(document).ready(function () {
                         '<tr id="' + data_server[i].site + '_archis" style="padding-bottom:20px;padding-top:20px"></tr>');
                 }
 
-                if (archis.indexOf(data_server[i].archi) == -1) { // unknown archi, adding it
-                    archis.push(data_server[i].archi);
+                if (archis.indexOf(data_server[i].site+"-"+data_server[i].archi) == -1) { // unknown archi, adding it
+                    archis.push(data_server[i].site+"-"+data_server[i].archi);
                     $("#" + data_server[i].site + "_archis").append("<tr>" +
                         "<td style=\"width:100px\">" + data_server[i].archi + '</td>' +
                         '<td><input type="text" id="' + data_server[i].site + "_" + data_server[i].archi + '_list" value="" class="form-control" style="width:70%" /></td>' +
@@ -235,10 +235,10 @@ $(document).ready(function () {
 
 
         var lnodes = [];
+        
         $("#tblNodes :checked").each(function () {
             lnodes.push($(this).val());
         });
-
 
         $.ajax({
             type: "POST",
