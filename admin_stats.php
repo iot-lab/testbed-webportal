@@ -94,10 +94,11 @@ include("header.php");
 
         <hr/>
 
-        <h3>System</h3>
+        <!--<h3>System</h3>
         <h4>Used on /senslab/experiments</h4>
 
         <div id="chart_divGauge"></div>
+        -->
     </div>
 </div>
 
