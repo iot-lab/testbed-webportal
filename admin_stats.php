@@ -249,8 +249,7 @@ $(document).ready(function () {
 
                             //check the plateform resources busy
                             for (var res = 0; res < data.items[i].resources.length; res++) {
-
-                                var regex = /node(\d*)\.(\w*)\.senslab\.info/;
+                                var regex = /(\w*)\.(\w*)\.iot-lab\.info/;
                                 match = regex.exec(data.items[i].resources[res]);
 
                                 var sitename = match[2];
