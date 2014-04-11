@@ -521,6 +521,7 @@ function submitReload() {
 
         exp_json.reservation = scheduled_timestamp;
     }
+    exp_json.duration = $("#txt_duration").val();
 
     $.ajax({
         type: "POST",
