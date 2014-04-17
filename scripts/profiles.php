@@ -82,7 +82,7 @@
         </div>
 
         <div class="form-group" style="width:100%;margin-bottom:10px">
-            <label class="col-lg-4 control-label" for="consumption_frequency_wsn430">Frequency (ms)</label>
+            <label class="col-lg-4 control-label" for="consumption_frequency_wsn430">Period (ms)</label>
 
             <div class="col-lg-8">
                 <select id="consumption_frequency_wsn430" class="form-control">
@@ -109,7 +109,7 @@
         </div>
 
         <div class="form-group" style="width:100%;margin-bottom:10px">
-            <label class="col-lg-4 control-label" for="sensor_frequency_wsn430">Frequency (ms)</label>
+            <label class="col-lg-4 control-label" for="sensor_frequency_wsn430">Period (ms)</label>
 
             <div class="col-lg-8">
                 <select id="sensor_frequency_wsn430" class="form-control">
@@ -132,7 +132,7 @@
         </div>
 
         <div class="form-group" style="width:100%;margin-bottom:10px">
-            <label class="col-lg-4 control-label" for="radio_frequency_wsn430">Frequency (ms)</label>
+            <label class="col-lg-4 control-label" for="radio_frequency_wsn430">Period (ms)</label>
 
             <div class="col-lg-8">
                 <select id="radio_frequency_wsn430" class="form-control">
