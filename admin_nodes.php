@@ -56,6 +56,7 @@ include("header.php");
                             <option value="start">Start</option>
                             <option value="stop">Stop</option>
                             <option value="reset">Reset</option>
+                            <option value="update">Update</option>
                         </select>
                     </div>
 
@@ -66,7 +67,7 @@ include("header.php");
 
 
                 <div id="stateSuccess" class="alert alert-success" style="display:none"></div>
-                <div id="stateFailure" class="alert alert-failure" style="display:none"></div>
+                <div id="stateFailure" class="alert alert-danger" style="display:none"></div>
 
             </form>
             <div id="loader" style="display:none"><img src="img/ajax-loader.gif"></div>
@@ -116,6 +117,28 @@ $(document).ready(function () {
     $(document).ajaxStop(function () {
         $("#loader").hide();
     });
+
+    $("#part").change(function() {
+       if ($("#part").val() == "opennodes") {
+           $("#action").empty();
+           $("#action").append(new Option("Start","start"));
+           $("#action").append(new Option("Stop","stop"));
+           $("#action").append(new Option("Reset","reset"));
+           $("#action").append(new Option("Update","update"));
+       }
+       else if ($("#part").val() == "controlnodes") {
+           $("#action").empty();
+           $("#action").append(new Option("Reset","reset"));
+           $("#action").append(new Option("Update","update"));
+       }
+       else if ($("#part").val() == "gatewaynodes") {
+           $("#action").empty();
+           $("#action").append(new Option("Start","start"));
+           $("#action").append(new Option("Stop","stop"));
+           $("#action").append(new Option("Reset","reset"));
+       }
+
+    })
 
 
     /* actions list change */
