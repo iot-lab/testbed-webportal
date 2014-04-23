@@ -60,11 +60,16 @@ include("header.php");
                         </select>
                     </div>
 
+
                     <div class="col-md-1">
                         <button id="btn_send" class="btn btn-default" type="submit">Send</button>
                     </div>
                 </div>
 
+
+                        <div id="firmware" style="display:none"><label for="files">Firmware: <input type="file"
+                                                                                                    id="files"
+                                                                                                    name="files[]"/></label></div>
 
                 <div id="stateSuccess" class="alert alert-success" style="display:none"></div>
                 <div id="stateFailure" class="alert alert-danger" style="display:none"></div>
@@ -139,6 +144,9 @@ $(document).ready(function () {
        }
 
     })
+
+    //file upload event
+    document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
 
     /* actions list change */
@@ -301,6 +309,58 @@ function unSelectAll() {
     });
 }
 
+function handleFileSelect(evt) {
+    var files = evt.target.files; // fileList object
+
+    for (var i = 0, f; f = files[i]; i++) {
+
+        var reader = new FileReader();
+
+        // closure to capture the file information.
+        reader.onload = (function (theFile) {
+            return function (e) {
+
+		    //ajax request
+		    var boundary = "AaB03x";
+		    var datab = "";
+		 
+		    datab += "--" + boundary + '\r\n';
+		    datab += 'Content-Disposition: form-data; name="' + theFile.name +'"; filename="' + theFile.name + '"\r\n';
+		    datab += 'Content-Type: application/octet-stream\r\n\r\n';
+		    datab += e.target.result + '\r\n';
+		    datab += "--" + boundary + '--\r\n';
+
+		    $.ajax({
+			type: "POST",
+			dataType: "json",
+			data: datab,
+			processData: false,
+			contentType: false,
+			async:false,
+			url: "/rest/firmware",
+			contentType: "multipart/form-data; boundary=" + boundary,
+
+			success: function (data_server) {
+
+			    binary.push({"name": theFile.name, "bin": e.target.result});
+			    if(data_server.format == "hex") {
+			    }  
+			    else if(data_server.format == "elf") {
+			    }
+                            else {
+                                alert("Format unknow");
+                            }
+			},
+			error: function (XMLHttpRequest, textStatus, errorThrows) {
+			   alert(errorThrows);
+		       }
+		    });
+            };
+        })(f);
+
+        reader.readAsDataURL(f);
+    }
+}
 
 // filtering function for map selection input (the "Search for nodes" part)
 $.fn.dataTableExt.afnFiltering.push(function (oSettings, aData, iDataIndex) {
