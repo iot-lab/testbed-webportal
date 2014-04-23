@@ -959,7 +959,6 @@ function sortfunction(a, b) {
 function handleFileSelect(evt) {
     var files = evt.target.files; // fileList object
 
-    // loop through the FileList and render image files as thumbnails.
     for (var i = 0, f; f = files[i]; i++) {
 
         var reader = new FileReader();
@@ -967,17 +966,51 @@ function handleFileSelect(evt) {
         // closure to capture the file information.
         reader.onload = (function (theFile) {
             return function (e) {
-                binary.push({"name": theFile.name, "bin": e.target.result});
-                $("#" + user_firmwares[theFile.name] + "Firmwares").append(new Option(theFile.name, theFile.name, false, false));
+
+                //ajax request
+                var boundary = "AaB03x";
+                var datab = "";
+             
+                datab += "--" + boundary + '\r\n';
+                datab += 'Content-Disposition: form-data; name="' + theFile.name +'"; filename="' + theFile.name + '"\r\n';
+                datab += 'Content-Type: application/octet-stream\r\n\r\n';
+                datab += e.target.result + '\r\n';
+                datab += "--" + boundary + '--\r\n';
+
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    data: datab,
+                    processData: false,
+                    contentType: false,
+                    async: false,
+                    url: "/rest/firmware",
+                    contentType: "multipart/form-data; boundary=" + boundary,
+
+                    success: function (data_server) {
+
+                        binary.push({"name": theFile.name, "bin": e.target.result});
+                        
+                        if(data_server.format == "hex") {
+                            user_firmwares[theFile.name] = "wsn430";
+                            $("#" + user_firmwares[theFile.name] + "Firmwares").append(new Option(theFile.name, theFile.name, false, false));
+                        }  
+                        else if(data_server.format == "elf") {
+                            user_firmwares[theFile.name] = "m3";
+                            $("#" + user_firmwares[theFile.name] + "Firmwares").append(new Option(theFile.name, theFile.name, false, false));
+                        }
+                        else {
+                            alert("Unknow format ");
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrows) {
+                        alert(errorThrows);
+                    }
+                });
             };
         })(f);
-        if (f.name.indexOf(".elf", f.name.length - 4) != -1) {
-            reader.readAsDataURL(f);
-            user_firmwares[f.name] = "m3";
-        } else {
-            reader.readAsText(f);
-            user_firmwares[f.name] = "wsn430";
-        }
+
+        reader.readAsDataURL(f);
     }
 }
 
