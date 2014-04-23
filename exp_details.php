@@ -141,7 +141,6 @@ include("header.php");
                     <div class="col-md-3">
                         <select id="action" class="form-control">
                             <option value="start">Start</option>
-                            <option value="start" data-battery="battery">Start (battery)</option>
                             <option value="stop">Stop</option>
                             <option value="reset">Reset</option>
                             <option value="update">Update</option>
@@ -159,7 +158,7 @@ include("header.php");
                 </div>
 
                 <div id="stateSuccess" class="alert alert-success" style="display:none;margin-top:2px:"></div>
-                <div id="stateFailure" class="alert alert-failure" style="display:none;margin-top:2px:"></div>
+                <div id="stateFailure" class="alert alert-danger" style="display:none;margin-top:2px:"></div>
 
             </form>
             <div id="loader" style="display:none"><img src="img/ajax-loader.gif"></div>
@@ -354,11 +353,6 @@ $(document).ready(function () {
 
         var command = $("#action option:selected").val();
 
-        var battery = "";
-        if ($("#action option:selected").attr("data-battery") == "battery") {
-            battery = "&battery=true";
-        }
-
 
         var lnodes = [];
         $("#tblNodes :checked").each(function () {
@@ -481,7 +475,6 @@ function unSelectAll() {
 function handleFileSelect(evt) {
     var files = evt.target.files; // fileList object
 
-    // loop through the FileList and render image files as thumbnails.
     for (var i = 0, f; f = files[i]; i++) {
 
         var reader = new FileReader();
@@ -490,14 +483,45 @@ function handleFileSelect(evt) {
         reader.onload = (function (theFile) {
             return function (e) {
 
-                binary.push({
-                    "name": theFile.name,
-                    "bin": e.target.result
-                });
+		    //ajax request
+		    var boundary = "AaB03x";
+		    var datab = "";
+		 
+		    datab += "--" + boundary + '\r\n';
+		    datab += 'Content-Disposition: form-data; name="' + theFile.name +'"; filename="' + theFile.name + '"\r\n';
+		    datab += 'Content-Type: application/octet-stream\r\n\r\n';
+		    datab += e.target.result + '\r\n';
+		    datab += "--" + boundary + '--\r\n';
+
+		    $.ajax({
+			type: "POST",
+			dataType: "json",
+			data: datab,
+			processData: false,
+			contentType: false,
+			async:false,
+			url: "/rest/firmware",
+			contentType: "multipart/form-data; boundary=" + boundary,
+
+			success: function (data_server) {
+
+			    binary.push({"name": theFile.name, "bin": e.target.result});
+			    if(data_server.format == "hex") {
+			    }  
+			    else if(data_server.format == "elf") {
+			    }
+                            else {
+                                alert("Format unknow");
+                            }
+			},
+			error: function (XMLHttpRequest, textStatus, errorThrows) {
+			   alert(errorThrows);
+		       }
+		    });
             };
         })(f);
-        if (f.name.indexOf(".elf", f.name.length - 4) != -1) reader.readAsDataURL(f);
-        else reader.readAsText(f);
+
+        reader.readAsDataURL(f);
     }
 }
 
