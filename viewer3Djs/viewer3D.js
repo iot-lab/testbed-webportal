@@ -307,7 +307,12 @@ function findNodeUnderMouse(event) {
     var ray = new THREE.Ray(camera.position, vector.subSelf(camera.position).normalize());
     var intersects = ray.intersectObjects(objects);
     if (intersects.length > 0) {
-        return intersects[0];
+        if(isNaN(intersects[0].object.position.x)) {
+            return null;
+        }
+        else {
+            return intersects[0];
+        }
     } else return null;
 }
 
