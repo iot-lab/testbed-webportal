@@ -21,6 +21,8 @@ var div3d, nodeboxes, infobox;
 
 var nodes = [];
 
+var groupNodes = new THREE.Object3D();
+
 function init() {
     var particle;
 
@@ -47,6 +49,31 @@ function init() {
     scene.add(camera);
     set3dsize();
 
+    loadNodes();
+
+    debugaxis(10);
+    // a projector is needed to find which node is under the mouse
+    projector = new THREE.Projector();
+
+    for (var i = 0; i < nodeboxes.length; i++) nodeboxes[i].onkeyup = parseNodebox;
+
+    // set mouse event handlers
+    div3d.onmousedown = OnMouseDown;
+    div3d.onmouseup = OnMouseUp;
+    div3d.onmousemove = displayNodeInfo;
+    if (div3d.addEventListener)
+        /** DOMMouseScroll is for mozilla. */
+        div3d.addEventListener('DOMMouseScroll', wheel, false);
+    /** IE/Opera. */
+    div3d.onmousewheel = div3d.onmousewheel = wheel;
+    myrender();
+}
+
+function loadNodes() {
+
+   scene.remove(groupNodes);
+   groupNodes = new THREE.Object3D();
+   objects = [];
 
     var PI2 = Math.PI * 2;
     var geometry = new THREE.Geometry();
@@ -89,28 +116,12 @@ function init() {
         particle.archi = nodes[i][6];
         particle.position.multiplyScalar(10);
         particle.scale.x = particle.scale.y = 1;
-        scene.add(particle);
         v = new THREE.Vertex(particle.position);
         geometry.vertices.push(v);
         objects.push(particle);
-
+        groupNodes.add(particle);
     }
-
-    debugaxis(10);
-    // a projector is needed to find which node is under the mouse
-    projector = new THREE.Projector();
-
-    for (var i = 0; i < nodeboxes.length; i++) nodeboxes[i].onkeyup = parseNodebox;
-
-    // set mouse event handlers
-    div3d.onmousedown = OnMouseDown;
-    div3d.onmouseup = OnMouseUp;
-    div3d.onmousemove = displayNodeInfo;
-    if (div3d.addEventListener)
-        /** DOMMouseScroll is for mozilla. */
-        div3d.addEventListener('DOMMouseScroll', wheel, false);
-    /** IE/Opera. */
-    div3d.onmousewheel = div3d.onmousewheel = wheel;
+    scene.add(groupNodes);
     myrender();
 }
 

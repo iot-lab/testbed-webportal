@@ -152,9 +152,7 @@ $site = $_GET['site'];
                     var type = $(this).data("value");
 
                     nodes = bdd[type];
-                    $("#trails").html("<div id='div3d' style='height:450px;background-color:#202020;z-index:-1' oncontextmenu='return false;'></div>");
-                    init();
-                    parseNodebox();
+                    loadNodes();
                 });
 
                 console.log(bdd);
