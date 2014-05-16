@@ -408,7 +408,7 @@ $(document).ready(function () {
                 dataType: "json",
                 data: JSON.stringify(lnodes),
                 contentType: "application/json; charset=utf-8",
-                url: "/rest/experiments/" + id + "/nodes?" + command + "" + battery,
+                url: "/rest/experiments/" + id + "/nodes?" + command,
                 success: function (data) {
                     if (data["0"]) {
                         $("#stateSuccess").html("<b>" + command + "</b> successful for node(s): " + JSON.stringify(data["0"]));
