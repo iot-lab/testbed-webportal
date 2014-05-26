@@ -18,7 +18,6 @@ include("header.php");
 
 <div class="row">
 <div class="col-md-9">
-
     <div class="alert" id="txt_notif">
         <button class="close" data-dismiss="alert">×</button>
         <p id="txt_notif_msg"></p>
@@ -359,6 +358,7 @@ var binary = [];
 var scheduled = false;
 
 var alias_nodes = [];
+var invalid_nodes = [];
 
 /* ************ */
 /*   on ready   */
@@ -424,6 +424,12 @@ $(document).ready(function () {
 });
 
 
+$("#form_part1").keypress(function(e){
+    if (e.which == 13){
+        e.preventDefault();
+    }
+});
+
 /* ************* */
 /* submit part 1 */
 /* ************ */
@@ -488,6 +494,7 @@ $("#form_part1").bind("submit", function (e) {
         exp_json.nodes = alias_nodes;
     }
     else {
+        invalid_nodes = [];
         exp_json.nodes = [];
         $("#div_resources_map_tbl input").each(function () {
             var site = $(this).attr("id").split('_')[0];
@@ -500,6 +507,9 @@ $("#form_part1").bind("submit", function (e) {
                     if (!isNaN(snodes[i]) && ((node_network_address = archi + "-" + snodes[i] + "." + site + ".iot-lab.info") in sites_nodes)) {
                         exp_json.nodes.push(node_network_address);
                         $("#" + sites_nodes[node_network_address] + "Nodes").append(new Option(node_network_address, node_network_address, false, false));
+                    }
+                    else {
+                        invalid_nodes.push(node_network_address);
                     }
                 }
             }
@@ -517,7 +527,11 @@ $("#form_part1").bind("submit", function (e) {
 
         displayAssociation();
     } else {
-        $("#txt_notif_msg").html("You have to choose at least one node.");
+        $("#txt_notif_msg").html("You have to choose at least one valid node. ");
+        if(invalid_nodes.length != 0) {
+            $("#txt_notif_msg").append("Invalid node(s) detected: " + invalid_nodes.toString());
+        }
+        window.scrollTo(0, 0);
         $("#txt_notif").show();
         $("#txt_notif").removeClass("alert-success");
         $("#txt_notif").addClass("alert-danger");
