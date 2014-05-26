@@ -400,7 +400,6 @@ $(document).ready(function () {
                     $("#stateFailure").show();
                 }
             });
-            binary = [];
         }
         else {
             $.ajax({
@@ -504,7 +503,7 @@ function handleFileSelect(evt) {
 			contentType: "multipart/form-data; boundary=" + boundary,
 
 			success: function (data_server) {
-
+                            binary = [];
 			    binary.push({"name": theFile.name, "bin": e.target.result});
 			    if(data_server.format == "hex") {
 			    }  
