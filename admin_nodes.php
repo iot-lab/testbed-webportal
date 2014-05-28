@@ -234,8 +234,8 @@ $(document).ready(function () {
             $("#searchDiv").hide();
 
             $.ajax({
-                type: "GET",
-                dataType: "json",
+                type: "POST",
+                //dataType: "json",
                 url: "/rest/admin/resourcesproperties",
                 success: function (data_server) {
                     window.location.href = "admin_nodes.php";
