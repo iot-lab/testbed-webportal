@@ -210,7 +210,7 @@ include("header.php");
                                         </button>
                                     </td>
                                     <td>
-                                        <select id="lst_archi" class="form-control archi">
+                                        <select id="lst_archi" class="lst_archi form-control archi">
                                         </select>
                                     </td>
                                     <td>
@@ -752,7 +752,7 @@ function getResourcesState() { //get all user profiles
         contentType: "application/json; charset=utf-8",
         url: "/rest/experiments?id",
         success: function (data) {
-
+console.log(data);
             if (data == "") return false; // no profile
             //$("#resourcesStateContent").html("<pre>" + JSON.stringify(data) + "</pre>");
             $("#resourcesStateContent").text("");
@@ -808,6 +808,11 @@ function getProfiles() { //get all user profiles
     });
 }
 
+
+var sites = [];
+var archis = [];
+var archis_all = [];
+
 function getNodes() { // get all sites nodes
     $.ajax({
         type: "GET",
@@ -815,16 +820,11 @@ function getNodes() { // get all sites nodes
         contentType: "application/json; charset=utf-8",
         url: "/rest/admin/resourcesproperties",
         success: function (data_server) {
-            var sites = [];
-            var archis = [];
-            var archis_all = [];
 
             for (var i in data_server) {
                 if (sites.indexOf(data_server[i].site) == -1) { // unknown site, adding it
                     sites.push(data_server[i].site);
-                    //$("#div_resources_map_tbl").append('<tr><td><a href="#" onclick="openMapPopup(\''+data_server[i].site+'\')" id="'+data_server[i].site+'_maps">'+data_server[i].site.charAt(0).toUpperCase() + data_server[i].site.slice(1)+' map</a></td><td><input type="text" id="'+data_server[i].site+'_list" value="" class="form-control" /></td></tr>');
-                    // filling the "by type" form
-                    $("#lst_site").append(new Option(data_server[i].site, data_server[i].site));
+
                     // filling the "from maps" form
                     $("#div_resources_map_tbl").append('<tr valign="top" style="border-top: 1px solid #CCCCCC;color:#555555"><td style="width:150px;"><a href="#" onclick="openMapPopup(\'' + data_server[i].site + '\')" id="' + data_server[i].site + '_maps">' + data_server[i].site.charAt(0).toUpperCase() + data_server[i].site.slice(1) + ' map</a></td><td id="' + data_server[i].site + '_archis" style="text-align:right;padding-bottom:20px;padding-top:20px"></td></tr>');
                 }
@@ -842,6 +842,14 @@ function getNodes() { // get all sites nodes
                 } 
                 sites_nodes[data_server[i].network_address] = data_server[i].archi.split(':')[0];
             }
+
+            //init list of sites for the first selected archi
+            var archi = $("#lst_archi option:selected").val();
+            for(var i=0;i<sites.length;i++){
+                if(archis.indexOf(sites[i] + "-" + archi) != -1) {
+                    $("#lst_site").append(new Option(sites[i],sites[i]));
+                }
+            }
         },
         error: function (XMLHttpRequest, textStatus, errorThrows) {
             $("#txt_notif_msg").html(errorThrows);
@@ -853,6 +861,16 @@ function getNodes() { // get all sites nodes
 }
 
 
+$("#div_resources_type").on("change",".lst_archi", function() {
+    $(this).parent().next().children().empty();
+    var archi = $(this).find("option:selected").val();
+    for(var i=0;i<sites.length;i++){
+        if(archis.indexOf(sites[i] + "-" + archi) != -1) {
+             $(this).parent().next().children().append(new Option(sites[i],sites[i]));
+        }
+    }
+});
+
 /* ******************* */
 /*   others function   */
 /* ******************* */
@@ -861,7 +879,10 @@ function getNodes() { // get all sites nodes
 $("#btn_add").click(function () {
     var t = $("#resources_row").clone();
     $(t).find(".number").val(1);
-    var t = $("#resources_table").append(t);
+    $("#resources_table").append(t);
+
+    $("#div_resources_type .lst_archi").last().trigger("change");
+
     return false;
 });
 
