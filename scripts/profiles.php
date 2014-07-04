@@ -277,6 +277,50 @@
                     </div>
                 </div>
             </div>
+       </div>
+
+
+
+
+   <div style="border-top: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;margin:5px;" id="m3Mobility">
+        <div class="form-group" style="width:100%;margin-bottom:10px">
+            <label class="col-lg-4 control-label" for="mobile_mode_m3">Mobile</label>
+
+            <div class="col-lg-8">
+                <label class="radio"><input type="radio" name="mobile_mode_m3" id="mobile_mode_no_m3" value="no"
+                                            data-target="#m3MobileNoPanel" checked> no</label>&nbsp;&nbsp;
+                <label class="radio"><input type="radio" name="mobile_mode_m3" id="mobile_mode_yes_m3" value="yes"
+                                            data-target="#m3MobileYesPanel"> yes</label>
+            </div>
+        </div>
+
+        <div class="tab-content">
+            <div id="m3MobileNoPanel" class="tab-pane active">
+
+            </div>
+
+            <div id="m3MobileYesPanel" class="tab-pane">
+		<label class="col-lg-4 control-label">Site:</label>
+                <div class="col-lg-8">
+                <select id="mobile_site_m3" class="form-control">
+                     <option value="strasbourg">Strasbourg</option>
+                     <option value="grenoble">Grenoble</option>
+                </select>
+                </div>
+
+                <label class="col-lg-4 control-label">Trajectory:</label>
+                <div class="col-lg-8">
+                <select id="mobile_trajectory_m3" class="form-control">
+                     <option value="square">square</option>
+                     <option value="triangle">triangle</option>
+                </select>
+                </div>
+            </div>
+
+  </div>
+
+
+
         </div>
     </div>
 
@@ -359,6 +403,9 @@ $(document).ready(function () {
 
         $("#m3panel").removeClass("active");
         $("#wsn430panel").addClass("active");
+        
+        $("#m3MobileYesPanel").removeClass("active");
+        $("#m3RadioMeasurePanel").removeClass("active");
 
     });
 
@@ -371,6 +418,11 @@ $(document).ready(function () {
     $('input[name="radio_mode_m3"]').click(function () {
         $(this).tab('show');
     });
+
+    $('input[name="mobile_mode_m3"]').click(function () {
+        $(this).tab('show');
+    });
+
     visibilityRadioNum();
     loadProfiles();
 
@@ -491,10 +543,19 @@ function loadProfile() {
                 $("#radio_num_per_channel_m3").val(my_profiles[i].radio.num_per_channel);
                 $("#radio_num_m3").val(my_profiles[i].radio.num_per_channel);
                 visibilityRadioNum();
-            } else {
+            }
+            else {
                 $("#radio_mode_none_m3").prop("checked", true);
                 $("#radio_mode_none_m3").tab('show');
             }
+
+            if (my_profiles[i].mobility != null) {
+                $("input[name='mobile_mode_m3']").tab('show');
+                $("#mobile_mode_yes_m3").prop("checked", true);
+                $("#mobile_mode_yes_m3").tab('show');
+                $("#mobile_site_m3").val(my_profiles[i].mobility.site_name);
+                $("#mobile_trajectory_m3").val(my_profiles[i].mobility.trajectory_name);
+            } 
             //TODO } else if (nodearch=="a8") {
         }
     }
@@ -625,6 +686,17 @@ $("#btn_submit").on("click", function (e) {
             "consumption": consumption
         };
         if (radio_mode != "none") profile_json.radio = radio;
+
+        mobile_mode_m3 = $("input[name=mobile_mode_m3]:checked").val()
+        if (mobile_mode_m3 == "yes") {
+            profile_json.mobility = {
+               "site_name": $("#mobile_site_m3 option:selected").val(),
+               "trajectory_name": $("#mobile_trajectory_m3 option:selected").val()
+            }
+        }
+        else {
+            delete profile_json.mobility;
+        }
 
     } else {
 
