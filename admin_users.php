@@ -388,13 +388,13 @@ include("header.php");
                     <div class="form-group">
                         <label class="control-label">Message:</label>
                         <textarea rows="7" class="form-control" name="message">
-                            Dear user,
+Dear user,
 
-                            Please consider re-filling the sign-up form, with an academic/professional (non-
-                            /*gmail/hotmail/yahoo/personal*/ ) mail address.
-                            For your information, I will reject this first subscription.
+Please consider re-filling the sign-up form, with an academic/professional (non-/*gmail/hotmail/yahoo/personal*/ ) mail address.
 
-                            Regards,</textarea>
+For your information, I will reject this first subscription.
+
+Regards,</textarea>
                     </div>
                     <input type="submit" class="btn btn-primary" value="Send Email"/>
                 </form>
