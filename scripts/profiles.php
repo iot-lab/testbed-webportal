@@ -288,7 +288,7 @@
 
             <div class="col-lg-8">
                 <label class="radio"><input type="radio" name="mobile_mode_m3" id="mobile_mode_no_m3" value="no"
-                                            data-target="#m3MobileNoPanel" checked> no</label>&nbsp;&nbsp;
+                                            data-target="#m3MobileNoPanel" checked> none</label>&nbsp;&nbsp;
                 <label class="radio"><input type="radio" name="mobile_mode_m3" id="mobile_mode_yes_m3" value="yes"
                                             data-target="#m3MobileYesPanel"> yes</label>
             </div>
@@ -303,16 +303,12 @@
 		<label class="col-lg-4 control-label">Site:</label>
                 <div class="col-lg-8">
                 <select id="mobile_site_m3" class="form-control">
-                     <option value="strasbourg">Strasbourg</option>
-                     <option value="grenoble">Grenoble</option>
                 </select>
                 </div>
 
                 <label class="col-lg-4 control-label">Trajectory:</label>
                 <div class="col-lg-8">
                 <select id="mobile_trajectory_m3" class="form-control">
-                     <option value="square">square</option>
-                     <option value="triangle">triangle</option>
                 </select>
                 </div>
             </div>
@@ -371,6 +367,10 @@ var index = -1;
 var radio_num = 0;
 var profilename = "";
 
+var mobility = [
+	{"name": "strasbourg", circuits: ["square", "triangle"]},
+    	{"name": "grenoble", circuits: ["circuit1","circuit2","circuit3"]}
+];
 
 function updateRadioNum(num) {
     $("#radio_num_m3").val(num);
@@ -425,6 +425,27 @@ $(document).ready(function () {
 
     visibilityRadioNum();
     loadProfiles();
+
+    //populate mobile site
+    for(var i=0; i<mobility.length; i++) {
+       $("#mobile_site_m3").append(new Option(mobility[i].name, mobility[i].name));
+    }
+
+
+    //populate circuits according to selected site
+    $("#mobile_site_m3").on("change", function(){
+        $("#mobile_trajectory_m3").empty();
+  
+        for(var i=0; i<mobility.length; i++) {
+            if(mobility[i].name == $(this).val()) {
+                for(var j=0; j<mobility[i].circuits.length; j++) {
+                    $("#mobile_trajectory_m3").append(new Option(mobility[i].circuits[j], mobility[i].circuits[j]));
+                }
+            }
+        }
+    });
+
+    $("#mobile_site_m3").trigger("change");
 
 });
 
