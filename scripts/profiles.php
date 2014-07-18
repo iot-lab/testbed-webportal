@@ -575,6 +575,7 @@ function loadProfile() {
                 $("#mobile_mode_yes_m3").prop("checked", true);
                 $("#mobile_mode_yes_m3").tab('show');
                 $("#mobile_site_m3").val(my_profiles[i].mobility.site_name);
+                $("#mobile_site_m3").trigger("change");
                 $("#mobile_trajectory_m3").val(my_profiles[i].mobility.trajectory_name);
             } 
             //TODO } else if (nodearch=="a8") {
