@@ -278,6 +278,8 @@ $(document).ready(function () {
             $("#detailsExpSummary").append("<b>Duration (min):</b> " + data.duration + "<br/>");
             $("#detailsExpSummary").append("<b>Number of nodes:</b> ");
 
+	    $("#txt_duration").attr("value", data.duration);
+
             $("#expButtons").show();
 
             json_exp = rebuildJson(data, true);
