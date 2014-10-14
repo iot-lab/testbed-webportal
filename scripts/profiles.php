@@ -43,7 +43,8 @@
                                     data-target="#wsn430panel" checked> WSN430</label>&nbsp;&nbsp;
         <label class="radio"><input type="radio" name="or_nodearch" id="or_nodearch_m3" value="m3"
                                     data-target="#m3panel"> M3</label>&nbsp;&nbsp;
-        <!-- <label class="radio inline"><input type="radio" name="or_nodearch" id="or_nodearch_a8" value="a8" data-target="#a8panel"> A8</label> -->
+        <label class="radio"><input type="radio" name="or_nodearch" id="or_nodearch_a8" value="a8"
+                                    data-target="#m3panel"> A8</label>&nbsp;&nbsp;                           
     </div>
 </div>
 
@@ -547,7 +548,9 @@ function loadProfile() {
                 $("#cb_rssi_wsn430").prop("checked", my_profiles[i].radio.rssi);
                 $('#radio_frequency_wsn430').val(my_profiles[i].radio.frequency);
             }
-        } else if (nodearch == "m3") {
+        //} else if (nodearch == "m3") {
+        // a8 and m3 nodearch = same profile form
+        } else {
             $("input[name='or_power_m3']").val([my_profiles[i].power]);
             if (my_profiles[i].consumption != null) {
                 $('#consumption_period_m3').val(my_profiles[i].consumption.period);
@@ -677,7 +680,8 @@ $("#btn_submit").on("click", function (e) {
             "sensor": sensor,
             "radio": radio
         };
-    } else if (nodearch == "m3") {
+    //} else if (nodearch == "m3") {
+    } else {
 
         consumption = {
             "current": $('#cb_current_m3').prop('checked'),
@@ -720,14 +724,15 @@ $("#btn_submit").on("click", function (e) {
             delete profile_json.mobility;
         }
 
-    } else {
+    }
+    /*} else {
 
         profile_json = {
             "profilename": $("#profiles_txt_name").val(),
             "nodearch": nodearch
         };
 
-    }
+    }*/
 
     //send edit or create request
     $.ajax({
