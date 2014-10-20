@@ -192,7 +192,7 @@
                     <option value="1100">1100</option>
                     <option value="2116">2116</option>
                     <option value="4156">4156</option>
-                    <option value="8244">8244</option>
+                    <option value="8244" selected="selected">8244</option>
                 </select>
             </div>
         </div>
@@ -203,7 +203,7 @@
             <div class="col-lg-8">
                 <select id="consumption_average_m3" class="form-control">
                     <option value="1">1</option>
-                    <option value="4">4</option>
+                    <option value="4" selected="selected">4</option>
                     <option value="16">16</option>
                     <option value="64">64</option>
                     <option value="256">256</option>
