@@ -121,7 +121,12 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
                 $("#detailsExpRow").html("");
 
                 var nbTotalNodes = 0;
-                if (data.type == "physical") nbTotalNodes = data.nodes.length;
+         
+		if (typeof data.deploymentresults !=="undefined" && data.type == "physical")
+			nbTotalNodes = data.deploymentresults[0].length;
+            	else if (data.type == "physical") 
+                	nbTotalNodes = data.nodes.length;
+
                 var nodename = "";
                 var state = "";
 
