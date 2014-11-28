@@ -223,7 +223,9 @@
                 <label class="radio"><input type="radio" name="radio_mode_m3" id="radio_mode_none_m3" value="none"
                                             data-target="#m3RadioNonePanel" checked> none</label>&nbsp;&nbsp;
                 <label class="radio"><input type="radio" name="radio_mode_m3" id="radio_mode_measure_m3" value="rssi"
-                                            data-target="#m3RadioMeasurePanel"> rssi</label>
+                                            data-target="#m3RadioMeasurePanel" onchange="visibilityRadioNum();"> rssi</label>&nbsp;&nbsp;
+                <label class="radio"><input type="radio" name="radio_mode_m3" id="radio_mode_sniffer_m3" value="sniffer"
+                                            data-target="#m3RadioSnifferPanel">sniffer</label>
             </div>
         </div>
 
@@ -231,11 +233,34 @@
             <div id="m3RadioNonePanel" class="tab-pane active">
 
             </div>
-
+            <div id="m3RadioSnifferPanel" class="tab-pane">
+            	<div class="form-group" style="width:100%;margin-bottom:10px">
+                    <label class="col-lg-4 control-label" for="radio_channel_m3">Channels</label>
+                    <div class="col-lg-8">
+                        <select id="radio_sniffer_channel_m3" class="form-control">
+                            <option value='11' selected="selected">11</option>
+                            <option value='12'>12</option>
+                            <option value='13'>13</option>
+                            <option value='14'>14</option>
+                            <option value='15'>15</option>
+                            <option value='16'>16</option>
+                            <option value='17'>17</option>
+                            <option value='18'>18</option>
+                            <option value='19'>19</option>
+                            <option value='20'>20</option>
+                            <option value='21'>21</option>
+                            <option value='22'>22</option>
+                            <option value='23'>23</option>
+                            <option value='24'>24</option>
+                            <option value='25'>25</option>
+                            <option value='26'>26</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
             <div id="m3RadioMeasurePanel" class="tab-pane">
                 <div class="form-group" style="width:100%;margin-bottom:10px">
                     <label class="col-lg-4 control-label" for="radio_channel_m3">Channels</label>
-
                     <div class="col-lg-8">
                         <select multiple id="radio_channel_m3" class="form-control" onchange="visibilityRadioNum();">
                             <option value='11' selected="selected">11</option>
@@ -370,7 +395,7 @@ var profilename = "";
 
 var mobility = [
 	{"name": "strasbourg", circuits: ["square", "triangle"]},
-    	{"name": "grenoble", circuits: ["circuit1","circuit2","circuit3"]}
+    {"name": "grenoble", circuits: ["circuit1","circuit2","circuit3"]}
 ];
 
 function updateRadioNum(num) {
@@ -378,16 +403,22 @@ function updateRadioNum(num) {
 }
 
 function visibilityRadioNum() {
-    var count = $("#radio_channel_m3 :selected").length;
-    if (count > 1) {
-        $("#m3RadioNumChannel").show();
-        radio_num = $("#radio_num_per_channel_m3").val()
-        $("#radio_num_m3").val(radio_num)
-    }
-    else {
-        $("#m3RadioNumChannel").hide();
-        radio_num = 0;
-    }
+	if ($("#radio_mode_measure_m3").is(':checked')) {
+		$("#radio_mode_measure_m3").tab('show');
+	    var count = $("#radio_channel_m3 :selected").length;
+	    if (count > 1) {
+	        $("#m3RadioNumChannel").show();
+	        radio_num = $("#radio_num_per_channel_m3").val()
+	        $("#radio_num_m3").val(radio_num)
+	    }
+	    else {
+	        $("#m3RadioNumChannel").hide();
+	        radio_num = 0;
+	    }
+	}
+	else if ($("#radio_mode_sniffer_m3").is(':checked')) {
+		$("#radio_mode_sniffer_m3").tab('show');
+	} 
 }
 
 /* ************ */
@@ -407,7 +438,7 @@ $(document).ready(function () {
         
         $("#m3MobileYesPanel").removeClass("active");
         $("#m3RadioMeasurePanel").removeClass("active");
-
+        $("#m3RadioSnifferPanel").removeClass("active");
     });
 
     // init tab for node architecture
@@ -562,11 +593,18 @@ function loadProfile() {
             if (my_profiles[i].radio != null) {
                 $("input[name='radio_mode_m3']").val([my_profiles[i].radio.mode]);
                 $("input[name='radio_mode_m3']").tab('show');
-                $("#radio_channel_m3").val(my_profiles[i].radio.channels);
-                $("#radio_period_m3").val(my_profiles[i].radio.period);
-                $("#radio_num_per_channel_m3").val(my_profiles[i].radio.num_per_channel);
-                $("#radio_num_m3").val(my_profiles[i].radio.num_per_channel);
-                visibilityRadioNum();
+				var radio_mode = my_profiles[i].radio.mode
+				if (radio_mode == "rssi") {
+	                $("#radio_channel_m3").val(my_profiles[i].radio.channels);
+	                $("#radio_period_m3").val(my_profiles[i].radio.period);
+	                $("#radio_num_per_channel_m3").val(my_profiles[i].radio.num_per_channel);
+	                $("#radio_num_m3").val(my_profiles[i].radio.num_per_channel);
+				// radio_mode = sniffer
+				} else {
+					// one channel at the moment
+		        	$("#radio_sniffer_channel_m3").val(my_profiles[i].radio.channels[0]);
+		        }
+				visibilityRadioNum();     
             }
             else {
                 $("#radio_mode_none_m3").prop("checked", true);
@@ -580,6 +618,10 @@ function loadProfile() {
                 $("#mobile_site_m3").val(my_profiles[i].mobility.site_name);
                 $("#mobile_site_m3").trigger("change");
                 $("#mobile_trajectory_m3").val(my_profiles[i].mobility.trajectory_name);
+            }
+            else {
+            	$("#mobile_mode_no_m3").prop("checked", true);
+                $("#mobile_mode_no_m3").tab('show');
             } 
             //TODO } else if (nodearch=="a8") {
         }
@@ -692,18 +734,26 @@ $("#btn_submit").on("click", function (e) {
         };
 
         radio_mode = $("input[name=radio_mode_m3]:checked").val();
-        period = $('#radio_period_m3').val();
-        if (radio_num == 0) {
-            num_per_channel = 0;
+        if (radio_mode == "rssi") {
+	        period = $('#radio_period_m3').val();
+	        if (radio_num == 0) {
+	            num_per_channel = 0;
+	        } else {
+	            num_per_channel = $("#radio_num_per_channel_m3").val();
+	        }
+	        radio = {
+	            "mode": radio_mode,
+	            "channels": $('#radio_channel_m3').val(),
+	            "period": period,
+	            "num_per_channel": num_per_channel
+	        };
         } else {
-            num_per_channel = $("#radio_num_per_channel_m3").val();
+			channels = $('#radio_sniffer_channel_m3').val();
+        	radio = {
+    	        "mode": radio_mode,
+    	        "channels": [channels]
+    	    };
         }
-        radio = {
-            "mode": radio_mode,
-            "channels": $('#radio_channel_m3').val(),
-            "period": period,
-            "num_per_channel": num_per_channel
-        };
 
         profile_json = {
             "profilename": $("#profiles_txt_name").val(),
