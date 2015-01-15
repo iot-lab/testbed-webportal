@@ -393,10 +393,6 @@ var index = -1;
 var radio_num = 0;
 var profilename = "";
 
-var mobility = [
-	{"name": "strasbourg", circuits: ["square", "triangle"]},
-    {"name": "grenoble", circuits: ["circuit1","circuit2","circuit3"]}
-];
 
 function updateRadioNum(num) {
     $("#radio_num_m3").val(num);
@@ -458,28 +454,60 @@ $(document).ready(function () {
     visibilityRadioNum();
     loadProfiles();
 
-    //populate mobile site
-    for(var i=0; i<mobility.length; i++) {
-       $("#mobile_site_m3").append(new Option(mobility[i].name, mobility[i].name));
-    }
-
-
-    //populate circuits according to selected site
-    $("#mobile_site_m3").on("change", function(){
-        $("#mobile_trajectory_m3").empty();
-  
-        for(var i=0; i<mobility.length; i++) {
-            if(mobility[i].name == $(this).val()) {
-                for(var j=0; j<mobility[i].circuits.length; j++) {
-                    $("#mobile_trajectory_m3").append(new Option(mobility[i].circuits[j], mobility[i].circuits[j]));
-                }
-            }
-        }
-    });
-
-    $("#mobile_site_m3").trigger("change");
-
+    loadMobilities();
 });
+
+/* *************** */
+/* load mobilities */
+/* *************** */
+function loadMobilities() {
+
+
+
+        $.ajax({
+            type: "GET",
+            cache: false,
+            dataType: "text",
+            contentType: "application/json; charset=utf-8",
+            url: "/rest/robots/circuits",
+            success: function (data_server) {
+
+                if (data_server == "") {
+                    //no mobility
+                    return false;
+                }
+
+                var mobility = JSON.parse(data_server);
+
+                //populate mobile site
+                for(var i in mobility) {
+                        $("#mobile_site_m3").append(new Option(i, i));
+                }
+
+                //populate circuits according to selected site
+                $("#mobile_site_m3").on("change", function(){
+                        $("#mobile_trajectory_m3").empty();
+  
+                        for(var i in mobility) {
+                            if(i == $(this).val()) {
+                                for (var j in mobility[i]) {
+                                if(typeof mobility[i][j].trajectory_name != "undefined")
+                                    $("#mobile_trajectory_m3").append(new Option(mobility[i][j].trajectory_name, mobility[i][j].trajectory_name));
+                                }
+                            }
+                        }
+                });
+                $("#mobile_site_m3").trigger("change");
+
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrows) {
+                $("#div_error_profiles").html(errorThrows);
+                $("#div_error_profiles").show();
+                $("#div_error_profiles").removeClass("alert-success");
+                $("#div_error_profiles").addClass("alert-danger");
+            }
+        });
+}
 
 
 /* ************************************* */
