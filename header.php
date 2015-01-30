@@ -3,8 +3,8 @@
 /* check the name of the file: stats, monika or drawgantt are for activity */
 $is_activity = ((strpos($_SERVER['PHP_SELF'], "/stats.php") !== FALSE) || (strpos($_SERVER['PHP_SELF'], "/drawgantt.php") !== FALSE) || (strpos($_SERVER['PHP_SELF'], "/monika.php") !== FALSE));
 
-$body_padding_top = 51;
-if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) $body_padding_top = 102;
+$body_padding_top = 62;
+if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) $body_padding_top = 112;
 
 ?>
 
@@ -18,8 +18,9 @@ if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) $body_
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link href="/wp-content/themes/alienship-1.2.2/css/bootstrap.min.css?ver=0.0.1" rel="stylesheet">
-    <link href="/wp-content/themes/alienship-1.2.2-child/style.css" rel="stylesheet">
+    <link href="/wp-content/themes/alienship-1.2.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/wp-content/themes/alienship-1.2.5/style.css" rel="stylesheet">
+    <link href="/wp-content/themes/alienship-1.2.5-child/style.css" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -47,7 +48,7 @@ if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) $body_
         }
 
         .navbar-grey {
-            top: 51px;
+            top: 62px;
             z-index: 1000;
             background-color: #E7E7E7;
             border-bottom: 1px solid #eee;
@@ -87,9 +88,9 @@ if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) $body_
     <!--<script src='/wp-includes/js/jquery/jquery.js'></script>-->
     <script src='js/jquery-1.10.2.min.js'></script>
     <script src="js/utils.js"></script>
-    <script type='text/javascript' src='/wp-content/themes/alienship-1.2.2/js/bootstrap.min.js?ver=3.0.0'></script>
+    <script type='text/javascript' src='/wp-content/themes/alienship-1.2.5/js/bootstrap.min.js'></script>
     <script type='text/javascript'
-            src='/wp-content/themes/alienship-1.2.2-child/js/twitter-bootstrap-hover-dropdown.min.js?ver=1.0.0'></script>
+            src='/wp-content/themes/alienship-1.2.5-child/js/bootstrap-hover-dropdown.min.js'></script>
 
 </head>
 
@@ -97,7 +98,7 @@ if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) $body_
 
 <!--  NAV BAR  -->
 
-<header class="navbar navbar-default navbar-fixed-top" role="banner">
+<header class="navbar navbar-default navbar-onelab navbar-fixed-top" role="banner">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
@@ -107,9 +108,10 @@ if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) $body_
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="/" class="navbar-brand"><img
-                    src="/wp-content/themes/alienship-1.2.2-child/templates/parts/FIT-IoT-Lab-Logo2.png"
-                    height="20"/></a>
+            <a href="/"> 
+                <img src="/wp-content/themes/alienship-1.2.5-child/templates/parts/fit-equipex2.png">
+                <img src="/wp-content/themes/alienship-1.2.5-child/templates/parts/fit-iotlab2.png">
+            </a>
         </div>
 
 
@@ -117,9 +119,9 @@ if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) $body_
 
             <?php include('./wp-menu/wp-menu.php'); ?>
 
-            <ul class="nav navbar-nav navbar-right testbed">
+            <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown <?php echo($is_activity ? 'active' : ''); ?>">
-                    <a href="./stats.php" class="testbed" title="Testbed activity" data-hover="dropdown"><span
+                    <a href="./stats.php" title="Testbed activity" data-hover="dropdown"><span
                             class="glyphicon glyphicon-info"></span> Activity <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li id="stats"><a href="./stats.php">Statistics</a></li>
@@ -129,7 +131,7 @@ if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) $body_
                 </li>
                 <?php if (isset($_SESSION['is_auth']) && $_SESSION['is_auth']) { ?>
                     <li class="dropdown <?php echo($is_activity ? '' : 'active'); ?>">
-                        <a href="./" class="testbed" title="Testbed" data-hover="dropdown"><span
+                        <a href="./" title="Testbed" data-hover="dropdown"><span
                                 class="glyphicon glyphicon-wrench"></span> Testbed <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li id="dashboard"><a href="./dashboard.php"><span class="glyphicon glyphicon-list"></span>
@@ -146,7 +148,7 @@ if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) $body_
                         </ul>
                     </li>
                 <?php } else { ?>
-                    <li id="login"><a href="./">Login</a></li>
+                    <li id="login"><span><a href="./" class="btn btn-primary testbed" title="Login">Access the tesbed</a></span></li>
                 <?php } ?>
             </ul>
         </nav>
