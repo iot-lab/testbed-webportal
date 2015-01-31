@@ -109,8 +109,7 @@ if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) $body_
                 <span class="icon-bar"></span>
             </button>
             <a href="/"> 
-                <img src="/wp-content/themes/alienship-1.2.5-child/templates/parts/fit-equipex2.png">
-                <img src="/wp-content/themes/alienship-1.2.5-child/templates/parts/fit-iotlab2.png">
+                <img src="/wp-content/themes/alienship-1.2.5-child/templates/parts/fit-equipex2.png"><img src="/wp-content/themes/alienship-1.2.5-child/templates/parts/fit-iotlab2.png">
             </a>
         </div>
 
