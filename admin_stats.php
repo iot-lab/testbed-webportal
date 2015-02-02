@@ -102,6 +102,7 @@ include("header.php");
     </div>
 </div>
 
+</div> <!-- container -->
 
 <script type="text/javascript">
 
