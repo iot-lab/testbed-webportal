@@ -21,6 +21,7 @@ if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) $body_
     <link href="/wp-content/themes/alienship-1.2.5/css/bootstrap.min.css" rel="stylesheet">
     <link href="/wp-content/themes/alienship-1.2.5/style.css" rel="stylesheet">
     <link href="/wp-content/themes/alienship-1.2.5-child/style.css" rel="stylesheet">
+    <link href="css/portal.css" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -30,59 +31,9 @@ if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) $body_
     <link rel="shortcut icon" href="img/favicon.png"/>
 
     <style type="text/css">
-
         body {
             padding-top: <?php echo $body_padding_top; ?>px;
         }
-
-        .badge-success {
-            background-color: #468847;
-        }
-
-        .badge-warning {
-            background-color: #F89406;
-        }
-
-        .badge-info {
-            background-color: #3A87AD;
-        }
-
-        .navbar-grey {
-            top: 62px;
-            z-index: 1000;
-            background-color: #E7E7E7;
-            border-bottom: 1px solid #eee;
-        }
-
-        .navbar-grey .navbar-nav > li > a:hover,
-        .navbar-grey .navbar-nav > li > a:focus,
-        .navbar-grey .navbar-nav > li.dropdown > a:hover,
-        .navbar-grey .navbar-nav > li.dropdown > a:focus,
-        .navbar-grey .navbar-nav > li.active > a,
-        .navbar-grey .navbar-nav > li.active > a:hover,
-        .navbar-grey .navbar-nav > li.active > a:focus {
-            background-color: #ddd;
-            color: #555555;
-        }
-
-        label {
-            font-weight: normal;
-        }
-
-        .alert-info{
-            background-color:transparent;
-        }
-
-        .label-state {
-            display: inline-block;
-            width: 100px;
-            font-weight: normal;
-        }
-
-        h2{
-            color: #31708f;
-        }
-
     </style>
 
     <!--<script src='/wp-includes/js/jquery/jquery.js'></script>-->
