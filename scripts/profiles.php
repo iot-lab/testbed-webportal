@@ -435,6 +435,7 @@ $(document).ready(function () {
         $("#m3MobileYesPanel").removeClass("active");
         $("#m3RadioMeasurePanel").removeClass("active");
         $("#m3RadioSnifferPanel").removeClass("active");
+	loadMobilities();
     });
 
     // init tab for node architecture
