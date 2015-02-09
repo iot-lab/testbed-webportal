@@ -260,7 +260,7 @@ include("header.php");
                     <optgroup label="A8" id="a8Profiles"></optgroup>
                 </select>
                 <button id='profilesModalLink' class="btn btn-default" data-toggle="modal"
-                        data-target="#profiles_modal">Manage Profiles
+                        data-target="#profiles_modal" type="button">Manage Profiles
                 </button>
             </div>
             <div class=col-md-4>
