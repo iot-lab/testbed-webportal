@@ -36,13 +36,17 @@ if ($code == 200) {
     header('Content-type: application/csv');
     header('Content-Disposition: attachment; filename="users.csv"');
 
-    echo "FirstName;LastName;Mail;Country;City;Structure\n";
+    echo "FirstName;LastName;Mail;Country;City;Structure;CreationDate\n";
     for ($i = 0; $i < sizeof($users); $i++) {
-        echo $users[$i]->{'firstName'} . ";" . $users[$i]->{'lastName'} . ";" . $users[$i]->{'email'} . ";" . $users[$i]->{'country'} . ";" . $users[$i]->{'city'} . ";" . $users[$i]->{'structure'} . "\n";
+        echo $users[$i]->{'firstName'} . ";" . $users[$i]->{'lastName'} . ";" . $users[$i]->{'email'} . ";" . $users[$i]->{'country'} . ";" . $users[$i]->{'city'} . ";" . trim($users[$i]->{'structure'}, ";") . ";" . formatCreateTimeStamp($users[$i]->{'createTimeStamp'}) . "\n";
     }
 
 }
 
+function formatCreateTimeStamp($value) {
+    /* "yyyy/mm/dd" */
+    return substr($value, 0, 4) . "/" . substr($value, 4, 2) . "/" . substr($value, 6, 2);
+}
 
 
 
