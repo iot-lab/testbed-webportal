@@ -314,7 +314,7 @@
 
             <div class="col-lg-8">
                 <label class="radio"><input type="radio" name="mobile_mode_m3" id="mobile_mode_none_m3" value="none"
-                                            data-target="#m3MobileNoPanel" checked> none</label>&nbsp;&nbsp;
+                                            data-target="#m3MobileNonePanel" checked> none</label>&nbsp;&nbsp;
                 <label class="radio"><input type="radio" name="mobile_mode_m3" id="mobile_mode_predefined_m3" value="predefined"
                                             data-target="#m3MobilePredefinedPanel"> predefined</label>&nbsp;&nbsp;
 		<label class="radio"><input type="radio" name="mobile_mode_m3" id="mobile_mode_controlled_m3" value="controlled"
