@@ -647,7 +647,7 @@ function loadProfile() {
                 $("#radio_mode_none_m3").tab('show');
             }
 
-            if (my_profiles[i].mobility == "predefined") {
+            if (my_profiles[i].mobility.type == "predefined") {
                 $("input[name='mobile_mode_m3']").tab('show');
                 $("#mobile_mode_predefined_m3").prop("checked", true);
                 $("#mobile_mode_predefined_m3").tab('show');
@@ -656,7 +656,7 @@ function loadProfile() {
                 $("#mobile_trajectory_m3").val(my_profiles[i].mobility.trajectory_name);
             }
 
-	    else if (my_profiles[i].mobility == "controlled") {
+	    else if (my_profiles[i].mobility.type == "controlled") {
                 $("input[name='mobile_mode_m3']").tab('show');
                 $("#mobile_mode_controlled_m3").prop("checked", true);
                 $("#mobile_mode_controlled_m3").tab('show');
