@@ -313,19 +313,21 @@
             <label class="col-lg-4 control-label" for="mobile_mode_m3">Mobile</label>
 
             <div class="col-lg-8">
-                <label class="radio"><input type="radio" name="mobile_mode_m3" id="mobile_mode_no_m3" value="no"
-                                            data-target="#m3MobileNoPanel" checked> none</label>&nbsp;&nbsp;
-                <label class="radio"><input type="radio" name="mobile_mode_m3" id="mobile_mode_yes_m3" value="yes"
-                                            data-target="#m3MobileYesPanel"> yes</label>
+                <label class="radio"><input type="radio" name="mobile_mode_m3" id="mobile_mode_none_m3" value="none"
+                                            data-target="#m3MobileNonePanel" checked> none</label>&nbsp;&nbsp;
+                <label class="radio"><input type="radio" name="mobile_mode_m3" id="mobile_mode_predefined_m3" value="predefined"
+                                            data-target="#m3MobilePredefinedPanel"> predefined</label>&nbsp;&nbsp;
+		<label class="radio"><input type="radio" name="mobile_mode_m3" id="mobile_mode_controlled_m3" value="controlled"
+                                            data-target="#m3MobileControlledPanel"> controlled</label>
             </div>
         </div>
 
         <div class="tab-content">
-            <div id="m3MobileNoPanel" class="tab-pane active">
+            <div id="m3MobileNonePanel" class="tab-pane active">
 
             </div>
 
-            <div id="m3MobileYesPanel" class="tab-pane">
+            <div id="m3MobilePredefinedPanel" class="tab-pane">
 		<label class="col-lg-4 control-label">Site:</label>
                 <div class="col-lg-8">
                 <select id="mobile_site_m3" class="form-control">
@@ -337,6 +339,10 @@
                 <select id="mobile_trajectory_m3" class="form-control">
                 </select>
                 </div>
+            </div>
+
+	    <div id="m3MobileControlledPanel" class="tab-pane active">
+
             </div>
 
   </div>
@@ -432,7 +438,8 @@ $(document).ready(function () {
         $("#m3panel").removeClass("active");
         $("#wsn430panel").addClass("active");
         
-        $("#m3MobileYesPanel").removeClass("active");
+        $("#m3MobilePredefinedPanel").removeClass("active");
+        $("#m3MobileControlledPanel").removeClass("active");
         $("#m3RadioMeasurePanel").removeClass("active");
         $("#m3RadioSnifferPanel").removeClass("active");
 	loadMobilities();
@@ -640,13 +647,19 @@ function loadProfile() {
                 $("#radio_mode_none_m3").tab('show');
             }
 
-            if (my_profiles[i].mobility != null) {
+            if (my_profiles[i].mobility.type == "predefined") {
                 $("input[name='mobile_mode_m3']").tab('show');
-                $("#mobile_mode_yes_m3").prop("checked", true);
-                $("#mobile_mode_yes_m3").tab('show');
+                $("#mobile_mode_predefined_m3").prop("checked", true);
+                $("#mobile_mode_predefined_m3").tab('show');
                 $("#mobile_site_m3").val(my_profiles[i].mobility.site_name);
                 $("#mobile_site_m3").trigger("change");
                 $("#mobile_trajectory_m3").val(my_profiles[i].mobility.trajectory_name);
+            }
+
+	    else if (my_profiles[i].mobility.type == "controlled") {
+                $("input[name='mobile_mode_m3']").tab('show');
+                $("#mobile_mode_controlled_m3").prop("checked", true);
+                $("#mobile_mode_controlled_m3").tab('show');
             }
             else {
             	$("#mobile_mode_no_m3").prop("checked", true);
@@ -793,11 +806,17 @@ $("#btn_submit").on("click", function (e) {
         if (radio_mode != "none") profile_json.radio = radio;
 
         mobile_mode_m3 = $("input[name=mobile_mode_m3]:checked").val()
-        if (mobile_mode_m3 == "yes") {
+        if (mobile_mode_m3 == "predefined") {
             profile_json.mobility = {
+	       "type":"predefined",
                "site_name": $("#mobile_site_m3 option:selected").val(),
                "trajectory_name": $("#mobile_trajectory_m3 option:selected").val()
-            }
+            };
+        }
+	else if (mobile_mode_m3 == "controlled") {
+            profile_json.mobility = {
+		"type":"controlled"
+	    };
         }
         else {
             delete profile_json.mobility;
