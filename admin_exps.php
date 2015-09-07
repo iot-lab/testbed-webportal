@@ -115,24 +115,6 @@ if (isset($_GET['user'])) {
             }
         });
 
-        // Retrieve profiles total 
-        $.ajax({
-            url: "<?php echo $request_profiles; ?>",
-            type: "GET",
-            dataType: "text",
-            contentType: "application/json; charset=utf-8",
-            success: function (data) {
-                my_profiles = JSON.parse(data);
-                $("#nb_profiles").text(my_profiles.total);
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrows) {
-                $("#div_msg").removeClass("alert-success");
-                $("#div_msg").addClass("alert-danger");
-                $("#div_msg").show();
-                $("#div_msg").html("An error occurred while retrieving the profile list");
-            }
-        });
-
         // Manage experiment list
         oTable = $('#tbl_exps').dataTable({
             "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",
