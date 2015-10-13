@@ -317,8 +317,8 @@
                                             data-target="#m3MobileNonePanel" checked> none</label>&nbsp;&nbsp;
                 <label class="radio"><input type="radio" name="mobile_mode_m3" id="mobile_mode_predefined_m3" value="predefined"
                                             data-target="#m3MobilePredefinedPanel"> predefined</label>&nbsp;&nbsp;
-		<label class="radio"><input type="radio" name="mobile_mode_m3" id="mobile_mode_controlled_m3" value="controlled"
-                                            data-target="#m3MobileControlledPanel"> controlled</label>
+				<!--<label class="radio"><input type="radio" name="mobile_mode_m3" id="mobile_mode_controlled_m3" value="controlled"
+                                            data-target="#m3MobileControlledPanel"> controlled</label>-->
             </div>
         </div>
 
@@ -341,9 +341,9 @@
                 </div>
             </div>
 
-	    <div id="m3MobileControlledPanel" class="tab-pane active">
+	    <!--  <div id="m3MobileControlledPanel" class="tab-pane active">
 
-            </div>
+            </div>-->
 
   </div>
 
@@ -477,7 +477,7 @@ function loadMobilities() {
             cache: false,
             dataType: "text",
             contentType: "application/json; charset=utf-8",
-            url: "/rest/robots/circuits",
+            url: "/rest/robots/mobility",
             success: function (data_server) {
 
                 if (data_server == "") {
@@ -641,13 +641,12 @@ function loadProfile() {
 		        	$("#radio_sniffer_channel_m3").val(my_profiles[i].radio.channels[0]);
 		        }
 				visibilityRadioNum();     
-            }
-            else {
+            } else {
                 $("#radio_mode_none_m3").prop("checked", true);
                 $("#radio_mode_none_m3").tab('show');
             }
 
-            if (my_profiles[i].mobility.type == "predefined") {
+            if (my_profiles[i].mobility.type == "predefined" || my_profiles[i].mobility.type == "controlled") {
                 $("input[name='mobile_mode_m3']").tab('show');
                 $("#mobile_mode_predefined_m3").prop("checked", true);
                 $("#mobile_mode_predefined_m3").tab('show');
@@ -656,11 +655,11 @@ function loadProfile() {
                 $("#mobile_trajectory_m3").val(my_profiles[i].mobility.trajectory_name);
             }
 
-	    else if (my_profiles[i].mobility.type == "controlled") {
-                $("input[name='mobile_mode_m3']").tab('show');
-                $("#mobile_mode_controlled_m3").prop("checked", true);
-                $("#mobile_mode_controlled_m3").tab('show');
-            }
+	    	//else if (my_profiles[i].mobility.type == "controlled") {
+            //    $("input[name='mobile_mode_m3']").tab('show');
+            //    $("#mobile_mode_controlled_m3").prop("checked", true);
+            //    $("#mobile_mode_controlled_m3").tab('show');
+            //}
             else {
             	$("#mobile_mode_no_m3").prop("checked", true);
                 $("#mobile_mode_no_m3").tab('show');
