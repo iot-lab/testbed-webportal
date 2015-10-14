@@ -818,7 +818,7 @@ function getNodes() { // get all sites nodes
         type: "GET",
         dataType: "json",
         contentType: "application/json; charset=utf-8",
-        url: "/rest/admin/resourcesproperties",
+        url: "/rest/nodes",
         success: function (data_server) {
 
             for (var i in data_server) {

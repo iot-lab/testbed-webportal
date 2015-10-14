@@ -167,7 +167,7 @@ $(document).ready(function () {
 
     // get nodes list
     $.ajax({
-        url: "/rest/admin/resourcesproperties",
+        url: "/rest/nodes",
         type: "GET",
         dataType: "json",
         contentType: "application/json; charset=utf-8",
@@ -236,7 +236,7 @@ $(document).ready(function () {
             $.ajax({
                 type: "POST",
                 //dataType: "json",
-                url: "/rest/admin/resourcesproperties",
+                url: "/rest/admin/nodes",
                 success: function (data_server) {
                     window.location.href = "admin_nodes.php";
                 },

@@ -103,7 +103,6 @@ $site = $_GET['site'];
     function loadResources() {
         $.ajax({
             url: "/rest/experiments?resources",
-            //url: "/rest/admin/resourcesproperties",
             type: "GET",
             dataType: "json",
             contentType: "application/json; charset=utf-8",

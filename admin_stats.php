@@ -183,7 +183,7 @@ $(document).ready(function () {
 
     $.when( //a callback for complete busy nodes after 2 ajax requests
             $.ajax({ // get nodes list
-                url: "/rest/admin/resourcesproperties",
+                url: "/rest/nodes",
                 type: "GET",
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
