@@ -645,26 +645,19 @@ function loadProfile() {
                 $("#radio_mode_none_m3").prop("checked", true);
                 $("#radio_mode_none_m3").tab('show');
             }
-
-            if (my_profiles[i].mobility.type == "predefined" || my_profiles[i].mobility.type == "controlled") {
-                $("input[name='mobile_mode_m3']").tab('show');
-                $("#mobile_mode_predefined_m3").prop("checked", true);
-                $("#mobile_mode_predefined_m3").tab('show');
-                $("#mobile_site_m3").val(my_profiles[i].mobility.site_name);
-                $("#mobile_site_m3").trigger("change");
-                $("#mobile_trajectory_m3").val(my_profiles[i].mobility.trajectory_name);
-            }
-
-	    	//else if (my_profiles[i].mobility.type == "controlled") {
-            //    $("input[name='mobile_mode_m3']").tab('show');
-            //    $("#mobile_mode_controlled_m3").prop("checked", true);
-            //    $("#mobile_mode_controlled_m3").tab('show');
-            //}
-            else {
-            	$("#mobile_mode_no_m3").prop("checked", true);
-                $("#mobile_mode_no_m3").tab('show');
+            if (my_profiles[i].mobility != null) {
+	            if (my_profiles[i].mobility.type == "predefined" || my_profiles[i].mobility.type == "controlled") {
+	                $("input[name='mobile_mode_m3']").tab('show');
+	                $("#mobile_mode_predefined_m3").prop("checked", true);
+	                $("#mobile_mode_predefined_m3").tab('show');
+	                $("#mobile_site_m3").val(my_profiles[i].mobility.site_name);
+	                $("#mobile_site_m3").trigger("change");
+	                $("#mobile_trajectory_m3").val(my_profiles[i].mobility.trajectory_name);
+	            }
+            } else {
+            	$("#mobile_mode_none_m3").prop("checked", true);
+                $("#mobile_mode_none_m3").tab('show');
             } 
-            //TODO } else if (nodearch=="a8") {
         }
     }
 
