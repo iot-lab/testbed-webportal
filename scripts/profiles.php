@@ -439,10 +439,11 @@ $(document).ready(function () {
         $("#wsn430panel").addClass("active");
         
         $("#m3MobilePredefinedPanel").removeClass("active");
-        $("#m3MobileControlledPanel").removeClass("active");
+        //$("#m3MobileControlledPanel").removeClass("active");
         $("#m3RadioMeasurePanel").removeClass("active");
         $("#m3RadioSnifferPanel").removeClass("active");
-	loadMobilities();
+		//loadMobilities();
+        $("#mobile_site_m3").trigger("change");
     });
 
     // init tab for node architecture
