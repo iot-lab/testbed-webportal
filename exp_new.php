@@ -250,6 +250,7 @@ include("header.php");
                     <optgroup label="WSN430" id="wsn430Nodes"></optgroup>
                     <optgroup label="M3" id="m3Nodes"></optgroup>
                     <optgroup label="A8" id="a8Nodes"></optgroup>
+                    <optgroup label="DES" id="desNodes"></optgroup>
                 </select>
             </div>
             <div class=col-md-4>
