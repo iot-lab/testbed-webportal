@@ -116,9 +116,36 @@ $site = $_GET['site'];
 
                 for (i = 0; i < data.items.length; i++) {
                     var n = [];
-
+				
                     if (data.items[i].site == site) {
-                        if (archis.indexOf(data.items[i].archi) == -1) { // unknown archi, adding it
+                    	var archi;
+                        if ((data.items[i].archi).indexOf("custom") !=-1) {
+                         	archi = (data.items[i].archi).split(':')[0] 
+                        } else {
+        					archi = data.items[i].archi
+                        }   
+                        if (archis.indexOf(archi) == -1) { // unknown archi, adding it
+                            archis.push(archi);
+                            bdd[archi] = [];
+                            $("#tab_trails").append('<li><a href="#" data-toggle="tab" data-value="' + archi + '">' + archi + '</a></li>');
+                            $("#inputs_nodebox").append('<div class="col-sm-4 col-md-4 text-right" style="padding:7px 12px;">' + archi + ': </div><div class="col-sm-8 col-md-8"><input type="text" placeholder="1-5+7" class="form-control col-md-3" style="margin-bottom:4px;" id="' + archi + '_nodebox" name="nodebox"/></div>');
+                        }
+                        var nn = data.items[i].network_address;
+                        var node_id = nn.substring(0, nn.indexOf("."));
+
+                        n.push(node_id);
+                        n.push(parseFloat(data.items[i].x));
+                        n.push(parseFloat(data.items[i].y));
+                        n.push(parseFloat(data.items[i].z));
+                        n.push(data.items[i].uid);
+                        n.push(data.items[i].state);
+                        n.push(data.items[i].archi);
+                        nodes.push(n);
+
+                        bdd[archi].push(n);
+                        bdd['all'].push(n);
+                        
+                        /**if (archis.indexOf(data.items[i].archi) == -1) { // unknown archi, adding it
                             archis.push(data.items[i].archi);
                             bdd[data.items[i].archi] = [];
                             $("#tab_trails").append('<li><a href="#" data-toggle="tab" data-value="' + data.items[i].archi + '">' + data.items[i].archi + '</a></li>');
@@ -138,7 +165,7 @@ $site = $_GET['site'];
                         nodes.push(n);
 
                         bdd[data.items[i].archi].push(n);
-                        bdd['all'].push(n);
+                        bdd['all'].push(n);**/
 
                     }
                 }

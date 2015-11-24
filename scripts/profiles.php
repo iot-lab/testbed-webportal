@@ -15,6 +15,7 @@
         <optgroup label="WSN430" id="wsn430Profiles_modal"></optgroup>
         <optgroup label="M3" id="m3Profiles_modal"></optgroup>
         <optgroup label="A8" id="a8Profiles_modal"></optgroup>
+        <optgroup label="Custom" id="customProfiles_modal"></optgroup>
     </select>
 
 <button id="btn_submit" class="btn btn-primary" type="submit">Save</button>
@@ -45,6 +46,8 @@
                                     data-target="#m3panel"> M3</label>&nbsp;&nbsp;
         <label class="radio"><input type="radio" name="or_nodearch" id="or_nodearch_a8" value="a8"
                                     data-target="#m3panel"> A8</label>&nbsp;&nbsp;                           
+    	<label class="radio"><input type="radio" name="or_nodearch" id="or_nodearch_custom" value="custom"
+                                    data-target="#m3panel"> Custom</label>&nbsp;&nbsp;    
     </div>
 </div>
 
@@ -446,8 +449,14 @@ $(document).ready(function () {
         $("#mobile_site_m3").trigger("change");
     });
 
+    
     // init tab for node architecture
     $('input[name="or_nodearch"]').click(function () {
+    	if (!$('#or_nodearch_m3').prop('checked')) {
+    		document.getElementById('m3Mobility').style.visibility='hidden';
+    	} else {
+    		document.getElementById('m3Mobility').style.visibility='visible';
+    	}
         $(this).tab('show');
     });
 
@@ -527,6 +536,7 @@ function loadProfiles() {
     $("#wsn430Profiles_modal").empty();
     $("#m3Profiles_modal").empty();
     $("#a8Profiles_modal").empty();
+    $("#customProfiles_modal").empty();
 
         $.ajax({
             type: "GET",
@@ -597,7 +607,6 @@ function loadProfile() {
         if (!nodearch) nodearch = "wsn430";
         $("input[name='or_nodearch']").val([nodearch]);
         $("#or_nodearch_" + nodearch + "").tab('show');
-
         if (nodearch == "wsn430") {
             $("input[name='or_power_wsn430']").val([my_profiles[i].power]);
 
@@ -619,6 +628,11 @@ function loadProfile() {
         //} else if (nodearch == "m3") {
         // a8 and m3 nodearch = same profile form
         } else {
+        	if (nodearch != "m3") {
+             	document.getElementById('m3Mobility').style.visibility='hidden';
+            } else {
+            	document.getElementById('m3Mobility').style.visibility='visible';
+            }
             $("input[name='or_power_m3']").val([my_profiles[i].power]);
             if (my_profiles[i].consumption != null) {
                 $('#consumption_period_m3').val(my_profiles[i].consumption.period);
@@ -726,6 +740,7 @@ $("#btn_submit").on("click", function (e) {
     var nodearch = "wsn430";
     if ($('#or_nodearch_m3').prop('checked')) nodearch = "m3";
     else if ($('#or_nodearch_a8').prop('checked')) nodearch = "a8";
+    else if ($('#or_nodearch_custom').prop('checked')) nodearch = "custom";
 
     var profile_json = "";
 
@@ -799,22 +814,21 @@ $("#btn_submit").on("click", function (e) {
         if (radio_mode != "none") profile_json.radio = radio;
 
         mobile_mode_m3 = $("input[name=mobile_mode_m3]:checked").val()
-        if (mobile_mode_m3 == "predefined") {
+        if (mobile_mode_m3 == "predefined" && nodearch == "m3") {
             profile_json.mobility = {
 	       "type":"predefined",
                "site_name": $("#mobile_site_m3 option:selected").val(),
                "trajectory_name": $("#mobile_trajectory_m3 option:selected").val()
             };
         }
-	else if (mobile_mode_m3 == "controlled") {
+		else if (mobile_mode_m3 == "controlled" && nodearch == "m3") {
             profile_json.mobility = {
-		"type":"controlled"
-	    };
+				"type":"controlled"
+	    	};
         }
         else {
             delete profile_json.mobility;
         }
-
     }
     /*} else {
 

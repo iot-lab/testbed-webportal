@@ -346,7 +346,30 @@ function toggleNode(obj) {
     // archi ?
     // split selectedNodes for archis separation
     for (var i = 0; i < nodeboxes.length; i++) {
-        if (obj.object.archi == nodeboxes[i].id.substring(0, nodeboxes[i].id.indexOf('_'))) {
+    	var nodearch;
+        if ((obj.object.archi).indexOf("custom") !=-1) {
+         	nodearch = (obj.object.archi).split(':')[0] 
+        } else {
+			nodearch = obj.object.archi
+        }   
+        if (nodearch == nodeboxes[i].id.substring(0, nodeboxes[i].id.indexOf('_'))) {
+        	// right nodebox
+        	// select nodes from selectedNodes with archi = archi and remove the prefix
+        	var nodesArchis = [];
+        	for (var j = 0; j < selectedNodes.length; j++) {
+        		var archi = selectedNodes[j].substring(0, selectedNodes[j].indexOf('-'));
+                console.log(archi);
+                console.log(nodearch.substring(0, nodearch.indexOf(':')));
+                if (archi == obj.object.archi.substring(0, obj.object.archi.indexOf(':'))) {
+        			nodesArchis.push(selectedNodes[j].substring(selectedNodes[j].indexOf('-') + 1, selectedNodes[j].length));
+        		}
+        	}
+        	// factorize only this one
+        	nodeboxes[i].value = factorize(nodesArchis).join("+");
+        }
+        
+    	
+    	/**if (obj.object.archi == nodeboxes[i].id.substring(0, nodeboxes[i].id.indexOf('_'))) {
             // right nodebox
             // select nodes from selectedNodes with archi = archi and remove the prefix
             var nodesArchis = [];
@@ -358,7 +381,7 @@ function toggleNode(obj) {
             }
             // factorize only this one
             nodeboxes[i].value = factorize(nodesArchis).join("+");
-        }
+        }**/
     }
     myrender();
 }

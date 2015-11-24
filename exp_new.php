@@ -251,6 +251,7 @@ include("header.php");
                     <optgroup label="M3" id="m3Nodes"></optgroup>
                     <optgroup label="A8" id="a8Nodes"></optgroup>
                     <optgroup label="DES" id="desNodes"></optgroup>
+                    <optgroup label="CUSTOM" id="customNodes"></optgroup>
                 </select>
             </div>
             <div class=col-md-4>
@@ -259,6 +260,7 @@ include("header.php");
                     <optgroup label="WSN430" id="wsn430Profiles"></optgroup>
                     <optgroup label="M3" id="m3Profiles"></optgroup>
                     <optgroup label="A8" id="a8Profiles"></optgroup>
+                    <optgroup label="CUSTOM" id="customProfiles"></optgroup>
                 </select>
                 <button id='profilesModalLink' class="btn btn-default" data-toggle="modal"
                         data-target="#profiles_modal" type="button">Manage Profiles
@@ -269,6 +271,7 @@ include("header.php");
                 <select class="form-control" id="my_firmwares" size="15" style="margin-bottom:5px;">
                     <optgroup label="WSN430" id="wsn430Firmwares"></optgroup>
                     <optgroup label="M3" id="m3Firmwares"></optgroup>
+                     <optgroup label="CUSTOM" id="customFirmwares"></optgroup>
                 </select>
                 <input type="file" id="files" name="files[]" multiple/>
             </div>
@@ -560,24 +563,36 @@ $("#btn_assoc").click(function () {
     // check if selected profile/firmware is OK for the selected node architecture
     // get profile and firmware architecture
     var profileNodearch = ((profil_set in user_profiles) ? user_profiles[profil_set] : null);
+
+	// fwNodearch = ["wsn430", ".."]
     var fwNodearch = ((firmware_set in user_firmwares) ? user_firmwares[firmware_set] : null);
+ 
     // profile and firware are compatible ?
-    if (profileNodearch != null && fwNodearch != null && profileNodearch != fwNodearch) {
+    //if (profileNodearch != null && fwNodearch != null && profileNodearch != fwNodearch) {
+    if (profileNodearch != null && fwNodearch != null && fwNodearch.indexOf(profileNodearch)==-1) {
         alert("The profile and the firmware are not for the same architecture.");
         return false;
     }
 
-    if (exp_json.type == "psysical") {
+    if (exp_json.type == "physical") {
         // for each selected node, check the architecture
         for (var i = 0; i < nodes_set.length; i++) {
             if (profileNodearch != null && sites_nodes[nodes_set[i]].indexOf(profileNodearch) == -1) {
                 alert("The profile is not compatible with some nodes architecture.");
                 return false;
             }
-            if (fwNodearch != null && sites_nodes[nodes_set[i]].indexOf(fwNodearch) == -1) {
-                alert("The firmware is not compatible with some nodes architecture.");
-                return false;
-            }
+            //if (fwNodearch != null && sites_nodes[nodes_set[i]].indexOf(fwNodearch) == -1) {
+            //    alert("The firmware is not compatible with some nodes architecture.");
+            //    return false;
+            //}
+			if (fwNodearch != null) {
+				var nodearch = sites_nodes[nodes_set[i]]
+				if (fwNodearch.indexOf(nodearch)==-1) {
+					return false;
+				}
+			}		
+
+            
         }
     }
 
@@ -831,10 +846,20 @@ function getNodes() { // get all sites nodes
                 }
 
                 // filling the "from maps" form
-                if (archis.indexOf(data_server[i].site+"-"+data_server[i].archi) == -1) { // unknown archi, adding it
-                    archis.push(data_server[i].site+"-"+data_server[i].archi);
-                    $("#" + data_server[i].site + "_archis").append(data_server[i].archi + '&nbsp;&nbsp;<input type="text" id="' + data_server[i].site + "_" + data_server[i].archi + '_list" value="" class="form-control" style="width:70%" placeholder="1-5+7" />');
+                var archi;
+                if ((data_server[i].archi).indexOf("custom") !=-1) {
+                 	archi = data_server[i].archi.split(':')[0] 
+                } else {
+					archi = data_server[i].archi
                 }
+                if (archis.indexOf(data_server[i].site+"-"+archi) == -1) { // unknown archi, adding it
+                    archis.push(data_server[i].site+"-"+archi);
+                    $("#" + data_server[i].site + "_archis").append(archi + '&nbsp;&nbsp;<input type="text" id="' + data_server[i].site + "_" + archi + '_list" value="" class="form-control" style="width:70%" placeholder="1-5+7" />');
+                }
+                //if (archis.indexOf(data_server[i].site+"-"+data_server[i].archi) == -1) { // unknown archi, adding it
+                    //archis.push(data_server[i].site+"-"+data_server[i].archi);
+                    //$("#" + data_server[i].site + "_archis").append(data_server[i].archi + '&nbsp;&nbsp;<input type="text" id="' + data_server[i].site + "_" + data_server[i].archi + '_list" value="" class="form-control" style="width:70%" placeholder="1-5+7" />');
+                //}
 
                 // filling the "by type" form
                 if(archis_all.indexOf(data_server[i].archi) == -1) {
@@ -846,6 +871,9 @@ function getNodes() { // get all sites nodes
 
             //init list of sites for the first selected archi
             var archi = $("#lst_archi option:selected").val();
+            if (archi.indexOf("custom") !=-1) {
+             	archi = archi.split(':')[0]
+            }
             for(var i=0;i<sites.length;i++){
                 if(archis.indexOf(sites[i] + "-" + archi) != -1) {
                     $("#lst_site").append(new Option(sites[i],sites[i]));
@@ -865,6 +893,9 @@ function getNodes() { // get all sites nodes
 $("#div_resources_type").on("change",".lst_archi", function() {
     $(this).parent().next().children().empty();
     var archi = $(this).find("option:selected").val();
+    if (archi.indexOf("custom") !=-1) {
+     	archi = archi.split(':')[0]
+    }
     for(var i=0;i<sites.length;i++){
         if(archis.indexOf(sites[i] + "-" + archi) != -1) {
              $(this).parent().next().children().append(new Option(sites[i],sites[i]));
@@ -956,8 +987,8 @@ $("#my_nodes").change(function () {
     var profileNodearch = ((profil_set in user_profiles) ? user_profiles[profil_set] : null);
     var fwNodearch = ((firmware_set in user_firmwares) ? user_firmwares[firmware_set] : null);
     if (nodearch != profileNodearch) $("#my_profiles option:selected").removeAttr("selected");
-    if (nodearch != fwNodearch) $("#my_firmwares option:selected").removeAttr("selected");
-
+    //if (nodearch != fwNodearch) $("#my_firmwares option:selected").removeAttr("selected");
+	if (fwNodearch.indexOf(nodearch)==-1) $("#my_firmwares option:selected").removeAttr("selected");
     return false;
 });
 
@@ -1028,12 +1059,20 @@ function handleFileSelect(evt) {
                         binary.push({"name": theFile.name, "bin": e.target.result});
                         
                         if(data_server.format == "hex") {
-                            user_firmwares[theFile.name] = "wsn430";
-                            $("#" + user_firmwares[theFile.name] + "Firmwares").append(new Option(theFile.name, theFile.name, false, false));
+                            //user_firmwares[theFile.name] = "wsn430";
+                            user_firmwares[theFile.name] = ["wsn430", "custom"];
+                            //$("#" + user_firmwares[theFile.name] + "Firmwares").append(new Option(theFile.name, theFile.name, false, false));
+							for (var archi of user_firmwares[theFile.name]) { 
+								$("#" + archi + "Firmwares").append(new Option(theFile.name, theFile.name, false, false));	
+							}
                         }  
                         else if(data_server.format == "elf") {
-                            user_firmwares[theFile.name] = "m3";
-                            $("#" + user_firmwares[theFile.name] + "Firmwares").append(new Option(theFile.name, theFile.name, false, false));
+                            //user_firmwares[theFile.name] = "m3";
+                            user_firmwares[theFile.name] = ["m3", "custom"];
+                            //$("#" + user_firmwares[theFile.name] + "Firmwares").append(new Option(theFile.name, theFile.name, false, false));
+                            for (var archi of user_firmwares[theFile.name]) { 
+								$("#" + archi + "Firmwares").append(new Option(theFile.name, theFile.name, false, false));	
+							}
                         }
                         else {
                             alert("Unknow format ");
