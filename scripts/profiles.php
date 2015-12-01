@@ -487,7 +487,7 @@ function loadMobilities() {
             cache: false,
             dataType: "text",
             contentType: "application/json; charset=utf-8",
-            url: "/rest/robots/mobility",
+            url: "/rest/robots/mobility?user",
             success: function (data_server) {
 
                 if (data_server == "") {
