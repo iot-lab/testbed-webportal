@@ -421,6 +421,14 @@ var oTable;
 var users = {};
 var selectedUser = {};
 
+var admin_users_url = "/rest/admin/users";
+
+// Allow overriding url to include this page in another
+// Used to create the same page but only for 'Pending' users
+if (typeof ADMIN_USERS_LIST_URL_CFG != 'undefined') {
+    var admin_users_url = ADMIN_USERS_LIST_URL_CFG
+}
+
 $(document).ready(function () {
 
     $("#admin").addClass("active");
@@ -432,7 +440,7 @@ $(document).ready(function () {
 
     /* Load data in the table */
     $.ajax({
-        url: "/rest/admin/users",
+        url: admin_users_url,
         type: "GET",
         dataType: "json",
         success: function (data) {
