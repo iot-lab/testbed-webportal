@@ -26,7 +26,7 @@ include("header.php");
 
 <div class="row">
     <div class="col-md-12">
-        <div id="tbl_exps_processing" class="dataTables_processing">Processing...</div>
+        <div id="tbl_users_processing" class="dataTables_processing">Processing...</div>
         <div class="alert alert-danger" id="div_msg" style="display:none">Loading ...</div>
         <table id="tbl_users" class="table table-striped table-condensed" style="display:none">
             <thead>
@@ -524,11 +524,11 @@ $(document).ready(function () {
                 "bAutoWidth": false
             });
             $('#tbl_users').show();
-            $('#tbl_exps_processing').hide();
+            $('#tbl_users_processing').hide();
 
         },
         error: function (XMLHttpRequest, textStatus, errorThrows) {
-            $('#tbl_exps_processing').hide();
+            $('#tbl_users_processing').hide();
             $("#div_msg").show();
             $("#div_msg").html("An error occurred while retrieving user list");
         }
