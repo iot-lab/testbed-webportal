@@ -515,12 +515,7 @@ $(document).ready(function () {
 
             oTable = $('#tbl_users').dataTable({
                 "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",
-                "bPaginate": true,
                 "sPaginationType": "bootstrap",
-                "bLengthChange": true,
-                "bFilter": true,
-                "bSort": true,
-                "bInfo": true,
                 "bAutoWidth": false
             });
             $('#tbl_users').show();
