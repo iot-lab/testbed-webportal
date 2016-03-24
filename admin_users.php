@@ -37,14 +37,16 @@ include("header.php");
           <input type="radio" name="table_content_mode" value="all">
           All users with email including
           <form id="form_email_filter" class="form-inline">
-            <div class="input-group">
-              <input type="text" id="email_filter" class="form-control" placeholder="email pattern">
-              <div class="input-group-btn">
-                <button type="submit" class="btn btn-default" aria-label="Search">
-                  <span class="glyphicon glyphicon-search"></span>
-                </button>
+            <fieldset id="fieldset_email_filter"disabled>
+              <div class="input-group">
+                <input type="text" id="email_filter" class="form-control" placeholder="email pattern">
+                <div class="input-group-btn">
+                  <button type="submit" class="btn btn-default" aria-label="Search">
+                    <span class="glyphicon glyphicon-search"></span>
+                  </button>
+                </div>
               </div>
-            </div>
+            </fieldset>
           </form>
         </label>
       </div>
@@ -689,12 +691,17 @@ function setAdmin(id) {
 
 /* Change table mode */
 $('input[type=radio][name=table_content_mode]').change(function() {
-    if(this.value != table_content_mode && this.value == "pending") {
-      alert("pending request");
-      table_content_mode = "pending";
+    if(this.value == "pending") {
+      $("#fieldset_email_filter").prop('disabled', true);
+      if(this.value != table_content_mode) {
+        alert("pending request");
+        table_content_mode = "pending";
+      }
     }
-    if(this.value == "all")
+    if(this.value == "all") {
+      $("#fieldset_email_filter").prop('disabled', false);
       $("#email_filter").select();
+    }
 });
 
 /* Submit email filter request */
@@ -702,7 +709,7 @@ $('#form_email_filter').bind('submit', function (e) {
     e.preventDefault();
 
     alert("email filter request w/ " + $("#email_filter").val());
-    table_content_mode = "pending";
+    table_content_mode = "all";
 })
 
 /* Edit a user */
