@@ -701,7 +701,7 @@ $('input[type=radio][name=table_content_mode]').change(function() {
 $('#form_email_filter').bind('submit', function (e) {
     e.preventDefault();
 
-    alert("email filter request w/ " + $("email_filter").val());
+    alert("email filter request w/ " + $("#email_filter").val());
     table_content_mode = "pending";
 })
 
