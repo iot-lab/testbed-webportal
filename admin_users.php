@@ -19,13 +19,14 @@ include("header.php");
 </div>
 
 <div class="row">
-    <div class="col-md-2" style="text-align:left;padding-bottom:5px;padding-left:5px;">
-        <a href="#" class="btn btn-default btn-add" data-toggle="modal">Add user(s)</a>
+    <div class="col-sm-6 text-right pull-right">
+        <button type="button" class="btn btn-lg btn-default btn-add" data-toggle="modal" aria-label="Add user(s)">
+          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+          Add user(s)
+        </button>
     </div>
-</div>
-
-<div class="row">
-    <div class="col-md-12">
+    <div class="col-sm-6">
+      <span class="lead">Show: </span>
       <div class="radio">
         <label>
           <input type="radio" name="table_content_mode" value="pending" checked>
