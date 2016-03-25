@@ -475,11 +475,14 @@ $(document).ready(function () {
 
 /* Load data in the table */
 function buildUsersTable() {
+  $('#tbl_users').hide();
+  $('#tbl_users_processing').show();
+
   var url = admin_users_url;
   if($('input[type=radio][name=table_content_mode]:checked').val() == "pending")
     url += pending_option;
   else {
-    alert($("#email_filter").val());
+    //alert($("#email_filter").val());
     url += email_option + $("#email_filter").val();
   }
   $.ajax({
@@ -488,7 +491,8 @@ function buildUsersTable() {
     dataType: "json",
     success: function (data) {
         users = data;
-        $("#tbl_users tbody").html("");
+        if(oTable && (typeof oTable != "undefined"))
+            oTable.fnClearTable();
         var i = 0;
         $.each(data, function (key, val) {
             var btnValidClass = "btn-primary";
@@ -558,6 +562,7 @@ function buildUsersTable() {
         });
 
         oTable = $('#tbl_users').dataTable({
+            "bDestroy": true,
             "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",
             "sPaginationType": "bootstrap",
             "bAutoWidth": false
@@ -694,8 +699,9 @@ $('input[type=radio][name=table_content_mode]').change(function() {
     if(this.value == "pending") {
       $("#fieldset_email_filter").prop('disabled', true);
       if(this.value != table_content_mode) {
-        alert("pending request");
-        table_content_mode = "pending";
+        //alert("pending request");
+        buildUsersTable();
+        // table_content_mode = "pending";
       }
     }
     if(this.value == "all") {
@@ -708,8 +714,9 @@ $('input[type=radio][name=table_content_mode]').change(function() {
 $('#form_email_filter').bind('submit', function (e) {
     e.preventDefault();
 
-    alert("email filter request w/ " + $("#email_filter").val());
-    table_content_mode = "all";
+    //alert("email filter request w/ " + $("#email_filter").val());
+    buildUsersTable();
+    // table_content_mode = "all";
 })
 
 /* Edit a user */
