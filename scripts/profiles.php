@@ -45,9 +45,9 @@
         <label class="radio"><input type="radio" name="or_nodearch" id="or_nodearch_m3" value="m3"
                                     data-target="#m3panel"> M3</label>&nbsp;&nbsp;
         <label class="radio"><input type="radio" name="or_nodearch" id="or_nodearch_a8" value="a8"
-                                    data-target="#m3panel"> A8</label>&nbsp;&nbsp;                           
+                                    data-target="#m3panel"> A8</label>&nbsp;&nbsp;
     	<label class="radio"><input type="radio" name="or_nodearch" id="or_nodearch_custom" value="custom"
-                                    data-target="#m3panel"> Custom</label>&nbsp;&nbsp;    
+                                    data-target="#m3panel"> Custom</label>&nbsp;&nbsp;
     </div>
 </div>
 
@@ -308,52 +308,7 @@
             </div>
        </div>
 
-
-
-
-   <div style="border-top: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;margin:5px;" id="m3Mobility">
-        <div class="form-group" style="width:100%;margin-bottom:10px">
-            <label class="col-lg-4 control-label" for="mobile_mode_m3">Mobile</label>
-
-            <div class="col-lg-8">
-                <label class="radio"><input type="radio" name="mobile_mode_m3" id="mobile_mode_none_m3" value="none"
-                                            data-target="#m3MobileNonePanel" checked> none</label>&nbsp;&nbsp;
-                <label class="radio"><input type="radio" name="mobile_mode_m3" id="mobile_mode_predefined_m3" value="predefined"
-                                            data-target="#m3MobilePredefinedPanel"> predefined</label>&nbsp;&nbsp;
-				<!--<label class="radio"><input type="radio" name="mobile_mode_m3" id="mobile_mode_controlled_m3" value="controlled"
-                                            data-target="#m3MobileControlledPanel"> controlled</label>-->
-            </div>
-        </div>
-
-        <div class="tab-content">
-            <div id="m3MobileNonePanel" class="tab-pane active">
-
-            </div>
-
-            <div id="m3MobilePredefinedPanel" class="tab-pane">
-		<label class="col-lg-4 control-label">Site:</label>
-                <div class="col-lg-8">
-                <select id="mobile_site_m3" class="form-control">
-                </select>
-                </div>
-
-                <label class="col-lg-4 control-label">Trajectory:</label>
-                <div class="col-lg-8">
-                <select id="mobile_trajectory_m3" class="form-control">
-                </select>
-                </div>
-            </div>
-
-	    <!--  <div id="m3MobileControlledPanel" class="tab-pane active">
-
-            </div>-->
-
-  </div>
-
-
-
-        </div>
-    </div>
+     </div>
 
 
 </div>
@@ -423,7 +378,7 @@ function visibilityRadioNum() {
 	}
 	else if ($("#radio_mode_sniffer_m3").is(':checked')) {
 		$("#radio_mode_sniffer_m3").tab('show');
-	} 
+	}
 }
 
 /* ************ */
@@ -440,24 +395,15 @@ $(document).ready(function () {
 
         $("#m3panel").removeClass("active");
         $("#wsn430panel").addClass("active");
-        
-        $("#m3MobilePredefinedPanel").removeClass("active");
-        //$("#m3MobileControlledPanel").removeClass("active");
+
         $("#m3RadioMeasurePanel").removeClass("active");
         $("#m3RadioSnifferPanel").removeClass("active");
-		//loadMobilities();
-        $("#mobile_site_m3").trigger("change");
     });
 
-    
+
     // init tab for node architecture
     $('input[name="or_nodearch"]').click(function () {
-    	if (!$('#or_nodearch_m3').prop('checked')) {
-    		document.getElementById('m3Mobility').style.visibility='hidden';
-    	} else {
-    		document.getElementById('m3Mobility').style.visibility='visible';
-    	}
-        $(this).tab('show');
+    	  $(this).tab('show');
     });
 
     // init tab for m3 radio mode
@@ -465,67 +411,9 @@ $(document).ready(function () {
         $(this).tab('show');
     });
 
-    $('input[name="mobile_mode_m3"]').click(function () {
-        $(this).tab('show');
-    });
-
     visibilityRadioNum();
     loadProfiles();
-
-    loadMobilities();
 });
-
-/* *************** */
-/* load mobilities */
-/* *************** */
-function loadMobilities() {
-
-
-
-        $.ajax({
-            type: "GET",
-            cache: false,
-            dataType: "text",
-            contentType: "application/json; charset=utf-8",
-            url: "/rest/robots/mobility?user",
-            success: function (data_server) {
-
-                if (data_server == "") {
-                    //no mobility
-                    return false;
-                }
-
-                var mobility = JSON.parse(data_server);
-
-                //populate mobile site
-                for(var i in mobility) {
-                        $("#mobile_site_m3").append(new Option(i, i));
-                }
-
-                //populate circuits according to selected site
-                $("#mobile_site_m3").on("change", function(){
-                        $("#mobile_trajectory_m3").empty();
-  
-                        for(var i in mobility) {
-                            if(i == $(this).val()) {
-                                for (var j in mobility[i]) {
-                                if(typeof mobility[i][j].trajectory_name != "undefined")
-                                    $("#mobile_trajectory_m3").append(new Option(mobility[i][j].trajectory_name, mobility[i][j].trajectory_name));
-                                }
-                            }
-                        }
-                });
-                $("#mobile_site_m3").trigger("change");
-
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrows) {
-                $("#div_error_profiles").html(errorThrows);
-                $("#div_error_profiles").show();
-                $("#div_error_profiles").removeClass("alert-success");
-                $("#div_error_profiles").addClass("alert-danger");
-            }
-        });
-}
 
 
 /* ************************************* */
@@ -628,12 +516,7 @@ function loadProfile() {
         //} else if (nodearch == "m3") {
         // a8 and m3 nodearch = same profile form
         } else {
-        	if (nodearch != "m3") {
-             	document.getElementById('m3Mobility').style.visibility='hidden';
-            } else {
-            	document.getElementById('m3Mobility').style.visibility='visible';
-            }
-            $("input[name='or_power_m3']").val([my_profiles[i].power]);
+        	  $("input[name='or_power_m3']").val([my_profiles[i].power]);
             if (my_profiles[i].consumption != null) {
                 $('#consumption_period_m3').val(my_profiles[i].consumption.period);
                 $('#consumption_average_m3').val(my_profiles[i].consumption.average);
@@ -655,24 +538,11 @@ function loadProfile() {
 					// one channel at the moment
 		        	$("#radio_sniffer_channel_m3").val(my_profiles[i].radio.channels[0]);
 		        }
-				visibilityRadioNum();     
+				visibilityRadioNum();
             } else {
                 $("#radio_mode_none_m3").prop("checked", true);
                 $("#radio_mode_none_m3").tab('show');
             }
-            if (my_profiles[i].mobility != null) {
-	            if (my_profiles[i].mobility.type == "predefined" || my_profiles[i].mobility.type == "controlled") {
-	                $("input[name='mobile_mode_m3']").tab('show');
-	                $("#mobile_mode_predefined_m3").prop("checked", true);
-	                $("#mobile_mode_predefined_m3").tab('show');
-	                $("#mobile_site_m3").val(my_profiles[i].mobility.site_name);
-	                $("#mobile_site_m3").trigger("change");
-	                $("#mobile_trajectory_m3").val(my_profiles[i].mobility.trajectory_name);
-	            }
-            } else {
-            	$("#mobile_mode_none_m3").prop("checked", true);
-                $("#mobile_mode_none_m3").tab('show');
-            } 
         }
     }
 
@@ -719,7 +589,7 @@ $("#btn_submit").on("click", function (e) {
 
   //  e.preventDefault();
 
-    // check profile name 
+    // check profile name
     var regExp = /^[0-9A-z]*$/;
 
     if (regExp.test($("#profiles_txt_name").val()) == false) {
@@ -727,7 +597,7 @@ $("#btn_submit").on("click", function (e) {
         return false;
     }
 
-    //check profile existence 
+    //check profile existence
     for (var i = 0; i < $("#my_profiles_modal option").length; i++) {
         if ($($("#my_profiles_modal option")[i]).val() == $("#profiles_txt_name").val()) {
             edit = true;
@@ -736,7 +606,7 @@ $("#btn_submit").on("click", function (e) {
         }
     }
 
-    // construct JSON 
+    // construct JSON
     var nodearch = "wsn430";
     if ($('#or_nodearch_m3').prop('checked')) nodearch = "m3";
     else if ($('#or_nodearch_a8').prop('checked')) nodearch = "a8";
@@ -812,23 +682,6 @@ $("#btn_submit").on("click", function (e) {
             "consumption": consumption
         };
         if (radio_mode != "none") profile_json.radio = radio;
-
-        mobile_mode_m3 = $("input[name=mobile_mode_m3]:checked").val()
-        if (mobile_mode_m3 == "predefined" && nodearch == "m3") {
-            profile_json.mobility = {
-	       "type":"predefined",
-               "site_name": $("#mobile_site_m3 option:selected").val(),
-               "trajectory_name": $("#mobile_trajectory_m3 option:selected").val()
-            };
-        }
-		else if (mobile_mode_m3 == "controlled" && nodearch == "m3") {
-            profile_json.mobility = {
-				"type":"controlled"
-	    	};
-        }
-        else {
-            delete profile_json.mobility;
-        }
     }
     /*} else {
 
