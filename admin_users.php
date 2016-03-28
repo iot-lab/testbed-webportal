@@ -54,7 +54,6 @@ include("header.php");
     </div>
 </div>
 
-
 <div class="row">
     <div class="col-md-12">
         <div id="tbl_users_processing" class="dataTables_processing">Processing...</div>
@@ -455,12 +454,6 @@ var selectedUser = {};
 var admin_users_url = "/rest/admin/users";
 var pending_option = "?validate=0";
 var email_option = "?email=";
-
-// Allow overriding url to include this page in another
-// Used to create the same page but only for 'Pending' users
-if (typeof ADMIN_USERS_LIST_URL_CFG != 'undefined') {
-    var admin_users_url = ADMIN_USERS_LIST_URL_CFG
-}
 
 $(document).ready(function () {
 
