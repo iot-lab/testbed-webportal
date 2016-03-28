@@ -19,14 +19,44 @@ include("header.php");
 </div>
 
 <div class="row">
-    <div class="col-md-2" style="text-align:left;padding-bottom:5px;padding-left:5px;">
-        <a href="#" class="btn btn-default btn-add" data-toggle="modal">Add user(s)</a>
+    <div class="col-sm-6 text-right pull-right">
+        <button type="button" class="btn btn-lg btn-default btn-add" data-toggle="modal" aria-label="Add user(s)">
+          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+          Add user(s)
+        </button>
+    </div>
+    <div class="col-sm-6">
+      <span class="lead">Show: </span>
+      <div class="radio">
+        <label>
+          <input type="radio" name="table_content_mode" value="pending" checked>
+          Only pending users
+        </label>
+      </div>
+      <div class="radio">
+        <label>
+          <input type="radio" name="table_content_mode" value="all">
+          All users with email including
+          <form id="form_email_filter" class="form-inline">
+            <fieldset id="fieldset_email_filter"disabled>
+              <div class="input-group">
+                <input type="text" id="email_filter" class="form-control" placeholder="email pattern">
+                <div class="input-group-btn">
+                  <button type="submit" class="btn btn-default" aria-label="Search">
+                    <span class="glyphicon glyphicon-search"></span>
+                  </button>
+                </div>
+              </div>
+            </fieldset>
+          </form>
+        </label>
+      </div>
     </div>
 </div>
 
 <div class="row">
     <div class="col-md-12">
-        <div id="tbl_exps_processing" class="dataTables_processing">Processing...</div>
+        <div id="tbl_users_processing" class="dataTables_processing">Processing...</div>
         <div class="alert alert-danger" id="div_msg" style="display:none">Loading ...</div>
         <table id="tbl_users" class="table table-striped table-condensed" style="display:none">
             <thead>
@@ -422,12 +452,8 @@ var users = {};
 var selectedUser = {};
 
 var admin_users_url = "/rest/admin/users";
-
-// Allow overriding url to include this page in another
-// Used to create the same page but only for 'Pending' users
-if (typeof ADMIN_USERS_LIST_URL_CFG != 'undefined') {
-    var admin_users_url = ADMIN_USERS_LIST_URL_CFG
-}
+var pending_option = "?validate=0";
+var email_option = "?email=";
 
 $(document).ready(function () {
 
@@ -438,102 +464,115 @@ $(document).ready(function () {
     $('#edit_modal').modal('hide');
     $("#email_modal").modal('hide');
 
-    /* Load data in the table */
-    $.ajax({
-        url: admin_users_url,
-        type: "GET",
-        dataType: "json",
-        success: function (data) {
-            users = data;
-            var i = 0;
-            $.each(data, function (key, val) {
-                var btnValidClass = "btn-primary";
-                var btnValidValue = "Pending";
-                if (val.validate) {
-                    btnValidClass = "btn-default";
-                    btnValidValue = "Valid";
-                }
-
-                btnAdminClass = 'btn-default';
-                btnAdminValue = "User";
-                if (val.admin) {
-                    btnAdminClass = 'btn-warning';
-                    btnAdminValue = "Admin";
-                }
-
-                //user row
-                $("#tbl_users tbody").append(
-                    '<tr id=' + i + ' data=' + i + '>' +
-                        '<td>' + val.login + '</td>' +
-                        '<td class="firstName">' + val.firstName + '</td>' +
-                        '<td class="lastName">' + val.lastName + '</td>' +
-                        '<td><a href="mailto:' + val.email + '" class="email">' + val.email + '</a></td>' +
-                        '<td>' + formatCreateTimeStamp(val.createTimeStamp) + '</td>' +
-                        '<td><a href="#" class="btn btn-valid ' + btnValidClass + '" data="' + i + '" data-state="' + val.validate + '" onClick="validateUser(' + i + ')">' + btnValidValue + '</a></td>' +
-                        '<td><a href="#" class="btn btn-admin ' + btnAdminClass + '" data="' + i + '" data-state="' + val.admin + '" onClick="setAdmin(' + i + ')">' + btnAdminValue + '</a></td>' +
-                        '<td><a href="admin_exps.php?user=' + val.login + '" class="btn btn-default btn-view" title="Experiments"><span class="glyphicon glyphicon-list"></span></a> ' +
-                        '<a href="#" class="btn btn-default btn-edit" data-toggle="modal" data="' + i + '" title="Edit"><span class="glyphicon glyphicon-pencil"></span></a> ' +
-                        '<a href="#" class="btn btn-default btn-email" data-toggle="modal" data="' + i + '" title="Email"><span class="glyphicon glyphicon-envelope"></span></a> ' +
-                        '<a href="#" class="btn btn-danger btn-passwd" data="' + i + '" onClick="resetPasswd(' + i + ')" title="Reset password"><span class="glyphicon glyphicon-lock"></span></a> ' +
-                        '<a href="#" class="btn btn-danger btn-del" data="' + i + '" onClick="deleteUser(' + i + ')" title="Delete"><span class="glyphicon glyphicon-remove"></span></a></td>'
-                        + '</tr>');
-                $("tr[data=" + i + "] .btn-valid").width(50);
-                $("tr[data=" + i + "] .btn-admin").width(50);
-                i++;
-            });
-
-            //action on edit button: load data on modal form
-            $(".btn-edit").click(function () {
-                var userId = $(this).attr("data");
-                selectedUser = users[userId];
-                $('#s_login_e').html(selectedUser.login);
-                $('#s_id_e').html(userId);
-                $('#txt_sshkey_e').val(selectedUser.sshPublicKeys[0]);
-                $('#txt_sshkey_e2').val(selectedUser.sshPublicKeys[1]);
-                $('#txt_sshkey_e3').val(selectedUser.sshPublicKeys[2]);
-                $('#txt_sshkey_e4').val(selectedUser.sshPublicKeys[3]);
-                $('#txt_sshkey_e5').val(selectedUser.sshPublicKeys[4]);
-                $('#txt_firstname_e').val(selectedUser.firstName);
-                $('#txt_lastname_e').val(selectedUser.lastName);
-                $('#txt_login_e').val(selectedUser.login);
-                $('#txt_email_e').val(selectedUser.email);
-                $('#txt_structure_e').val(selectedUser.structure);
-                $('#txt_city_e').val(selectedUser.city);
-                $('#txt_country_e').val(selectedUser.country);
-                $('#txt_motivation_e').val(selectedUser.motivations);
-                $("#edit_modal").modal('show');
-            });
-
-            //action on email button: load data on modal form
-            $(".btn-email").click(function () {
-                var userId = $(this).attr("data");
-                useremail = users[userId];
-                $("#to").val(useremail.email);
-                $('#s_login_email').html(useremail.login);
-                $("#email_modal").modal('show');
-            });
-
-            oTable = $('#tbl_users').dataTable({
-                "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",
-                "bPaginate": true,
-                "sPaginationType": "bootstrap",
-                "bLengthChange": true,
-                "bFilter": true,
-                "bSort": true,
-                "bInfo": true,
-                "bAutoWidth": false
-            });
-            $('#tbl_users').show();
-            $('#tbl_exps_processing').hide();
-
-        },
-        error: function (XMLHttpRequest, textStatus, errorThrows) {
-            $('#tbl_exps_processing').hide();
-            $("#div_msg").show();
-            $("#div_msg").html("An error occurred while retrieving user list");
-        }
-    });
+    buildUsersTable();
 });
+
+/* Load data in the table */
+function buildUsersTable() {
+  $('#tbl_users').hide();
+  $('#tbl_users_processing').show();
+
+  var url = admin_users_url;
+  if($('input[type=radio][name=table_content_mode]:checked').val() == "pending")
+    url += pending_option;
+  else {
+    //alert($("#email_filter").val());
+    url += email_option + $("#email_filter").val();
+  }
+  $.ajax({
+    url: url,
+    type: "GET",
+    dataType: "json",
+    success: function (data) {
+        users = data;
+        if(oTable && (typeof oTable != "undefined"))
+            oTable.fnClearTable();
+        var i = 0;
+        $.each(data, function (key, val) {
+            var btnValidClass = "btn-primary";
+            var btnValidValue = "Pending";
+            if (val.validate) {
+                btnValidClass = "btn-default";
+                btnValidValue = "Valid";
+            }
+
+            btnAdminClass = 'btn-default';
+            btnAdminValue = "User";
+            if (val.admin) {
+                btnAdminClass = 'btn-warning';
+                btnAdminValue = "Admin";
+            }
+
+            //user row
+            $("#tbl_users tbody").append(
+                '<tr id=' + i + ' data=' + i + '>' +
+                    '<td>' + val.login + '</td>' +
+                    '<td class="firstName">' + val.firstName + '</td>' +
+                    '<td class="lastName">' + val.lastName + '</td>' +
+                    '<td><a href="mailto:' + val.email + '" class="email">' + val.email + '</a></td>' +
+                    '<td>' + formatCreateTimeStamp(val.createTimeStamp) + '</td>' +
+                    '<td><a href="#" class="btn btn-valid ' + btnValidClass + '" data="' + i + '" data-state="' + val.validate + '" onClick="validateUser(' + i + ')">' + btnValidValue + '</a></td>' +
+                    '<td><a href="#" class="btn btn-admin ' + btnAdminClass + '" data="' + i + '" data-state="' + val.admin + '" onClick="setAdmin(' + i + ')">' + btnAdminValue + '</a></td>' +
+                    '<td><a href="admin_exps.php?user=' + val.login + '" class="btn btn-default btn-view" title="Experiments"><span class="glyphicon glyphicon-list"></span></a> ' +
+                    '<a href="#" class="btn btn-default btn-edit" data-toggle="modal" data="' + i + '" title="Edit"><span class="glyphicon glyphicon-pencil"></span></a> ' +
+                    '<a href="#" class="btn btn-default btn-email" data-toggle="modal" data="' + i + '" title="Email"><span class="glyphicon glyphicon-envelope"></span></a> ' +
+                    '<a href="#" class="btn btn-danger btn-passwd" data="' + i + '" onClick="resetPasswd(' + i + ')" title="Reset password"><span class="glyphicon glyphicon-lock"></span></a> ' +
+                    '<a href="#" class="btn btn-danger btn-del" data="' + i + '" onClick="deleteUser(' + i + ')" title="Delete"><span class="glyphicon glyphicon-remove"></span></a></td>'
+                    + '</tr>');
+            $("tr[data=" + i + "] .btn-valid").width(50);
+            $("tr[data=" + i + "] .btn-admin").width(50);
+            i++;
+        });
+
+        //action on edit button: load data on modal form
+        $(".btn-edit").click(function () {
+            var userId = $(this).attr("data");
+            selectedUser = users[userId];
+            $('#s_login_e').html(selectedUser.login);
+            $('#s_id_e').html(userId);
+            $('#txt_sshkey_e').val(selectedUser.sshPublicKeys[0]);
+            $('#txt_sshkey_e2').val(selectedUser.sshPublicKeys[1]);
+            $('#txt_sshkey_e3').val(selectedUser.sshPublicKeys[2]);
+            $('#txt_sshkey_e4').val(selectedUser.sshPublicKeys[3]);
+            $('#txt_sshkey_e5').val(selectedUser.sshPublicKeys[4]);
+            $('#txt_firstname_e').val(selectedUser.firstName);
+            $('#txt_lastname_e').val(selectedUser.lastName);
+            $('#txt_login_e').val(selectedUser.login);
+            $('#txt_email_e').val(selectedUser.email);
+            $('#txt_structure_e').val(selectedUser.structure);
+            $('#txt_city_e').val(selectedUser.city);
+            $('#txt_country_e').val(selectedUser.country);
+            $('#txt_motivation_e').val(selectedUser.motivations);
+            $("#edit_modal").modal('show');
+        });
+
+        //action on email button: load data on modal form
+        $(".btn-email").click(function () {
+            var userId = $(this).attr("data");
+            useremail = users[userId];
+            $("#to").val(useremail.email);
+            $('#s_login_email').html(useremail.login);
+            $("#email_modal").modal('show');
+        });
+
+        oTable = $('#tbl_users').dataTable({
+            "bDestroy": true,
+            "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",
+            "sPaginationType": "bootstrap",
+            "bAutoWidth": false
+        });
+        $('#tbl_users').show();
+        $('#tbl_users_processing').hide();
+        table_content_mode = $('input[type=radio][name=table_content_mode]:checked').val();
+
+    },
+    error: function (XMLHttpRequest, textStatus, errorThrows) {
+        $('#tbl_users_processing').hide();
+        $("#div_msg").show();
+        $("#div_msg").html("An error occurred while retrieving user list");
+    }
+  });
+}
 
 /* Delete a user */
 function deleteUser(id) {
@@ -649,6 +688,30 @@ function setAdmin(id) {
 }
 ;
 
+/* Change table mode */
+$('input[type=radio][name=table_content_mode]').change(function() {
+    if(this.value == "pending") {
+      $("#fieldset_email_filter").prop('disabled', true);
+      if(this.value != table_content_mode) {
+        //alert("pending request");
+        buildUsersTable();
+        // table_content_mode = "pending";
+      }
+    }
+    if(this.value == "all") {
+      $("#fieldset_email_filter").prop('disabled', false);
+      $("#email_filter").select();
+    }
+});
+
+/* Submit email filter request */
+$('#form_email_filter').bind('submit', function (e) {
+    e.preventDefault();
+
+    //alert("email filter request w/ " + $("#email_filter").val());
+    buildUsersTable();
+    // table_content_mode = "all";
+})
 
 /* Edit a user */
 $('#form_modify_user').bind('submit', function (e) {
