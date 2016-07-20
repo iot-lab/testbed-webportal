@@ -9,7 +9,7 @@ include("header.php");
 
     <div class="row" id="login_div">
         <div class="span12" heigth="800px">
-            <iframe onload="resizeFrame(document.getElementById('childframe'))" src="/testbed/monika" width="100%"
+            <iframe onload="resizeFrame(document.getElementById('childframe'))" src="/monika" width="100%"
                     frameborder="0" id="childframe"></iframe>
         </div>
 
