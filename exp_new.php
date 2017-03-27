@@ -434,6 +434,19 @@ $("#form_part1").keypress(function(e){
     }
 });
 
+
+function getArchiOrCustom(archi) {
+    switch(archi) {
+        case 'wsn430':
+        case 'm3':
+        case 'a8':
+        case 'des':
+            return archi;
+        default:
+            return 'custom';
+    }
+}
+
 /* ************* */
 /* submit part 1 */
 /* ************ */
@@ -490,7 +503,7 @@ $("#form_part1").bind("submit", function (e) {
 
                 alias_nodes.push(row_rs);
 
-                $("#" + archi.split(':')[0] + "Nodes").append(new Option(archi + "/" + site + "/" + number + "/" + ntype, alias_index));
+                $("#" + getArchiOrCustom(archi.split(':')[0]) + "Nodes").append(new Option(archi + "/" + site + "/" + number + "/" + ntype, alias_index));
                 alias_index++;
             }
         }
@@ -510,7 +523,7 @@ $("#form_part1").bind("submit", function (e) {
                     var node_network_address;
                     if (!isNaN(snodes[i]) && ((node_network_address = archi + "-" + snodes[i] + "." + site + ".iot-lab.info") in sites_nodes)) {
                         exp_json.nodes.push(node_network_address);
-                        $("#" + sites_nodes[node_network_address] + "Nodes").append(new Option(node_network_address, node_network_address, false, false));
+                        $("#" + getArchiOrCustom(sites_nodes[node_network_address]) + "Nodes").append(new Option(node_network_address, node_network_address, false, false));
                     }
                     else {
                         invalid_nodes.push(node_network_address);
@@ -811,7 +824,7 @@ function getProfiles() { //get all user profiles
 
             //fill profiles list
             for (var i = 0; i < data_server.length; i++) {
-                $("#" + data_server[i].nodearch + "Profiles").append(new Option(data_server[i].profilename, data_server[i].profilename));
+                $("#" + getArchiOrCustom(data_server[i].nodearch) + "Profiles").append(new Option(data_server[i].profilename, data_server[i].profilename));
                 user_profiles[data_server[i].profilename] = data_server[i].nodearch;
             }
         },
@@ -854,7 +867,7 @@ function getNodes() { // get all sites nodes
                 }
                 if (archis.indexOf(data_server[i].site+"-"+archi) == -1) { // unknown archi, adding it
                     archis.push(data_server[i].site+"-"+archi);
-                    $("#" + data_server[i].site + "_archis").append(archi + '&nbsp;&nbsp;<input type="text" id="' + data_server[i].site + "_" + archi + '_list" value="" class="form-control" style="width:70%" placeholder="1-5+7" />');
+                    $("#" + data_server[i].site + "_archis").append(archi + '&nbsp;&nbsp;<input type="text" id="' + data_server[i].site + "_" + archi + '_list" value="" class="form-control" style="width:60%" placeholder="1-5+7" /><br>');
                 }
                 //if (archis.indexOf(data_server[i].site+"-"+data_server[i].archi) == -1) { // unknown archi, adding it
                     //archis.push(data_server[i].site+"-"+data_server[i].archi);
@@ -977,10 +990,10 @@ $("#my_nodes").change(function () {
     $("#my_profiles option").css("font-style", "italic");
     $("#my_firmwares optgroup").attr("disabled", "disabled");
     $("#my_firmwares option").css("font-style", "italic");
-    $("#" + nodearch + "Profiles").removeAttr("disabled");
-    $("#" + nodearch + "Profiles option").css("font-style", "");
-    $("#" + nodearch + "Firmwares").removeAttr("disabled");
-    $("#" + nodearch + "Firmwares option").css("font-style", "");
+    $("#" + getArchiOrCustom(nodearch) + "Profiles").removeAttr("disabled");
+    $("#" + getArchiOrCustom(nodearch) + "Profiles option").css("font-style", "");
+    $("#" + getArchiOrCustom(nodearch) + "Firmwares").removeAttr("disabled");
+    $("#" + getArchiOrCustom(nodearch) + "Firmwares option").css("font-style", "");
     // remove selected profile or firmware if non compatible architecture
     var profil_set = $("#my_profiles").val();
     var firmware_set = $("#my_firmwares").val();
@@ -1063,7 +1076,7 @@ function handleFileSelect(evt) {
                             user_firmwares[theFile.name] = ["wsn430", "custom"];
                             //$("#" + user_firmwares[theFile.name] + "Firmwares").append(new Option(theFile.name, theFile.name, false, false));
 							for (var archi of user_firmwares[theFile.name]) { 
-								$("#" + archi + "Firmwares").append(new Option(theFile.name, theFile.name, false, false));	
+								$("#" + getArchiOrCustom(archi) + "Firmwares").append(new Option(theFile.name, theFile.name, false, false));	
 							}
                         }  
                         else if(data_server.format == "elf") {
@@ -1071,7 +1084,7 @@ function handleFileSelect(evt) {
                             user_firmwares[theFile.name] = ["m3", "custom"];
                             //$("#" + user_firmwares[theFile.name] + "Firmwares").append(new Option(theFile.name, theFile.name, false, false));
                             for (var archi of user_firmwares[theFile.name]) { 
-								$("#" + archi + "Firmwares").append(new Option(theFile.name, theFile.name, false, false));	
+								$("#" + getArchiOrCustom(archi) + "Firmwares").append(new Option(theFile.name, theFile.name, false, false));	
 							}
                         }
                         else {
@@ -1160,9 +1173,9 @@ function removeAssociation(index) {
 
     if (exp_json.type == "alias") {
         var node = exp_json.nodes[json_tmp[index].node];
-        $("#" + node.properties.archi.split(':')[0] + "Nodes").append(new Option(node.properties.archi + "/" + node.properties.site + "/" + node.nbnodes + "/" + ((node.properties.mobile == 1) ? "mobile" : "fixe"), json_tmp[index].node)); // TODO
+        $("#" + getArchiOrCustom(node.properties.archi.split(':')[0]) + "Nodes").append(new Option(node.properties.archi + "/" + node.properties.site + "/" + node.nbnodes + "/" + ((node.properties.mobile == 1) ? "mobile" : "fixe"), json_tmp[index].node)); // TODO
     } else {
-        $("#" + sites_nodes[json_tmp[index].node] + "Nodes").append(new Option(json_tmp[index].node, json_tmp[index].node, false, false));
+        $("#" + getArchiOrCustom(sites_nodes[json_tmp[index].node]) + "Nodes").append(new Option(json_tmp[index].node, json_tmp[index].node, false, false));
     }
 
     displayAssociation();
