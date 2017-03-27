@@ -190,7 +190,7 @@ include("header.php");
                         <!-- by alias -->
                         <div class="" id="div_resources_type">
 
-                            <table style="width:100%;text-align:center">
+                            <table style="width:100%;">
                                 <thead>
                                 <tr>
                                     <th>
@@ -219,7 +219,7 @@ include("header.php");
                                     </td>
                                     <td width="75px;">
                                         <input id="txt_fixe" type="number" class="form-control number" value="1"
-                                               min="0">
+                                               min="0" style="width: 70px;">
                                     </td>
                                     <td align="center">
                                         <input id="txt_mobile" type="checkbox" class="form-control mobile">
@@ -1088,7 +1088,7 @@ function handleFileSelect(evt) {
 							}
                         }
                         else {
-                            alert("Unknow format ");
+                            alert("Unknown format ");
                         }
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrows) {
