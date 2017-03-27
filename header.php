@@ -60,7 +60,7 @@ if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) $body_
                 <span class="icon-bar"></span>
             </button>
             <a href="/"> 
-                <img src="/wp-content/themes/alienship-1.2.5-child/templates/parts/fit-equipex2.png"><img src="/wp-content/themes/alienship-1.2.5-child/templates/parts/fit-iotlab2.png">
+                <img src="/wp-content/themes/alienship-1.2.5-child/templates/parts/fit-iotlab3.png">
             </a>
         </div>
 
@@ -71,7 +71,7 @@ if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) $body_
 
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown <?php echo($is_activity ? 'active' : ''); ?>">
-                    <a href="./stats.php" title="Testbed activity" data-hover="dropdown"><span
+                    <a href="./stats.php" title="Testbed activity" data-toggle="dropdown" data-hover="dropdown"><span
                             class="glyphicon glyphicon-info"></span> Activity <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li id="stats"><a href="./stats.php">Statistics</a></li>
@@ -81,7 +81,7 @@ if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) $body_
                 </li>
                 <?php if (isset($_SESSION['is_auth']) && $_SESSION['is_auth']) { ?>
                     <li class="dropdown <?php echo($is_activity ? '' : 'active'); ?>">
-                        <a href="./" title="Testbed" data-hover="dropdown"><span
+                        <a href="./" title="Testbed" data-toggle="dropdown" data-hover="dropdown"><span
                                 class="glyphicon glyphicon-wrench"></span> Testbed <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li id="dashboard"><a href="./dashboard.php"><span class="glyphicon glyphicon-list"></span>
@@ -136,7 +136,7 @@ if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) $body_
                 <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']) { ?>
                     <ul class="nav navbar-nav pull-right">
                         <li class="dropdown" id="admin">
-                            <a href="#" data-hover="dropdown">Admin <b class="caret"></b></a>
+                            <a href="#" data-toggle="dropdown" data-hover="dropdown">Admin <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li id="admin_users"><a href="./admin_users.php">Users</a></li>
                                 <li id="admin_exps"><a href="./admin_exps.php">Experiments</a></li>
