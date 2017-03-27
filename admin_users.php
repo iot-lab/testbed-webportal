@@ -132,7 +132,7 @@ include("header.php");
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="col-lg-3 control-label" for="txt_structure_SA">Structure:</label>
+                                    <label class="col-lg-3 control-label" for="txt_structure_SA">Organization:</label>
 
                                     <div class="col-lg-8">
                                         <input id="txt_structure_SA" type="text" class="form-control"
@@ -212,7 +212,7 @@ include("header.php");
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="col-lg-3 control-label" for="txt_structure_MA">Structure:</label>
+                                    <label class="col-lg-3 control-label" for="txt_structure_MA">Organization:</label>
 
                                     <div class="col-lg-8">
                                         <input id="txt_structure_MA" type="text" class="form-control"
@@ -320,7 +320,7 @@ include("header.php");
                     </div>
 
                     <div class="form-group">
-                        <label class="col-lg-3 control-label" for="txt_structure_e">Structure:</label>
+                        <label class="col-lg-3 control-label" for="txt_structure_e">Organization:</label>
 
                         <div class="col-lg-8">
                             <input id="txt_structure_e" type="text" class="form-control" required="required"/>
