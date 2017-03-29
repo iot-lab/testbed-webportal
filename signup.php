@@ -109,7 +109,7 @@ include("header.php");
                     <div class="col-lg-offset-3 col-lg-9">
                         <div class="checkbox">
                             <label>
-                                <input id="charter" class="form-control" name="charter" type="checkbox"
+                                <input id="charter" name="charter" type="checkbox"
                                        required="required"/>I read and I accept <a
                                     href="/charter/" target="_blank">IoT-LAB Terms
                                     of Service</a>.
