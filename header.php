@@ -98,7 +98,7 @@ if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) $body_
                         </ul>
                     </li>
                 <?php } else { ?>
-                    <li id="login"><span><a href="./" class="btn btn-primary testbed" title="Login">Access the tesbed</a></span></li>
+                    <li id="login"><span><a href="./" class="btn btn-primary testbed" title="Login">Access the testbed</a></span></li>
                 <?php } ?>
             </ul>
         </nav>
