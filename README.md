@@ -1,21 +1,30 @@
-# Legacy testbed webportal
+# testbed-webportal
 
-A new webportal is being developed with Vue.js in branch `vueapp`
+> A Vue.js webportal for FIT IoT-LAB testbed
 
-## Deployment
+## Build Setup
 
-Legacy webportal should be deployed as follow:
-* branch `release` should be deployed to prod (`www`)
-* branch `master` should be deployed to dev (`devwww`)
+``` bash
+# install dependencies
+npm install
 
-```bash
-# deploy with install_lib
+# serve with hot reload at localhost:8080
+npm run dev
 
-# dev
-$ git checkout master
-$ fab dev deploy_testbed_webportal:"../parts/testbed-webportal/" -H root@devwww.iot-lab.info:2222
+# build for production with minification
+npm run build
 
-# prod
-$ git checkout release
-$ fab prod deploy_testbed_webportal:"../parts/testbed-webportal/" -H root@www.iot-lab.info:2222
+# build for production and view the bundle analyzer report
+npm run build --report
+
+# run unit tests
+npm run unit
+
+# run e2e tests
+npm run e2e
+
+# run all tests
+npm test
 ```
+
+For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
