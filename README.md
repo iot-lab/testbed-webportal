@@ -1,8 +1,14 @@
 # testbed-webportal
 
-> A Vue.js webportal for FIT IoT-LAB testbed
+> A Vue.js webportal for the FIT IoT-LAB testbed
 
-## Build Setup
+## Requirements
+
+* [Node.js](https://nodejs.org), for development
+* Python & Fabric, for deployment
+
+
+## Development
 
 ``` bash
 # install dependencies
@@ -28,3 +34,10 @@ npm test
 ```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+## Deployment
+
+``` bash
+# run tests, build and deploy
+fab test build deploy -H root@devwww:2222
+```
