@@ -5,7 +5,7 @@
 
     <!-- <?php if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) { ?> -->
         <!-- <div class="navbar navbar-default navbar-fixed-top navbar-grey" role="banner"> -->
-        <div class="navbar navbar-default navbar-grey" role="banner">
+        <div class="navbar navbar-default navbar-grey" role="banner" v-if="auth.loggedIn">
             <div class="container">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
@@ -20,22 +20,23 @@
                 <nav class="navbar-collapse collapse navbar-ex2-collapse" role="navigation">
                     <ul class="nav navbar-nav">
                         <li class="divider-vertical"></li>
-                        <li id="dashboard2"><router-link to="Dashboard">Dashboard</router-link></li>
-                        <li id="exp_new2"><router-link to="Experiment">New Experiment</router-link></li>
+                        <li id="dashboard2"><router-link to="Dashboard"><i class="fa fa-home" aria-hidden="true"></i> Dashboard</router-link></li>
+                        <li id="exp_new2"><router-link to="Experiment"><i class="fa fa-plus-circle" aria-hidden="true"></i> Experiment</router-link></li>
                         <!--<li><a id='profilesModalLink' data-toggle="modal" data-target="#profiles_modal" style="cursor:pointer">Manage Profiles</a></li>-->
-                        <li id="profiles2"><router-link to="Monitoring">Monitoring</router-link></li>
+                        <li id="profiles2"><router-link to="Monitor"><i class="fa fa-tachometer" aria-hidden="true"></i> Monitor</router-link></li>
                         <li class="divider-vertical"></li>
                     </ul>
                     <!-- <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']) { ?> -->
                         <ul class="nav navbar-nav pull-right">
-                            <li class="dropdown">
+                            <li class="dropdown" v-if="auth.loggedIn">
                                 <a href="#" data-toggle="dropdown" data-hover="dropdown"><i class="fa fa-user fa-lg" aria-hidden="true"></i> <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
+                                    <li class="dropdown-header"><i class="fa fa-user-o" aria-hidden="true"></i> {{auth.username}}</li>
                                     <li><router-link to="UserAccount"><i class="fa fa-pencil" aria-hidden="true"></i> Edit my account</router-link></li>
                                     <li><a href @click="logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
                                 </ul>
                             </li>
-                            <li class="dropdown" id="admin">
+                            <li class="dropdown" v-if="auth.isAdmin">
                                 <a href="#" data-toggle="dropdown" data-hover="dropdown">Admin <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li id="admin_users"><a href="./admin_users.php">Users</a></li>
@@ -57,13 +58,18 @@
 </template>
 
 <script>
-import {doLogout} from './main.js'
+import {auth} from './auth'
 
 export default {
   name: 'app',
+  data () {
+    return {
+      auth: auth,
+    }
+  },
   methods: {
     logout: function (event) {
-      doLogout()
+      auth.doLogout()
     },
   },
 }
