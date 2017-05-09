@@ -1,7 +1,7 @@
 <template>
 <div class="container">
         
-    <h2>Monitoring</h2>
+    <h2>Monitor</h2>
 
 </div> <!-- container -->
 
@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: 'Monitoring',
+  name: 'Monitor',
 }
 </script>
 
