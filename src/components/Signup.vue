@@ -7,21 +7,21 @@
 
             <div class="alert alert-error" id="div_error_signup" style="display:none"></div>
 
-            <form class="well form-horizontal" id="signup_form">
+            <form class="well form-horizontal" @submit.prevent="signup">
 
                 <div class="form-group">
-                    <label class="col-lg-3 control-label" for="txt_firstname">First Name:</label>
+                    <label class="col-lg-3 control-label" for="txt_firstname">First name:</label>
 
                     <div class="col-lg-9">
-                        <input id="txt_firstname" class="form-control" type="text" required="required">
+                        <input placeholder="First name" v-model="newuser.firstName" class="form-control" type="text" required="required">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-lg-3 control-label" for="txt_lastname">Last Name:</label>
+                    <label class="col-lg-3 control-label" for="txt_lastname">Last name:</label>
 
                     <div class="col-lg-9">
-                        <input id="txt_lastname" class="form-control" type="text" required="required">
+                        <input placeholder="Last name" v-model="newuser.lastName" class="form-control" type="text" required="required">
                     </div>
                 </div>
 
@@ -29,11 +29,24 @@
                     <label class="col-lg-3 control-label" for="txt_email">Email:</label>
 
                     <div class="col-lg-9">
-                        <span class="text-danger">Please fill with an <b>academic</b> or <b>professional</b> address in order to validate your account <b>(no
+                        <span class="text-danger">Please fill with an <b>academic</b> or <b>professional</b> email in order to validate your account <b>(no
                                 gmail, no hotmail, ...)</b></span>
-                        <input id="txt_email" class="form-control" type="email" required="required"
+                        <input v-model="newuser.email" class="form-control" type="email" required="required"
                                placeholder="Academic or professional email">
+                    </div>
+                </div>
 
+                <div class="form-group">
+                    <label class="col-lg-3 control-label" for="txt_profile">User profile:</label>
+
+                    <div class="col-lg-9">
+                        <select v-model="profile" class="form-control" required="required">
+                            <!-- <option value="" disabled selected>Profile...</option> -->
+                            <option value="student">Student</option>
+                            <option value="academic">Academic (Researcher, ...)</option>
+                            <option value="startup">Small business (Start-up, ...)</option>
+                            <option value="business">Large business</option>
+                        </select>
                     </div>
                 </div>
 
@@ -41,7 +54,7 @@
                     <label class="col-lg-3 control-label" for="txt_structure">Organization:</label>
 
                     <div class="col-lg-9">
-                        <input id="txt_structure" class="form-control" type="text" required="required">
+                        <input placeholder="Organization" v-model="newuser.structure" class="form-control" type="text" required="required">
                     </div>
                 </div>
 
@@ -49,7 +62,15 @@
                     <label class="col-lg-3 control-label" for="txt_city">City:</label>
 
                     <div class="col-lg-9">
-                        <input id="txt_city" class="form-control" type="text" required="required">
+                        <input placeholder="City" v-model="newuser.city" class="form-control" type="text" required="required">
+                    </div>
+                </div>
+
+                <div class="form-group" id="spambot">
+                    <label class="col-lg-3 control-label" for="txt_city">Leave empty:</label>
+
+                    <div class="col-lg-9">
+                        <input placeholder="whatever" v-model="whatever" class="form-control" type="text">
                     </div>
                 </div>
 
@@ -57,9 +78,9 @@
                     <label class="col-lg-3 control-label" for="txt_country">Country:</label>
 
                     <div class="col-lg-9">
-                        <select id="txt_country" class="form-control" required="required">
+                        <select v-model="newuser.country" class="form-control" required="required">
                 
-                <option value="">Country...</option>
+                <!-- <option value="" disabled selected>Country...</option> -->
                 <option value="Afganistan">Afghanistan</option>
                 <option value="Albania">Albania</option>
                 <option value="Algeria">Algeria</option>
@@ -254,7 +275,7 @@
                 <option value="Samoa">Samoa</option>
                 <option value="Samoa American">Samoa American</option>
                 <option value="San Marino">San Marino</option>
-                <option value="Sao Tome & Principe">Sao Tome &amp; Principe</option>
+                <option value="Sao Tome &amp; Principe">Sao Tome &amp; Principe</option>
                 <option value="Saudi Arabia">Saudi Arabia</option>
                 <option value="Senegal">Senegal</option>
                 <option value="Seychelles">Seychelles</option>
@@ -314,7 +335,7 @@
                     <label class="col-lg-3 control-label" for="txt_sshkey">SSH public key:</label>
 
                     <div class="col-lg-9">
-                        <textarea id="txt_sshkey" class="form-control" rows="3"></textarea>
+                        <textarea v-model="newuser.sshkey" class="form-control" rows="3"></textarea>
                     </div>
                 </div>
  -->
@@ -322,34 +343,17 @@
                     <label class="col-lg-3 control-label" for="txt_motivation">Motivation:</label>
 
                     <div class="col-lg-9">
-                        <textarea id="txt_motivation" class="form-control" rows="5"
+                        <textarea v-model="newuser.motivations" class="form-control" rows="5"
                                   required="required"></textarea>
                     </div>
                 </div>
-<!-- 
-
-                <div class="form-group" id="cg_captcha">
-                    <label class="col-lg-3 control-label" for="txt_motivation">Anti-spam:</label>
-
-                    <div class="col-lg-9">
-                        <input id="captcha" class="form-control" name="captcha" type="text" required="required"/>
-                        <br/>
-                        <a href="#" onclick="
-                    document.getElementById('captcha-img').src='/testbed/scripts/captcha/captcha.php?'+Math.random();
-                    document.getElementById('captcha').focus();"
-                           id="change-image" title="Click to change text">
-                            <img style="border:solid 1px" src="/testbed/scripts/captcha/captcha.php" id="captcha-img"/></a>
-                    </div>
-                </div> -->
 
                 <div class="form-group">
                     <div class="col-lg-offset-3 col-lg-9">
                         <div class="checkbox">
                             <label>
-                                <input id="charter" name="charter" type="checkbox"
-                                       required="required"/>I read and I accept <a
-                                    href="/charter/" target="_blank">IoT-LAB Terms
-                                    of Service</a>.
+                                <input v-model="charter" name="charter" type="checkbox" required="required"/>
+                                    I read and I accept <a href="/charter/" target="_blank">IoT-LAB Terms of Service</a>.
                             </label>
                         </div>
                     </div>
@@ -357,7 +361,7 @@
 
                 <div class="form-group">
                     <div class="col-lg-offset-3 col-lg-9">
-                        <button id="btn_signup" class="btn btn-primary" type="submit">Submit</button>
+                        <button id="btn_signup" class="btn btn-primary btn-lg" type="submit">Submit</button>
                     </div>
                 </div>
 
@@ -366,7 +370,7 @@
         </div>
         <!-- span -->
         <div class="col-md-4">
-            <div class="alert alert-info" style="margin-top:430px;">
+            <div class="alert alert-info" style="margin-top:415px;">
                 <i class="fa fa-question-circle"></i> <b>Motivation:</b>
                 <ul>
                 <li>Research domain (Radio communication, networking protocol, distributed applications, …).</li>
@@ -385,11 +389,51 @@
 </template>
 
 <script>
+import {iotlab} from '../rest'
+
 export default {
   name: 'signup',
+
+  data () {
+    return {
+      charter: false,
+      whatever: undefined,
+      profile: undefined,
+      newuser: {
+        'sshPublicKeys': [],
+      },
+    }
+  },
+
+  methods: {
+    async signup () {
+      // check charter read
+      if (!this.charter) {
+        alert('Please read and accept the Terms of Service')
+        return
+      }
+      // try to fool spam bots
+      if (this.whatever) {
+        console.log('aborted')
+        return
+      }
+
+      try {
+        await iotlab.api.post('/users', this.newuser)
+        // this.$router.push('dashboard')
+      } catch (err) {
+        this.failed = true
+      }
+    },
+  },
 }
 </script>
 
-<style>
-
+<style scoped>
+ul {
+    padding-left: 15px;
+}
+#spambot {
+    display: none;
+}
 </style>
