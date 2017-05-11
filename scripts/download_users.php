@@ -36,9 +36,9 @@ if ($code == 200) {
     header('Content-type: application/csv');
     header('Content-Disposition: attachment; filename="users.csv"');
 
-    echo "FirstName;LastName;Mail;Country;City;Structure;CreationDate\n";
+    echo "FirstName;LastName;Mail;Country;City;Organization;CreationDate\n";
     for ($i = 0; $i < sizeof($users); $i++) {
-        echo $users[$i]->{'firstName'} . ";" . $users[$i]->{'lastName'} . ";" . $users[$i]->{'email'} . ";" . $users[$i]->{'country'} . ";" . $users[$i]->{'city'} . ";" . trim($users[$i]->{'structure'}, ";") . ";" . formatCreateTimeStamp($users[$i]->{'createTimeStamp'}) . "\n";
+        echo $users[$i]->{'firstName'} . ";" . $users[$i]->{'lastName'} . ";" . $users[$i]->{'email'} . ";" . $users[$i]->{'country'} . ";" . $users[$i]->{'city'} . ";" . trim($users[$i]->{'organization'}, ";") . ";" . formatCreateTimeStamp($users[$i]->{'createTimeStamp'}) . "\n";
     }
 
 }

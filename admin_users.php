@@ -132,10 +132,10 @@ include("header.php");
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="col-lg-3 control-label" for="txt_structure_SA">Organization:</label>
+                                    <label class="col-lg-3 control-label" for="txt_organization_SA">Organization:</label>
 
                                     <div class="col-lg-8">
-                                        <input id="txt_structure_SA" type="text" class="form-control"
+                                        <input id="txt_organization_SA" type="text" class="form-control"
                                                required="required"/>
                                     </div>
                                 </div>
@@ -212,10 +212,10 @@ include("header.php");
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="col-lg-3 control-label" for="txt_structure_MA">Organization:</label>
+                                    <label class="col-lg-3 control-label" for="txt_organization_MA">Organization:</label>
 
                                     <div class="col-lg-8">
-                                        <input id="txt_structure_MA" type="text" class="form-control"
+                                        <input id="txt_organization_MA" type="text" class="form-control"
                                                required="required"/>
                                     </div>
                                 </div>
@@ -320,10 +320,10 @@ include("header.php");
                     </div>
 
                     <div class="form-group">
-                        <label class="col-lg-3 control-label" for="txt_structure_e">Organization:</label>
+                        <label class="col-lg-3 control-label" for="txt_organization_e">Organization:</label>
 
                         <div class="col-lg-8">
-                            <input id="txt_structure_e" type="text" class="form-control" required="required"/>
+                            <input id="txt_organization_e" type="text" class="form-control" required="required"/>
                         </div>
                     </div>
 
@@ -539,7 +539,7 @@ function buildUsersTable() {
             $('#txt_lastname_e').val(selectedUser.lastName);
             $('#txt_login_e').val(selectedUser.login);
             $('#txt_email_e').val(selectedUser.email);
-            $('#txt_structure_e').val(selectedUser.structure);
+            $('#txt_organization_e').val(selectedUser.organization);
             $('#txt_city_e').val(selectedUser.city);
             $('#txt_country_e').val(selectedUser.country);
             $('#txt_motivation_e').val(selectedUser.motivations);
@@ -734,7 +734,7 @@ $('#form_modify_user').bind('submit', function (e) {
 
 
     selectedUser.motivations = $("#txt_motivation_e").val();
-    selectedUser.structure = $("#txt_structure_e").val();
+    selectedUser.organization = $("#txt_organization_e").val();
     selectedUser.city = $("#txt_city_e").val();
     selectedUser.country = $("#txt_country_e").val();
 
@@ -795,7 +795,7 @@ $('#form_add_SA').bind('submit', function (e) {
         "firstName": $("#txt_firstname_SA").val(),
         "lastName": $("#txt_lastname_SA").val(),
         "email": $("#txt_email_SA").val(),
-        "structure": $("#txt_structure_SA").val(),
+        "organization": $("#txt_organization_SA").val(),
         "city": $("#txt_city_SA").val(),
         "country": $("#txt_country_SA").val(),
         "sshPublicKey": $("#txt_sshkey_SA").val(),
@@ -833,7 +833,7 @@ $('#form_add_MA').bind('submit', function (e) {
     var userregister = {
         "login": $("#txt_login_MA").val(),
         "event": $("#txt_event_MA").val(),
-        "structure": $("#txt_structure_MA").val(),
+        "organization": $("#txt_organization_MA").val(),
         "city": $("#txt_city_MA").val(),
         "country": $("#txt_country_MA").val(),
         "sshPublicKey": $("#txt_sshkey_MA").val(),

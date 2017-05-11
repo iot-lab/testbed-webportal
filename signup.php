@@ -48,10 +48,10 @@ include("header.php");
                 </div>
 
                 <div class="form-group">
-                    <label class="col-lg-3 control-label" for="txt_structure">Organization:</label>
+                    <label class="col-lg-3 control-label" for="txt_organization">Organization:</label>
 
                     <div class="col-lg-9">
-                        <input id="txt_structure" class="form-control" type="text" required="required">
+                        <input id="txt_organization" class="form-control" type="text" required="required">
                     </div>
                 </div>
 
@@ -156,7 +156,7 @@ include("header.php");
             userregister.firstName = $("#txt_firstname").val();
             userregister.lastName = $("#txt_lastname").val();
             userregister.email = $("#txt_email").val();
-            userregister.structure = $("#txt_structure").val();
+            userregister.organization = $("#txt_organization").val();
             userregister.city = $("#txt_city").val();
             userregister.country = $("#txt_country").val();
             userregister.motivations = $("#txt_motivation").val();
