@@ -6,7 +6,7 @@
         <h2>Reset your password</h2>
 
         <form @submit.prevent="reset">
-          <input name="email" type="email" placeholder="Email" class="form-control" autofocus required>
+          <input v-model="email" type="email" placeholder="Email" class="form-control" autofocus required>
           <button class="btn btn-primary btn-block">Reset password</button>
         </form>
 
@@ -21,20 +21,19 @@
 </template>
 
 <script>
-// import {doLogin} from '../main'
+import {iotlab} from '@/rest'
 
 export default {
   name: 'reset',
   data () {
     return {
-      username: '',
-      password: '',
-      failed: false,
+      email: '',
     }
   },
   methods: {
-    reset () {
-      console.log('test')
+    async reset () {
+      await iotlab.resetPassword(this.email)
+      alert('OK')
     },
   },
 }
