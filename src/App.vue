@@ -32,7 +32,7 @@
                                 <a href="#" data-toggle="dropdown" data-hover="dropdown"><i class="fa fa-user fa-lg" aria-hidden="true"></i> <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li class="dropdown-header"><i class="fa fa-user-o" aria-hidden="true"></i> {{auth.username}}</li>
-                                    <li><router-link to="UserAccount"><i class="fa fa-pencil" aria-hidden="true"></i> Edit my account</router-link></li>
+                                    <li><router-link to="account"><i class="fa fa-pencil" aria-hidden="true"></i> Edit my account</router-link></li>
                                     <li><a href @click="logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
                                 </ul>
                             </li>
@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import {auth} from './auth'
+import {auth} from '@/auth'
 
 export default {
   name: 'app',
