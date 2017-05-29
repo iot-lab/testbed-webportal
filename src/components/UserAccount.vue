@@ -1,161 +1,145 @@
 <template>
 <div class="container">
 
-    <h2>My Account</h2>
+    <h1>My Account</h1>
 
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-12">
 
-        <h3><i class="fa fa-pencil" aria-hidden="true"></i> Edit my details</h3>
+        <h2><i class="fa fa-pencil" aria-hidden="true"></i> Edit my details</h2>
 
-    <form class="well form-horizontal" @submit.prevent="saveDetails">
-
-        <div class="form-group">
-            <label class="col-lg-3 control-label">Username</label>
-            <label class="col-lg-9 control-label" style="text-align: left"><b>{{auth.username}}</b> <small class="text-muted pull-right">(note: the username cannot be modified)</small></label>
-        </div>
-
-        <div class="form-group">
-            <label class="col-lg-3 control-label" for="txt_firstname">First name</label>
-
-            <div class="col-lg-9">
-                <input placeholder="First name" v-model="user.firstName" class="form-control" type="text" required>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-lg-3 control-label" for="txt_lastname">Last name</label>
-
-            <div class="col-lg-9">
-                <input placeholder="Last name" v-model="user.lastName" class="form-control" type="text" required>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-lg-3 control-label" for="txt_email">Email</label>
-
-            <div class="col-lg-9">
-                <input v-model="user.email" class="form-control" type="email" required
-                       placeholder="Academic or professional email">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-lg-3 control-label" for="txt_profile">User category</label>
-
-            <div class="col-lg-9">
-                <v-select v-model="user.category" :options="categories" placeholder="Category" required></v-select>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-lg-3 control-label" for="txt_structure">Organization</label>
-
-            <div class="col-lg-9">
-                <input placeholder="Organization" v-model="user.structure" class="form-control" type="text" required>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-lg-3 control-label" for="txt_city">City</label>
-
-            <div class="col-lg-9">
-                <input placeholder="City" v-model="user.city" class="form-control" type="text" required>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-lg-3 control-label" for="txt_country">Country</label>
-
-            <div class="col-lg-9">
-                <v-select :options="countries" v-model="user.country" required placeholder="Country" @keydown.enter.prevent=""></v-select>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-lg-3 control-label" for="txt_motivation">
-                Motivation:<br>
-                <i class="fa fa-question-circle fa-lg cursor"
-                    @click="showPopover = !showPopover"
-                    @mouseover="showPopover = true"
-                    @mouseout="showPopover = false">
-                </i>
-                <!-- <div class="col-md-4"> -->
-                    <div class="alert alert-info mypopover" :class="{ 'hidden': !showPopover }">
-                        <i class="fa fa-info-circle"></i> <b>Tell us about your motivations:</b>
-                        <ul>
-                            <li>Research domain (Radio communication, networking protocol, distributed applications, …).</li>
-                            <li>What kind of experiments do you want to run with IoT-LAB ?</li>
-                            <li>Goal: (Verify something existing in large scale, new development, …)</li>
-                            <li>Network sensor previous experience (n00b, experiments with X platform, former IoT-LAB user, Guru, God)</li>
-                        </ul>
-                    </div>
-                <!-- </div> -->
-            </label>
-
-            <div class="col-lg-9">
-                <textarea v-model="user.motivations" class="form-control" rows="5"
-                          required></textarea>
+        <form @submit.prevent="saveDetails">
+            <div class="form-group">
+                <label class="control-label">Username</label>
+                <input v-model="auth.username" class="form-control" type="text" disabled/>
             </div>
 
-        </div>
-
-
-        <div class="form-group">
-            <div class="col-lg-offset-3 col-lg-9">
-                <button class="btn btn-primary" type="submit">Save</button>
-                <button class="btn btn-default" type="reset">Reset</button>
+            <div class="form-group">
+                <label class="control-label" for="txt_firstname">First name</label>
+                <input id="txt_firstname" placeholder="First name" v-model="user.firstName" class="form-control" type="text" required>
             </div>
-        </div>
 
-    </form>
+            <div class="form-group">
+                <label class="control-label" for="txt_lastname">Last name</label>
+                <input id="txt_lastname" placeholder="Last name" v-model="user.lastName" class="form-control" type="text" required>
+            </div>
 
-        </div>
+            <div class="form-group">
+                <label class="control-label" for="txt_email">Email</label>
+                <input id="txt_email" v-model="user.email" class="form-control" type="email" required
+                            placeholder="Academic or professional email">
+                <span class="help-block">Please fill with an <b>academic</b> or <b>professional</b> email in order
+                            to validate your account (no gmail, no hotmail, ...)</span>
+            </div>
 
-        <div class="col-md-5">
-        <div class="row">
-            
-            <h3><i class="fa fa-key" aria-hidden="true"></i> SSH keys</h3>
-            <form class="form-horizontal" @submit.prevent="saveKeys">
-                <ul class="nav nav-tabs" style="border-bottom: 1px solid transparent; position: relative; top: 1px">
-                    <li v-for="(key, i) in keys" :class="{ 'active': i === activeKey }">
-                        <a :href="'#tab_SSH'+i" data-toggle="tab" @click="activeKey = i">
-                            SSH key {{i+1}}
-                            <a @click.stop.prevent="delKey(i)" v-show="i === activeKey && keys.length > 1"><i class="fa fa-times-circle"></i></a>
-                        </a>
-                    </li>
-                    <li><a @click="addKey"><i class="fa fa-plus"></i></a></li>
-                </ul>
+            <div class="form-group">
+                <label class="control-label" for="txt_profile">User category</label>
+                <v-select id="txt_profile" v-model="user.category" :options="categories" placeholder="Category" required></v-select>
+            </div>
 
-                <div class="tab-content">
-                    <div v-for="(key, i) in keys" class="tab-pane" :class="{ 'active': i === activeKey }" :id="'tab_SSH'+i">
-                        <div class="control-group">
-                            <div class="controls">
-                                <textarea v-model="keys[i]" class="form-control" rows="5"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="form-group">
+                <label class="control-label" for="txt_structure">Organization</label>
+                <input id="txt_structure" placeholder="Organization" v-model="user.structure" class="form-control" type="text" required>
+            </div>
 
-                <button class="btn btn-primary" :class="keyState" type="submit" style="margin-top: 10px;">Save SSH keys</button>
+            <div class="form-group">
+                <label class="control-label" for="txt_city">City</label>
+                <input id="txt_city" placeholder="City" v-model="user.city" class="form-control" type="text" required>
+            </div>
 
-            </form>
-            <hr>
-            <h3><i class="fa fa-unlock-alt" aria-hidden="true"></i> Change password</h3>
-            <form class="form-horizontal" @submit.prevent="changePassword">
-                <button class="btn btn-primary" type="button" @click="showPwd = true" v-if="!showPwd" style="margin-top: 6px;">Change Password</button>
-                <div v-if="showPwd">
-                    <input v-model="pwd.old" type="password" placeholder="Current password" class="form-control" style="margin-top: 8px;" required>
-                    <input v-model="pwd.new" type="password" placeholder="New password" class="form-control" style="margin-top: 8px;" required>
-                    <input v-model="pwd.confirm" type="password" placeholder="Confirm password" class="form-control" style="margin-top: 8px;" required>
-                    <button class="btn btn-primary" :class="pwdState" type="submit" style="margin-top: 10px;">Change Password</button>
-                </div>
-            </form>
-        </div>
+            <div class="form-group">
+                <label class="control-label" for="txt_country">Country</label>
+                <v-select id="txt_country" :options="countries" v-model="user.country" required placeholder="Country" @keydown.enter.prevent=""></v-select>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="txt_motivation">Motivation:</label>
+                <textarea id="txt_motivation" v-model="user.motivations" class="form-control" rows="5" required></textarea>
+                <span class="help-block">
+                    Tell us about your motivations:
+                    <ul>
+                        <li>Research domain (Radio communication, networking protocol, distributed applications, …).</li>
+                        <li>What kind of experiments do you want to run with IoT-LAB ?</li>
+                        <li>Goal: (Verify something existing in large scale, new development, …)</li>
+                        <li>Network sensor previous experience (n00b, experiments with X platform, former IoT-LAB user, Guru, God)</li>
+                    </ul>
+                </span>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Update details</button>
+            <button class="btn btn-default" type="reset">Reset</button>
+
+        </form>
+
         </div>
     </div>
 
-    <button class="btn btn-danger" type="button"><i class="fa fa-trash-o fa-lg" aria-hidden="true"></i> Delete Account</button>
+    <hr>
+
+    <div class="row">
+        <div class="col-md-12">
+
+          <h2><i class="fa fa-key" aria-hidden="true"></i> SSH keys</h2>
+          <form class="form-horizontal" @submit.prevent="saveKeys">
+              <ul class="nav nav-tabs" style="border-bottom: 1px solid transparent; position: relative; top: 1px">
+                  <li role="presentation" v-for="(key, i) in keys" :class="{ 'active': i === activeKey }">
+                      <a :href="'#tab_SSH'+i" data-toggle="tab" @click="activeKey = i">
+                          SSH key {{i+1}}
+                          <a @click.stop.prevent="delKey(i)" v-show="i === activeKey && keys.length > 1"><i class="fa fa-times-circle"></i></a>
+                      </a>
+                  </li>
+                  <li><a @click="addKey"><i class="fa fa-plus"></i></a></li>
+              </ul>
+
+              <div class="tab-content">
+                  <div v-for="(key, i) in keys" class="tab-pane" :class="{ 'active': i === activeKey }" :id="'tab_SSH'+i">
+                      <div class="control-group">
+                          <div class="controls">
+                              <textarea v-model="keys[i]" class="form-control" rows="5"></textarea>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <button class="btn btn-primary" :class="keyState" type="submit" style="margin-top: 10px;">Save SSH keys</button>
+          </form>
+
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <h2><i class="fa fa-unlock-alt" aria-hidden="true"></i> Change password</h2>
+            <form class="form" @submit.prevent="changePassword">
+                <div class="form-group">
+                    <label class="control-label" for="txt_password">Current password</label>
+                    <input for="txt_password" v-model="pwd.old" type="password" placeholder="Current password" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="txt_new_password">New password</label>
+                    <input for="txt_new_password" v-model="pwd.new" type="password" placeholder="New password" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="txt_confirm_password">Confirm new password</label>
+                    <input for="txt_confirm_password" v-model="pwd.confirm" type="password" placeholder="Confirm new password" class="form-control" required>
+                </div>
+                    <button class="btn btn-primary" :class="pwdState" type="submit" style="margin-top: 10px;">Change Password</button>
+            </form>
+
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h2><i class="fa fa-trash-o" aria-hidden="true"></i> Delete account</h2>
+            <button class="btn btn-danger" type="button">Delete your account</button>
+        </div>
+    </div>
 
 </div> <!-- container -->
 
@@ -180,7 +164,6 @@ export default {
       countries: countries,
       categories: categories,
       auth: auth,
-      showPwd: false,
       showPopover: false,
       activeKey: 0,
       keyState: [],
@@ -202,7 +185,6 @@ export default {
         await iotlab.changePassword(this.pwd.old, this.pwd.new, this.pwd.confirm)
         this.pwdState = ['isSuccess']
         this.pwd = {}
-        this.showPwd = false
         alert('Success')
       } catch (err) {
         this.pwdState = ['isError']
@@ -232,14 +214,6 @@ export default {
 </script>
 
 <style scoped>
-.v-select {
-    background: white;
-    border-radius: 3px;
-}
-label {
-    font-weight: normal;
-}
-
 .isSuccess, .isError {
     position: relative;
 }

@@ -4,21 +4,30 @@
     <div id="logo">
       <img src="../assets/disc-iotlab.svg">
     </div>
+    <h1 class="text-center">Sign in to FIT IoT-LAB</h1>
     <div class="row">
-      <div class="col-md-4 col-md-offset-4 well" :class="{ 'error': failed }">
-        <h2>Please Log in</h2>
-
-        <form @submit.prevent="login">
-          <input v-model="username" type="text" class="form-control" placeholder="Username" autofocus required>
-          <input v-model="password" type="password" class="form-control" placeholder="Password" required>
-          <button type="submit" class="btn btn-primary btn-block">Log in</button>
-          <p class="text-center">
-            <router-link to="signup">Register for an account</router-link> – <router-link to="reset">Forgot your password?</router-link>
-          </p>
-        </form>
-
+      <div class="col-md-4 col-md-offset-4">
+        <div class="well" :class="{ 'error': failed }">
+          <form @submit.prevent="login">
+            <div class="form-group">
+              <label for="txt_username">Username</label>
+              <input v-model="username" type="text" class="form-control" id="txt_username" placeholder="Username" autofocus required>
+            </div>
+            <div class="form-group">
+              <label for="txt_password">Password</label>
+              <router-link class="pull-right" to="reset">Forgot your password?</router-link>
+              <input v-model="password" type="password" class="form-control" id="txt_password" placeholder="Password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+          </form>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-body text-center">
+            New on FIT IoT-LAB? <router-link to="signup">Create an account</router-link>
+          </div>
+        </div>
       </div>
-    </div> <!-- row -->
+    </div>
   </div> <!-- container -->
 
 </template>
@@ -80,19 +89,9 @@ export default {
   }
 }
 
-.well {
-  padding: 25px 38px;
-}
 .well.error {
   animation: shake .5s;
   border-color: #a94442;
-}
-
-input {
-  margin: 5px 0;
-}
-button {
-  margin: 5px 0;
 }
 
 #logo {
@@ -105,5 +104,4 @@ button {
   width: 150px;
   opacity: 0.8;
 }
-
 </style>

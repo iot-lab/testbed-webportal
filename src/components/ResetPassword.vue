@@ -1,18 +1,26 @@
 
 <template>
-  <div class="container" style="margin-top:50px;">
+  <div class="container">
+    <div id="logo">
+      <img src="../assets/disc-iotlab.svg">
+    </div>
+    <h1 class="text-center">Reset your password</h1>
     <div class="row">
-      <div class="col-md-4 col-md-offset-4 well">
-        <h2>Reset your password</h2>
-
-        <form @submit.prevent="reset">
-          <input v-model="email" type="email" placeholder="Email" class="form-control" autofocus required>
-          <button class="btn btn-primary btn-block">Reset password</button>
-        </form>
-
-          <p class="text-center">
-            <router-link to="signup">Register for an account</router-link> – <router-link to="login">Login</router-link>
-          </p>
+      <div class="col-md-4 col-md-offset-4">
+        <div class="well">
+          <form @submit.prevent="reset">
+            <div class="form-group">
+              <label for="txt_email">Enter your email address and we will send you an email with a new password.</label>
+              <input v-model="email" type="email" class="form-control" id="txt_email" placeholder="Email" autofocus required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Reset password</button>
+          </form>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-body text-center">
+            <router-link to="signup">Create an account</router-link> or <router-link to="login">Sign in</router-link>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -68,14 +76,14 @@ form.error {
   animation: shake .5s;
 }
 
-input {
-  margin: 5px 0;
+#logo {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding: 20px;
 }
-button {
-  margin: 5px 0;
+#logo img {
+  width: 150px;
+  opacity: 0.8;
 }
-.well {
-  padding: 25px 40px;
-}
-
 </style>

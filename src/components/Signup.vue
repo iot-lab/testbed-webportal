@@ -2,141 +2,87 @@
 <div class="container">
 
     <div class="row">
-        <div class="col-md-8">
-            <h2>Sign up</h2>
+        <div class="col-md-12">
+            <h1>Sign up</h1>
 
             <div v-if="success" class="alert alert-success">Success</div>
 
             <div v-else-if="error" class="alert alert-danger">Failed</div>
 
-            <form v-else class="well form-horizontal" @submit.prevent="signup">
+            <form v-else @submit.prevent="signup">
 
                 <div class="form-group">
-                    <label class="col-lg-3 control-label" for="txt_firstname">First name:</label>
-
-                    <div class="col-lg-9">
-                        <input placeholder="First name" v-model="newuser.firstName" class="form-control" type="text" required>
-                    </div>
+                    <label class="control-label" for="txt_firstname">First name:</label>
+                    <input id="txt_firstname" placeholder="First name" v-model="newuser.firstName" class="form-control" type="text" required>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-lg-3 control-label" for="txt_lastname">Last name:</label>
-
-                    <div class="col-lg-9">
-                        <input placeholder="Last name" v-model="newuser.lastName" class="form-control" type="text" required>
-                    </div>
+                    <label class="control-label" for="txt_lastname">Last name:</label>
+                    <input id="txt_lastname" placeholder="Last name" v-model="newuser.lastName" class="form-control" type="text" required>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-lg-3 control-label" for="txt_email">Email:</label>
-
-                    <div class="col-lg-9">
-                        <span class="text-danger">Please fill with an <b>academic</b> or <b>professional</b> email in order to validate your account <b>(no
-                                gmail, no hotmail, ...)</b></span>
-                        <input v-model="newuser.email" class="form-control" type="email" required
+                    <label class="control-label" for="txt_email">Email:</label>
+                    <input id="txt_email" v-model="newuser.email" class="form-control" type="email" required
                                placeholder="Academic or professional email">
-                    </div>
+                    <span class="help-block">Please fill with an <b>academic</b> or <b>professional</b> email in order
+                                to validate your account (no gmail, no hotmail, ...)</span>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-lg-3 control-label" for="txt_profile">User category:</label>
-
-                    <div class="col-lg-9">
-                        <v-select v-model="category" :options="categories" placeholder="Category" required></v-select>
-                    </div>
+                    <label class="control-label" for="txt_profile">User category:</label>
+                    <v-select id="txt_profile" v-model="category" :options="categories" placeholder="Category" required></v-select>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-lg-3 control-label">Organization:</label>
-
-                    <div class="col-lg-9">
-                        <input placeholder="Organization" v-model="newuser.organization" class="form-control" type="text" required>
-                    </div>
+                    <label class="control-label" for="txt_organization">Organization:</label>
+                    <input id="txt_organization" placeholder="Organization" v-model="newuser.organization" class="form-control" type="text" required>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-lg-3 control-label" for="txt_city">City:</label>
-
-                    <div class="col-lg-9">
-                        <input placeholder="City" v-model="newuser.city" class="form-control" type="text" required>
-                    </div>
+                    <label class="control-label" for="txt_city">City:</label>
+                    <input id="txt_city" placeholder="City" v-model="newuser.city" class="form-control" type="text" required>
                 </div>
 
                 <div class="form-group" id="spambot">
-                    <label class="col-lg-3 control-label" for="txt_city">Leave empty:</label>
-
-                    <div class="col-lg-9">
-                        <input placeholder="whatever" v-model="whatever" class="form-control" type="text">
-                    </div>
+                    <label class="control-label">Leave empty:</label>
+                    <input placeholder="whatever" v-model="whatever" class="form-control" type="text">
                 </div>
 
                 <div class="form-group">
-                    <label class="col-lg-3 control-label" for="txt_country">Country:</label>
-
-                    <div class="col-lg-9">
-                        <v-select :options="countries" v-model="newuser.country" placeholder="Country" @keydown.enter.prevent="" required></v-select>
-                    </div>
+                    <label class="control-label" for="txt_country">Country:</label>
+                    <v-select id="txt_country" :options="countries" v-model="newuser.country" placeholder="Country" @keydown.enter.prevent="" required></v-select>
                 </div>
-<!-- 
-                <div class="form-group">
-                    <label class="col-lg-3 control-label" for="txt_sshkey">SSH public key:</label>
 
-                    <div class="col-lg-9">
-                        <textarea v-model="newuser.sshkey" class="form-control" rows="3"></textarea>
-                    </div>
-                </div>
- -->
                 <div class="form-group">
-                    <label class="col-lg-3 control-label" for="txt_motivation">
-                        Motivation:<br>
-                        <i class="fa fa-question-circle fa-lg cursor"
-                            @click="showPopover = !showPopover"
-                            @mouseover="showPopover = true"
-                            @mouseout="showPopover = false">
-                        </i>
-                        <!-- <div class="col-md-4"> -->
-                            <div class="alert alert-info mypopover" :class="{ 'hidden': !showPopover }">
-                                <i class="fa fa-info-circle"></i> <b>Tell us about your motivations:</b>
-                                <ul>
-                                    <li>Research domain (Radio communication, networking protocol, distributed applications, …).</li>
-                                    <li>What kind of experiments do you want to run with IoT-LAB ?</li>
-                                    <li>Goal: (Verify something existing in large scale, new development, …)</li>
-                                    <li>Network sensor previous experience (n00b, experiments with X platform, former IoT-LAB user, Guru, God)</li>
-                                </ul>
-                            </div>
-                        <!-- </div> -->
+                    <label class="control-label" for="txt_motivation">Motivation:</label>
+                    <textarea id="txt_motivation" v-model="newuser.motivations" class="form-control" rows="5" required></textarea>
+                    <span class="help-block">
+                        Tell us about your motivations:
+                        <ul>
+                            <li>Research domain (Radio communication, networking protocol, distributed applications, …).</li>
+                            <li>What kind of experiments do you want to run with IoT-LAB ?</li>
+                            <li>Goal: (Verify something existing in large scale, new development, …)</li>
+                            <li>Network sensor previous experience (n00b, experiments with X platform, former IoT-LAB user, Guru, God)</li>
+                        </ul>
+                    </span>
+                </div>
+
+                <div class="checkbox">
+                    <label>
+                        <input v-model="charter" name="charter" type="checkbox" required/>
+                        I read and I accept <a href="/charter/" target="_blank">IoT-LAB Terms of Service</a>.
                     </label>
-
-                    <div class="col-lg-9">
-                        <textarea v-model="newuser.motivations" class="form-control" rows="5"
-                                  required></textarea>
-                    </div>
-
                 </div>
 
-                <div class="form-group">
-                    <div class="col-lg-offset-3 col-lg-9">
-                        <div class="checkbox">
-                            <label>
-                                <input v-model="charter" name="charter" type="checkbox" required/>
-                                    I read and I accept <a href="/charter/" target="_blank">IoT-LAB Terms of Service</a>.
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-lg-offset-3 col-lg-9">
-                        <button id="btn_signup" class="btn btn-primary btn-lg" type="submit">Sign up</button>
-                    </div>
-                </div>
-
+                <button id="btn_signup" class="btn btn-primary" type="submit">Sign up</button>
+                
             </form>
 
         </div>
 
     </div>
-    <!-- row --> 
+    <!-- row -->
 </div>
 </template>
 
@@ -192,32 +138,7 @@ export default {
 </script>
 
 <style scoped>
-ul {
-    padding-left: 15px;
-}
 #spambot {
     display: none;
-}
-.cursor:hover {
-    cursor: pointer;
-}
-.mypopover {
-    position: absolute;
-    top: -207px;
-    left: 190px;
-    width: 300px;
-    z-index: 2;
-    font-weight: normal;
-    text-align: left;
-}
-.mypopover ul {
-    margin-top: 5px;
-}
-label {
-    position: relative;
-}
-.v-select {
-    background: white;
-    border-radius: 3px;
 }
 </style>
