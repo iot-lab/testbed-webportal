@@ -5,7 +5,7 @@ const API_URL = 'https://devwww.iot-lab.info/rest/'
 
 export const iotlab = {
 
-  api: axios.create({baseURL: API_URL}),
+  api: axios.create({baseURL: API_URL, auth: JSON.parse(sessionStorage.getItem('apiAuth') || '{}')}),
 
   create (username, password) {
     this.api = axios.create({
@@ -49,4 +49,13 @@ export const iotlab = {
   async modifySSHkeys (keys) {
     return await iotlab.api.put('/users/sshkeys', {'sshkeys': keys})
   },
+
+  async getUserExperiments () {
+    return await iotlab.api.get('/experiments?total').then(resp => resp.data)
+  },
+
+  async getStats () {
+    return await iotlab.api.get('/stats').then(resp => resp.data)
+  },
+
 }
