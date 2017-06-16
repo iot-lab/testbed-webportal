@@ -3,9 +3,9 @@ import {iotlab} from './rest'
 
 export const auth = {
 
-  loggedIn: false,
-  isAdmin: false,
-  username: '',
+  loggedIn: sessionStorage.getItem('loggedIn') || false,
+  isAdmin: sessionStorage.getItem('isAdmin') || false,
+  username: sessionStorage.getItem('username') || '',
 
   async doLogin (username, password) {
     // let iotlab = axios.create({
@@ -26,6 +26,9 @@ export const auth = {
       this.loggedIn = true
       this.username = username
       this.isAdmin = (admin.data === 'Success')
+      sessionStorage.setItem('loggedIn', this.loggedIn)
+      sessionStorage.setItem('isAdmin', this.isAdmin)
+      sessionStorage.setItem('username', this.username)
     }))
     .catch(err => {
       // console.log( err )
@@ -38,6 +41,7 @@ export const auth = {
 
   doLogout () {
     this.loggedIn = false
+    sessionStorage.removeItem('loggedIn')
   },
 }
 
