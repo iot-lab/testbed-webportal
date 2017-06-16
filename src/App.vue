@@ -19,12 +19,10 @@
 
                 <nav class="navbar-collapse collapse navbar-ex2-collapse" role="navigation">
                     <ul class="nav navbar-nav">
-                        <li class="divider-vertical"></li>
-                        <li id="dashboard2"><router-link to="Dashboard"><i class="fa fa-home" aria-hidden="true"></i> Dashboard</router-link></li>
-                        <li id="exp_new2"><router-link to="Experiment"><i class="fa fa-plus-circle" aria-hidden="true"></i> Experiment</router-link></li>
+                        <router-link tag="li" to="Dashboard" active-class="active"><a><i class="fa fa-home" aria-hidden="true"></i> Dashboard</a></router-link>
+                        <router-link tag="li" to="Experiment" active-class="active"><a><i class="fa fa-plus-circle" aria-hidden="true"></i> Experiment</a></router-link>
+                        <router-link tag="li" to="Monitor" active-class="active"><a><i class="fa fa-tachometer" aria-hidden="true"></i> Monitor</a></router-link>
                         <!--<li><a id='profilesModalLink' data-toggle="modal" data-target="#profiles_modal" style="cursor:pointer">Manage Profiles</a></li>-->
-                        <li id="profiles2"><router-link to="Monitor"><i class="fa fa-tachometer" aria-hidden="true"></i> Monitor</router-link></li>
-                        <li class="divider-vertical"></li>
                     </ul>
                     <!-- <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']) { ?> -->
                         <ul class="nav navbar-nav pull-right">
