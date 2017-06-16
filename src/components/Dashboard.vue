@@ -11,7 +11,7 @@
         <i class="fa fa-spinner fa-spin fa-fw"></i>
     </p>
     <p>
-        <a class="btn btn-default">Check future avaibility</a>
+        <a class="btn btn-default">Check future availability</a>
     </p>
 
     <h2>My experiments</h2>
