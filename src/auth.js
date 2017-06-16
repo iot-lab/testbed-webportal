@@ -16,6 +16,10 @@ export const auth = {
     //   },
     // })
     iotlab.create(username, password)
+    sessionStorage.setItem('apiAuth', JSON.stringify({
+      username: username,
+      password: password,
+    }))
 
     await axios.all([
       iotlab.api.get(`/users/${username}?login`),
@@ -42,6 +46,7 @@ export const auth = {
   doLogout () {
     this.loggedIn = false
     sessionStorage.removeItem('loggedIn')
+    sessionStorage.removeItem('apiAuth')
   },
 }
 
