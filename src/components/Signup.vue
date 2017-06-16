@@ -108,10 +108,19 @@
                     </label>
 
                     <div class="col-lg-9">
-                        <textarea v-model="newuser.motivations" class="form-control" rows="5"
-                                  required></textarea>
-                    </div>
+                        <textarea v-model="newuser.motivations" class="form-control" rows="5" required></textarea> </div>
 
+                </div>
+
+                <div class="form-group">
+                    <div class="col-lg-offset-3 col-lg-9">
+                        <vue-recaptcha
+                          ref="recaptcha"
+                          @verify="onCaptchaVerify"
+                          @expired="onCaptchaExpired"
+                          :sitekey="reCaptchaSitekey">
+                        </vue-recaptcha>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -142,18 +151,21 @@
 
 <script>
 import vSelect from 'vue-select'
+import VueRecaptcha from 'vue-recaptcha'
 import {iotlab} from '@/rest'
 import countries from '@/assets/js/countries'
 import categories from '@/assets/js/categories'
 
 export default {
   name: 'signup',
-  components: {vSelect},
+  components: {vSelect, VueRecaptcha},
 
   data () {
     return {
+      reCaptchaSitekey: '6Ld8cR4UAAAAAC-zBLP9m2bC35xyyYwTbvkBcx4q',
       charter: false,
       whatever: undefined,
+      verified: false,
       showPopover: false,
       newuser: {
         'sshPublicKeys': [''],
@@ -176,6 +188,10 @@ export default {
         console.log('aborted')
         return
       }
+      // check reCaptcha verified
+      if (!this.verified) {
+        alert('Please verify the captcha "I\'m not a robot"')
+      }
 
       try {
         await iotlab.signup(this.newuser)
@@ -186,6 +202,14 @@ export default {
         this.error = true
         alert('Error')
       }
+    },
+    onCaptchaVerify: function (response) {
+      console.log('Captcha Verified')
+      this.verified = true
+    },
+    onCaptchaExpired: function () {
+      console.log('Captcha Expired')
+      this.verified = false
     },
   },
 }
