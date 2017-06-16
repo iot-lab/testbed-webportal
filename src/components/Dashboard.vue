@@ -44,9 +44,9 @@ export default {
     }
   },
 
-  async created () {
-    this.total = await iotlab.getUserExperiments()
-    this.stats = await iotlab.getStats()
+  created () {
+    iotlab.getUserExperiments().then(data => { this.total = data })
+    iotlab.getStats().then(data => { this.stats = data })
   },
 
 }
