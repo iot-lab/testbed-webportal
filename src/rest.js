@@ -58,4 +58,12 @@ export const iotlab = {
     return await iotlab.api.get('/stats').then(resp => resp.data)
   },
 
+  async getSites () {
+    return await iotlab.api.get('/experiments?sites').then(resp => resp.data.items)
+  },
+
+  async getSiteResources () {
+    return await iotlab.api.get('/experiments?resources').then(resp => resp.data.items)
+  },
+
 }
