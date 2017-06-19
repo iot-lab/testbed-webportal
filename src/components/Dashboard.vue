@@ -2,10 +2,20 @@
 <div class="container">
         
     <h2>Platform status</h2>
-    <p v-if="stats.nodes">
+    <p v-if="sites">
+        <span class="badge" :class="{'label-primary': currentSite === 'all'}" @click="currentSite = 'all'" style="cursor: pointer">{{sites.length}} sites</span>
+        <span v-for="site in sites" class="badge" :class="{'label-primary': currentSite === site}" style="margin-right: 4px; cursor: pointer"
+        @click="currentSite = site">{{site.site}}</span>
+    </p>
+<!--     <p v-if="stats.nodes">
         <span class="badge label-success">{{stats.nodes.Alive}}</span> nodes available
         <span class="badge label-warning">{{stats.nodes.Busy}}</span> busy
         <span class="badge label-danger">{{stats.nodes.Unavailable}}</span> unavailable
+    </p> -->
+    <p v-if="resources">
+        <span class="badge label-success">{{getNodesCount(currentSite, ['Alive'])}}</span> nodes available
+        <span class="badge label-warning">{{getNodesCount(currentSite, ['Busy'])}}</span> busy
+        <span class="badge label-danger">{{getNodesCount(currentSite, ['Absent','Suspected'])}}</span> unavailable
     </p>
     <p v-else>
         <i class="fa fa-spinner fa-spin fa-fw"></i>
@@ -40,13 +50,24 @@ export default {
   data () {
     return {
       total: {},
-      stats: {},
+      // stats: {},
+      resources: [],
+      currentSite: 'all',
     }
   },
 
   created () {
     iotlab.getUserExperiments().then(data => { this.total = data })
-    iotlab.getStats().then(data => { this.stats = data })
+    // iotlab.getStats().then(data => { this.stats = data })
+    iotlab.getSites().then(data => { this.sites = data })
+    iotlab.getSiteResources().then(data => { this.resources = data })
+  },
+
+  methods: {
+    getNodesCount (site, stateList) {
+      let siteList = (site === 'all') ? this.sites.map(key => key.site) : [site.site]
+      return this.resources.filter(node => siteList.includes(node.site)).filter(node => stateList.includes(node.state)).length
+    },
   },
 
 }
