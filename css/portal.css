@@ -49,3 +49,7 @@ label {
 h2{
     color: rgb(32, 83, 157);
 }
+
+.navbar-onelab .navbar-nav > li.active > a {
+    border-bottom: solid 3px rgb(139, 176, 222);
+}
