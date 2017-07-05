@@ -6,14 +6,11 @@
 
     <div class="container">
         <div class="row">
-
-            <div class="bottom-navigation col-sm-6 col-sm-push-6">
-            </div>
-            <!-- .bottom-navigation -->
-            <div class="footer-text col-sm-6 col-sm-pull-6">
+            <div class="footer-text col-sm-9">
+                <a href="/what-is-iot-lab/">WHAT IS IOT-LAB?</a> 
+                <a href="/about-us/">ABOUT US</a>
+                <a href="mailto:admin@iot-lab.info">CONTACT US</a> &nbsp;
                 Copyright &copy; FIT IoT-LAB
-                - <a href="/about-us/">ABOUT US</a>
-                - <a href="mailto:admin@iot-lab.info">CONTACT US</a>
             </div>
             <!-- .footer-text -->
         </div>
