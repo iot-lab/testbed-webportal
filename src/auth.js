@@ -22,8 +22,8 @@ export const auth = {
     }))
 
     await axios.all([
-      iotlab.api.get(`/users/${username}?login`),
-      iotlab.api.get(`/users/${username}/isadmin`),
+      iotlab.apiv1.get(`/users/${username}?login`),
+      iotlab.apiv1.get(`/users/${username}/isadmin`),
     ])
     .then(axios.spread((user, admin) => {
       // when all requests successful
