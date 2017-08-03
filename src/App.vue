@@ -28,7 +28,7 @@
                                 <a href="#" data-toggle="dropdown" data-hover="dropdown"><i class="fa fa-user fa-lg" aria-hidden="true"></i> <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li class="dropdown-header"><i class="fa fa-user-o" aria-hidden="true"></i> {{auth.username}}</li>
-                                    <router-link tag="li" to="account" active-class="active"><a><i class="fa fa-pencil" aria-hidden="true"></i> Edit my account</a></router-link>
+                                    <router-link tag="li" to="account" active-class="active"><a><i class="fa fa-pencil" aria-hidden="true"></i> My account</a></router-link>
                                     <li><a href @click="logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
                                 </ul>
                             </li>

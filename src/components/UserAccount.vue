@@ -35,8 +35,7 @@
             <label class="col-lg-3 control-label" for="txt_email">Email</label>
 
             <div class="col-lg-9">
-                <input v-model="user.email" class="form-control" type="email" required
-                       placeholder="Academic or professional email">
+                <input v-model="user.email" class="form-control" type="email" required placeholder="Academic or professional email">
             </div>
         </div>
 
@@ -52,7 +51,7 @@
             <label class="col-lg-3 control-label" for="txt_structure">Organization</label>
 
             <div class="col-lg-9">
-                <input placeholder="Organization" v-model="user.structure" class="form-control" type="text" required>
+                <input placeholder="Organization" v-model="user.organization" class="form-control" type="text" required>
             </div>
         </div>
 
@@ -188,13 +187,17 @@ export default {
     }
   },
 
-  async created () {
-    this.keys = await iotlab.getSSHkeys()
+  created () {
+    iotlab.getSSHkeys().then(data => { this.keys = data })
+    iotlab.getUserInfo().then(data => { this.user = data })
   },
 
   methods: {
     async saveDetails () {
-
+      if (typeof this.user.category === 'object') {
+        this.user.category = this.user.category.value
+      }
+      await iotlab.setUserInfo(this.user)
     },
     async changePassword () {
       this.pwdState = []
