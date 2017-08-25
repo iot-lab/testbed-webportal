@@ -1,26 +1,27 @@
 
 <template>
-  <div class="container">
+<div class="container">
     <div id="logo">
-      <img src="../assets/disc-iotlab.svg">
+        <img src="../assets/disc-iotlab.svg">
     </div>
     <div class="row">
-      <div class="col-md-4 col-md-offset-4 well" :class="{ 'error': failed }">
-        <h2>Please Log in</h2>
-
-        <form @submit.prevent="login">
-          <input v-model="username" type="text" class="form-control" placeholder="Username" autofocus required>
-          <input v-model="password" type="password" class="form-control" placeholder="Password" required>
-          <button type="submit" class="btn btn-primary btn-block">Log in</button>
-          <p class="text-center">
-            <router-link to="signup">Register for an account</router-link> – <router-link to="reset">Forgot your password?</router-link>
-          </p>
-        </form>
-
-      </div>
-    </div> <!-- row -->
-  </div> <!-- container -->
-
+        <div class="col-lg-4 mx-md-auto well" :class="{ 'error': failed }">
+            <h2>Welcome to IoT-LAB</h2>
+            <form @submit.prevent="login">
+                <input v-model="username" type="text" class="form-control" :class="{ 'is-invalid': failed }" placeholder="Username"autofocus required>
+                <div class="invalid-feedback">Invalid username or password</div>
+                <input v-model="password" type="password" class="form-control" :class="{ 'is-invalid': failed }" placeholder="Password" required>
+                <button type="submit" class="btn btn-primary btn-block">Log in</button>
+                <router-link to="signup" class="btn btn-light btn-block">Register for an account</router-link>
+                <p class="text-center">
+                    <router-link to="reset" class="btn btn-block">Forgot your password?</router-link>
+                </p>
+            </form>
+        </div>
+    </div>
+    <!-- row -->
+</div>
+<!-- container -->
 </template>
 
 <script>
@@ -81,18 +82,14 @@ export default {
 }
 
 .well {
-  padding: 25px 38px;
+  padding: 15px 38px;
 }
 .well.error {
   animation: shake .5s;
-  border-color: #a94442;
 }
 
 input {
-  margin: 5px 0;
-}
-button {
-  margin: 5px 0;
+  margin: 7px 0;
 }
 
 #logo {

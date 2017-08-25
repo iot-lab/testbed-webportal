@@ -1,23 +1,20 @@
 
 <template>
-  <div class="container" style="margin-top:50px;">
+<div class="container" style="margin-top:50px;">
     <div class="row">
-      <div class="col-md-4 col-md-offset-4 well">
-        <h2>Reset your password</h2>
-
-        <form @submit.prevent="reset">
-          <input v-model="email" type="email" placeholder="Email" class="form-control" autofocus required>
-          <button class="btn btn-primary btn-block">Reset password</button>
-        </form>
-
-          <p class="text-center">
-            <router-link to="signup">Register for an account</router-link> – <router-link to="login">Login</router-link>
-          </p>
-      </div>
+        <div class="col-lg-4 mx-md-auto well">
+             <h2>Reset your password</h2>
+            <form @submit.prevent="reset">
+                <input v-model="email" type="email" placeholder="Email" class="form-control" autofocus required>
+                <button class="btn btn-primary btn-block">Reset password</button>
+            </form>
+            <p class="text-center">
+                <router-link to="signup">Register for an account</router-link> &#x2013;
+                <router-link to="login">Login</router-link>
+            </p>
+        </div>
     </div>
-
-  </div> <!-- container -->
-
+</div> <!-- container -->
 </template>
 
 <script>

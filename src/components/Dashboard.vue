@@ -3,38 +3,38 @@
         
     <h2>Platform status</h2>
     <p v-if="sites">
-        <span class="badge" :class="{'label-primary': currentSite === 'all'}" @click="currentSite = 'all'" style="cursor: pointer">{{sites.length}} sites</span>
-        <span v-for="site in sites" class="badge" :class="{'label-primary': currentSite === site}" style="margin-right: 4px; cursor: pointer"
+        <span class="badge badge-pill" :class="{'badge-primary': currentSite === 'all', 'badge-secondary': currentSite !== 'all'}" @click="currentSite = 'all'" style="cursor: pointer">{{sites.length}} sites</span>
+        <span v-for="site in sites" class="badge badge-pill" :class="{'badge-primary': currentSite === site, 'badge-secondary': currentSite !== site}" style="margin-right: 4px; cursor: pointer"
         @click="currentSite = site">{{site.site}}</span>
     </p>
 <!--     <p v-if="stats.nodes">
-        <span class="badge label-success">{{stats.nodes.Alive}}</span> nodes available
-        <span class="badge label-warning">{{stats.nodes.Busy}}</span> busy
-        <span class="badge label-danger">{{stats.nodes.Unavailable}}</span> unavailable
+        <span class="badge badge-pill badge-success">{{stats.nodes.Alive}}</span> nodes available
+        <span class="badge badge-pill badge-warning">{{stats.nodes.Busy}}</span> busy
+        <span class="badge badge-pill badge-danger">{{stats.nodes.Unavailable}}</span> unavailable
     </p> -->
     <p v-if="resources">
-        <span class="badge label-success">{{getNodesCount(currentSite, ['Alive'])}}</span> nodes available
-        <span class="badge label-warning">{{getNodesCount(currentSite, ['Busy'])}}</span> busy
-        <span class="badge label-danger">{{getNodesCount(currentSite, ['Absent','Suspected'])}}</span> unavailable
+        <span class="badge badge-pill badge-success">{{getNodesCount(currentSite, ['Alive'])}}</span> nodes available
+        <span class="badge badge-pill badge-warning">{{getNodesCount(currentSite, ['Busy'])}}</span> busy
+        <span class="badge badge-pill badge-danger">{{getNodesCount(currentSite, ['Absent','Suspected'])}}</span> unavailable
     </p>
     <p v-else>
         <i class="fa fa-spinner fa-spin fa-fw"></i>
     </p>
     <p>
-        <a class="btn btn-default">Check future availability</a>
+        <a class="btn btn-light" href="">Check future availability</a>
     </p>
 
     <h2>My experiments</h2>
     <p v-if="total.running != undefined">
-        <span class="badge label-success">{{total.running}}</span> running
-        <span class="badge label-warning">{{total.upcoming}}</span> upcoming
-        <span class="badge label-danger">{{total.terminated}}</span> terminated
+        <span class="badge badge-pill badge-success">{{total.running}}</span> running
+        <span class="badge badge-pill badge-warning">{{total.upcoming}}</span> upcoming
+        <span class="badge badge-pill badge-danger">{{total.terminated}}</span> terminated
     </p>
     <p v-else>
         <i class="fa fa-spinner fa-spin fa-fw"></i>
     </p>
     <p>
-        <a class="btn btn-primary">New experiment</a>
+        <a href="" class="btn btn-primary">New experiment</a>
     </p>
 
 </div> <!-- container -->
