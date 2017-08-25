@@ -95,13 +95,13 @@
           <div class="tab-pane fade" id="list-password" role="tabpanel" aria-labelledby="list-password-list">
             
             <h5><i class="fa fa-fw fa-user" aria-hidden="true"></i> Username <span class="text-muted">{{auth.username}}</span></h5>
-            <p>Your username cannot be modified.</p>
+            <p class="mb-4">Your username cannot be modified.</p>
             <h5><i class="fa fa-fw fa-unlock-alt" aria-hidden="true"></i> Change my password</h5>
             <form class="" @submit.prevent="changePassword"> 
               <input v-model="pwd.old" type="password" placeholder="Current password" class="form-control" style="margin-top: 8px;" required>
               <input v-model="pwd.new" type="password" placeholder="New password" class="form-control" style="margin-top: 8px;" required>
               <input v-model="pwd.confirm" type="password" placeholder="Confirm password" class="form-control" style="margin-top: 8px;" required>
-              <button class="btn btn-success" :class="pwdState" type="submit" style="margin-top: 10px;">Change Password</button>
+              <button class="btn btn-success" type="submit" style="margin-top: 10px;">Change Password</button>
             </form>            
           </div>
 
@@ -128,7 +128,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="btn btn-success" :class="keyState" type="submit" style="margin-top: 10px;">Save SSH keys</button>
+                <button class="btn btn-success" :class="keyState" type="submit" style="margin-top: 10px;">Update SSH keys</button>
             </form>
           </div>
           <div class="tab-pane fade" id="list-delete" role="tabpanel" aria-labelledby="list-delete-list">
@@ -148,7 +148,6 @@ import countries from '@/assets/js/countries'
 import categories from '@/assets/js/categories'
 import {iotlab} from '@/rest'
 import {auth} from '@/auth'
-import {messages} from '@/App'
 
 export default {
   name: 'UserAccount',
@@ -163,8 +162,6 @@ export default {
       categories: categories,
       auth: auth,
       activeKey: 0,
-      keyState: [],
-      pwdState: [],
     }
   },
 
@@ -181,33 +178,25 @@ export default {
       if (typeof this.user.category === 'object') {
         this.user.category = this.user.category.value
       }
-      try {
-        await iotlab.setUserInfo(this.user)
-        this.messages.
-      } catch (err) {
-
-      }
+      await iotlab.setUserInfo(this.user)
+      this.$notify({text: 'Profile updated', type: 'success'})
     },
     async changePassword () {
-      this.pwdState = []
       try {
         await iotlab.changePassword(this.pwd.old, this.pwd.new, this.pwd.confirm)
-        this.pwdState = ['isSuccess']
         this.pwd = {}
-        alert('Success')
+        this.$notify({text: 'Password successfully changed', type: 'success'})
       } catch (err) {
-        this.pwdState = ['isError']
         this.pwd = {}
-        alert('Failed')
+        this.$notify({text: 'Failed to change password', type: 'error'})
       }
     },
     async saveKeys () {
-      this.keyState = []
       try {
         await iotlab.modifySSHkeys(this.keys)
-        this.keyState = ['isSuccess']
+        this.$notify({text: 'SSH keys updated', type: 'success'})
       } catch (err) {
-        this.keyState = ['isError']
+        this.$notify({text: 'Failed to update SSH keys', type: 'error'})
       }
     },
     addKey () {
@@ -221,45 +210,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.v-select {
-    background: white;
-    border-radius: 3px;
-}
-label {
-    font-weight: normal;
-}
-
-.isSuccess, .isError {
-    position: relative;
-}
-.isSuccess::after, .isError::after {
-    font-family: "FontAwesome";
-    position: absolute;
-    font-size: 1.2em;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background-color: green;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: 1s ease 0s normal forwards 1 fadein;
-}
-.isSuccess::after {
-    content:"\f00c";
-    background-color: green;
-}
-.isError::after {
-    content:"\f00d";
-    background-color: darkred;
-}
-
-@keyframes fadein{
-    0% { opacity: 1; }
-    50% { opacity: 1; }
-    100% { opacity: 0; }
-}
-</style>
