@@ -30,7 +30,7 @@ export default {
   methods: {
     async reset () {
       await iotlab.resetPassword(this.email)
-      alert('OK')
+      this.$notify({text: 'An email has been sent to ' + this.email, type: 'success'})
     },
   },
 }
