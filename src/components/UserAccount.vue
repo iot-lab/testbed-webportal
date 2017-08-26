@@ -4,7 +4,7 @@
     <div class="row">
       <div class="col-md-3">
         <div class="list-group" id="list-tab" role="tablist">
-          <a class="list-group-item list-group-item-action active" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile"><i class="fa fa-fw fa-address-card" aria-hidden="true"></i> My profile</a>
+          <a class="list-group-item list-group-item-action active" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile"><i class="fa fa-fw fa-address-card" aria-hidden="true"></i> Profile</a>
           <a class="list-group-item list-group-item-action" id="list-password-list" data-toggle="list" href="#list-password" role="tab" aria-controls="password"><i class="fa fa-fw fa-unlock-alt" aria-hidden="true"></i> Password</a>
           <a class="list-group-item list-group-item-action" id="list-sshkeys-list" data-toggle="list" href="#list-sshkeys" role="tab" aria-controls="sshkeys"><i class="fa fa-fw fa-key" aria-hidden="true"></i> SSH Keys</a>
           <a class="list-group-item list-group-item-action" id="list-delete-list" data-toggle="list" href="#list-delete" role="tab" aria-controls="delete"><i class="fa fa-fw fa-trash-o" aria-hidden="true"></i> Delete account</a>
@@ -14,29 +14,27 @@
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane fade show active" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
             
-            <h5><i class="fa fa-fw fa-pencil" aria-hidden="true"></i> Edit my profile</h5>
+            <h5><i class="fa fa-fw fa-pencil" aria-hidden="true"></i> Edit your profile</h5>
             <form @submit.prevent="saveDetails">
                 <div class="row">
                   <div class="col-md">
                     <div class="form-group">
-                        <label class="form-control-label" for="txt_firstname">First name</label>
-                        <input placeholder="First name" v-model="user.firstName" class="form-control"
-                        type="text" required>
+                      <label class="form-control-label">First name</label>
+                      <input placeholder="First name" v-model="user.firstName" class="form-control" type="text" required>
                     </div>
                   </div>
                   <div class="col-md">                    
                     <div class="form-group">
-                        <label class="form-control-label" for="txt_lastname">Last name</label>
-                        <input placeholder="Last name" v-model="user.lastName" class="form-control"
-                        type="text" required>
+                      <label class="form-control-label">Last name</label>
+                      <input placeholder="Last name" v-model="user.lastName" class="form-control" type="text" required>
                     </div>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-md">
                     <div class="form-group">
-                        <label class="form-control-label" for="txt_email">Email</label>
-                        <input v-model="user.email" class="form-control" type="email" required placeholder="Academic or professional email">
+                      <label class="form-control-label">Email</label>
+                      <input v-model="user.email" class="form-control" type="email" required placeholder="Academic or professional email">
                     </div>
                   </div>
                   <div class="col-md"></div>
@@ -44,46 +42,45 @@
                 <div class="row">
                   <div class="col-md">
                     <div class="form-group">
-                        <label class="form-control-label" for="txt_profile">User category</label>
-                        <v-select v-model="user.category" :options="categories" placeholder="Category" :searchable="false" required></v-select>
+                      <label class="form-control-label">User category</label>
+                      <v-select v-model="user.category" :options="categories" placeholder="Category" :searchable="false" required></v-select>
                     </div>                    
                   </div>
                   <div class="col-md">
                     <div class="form-group">
-                        <label class="form-control-label" for="txt_structure">Organization</label>
-                        <input placeholder="Organization" v-model="user.organization" class="form-control" type="text" required>
+                      <label class="form-control-label">Organization</label>
+                      <input placeholder="Organization" v-model="user.organization" class="form-control" type="text" required>
                     </div>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-md">
                     <div class="form-group">
-                        <label class="form-control-label" for="txt_city">City</label>
-                        <input placeholder="City" v-model="user.city" class="form-control" type="text" required>
+                      <label class="form-control-label">City</label>
+                      <input placeholder="City" v-model="user.city" class="form-control" type="text" required>
                     </div>
                   </div>
                   <div class="col-md">
                     <div class="form-group">
-                        <label class="form-control-label" for="txt_country">Country</label>
-                        <v-select :options="countries" v-model="user.country" required placeholder="Country"
-                        @keydown.enter.prevent=""></v-select>
+                      <label class="form-control-label">Country</label>
+                      <v-select :options="countries" v-model="user.country" required placeholder="Country" @keydown.enter.prevent=""></v-select>
                     </div>
                   </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" for="txt_motivation">Motivation</label>
-                    <textarea v-model="user.motivations" class="form-control" rows="5" placeholder="Motivations" required></textarea>
+                  <label class="form-control-label">Motivations</label>
+                  <textarea v-model="user.motivations" class="form-control" rows="5" placeholder="Tell us about you" required></textarea>
                 </div>
                 <div class="form-group">
-                    <div class="alert alert-info form-control">
-                        <i class="fa fa-pencil"></i> <b>Tell us about your motivations:</b>
-                        <ul style="margin: 0">
-                            <li>Research domain (Radio communication, networking protocol, distributed applications, &#x2026;)</li>
-                            <li>What kind of experiments do you want to run with IoT-LAB?</li>
-                            <li>Goal (Verify something existing in large scale, new development, &#x2026;)</li>
-                            <li>Experience with sensor networks (n00b, experiments with X platform, former IoT-LAB user, Guru, God)</li>
-                        </ul>
-                    </div>
+                  <div class="alert alert-info form-control">
+                    <i class="fa fa-pencil"></i> <b>Tell us about your motivations</b>
+                    <ul style="margin: 0">
+                      <li>Research domain (Radio communication, networking protocol, distributed applications, &#x2026;)</li>
+                      <li>What kind of experiments do you want to run with IoT-LAB?</li>
+                      <li>Goal (Verify something existing in large scale, new development, &#x2026;)</li>
+                      <li>Experience with sensor networks (n00b, experiments with X platform, former IoT-LAB user, Guru, God)</li>
+                    </ul>
+                  </div>
                 </div>
                 <div class="form-group">
                   <button class="btn btn-success" type="submit">Update profile</button>
@@ -96,13 +93,15 @@
             
             <h5><i class="fa fa-fw fa-user" aria-hidden="true"></i> Username <span class="text-muted">{{auth.username}}</span></h5>
             <p class="mb-4">Your username cannot be modified.</p>
-            <h5><i class="fa fa-fw fa-unlock-alt" aria-hidden="true"></i> Change my password</h5>
-            <form class="" @submit.prevent="changePassword"> 
-              <input v-model="pwd.old" type="password" placeholder="Current password" class="form-control" style="margin-top: 8px;" required>
-              <input v-model="pwd.new" type="password" placeholder="New password" class="form-control" style="margin-top: 8px;" required>
-              <input v-model="pwd.confirm" type="password" placeholder="Confirm password" class="form-control" style="margin-top: 8px;" required>
-              <button class="btn btn-success" type="submit" style="margin-top: 10px;">Change Password</button>
-            </form>            
+            <h5><i class="fa fa-fw fa-unlock-alt" aria-hidden="true"></i> Change your password</h5>
+            <div class="row">
+              <form class="" @submit.prevent="changePassword" class="col-md-6"> 
+                <input v-model="pwd.old" type="password" placeholder="Current password" class="form-control" style="margin-top: 8px;" required>
+                <input v-model="pwd.new" type="password" placeholder="New password" class="form-control" style="margin-top: 8px;" required>
+                <input v-model="pwd.confirm" type="password" placeholder="Confirm password" class="form-control" style="margin-top: 8px;" required>
+                <button class="btn btn-success" type="submit" style="margin-top: 10px;">Change Password</button>
+              </form>            
+            </div>
           </div>
 
           <div class="tab-pane fade" id="list-sshkeys" role="tabpanel" aria-labelledby="list-sshkeys-list">
