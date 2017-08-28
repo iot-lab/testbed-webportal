@@ -1,5 +1,5 @@
 <template>
-<div class="container">
+<div class="container mt-3">
   <div class="row">
     <div class="col-lg-9">
       <h2>Sign up to IoT-LAB</h2>

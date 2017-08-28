@@ -1,5 +1,5 @@
 <template>
-<div class="container">
+<div class="container mt-3">
         
     <h2>Monitor</h2>
 

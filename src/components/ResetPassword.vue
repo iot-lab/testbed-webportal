@@ -1,6 +1,6 @@
 
 <template>
-<div class="container" style="margin-top:50px;">
+<div class="container mt-5">
     <div class="row">
         <div class="col-lg-4 mx-md-auto well">
              <h2>Reset your password</h2>

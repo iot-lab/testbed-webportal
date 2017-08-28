@@ -1,6 +1,6 @@
 
 <template>
-<div class="container">
+<div class="container mt-3">
     <div id="logo">
         <img src="../assets/disc-iotlab.svg">
     </div>

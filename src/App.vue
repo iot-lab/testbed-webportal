@@ -82,9 +82,6 @@ export default {
 </script>
 
 <style>
-.navbar {
-    margin-bottom: 20px;
-}
 .cursor:hover {
     cursor: pointer;
 }
