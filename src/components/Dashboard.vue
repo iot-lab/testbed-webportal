@@ -1,6 +1,17 @@
 <template>
+<div>
+<div class="alert alert-info rounded-0 p-2" v-if="auth.isAdmin && nbPendingUsers > 0" style="font-weight: 300">
+    <router-link to="users" tag="div" class="container cursor">
+        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+        {{nbPendingUsers}} pending user accounts awaiting validation
+    </router-link>
+</div>
 <div class="container">
-        
+    
+    <!-- <a href="" class="btn btn-outline-info" v-if="auth.isAdmin && nbPendingUsers > 0">
+        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+        8 pending users
+    </a> -->
     <h2>Platform status</h2>
     <p v-if="sites">
         <span class="badge badge-pill" :class="{'badge-primary': currentSite === 'all', 'badge-secondary': currentSite !== 'all'}" @click="currentSite = 'all'" style="cursor: pointer">{{sites.length}} sites</span>
@@ -36,6 +47,7 @@
     <p>
         <a href="" class="btn btn-primary">New experiment</a>
     </p>
+</div>
 
 </div> <!-- container -->
 
@@ -43,6 +55,7 @@
 
 <script>
 import {iotlab} from '@/rest'
+import {auth} from '@/auth'
 
 export default {
   name: 'Dashboard',
@@ -53,6 +66,8 @@ export default {
       // stats: {},
       resources: [],
       currentSite: 'all',
+      auth: auth,
+      nbPendingUsers: 0,
     }
   },
 
@@ -61,6 +76,9 @@ export default {
     // iotlab.getStats().then(data => { this.stats = data })
     iotlab.getSites().then(data => { this.sites = data })
     iotlab.getSiteResources().then(data => { this.resources = data })
+    if (auth.isAdmin) {
+      iotlab.getUsers().then(data => { this.nbPendingUsers = data.length })
+    }
   },
 
   methods: {
@@ -72,48 +90,3 @@ export default {
 
 }
 </script>
-
-<style>
-.label-default {
-  background-color: #777;
-}
-.label-default[href]:hover,
-.label-default[href]:focus {
-  background-color: #5e5e5e;
-}
-.label-primary {
-  background-color: #337ab7;
-}
-.label-primary[href]:hover,
-.label-primary[href]:focus {
-  background-color: #286090;
-}
-.label-success {
-  background-color: #5cb85c;
-}
-.label-success[href]:hover,
-.label-success[href]:focus {
-  background-color: #449d44;
-}
-.label-info {
-  background-color: #5bc0de;
-}
-.label-info[href]:hover,
-.label-info[href]:focus {
-  background-color: #31b0d5;
-}
-.label-warning {
-  background-color: #f0ad4e;
-}
-.label-warning[href]:hover,
-.label-warning[href]:focus {
-  background-color: #ec971f;
-}
-.label-danger {
-  background-color: #d9534f;
-}
-.label-danger[href]:hover,
-.label-danger[href]:focus {
-  background-color: #c9302c;
-}
-</style>
