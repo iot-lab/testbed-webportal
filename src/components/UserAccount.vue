@@ -127,7 +127,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="btn btn-success" :class="keyState" type="submit" style="margin-top: 10px;">Update SSH keys</button>
+                <button class="btn btn-success" type="submit" style="margin-top: 10px;">Update SSH keys</button>
             </form>
           </div>
           <div class="tab-pane fade" id="list-delete" role="tabpanel" aria-labelledby="list-delete-list">
