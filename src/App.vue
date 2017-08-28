@@ -85,6 +85,9 @@ export default {
 .navbar {
     margin-bottom: 20px;
 }
+.cursor:hover {
+    cursor: pointer;
+}
 .v-select .dropdown-toggle {
     padding: 1px !important; /* adjust v-select to bootstrap-4 */
 }
