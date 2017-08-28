@@ -17,7 +17,7 @@
             <router-link tag="li" to="dashboard" active-class="active">
                 <a class="nav-link"><i class="fa fa-tasks" aria-hidden="true"></i> Dashboard</a>
             </router-link>
-            <router-link tag="li" to="experiment"  active-class="active">
+            <router-link tag="li" to="experiment" active-class="active">
                 <a class="nav-link"><i class="fa fa-flask" aria-hidden="true"></i> Experiment</a>
             </router-link>
             <router-link tag="li" to="monitor" active-class="active">
@@ -38,7 +38,7 @@
             <li class="dropdown nav-item" v-if="auth.isAdmin">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" data-hover="dropdown">Admin</a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="">Users</a>
+                        <router-link to="users" class="dropdown-item">Users</router-link>
                         <a class="dropdown-item" href="">Experiments</a>
                         <a class="dropdown-item" href="">Nodes</a>
                         <a class="dropdown-item" href="">Statistics</a>

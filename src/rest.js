@@ -59,6 +59,21 @@ export const iotlab = {
     return await iotlab.api.post('/user/keys', {'sshkeys': keys})
   },
 
+  async getUsers ({status, isAdmin, search} = {}) {
+    let params = {}
+    if (status) {
+      params.status = status
+    }
+    if (isAdmin) {
+      params.isadmin = isAdmin
+      params.status = 'active'
+    }
+    if (search) {
+      params.search = search
+    }
+    return await iotlab.api.get('/users', {params: params}).then(resp => resp.data)
+  },
+
   async getUserInfo () {
     return await iotlab.api.get('/user').then(resp => resp.data)
   },

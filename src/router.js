@@ -5,6 +5,7 @@ import Login from '@/components/Login'
 import ResetPassword from '@/components/ResetPassword'
 import Signup from '@/components/Signup'
 import UserAccount from '@/components/UserAccount'
+import AdminUsers from '@/components/AdminUsers'
 import Monitor from '@/components/Monitor'
 import Experiment from '@/components/Experiment'
 import Dashboard from '@/components/Dashboard'
@@ -19,6 +20,7 @@ const router = new Router({
     { path: '/experiment', name: 'experiment', component: Experiment, meta: { requiresAuth: true } },
     { path: '/monitor', name: 'monitor', component: Monitor, meta: { requiresAuth: true } },
     { path: '/account', name: 'UserAccount', component: UserAccount, meta: { requiresAuth: true } },
+    { path: '/users', name: 'AdminUsers', component: AdminUsers, meta: { requiresAdmin: true } },
     { path: '/signup', name: 'signup', component: Signup },
     { path: '/reset', name: 'reset', component: ResetPassword },
     { path: '/login', name: 'login', component: Login },
@@ -29,6 +31,8 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   // redirect to login page when appropriate
   if (to.meta.requiresAuth && !auth.loggedIn) {
+    next('login')
+  } else if (to.meta.requiresAdmin && !(auth.isAdmin && auth.loggedIn)) {
     next('login')
   } else {
     next()
