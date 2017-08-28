@@ -1,5 +1,5 @@
 <template>
-<div class="container">
+<div class="container mt-3">
     <h2><i class="fa fa-fw fa-user" aria-hidden="true"></i> My Account</h2>
     <div class="row">
       <div class="col-md-3">

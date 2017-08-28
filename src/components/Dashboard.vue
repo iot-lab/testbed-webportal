@@ -6,7 +6,7 @@
         {{nbPendingUsers}} pending user accounts awaiting validation
     </router-link>
 </div>
-<div class="container">
+<div class="container mt-3">
     
     <!-- <a href="" class="btn btn-outline-info" v-if="auth.isAdmin && nbPendingUsers > 0">
         <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
