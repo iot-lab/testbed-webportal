@@ -1,6 +1,6 @@
 <template>
 <div>
-<div class="alert alert-info rounded-0 p-2" v-if="auth.isAdmin && nbPendingUsers > 0" style="font-weight: 300">
+<div class="alert alert-info rounded-0" v-if="auth.isAdmin && nbPendingUsers > 0" style="font-weight: 300">
     <router-link to="users" tag="div" class="container cursor">
         <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
         {{nbPendingUsers}} pending user accounts awaiting validation
