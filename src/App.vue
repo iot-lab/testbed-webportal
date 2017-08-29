@@ -25,26 +25,24 @@
             </router-link>
         </ul>
         <ul class="nav navbar-nav float-xs-right">
-            <li class="dropdown nav-item" v-if="auth.loggedIn">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-user fa-lg" aria-hidden="true"></i> </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <h6 class="dropdown-header"><i class="fa fa-user-o" aria-hidden="true"></i> {{auth.username}}</h6>
-                    <router-link to="account" class="dropdown-item" active-class="active">
-                        <i class="fa fa-pencil" aria-hidden="true"></i> My account
-                    </router-link>
-                    <a class="dropdown-item" href="" @click="logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
-                </div>
+            <router-link tag="li" to="users" active-class="active" v-if="auth.isAdmin">
+                <a class="nav-link"><i class="fa fa-lg fa-fw fa-users" aria-label="Users"></i></a>
+            </router-link>
+            <router-link tag="li" to="account" active-class="active" v-if="auth.loggedIn">
+                <a class="nav-link"><i class="fa fa-lg fa-fw fa-user" aria-label="Account"></i></a>
+            </router-link>
+            <li>
+                <a class="nav-link" href="" @click="logout"><i class="fa fa-lg fa-fw fa-sign-out" aria-label="Logout"></i></a>
             </li>
             <li class="dropdown nav-item" v-if="auth.isAdmin">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" data-hover="dropdown">Admin</a>
-                    <div class="dropdown-menu">
-                        <router-link to="users" class="dropdown-item">Users</router-link>
-                        <a class="dropdown-item" href="">Experiments</a>
-                        <a class="dropdown-item" href="">Nodes</a>
-                        <a class="dropdown-item" href="">Statistics</a>
-                    </div>
-                </li>
-                </ul>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="">Experiments</a>
+                    <a class="dropdown-item" href="">Nodes</a>
+                    <a class="dropdown-item" href="">Statistics</a>
+                </div>
+            </li>
+        </ul>
       </div>
     </div>
     </nav>
