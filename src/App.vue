@@ -49,12 +49,15 @@
     </div>
     </nav>
 
-    <notifications position="bottom right" duration="2" animation-type="velocity">
-      <template slot="body" scope="props">
-        <div style="margin-right: 10px" :class="['alert', 'alert-'+(e => e==='error'?'danger':e)(props.item.type)]" @click="props.close">
-            <h6 class="alert-heading" v-if="props.item.title" v-html="props.item.title"></h6>
-            <div v-html="props.item.text"></div>
-            <div v-html="props.item.icon"></div>
+    <notifications position="top right" duration="3" animation-type="velocity"  style="margin: 10px;">
+      <template slot="body" scope="props" style="margin: 10px">
+        <!-- <div :class="['alert', `alert-${props.item.type==='error'?'danger':props.item.type}`]" @click="props.close"> -->
+        <div class="alert text-light border-0" :class="[`bg-${props.item.type==='error'?'danger':props.item.type}`]" @click="props.close">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="font-weight: normal; font-size: 1.3rem; text-shadow: none">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h6 class="alert-heading" v-if="props.item.title" v-html="props.item.title"></h6>
+          <div v-html="props.item.text" style="line-height: 1.3"></div>
         </div>
       </template>
     </notifications>
