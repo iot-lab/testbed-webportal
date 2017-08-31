@@ -4,17 +4,17 @@
     <h2>Users</h2>
     <div class="row">
         <div class="col-md-4 mb-4">
-            <div class="mt-2 mb-2">
+            <div class="my-2">
                 <span class="lead mr-3">Show</span>                
                 <label class="custom-control custom-radio">
                   <input id="radioStacked1" name="radio-stacked" type="radio" class="custom-control-input" v-model="show" value="pending" @click="showPending">
                   <span class="custom-control-indicator"></span>
                   <span class="custom-control-description">Pending users</span>
                 </label>
-                <label class="custom-control custom-radio">
+                <label class="custom-control custom-radio mr-0">
                   <input id="radioStacked2" name="radio-stacked" type="radio" class="custom-control-input" v-model="show" value="admin" @click="showAdmin">
                   <span class="custom-control-indicator"></span>
-                  <span class="custom-control-description">Adminstrators</span>
+                  <span class="custom-control-description">Administrators</span>
                 </label>
             </div>
             <form @submit.prevent="search">
