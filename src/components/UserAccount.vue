@@ -2,7 +2,7 @@
 <div class="container mt-3">
     <h2><i class="fa fa-fw fa-user" aria-hidden="true"></i> My Account</h2>
     <div class="row">
-      <div class="col-md-3">
+      <div class="col-md-3 mb-4">
         <div class="list-group" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile"><i class="fa fa-fw fa-address-card" aria-hidden="true"></i> Profile</a>
           <a class="list-group-item list-group-item-action" id="list-password-list" data-toggle="list" href="#list-password" role="tab" aria-controls="password"><i class="fa fa-fw fa-unlock-alt" aria-hidden="true"></i> Password</a>
@@ -10,7 +10,7 @@
           <a class="list-group-item list-group-item-action" id="list-delete-list" data-toggle="list" href="#list-delete" role="tab" aria-controls="delete"><i class="fa fa-fw fa-trash-o" aria-hidden="true"></i> Delete account</a>
         </div>
       </div>
-      <div class="col-9">
+      <div class="col-md-9">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane fade show active" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
             
