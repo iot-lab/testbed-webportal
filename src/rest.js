@@ -82,8 +82,12 @@ export const iotlab = {
     return await iotlab.api.put('/user', user)
   },
 
-  async getUserExperiments () {
+  async getUserExperimentsCount () {
     return await iotlab.apiv1.get('/experiments?total').then(resp => resp.data)
+  },
+
+  async getUserExperiments (state = 'Terminated,Error,Running,Finishing,Resuming,toError,Waiting,Launching,Hold,toLaunch,toAckReservation,Suspended') {
+    return await iotlab.apiv1.get('/experiments', {'params': {state: state}}).then(resp => resp.data.items)
   },
 
   async getStats () {
