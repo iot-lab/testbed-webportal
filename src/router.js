@@ -5,6 +5,7 @@ import ResetPassword from '@/components/ResetPassword'
 import Signup from '@/components/Signup'
 import UserAccount from '@/components/UserAccount'
 import AdminUsers from '@/components/AdminUsers'
+import AdminAddUser from '@/components/AdminAddUser'
 import Monitor from '@/components/Monitor'
 import Experiment from '@/components/Experiment'
 import Dashboard from '@/components/Dashboard'
@@ -20,6 +21,7 @@ const router = new Router({
     { path: '/monitor', name: 'monitor', component: Monitor, meta: { requiresAuth: true } },
     { path: '/account', name: 'UserAccount', component: UserAccount, meta: { requiresAuth: true } },
     { path: '/users', name: 'AdminUsers', component: AdminUsers, meta: { requiresAdmin: true } },
+    { path: '/adduser', name: 'AdminAddUser', component: AdminAddUser, meta: { requiresAdmin: true } },
     { path: '/signup', name: 'signup', component: Signup },
     { path: '/reset', name: 'reset', component: ResetPassword },
     { path: '/login', name: 'login', component: Login },
