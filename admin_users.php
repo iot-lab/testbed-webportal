@@ -795,7 +795,7 @@ $('#form_add_SA').bind('submit', function (e) {
         "firstName": $("#txt_firstname_SA").val(),
         "lastName": $("#txt_lastname_SA").val(),
         "email": $("#txt_email_SA").val(),
-        "organization": $("#txt_organization_SA").val(),
+        "structure": $("#txt_organization_SA").val(),
         "city": $("#txt_city_SA").val(),
         "country": $("#txt_country_SA").val(),
         "sshPublicKey": $("#txt_sshkey_SA").val(),
@@ -833,7 +833,7 @@ $('#form_add_MA').bind('submit', function (e) {
     var userregister = {
         "login": $("#txt_login_MA").val(),
         "event": $("#txt_event_MA").val(),
-        "organization": $("#txt_organization_MA").val(),
+        "structure": $("#txt_organization_MA").val(),
         "city": $("#txt_city_MA").val(),
         "country": $("#txt_country_MA").val(),
         "sshPublicKey": $("#txt_sshkey_MA").val(),
