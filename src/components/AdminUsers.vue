@@ -51,7 +51,7 @@
                 <td><a :href="'mailto:' + user.email" class="email">{{user.email}}</a></td>
                 <td :title="user.created | formatDateTime">{{user.created | formatDate}}</td>
                 <td><a href="" class="btn btn-sm" :class="(user.status === 'pending') ? 'btn-primary' : 'btn-outline-primary'" style="width: 70px;">{{user.status}}</a></td>
-                <td><a href="" class="btn btn-sm" :class="(user.isAdmin) ? 'btn-warning' : 'btn-outline-primary'" style="width: 70px;">missing</a></td>
+                <td><a href="" class="btn btn-sm" :class="(user.admin) ? 'btn-warning' : 'btn-outline-primary'" style="width: 70px;">{{user.admin ? 'Admin': 'User'}}</a></td>
                 <td>
                     <div class="btn-group" role="group" aria-label="User actions">
                         <a href="" class="btn btn-sm border-0 btn-outline-secondary" title="Experiments"><i class="fa fa-fw fa-flask"></i></a>
