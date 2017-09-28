@@ -34,12 +34,15 @@
               <span class="custom-control-description">As soon as possible</span>
             </label>
             <label class="custom-control custom-radio mr-0">
-              <input id="radioStacked2" name="radio-stacked" type="radio" class="custom-control-input" v-model="start" value="scheduled" @click="startSchedule">
+              <input id="radioStacked2" name="radio-stacked" type="radio" class="custom-control-input" v-model="start" value="scheduled" @click="startScheduled">
               <span class="custom-control-indicator"></span>
               <span class="custom-control-description">Scheduled</span>
             </label>
           </div>
-
+          <div class="form-group" v-show="start == 'scheduled'">
+            <span class="lead text-right mr-3" style="display: inline-block; width: 80px;"></span>
+            <input type="text" class="form-control datetimepicker-input" id="datetimepicker1" data-toggle="datetimepicker" data-target="#datetimepicker1" style="width: 300px; display: inline-block" placeholder="">
+          </div>
         </div>
       </div>
     </div>
@@ -143,7 +146,7 @@
   </div>
 
   <h5 class="my-3">Summary</h5>
-  <p class="lead">Your experiment on <span class="text-primary">4</span> nodes is set to start <span class="text-primary">as soon as possible</span> for <span class="text-primary">20</span> minutes.</p>
+  <p class="lead">Your experiment on <span class="text-primary">4</span> nodes is set to start <span class="text-primary">{{scheduleText}}</span> for <span class="text-primary">{{duration}}</span> {{ durationMultiplier == 1 ? 'minutes' : 'hours'}}.</p>
   <p>
     <a href="" @click.prevent="showSummary = !showSummary">show nodes and associations</a>
   </p>
@@ -176,7 +179,10 @@
 
 <script>
 import Multiselect from 'vue-multiselect'
-import {iotlab} from '@/rest'
+// import {iotlab} from '@/rest'
+import $ from 'jquery'
+import 'tempusdominus-bootstrap-4'
+import 'tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4.min.css'
 
 export default {
   name: 'NewExperiment',
@@ -191,6 +197,7 @@ export default {
       start: 'asap',
       duration: 20,
       durationMultiplier: 1,
+      startDate: '',
       showSummary: false,
       monitoringFile: {name: undefined},
       firmwareFile: {name: undefined},
@@ -212,14 +219,44 @@ export default {
     // iotlab.getUsers().then(data => { this.users = data })
   },
 
-  methods: {
-    async showPending () {
-      this.pattern = ''
-      this.users = await iotlab.getUsers({status: 'pending'})
+  mounted () {
+    $('#datetimepicker1').datetimepicker({
+      sideBySide: true,
+      format: 'YYYY-MM-DD HH:mm',
+    })
+    $('#datetimepicker1').on('change.datetimepicker', (e) => {
+      this.startDate = e.date
+    })
+  },
+
+  computed: {
+    scheduleText () {
+      console.log('test' + this.startDate)
+      if (this.start === 'asap') {
+        return 'as soon as possible'
+      }
+      if (this.startDate) {
+        return 'on ' + this.startDate.format('YYYY-MM-DD HH:mm')
+      }
+      return ''
     },
-    async showAdmin () {
-      this.pattern = ''
-      this.users = await iotlab.getUsers({isAdmin: true})
+  },
+
+  methods: {
+    // async showPending () {
+    //   this.pattern = ''
+    //   this.users = await iotlab.getUsers({status: 'pending'})
+    // },
+    startAsap () {
+    },
+    startScheduled () {
+      this.$nextTick(() => {
+        $('#datetimepicker1').datetimepicker('show')
+      })
+    },
+    setStartDate () {
+      console.log(this.startSchedule)
+      console.log('ok')
     },
     previewMonitoringFile () {
       this.monitoringFile = this.$refs.monitoringFile.files[0]
