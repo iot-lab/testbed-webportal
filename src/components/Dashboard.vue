@@ -36,7 +36,7 @@
             <td>{{experiment.owner}}</td>
             <td>{{experiment.name}}</td>
             <td>{{experiment.date | fromTimestamp}}</td>
-            <td>{{experiment.duration/60}} min</td>
+            <td>{{Math.round(experiment.duration/60)}} min</td>
             <td>{{experiment.nb_resources}}</td>
             <td><span class="badge badge-state" :class="experiment.state | stateBadgeClass">{{experiment.state}}</span></td>
           </tr>
