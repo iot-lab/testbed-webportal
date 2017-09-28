@@ -61,7 +61,7 @@
                         <a href="" class="btn btn-sm border-0 btn-outline-danger" title="Delete"><i class="fa fa-fw fa-trash"></i></a>
                     </div>
                 </td>
-            </tr>                        
+            </tr>
         </tbody>
     </table>
 
