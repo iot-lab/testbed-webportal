@@ -89,4 +89,24 @@ export default {
 .v-select .dropdown-toggle {
     padding: 1px !important; /* adjust v-select to bootstrap-4 */
 }
+.scrollable {
+  overflow-y: auto !important;
+  /*overflow-x: hidden !important;*/
+  /*margin-bottom: 20px;*/
+}
+.scrollable.h200 {
+  max-height: 200px;
+}
+.scrollable.h300 {
+  max-height: 300px;
+}
+.scrollable.h400 {
+  max-height: 400px;
+}
+.scrollable.h500 {
+  max-height: 500px;
+}
+.scrollable.h600 {
+  max-height: 600px;
+}
 </style>
