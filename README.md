@@ -35,9 +35,23 @@ npm test
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
+Note: project structure created with vue-cli `vue init webpack testbed-webportal`
+
 ## Deployment
 
 ``` bash
 # run tests, build and deploy
 fab test build deploy -H root@devwww:2222
+```
+
+## IoT-LAB API
+
+New API is located at `https://devwww.iot-lab.info/api/`
+[Documentation on wiki](https://github.com/iot-lab/testbed-webportal/wiki/API-v2-Proposal)
+
+``` bash
+# test API
+curl https://devwww.iot-lab.info/api/sites | python -m json.tool
+# with authentification
+curl -u <login> https://devwww.iot-lab.info/api/<...> | python -m json.tool
 ```
