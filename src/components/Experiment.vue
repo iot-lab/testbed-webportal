@@ -13,12 +13,12 @@
       <div id="collapseZero" class="collapse show" role="tabpanel" aria-labelledby="headingZero" data-parent="#accordion">
         <div class="card-body">
           <div class="form-group">
-            <span class="lead text-right mr-3" style="display: inline-block; width: 80px;">Name</span>
-            <input type="text" class="form-control" style="width: 300px; display: inline-block" placeholder="New experiment">
+            <label class="lead mr-3 my-label">Name</label>
+            <input type="text" class="form-control" style="max-width: 300px; display: inline-block" placeholder="New experiment" v-focus>
           </div>
           <div class="form-group">
-            <span class="lead text-right mr-3" style="display: inline-block; width: 80px;">Duration</span>
-            <div class="input-group" style="display: inline-flex; width: 300px;">
+            <label class="lead mr-3 my-label">Duration</label>
+            <div class="input-group" style="display: inline-flex; max-width: 300px;">
               <input type="number" class="form-control" min="1" v-model="duration">
               <div class="input-group-btn">
                 <button type="button" class="btn" :class="{'btn-secondary': durationMultiplier == 1}" @click="durationMultiplier = 1"> minutes </button>
@@ -27,7 +27,7 @@
             </div>
           </div>
           <div class="form-group">
-            <span class="lead text-right mr-3" style="display: inline-block; width: 80px;">Start</span>
+            <label class="lead mr-3 my-label">Start</label>
             <label class="custom-control custom-radio">
               <input id="radioStacked1" name="radio-stacked" type="radio" class="custom-control-input" v-model="start" value="asap" @click="startAsap">
               <span class="custom-control-indicator"></span>
@@ -40,8 +40,8 @@
             </label>
           </div>
           <div class="form-group" v-show="start == 'scheduled'">
-            <span class="lead text-right mr-3" style="display: inline-block; width: 80px;"></span>
-            <input type="text" class="form-control datetimepicker-input" id="datetimepicker1" data-toggle="datetimepicker" data-target="#datetimepicker1" style="width: 300px; display: inline-block" placeholder="">
+            <label class="lead mr-3 my-label"></label>
+            <input type="text" class="form-control datetimepicker-input" id="datetimepicker1" data-toggle="datetimepicker" data-target="#datetimepicker1" style="max-width: 300px; display: inline-block" placeholder="">
           </div>
         </div>
       </div>
@@ -332,14 +332,29 @@ export default {
   font-weight: normal;
   font-size: 100%;
 }
-.multiselect__element, .multiselect__content-wrapper {
+/*.multiselect__element, .multiselect__content-wrapper {
   z-index: 100 !important;
-}
+}*/
 
 .custom-file-control {
   overflow: hidden;
 }
 .custom-file {
   width: 400px;
+}
+
+
+@media screen and (min-width: 576px) {
+  .my-label {
+    display: inline-block;
+    width: 80px;
+    text-align: right;
+  }
+}
+@media screen and (max-width: 576px) {
+  .my-label {
+    display: block;
+    text-align: left;
+  }
 }
 </style>
