@@ -95,7 +95,11 @@ export const iotlab = {
   },
 
   async getSites () {
-    return await iotlab.apiv1.get('/experiments?sites').then(resp => resp.data.items)
+    return await iotlab.api.get('/sites').then(resp => resp.data.items)
+  },
+
+  async getNodes () {
+    return await iotlab.api.get('/nodes').then(resp => resp.data.items)
   },
 
   async getSiteResources () {
