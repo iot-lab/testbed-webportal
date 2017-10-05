@@ -24,26 +24,23 @@ Vue.filter('stateBadgeClass', function (value) {
     switch (value) {
       case 'Terminated':
         return 'badge-secondary'
-      case 'Error':
-        return 'badge-danger'
+      case 'Alive':
       case 'Running':
         return 'badge-success'
+      case 'Error':
+      case 'toError':
+      case 'Absent':
+        return 'badge-danger'
+      case 'Waiting':
+      case 'Hold':
       case 'Finishing':
         return 'badge-warning'
       case 'Resuming':
-        return 'badge-info'
-      case 'toError':
-        return 'badge-danger'
-      case 'Waiting':
-        return 'badge-warning'
       case 'Launching':
-        return 'badge-info'
-      case 'Hold':
-        return 'badge-warning'
       case 'toLaunch':
-        return 'badge-info'
       case 'toAckReservation':
         return 'badge-info'
+      case 'Suspected':
       case 'Suspended':
         return 'badge-dark'
       default:
