@@ -23,11 +23,11 @@ module.exports = {
       .url(devServer)
       .waitForElementVisible('#app', 1000)
       .assert.elementPresent('form')
-      .setValue('input[placeholder=Username]', 'XXX')
-      .setValue('input[placeholder=Password]', 'XXX')
+      .setValue('input[placeholder=Username]', 'wtest')
+      .setValue('input[placeholder=Password]', 'kKz4o8RF')
       .submitForm('form')
       .waitForElementVisible('.navbar', 2000)
-      .assert.containsText('h2', 'Dashboard')
+      .assert.containsText('h2', 'My experiments')
       .end()
   }   
 }
