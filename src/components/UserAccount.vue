@@ -43,7 +43,7 @@
                   <div class="col-md">
                     <div class="form-group">
                       <label class="form-control-label">User category</label>
-                      <v-select v-model="user.category" :options="categories" placeholder="Category" :searchable="false" required></v-select>
+                      <multiselect v-model="user.category" :options="Object.keys(categories)" placeholder="Category" :searchable="false" required :custom-label="userLabel" :show-labels="false"></multiselect>
                     </div>                    
                   </div>
                   <div class="col-md">
@@ -63,7 +63,7 @@
                   <div class="col-md">
                     <div class="form-group">
                       <label class="form-control-label">Country</label>
-                      <v-select :options="countries" v-model="user.country" required placeholder="Country" @keydown.enter.prevent=""></v-select>
+                      <multiselect :options="countries" v-model="user.country" required placeholder="Country"></multiselect>
                     </div>
                   </div>
                 </div>
@@ -142,15 +142,15 @@
 </template>
 
 <script>
-import vSelect from 'vue-select'
+import Multiselect from 'vue-multiselect'
 import countries from '@/assets/js/countries'
-import categories from '@/assets/js/categories'
+import UserCategories from '@/assets/js/categories'
 import {iotlab} from '@/rest'
 import {auth} from '@/auth'
 
 export default {
   name: 'UserAccount',
-  components: {vSelect},
+  components: {Multiselect},
 
   data () {
     return {
@@ -158,7 +158,7 @@ export default {
       keys: [''],
       pwd: {},
       countries: countries,
-      categories: categories,
+      categories: UserCategories,
       auth: auth,
       activeKey: 0,
     }
@@ -174,9 +174,6 @@ export default {
       this.user = await iotlab.getUserInfo()
     },
     async saveDetails () {
-      if (typeof this.user.category === 'object') {
-        this.user.category = this.user.category.value
-      }
       await iotlab.setUserInfo(this.user)
       this.$notify({text: 'Profile updated', type: 'success'})
     },
@@ -205,6 +202,9 @@ export default {
     delKey (index) {
       this.keys.splice(index, 1)
       this.activeKey = Math.min(this.activeKey, this.keys.length - 1)
+    },
+    userLabel (cat) {
+      return UserCategories[cat]
     },
   },
 }

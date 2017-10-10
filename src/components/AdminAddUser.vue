@@ -44,7 +44,7 @@
                   <div class="col-md">
                     <div class="form-group">
                       <label class="form-control-label">User category</label>
-                      <v-select v-model="user.category" :options="categories" placeholder="Category" :searchable="false" required></v-select>
+                      <multiselect v-model="user.category" :options="Object.keys(categories)" placeholder="Category" :searchable="false" required :custom-label="userLabel" :show-labels="false"></multiselect>
                     </div>
                   </div>
                   <div class="col-md">
@@ -64,7 +64,7 @@
                   <div class="col-md">
                     <div class="form-group">
                       <label class="form-control-label">Country</label>
-                      <v-select :options="countries" v-model="user.country" required placeholder="Country" @keydown.enter.prevent=""></v-select>
+                      <multiselect :options="countries" v-model="user.country" required placeholder="Country"></multiselect>
                     </div>
                   </div>
                 </div>
@@ -119,7 +119,7 @@
                   <div class="col-md">
                     <div class="form-group">
                       <label class="form-control-label">User category</label>
-                      <v-select v-model="user.category" :options="categories" placeholder="Category" :searchable="false" required></v-select>
+                      <multiselect v-model="user.category" :options="Object.keys(categories)" placeholder="Category" :searchable="false" required :custom-label="userLabel" :show-labels="false"></multiselect>
                     </div>
                   </div>
                   <div class="col-md">
@@ -139,7 +139,7 @@
                   <div class="col-md">
                     <div class="form-group">
                       <label class="form-control-label">Country</label>
-                      <v-select :options="countries" v-model="user.country" required placeholder="Country" @keydown.enter.prevent=""></v-select>
+                      <multiselect :options="countries" v-model="user.country" required placeholder="Country"></multiselect>
                     </div>
                   </div>
                 </div>
@@ -163,22 +163,20 @@
 </template>
 
 <script>
-import vSelect from 'vue-select'
+import Multiselect from 'vue-multiselect'
 import {iotlab} from '@/rest'
 import countries from '@/assets/js/countries'
-import categories from '@/assets/js/categories'
+import UserCategories from '@/assets/js/categories'
 
 export default {
   name: 'AdminAddUser',
-  components: {vSelect},
+  components: {Multiselect},
 
   data () {
     return {
-      user: {
-        'sshPublicKeys': [''],
-      },
+      user: {},
       countries: countries,
-      categories: categories,
+      categories: UserCategories,
       category: undefined,
       qty: 3,
       showQty: false,
@@ -199,6 +197,7 @@ export default {
       // check reCaptcha verified
       if (!this.verified) {
         alert('Please verify the captcha "I\'m not a robot"')
+        return
       }
 
       try {
@@ -210,6 +209,9 @@ export default {
         this.error = true
         alert('Error')
       }
+    },
+    userLabel (cat) {
+      return UserCategories[cat]
     },
   },
 }
