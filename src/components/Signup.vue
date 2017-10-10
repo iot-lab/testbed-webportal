@@ -3,9 +3,13 @@
   <div class="row">
     <div class="col-lg-8">
       <h2>Sign up to FIT IoT-LAB</h2>
-      <div v-if="success" class="anlert alert-success">Success</div>
-      <div v-else-if="error" class="alert alert-danger">Failed</div>
-      <form v-else class=" mb-5" @submit.prevent="signup">
+      <div v-if="success" class="card border-success mt-4 mb-4">
+        <div class="card-header lead bg-success text-white"><i class="fa fa-check mr-1"></i> An email has been sent to <i>{{user.email}}</i></div>
+        <div class="card-body text-success">
+          <h4>Check your inbox and follow link to validate your account.</h4>
+        </div>
+      </div>
+      <form v-else class="mb-5" @submit.prevent="signup" novalidate>
         <div class="text-right text-italic text-muted small">
           * All fields are mandatory
         </div>
@@ -115,6 +119,7 @@ export default {
       countries: countries,
       categories: UserCategories,
       category: undefined,
+      success: false,
     }
   },
 
@@ -133,12 +138,10 @@ export default {
 
       try {
         await iotlab.signup(this.user)
-        // this.$router.push('dashboard')
-        alert('Success')
         this.success = true
       } catch (err) {
-        this.error = true
-        alert('Error')
+        this.success = false
+        this.$notify({text: 'Error during signup', type: 'error'})
       }
     },
     onCaptchaVerify: function (response) {
