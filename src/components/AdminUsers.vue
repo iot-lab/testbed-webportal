@@ -361,7 +361,6 @@
 </template>
 
 <script>
-import vSelect from 'vue-select'
 import countries from '@/assets/js/countries'
 import categories from '@/assets/js/categories'
 import {iotlab} from '@/rest'
@@ -369,7 +368,6 @@ import {auth} from '@/auth'
 
 export default {
   name: 'AdminUsers',
-  components: {vSelect},
 
   data () {
     return {

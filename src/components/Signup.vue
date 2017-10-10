@@ -32,7 +32,7 @@
           <div class="col-md">
             <div class="form-group">
               <label class="form-control-label">User category</label>
-              <v-select v-model="user.category" :options="categories" placeholder="Category" :searchable="false" required></v-select>
+              <multiselect v-model="user.category" :options="Object.keys(categories)" placeholder="Category" :searchable="false" required :custom-label="userLabel" :show-labels="false"></multiselect>
             </div>                    
           </div>
           <div class="col-md">
@@ -52,7 +52,7 @@
           <div class="col-md">
             <div class="form-group">
               <label class="form-control-label">Country</label>
-              <v-select :options="countries" v-model="user.country" required placeholder="Country" @keydown.enter.prevent=""></v-select>
+              <multiselect :options="countries" v-model="user.country" required placeholder="Country"></multiselect>
             </div>
           </div>
         </div>
@@ -96,26 +96,24 @@
 </template>
 
 <script>
-import vSelect from 'vue-select'
+import Multiselect from 'vue-multiselect'
 import VueRecaptcha from 'vue-recaptcha'
 import {iotlab} from '@/rest'
 import countries from '@/assets/js/countries'
-import categories from '@/assets/js/categories'
+import UserCategories from '@/assets/js/categories'
 
 export default {
   name: 'signup',
-  components: {vSelect, VueRecaptcha},
+  components: {Multiselect, VueRecaptcha},
 
   data () {
     return {
       reCaptchaSitekey: '6Ld8cR4UAAAAAC-zBLP9m2bC35xyyYwTbvkBcx4q',
       charter: false,
       verified: false,
-      user: {
-        'sshPublicKeys': [''],
-      },
+      user: {},
       countries: countries,
-      categories: categories,
+      categories: UserCategories,
       category: undefined,
     }
   },
@@ -130,6 +128,7 @@ export default {
       // check reCaptcha verified
       if (!this.verified) {
         alert('Please verify the captcha "I\'m not a robot"')
+        return
       }
 
       try {
@@ -150,6 +149,9 @@ export default {
       console.log('Captcha Expired')
       this.verified = false
     },
+    userLabel (cat) {
+      return UserCategories[cat]
+    },
   },
 }
 </script>
@@ -157,8 +159,5 @@ export default {
 <style scoped>
 ul {
   padding-left: 15px;
-}
-.v-select {
-  background: white;
 }
 </style>
