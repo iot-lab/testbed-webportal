@@ -539,7 +539,7 @@ function buildUsersTable() {
             $('#txt_lastname_e').val(selectedUser.lastName);
             $('#txt_login_e').val(selectedUser.login);
             $('#txt_email_e').val(selectedUser.email);
-            $('#txt_organization_e').val(selectedUser.organization);
+            $('#txt_organization_e').val(selectedUser.structure);
             $('#txt_city_e').val(selectedUser.city);
             $('#txt_country_e').val(selectedUser.country);
             $('#txt_motivation_e').val(selectedUser.motivations);
@@ -734,7 +734,7 @@ $('#form_modify_user').bind('submit', function (e) {
 
 
     selectedUser.motivations = $("#txt_motivation_e").val();
-    selectedUser.organization = $("#txt_organization_e").val();
+    selectedUser.structure = $("#txt_organization_e").val();
     selectedUser.city = $("#txt_city_e").val();
     selectedUser.country = $("#txt_country_e").val();
 
