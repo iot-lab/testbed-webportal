@@ -156,7 +156,7 @@ include("header.php");
             userregister.firstName = $("#txt_firstname").val();
             userregister.lastName = $("#txt_lastname").val();
             userregister.email = $("#txt_email").val();
-            userregister.structure = $("#txt_organization").val();
+            userregister.organization = $("#txt_organization").val();
             userregister.city = $("#txt_city").val();
             userregister.country = $("#txt_country").val();
             userregister.motivations = $("#txt_motivation").val();
