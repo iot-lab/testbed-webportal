@@ -145,6 +145,9 @@ $(document).ready(function () {
         "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",
         "bProcessing": false,
         "bServerSide": true,
+        "oLanguage": {
+            "sInfoFiltered": ""
+        },
         "sAjaxSource": "scripts/exp_list.php",
         "aoColumns": [
             {"mDataProp": "id" },

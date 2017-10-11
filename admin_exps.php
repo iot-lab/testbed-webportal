@@ -120,6 +120,9 @@ if (isset($_GET['user'])) {
             "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",
             "bProcessing": false,
             "bServerSide": true,
+            "oLanguage": {
+                "sInfoFiltered": ""
+            },
             "sAjaxSource": "scripts/admin_exp_list.php",
             "fnServerParams": <?php echo $request_exps; ?>,
             "bPaginate": true,
