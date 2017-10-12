@@ -2,6 +2,12 @@
 process.env.NODE_ENV = 'testing'
 var server = require('../../build/dev-server.js')
 
+if (!process.env.IOTLAB_WEBPORTAL_PASSWD) {
+  console.error('\x1b[31m%s\x1b[0m', 'Environment variable IOTLAB_WEBPORTAL_PASSWD is missing.')
+  console.error('\x1b[35m%s\x1b[0m', 'Please export with ldap password for user "webportal".')
+  process.exit(-1)
+}
+
 server.ready.then(() => {
   // 2. run the nightwatch test suite against it
   // to run in additional browsers:
