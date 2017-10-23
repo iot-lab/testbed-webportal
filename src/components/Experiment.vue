@@ -331,6 +331,7 @@ export default {
     startAsap () {
     },
     startScheduled () {
+      this.$forceUpdate()
       this.$nextTick(() => {
         $('#datetimepicker1').datetimepicker('show')
       })
