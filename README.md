@@ -1,5 +1,7 @@
 # testbed-webportal
 
+[![Build Status](https://ci.inria.fr/iot-lab/buildStatus/icon?job=testbed-webportal)](https://ci.inria.fr/iot-lab/job/testbed-webportal/)
+
 > A Vue.js webportal for the FIT IoT-LAB testbed
 
 ## Requirements
