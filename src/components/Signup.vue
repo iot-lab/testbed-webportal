@@ -35,9 +35,8 @@
         </div>
             <div class="form-group">
               <label class="form-control-label">Email</label>
-              <input v-model="user.email" name="email" class="form-control" type="email" v-validate="'required|email'" placeholder="Academic or professional email" :class="{'is-invalid': errors.has('email') }">
-              <div class="invalid-feedback" v-show="errors.has('email')">
-                {{ errors.first('email') }}
+              <input v-model="user.email" name="email" class="form-control" type="email" v-validate="'required|email|noWebMail'" placeholder="Academic or professional email" :class="{'is-invalid': errors.has('email') }">
+              <div class="invalid-feedback" v-show="errors.has('email')" v-html="errors.first('email')">
               </div>
             </div>
         <div class="row">
@@ -155,9 +154,11 @@
 import Multiselect from 'vue-multiselect'
 import VueRecaptcha from 'vue-recaptcha'
 import {iotlab} from '@/rest'
+import WebmailDomains from '@/assets/js/webmail-domains'
 import countries from '@/assets/js/countries'
 import UserCategories from '@/assets/js/categories'
 import $ from 'jquery'
+import { Validator } from 'vee-validate'
 
 export default {
   name: 'signup',
@@ -179,6 +180,13 @@ export default {
         captcha: false,
       },
     }
+  },
+
+  created () {
+    Validator.extend('noWebMail', {
+      getMessage: field => `Your email must be <b>academic</b> or <b>professional</b> in order to validate your account (<b>${this.user.email.split('@')[1]}</b> not allowed).`,
+      validate: email => !WebmailDomains.includes(email.split('@')[1].toLowerCase()),
+    })
   },
 
   methods: {
