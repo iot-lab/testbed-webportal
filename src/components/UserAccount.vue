@@ -15,77 +15,12 @@
           <div class="tab-pane fade show active" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
             
             <h5><i class="fa fa-fw fa-pencil" aria-hidden="true"></i> Edit your profile</h5>
-            <form @submit.prevent="saveDetails">
-                <div class="row">
-                  <div class="col-md">
-                    <div class="form-group">
-                      <label class="form-control-label">First name</label>
-                      <input placeholder="First name" v-model="user.firstName" class="form-control" type="text" required>
-                    </div>
-                  </div>
-                  <div class="col-md">                    
-                    <div class="form-group">
-                      <label class="form-control-label">Last name</label>
-                      <input placeholder="Last name" v-model="user.lastName" class="form-control" type="text" required>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md">
-                    <div class="form-group">
-                      <label class="form-control-label">Email</label>
-                      <input v-model="user.email" class="form-control" type="email" required placeholder="Academic or professional email">
-                    </div>
-                  </div>
-                  <div class="col-md"></div>
-                </div>
-                <div class="row">
-                  <div class="col-md">
-                    <div class="form-group">
-                      <label class="form-control-label">User category</label>
-                      <multiselect v-model="user.category" :options="Object.keys(categories)" placeholder="Category" :searchable="false" required :custom-label="userLabel" :show-labels="false"></multiselect>
-                    </div>                    
-                  </div>
-                  <div class="col-md">
-                    <div class="form-group">
-                      <label class="form-control-label">Organization</label>
-                      <input placeholder="Organization" v-model="user.organization" class="form-control" type="text" required>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md">
-                    <div class="form-group">
-                      <label class="form-control-label">City</label>
-                      <input placeholder="City" v-model="user.city" class="form-control" type="text" required>
-                    </div>
-                  </div>
-                  <div class="col-md">
-                    <div class="form-group">
-                      <label class="form-control-label">Country</label>
-                      <multiselect :options="countries" v-model="user.country" required placeholder="Country"></multiselect>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="form-control-label">Motivations</label>
-                  <textarea v-model="user.motivations" class="form-control" rows="5" placeholder="Tell us about you" required></textarea>
-                </div>
-                <div class="form-group">
-                  <div class="alert alert-info form-control">
-                    <i class="fa fa-pencil"></i> <b>Tell us about your motivations</b>
-                    <ul style="margin: 0">
-                      <li>Research domain (Radio communication, networking protocol, distributed applications, &#x2026;)</li>
-                      <li>What kind of experiments do you want to run with IoT-LAB?</li>
-                      <li>Goal (Verify something existing in large scale, new development, &#x2026;)</li>
-                      <li>Experience with sensor networks (n00b, experiments with X platform, former IoT-LAB user, Guru, God)</li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <button class="btn btn-success" type="submit">Update profile</button>
-                  <button class="btn btn-secondary" type="button" @click="reset">Reset</button>
-                </div>
+            <form @submit.prevent="updateProfile">
+              <user-form :user="user" ref="user"></user-form>
+              <div class="form-group">
+                <button class="btn btn-success" type="submit">Update profile</button>
+                <button class="btn btn-secondary" type="button" @click="reset">Reset</button>
+              </div>
             </form>
             
           </div>
@@ -142,23 +77,19 @@
 </template>
 
 <script>
-import Multiselect from 'vue-multiselect'
-import countries from '@/assets/js/countries'
-import UserCategories from '@/assets/js/categories'
+import UserForm from '@/components/UserForm'
 import {iotlab} from '@/rest'
 import {auth} from '@/auth'
 
 export default {
   name: 'UserAccount',
-  components: {Multiselect},
+  components: {UserForm},
 
   data () {
     return {
       user: {},
       keys: [''],
       pwd: {},
-      countries: countries,
-      categories: UserCategories,
       auth: auth,
       activeKey: 0,
     }
@@ -173,9 +104,15 @@ export default {
     async reset () {
       this.user = await iotlab.getUserInfo()
     },
-    async saveDetails () {
-      await iotlab.setUserInfo(this.user)
-      this.$notify({text: 'Profile updated', type: 'success'})
+    async updateProfile () {
+      if (await this.$refs.user.validate()) {
+        try {
+          await iotlab.setUserInfo(this.user)
+          this.$notify({text: 'Profile updated', type: 'success'})
+        } catch (err) {
+          this.$notify({text: 'An error occured', type: 'error'})
+        }
+      }
     },
     async changePassword () {
       try {
@@ -202,9 +139,6 @@ export default {
     delKey (index) {
       this.keys.splice(index, 1)
       this.activeKey = Math.min(this.activeKey, this.keys.length - 1)
-    },
-    userLabel (cat) {
-      return UserCategories[cat]
     },
   },
 }
