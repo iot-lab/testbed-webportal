@@ -17,68 +17,14 @@
           <div class="tab-pane fade show active" id="list-single" role="tabpanel" aria-labelledby="list-single-list">
             
             <form @submit.prevent="createSingle">
-                <div class="row">
-                  <div class="col-md">
-                    <div class="form-group">
-                      <label class="form-control-label">First name</label>
-                      <input placeholder="First name" v-model="user.firstName" class="form-control" type="text" required>
-                    </div>
-                  </div>
-                  <div class="col-md">
-                    <div class="form-group">
-                      <label class="form-control-label">Last name</label>
-                      <input placeholder="Last name" v-model="user.lastName" class="form-control" type="text" required>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md">
-                    <div class="form-group">
-                      <label class="form-control-label">Email</label>
-                      <input v-model="user.email" class="form-control" type="email" required placeholder="Academic or professional email">
-                    </div>
-                  </div>
-                  <div class="col-md"></div>
-                </div>
-                <div class="row">
-                  <div class="col-md">
-                    <div class="form-group">
-                      <label class="form-control-label">User category</label>
-                      <multiselect v-model="user.category" :options="Object.keys(categories)" placeholder="Category" :searchable="false" required :custom-label="userLabel" :show-labels="false"></multiselect>
-                    </div>
-                  </div>
-                  <div class="col-md">
-                    <div class="form-group">
-                      <label class="form-control-label">Organization</label>
-                      <input placeholder="Organization" v-model="user.organization" class="form-control" type="text" required>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md">
-                    <div class="form-group">
-                      <label class="form-control-label">City</label>
-                      <input placeholder="City" v-model="user.city" class="form-control" type="text" required>
-                    </div>
-                  </div>
-                  <div class="col-md">
-                    <div class="form-group">
-                      <label class="form-control-label">Country</label>
-                      <multiselect :options="countries" v-model="user.country" required placeholder="Country"></multiselect>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="form-control-label">Motivations</label>
-                  <textarea v-model="user.motivations" class="form-control" rows="5" placeholder="Motivations" required></textarea>
-                </div>
-                <div class="form-group">
-                  <label class="form-control-label text-danger">+ SSH Key here ?</label>
-                </div>
-                <div class="form-group">
-                  <button class="btn btn-success" type="submit">Create account</button>
-                  <button class="btn btn-secondary" type="reset">Clear</button>
-                </div>
+              <user-form :user="user" ref="user" :hidden="['motivations-help']"></user-form>
+              <div class="form-group">
+                <label class="form-control-label text-danger">+ SSH Key here ?</label>
+              </div>
+              <div class="form-group">
+                <button class="btn btn-success" type="submit">Create account</button>
+                <button class="btn btn-secondary" type="reset">Clear</button>
+              </div>
             </form>
             
           </div>
@@ -115,38 +61,7 @@
                     </div>                    
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-md">
-                    <div class="form-group">
-                      <label class="form-control-label">User category</label>
-                      <multiselect v-model="user.category" :options="Object.keys(categories)" placeholder="Category" :searchable="false" required :custom-label="userLabel" :show-labels="false"></multiselect>
-                    </div>
-                  </div>
-                  <div class="col-md">
-                    <div class="form-group">
-                      <label class="form-control-label">Organization</label>
-                      <input placeholder="Organization" v-model="user.organization" class="form-control" type="text" required>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md">
-                    <div class="form-group">
-                      <label class="form-control-label">City</label>
-                      <input placeholder="City" v-model="user.city" class="form-control" type="text" required>
-                    </div>
-                  </div>
-                  <div class="col-md">
-                    <div class="form-group">
-                      <label class="form-control-label">Country</label>
-                      <multiselect :options="countries" v-model="user.country" required placeholder="Country"></multiselect>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="form-control-label">Motivations / Event</label>
-                  <textarea v-model="user.motivations" class="form-control" rows="5" placeholder="Describe the event" required></textarea>
-                </div>
+                <user-form :user="users" ref="users" :hidden="['firstName','lastName','email','motivations-help']"></user-form>
                 <div class="form-group">
                   <button class="btn btn-success" type="submit">Create accounts</button>
                   <button class="btn btn-secondary" type="reset">Clear</button>
@@ -154,30 +69,28 @@
             </form>
             
           </div>
-          </div>
-          </div>
-
+        </div>
+      </div>
     </div>
   </div> <!-- row -->
 </div>
 </template>
 
 <script>
-import Multiselect from 'vue-multiselect'
-import {iotlab} from '@/rest'
-import countries from '@/assets/js/countries'
-import UserCategories from '@/assets/js/categories'
+import UserForm from '@/components/UserForm'
+// import {iotlab} from '@/rest'
+import {auth} from '@/auth'
 
 export default {
   name: 'AdminAddUser',
-  components: {Multiselect},
+  components: {UserForm},
 
   data () {
     return {
       user: {},
-      countries: countries,
-      categories: UserCategories,
-      category: undefined,
+      users: {
+        'motivations': `# created by ${auth.username} for <describe the event>`,
+      },
       qty: 3,
       showQty: false,
     }
@@ -188,31 +101,6 @@ export default {
     },
   },
   methods: {
-    async signup () {
-      // check charter read
-      if (!this.charter) {
-        alert('Please read and accept the Terms of Service')
-        return
-      }
-      // check reCaptcha verified
-      if (!this.verified) {
-        alert('Please verify the captcha "I\'m not a robot"')
-        return
-      }
-
-      try {
-        await iotlab.signup(this.user)
-        // this.$router.push('dashboard')
-        alert('Success')
-        this.success = true
-      } catch (err) {
-        this.error = true
-        alert('Error')
-      }
-    },
-    userLabel (cat) {
-      return UserCategories[cat]
-    },
   },
 }
 </script>
