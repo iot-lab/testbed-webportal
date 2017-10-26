@@ -2,7 +2,7 @@
   <div>
     <div class="row">
       <div class="col-md">
-        <div class="form-group">
+        <div class="form-group" v-if="!hidden.includes('firstName')">
           <label class="form-control-label">First name</label>
           <input placeholder="First name" v-model="user.firstName" name="firstname"
             class="form-control" type="text"v-validate="'required'"
@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="col-md">                    
-        <div class="form-group">
+        <div class="form-group" v-if="!hidden.includes('lastName')">
           <label class="form-control-label">Last name</label>
           <input placeholder="Last name" v-model="user.lastName" name="lastname"
             class="form-control" type="text" v-validate="'required'"
@@ -26,7 +26,7 @@
     </div>
     <div class="row">
       <div class="col-md">                    
-        <div class="form-group">
+        <div class="form-group" v-if="!hidden.includes('email')">
           <label class="form-control-label">Email</label>
           <input v-model="user.email" name="email" class="form-control" type="email"
             placeholder="Academic or professional email" v-validate="'required|email|noWebMail'"
@@ -40,7 +40,7 @@
     </div>
     <div class="row">
       <div class="col-md">
-        <div class="form-group">
+        <div class="form-group" v-if="!hidden.includes('category')">
           <label class="form-control-label">User category</label>
           <multiselect v-model="user.category"
             placeholder="Category"
@@ -58,7 +58,7 @@
         </div>
       </div>
       <div class="col-md">
-        <div class="form-group">
+        <div class="form-group" v-if="!hidden.includes('organization')">
           <label class="form-control-label">Organization</label>
           <input placeholder="Organization" v-model="user.organization" name="organization"
             class="form-control" type="text" v-validate="'required'" :class="{'is-invalid': errors.has('organization') }">
@@ -70,7 +70,7 @@
     </div>
     <div class="row">
       <div class="col-md">
-        <div class="form-group">
+        <div class="form-group" v-if="!hidden.includes('city')">
           <label class="form-control-label">City</label>
           <input placeholder="City" v-model="user.city" name="city"
             class="form-control" type="text" v-validate="'required'" :class="{'is-invalid': errors.has('city') }">
@@ -80,7 +80,7 @@
         </div>
       </div>
       <div class="col-md">
-        <div class="form-group">
+        <div class="form-group" v-if="!hidden.includes('country')">
           <label class="form-control-label">Country</label>
           <multiselect v-model="user.country"
             placeholder="Country"
@@ -94,7 +94,7 @@
         </div>
       </div>
     </div>
-    <div class="form-group">
+    <div class="form-group" v-if="!hidden.includes('motivations')">
       <label class="form-control-label">Motivations</label>
       <textarea v-model="user.motivations"
         name="motivations"
@@ -110,7 +110,7 @@
         {{ errors.first('motivations') }}
       </div>
     </div>
-    <div class="form-group" id="motivations" style="display: none">
+    <div class="form-group" id="motivations-help" style="display: none" v-if="!hidden.includes('motivations-help')">
       <div class="alert alert-info form-control">
         <i class="fa fa-pencil"></i> <b>Tell us about your motivations</b>
         <ul style="margin: 0">
@@ -137,7 +137,16 @@ export default {
   name: 'UserForm',
   components: {Multiselect},
 
-  props: ['user'],
+  props: {
+    user: {
+      type: Object,
+      default: () => {},
+    },
+    hidden: {
+      type: Object,
+      default: () => [],
+    },
+  },
 
   data () {
     return {
@@ -173,7 +182,7 @@ export default {
       return UserCategories[cat]
     },
     toggleMotivations () {
-      $('#motivations').slideToggle()
+      $('#motivations-help').slideToggle()
     },
   },
 }
