@@ -1,7 +1,7 @@
 <template>
 <div>
 <div class="alert alert-info rounded-0" v-if="auth.isAdmin && nbPendingUsers > 0" style="font-weight: 300">
-  <router-link to="users" tag="div" class="container cursor">
+  <router-link :to="{name:'users'}" tag="div" class="container cursor">
     <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
     {{nbPendingUsers}} pending user accounts awaiting validation
   </router-link>
@@ -43,7 +43,7 @@
         </tbody>
       </table>
       <p>
-        <router-link to="experiment" class="btn btn-primary">New experiment</router-link>
+        <router-link :to="{name:'experiment'}" class="btn btn-primary">New experiment</router-link>
       </p>
     </div>
     <div class="col">

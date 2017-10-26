@@ -9,8 +9,8 @@
                 <button class="btn btn-primary btn-block">Reset password</button>
             </form>
             <p class="text-center">
-                <router-link to="signup">Register for an account</router-link> &#x2013;
-                <router-link to="login">Login</router-link>
+                <router-link :to="{name:'signup'}">Register for an account</router-link> &#x2013;
+                <router-link :to="{name:'login'}">Login</router-link>
             </p>
         </div>
     </div>
