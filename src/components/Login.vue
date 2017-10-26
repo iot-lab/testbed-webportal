@@ -7,11 +7,11 @@
   <div class="login-box mx-auto text-center" :class="{ 'error': failed }">
     <h2 style="font-size: 1.75rem">Welcome to FIT IoT-LAB</h2>
     <form @submit.prevent="login" class="mx-auto">
-      <input v-model="username" type="text" class="form-control" :class="{ 'is-invalid': failed }" placeholder="Username"autofocus required>
+      <input v-model="username" type="text" class="form-control" :class="{ 'is-invalid': failed }" placeholder="Username" autofocus required>
       <input v-model="password" type="password" class="form-control" :class="{ 'is-invalid': failed }" placeholder="Password" required>
       <div class="invalid-feedback mb-2">Invalid username or password</div>
       <button type="submit" class="btn btn-primary btn-block">Log in</button>
-      <router-link to="signup" class="btn btn-warning btn-block">Register for an account</router-link>
+      <router-link to="signup" class="btn btn-outline-success btn-block">Register for an account</router-link>
       <p class="text-center">
         <router-link to="reset" class="btn btn-block">Forgot your password?</router-link>
       </p>
