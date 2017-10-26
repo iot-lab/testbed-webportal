@@ -27,7 +27,7 @@
         </form>
       </div>
       <div class="col-md-8 text-right align-self-end mb-4">
-        <router-link to="/adduser" class="btn btn-success"><i class="fa fa-user-plus"></i> Add User·s</router-link>
+        <router-link :to="{name:'addUsers'}" class="btn btn-success"><i class="fa fa-user-plus"></i> Add Users</router-link>
       </div>
     </div>
     <table class="table table-striped table-sm">

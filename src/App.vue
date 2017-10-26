@@ -14,21 +14,21 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <router-link tag="li" to="dashboard" active-class="active">
+            <router-link tag="li" :to="{name:'dashboard'}" active-class="active">
                 <a class="nav-link"><i class="fa fa-tasks" aria-hidden="true"></i> Dashboard</a>
             </router-link>
-            <router-link tag="li" to="experiment" active-class="active">
+            <router-link tag="li" :to="{name:'experiment'}" active-class="active">
                 <a class="nav-link"><i class="fa fa-flask" aria-hidden="true"></i> Experiment</a>
             </router-link>
-            <router-link tag="li" to="monitor" active-class="active">
+            <router-link tag="li" :to="{name:'monitor'}" active-class="active">
                 <a class="nav-link"><i class="fa fa-thermometer" aria-hidden="true"></i> Monitoring</a>
             </router-link>
         </ul>
         <ul class="nav navbar-nav float-xs-right">
-            <router-link tag="li" to="users" active-class="active" v-if="auth.isAdmin">
+            <router-link tag="li" :to="{name:'users'}" active-class="active" v-if="auth.isAdmin">
                 <a class="nav-link"><i class="fa fa-lg fa-fw fa-users" aria-label="Users"></i></a>
             </router-link>
-            <router-link tag="li" to="account" active-class="active" v-if="auth.loggedIn">
+            <router-link tag="li" :to="{name:'account'}" active-class="active" v-if="auth.loggedIn">
                 <a class="nav-link"><i class="fa fa-lg fa-fw fa-user" aria-label="Account"></i></a>
             </router-link>
             <li>

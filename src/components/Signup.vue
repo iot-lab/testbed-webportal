@@ -39,7 +39,7 @@
         </div>
         <div class="form-group">
           <button class="btn btn-lg btn-primary" type="submit">Sign up</button>
-          <router-link to="login" class="btn btn-lg btn-secondary">Login</router-link>
+          <router-link :to="{name:'login'}" class="btn btn-lg btn-secondary">Login</router-link>
         </div>
       </form>
 

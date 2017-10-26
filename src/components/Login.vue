@@ -11,9 +11,9 @@
       <input v-model="password" type="password" class="form-control" :class="{ 'is-invalid': failed }" placeholder="Password" required>
       <div class="invalid-feedback mb-2">Invalid username or password</div>
       <button type="submit" class="btn btn-primary btn-block">Log in</button>
-      <router-link to="signup" class="btn btn-outline-success btn-block">Register for an account</router-link>
+      <router-link :to="{name:'signup'}" class="btn btn-outline-success btn-block">Register for an account</router-link>
       <p class="text-center">
-        <router-link to="reset" class="btn btn-block">Forgot your password?</router-link>
+        <router-link :to="{name:'reset'}" class="btn btn-block">Forgot your password?</router-link>
       </p>
     </form>
   </div>
