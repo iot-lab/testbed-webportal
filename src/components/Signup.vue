@@ -3,10 +3,10 @@
   <div class="row">
     <div class="col-lg-8">
       <h2>Sign up to FIT IoT-LAB</h2>
-      <div v-if="success" class="card border-success mt-4 mb-4">
-        <div class="card-header lead bg-success text-white"><i class="fa fa-check mr-1"></i> An email has been sent to <i>{{user.email}}</i></div>
+      <div v-if="success" class="card border-success my-5">
+        <div class="card-header bg-success text-white"><i class="fa fa-check mr-1"></i> An email has been sent to <i>{{user.email}}</i></div>
         <div class="card-body text-success">
-          <h4>Check your inbox and follow link to validate your account.</h4>
+          <h5>Check your inbox and follow link to validate your account.</h5>
         </div>
       </div>
       <form v-else class="mb-5" @submit.prevent="signup">
