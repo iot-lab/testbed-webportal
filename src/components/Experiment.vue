@@ -81,20 +81,24 @@
               <div class="mb-2">
                 <span class="lead align-middle my-filter">Sites</span>
                 <div class="btn-group btn-group-sm btn-filter" role="group" aria-label="Filter by site">
-                  <button type="button" class="btn" :class="{'btn-secondary': filterSite == 'all'}" @click="filterSite = 'all'">all</button>
-                  <button type="button" class="btn" v-for="site in sites" :class="{'btn-secondary': filterSite == site.site}" @click="filterSite = site.site">{{site.site}}</button>
+                  <button type="button" class="btn" :class="{'btn-secondary': filterSite == 'all'}" @click="filterSite = 'all'">All</button>
+                  <button type="button" class="btn text-capitalize" v-for="site in sites" :class="{'btn-secondary': filterSite == site.site}" @click="filterSite = site.site">{{site.site}}</button>
                 </div>
               </div>
-              <div>
+              <div class="mb-2">
                 <span class="lead align-middle my-filter">Archi</span>
                 <div class="btn-group btn-group-sm btn-filter" role="group" aria-label="Filter by architecture">
-                  <button type="button" class="btn" :class="{'btn-secondary': filterArchi == 'all'}" @click="filterArchi = 'all'">all</button>
-                  <button type="button" class="btn" v-for="archi in archis" :class="{'btn-secondary': filterArchi == archi}" @click="filterArchi = archi">{{archi}}</button>
-                  <!-- <button type="button" class="btn" :class="{'btn-secondary': filterArchi == 'a8'}" @click="filterArchi = 'a8'">A8</button> -->
-                  <!-- <button type="button" class="btn" :class="{'btn-secondary': filterArchi == 'm3'}" @click="filterArchi = 'm3'">M3</button> -->
-                  <!-- <button type="button" class="btn" :class="{'btn-secondary': filterArchi == 'wsn430'}" @click="filterArchi = 'wsn430'">WSN430</button> -->
+                  <button type="button" class="btn" :class="{'btn-secondary': filterArchi == 'all'}" @click="filterArchi = 'all'">All</button>
+                  <button type="button" class="btn text-capitalize" v-for="archi in archis.sort()" :class="{'btn-secondary': filterArchi == archi}" @click="filterArchi = archi">{{archi|formatArchi}}</button>
                 </div>
-                  <button type="button" class="btn btn-sm btn-filter" :class="{'btn-secondary': filterMobile}" @click="filterMobile = !filterMobile">mobile</button>
+                <button type="button" class="btn btn-sm btn-filter" :class="{'btn-secondary': filterMobile}" @click="filterMobile = !filterMobile">Mobile</button>
+              </div>
+              <div>
+                <span class="lead align-middle my-filter">State</span>
+                <div class="btn-group btn-group-sm btn-filter" role="group" aria-label="Filter by state">
+                  <button type="button" class="btn" :class="{'btn-secondary': filterState == 'all'}" @click="filterState = 'all'">All</button>
+                  <button type="button" class="btn text-capitalize" v-for="state in states.sort()" :class="{'btn-secondary': filterState == state}" @click="filterState = state">{{state}}</button>
+                </div>
               </div>
               <div class="d-md-flex flex-row">
                 <multiselect v-model="currentNodes" :options="filteredNodes" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" :placeholder="searchNodesPlaceholder" label="network_address" track-by="network_address" class="mr-2 mt-3">
@@ -112,7 +116,7 @@
                     </div>
                   </template>
                 </multiselect>
-                <button class="btn btn-outline-success mt-3" @click="addNodes"><i class="fa fa-plus" aria-hidden="true"></i> Add to experiment</button>
+                <button class="btn btn-success mt-3" @click="addNodes"><i class="fa fa-plus" aria-hidden="true"></i> Add to experiment</button>
               </div>
               <p class="ml-1 mt-2" style="font-size: 0.875rem;">
                 <a href="" data-toggle="collapse" href="#collapseMap" aria-expanded="false" aria-controls="collapseMap"><i class="fa fa-map-o fa-lg" aria-hidden="true"></i> View/select nodes on map <i class="fa fa-caret-down" aria-hidden="true"></i></a> 
@@ -124,7 +128,60 @@
               </div>
               <!-- <span class="align-middle text-muted">0 nodes currently in experiment</span> -->
             </div>
-            <div class="tab-pane fade show active" id="list-byset" role="tabpanel" aria-labelledby="list-byset-list">
+            <div class="tab-pane fade show" id="list-byset" role="tabpanel" aria-labelledby="list-byset-list">
+              <div class="mb-2">
+                <span class="lead align-middle my-filter">Sites</span>
+                <div class="btn-group btn-group-sm btn-filter" role="group" aria-label="Filter by site">
+                  <button type="button" class="btn text-capitalize" v-for="site in sites" :class="{'btn-secondary': filterSite == site.site}" @click="filterSite = site.site">{{site.site}}</button>
+                </div>
+              </div>
+              <div>
+                <span class="lead align-middle my-filter">Archi</span>
+                <div class="btn-group btn-group-sm btn-filter" role="group" aria-label="Filter by architecture">
+                  <button type="button" class="btn text-capitalize" v-for="archi in archis.sort()" :class="{'btn-secondary': filterArchi == archi}" @click="filterArchi = archi">{{archi|formatArchi}}</button>
+                </div>
+                <button type="button" class="btn btn-sm btn-filter" :class="{'btn-secondary': filterMobile}" @click="filterMobile = !filterMobile">Mobile</button>
+              </div>
+                <span class="lead align-middle my-filter">Qty</span>
+                <div class="d-inline-block">
+                  <div class="input-group input-group-sm mt-2" style="max-width:120px;">
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-danger" :disabled="qty<=1" @click="qty--">
+                        <i class="fa fa-minus"></i>
+                      </button>
+                    </span>
+                    <input type="text" class="form-control" v-model="qty">
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-success" @click="qty++">
+                        <i class="fa fa-plus"></i>
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              <!-- <div class="d-md-flex" style="max-width: 800px"> -->
+                <!-- <input type="" name=""> -->
+              <!-- </div> -->
+              <hr>
+              <div class="d-md-flex" style="max-width: 800px">
+                <select class="form-control form-control-sm text-capitalize mr-2">
+                  <option selected disabled>Architecture</option>
+                  <option v-for="archi in archis" class="text-capitalize">{{archi | formatArchiRadio}}</option>
+                </select>
+                <select class="form-control form-control-sm text-capitalize mr-2">
+                  <option selected disabled>Site</option>
+                  <option v-for="site in sites">{{site.site}}</option>
+                </select>
+                <select class="form-control form-control-sm mr-2" style="max-width: 90px;">
+                  <option selected disabled>Count</option>
+                  <option v-for="i in [1,2,3,4,5,6,7,8,9,10]">{{i}}</option>
+                </select>
+                <label class="custom-control custom-checkbox mb-0 mt-1">
+                  <input type="checkbox" class="custom-control-input">
+                  <span class="custom-control-indicator"></span>
+                  <span class="custom-control-description">Mobile</span>
+                </label>
+                <button class="btn btn-sm btn-success"><i class="fa fa-plus" aria-hidden="true"></i> Add set</button>
+              </div>
             </div>
           </div>
         </div>
@@ -250,6 +307,7 @@ export default {
       filterSite: 'all',
       filterArchi: 'all',
       filterMobile: false,
+      filterState: 'all',
       monitoringFile: {name: undefined},
       firmwareFile: {name: undefined},
       scriptFile: {name: undefined},
@@ -297,6 +355,9 @@ export default {
         return this.filterMobile === false || node.mobile === 1
       })
       .filter((node) => {
+        return this.filterState === 'all' || node.state === this.filterState
+      })
+      .filter((node) => {
         return !this.selectedNodes.some(e => e.network_address === node.network_address)
       })
     },
@@ -318,6 +379,15 @@ export default {
       })
       .reduce((list, node) => {
         if (!list.includes(node.archi)) { list.push(node.archi) }
+        return list
+      }, [])
+    },
+    states () {
+      return this.nodes.filter((node) => {
+        return this.filterSite === 'all' || node.site === this.filterSite
+      })
+      .reduce((list, node) => {
+        if (!list.includes(node.state)) { list.push(node.state) }
         return list
       }, [])
     },
@@ -362,12 +432,6 @@ export default {
 .custom__remove:hover {
   color: black;
 }
-.multiselect__option--highlight:after {
-  background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(65,184,131,1) 10%, rgba(65,184,131,1) 100%) !important;
-}
-/*.multiselect__element, .multiselect__content-wrapper {
-  z-index: 100 !important;
-}*/
 
 .custom-file-control {
   overflow: hidden;
@@ -402,7 +466,7 @@ export default {
 .font-size-sm {
   font-size: 0.875rem;
 }
-.btn-group {
+.btn-filter {
   flex-flow: wrap;
 }
 </style>

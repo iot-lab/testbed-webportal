@@ -48,3 +48,18 @@ Vue.filter('stateBadgeClass', function (value) {
     }
   }
 })
+
+Vue.filter('formatArchi', function (value) {
+  if (value) {
+    return value.split(':')[0].replace('_', ' ')
+  }
+})
+
+Vue.filter('formatArchiRadio', function (value) {
+  if (value) {
+    if (value.split(':')[1]) {
+      return value.split(':')[0].replace('_', ' ') + ' (' + value.split(':')[1] + ')'
+    }
+    return value.split(':')[0].replace('_', ' ')
+  }
+})
