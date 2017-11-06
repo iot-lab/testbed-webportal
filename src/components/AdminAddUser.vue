@@ -17,10 +17,7 @@
           <div class="tab-pane fade show active" id="list-single" role="tabpanel" aria-labelledby="list-single-list">
             
             <form @submit.prevent="createSingle">
-              <user-form :user="user" ref="user" :hidden="['motivations-help']"></user-form>
-              <div class="form-group">
-                <label class="form-control-label text-danger">+ SSH Key here ?</label>
-              </div>
+              <user-form :user="user" ref="user" :admin="true"></user-form>
               <div class="form-group">
                 <button class="btn btn-success" type="submit">Create account</button>
                 <button class="btn btn-secondary" type="reset">Clear</button>
@@ -61,7 +58,7 @@
                     </div>                    
                   </div>
                 </div>
-                <user-form :user="users" ref="users" :hidden="['firstName','lastName','email','motivations-help']"></user-form>
+                <user-form :user="users" ref="users" :admin="true" :hidden="['firstName','lastName','email']"></user-form>
                 <div class="form-group">
                   <button class="btn btn-success" type="submit">Create accounts</button>
                   <button class="btn btn-secondary" type="reset">Clear</button>

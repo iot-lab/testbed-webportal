@@ -110,7 +110,7 @@
         {{ errors.first('motivations') }}
       </div>
     </div>
-    <div class="form-group" id="motivations-help" style="display: none" v-if="!hidden.includes('motivations-help')">
+    <div class="form-group" id="motivations-help" style="display: none">
       <div class="alert alert-info form-control">
         <i class="fa fa-pencil"></i> <b>Tell us about your motivations</b>
         <ul style="margin: 0">
@@ -139,12 +139,19 @@ export default {
 
   props: {
     user: {
+      // Initial user object for form field values
       type: Object,
       default: () => {},
     },
     hidden: {
-      type: Object,
+      // List of user fields to be hidden from the form
+      type: [String, Array],
       default: () => [],
+    },
+    admin: {
+      // when admin=true, no validation on user email domain & no motivations help text
+      type: Boolean,
+      default: () => false,
     },
   },
 
@@ -163,7 +170,7 @@ export default {
   created () {
     Validator.extend('noWebMail', {
       getMessage: field => `Your email must be <b>academic</b> or <b>professional</b> in order to validate your account (<b>${this.user.email.split('@')[1]}</b> not allowed).`,
-      validate: email => !WebmailDomains.includes(email.split('@')[1].toLowerCase()),
+      validate: email => this.admin || !WebmailDomains.includes(email.split('@')[1].toLowerCase()),
     })
   },
 
@@ -182,7 +189,9 @@ export default {
       return UserCategories[cat]
     },
     toggleMotivations () {
-      $('#motivations-help').slideToggle()
+      if (!this.admin) {
+        $('#motivations-help').slideToggle()
+      }
     },
   },
 }
