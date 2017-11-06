@@ -98,12 +98,12 @@
               </div>
               <div class="d-md-flex flex-row">
                 <multiselect v-model="currentNodes" :options="filteredNodes" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" :placeholder="searchNodesPlaceholder" label="network_address" track-by="network_address" class="mr-2 mt-3">
-                  <template slot="tag" scope="props">
+                  <template slot="tag" slot-scope="props">
                     <span class="custom__tag badge badge-primary">
                       <span>{{props.option.network_address}}</span> <span class="custom__remove cursor" @click="props.remove(props.option)">&times;</span>
                     </span>
                   </template>
-                  <template slot="option" scope="props">
+                  <template slot="option" slot-scope="props">
                     <div class="option__desc">
                       <span class="option__title">{{props.option.network_address}}</span>
                       <span class="float-right badge custom__tag badge-secondary" :class="props.option.archi">{{props.option.archi}}</span>
@@ -147,7 +147,7 @@
           <!-- <label>Select nodes</label> -->
           <!-- <label>Node type </label> -->
           <multiselect v-model="value" :options="selectedNodes" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Select nodes" label="network_address" track-by="network_address">
-            <template slot="tag" scope="props">
+            <template slot="tag" slot-scope="props">
               <span class="custom__tag badge badge-primary">
                 <span>{{props.option.network_address}}</span> <span class="custom__remove cursor" @click="props.remove(props.option)">&times;</span>
               </span>
