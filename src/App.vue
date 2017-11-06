@@ -59,8 +59,9 @@
         </div>
       </template>
     </notifications>
-    
-    <router-view></router-view>
+    <keep-alive include="NewExperiment,AdminUsers">
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 
