@@ -11,6 +11,7 @@ import App from './App'
 import router from './router'
 import {iotlab} from './rest'
 import './filters'
+import './directives'
 
 Vue.use(VeeValidate)
 Vue.use(Notifications, {velocity})
