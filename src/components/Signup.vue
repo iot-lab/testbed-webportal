@@ -121,16 +121,13 @@ ul {
   min-height: 38px !important;
 }
 .invalid .multiselect__tags {
-  border-color: #dc3545 !important;
+  border-color: var(--danger) !important;
 }
 .multiselect__option--highlight {
-  background: #007bff !important;
-}
-.multiselect__option--selected.multiselect__option--highlight {
-  background: #868e96 !important;
+  background: var(--primary) !important;
 }
 .multiselect__option--highlight:after {
-  background: linear-gradient(90deg, rgba(0,0,0,0) 0%, #007bff 10%, #007bff 100%) !important;
+  background: linear-gradient(90deg, rgba(0,0,0,0) 0%, var(--primary) 10%, var(--primary) 100%) !important;
 }
 .multiselect__option--highlight:hover:after {
   opacity: 0;
