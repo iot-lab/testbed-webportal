@@ -50,15 +50,39 @@
           <td>{{user.lastName}}</td>
           <td><a :href="'mailto:' + user.email" class="email">{{user.email}}</a></td>
           <td :title="user.created | formatDateTime">{{user.created | formatDate}}</td>
-          <td><a href="" class="btn btn-sm" :class="(user.status === 'pending') ? 'btn-primary' : 'btn-outline-primary'" style="width: 70px;">{{user.status}}</a></td>
-          <td><a href="" class="btn btn-sm" :class="(user.admin) ? 'btn-warning' : 'btn-outline-primary'" style="width: 70px;">{{user.admin ? 'Admin': 'User'}}</a></td>
+          <td>
+            <a href="" class="btn btn-sm" style="width: 70px"
+              :class="(user.status === 'pending') ? 'btn-primary' : 'btn-outline-primary'"
+              v-tooltip:top="(user.status === 'pending') ? 'Activate' : 'Deactivate'"
+              @click.prevent="toggleActive(user)">
+              {{user.status}}
+            </a>
+          </td>
+          <td>
+            <a href="" class="btn btn-sm" style="width: 70px"
+              :class="user.admin ? 'btn-warning' : 'btn-outline-primary'"
+              v-tooltip:top="user.admin ? ' User' : 'Admin'"
+              @click.prevent="toggleAdmin(user)">
+              {{user.admin ? 'Admin': 'User'}}
+            </a>
+          </td>
           <td>
             <div class="btn-group" role="group" aria-label="User actions">
-              <a href="" class="btn btn-sm border-0 btn-outline-secondary" title="Experiments"><i class="fa fa-fw fa-flask"></i></a>
-              <a href="" class="btn btn-sm border-0 btn-outline-secondary" title="Edit"><i class="fa fa-fw fa-pencil"></i></a>
-              <a href="" class="btn btn-sm border-0 btn-outline-secondary" title="Email"><i class="fa fa-fw fa-envelope"></i></a>
-              <a href="" class="btn btn-sm border-0 btn-outline-danger" title="Reset password"><i class="fa fa-fw fa-unlock-alt"></i></a>
-              <a href="" class="btn btn-sm border-0 btn-outline-danger" title="Delete"><i class="fa fa-fw fa-trash"></i></a>
+              <a href="" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Experiments'" @click.prevent="">
+                <i class="fa fa-fw fa-flask"></i>
+              </a>
+              <a href="" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Edit'" data-toggle="modal" data-target=".edit-user-modal" @click="currentUser = user">
+                <i class="fa fa-fw fa-pencil"></i>
+              </a>
+              <a href="" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Email'" @click.prevent="">
+                <i class="fa fa-fw fa-envelope"></i>
+              </a>
+              <a href="" class="btn btn-sm border-0 btn-outline-danger" v-tooltip="'Reset password'" @click.prevent="resetPassword(user)">
+                <i class="fa fa-fw fa-unlock-alt"></i>
+              </a>
+              <a href="" class="btn btn-sm border-0 btn-outline-danger" v-tooltip="'Delete'" @click.prevent="deleteUser(user)">
+                <i class="fa fa-fw fa-trash"></i>
+              </a>
             </div>
           </td>
         </tr>
@@ -71,36 +95,63 @@
       <p v-else>No matching user found</p>        
     </div>
 
+    <div class="modal fade edit-user-modal" tabindex="-1" role="dialog" aria-labelledby="editUserModal" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header bg-light">
+            <h5 class="modal-title"><i class="fa fa-fw fa-pencil"></i> Edit <span class="text-primary">{{currentUser.login}}</span>'s profile</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body px-4 pt-3 pb-0">
+            <user-form ref="user" :user="currentUser" :admin="true"></user-form>
+          </div>
+          <div class="modal-footer border-0 dbg-light">
+            <button type="button" class="btn" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-success" @click.prevent="updateProfile">Save profile</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div> <!-- container -->
 </template>
 
 <script>
+import UserForm from '@/components/UserForm'
 import {iotlab} from '@/rest'
 import {auth} from '@/auth'
+import $ from 'jquery'
 
 export default {
   name: 'AdminUsers',
 
+  components: {UserForm},
+
   data () {
     return {
       users: [],
+      currentUser: {},
       auth: auth,
       pattern: '',
       show: 'pending',
     }
   },
 
-  created () {
-    iotlab.getUsers().then(data => { this.users = data })
+  async created () {
+    this.users = await iotlab.getUsers()
   },
 
   methods: {
     async showPending () {
       this.pattern = ''
+      this.show = 'pending'
       this.users = await iotlab.getUsers({status: 'pending'})
     },
     async showAdmin () {
       this.pattern = ''
+      this.show = 'admin'
       this.users = await iotlab.getUsers({isAdmin: true})
     },
     async search () {
@@ -110,6 +161,70 @@ export default {
       } else {
         this.show = 'pending'
         this.showPending()
+      }
+    },
+    async updateProfile () {
+      if (await this.$refs.user.validate()) {
+        try {
+          await iotlab.setUserInfo(this.currentUser, this.currentUser.login)
+          $('.edit-user-modal').modal('hide')
+        } catch (err) {
+          this.$notify({text: 'An error occured', type: 'error'})
+        }
+      }
+    },
+    async toggleActive (user) {
+      if (user.status === 'pending') {
+        if (confirm('Activate user?')) {
+          try {
+            await iotlab.activateUser(user.login)
+            user.status = 'active'
+            user.admin = false
+          } catch (err) {
+            this.$notify({text: 'An error occured', type: 'error'})
+          }
+        }
+      } else {
+        if (confirm('Deactivate user?')) {
+          try {
+            await iotlab.deactivateUser(user.login)
+            user.status = 'pending'
+            user.admin = false
+          } catch (err) {
+            this.$notify({text: 'An error occured', type: 'error'})
+          }
+        }
+      }
+    },
+    async toggleAdmin (user) {
+      if (confirm(`${user.admin ? 'Remove' : 'Set'} role admin for user?`)) {
+        try {
+          await iotlab.setAdminRole(user.login, !user.admin)
+          user.admin = !user.admin
+        } catch (err) {
+          this.$notify({text: 'An error occured', type: 'error'})
+        }
+      }
+    },
+    async resetPassword (user) {
+      if (confirm(`Reset password for user ${user.login}?\n\nThe user will receive a new password by email.`)) {
+        try {
+          await iotlab.resetPassword(user.email)
+          this.$notify({text: 'New password sent by email', type: 'success'})
+        } catch (err) {
+          this.$notify({text: 'An error occured', type: 'error'})
+        }
+      }
+    },
+    async deleteUser (user) {
+      if (confirm(`Delete user ${user.login}?`)) {
+        try {
+          await iotlab.deleteUser(user.login)
+          this.users = this.users.filter(item => item.login !== user.login)
+          this.$notify({text: `User ${user.login} deleted`, type: 'success'})
+        } catch (err) {
+          this.$notify({text: 'An error occured', type: 'error'})
+        }
       }
     },
   },
