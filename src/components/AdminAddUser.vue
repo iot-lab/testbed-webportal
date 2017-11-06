@@ -34,7 +34,7 @@
                     <div class="form-group">
                       <label class="form-control-label">Login</label>
                       <div class="input-group">
-                        <input v-model="user.login" class="form-control" type="text" required placeholder="username">
+                        <input v-model="baseLogin" class="form-control" type="text" required placeholder="username">
                         <span class="input-group-addon" v-text="`_1 to ${qty}`"></span>
                       </div>
                     </div>
@@ -75,7 +75,7 @@
 
 <script>
 import UserForm from '@/components/UserForm'
-// import {iotlab} from '@/rest'
+import {iotlab} from '@/rest'
 import {auth} from '@/auth'
 
 export default {
@@ -89,6 +89,7 @@ export default {
         'motivations': `# created by ${auth.username} for <describe the event>`,
       },
       qty: 3,
+      baseLogin: '',
       showQty: false,
     }
   },
@@ -98,6 +99,37 @@ export default {
     },
   },
   methods: {
+    async createSingle () {
+      if (!(await this.$refs.user.validate())) {
+        return
+      }
+      try {
+        this.user.status = 'active'
+        await iotlab.signup(this.user)
+        this.$notify({text: 'User created', type: 'success'})
+      } catch (err) {
+        this.$notify({text: 'An error occured', type: 'error'})
+      }
+    },
+    async createMultiple () {
+      if (!(await this.$refs.users.validate())) {
+        return
+      }
+      try {
+        for (let i of Array(this.qty).keys()) {
+          this.users.login = `${this.baseLogin}_${i + 1}`
+          this.users.firstName = this.users.lastName = this.users.login
+          this.users.email = `${this.users.login}@iot-lab.info`
+          this.users.status = 'active'
+          console.log('creating user', this.users.login)
+          await iotlab.signup(this.users)
+        }
+        this.$notify({text: `${this.qty} users created`, type: 'success'})
+        this.user = {}
+      } catch (err) {
+        this.$notify({text: 'An error occured', type: 'error'})
+      }
+    },
   },
 }
 </script>
