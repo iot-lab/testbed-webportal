@@ -35,8 +35,14 @@ export const iotlab = {
     this.api = this.apiv2
   },
 
+  // USERS API
+
   async signup (user) {
     await iotlab.api.post('/users', user)
+  },
+
+  async deleteUser (login) {
+    await iotlab.api.delete(`/users/${login}`)
   },
 
   async resetPassword (email) {
@@ -59,6 +65,10 @@ export const iotlab = {
     return await iotlab.api.post('/user/keys', {'sshkeys': keys})
   },
 
+  async deleteSSHkey (id) {
+    return await iotlab.api.delete(`/user/keys/${id}`)
+  },
+
   async getUsers ({status, isAdmin, search} = {}) {
     let params = {}
     if (status) {
@@ -74,13 +84,35 @@ export const iotlab = {
     return await iotlab.api.get('/users', {params: params}).then(resp => resp.data)
   },
 
-  async getUserInfo () {
-    return await iotlab.api.get('/user').then(resp => resp.data)
+  async getUserInfo (login = undefined) {
+    if (login) {
+      return await iotlab.api.get(`/users/${login}`).then(resp => resp.data)
+    } else {
+      return await iotlab.api.get('/user').then(resp => resp.data)
+    }
   },
 
-  async setUserInfo (user) {
-    return await iotlab.api.put('/user', user)
+  async setUserInfo (user, login = undefined) {
+    if (login) {
+      return await iotlab.api.put(`/users/${login}`, user)
+    } else {
+      return await iotlab.api.put('/user', user)
+    }
   },
+
+  async activateUser (login) {
+    return await iotlab.api.put(`/users/${login}`, {'status': 'active'})
+  },
+
+  async deactivateUser (login) {
+    return await iotlab.api.put(`/users/${login}`, {'status': 'pending'})
+  },
+
+  async setAdminRole (login, bool) {
+    return await iotlab.api.put(`/users/${login}`, {'admin': bool})
+  },
+
+  // EXPERIMENT API
 
   async getUserExperimentsCount () {
     return await iotlab.apiv1.get('/experiments?total').then(resp => resp.data)
@@ -90,16 +122,24 @@ export const iotlab = {
     return await iotlab.apiv1.get('/experiments', {'params': {state: state}}).then(resp => resp.data.items)
   },
 
-  async getStats () {
-    return await iotlab.apiv1.get('/stats').then(resp => resp.data)
-  },
+  // OTHER API
 
   async getSites () {
     return await iotlab.api.get('/sites').then(resp => resp.data.items)
   },
 
+  async getSitesDetails () {
+    return await iotlab.api.get('/sites/details').then(resp => resp.data.items)
+  },
+
   async getNodes () {
     return await iotlab.api.get('/nodes').then(resp => resp.data.items)
+  },
+
+  // API V1
+
+  async getStats () {
+    return await iotlab.apiv1.get('/stats').then(resp => resp.data)
   },
 
   async getSiteResources () {
