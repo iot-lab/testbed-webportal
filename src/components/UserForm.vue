@@ -202,3 +202,32 @@ ul {
   padding-left: 20px;
 }
 </style>
+
+<style>
+/* Let multiselect style match bootstrap 4 */
+
+.multiselect__single, .multiselect__input {
+  font-size: 1rem !important;
+  line-height: 1.25 !important;
+  color: #495057 !important;
+}
+.multiselect__tags {
+  border: 1px solid rgba(0,0,0,.15) !important;
+  border-radius: .25rem !important;
+}
+.mymultiselect .multiselect__tags {
+  min-height: 38px !important;
+}
+.invalid .multiselect__tags {
+  border-color: var(--danger) !important;
+}
+.multiselect__option--highlight {
+  background: var(--primary) !important;
+}
+.multiselect__option--highlight:after {
+  background: linear-gradient(90deg, rgba(0,0,0,0) 0%, var(--primary) 10%, var(--primary) 100%) !important;
+}
+.multiselect__option--highlight:hover:after {
+  opacity: 0;
+}
+</style>
