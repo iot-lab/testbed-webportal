@@ -34,11 +34,14 @@
                     <div class="form-group">
                       <label class="form-control-label">Login</label>
                       <div class="input-group">
-                        <input v-model="baseLogin" type="text" placeholder="username" name="username"
-                          class="form-control" :class="{'is-invalid': errors.has('username') }" v-validate="'required|unixUsername'">
+                        <input v-model="baseLogin"
+                          type="text" placeholder="username" name="username"
+                          class="form-control" :class="{'is-invalid': errors.has('username') }"
+                          v-validate="'required|unixUsername'">
                         <span class="input-group-addon" v-text="`_1 to ${qty}`"></span>
                       </div>
-                      <div class="invalid-feedback" v-show="errors.has('username')" :style="{'display': errors.has('username') ? 'none': 'block'}">
+                      <div class="invalid-feedback" v-show="errors.has('username')"
+                        :style="{'display': errors.has('username') ? 'none': 'block'}">
                         {{ errors.first('username') }}
                       </div>
                     </div>
