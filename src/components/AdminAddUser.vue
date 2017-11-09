@@ -20,7 +20,7 @@
               <user-form :user="user" ref="user" :admin="true"></user-form>
               <div class="form-group">
                 <button class="btn btn-success" type="submit">Create account</button>
-                <button class="btn btn-secondary" type="reset">Clear</button>
+                <button class="btn btn-secondary" type="reset" @click="$refs.user.clean()">Clear</button>
               </div>
             </form>
             
@@ -61,7 +61,7 @@
                 <user-form :user="users" ref="users" :admin="true" :hidden="['firstName','lastName','email']"></user-form>
                 <div class="form-group">
                   <button class="btn btn-success" type="submit">Create accounts</button>
-                  <button class="btn btn-secondary" type="reset">Clear</button>
+                  <button class="btn btn-secondary" type="reset" @click="$refs.users.clean(); baseLogin = ''; $validator.clean()">Clear</button>
                 </div>
             </form>
             
@@ -86,7 +86,7 @@ export default {
     return {
       user: {},
       users: {
-        'motivations': `# created by ${auth.username} for <describe the event>`,
+        'motivations': `# created by ${auth.username} for <DESCRIBE THE EVENT>`,
       },
       qty: 3,
       baseLogin: '',

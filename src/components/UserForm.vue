@@ -175,6 +175,16 @@ export default {
   },
 
   methods: {
+    clean (newUser = {}) {
+      // clear errors
+      this.$validator.clean()
+      this.dirty = {
+        category: false,
+        country: false,
+      }
+      // reset user value
+      this.user = newUser
+    },
     async validate () {
       return this.$validator.validateAll().then((validated) => {
         if (!validated || !this.user.country || !this.user.category) {
