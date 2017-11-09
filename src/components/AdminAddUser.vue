@@ -37,7 +37,8 @@
                         <input v-model="baseLogin"
                           type="text" placeholder="login" name="login"
                           class="form-control" :class="{'is-invalid': errors.has('login') }"
-                          v-validate="`required|min:3|max:${20-String(qty).length}|iotlabLogin`">
+                          v-validate="`required|min:3|max:${20-String(qty).length}|iotlabLogin|checkDuplicate`"
+                          data-vv-delay="400">
                         <span class="input-group-addon" v-text="`1 to ${qty}`"></span>
                       </div>
                       <div class="invalid-feedback" v-show="errors.has('login')"
@@ -94,6 +95,17 @@ export default {
     Validator.extend('iotlabLogin', {
       getMessage: field => 'Must be a valid iotlab login (use only a-z & 0-9 characters).',
       validate: login => /^[a-z][a-z0-9]{3,19}$/.test(login + String(this.qty)),
+    })
+    Validator.extend('checkDuplicate', {
+      getMessage: field => 'This login already exists.',
+      validate: async login => {
+        try {
+          await iotlab.getUserInfo(login + '1')
+          return false
+        } catch (err) {
+          return true
+        }
+      },
     })
   },
 
