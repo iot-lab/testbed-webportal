@@ -35,7 +35,7 @@
                       <label class="form-control-label">Login</label>
                       <div class="input-group">
                         <input v-model="baseLogin" type="text" placeholder="username" name="username"
-                          class="form-control" :class="{'is-invalid': errors.has('username') }" v-validate="'required'">
+                          class="form-control" :class="{'is-invalid': errors.has('username') }" v-validate="'required|unixUsername'">
                         <span class="input-group-addon" v-text="`_1 to ${qty}`"></span>
                       </div>
                       <div class="invalid-feedback" v-show="errors.has('username')" :style="{'display': errors.has('username') ? 'none': 'block'}">
@@ -78,6 +78,7 @@
 </template>
 
 <script>
+import {Validator} from 'vee-validate'
 import UserForm from '@/components/UserForm'
 import {iotlab} from '@/rest'
 import {auth} from '@/auth'
@@ -85,6 +86,13 @@ import {auth} from '@/auth'
 export default {
   name: 'AdminAddUser',
   components: {UserForm},
+
+  created () {
+    Validator.extend('unixUsername', {
+      getMessage: field => 'Must be a valid unix username (use only a-z & 0-9 characters).',
+      validate: username => /^[a-z][a-z0-9]{0,30}$/.test(username),
+    })
+  },
 
   data () {
     return {
