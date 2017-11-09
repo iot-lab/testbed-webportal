@@ -34,8 +34,12 @@
                     <div class="form-group">
                       <label class="form-control-label">Login</label>
                       <div class="input-group">
-                        <input v-model="baseLogin" class="form-control" type="text" required placeholder="username">
+                        <input v-model="baseLogin" type="text" placeholder="username" name="username"
+                          class="form-control" :class="{'is-invalid': errors.has('username') }" v-validate="'required'">
                         <span class="input-group-addon" v-text="`_1 to ${qty}`"></span>
+                      </div>
+                      <div class="invalid-feedback" v-show="errors.has('username')" :style="{'display': errors.has('username') ? 'none': 'block'}">
+                        {{ errors.first('username') }}
                       </div>
                     </div>
                   </div>
@@ -111,24 +115,26 @@ export default {
         this.$notify({text: 'An error occured', type: 'error'})
       }
     },
-    async createMultiple () {
-      if (!(await this.$refs.users.validate())) {
-        return
-      }
-      try {
-        for (let i of Array(this.qty).keys()) {
-          this.users.login = `${this.baseLogin}_${i + 1}`
-          this.users.firstName = this.users.lastName = this.users.login
-          this.users.email = `${this.users.login}@iot-lab.info`
-          this.users.status = 'active'
-          console.log('creating user', this.users.login)
-          await iotlab.signup(this.users)
+    createMultiple () {
+      this.$validator.validateAll().then(async (valid) => {
+        if (!(await this.$refs.users.validate()) || !valid) {
+          return
         }
-        this.$notify({text: `${this.qty} users created`, type: 'success'})
-        this.user = {}
-      } catch (err) {
-        this.$notify({text: 'An error occured', type: 'error'})
-      }
+        try {
+          for (let i of Array(this.qty).keys()) {
+            this.users.login = `${this.baseLogin}${i + 1}`
+            this.users.firstName = this.users.lastName = this.users.login
+            this.users.email = `${this.users.login}@iot-lab.info`
+            this.users.status = 'active'
+            console.log('creating user', this.users.login)
+            await iotlab.signup(this.users)
+          }
+          this.$notify({text: `${this.qty} users created`, type: 'success'})
+          this.user = {}
+        } catch (err) {
+          this.$notify({text: 'An error occured', type: 'error'})
+        }
+      })
     },
   },
 }
