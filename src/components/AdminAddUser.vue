@@ -35,14 +35,14 @@
                       <label class="form-control-label">Login</label>
                       <div class="input-group">
                         <input v-model="baseLogin"
-                          type="text" placeholder="username" name="username"
-                          class="form-control" :class="{'is-invalid': errors.has('username') }"
-                          v-validate="'required|unixUsername'">
-                        <span class="input-group-addon" v-text="`_1 to ${qty}`"></span>
+                          type="text" placeholder="login" name="login"
+                          class="form-control" :class="{'is-invalid': errors.has('login') }"
+                          v-validate="`required|min:3|max:${20-String(qty).length}|iotlabLogin`">
+                        <span class="input-group-addon" v-text="`1 to ${qty}`"></span>
                       </div>
-                      <div class="invalid-feedback" v-show="errors.has('username')"
-                        :style="{'display': errors.has('username') ? 'none': 'block'}">
-                        {{ errors.first('username') }}
+                      <div class="invalid-feedback" v-show="errors.has('login')"
+                        :style="{'display': errors.has('login') ? 'none': 'block'}">
+                        {{ errors.first('login') }}
                       </div>
                     </div>
                   </div>
@@ -91,9 +91,9 @@ export default {
   components: {UserForm},
 
   created () {
-    Validator.extend('unixUsername', {
-      getMessage: field => 'Must be a valid unix username (use only a-z & 0-9 characters).',
-      validate: username => /^[a-z][a-z0-9]{0,30}$/.test(username),
+    Validator.extend('iotlabLogin', {
+      getMessage: field => 'Must be a valid iotlab login (use only a-z & 0-9 characters).',
+      validate: login => /^[a-z][a-z0-9]{3,19}$/.test(login + String(this.qty)),
     })
   },
 
