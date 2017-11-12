@@ -34,8 +34,8 @@
       <thead>
         <tr>
           <th class="header headerSortDown" aria-sort="ascending">Login</th>
-          <th class="header">FirstName</th>
-          <th class="header">LastName</th>
+          <th class="header">First name</th>
+          <th class="header">Last name</th>
           <th class="header">Email</th>
           <th class="header">Created</th>
           <th class="header" width="50px">State</th>
@@ -71,10 +71,12 @@
               <a href="" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Experiments'" @click.prevent="">
                 <i class="fa fa-fw fa-flask"></i>
               </a>
-              <a href="" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Edit'" data-toggle="modal" data-target=".edit-user-modal" @click="currentUser = user">
+              <a href="" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Edit'"
+                data-toggle="modal" data-target=".edit-user-modal" @click="currentUser = user; $refs.user.clean(user)">
                 <i class="fa fa-fw fa-pencil"></i>
               </a>
-              <a href="" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Email'" @click.prevent="">
+              <a href="" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Email'"
+                data-toggle="modal" data-target=".email-user-modal" @click="currentUser = user; $refs.mail.$validator.clean()">
                 <i class="fa fa-fw fa-envelope"></i>
               </a>
               <a href="" class="btn btn-sm border-0 btn-outline-danger" v-tooltip="'Reset password'" @click.prevent="resetPassword(user)">
@@ -115,11 +117,35 @@
       </div>
     </div>
 
+    <div class="modal fade email-user-modal" tabindex="-1" role="dialog" aria-labelledby="emailUserModal" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header bg-light">
+            <h5 class="modal-title">
+              <i class="fa fa-fw fa-envelope"></i>
+              Send email to {{currentUser.firstName}} {{currentUser.lastName}} <span class="text-muted">({{ currentUser.login }})</span>
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body px-4 pt-3 pb-0">
+            <email-form ref="mail" :to="currentUser.email"></email-form>
+          </div>
+          <div class="modal-footer border-0 dbg-light">
+            <button type="button" class="btn" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-success" @click.prevent="$refs.mail.send">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div> <!-- container -->
 </template>
 
 <script>
 import UserForm from '@/components/UserForm'
+import EmailForm from '@/components/EmailForm'
 import {iotlab} from '@/rest'
 import {auth} from '@/auth'
 import $ from 'jquery'
@@ -127,7 +153,7 @@ import $ from 'jquery'
 export default {
   name: 'AdminUsers',
 
-  components: {UserForm},
+  components: {UserForm, EmailForm},
 
   data () {
     return {
