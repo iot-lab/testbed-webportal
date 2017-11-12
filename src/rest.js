@@ -112,6 +112,14 @@ export const iotlab = {
     return await iotlab.api.put(`/users/${login}`, {'admin': bool})
   },
 
+  async sendMail (recipients, subject, message) {
+    await iotlab.api.post('/users/email', {
+      recipients: recipients,
+      subject: subject,
+      body: message,
+    })
+  },
+
   // EXPERIMENT API
 
   async getUserExperimentsCount () {
