@@ -257,7 +257,7 @@ include("header.php");
             <div class=col-md-4>
                 <label class="control-label">Profile(s)</label>
                 <select class="form-control" id="my_profiles" size="15" style="margin-bottom:5px;">
-                    <optgroup label="WSN430" id="wsn430Profiles"></optgroup>
+                    <!-- <optgroup label="WSN430" id="wsn430Profiles"></optgroup> -->
                     <optgroup label="M3" id="m3Profiles"></optgroup>
                     <optgroup label="A8" id="a8Profiles"></optgroup>
                     <optgroup label="CUSTOM" id="customProfiles"></optgroup>

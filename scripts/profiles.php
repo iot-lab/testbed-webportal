@@ -12,7 +12,7 @@
 
 <span><b>Select a profile:</b></span>
 <select class="form-control" id="my_profiles_modal" style="margin-bottom:5px;display:inline-block;width:200px">
-        <optgroup label="WSN430" id="wsn430Profiles_modal"></optgroup>
+        <!-- <optgroup label="WSN430" id="wsn430Profiles_modal"></optgroup> -->
         <optgroup label="M3" id="m3Profiles_modal"></optgroup>
         <optgroup label="A8" id="a8Profiles_modal"></optgroup>
         <optgroup label="Custom" id="customProfiles_modal"></optgroup>
@@ -40,8 +40,8 @@
     <label class="col-lg-4 control-label">Node architecture</label>
 
     <div class="col-lg-8" style="float:left">
-        <label class="radio"><input type="radio" name="or_nodearch" id="or_nodearch_wsn430" value="wsn430"
-                                    data-target="#wsn430panel" checked> WSN430</label>&nbsp;&nbsp;
+        <!-- <label class="radio"><input type="radio" name="or_nodearch" id="or_nodearch_wsn430" value="wsn430"
+                                    data-target="#wsn430panel" checked> WSN430</label>&nbsp;&nbsp; -->
         <label class="radio"><input type="radio" name="or_nodearch" id="or_nodearch_m3" value="m3"
                                     data-target="#m3panel"> M3</label>&nbsp;&nbsp;
         <label class="radio"><input type="radio" name="or_nodearch" id="or_nodearch_a8" value="a8"
