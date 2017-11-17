@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from '@/components/Login'
 import ResetPassword from '@/components/ResetPassword'
 import Signup from '@/components/Signup'
+import ActivateAccount from '@/components/ActivateAccount'
 import UserAccount from '@/components/UserAccount'
 import AdminUsers from '@/components/AdminUsers'
 import AdminAddUser from '@/components/AdminAddUser'
@@ -16,15 +17,16 @@ Vue.use(Router)
 const router = new Router({
   routes: [
     { path: '/', redirect: '/dashboard' },
+    { path: '/signup', name: 'signup', component: Signup },
+    { path: '/reset', name: 'reset', component: ResetPassword },
+    { path: '/login', name: 'login', component: Login },
+    { path: '/activate', name: 'activate', component: ActivateAccount },
     { path: '/dashboard', name: 'dashboard', component: Dashboard, meta: { requiresAuth: true } },
     { path: '/experiment', name: 'experiment', component: Experiment, meta: { requiresAuth: true } },
     { path: '/monitor', name: 'monitor', component: Monitor, meta: { requiresAuth: true } },
     { path: '/account', name: 'account', component: UserAccount, meta: { requiresAuth: true } },
     { path: '/users', name: 'users', component: AdminUsers, meta: { requiresAdmin: true } },
     { path: '/users/add', name: 'addUsers', component: AdminAddUser, meta: { requiresAdmin: true } },
-    { path: '/signup', name: 'signup', component: Signup },
-    { path: '/reset', name: 'reset', component: ResetPassword },
-    { path: '/login', name: 'login', component: Login },
   ],
 })
 

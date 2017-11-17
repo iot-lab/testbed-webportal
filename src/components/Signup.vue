@@ -6,7 +6,7 @@
       <div v-if="success" class="card border-success my-5">
         <div class="card-header bg-success text-white"><i class="fa fa-check mr-1"></i> An email has been sent to <i>{{user.email}}</i></div>
         <div class="card-body text-success">
-          <h5>Check your inbox and follow link to validate your account.</h5>
+          <h5>Check your inbox and follow the link to activate your account.</h5>
         </div>
       </div>
       <form v-else class="mb-5" @submit.prevent="signup">
