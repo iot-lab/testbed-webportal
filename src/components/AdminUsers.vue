@@ -130,7 +130,7 @@
             </button>
           </div>
           <div class="modal-body px-4 pt-3 pb-0">
-            <email-form ref="mail" :to="currentUser.email"></email-form>
+            <email-form ref="mail" :to="currentUser.email + ', admin@iot-lab.info'"></email-form>
           </div>
           <div class="modal-footer border-0 dbg-light">
             <button type="button" class="btn" data-dismiss="modal">Close</button>
