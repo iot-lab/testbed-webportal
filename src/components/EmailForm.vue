@@ -55,7 +55,13 @@ export default {
     message: {
       // email body
       type: String,
-      default: () => '',
+      default: () => `Dear IoT-LAB user,
+
+
+
+Regards,
+The FIT IoT-LAB Team
+https://www.iot-lab.info`,
     },
   },
 
