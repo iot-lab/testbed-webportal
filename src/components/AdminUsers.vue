@@ -49,7 +49,7 @@
           <td>{{user.firstName}}</td>
           <td>{{user.lastName}}</td>
           <td><a :href="'mailto:' + user.email" class="email">{{user.email}}</a></td>
-          <td :title="user.created | formatDateTime">{{user.created | formatDate}}</td>
+          <td :title="user.created | formatDateTime" style="white-space: nowrap">{{user.created | formatDate}}</td>
           <td>
             <a href="" class="btn btn-sm" style="width: 70px"
               :class="(user.status === 'pending') ? 'btn-primary' : 'btn-outline-primary'"
@@ -72,7 +72,8 @@
                 <i class="fa fa-fw fa-flask"></i>
               </a>
               <a href="" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Edit'"
-                data-toggle="modal" data-target=".edit-user-modal" @click="currentUser = user; $refs.user.clean(user)">
+                data-toggle="modal" data-target=".edit-user-modal"
+                @click="currentUser = JSON.parse(JSON.stringify(user)); $refs.user.clean(user)">
                 <i class="fa fa-fw fa-pencil"></i>
               </a>
               <a href="" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Email'"
