@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import UserForm from '@/components/UserForm'
+import UserForm from '@/components/parts/UserForm'
 import {iotlab} from '@/rest'
 import {auth} from '@/auth'
 

@@ -145,8 +145,8 @@
 </template>
 
 <script>
-import UserForm from '@/components/UserForm'
-import EmailForm from '@/components/EmailForm'
+import UserForm from '@/components/parts/UserForm'
+import EmailForm from '@/components/parts/EmailForm'
 import {iotlab} from '@/rest'
 import {auth} from '@/auth'
 import $ from 'jquery'
