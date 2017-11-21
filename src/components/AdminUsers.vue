@@ -167,22 +167,33 @@ export default {
   },
 
   async created () {
-    this.users = await iotlab.getUsers()
+    this.pattern = this.$route.query.search
+    this.search()
+  },
+
+  async beforeUpdate () {
+    if (this.$route.query.search && this.$route.query.search !== this.pattern) {
+      this.pattern = this.$route.query.search
+      this.search()
+    }
   },
 
   methods: {
     async showPending () {
+      delete this.$route.query.search
       this.pattern = ''
       this.show = 'pending'
       this.users = await iotlab.getUsers({status: 'pending'})
     },
     async showAdmin () {
+      delete this.$route.query.search
       this.pattern = ''
       this.show = 'admin'
       this.users = await iotlab.getUsers({isAdmin: true})
     },
     async search () {
       if (this.pattern) {
+        delete this.$route.query.search
         this.show = false
         this.users = await iotlab.getUsers({search: this.pattern})
       } else {
