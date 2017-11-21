@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import moment from 'moment'
+import humanizeDuration from 'humanize-duration'
 
 Vue.filter('fromTimestamp', function (value) {
   if (value) {
@@ -19,11 +20,20 @@ Vue.filter('formatDateTime', function (value) {
   }
 })
 
+Vue.filter('humanizeDuration', function (value) {
+  if (value) {
+    let ms = value * 1000
+    return humanizeDuration(ms, {
+      units: ['d', 'h', 'm'],
+      largest: 2,
+      round: true,
+    })
+  }
+})
+
 Vue.filter('stateBadgeClass', function (value) {
   if (value) {
     switch (value) {
-      case 'Terminated':
-        return 'badge-secondary'
       case 'Alive':
       case 'Running':
         return 'badge-success'
@@ -42,6 +52,7 @@ Vue.filter('stateBadgeClass', function (value) {
         return 'badge-info'
       case 'Suspected':
       case 'Suspended':
+      case 'Terminated':
         return 'badge-dark'
       default:
         return 'badge-secondary'
