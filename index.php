@@ -1,13 +1,21 @@
 <?php
 /* LOGIN AND RESET PASSWORD PAGE */
+
 session_start();
 if (isset($_SESSION['is_auth']) && $_SESSION['is_auth']) {
     header("location: dashboard.php");
     exit();
 }
 include('header.php');
+
 ?>
 
+<script>
+// temporary redirection for email account validation
+if (window.location.host === 'devwww.iot-lab.info') && window.location.hash.startsWith('#/activate')) {
+    window.location = 'https://devwww.iot-lab.info/testbed2/' + window.location.hash;
+}
+</script>
 
 <div class="container" style="margin-top:50px;">
 
@@ -61,7 +69,6 @@ include('footer.php');
     /*   on ready   */
     /* ************ */
     $(document).ready(function () {
-
         if (document.location.hash == "#logout") {
             $("#div_error_login_and_reset_forms").show();
             $("#div_error_login_and_reset_forms").removeClass("alert-danger");
