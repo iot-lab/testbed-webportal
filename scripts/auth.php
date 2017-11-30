@@ -58,6 +58,6 @@ if ($code == 200 && $response == "Success") {
     $_SESSION['is_admin'] = true;
 }
 
-header("location: .");
+//header("location: .");
 
 ?>
