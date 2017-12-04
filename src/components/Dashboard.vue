@@ -18,30 +18,7 @@
       <p v-else>
         <i class="fa fa-spinner fa-spin fa-fw"></i>
       </p>
-      <table class="table table-striped table-sm">
-        <thead>
-          <tr>
-            <th>id</th>
-            <th>Owner</th>
-            <th>Name</th>
-            <th>Date</th>
-            <th>Duration</th>
-            <th>Node(s)</th>
-            <th>State</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="experiment in experiments">
-            <td>{{experiment.id}}</td>
-            <td>{{experiment.owner}}</td>
-            <td>{{experiment.name}}</td>
-            <td>{{experiment.date | fromTimestamp}}</td>
-            <td>{{Math.round(experiment.duration/60)}} min</td>
-            <td>{{experiment.nb_resources}}</td>
-            <td><span class="badge badge-state" :class="experiment.state | stateBadgeClass">{{experiment.state}}</span></td>
-          </tr>
-        </tbody>
-      </table>
+      <experiment-list user="@self"></experiment-list>
       <p>
         <router-link :to="{name:'experiment'}" class="btn btn-primary">New experiment</router-link>
       </p>
@@ -79,17 +56,21 @@
 </template>
 
 <script>
+import ExperimentList from '@/components/parts/ExperimentList'
 import {iotlab} from '@/rest'
 import {auth} from '@/auth'
 
 export default {
   name: 'Dashboard',
 
+  components: {ExperimentList},
+
   data () {
     return {
       total: {},
       // stats: {},
       resources: [],
+      sites: [],
       experiments: [],
       currentSite: 'all',
       auth: auth,

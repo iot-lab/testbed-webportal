@@ -68,9 +68,10 @@
           </td>
           <td>
             <div class="btn-group" role="group" aria-label="User actions">
-              <a href="" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Experiments'" @click.prevent="">
-                <i class="fa fa-fw fa-flask"></i>
-              </a>
+              <router-link :to="{name: 'userExperiments', params: {username: user.login}}"
+                class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Experiments'">
+                <i class="fa fa-fw fa-flask" @click="hideTooltip"></i>
+              </router-link>
               <a href="" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Edit'"
                 data-toggle="modal" data-target=".edit-user-modal"
                 @click="currentUser = JSON.parse(JSON.stringify(user)); $refs.user.clean(user)">
@@ -264,6 +265,9 @@ export default {
           this.$notify({text: 'An error occured', type: 'error'})
         }
       }
+    },
+    hideTooltip () {
+      $('.tooltip').fadeOut()
     },
   },
 }
