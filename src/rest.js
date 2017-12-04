@@ -130,8 +130,30 @@ export const iotlab = {
     return await iotlab.apiv1.get('/experiments?total').then(resp => resp.data)
   },
 
-  async getUserExperiments (state = 'Terminated,Error,Running,Finishing,Resuming,toError,Waiting,Launching,Hold,toLaunch,toAckReservation,Suspended') {
-    return await iotlab.apiv1.get('/experiments', {'params': {state: state}}).then(resp => resp.data.items)
+  async getAllExperiments ({limit, offset, user, state = 'Terminated,Error,Running,Finishing,Resuming,toError,Waiting,Launching,Hold,toLaunch,toAckReservation,Suspended'} = {}) {
+    let params = {}
+    if (state) {
+      params.state = state
+    }
+    if (limit) {
+      params.limit = limit
+    }
+    if (offset) {
+      params.offset = offset
+    }
+    if (user === '@self') {
+      return await iotlab.api.get('/experiments', {params: params}).then(resp => resp.data.items)
+    } else if (user) {
+      return await iotlab.api.get(`/experiments/users/${user}`, {params: params}).then(resp => resp.data.items)
+    } else {
+      return await iotlab.api.get('/experiments/all', {params: params}).then(resp => resp.data.items)
+    }
+  },
+
+  async getExperiment (id) {
+    return await iotlab.api.get(`/experiments/${id}`).then(resp => resp.data)
+  },
+
   },
 
   // OTHER API

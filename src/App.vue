@@ -14,34 +14,42 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <router-link tag="li" :to="{name:'dashboard'}" active-class="active">
-                <a class="nav-link"><i class="fa fa-tasks" aria-hidden="true"></i> Dashboard</a>
-            </router-link>
-            <router-link tag="li" :to="{name:'experiment'}" active-class="active">
-                <a class="nav-link"><i class="fa fa-flask" aria-hidden="true"></i> Experiment</a>
-            </router-link>
-            <router-link tag="li" :to="{name:'monitor'}" active-class="active">
-                <a class="nav-link"><i class="fa fa-thermometer" aria-hidden="true"></i> Monitoring</a>
-            </router-link>
+          <router-link tag="li" :to="{name:'dashboard'}" active-class="active">
+            <a class="nav-link"><i class="fa fa-tasks" aria-hidden="true"></i> Dashboard</a>
+          </router-link>
+          <router-link tag="li" :to="{name:'experiment'}" active-class="active">
+            <a class="nav-link"><i class="fa fa-flask" aria-hidden="true"></i> Experiment</a>
+          </router-link>
+          <router-link tag="li" :to="{name:'monitor'}" active-class="active">
+            <a class="nav-link"><i class="fa fa-thermometer" aria-hidden="true"></i> Monitoring</a>
+          </router-link>
         </ul>
         <ul class="nav navbar-nav float-xs-right">
-            <router-link tag="li" :to="{name:'users'}" active-class="active" v-if="auth.isAdmin">
-                <a class="nav-link"><i class="fa fa-lg fa-fw fa-users" aria-label="Users"></i></a>
-            </router-link>
-            <router-link tag="li" :to="{name:'account'}" active-class="active" v-if="auth.loggedIn">
-                <a class="nav-link"><i class="fa fa-lg fa-fw fa-user" aria-label="Account"></i></a>
-            </router-link>
-            <li>
-                <a class="nav-link" href="" @click="logout"><i class="fa fa-lg fa-fw fa-sign-out" aria-label="Logout"></i></a>
-            </li>
-            <li class="dropdown nav-item" v-if="auth.isAdmin">
-                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" data-hover="dropdown">Admin</a>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="">Experiments</a>
-                    <a class="dropdown-item" href="">Nodes</a>
-                    <a class="dropdown-item" href="">Statistics</a>
-                </div>
-            </li>
+          <router-link tag="li" :to="{name:'allExperiments'}" active-class="active" v-if="auth.isAdmin">
+            <a class="nav-link" v-tooltip:bottom="'All Experiments'">
+              <i class="fa fa-lg fa-fw fa-flask" aria-label="All experiments"></i>
+            </a>
+          </router-link>
+          <router-link tag="li" :to="{name:'users'}" active-class="active" v-if="auth.isAdmin">
+            <a class="nav-link" v-tooltip:bottom="'Manage Users'">
+              <i class="fa fa-lg fa-fw fa-users" aria-label="Users"></i>
+            </a>
+          </router-link>
+          <router-link tag="li" :to="{name:'account'}" active-class="active" v-if="auth.loggedIn">
+            <a class="nav-link" v-tooltip:bottom="'Account'">
+              <i class="fa fa-lg fa-fw fa-user" aria-label="Account"></i>
+            </a>
+          </router-link>
+          <li>
+            <a class="nav-link" href="" @click="logout" v-tooltip:bottom="'Log out'"><i class="fa fa-lg fa-fw fa-sign-out" aria-label="Logout"></i></a>
+          </li>
+          <li class="dropdown nav-item" v-if="auth.isAdmin">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" data-hover="dropdown">Admin</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="">Nodes</a>
+              <a class="dropdown-item" href="">Statistics</a>
+            </div>
+          </li>
         </ul>
       </div>
     </div>
