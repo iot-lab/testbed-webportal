@@ -154,6 +154,17 @@ export const iotlab = {
     return await iotlab.api.get(`/experiments/${id}`).then(resp => resp.data)
   },
 
+  async submitPhysicalExperiment ({name, duration, nodes} = {}) {
+    const formData = new FormData()
+    formData.append('file.json', JSON.stringify({
+      type: 'physical',
+      duration: duration,
+      name: name,
+      nodes: nodes,
+      firmwareassociations: undefined,
+      profileassociations: undefined,
+    }))
+    return await iotlab.api.post('/experiments', formData).then(resp => resp.data)
   },
 
   // OTHER API
@@ -181,3 +192,30 @@ export const iotlab = {
   },
 
 }
+
+// GET /experiments?state(Running,Terminated),limit(500),offset(0)  (user:current)
+// POST /experiments
+// GET /experiments/total
+// GET /experiments/:id
+// GET /experiments/:id/anystate ???
+// GET /experiments/:id/state
+// GET /experiments/:id/data
+// GET /experiments/:id/result
+// GET /experiments/:id/nodes
+// GET /experiments/:id/nodes_id
+// GET /experiments/:id/start (get start time)
+// DEL /experiments/:id
+// POST /experiments/:id/reload
+// POST /experiments/:id/scripts/run
+// POST /experiments/:id/scripts/kill
+// POST /experiments/:id/scripts/status
+// POST /experiments/:id/scripts/flash
+// POST /experiments/:id/nodes/monitoring
+// POST /experiments/:id/nodes/:cmd     { "start", "stop", "reset", "debug-start", "debug-stop", "update-idle", "profile-reset" };
+// POST /experiments/:id/nodes/monitoring/:name
+
+// GET /nodes?site(all),archi(all),state(all)
+// GET /nodes?site(all),archi(all),state(all)
+
+// note: send mail par l'api ?
+// admin filter when pending....

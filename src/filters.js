@@ -31,6 +31,12 @@ Vue.filter('humanizeDuration', function (value) {
   }
 })
 
+Vue.filter('stripDomain', function (value) {
+  if (value) {
+    return value.replace('.iot-lab.info', '')
+  }
+})
+
 Vue.filter('stateBadgeClass', function (value) {
   if (value) {
     switch (value) {
