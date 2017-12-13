@@ -8,6 +8,7 @@
           <a class="list-group-item list-group-item-action" id="list-password-list" data-toggle="list" href="#list-password" role="tab" aria-controls="password"><i class="fa fa-fw fa-unlock-alt" aria-hidden="true"></i> Password</a>
           <a class="list-group-item list-group-item-action" id="list-sshkeys-list" data-toggle="list" href="#list-sshkeys" role="tab" aria-controls="sshkeys"><i class="fa fa-fw fa-key" aria-hidden="true"></i> SSH Keys</a>
           <a class="list-group-item list-group-item-action" id="list-delete-list" data-toggle="list" href="#list-delete" role="tab" aria-controls="delete"><i class="fa fa-fw fa-trash-o" aria-hidden="true"></i> Delete account</a>
+          <a class="list-group-item list-group-item-action" id="list-mailing-list" data-toggle="list" href="#list-mailing" role="tab" aria-controls="mailing"><i class="fa fa-fw fa-envelope-o" aria-hidden="true"></i> Mailing list</a>
         </div>
       </div>
       <div class="col-md-9">
@@ -69,6 +70,12 @@
             <p class="lead">Permanently delete your account?</p>
             <p><strong>All your data will be lost</strong></p>
             <button class="btn btn-danger" type="button"><i class="fa fa-trash-o fa-lg" aria-hidden="true"></i> Delete Account</button>
+          </div>
+          <div class="tab-pane fade" id="list-mailing" role="tabpanel" aria-labelledby="list-mailing-list">
+            <h5 class="mb-3"><i class="fa fa-envelope-o" aria-hidden="true"></i> Mailing list subscription</h5>
+            <p>You can subcribe or unsubcribe to the mailing list for FIT IoT-LAB users from this page:<br>
+              <a href="https://lists.gforge.inria.fr/mailman/listinfo/senslab-users">https://lists.gforge.inria.fr/mailman/listinfo/senslab-users</a>
+            </p>
           </div>
         </div>
       </div>
