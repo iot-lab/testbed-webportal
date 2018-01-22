@@ -1,8 +1,8 @@
 <template>
   <select class="form-control form-control-sm text-capitalize mr-2 d-inline-block" @change="filterChanged">
-    <option selected disabled v-if="title">{{title}}</option>
-    <option value="all" v-if="all">{{all}}</option>
-    <option v-for="item in items" class="text-capitalize" :value="item.value || item">{{item.option || item}}</option>
+    <option value="all" :selected="value === 'all' || value === 0" disabled v-if="title">{{title}}</option>
+    <option value="all" :selected="value === 'all'" v-if="all">{{all}}</option>
+    <option v-for="item in items" class="text-capitalize" :value="item.value || item" :selected="value === (item.value || item)">{{item.option || item}}</option>
   </select>
 </template>
 
@@ -13,8 +13,8 @@ export default {
 
   props: {
     items: {
-      // List of options (can be strings or objects with keys = value and option)
-      type: Array,
+      // List of options (can be strings or objects with keys = value and option), or can be an integer range
+      type: [Array, Number],
       default: () => [],
     },
     title: {
@@ -27,6 +27,11 @@ export default {
       type: String,
       default: () => '',
     },
+    value: {
+      // Currently selected value or v-model
+      type: [String, Number],
+      default: () => 'all',
+    },
   },
 
   data () {
@@ -37,7 +42,8 @@ export default {
 
   methods: {
     filterChanged ($event) {
-      this.$emit('changed', $event.target.value)
+      // emit input event compatible with v-model
+      this.$emit('input', $event.target.value)
     },
   },
 }
