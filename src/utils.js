@@ -1,6 +1,6 @@
 // Expand a list of nodes containing dash intervals
 // "1-3+5+9" -> 1,2,3,5,9
-export const expand = function (factExp) {
+export const expandIds = function (factExp) {
   factExp = factExp.split('+')
   var exp, dashExpression
   exp = []
@@ -19,4 +19,19 @@ export const expand = function (factExp) {
     }
   }
   return exp
+}
+
+// Extract archi from a string "archi:radio"
+export const extractArchi = function (nodeArchi) {
+  return nodeArchi.split(':')[0]
+}
+
+// Group an array of items by item.key
+// groupBy(['one', 'two', 'three'], 'length'))
+// => {3: ["one", "two"], 5: ["three"]}
+export const groupBy = function (array, key) {
+  return array.reduce(function (rv, x) {
+    (rv[x[key]] = rv[x[key]] || []).push(x)
+    return rv
+  }, {})
 }

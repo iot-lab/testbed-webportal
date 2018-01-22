@@ -7,9 +7,6 @@
       <div class="card-header pl-3" role="tab" id="headingZero">
         <a data-toggle="collapse" href="#collapseZero" aria-expanded="true" aria-controls="collapseZero" class="text-dark">
           <h6 class="mb-0"><i class="fa fa-fw fa-clock-o" aria-hidden="true"></i> Schedule
-            <!-- <span class="badge badge-secondary float-right" v-html="(start == 'asap') ? 'asap' : startDate"></span> -->
-            <!-- <span class="badge badge-secondary float-right mr-1">{{scheduleText}}</span> -->
-            <!-- <span class="badge badge-secondary float-right mr-1">{{duration}} {{ durationMultiplier == 1 ? 'min' : 'hours'}}</span> -->
             <span class="text-muted font-weight-normal font-size-sm float-right">
               <i class="fa fa-clock-o" aria-hidden="true"></i> {{duration}} {{ durationMultiplier == 1 ? 'min' : 'hours'}}, {{scheduleText}}
             </span>
@@ -67,254 +64,162 @@
               <span class="nav-link disabled text-dark fdont-weight-bold">Select by</span>
             </li>
             <li class="nav-item" v-tooltip:top="'Select nodes from a list'">
-              <a class="nav-link active" id="list-byname-list" data-toggle="list" href="#list-byname" role="tab" aria-controls="byname"> host name </a>
+              <a class="nav-link active" id="list-byname-list" data-toggle="list" href="#list-byname" role="tab" aria-controls="byname" @click="setMode('byname')"> host name </a>
             </li>
             <li class="nav-item" v-tooltip:top="'Select sets of nodes with the same properties'">
-              <a class="nav-link" id="list-byprop-list" data-toggle="list" href="#list-byprop" role="tab" aria-controls="byprop"> node properties </a>
+              <a class="nav-link" id="list-byprop-list" data-toggle="list" href="#list-byprop" role="tab" aria-controls="byprop" @click="setMode('byprop')"> node properties </a>
             </li>
             <li class="nav-item" v-tooltip:top="'Select nodes with given ids'">
-              <a class="nav-link" id="list-byid-list" data-toggle="list" href="#list-byid" role="tab" aria-controls="byid"> node id </a>
+              <a class="nav-link" id="list-byid-list" data-toggle="list" href="#list-byid" role="tab" aria-controls="byid" @click="setMode('byid')"> node id </a>
             </li>
           </ul>
         <div class="py-3 card-body">
-          <!-- <span class="lead align-middle">Select nodes for your experiment</span> -->
 
           <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="list-byname" role="tabpanel" aria-labelledby="list-byname-list">
               
               <p class="mb-2 lead text-muted">Pick nodes from the list. Add some filters or a search pattern.</p>
-<!--               <div class="mb-2">
-                <span class="lead align-middle my-filter">Sites</span>
-                <div class="btn-group btn-group-sm btn-filter" role="group" aria-label="Filter by site">
-                  <button type="button" class="btn" :class="{'btn-secondary': filterSite == 'all'}" @click="filterSite = 'all'">All</button>
-                  <button type="button" class="btn text-capitalize" v-for="site in sites" :class="{'btn-secondary': filterSite == site.site}" @click="filterSite = site.site">{{site.site}}</button>
-                </div>
-              </div>
-              <div class="mb-2">
-                <span class="lead align-middle my-filter">Archi</span>
-                <div class="btn-group btn-group-sm btn-filter" role="group" aria-label="Filter by architecture">
-                  <button type="button" class="btn" :class="{'btn-secondary': filterArchi == 'all'}" @click="filterArchi = 'all'">All</button>
-                  <button type="button" class="btn text-capitalize" v-for="archi in archis4Site.sort()" :class="{'btn-secondary': filterArchi == archi}" @click="filterArchi = archi">{{archi|formatArchi}}</button>
-                </div>
-                <button type="button" class="btn btn-sm btn-filter" :class="{'btn-secondary': filterMobile}" @click="filterMobile = !filterMobile">Mobile</button>
-              </div> -->
               <div>
                 <span>Filters</span>&nbsp;
-                <filter-select :items="sites.map(s => s.site).sort()" all="All sites" @changed="function (value) {filterSite = value}"></filter-select>
-                <filter-select all="All architectures" @changed="function (value) {filterArchi = value}"
+                <filter-select :items="sites.map(s => s.site).sort()" all="All sites" v-model="filterSite"></filter-select>
+                <filter-select all="All architectures" v-model="filterArchi"
                   :items="archis4Site.map(archi => Object({value: archi, option: this.$options.filters.formatArchiRadio(archi)}))">
                 </filter-select>
-                <filter-select :items="['All mobility', 'Mobile', 'Not mobile']" @changed="tototo"></filter-select>
+                <filter-select all="All mobility" :items="[{value: '1', option:'Mobile'}, {value: '0', option: 'Not mobile'}]" v-model="filterMobile"></filter-select>
                 
               </div>
-              <div class="d-md-flex flex-row mt-3">
+              <div class="d-md-flex flex-row mt-3" style="align-items: center;">
                 <multiselect v-model="currentNodes" :options="filteredNodes" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" :placeholder="searchNodesPlaceholder" label="network_address" track-by="network_address" class="mr-1">
                   <template slot="tag" slot-scope="props">
-                    <span class="custom__tag badge badge-primary">
+                    <span class="badge-tag badge badge-primary">
                       <span>{{props.option.network_address | stripDomain}}</span>
-                      <span class="custom__remove cursor" @click="props.remove(props.option)">&times;</span>
+                      <span class="tag-remove cursor" @click="props.remove(props.option)">&times;</span>
                     </span>
                   </template>
                   <template slot="option" slot-scope="props">
                     <div class="option__desc">
                       <span class="option__title">{{props.option.network_address}}</span>
-                      <span class="float-right badge custom__tag badge-secondary" :class="props.option.archi">{{props.option.archi}}</span>
-                      <span class="float-right badge custom__tag badge-primary" v-if="props.option.mobile">mobile</span>
-                      <span class="float-right badge custom__tag" :class="props.option.state | stateBadgeClass">{{props.option.state}}</span>
+                      <span class="float-right badge badge-tag badge-secondary" :class="props.option.archi">{{props.option.archi}}</span>
+                      <span class="float-right badge badge-tag badge-primary" v-if="props.option.mobile">mobile</span>
+                      <span class="float-right badge badge-tag" :class="props.option.state | stateBadgeClass">{{props.option.state}}</span>
                     </div>
                   </template>
                 </multiselect>
-                <button class="btn btn-success mr-1" @click="addNodes">Add to experiment</button>
-                <div class="btn-group xmr-1">
-                  <div class="btn-group" role="group">
-                    <button class="btn btn-icon dropdown-toggle" v-tooltip="'Add firmware'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i class="fa fa-fw fa-microchip"></i>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right">
-                      <div class="card-body">
-                        <p class="lead">Pick a firmware <span class="text-muted">(optional)</span></p>
-                        <label class="custom-file">
-                          <input type="file" id="file" ref="firmwareFile" class="custom-file-input" @change="previewFirmwareFile">
-                          <span class="custom-file-control">{{firmwareFile.name}}</span>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="btn-group" role="group">
-                    <button class="btn btn-icon dropdown-toggle" v-tooltip="'Add monitoring profile'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i class="fa fa-fw fa-thermometer"></i>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right">
-                      <div class="card-body">
-                        <p class="lead">Pick a monitoring profile <span class="text-muted">(optional)</span></p>
-                        <label class="custom-file">
-                          <input type="file" id="file" ref="monitoringFile" class="custom-file-input" @change="previewMonitoringFile">
-                          <span class="custom-file-control">{{monitoringFile.name}}</span>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
+                <button class="btn btn-success" @click="addNodes">Add to experiment</button>
               </div>
               <p class="ml-1 mt-2 font-size-sm">
                 <a href="" data-toggle="collapse" href="#collapseMap" aria-expanded="false" aria-controls="collapseMap"><i class="fa fa-map-o fa-lg" aria-hidden="true"></i> View/select nodes on map <i class="fa fa-caret-down" aria-hidden="true"></i></a> 
               </p>
               <div class="collapse" id="collapseMap">
                 <div class="card card-body">
-                  Map !
+                  <!-- <div id="div3d" oncontextmenu="return false"></div>           
+                  <div id="infobox"></div> -->
+                  <router-link :to="{name:'map'}">(TODO) Map !</router-link>
                 </div>
               </div>
             </div>
+            <!-- Select By PROPS -->
             <div class="tab-pane fade show" id="list-byprop" role="tabpanel" aria-labelledby="list-byprop-list">
               <p class="mb-2 lead text-muted">Select an architecture, site and quantity.</p>
-              <div>
-                <span class="lead align-middle my-filter">Archi</span>
-                <div class="btn-group btn-group-sm btn-filter" role="group" aria-label="Filter by architecture">
-                  <button type="button" class="btn text-capitalize" v-for="archi in archis.sort()" :class="{'btn-secondary': filterArchi == archi}" @click="filterArchi = archi">{{archi|formatArchi}}</button>
-                </div>
-                <button type="button" class="btn btn-sm btn-filter" :class="{'btn-secondary': filterMobile}" @click="filterMobile = !filterMobile">Mobile</button>
-              </div>
-              <div class="mb-2 mt-2">
-                <span class="lead align-middle my-filter">Sites</span>
-                <div class="btn-group btn-group-sm btn-filter" role="group" aria-label="Filter by site">
-                  <button type="button" class="btn text-capitalize" v-for="site in sites4Archi" :class="{'btn-secondary': filterSite == site.site}" @click="filterSite = site.site">{{site.site}}</button>
-                </div>
-              </div>
-                <span class="lead align-middle my-filter">Qty</span>
-                <div class="d-inline-block">
-                  <div class="input-group input-group-sm mt-2" style="max-width:120px;">
-                    <span class="input-group-btn">
-                      <button type="button" class="btn btn-danger" :disabled="qty<=1" @click="qty--">
-                        <i class="fa fa-minus"></i>
-                      </button>
-                    </span>
-                    <input type="text" class="form-control" v-model="qty">
-                    <span class="input-group-btn">
-                      <button type="button" class="btn btn-success" @click="qty++">
-                        <i class="fa fa-plus"></i>
-                      </button>
-                    </span>
-                  </div>
-                </div>
-              <!-- <div class="d-md-flex" style="max-width: 800px"> -->
-                <!-- <input type="" name=""> -->
-              <!-- </div> -->
-              <hr>
               <div class="d-md-flex" style="max-width: 850px">
-                <select class="form-control form-control-sm text-capitalize mr-2">
-                  <option selected disabled>Architecture</option>
-                  <option v-for="archi in archis" class="text-capitalize">{{archi | formatArchiRadio}}</option>
-                </select>
-                <select class="form-control form-control-sm text-capitalize mr-2">
-                  <option selected disabled>Site</option>
-                  <option v-for="site in sites4Archi">{{site.site}}</option>
-                </select>
-                <select class="form-control form-control-sm mr-2" style="max-width: 90px;">
-                  <option selected disabled>Qty</option>
-                  <option v-for="i in [1,2,3,4,5,6,7,8,9,10]">{{i}}</option>
-                </select>
+                <filter-select v-model="filterArchi" title="Architecture" @input="filterSite = sites4Archi[0]; qty = 1"
+                  :items="archis.map(archi => Object({value: archi, option: this.$options.filters.formatArchiRadio(archi)}))">
+                </filter-select>
+                <filter-select title="Site" :items="sites4Archi" v-model="filterSite"></filter-select>
                 <label class="custom-control custom-checkbox mb-0 mt-1">
-                  <input type="checkbox" class="custom-control-input">
+                  <input v-model="propMobile" type="checkbox" class="custom-control-input">
                   <span class="custom-control-indicator"></span>
                   <span class="custom-control-description">Mobile</span>
                 </label>
-                <button class="btn btn-sm btn-success"><i class="fa fa-plus" aria-hidden="true"></i> Add to experiment</button>
+                <filter-select :items="qtyAvailable" title="Qty" v-model.number="qty" style="max-width: 90px"></filter-select>
+                <button class="btn btn-sm btn-success" @click="addProps"><i class="fa fa-plus" aria-hidden="true"></i> Add to experiment</button>
               </div>
             </div>
             <!-- Select By ID -->
             <div class="tab-pane fade show" id="list-byid" role="tabpanel" aria-labelledby="list-byid-list">
               <p class="mb-2 lead text-muted">Select a site, architecture and desired ids.</p>
-              <div class="d-md-flex" style="max-width: 850px">
-                <filter-select :items="sites.map(s => s.site).sort()" title="Site" @changed="function (value) {filterSite = value}"></filter-select>
-                <filter-select title="Architecture" @changed="function (value) {filterArchi = value}"
+              <div class="d-md-flex" style="max-width: 800px">
+                <filter-select :items="sites.map(s => s.site).sort()" title="Site" v-model="filterSite"
+                  @input="testArchi"></filter-select>
+                <filter-select title="Architecture" v-model="filterArchi"
                   :items="archis4Site.map(archi => Object({value: archi, option: this.$options.filters.formatArchiRadio(archi)}))">
                 </filter-select>
                 <input v-model="nodeIds" class="form-control form-control-sm mr-2" type="text" placeholder="IDs (e.g. 1-5+7)">
-                <button class="btn btn-sm btn-success mr-1" @click="expand"><i class="fa fa-plus" aria-hidden="true"></i> Add to experiment</button>
-                <div class="btn-group btn-group-sm xmr-1">
-                  <div class="btn-group btn-group-sm" role="group">
-                    <button class="btn btn-icon dropdown-toggle" v-tooltip="'Add firmware'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i class="fa fa-fw fa-microchip"></i>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right">
-                      <div class="card-body">
-                        <p class="lead">Pick a firmware <span class="text-muted">(optional)</span></p>
-                        <label class="custom-file">
-                          <input type="file" id="file" ref="firmwareFile" class="custom-file-input" @change="previewFirmwareFile">
-                          <span class="custom-file-control">{{firmwareFile.name}}</span>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="btn-group btn-group-sm" role="group">
-                    <button class="btn btn-icon dropdown-toggle" v-tooltip="'Add monitoring profile'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i class="fa fa-fw fa-thermometer"></i>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right">
-                      <div class="card-body">
-                        <p class="lead">Pick a monitoring profile <span class="text-muted">(optional)</span></p>
-                        <label class="custom-file">
-                          <input type="file" id="file" ref="monitoringFile" class="custom-file-input" @change="previewMonitoringFile">
-                          <span class="custom-file-control">{{monitoringFile.name}}</span>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <button class="btn btn-sm btn-success" @click="expandNodeIds"><i class="fa fa-plus" aria-hidden="true"></i> Add to experiment</button>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <!-- Selected nodes -->
-      <div v-if="selectedNodes.length" class="card-body font-size-sm" style="background: #22222222">
-        <p class="mb-1 font-size-1">{{selectedNodes.length}} selected nodes: <a href="" @click.prevent="selectedNodes = []">clear all</a></p>
-        <span class="badge badge-info custom__tag" v-for="node in selectedNodes">
-          <span>{{node.network_address | stripDomain}}</span> <span class="custom__remove cursor" @click="removeNode(node)">&times;</span>
-        </span>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header pl-3" role="tab" id="headingTwo">
-        <a class="collapsed text-dark" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-          <h6 class="mb-0"><i class="fa fa-fw fa-microchip" aria-hidden="true"></i> Firmwares <small class="text-muted">(optional)</small></h6>
-        </a>
-      </div>
-      <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo" data-parent="#accordion">
-        <div class="card-body">
-          <p class="lead mb-1 mb-2">Pick a firmware</p>
-          <label class="custom-file">
-            <input type="file" id="file2" ref="firmwareFile" class="custom-file-input" @change="previewFirmwareFile">
-            <span class="custom-file-control">{{firmwareFile.name}}</span>
-          </label>
-          <p class="lead mt-3">Assign it to following nodes <span class="badge badge-primary">M3 (elf)</span> <span class="badge badge-secondary">WSN430 (ihex &amp; hex)</span></p>
-          <!-- <label>Select nodes</label> -->
-          <!-- <label>Node type </label> -->
-          <multiselect v-model="value" :options="selectedNodes" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Select nodes" label="network_address" track-by="network_address">
-            <template slot="tag" slot-scope="props">
-              <span class="custom__tag badge badge-primary">
-                <span>{{props.option.network_address}}</span> <span class="custom__remove cursor" @click="props.remove(props.option)">&times;</span>
-              </span>
-            </template>
-          </multiselect>
-          <button class="btn btn-secondary mt-3">Assign firmware</button>
+      <!-- Selected nodes by host or ID -->
+      <div v-if="selectedNodes.length" v-show="mode !== 'byprop'" class="card-body font-size-sm" style="background: #22222222">
+        <p class="mb-0 font-size-1">{{selectedNodes.length}} nodes selected: <a href="" @click.prevent="selectedNodeGroups = []">clear all</a></p>
+        <div style="margin-top: 0.35rem" v-for="(group, index) in selectedNodeGroups">
+          <span class="badge badge-info badge-tag" v-for="node in group.nodes" :class="{'badge-even': index % 2}">
+            <span>{{node.network_address | stripDomain}}</span> <span class="tag-remove cursor" @click="removeNode(node)">&times;</span>
+          </span>
+          <span class="badge badge-light badge-tag cursor" v-if="group.hasFirmware" data-toggle="dropdown" v-tooltip="'Add firmware'">
+            <span><i class="fa fa-microchip text-dark"></i> {{group.firmware.name}}</span> <span v-if="group.firmware.name" class="tag-remove cursor" @click="group.firmware = {name:undefined}">&times;</span>
+          </span>
+          <div class="dropdown-menu dropdown-menu-right">
+            <div class="card-body">
+              <p class="lead">Assign a firmware <span class="text-muted">(optional)</span></p>
+              <label class="custom-file">
+                <input type="file" id="file" :ref="'firmwareFile' + index" class="custom-file-input" @change="loadFirmwareFile('firmwareFile' + index, index)">
+                <span class="custom-file-control">{{group.firmware.name}}</span>
+              </label>
+            </div>
+          </div>
+          <span>
+            <span class="badge badge-light badge-tag cursor" data-toggle="dropdown" v-tooltip="'Add monitoring profile'">
+              <span><i class="fa fa-thermometer text-dark" style="width: 12px;"></i> {{group.monitoring.name}}</span> <span v-if="group.monitoring.name" class="tag-remove cursor" @click="group.monitoring = {name:undefined}">&times;</span>
+            </span>
+            <div class="dropdown-menu dropdown-menu-right">
+              <div class="card-body">
+                <p class="lead">Assign a monitoring profile <span class="text-muted">(optional)</span></p>
+                <p>TODO</p>
+              </div>
+            </div>
+          </span>
+          <span class="badge badge-light badge-tag tag-remove cursor"
+            @click="group.nodes.map(node => removeNode(node))"
+            v-tooltip="`Clear ${group.nodes.length} nodes`"><i class="fa fa-trash-o"></i></span>
         </div>
       </div>
-    </div>
-    <div class="card">
-      <div class="card-header pl-3" role="tab" id="headingThree">
-        <a class="collapsed text-dark" data-toggle="collapse" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-          <h6 class="mb-0"><i class="fa fa-fw fa-thermometer" aria-hidden="true"></i> Monitoring <small class="text-muted">(optional)</small></h6>
-        </a>
-      </div>
-      <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree" data-parent="#accordion">
-        <div class="card-body">
-          <p class="lead">You can pick monitoring profiles</p>
-          <label class="custom-file">
-            <input type="file" id="file" ref="monitoringFile" class="custom-file-input" @change="previewMonitoringFile">
-            <span class="custom-file-control">{{monitoringFile.name}}</span>
-          </label>
+      <!-- Selected nodes by Props -->
+      <div v-if="selectedProps.length" v-show="mode === 'byprop'" class="card-body font-size-sm" style="background: #22222222">
+        <p class="mb-0 font-size-1">{{nodeCount}} nodes selected: <a href="" @click.prevent="selectedProps = []">clear all</a></p>
+        <div style="margin-top: 0.35rem" v-for="(p, index) in selectedProps">
+          <span class="badge badge-info badge-tag"> {{p.prop.properties.archi | formatArchiRadio}} @ {{p.prop.properties.site}}</span>
+          x {{p.prop.nbnodes}}
+          <span class="badge badge-primary badge-tag" v-if="p.prop.properties.mobile"> mobile </span>
+
+          <span class="badge badge-light badge-tag cursor" v-if="p.hasFirmware" data-toggle="dropdown" v-tooltip="'Add firmware'">
+            <span><i class="fa fa-microchip text-dark"></i> {{p.firmware.name}}</span> <span v-if="p.firmware.name" class="tag-remove cursor" @click="p.firmware = {name:undefined}">&times;</span>
+          </span>
+          <div class="dropdown-menu dropdown-menu-right">
+            <div class="card-body">
+              <p class="lead">Assign a firmware <span class="text-muted">(optional)</span></p>
+              <label class="custom-file">
+                <input type="file" id="file" :ref="'firmwarePropFile' + index" class="custom-file-input" @change="loadFirmwareFile('firmwarePropFile' + index, index)">
+                <span class="custom-file-control">{{p.firmware.name}}</span>
+              </label>
+            </div>
+          </div>
+          <span>
+            <span class="badge badge-light badge-tag cursor" data-toggle="dropdown" v-tooltip="'Add monitoring profile'">
+              <span><i class="fa fa-thermometer text-dark" style="width: 12px;"></i> {{p.monitoring.name}}</span> <span v-if="p.monitoring.name" class="tag-remove cursor" @click="p.monitoring = {name:undefined}">&times;</span>
+            </span>
+            <div class="dropdown-menu dropdown-menu-right">
+              <div class="card-body">
+                <p class="lead">Assign a monitoring profile <span class="text-muted">(optional)</span></p>
+                <p>TODO</p>
+              </div>
+            </div>
+          </span>
+          <span class="badge badge-light badge-tag tag-remove cursor"
+            @click="removeProp(index)"
+            v-tooltip="`Clear ${p.prop.nbnodes} nodes`"><i class="fa fa-trash-o"></i></span>
         </div>
       </div>
     </div>
@@ -331,6 +236,7 @@
             <input type="file" id="file2" ref="scriptFile" class="custom-file-input" @change="previewScriptFile">
             <span class="custom-file-control">{{scriptFile.name}}</span>
           </label>
+          TODO
         </div>
       </div>
     </div>
@@ -338,30 +244,8 @@
 
   <h5 class="my-3">Summary</h5>
   <p class="lead">Your experiment on <span class="text-primary">{{nodeCount}}</span> nodes is set to start <span class="text-primary">{{scheduleText}}</span> for <span class="text-primary">{{duration}}</span> {{ durationMultiplier == 1 ? 'minutes' : 'hours'}}.</p>
-  <p>
-    <a href="" @click.prevent="showSummary = !showSummary">show nodes and associations</a>
-  </p>
-  <div class="scrollable h300" v-show="showSummary">
-    <table class="table table-striped table-sm font-size-sm">
-      <thead>
-        <tr>
-          <th class="header">Nodes</th>
-          <th class="header">Firmwares</th>
-          <th class="header">Monitoring profiles</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(node, i) in selectedNodes">
-          <td>{{node.network_address}}</td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
 
-  <button class="btn btn-lg btn-success" @click="submitExperiment">Create experiment</button>
+  <button class="btn btn-lg btn-primary" @click="submitExperiment">Submit experiment</button>
 
 </div> <!-- container -->
 
@@ -374,8 +258,45 @@ import FilterSelect from '@/components/parts/FilterSelect'
 import 'vue-multiselect/dist/vue-multiselect.min.css'
 import 'tempusdominus-bootstrap-4'
 import 'tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4.min.css'
-import {iotlab} from '@/rest'
-import {expand} from '@/utils'
+import { iotlab } from '@/rest'
+import { expandIds, extractArchi, groupBy } from '@/utils'
+import { allowedFirmwares4Archi } from '@/assets/js/archi-firmwares'
+// import { loadNodes, init3d } from '@/assets/map/map3d'
+
+function Exception (message) {
+  this.message = message
+  this.name = 'Exception'
+}
+
+function newNode (node) {
+  // Expand node object returned by IoT-LAB API with computed attributes and functions
+  return Object.assign({}, node, {
+    shortArchi: extractArchi(node.archi),
+  })
+}
+
+function newNodeGroup (nodes) {
+  if ([...new Set(nodes.map(node => node.shortArchi))].length > 1) throw new Exception('Node groups should have the same archi')
+  return Object.assign({}, {
+    nodes: nodes,
+    firmware: {name: undefined},
+    monitoring: {name: undefined},
+    archi: nodes[0].shortArchi,
+    allowedFirmwareTypes: allowedFirmwares4Archi(nodes[0].shortArchi),
+    hasFirmware: allowedFirmwares4Archi(nodes[0].shortArchi).length > 0,
+  })
+}
+
+function newPropGroup (prop) {
+  return Object.assign({}, {
+    prop: prop,
+    firmware: {name: undefined},
+    monitoring: {name: undefined},
+    archi: extractArchi(prop.properties.archi),
+    allowedFirmwareTypes: allowedFirmwares4Archi(extractArchi(prop.properties.archi)),
+    hasFirmware: allowedFirmwares4Archi(extractArchi(prop.properties.archi)).length > 0,
+  })
+}
 
 export default {
   name: 'NewExperiment',
@@ -392,27 +313,40 @@ export default {
       duration: 20,
       durationMultiplier: 1,
       startDate: '',
-      showSummary: true,
+      mode: 'byname',
       filterSite: 'all',
       filterArchi: 'all',
-      filterMobile: false,
-      filterState: 'all',
+      filterMobile: 'all',
+      propMobile: false,
       monitoringFile: {name: undefined},
-      firmwareFile: {name: undefined},
+      firmwareFiles: [{name: undefined}],
       scriptFile: {name: undefined},
-      selectedNodes: [],
+      selectedNodeGroups: [],
+      selectedProps: [],
       currentNodes: [],
-      value: [],
+      currentFirmware: {name: undefined},
+      currentMonitoring: {name: undefined},
+      firmwares: {},
       sites: [],
       nodes: [],
-      qty: 1,
+      qty: 0,
       nodeIds: '',
+      mapNodes: [
+        ['a8-x0', 1, 0, 1, 'a8', 'alive'],
+        ['a8-x1', 1, 1, 1, 'a8', 'alive'],
+        ['a8-x2', 1, 2, 0, 'a8', 'alive'],
+        ['a8-y1', 1, 1, 1, 'a8', 'alive'],
+      ],
     }
   },
 
   created () {
     iotlab.getSites().then(data => { this.sites = data })
-    iotlab.getNodes().then(data => { this.nodes = data })
+    iotlab.getNodes().then(data => { this.nodes = data.map(node => newNode(node)) })
+                     .catch(err => {
+                       this.$notify({text: 'An error occured while fetching data', type: 'error'})
+                       throw err
+                     })
   },
 
   mounted () {
@@ -443,10 +377,7 @@ export default {
         return this.filterSite === 'all' || node.site === this.filterSite
       })
       .filter((node) => {
-        return this.filterMobile === false || node.mobile === 1
-      })
-      .filter((node) => {
-        return this.filterState === 'all' || node.state === this.filterState
+        return this.filterMobile === 'all' || node.mobile === parseInt(this.filterMobile)
       })
       .filter((node) => {
         return !this.selectedNodes.some(e => e.network_address === node.network_address)
@@ -458,11 +389,15 @@ export default {
       }
       return 'No matching nodes found. Try to clear filters.'
     },
-    // selectedNodes () {
-      // return this.selectedNodeGroups.reduce((a, e) => a.concat(e), [])
-    // },
+    selectedNodes () {
+      return this.selectedNodeGroups.reduce((a, e) => a.concat(e.nodes), [])
+    },
     nodeCount () {
-      return this.selectedNodes.length
+      if (this.mode === 'byprop') {
+        return this.selectedProps.reduce((a, e) => a + parseInt(e.prop.nbnodes), 0)
+      } else {
+        return this.selectedNodes.length
+      }
     },
     archis () {
       return this.nodes.reduce((list, node) => {
@@ -488,6 +423,16 @@ export default {
         return list
       }, [])
     },
+    qtyAvailable () {
+      // qty available for (site, archi, mobile) = total qty - qty already selected
+      return this.nodes.filter((node) => node.site === this.filterSite &&
+                                         node.archi === this.filterArchi &&
+                                         Boolean(node.mobile) === this.propMobile).length -
+             this.selectedProps.filter((p) => p.prop.properties.site === this.filterSite &&
+                                              p.prop.properties.archi === this.filterArchi &&
+                                              Boolean(p.prop.properties.mobile) === this.propMobile)
+                               .reduce((a, e) => a + parseInt(e.prop.nbnodes), 0)
+    },
     states () {
       return this.nodes.filter((node) => {
         return this.filterSite === 'all' || node.site === this.filterSite
@@ -497,9 +442,31 @@ export default {
         return list
       }, [])
     },
+    firmwareAssociations () {
+      let fwasso
+      if (this.mode === 'byprop') {
+        fwasso = this.selectedProps.filter(prop => prop.firmware !== undefined && prop.firmware.name !== undefined)
+                                    .map(prop => ({
+                                      nodes: [prop.prop.alias],
+                                      firmwarename: prop.firmware.name,
+                                    }))
+      } else {
+        fwasso = this.selectedNodeGroups.filter(group => group.firmware !== undefined && group.firmware.name !== undefined)
+                                        .map(group => ({
+                                          nodes: group.nodes.map(node => node.network_address),
+                                          firmwarename: group.firmware.name,
+                                        }))
+      }
+      if (fwasso.length === 0) return null
+      return fwasso
+    },
   },
 
   methods: {
+    loadMap () {
+      // loadNodes(this.mapNodes)
+      // init3d()
+    },
     startAsap () {
     },
     startScheduled () {
@@ -508,50 +475,145 @@ export default {
         $('#datetimepicker1').datetimepicker('show')
       })
     },
+    setMode (mode) {
+      this.mode = mode
+      this.filterArchi = 'all'
+      this.filterSite = 'all'
+      this.filterMobile = 'all'
+    },
     previewMonitoringFile () {
       this.monitoringFile = this.$refs.monitoringFile.files[0]
     },
-    previewFirmwareFile () {
-      this.firmwareFile = this.$refs.firmwareFile.files[0]
+    loadFirmwareFile (ref, index) {
+      this.firmwareFiles[index] = this.$refs[ref][0].files[0]
+      // console.log(this.$refs[ref][0])
+      var group = (this.mode === 'byprop') ? this.selectedProps[index] : this.selectedNodeGroups[index]
+      var reader = new FileReader()
+
+      reader.onload = (function (file, vm, index, allowedFirmwares) {
+        return async function (e) {
+          var res = await iotlab.checkFirmware(e.target.result)
+          vm.$notify({text: `firmware format ${res.format}`, type: res.format === 'unknown' ? 'error' : 'info'})
+          if (allowedFirmwares.includes(res.format)) {
+            file.bin = e.target.result
+            // file.format = res.format
+            vm.firmwareFiles[index] = file
+            if (vm.mode === 'byprop') {
+              vm.selectedProps[index].firmware = file
+            } else {
+              vm.selectedNodeGroups[index].firmware = file
+            }
+            vm.firmwares[file.name] = file.bin
+          } else {
+            vm.$notify({text: `Wrong format for this type of nodes.\n(expected ${allowedFirmwares})`, type: 'error'})
+            // vm.$refs[ref][0].files[0] = null
+            // vm.$refs[ref][0].value = null
+            // vm.$refs[ref].value = null
+          }
+        }
+      })(this.firmwareFiles[index], this, index, group.allowedFirmwareTypes)
+
+      reader.readAsDataURL(this.firmwareFiles[index])
     },
     previewScriptFile () {
       this.scriptFile = this.$refs.scriptFile.files[0]
     },
+    testArchi () {
+      if (!this.archis4Site.includes(this.filterArchi)) this.filterArchi = this.archis4Site[0]
+    },
     addNodes () {
-      this.selectedNodes = this.selectedNodes.concat(this.currentNodes)
+      for (let nodes of Object.values(groupBy(this.currentNodes, 'archi'))) {
+        this.selectedNodeGroups.push(newNodeGroup(nodes)) // make one group of nodes per archi
+      }
       this.currentNodes = []
     },
     removeNode (node) {
-      this.selectedNodes = this.selectedNodes.filter(n => n.network_address !== node.network_address)
+      this.selectedNodeGroups = this.selectedNodeGroups.map(function (g) {
+        g.nodes = g.nodes.filter(n => n.network_address !== node.network_address)
+        return g
+      }).filter(g => g.nodes.length !== 0) // remove empty node groups
+    },
+    addProps () {
+      if (this.filterArchi === 'all') {
+        this.$notify({text: `Select an architecture first`, type: 'warning'})
+        return
+      }
+      if (this.filterSite === 'all') {
+        this.$notify({text: `Select a site first`, type: 'warning'})
+        return
+      }
+      if (this.qty === 0 && this.qtyAvailable >= 1) {
+        this.$notify({text: `Select a quantity first`, type: 'warning'})
+        return
+      }
+      if (this.qtyAvailable < 1) {
+        this.$notify({text: `No nodes available with such properties`, type: 'error'})
+        return
+      }
+      this.selectedProps.push(newPropGroup({
+        alias: this.selectedProps.length + 1, // XXXX collision ??
+        nbnodes: this.qty,
+        properties: {
+          archi: this.filterArchi,
+          site: this.filterSite,
+          mobile: this.propMobile,
+        },
+      }))
+      this.$nextTick(function () {
+        this.qty = Math.min(this.qty, this.qtyAvailable)
+      })
+    },
+    removeProp (i) {
+      this.selectedProps.splice(i, 1)
     },
 
-    expand () {
+    expandNodeIds () {
       var node
-      for (var i of expand(this.nodeIds)) {
-        node = this.nodes.find(n => n.network_address === `${this.filterArchi.split(':')[0]}-${i}.${this.filterSite}.iot-lab.info`)
+      var nodeGroup = []
+      if (!this.filterSite || this.filterSite === 'all') {
+        this.$notify({text: `Select a site first`, type: 'warning'})
+        return
+      }
+      if (!this.filterArchi || this.filterArchi === 'all') {
+        this.$notify({text: `Select an architecture first`, type: 'warning'})
+        return
+      }
+      if (!this.nodeIds) {
+        this.$notify({text: `Select node ids first`, type: 'warning'})
+        return
+      }
+      for (var i of expandIds(this.nodeIds)) {
+        node = this.nodes.find(n => n.network_address === `${extractArchi(this.filterArchi)}-${i}.${this.filterSite}.iot-lab.info`)
         if (node) {
-          if (!this.selectedNodes.includes(node)) this.selectedNodes.push(node)
+          if (!this.selectedNodes.includes(node)) nodeGroup.push(node)
         } else {
           this.$notify({text: `Invalid node id ${i}`, type: 'error'})
         }
       }
-    },
-
-    tototo (filterValue) {
-      alert(filterValue)
+      if (nodeGroup.length > 0) {
+        this.currentNodes = nodeGroup
+        this.addNodes()
+      }
     },
 
     async submitExperiment () {
-      if (this.selectedNodes.length === 0) return
+      if (this.nodeCount === 0) {
+        this.$notify({text: 'Select nodes first', type: 'warning'})
+        return
+      }
       try {
-        let newExp = await iotlab.submitPhysicalExperiment({
+        let newExp = await iotlab.submitExperiment({
+          type: (this.mode === 'byprop') ? 'alias' : 'physical',
           name: this.name,
           duration: this.duration * this.durationMultiplier,
-          nodes: this.selectedNodes.map(node => node.network_address),
+          nodes: (this.mode === 'byprop') ? this.selectedProps.map(p => p.prop) : this.selectedNodes.map(node => node.network_address),
+          firmwareassociations: this.firmwareAssociations,
+          firmwares: this.firmwares,
         })
         this.$notify({text: `Experiment ${newExp.id} submitted`, type: 'success'})
       } catch (err) {
         this.$notify({text: 'An error occured', type: 'error'})
+        throw err
       }
     },
   },
@@ -559,13 +621,24 @@ export default {
 </script>
 
 <style>
-.custom__tag.badge {
+.badge-tag.badge {
   font-weight: normal;
   font-size: 100%;
   margin: 1px 2px;
 }
-.custom__remove:hover {
+.badge-even {
+  /*filter: brightness(0.8);*/
+  filter: saturate(0.35);
+  /*filter: grayscale(0.8);*/
+  /*filter: sepia(0.6);*/
+  /*filter: hue-rotate(25deg);*/
+  /*filter: invert();*/
+}
+.tag-remove:hover {
   color: black;
+}
+.badge-light.tag-remove:hover, .badge-light .tag-remove:hover {
+  color: var(--danger);
 }
 
 .custom-file-control {
@@ -613,5 +686,10 @@ export default {
 }
 .btn-icon:hover {
   background-color: hsl(134, 62%, 61%);
+}
+
+#div3d {
+  height: 500px;
+  background: lightgray;
 }
 </style>
