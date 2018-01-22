@@ -12,6 +12,7 @@ import Resources from '@/components/Resources'
 import Experiment from '@/components/Experiment'
 import ExperimentDetails from '@/components/ExperimentDetails'
 import Dashboard from '@/components/Dashboard'
+import Map from '@/components/Map'
 import {auth} from './auth'
 
 Vue.use(Router)
@@ -19,6 +20,7 @@ Vue.use(Router)
 const router = new Router({
   routes: [
     { path: '/', redirect: '/dashboard' },
+    { path: '/map', name: 'map', component: Map },
     { path: '/signup', name: 'signup', component: Signup },
     { path: '/reset', name: 'reset', component: ResetPassword },
     { path: '/login', name: 'login', component: Login },
