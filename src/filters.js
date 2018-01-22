@@ -50,6 +50,7 @@ Vue.filter('stateBadgeClass', function (value) {
       case 'Waiting':
       case 'Hold':
       case 'Finishing':
+      case 'Busy':
         return 'badge-warning'
       case 'Resuming':
       case 'Launching':
