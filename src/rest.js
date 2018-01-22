@@ -127,7 +127,7 @@ export const iotlab = {
   // EXPERIMENT API
 
   async getUserExperimentsCount () {
-    return await iotlab.apiv1.get('/experiments?total').then(resp => resp.data)
+    return await iotlab.api.get('/experiments/total').then(resp => resp.data)
   },
 
   async getAllExperiments ({limit, offset, user, state = 'Terminated,Error,Running,Finishing,Resuming,toError,Waiting,Launching,Hold,toLaunch,toAckReservation,Suspended'} = {}) {
@@ -154,17 +154,26 @@ export const iotlab = {
     return await iotlab.api.get(`/experiments/${id}`).then(resp => resp.data)
   },
 
-  async submitPhysicalExperiment ({name, duration, nodes} = {}) {
+  async submitExperiment ({type, name, duration, nodes, firmwareassociations, firmwares, profileassociations, profiles} = {}) {
     const formData = new FormData()
-    formData.append('file.json', JSON.stringify({
-      type: 'physical',
+    formData.append('experiment.json', JSON.stringify({
+      type: type,
       duration: duration,
       name: name,
       nodes: nodes,
-      firmwareassociations: undefined,
-      profileassociations: undefined,
+      firmwareassociations: firmwareassociations,
+      profileassociations: profileassociations,
     }))
+    for (let asso of firmwareassociations || []) {
+      formData.append(asso.firmwarename, new Blob([firmwares[asso.firmwarename]], {type: 'application/octet-stream'}), asso.firmwarename)
+    }
     return await iotlab.api.post('/experiments', formData).then(resp => resp.data)
+  },
+
+  async checkFirmware (fileString) {
+    const formData = new FormData()
+    formData.append('firmware.bin', fileString)
+    return await iotlab.api.post('/firmwares/checker', formData).then(resp => resp.data)
   },
 
   // OTHER API
