@@ -8,7 +8,7 @@ import UserAccount from '@/components/UserAccount'
 import AdminUsers from '@/components/AdminUsers'
 import AdminAddUser from '@/components/AdminAddUser'
 import AdminExperiments from '@/components/AdminExperiments'
-import Monitor from '@/components/Monitor'
+import Resources from '@/components/Resources'
 import Experiment from '@/components/Experiment'
 import ExperimentDetails from '@/components/ExperimentDetails'
 import Dashboard from '@/components/Dashboard'
@@ -25,7 +25,7 @@ const router = new Router({
     { path: '/activate', name: 'activate', component: ActivateAccount },
     { path: '/dashboard', name: 'dashboard', component: Dashboard, meta: { requiresAuth: true } },
     { path: '/experiment', name: 'experiment', component: Experiment, meta: { requiresAuth: true } },
-    { path: '/monitor', name: 'monitor', component: Monitor, meta: { requiresAuth: true } },
+    { path: '/resources', name: 'resources', component: Resources, meta: { requiresAuth: true } },
     { path: '/account', name: 'account', component: UserAccount, meta: { requiresAuth: true } },
     { path: '/users', name: 'users', component: AdminUsers, meta: { requiresAdmin: true } },
     { path: '/users/add', name: 'addUsers', component: AdminAddUser, meta: { requiresAdmin: true } },
