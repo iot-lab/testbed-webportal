@@ -73,7 +73,7 @@
           </div>
           <div class="tab-pane fade" id="list-mailing" role="tabpanel" aria-labelledby="list-mailing-list">
             <h5 class="mb-3"><i class="fa fa-envelope-o" aria-hidden="true"></i> Mailing list subscription</h5>
-            <p>You can subcribe or unsubcribe to the mailing list for FIT IoT-LAB users from this page:<br>
+            <p>You can manage your subscription to the mailing list for FIT IoT-LAB users from this page:<br>
               <a href="https://lists.gforge.inria.fr/mailman/listinfo/senslab-users">https://lists.gforge.inria.fr/mailman/listinfo/senslab-users</a>
             </p>
           </div>
