@@ -20,8 +20,8 @@
           <router-link tag="li" :to="{name:'experiment'}" active-class="active">
             <a class="nav-link"><i class="fa fa-flask" aria-hidden="true"></i> Experiment</a>
           </router-link>
-          <router-link tag="li" :to="{name:'monitor'}" active-class="active">
-            <a class="nav-link"><i class="fa fa-thermometer" aria-hidden="true"></i> Monitoring</a>
+          <router-link tag="li" :to="{name:'resources'}" active-class="active">
+            <a class="nav-link"><i class="fa fa-folder-open" aria-hidden="true"></i> Resources</a>
           </router-link>
         </ul>
         <ul class="nav navbar-nav float-xs-right">
