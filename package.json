@@ -21,6 +21,7 @@
     "moment": "^2.18.1",
     "popper.js": "^1.12.5",
     "tempusdominus-bootstrap-4": "github:tempusdominus/bootstrap-4",
+    "three": "^0.68.0",
     "vee-validate": "^2.0.0-rc.18",
     "velocity-animate": "^1.5.0",
     "vue": "^2.5.2",
