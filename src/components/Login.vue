@@ -37,7 +37,7 @@ export default {
       try {
         this.failed = false
         await auth.doLogin(this.username, this.password)
-        this.$router.push('dashboard')
+        this.$router.push(this.$route.query.next || 'dashboard') // redirect to next url in query parameter or dashboard
         // await userStore.login(this.email, this.password)
         // await sleep(200)
         // event.emit('user:loggedin')
