@@ -369,6 +369,9 @@ export default {
       }
       return ''
     },
+    scheduleEpoch () {
+      return (this.start === 'asap') ? undefined : this.startDate.unix()
+    },
     filteredNodes () {
       return this.nodes.filter((node) => {
         return this.filterArchi === 'all' || node.archi === this.filterArchi
@@ -606,6 +609,7 @@ export default {
           type: (this.mode === 'byprop') ? 'alias' : 'physical',
           name: this.name,
           duration: this.duration * this.durationMultiplier,
+          reservation: this.scheduleEpoch,
           nodes: (this.mode === 'byprop') ? this.selectedProps.map(p => p.prop) : this.selectedNodes.map(node => node.network_address),
           firmwareassociations: this.firmwareAssociations,
           firmwares: this.firmwares,
