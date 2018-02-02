@@ -259,8 +259,8 @@ import 'vue-multiselect/dist/vue-multiselect.min.css'
 import 'tempusdominus-bootstrap-4'
 import 'tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4.min.css'
 import { iotlab } from '@/rest'
-import { expandIds, extractArchi, groupBy } from '@/utils'
-import { allowedFirmwares4Archi } from '@/assets/js/archi-firmwares'
+import { expandIds, groupBy } from '@/utils'
+import { allowedFirmwares4Archi, extractArchi } from '@/assets/js/iotlab-utils'
 // import { loadNodes, init3d } from '@/assets/map/map3d'
 
 function Exception (message) {

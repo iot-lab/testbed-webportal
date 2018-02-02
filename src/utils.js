@@ -21,11 +21,6 @@ export const expandIds = function (factExp) {
   return exp
 }
 
-// Extract archi from a string "archi:radio"
-export const extractArchi = function (nodeArchi) {
-  return nodeArchi.split(':')[0]
-}
-
 // Group an array of items by item.key
 // groupBy(['one', 'two', 'three'], 'length'))
 // => {3: ["one", "two"], 5: ["three"]}
