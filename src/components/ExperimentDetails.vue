@@ -4,13 +4,24 @@
       Experiment <span class="text-muted">{{experiment.name}} <small>#{{id}}</small></span>
     </h2>
     <ul class="list-unstyled">
-      <li>Owner <b>{{experiment.owner}}</b></li>
+      <li>User <b>{{experiment.user}}</b></li>
       <li>Name <b>{{experiment.name}}</b></li>
-      <li>Duration <b>{{experiment.duration * 60 | humanizeDuration}}</b></li>
+      <li>Duration <b>{{experiment.duration | humanizeDuration}}</b></li>
       <li>Number of nodes <b>{{experiment.nodes.length}}</b></li>
-      <li>State <span class="badge" :class="experiment.state | stateBadgeClass">{{experiment.state}}</span></li>
       <li>Type <b>{{experiment.type}}</b></li>
+      <li>State <span class="badge" :class="experiment.state | stateBadgeClass">{{experiment.state}}</span></li>
     </ul>
+    <a href="" class="btn btn-sm btn-outline-danger mb-3" @click.prevent="delExperiment(id)"
+      v-if="states.scheduled.includes(experiment.state)">
+      <i class="fa fa-ban"></i> Stop
+    </a>
+    <a href="" class="btn btn-sm btn-outline-secondary mb-3" @click.prevent="reloadExperiment(id)">
+      <i class="fa fa-refresh"></i> Restart
+    </a>
+    <a href="" class="btn btn-sm btn-outline-secondary mb-3" @click.prevent="this.alert('todo')">
+      <i class="fa fa-clone"></i> Clone
+    </a>
+
     <table class="table table-striped table-sm">
       <thead>
         <tr>
@@ -33,7 +44,8 @@
 </template>
 
 <script>
-import {iotlab} from '@/rest'
+import { iotlab } from '@/rest'
+import { experimentStates } from '@/assets/js/iotlab-utils'
 
 export default {
   name: 'ExperimentDetails',
@@ -47,6 +59,7 @@ export default {
   data () {
     return {
       experiment: undefined,
+      states: experimentStates,
     }
   },
 
@@ -70,6 +83,24 @@ export default {
     getMonitoring (node) {
       return '?'
     },
+    async delExperiment (id) {
+      try {
+        await iotlab.stopExperiment(id)
+        this.$notify({text: `Experiment ${id} stopped`, type: 'success'})
+        this.experiment.state = 'Finishing'
+      } catch (err) {
+        this.$notify({text: err.message, type: 'error'})
+      }
+    },
+    async reloadExperiment (id) {
+      try {
+        let newExp = await iotlab.reloadExperiment(id)
+        this.$notify({text: `Experiment ${newExp.id} submitted`, type: 'success'})
+      } catch (err) {
+        this.$notify({text: err.message, type: 'error'})
+      }
+    },
+
   },
 }
 </script>

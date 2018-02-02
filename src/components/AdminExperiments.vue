@@ -1,15 +1,31 @@
 <template>
   <div class="container mt-3">
     <div class="row">
-      <div class="col-md-9">
+      <div class="col-md-10">
         <h2>
           All experiments
           <span v-if="username">for user <span class="text-muted">{{username}}</span></span>
         </h2>
-        <h4 class="text-secondary">In progress</h4>
-        <experiment-list :user="username" state="Running,Finishing,Resuming,toError,Waiting,Launching,Hold,toLaunch,toAckReservation,Suspended"></experiment-list>
-        <h4 class="text-secondary">History</h4>
-        <experiment-list :user="username" state="Terminated,Error"></experiment-list>
+        <template v-if="total != undefined">
+          <div class="d-flex align-items-baseline">
+            <h4 class="text-secondary mr-3">Scheduled</h4>
+            <div>
+              <span class="badge badge-pill badge-success">{{total.running}}</span> Running
+              <span class="badge badge-pill badge-warning">{{total.upcoming}}</span> Scheduled
+            </div>
+          </div>
+          <experiment-list :user="username" state="all_scheduled" :show="15" :total="total.running + total.upcoming"></experiment-list>
+          <div class="d-flex align-items-baseline">
+            <h4 class="text-secondary mr-3">Recent</h4>
+            <div>
+              <span class="badge badge-pill badge-dark">{{total.terminated}}</span> Completed
+            </div>
+          </div>
+          <experiment-list :user="username" state="all_terminated" :show="40" :total="total.terminated" :step="100"></experiment-list>
+        </template>
+        <p v-else>
+          <i class="fa fa-spinner fa-spin fa-fw"></i>
+        </p>
       </div>
       <div class="col"></div>
     </div>
@@ -18,7 +34,7 @@
 </template>
 
 <script>
-// import {iotlab} from '@/rest'
+import {iotlab} from '@/rest'
 import ExperimentList from '@/components/parts/ExperimentList'
 
 export default {
@@ -35,11 +51,13 @@ export default {
 
   data () {
     return {
-      experiments: undefined,
+      total: undefined,
     }
   },
 
-  methods: {},
+  created () {
+    iotlab.getAllExperimentsCount(this.username).then(data => { this.total = data })
+  },
 }
 </script>
 
