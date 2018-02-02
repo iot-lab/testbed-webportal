@@ -130,6 +130,14 @@ export const iotlab = {
     return await iotlab.api.get('/experiments/total').then(resp => resp.data)
   },
 
+  async getAllExperimentsCount (user) {
+    if (user) {
+      return await iotlab.apiv1.get(`admin/experiments?total&user=${user}`).then(resp => resp.data)
+    } else {
+      return await iotlab.apiv1.get(`admin/experiments?total`).then(resp => resp.data)
+    }
+  },
+
   async getAllExperiments ({limit, offset, user, state = 'Terminated,Error,Running,Finishing,Resuming,toError,Waiting,Launching,Hold,toLaunch,toAckReservation,Suspended'} = {}) {
     let params = {}
     if (state) {
@@ -154,11 +162,16 @@ export const iotlab = {
     return await iotlab.api.get(`/experiments/${id}`).then(resp => resp.data)
   },
 
-  async submitExperiment ({type, name, duration, nodes, firmwareassociations, firmwares, profileassociations, profiles} = {}) {
+  async stopExperiment (id) {
+    return await iotlab.api.delete(`/experiments/${id}`)
+  },
+
+  async submitExperiment ({type, name, duration, reservation, nodes, firmwareassociations, firmwares, profileassociations, profiles} = {}) {
     const formData = new FormData()
     formData.append('experiment.json', JSON.stringify({
       type: type,
       duration: duration,
+      reservation: reservation,
       name: name,
       nodes: nodes,
       firmwareassociations: firmwareassociations,
@@ -174,6 +187,10 @@ export const iotlab = {
     const formData = new FormData()
     formData.append('firmware.bin', fileString)
     return await iotlab.api.post('/firmwares/checker', formData).then(resp => resp.data)
+  },
+
+  async reloadExperiment (id) {
+    return await iotlab.api.post(`/experiments/${id}/reload`, {}).then(resp => resp.data)
   },
 
   // OTHER API
