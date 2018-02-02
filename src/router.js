@@ -40,9 +40,9 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   // redirect to login page when appropriate
   if (to.meta.requiresAuth && !auth.loggedIn) {
-    next('login')
+    next({name: 'login', query: { next: to.path }})
   } else if (to.meta.requiresAdmin && !(auth.isAdmin && auth.loggedIn)) {
-    next('login')
+    next({name: 'login', query: { next: to.path }})
   } else {
     next()
   }
