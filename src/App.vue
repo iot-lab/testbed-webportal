@@ -22,6 +22,8 @@
           </router-link>
           <router-link tag="li" :to="{name:'resources'}" active-class="active">
             <a class="nav-link"><i class="fa fa-folder-open" aria-hidden="true"></i> Resources</a>
+            <!-- <a class="nav-link"><i class="fa fa-briefcase" aria-hidden="true"></i> Resources</a> -->
+            <!-- <a class="nav-link"><i class="fa fa-puzzle-piece" aria-hidden="true"></i> Resources</a> -->
           </router-link>
         </ul>
         <ul class="nav navbar-nav float-xs-right">
@@ -46,8 +48,8 @@
           <li class="dropdown nav-item" v-if="auth.isAdmin">
             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" data-hover="dropdown">Admin</a>
             <div class="dropdown-menu">
-              <a class="dropdown-item" href="">Nodes</a>
-              <a class="dropdown-item" href="">Statistics</a>
+              <a class="dropdown-item" href="" @click.prevent="this.alert('todo')">Nodes</a>
+              <a class="dropdown-item" href="" @click.prevent="this.alert('todo')">Statistics</a>
             </div>
           </li>
         </ul>

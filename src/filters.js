@@ -22,9 +22,9 @@ Vue.filter('formatDateTime', function (value) {
 
 Vue.filter('humanizeDuration', function (value) {
   if (value) {
-    let ms = value * 1000
+    let ms = value * 60 * 1000
     return humanizeDuration(ms, {
-      units: ['d', 'h', 'm'],
+      units: ['y', 'd', 'h', 'm'],
       largest: 2,
       round: true,
     })
@@ -59,8 +59,9 @@ Vue.filter('stateBadgeClass', function (value) {
         return 'badge-info'
       case 'Suspected':
       case 'Suspended':
-      case 'Terminated':
+      case 'Stopped':
         return 'badge-dark'
+      case 'Terminated':
       default:
         return 'badge-secondary'
     }
