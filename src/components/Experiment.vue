@@ -18,7 +18,12 @@
         <div class="card-body">
           <div class="form-group">
             <label class="lead mr-3 my-label">Name</label>
-            <input v-model="name" type="text" class="form-control" style="max-width: 300px; display: inline-block" placeholder="New experiment" autofocus>
+            <input v-model="name" type="text" class="form-control" placeholder="New experiment" autofocus
+              style="max-width: 300px; display: inline-block"
+              :class="{'is-invalid': !nameValidation}">
+            <div class="invalid-feedback">
+              Invalid name. Only alphanumeric characters allowed [0-9A-Za-z_]
+            </div>
           </div>
           <div class="form-group">
             <label class="lead mr-3 my-label">Duration</label>
@@ -360,6 +365,9 @@ export default {
   },
 
   computed: {
+    nameValidation () {
+      return this.name.match(/^[0-9A-Za-z_]*$/)
+    },
     scheduleText () {
       if (this.start === 'asap') {
         return 'as soon as possible'
@@ -600,8 +608,12 @@ export default {
     },
 
     async submitExperiment () {
+      if (!this.nameValidation) {
+        this.$notify({text: 'Name is invalid', type: 'warning'})
+        return
+      }
       if (this.nodeCount === 0) {
-        this.$notify({text: 'Select nodes first', type: 'warning'})
+        this.$notify({text: 'Select nodes first', type: 'warning'})
         return
       }
       try {
