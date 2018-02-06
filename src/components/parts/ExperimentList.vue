@@ -19,7 +19,10 @@
           <td v-if="user != '@self'"><router-link :to="{name: 'users', query: { search: exp.user }}">{{exp.user}}</router-link></td>
           <td>{{exp.name}}</td>
           <td>{{startDate(exp) | formatDateTime}}</td>
-          <td style="text-align: center">{{(exp.effective_duration || exp.submitted_duration) | humanizeDuration}}</td>
+          <td :class="{'durationProgress': experimentProgress(exp) !== 0}" :style="`text-align: center; --progress: ${experimentProgress(exp)}%`">
+            {{(exp.effective_duration || exp.submitted_duration) | humanizeDuration}}
+            <small class="text-dark" v-if="experimentProgress(exp) !== 0">({{experimentProgress(exp)}}%)</small>
+          </td>
           <td style="text-align: right">{{exp.nb_nodes}}</td>
           <td style="text-align: right"><span class="badge badge-state" :class="exp.state | stateBadgeClass">{{exp.state}}</span></td>
           <td>
@@ -32,7 +35,7 @@
                 </a>
                 <a class="dropdown-item text-danger" href="" @click.prevent="stopExperiment(exp)"
                   v-if="expStates.stoppable.includes(exp.state)">
-                  <i class="fa fa-fw fa-ban"></i> Stop
+                  <i class="fa fa-fw fa-ban"></i> Cancel
                 </a>
                 <a class="dropdown-item" href="" @click.prevent="reloadExperiment(exp)">
                   <i class="fa fa-fw fa-refresh"></i> Restart
@@ -121,6 +124,12 @@ export default {
 
   methods: {
 
+    experimentProgress (exp) {
+      // Gives the percentage of progress
+      if (experimentStates.completed.includes(exp.state)) return 0
+      return Math.min(100, 100 * exp.effective_duration / exp.submitted_duration)
+    },
+
     startDate (exp) {
       return [exp.start_date, exp.scheduled_date, exp.submission_date].find(date => date !== '1970-01-01T01:00:00Z')
     },
@@ -133,12 +142,13 @@ export default {
         state: this.states,
         offset: Math.max(this.total - this.experiments.length - qty, 0),
         limit: Math.min(this.total - this.experiments.length, qty),
-      })).sort((exp1, exp2) => exp2.id - exp1.id)) // reverse ordered by ID
+      })).sort((exp1, exp2) => exp2.id - exp1.id)) // order by reverse ID
 
       this.spinner = false
     },
 
-    async stopExperiment (exp) {
+    async stopExperiment (exp, confirmed = false) {
+      if (!confirmed && !confirm('Cancel this experiment?')) return
       try {
         await iotlab.stopExperiment(exp.id)
         this.$notify({text: `Experiment ${exp.id} stopped`, type: 'success'})
@@ -164,5 +174,27 @@ export default {
 <style scoped>
 .dropdown .dropdown-toggle:hover {
   filter: brightness(0.5);
+}
+
+.durationProgress {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  background: var(--light);
+  /*border-radius: 3px;*/
+}
+.durationProgress::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  /*top: -1px;*/
+  left: 0;
+  height: 100%;
+  /*height: calc(100% + 1px);*/
+  width: var(--progress);
+  background-color: #67c37c;
+  /*border: 1px solid var(--success);*/
+  border-radius: 3px 0 0 3px;
+  z-index: -1;
 }
 </style>
