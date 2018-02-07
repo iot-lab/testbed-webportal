@@ -19,9 +19,9 @@
           <td v-if="user != '@self'"><router-link :to="{name: 'users', query: { search: exp.user }}">{{exp.user}}</router-link></td>
           <td>{{exp.name}}</td>
           <td>{{startDate(exp) | formatDateTime}}</td>
-          <td :class="{'durationProgress': experimentProgress(exp) !== 0}" :style="`text-align: center; --progress: ${experimentProgress(exp)}%`">
+          <td :class="{'durationProgress': showProgress(exp)}" :style="`text-align: center; --progress: ${experimentProgress(exp)}%`">
             {{(exp.effective_duration || exp.submitted_duration) | humanizeDuration}}
-            <small class="text-dark" v-if="experimentProgress(exp) !== 0">({{experimentProgress(exp)}}%)</small>
+            <small class="text-dark" v-if="showProgress(exp)">({{experimentProgress(exp)}}%)</small>
           </td>
           <td style="text-align: right">{{exp.nb_nodes}}</td>
           <td style="text-align: right"><span class="badge badge-state" :class="exp.state | stateBadgeClass">{{exp.state}}</span></td>
@@ -124,6 +124,8 @@ export default {
 
   methods: {
 
+    showProgress: exp => exp.state === 'Running',
+
     experimentProgress (exp) {
       // Gives the percentage of progress
       if (experimentStates.completed.includes(exp.state)) return 0
@@ -180,21 +182,34 @@ export default {
   position: relative;
   z-index: 1;
   text-align: center;
-  background: var(--light);
-  /*border-radius: 3px;*/
+  /*background: var(--light);*/
+  /*border: 1px solid lightgrey;*/
+  /*border-radius: 10px;*/
+}
+.durationProgress::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 0;
+  height: calc(100% - 10px);
+  width: var(--progress);
+  background-color: #17a2b890;
+  border-left: 0.5px solid #17a2b850;
+  border-top: 0.5px solid #17a2b850;
+  border-bottom: 0.5px solid #17a2b850;
+  border-radius: 3px 0 0 3px;
+  z-index: -1;
 }
 .durationProgress::before {
   content: '';
   position: absolute;
-  top: 0;
-  /*top: -1px;*/
+  top: 5px;
   left: 0;
-  height: 100%;
-  /*height: calc(100% + 1px);*/
-  width: var(--progress);
-  background-color: #67c37c;
-  /*border: 1px solid var(--success);*/
-  border-radius: 3px 0 0 3px;
+  height: calc(100% - 10px);
+  width: 100%;
+  background-color: var(--light);
+  border: 0.5px solid lightgrey;
+  border-radius: 3px;
   z-index: -1;
 }
 </style>
