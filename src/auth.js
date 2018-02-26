@@ -3,9 +3,9 @@ import {iotlab} from './rest'
 
 export const auth = {
 
-  loggedIn: sessionStorage.getItem('loggedIn') || false,
-  isAdmin: sessionStorage.getItem('isAdmin') || false,
-  username: sessionStorage.getItem('username') || '',
+  loggedIn: localStorage.getItem('loggedIn') || false,
+  isAdmin: localStorage.getItem('isAdmin') || false,
+  username: localStorage.getItem('username') || '',
 
   async doLogin (username, password) {
     // let iotlab = axios.create({
@@ -16,7 +16,7 @@ export const auth = {
     //   },
     // })
     iotlab.create(username, password)
-    sessionStorage.setItem('apiAuth', JSON.stringify({
+    localStorage.setItem('apiAuth', JSON.stringify({
       username: username,
       password: password,
     }))
@@ -30,9 +30,9 @@ export const auth = {
       this.loggedIn = true
       this.username = username
       this.isAdmin = (admin.data === 'Success')
-      sessionStorage.setItem('loggedIn', this.loggedIn)
-      sessionStorage.setItem('isAdmin', this.isAdmin)
-      sessionStorage.setItem('username', this.username)
+      localStorage.setItem('loggedIn', this.loggedIn)
+      localStorage.setItem('isAdmin', this.isAdmin)
+      localStorage.setItem('username', this.username)
     }))
     .catch(err => {
       // console.log( err )
@@ -45,8 +45,8 @@ export const auth = {
 
   doLogout () {
     this.loggedIn = false
-    sessionStorage.removeItem('loggedIn')
-    sessionStorage.removeItem('apiAuth')
+    localStorage.removeItem('loggedIn')
+    localStorage.removeItem('apiAuth')
   },
 }
 

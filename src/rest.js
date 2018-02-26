@@ -7,15 +7,15 @@ const API_V2_URL = 'https://devwww.iot-lab.info/api/'
 
 // export const iotlab = new function () {
 
-//   this.apiv1 = axios.create({baseURL: API_V1_URL, auth: JSON.parse(sessionStorage.getItem('apiAuth') || '{}')})
-//   this.apiv2 = axios.create({baseURL: API_V2_URL, auth: JSON.parse(sessionStorage.getItem('apiAuth') || '{}')})
+//   this.apiv1 = axios.create({baseURL: API_V1_URL, auth: JSON.parse(localStorage.getItem('apiAuth') || '{}')})
+//   this.apiv2 = axios.create({baseURL: API_V2_URL, auth: JSON.parse(localStorage.getItem('apiAuth') || '{}')})
 //   this.api = this.apiv2
 
 export const iotlab = {
 
-  apiv1: axios.create({baseURL: API_V1_URL, auth: JSON.parse(sessionStorage.getItem('apiAuth') || '{}')}),
-  apiv2: axios.create({baseURL: API_V2_URL, auth: JSON.parse(sessionStorage.getItem('apiAuth') || '{}')}),
-  api: axios.create({baseURL: API_V2_URL, auth: JSON.parse(sessionStorage.getItem('apiAuth') || '{}')}),
+  apiv1: axios.create({baseURL: API_V1_URL, auth: JSON.parse(localStorage.getItem('apiAuth') || '{}')}),
+  apiv2: axios.create({baseURL: API_V2_URL, auth: JSON.parse(localStorage.getItem('apiAuth') || '{}')}),
+  api: axios.create({baseURL: API_V2_URL, auth: JSON.parse(localStorage.getItem('apiAuth') || '{}')}),
 
   create (username, password) {
     this.apiv2 = axios.create({
