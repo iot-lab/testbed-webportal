@@ -11,6 +11,14 @@ include("header.php");
 
 <div class="container">
 
+    <div id="warn_devwww" style="display:none;">
+        <h3 class="text-danger">Signup disabled</h3>
+        <div class="alert alert-danger" style="display: inline-block;">
+            This is a development site for internal purpose only.<br>
+            Please signup on <a class="text-danger alert-link" href="https://www.iot-lab.info/testbed/signup.php">www.iot-lab.info</a> for FIT IoT-LAB public site.
+        </div>
+    </div>
+
     <div class="row" id="signup_div">
         <div class="col-md-8">
             <h2>Sign up</h2>
@@ -146,6 +154,11 @@ include("header.php");
 <script type="text/javascript">
 
     $(document).ready(function () {
+
+        if (document.location.hostname == "devwww.iot-lab.info") {
+            $('#warn_devwww').show();
+            $('#signup_div').hide();
+        }
 
         if (document.location.hash == "#signup") showSignup();
 

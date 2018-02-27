@@ -19,6 +19,12 @@ if (window.location.host === 'devwww.iot-lab.info') && window.location.hash.star
 
 <div class="container" style="margin-top:50px;">
 
+    <div class="row" id="warn_devwww" style="display:none;">
+        <div class="col-md-4 col-md-offset-4 alert alert-danger">
+            This is a development site for <b>internal purpose only</b>.<br>
+            Go to <a class="text-danger alert-link" href="https://www.iot-lab.info/testbed/">www.iot-lab.info</a> for FIT IoT-LAB public site.
+        </div>
+    </div>
 
     <div class="row">
         <div class="alert alert-error" id="div_error_login_and_reset_forms" style="display:none"></div>
@@ -69,6 +75,9 @@ include('footer.php');
     /*   on ready   */
     /* ************ */
     $(document).ready(function () {
+        if (document.location.hostname == "devwww.iot-lab.info") {
+            $("#warn_devwww").show();
+        }
         if (document.location.hash == "#logout") {
             $("#div_error_login_and_reset_forms").show();
             $("#div_error_login_and_reset_forms").removeClass("alert-danger");
