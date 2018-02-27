@@ -3,6 +3,12 @@
   <div class="row">
     <div class="col-lg-8">
       <h2>Sign up to FIT IoT-LAB</h2>
+      <div class="card border-danger bg-danger my-2 mx-auto sd-inline-block text-left" v-if="hostname === 'devwww.iot-lab.info'">
+        <div class="card-body text-white p-2">
+          Development site for <b>internal purpose only</b>.
+          Go to <a class="text-white alert-link" href="https://www.iot-lab.info/testbed">www.iot-lab.info</a> for FIT IoT-LAB public site.
+        </div>
+      </div>
       <div v-if="success" class="card border-success my-5">
         <div class="card-header bg-success text-white"><i class="fa fa-check mr-1"></i> An email has been sent to <i>{{user.email}}</i></div>
         <div class="card-body text-success">
@@ -59,6 +65,7 @@ export default {
 
   data () {
     return {
+      hostname: location.hostname,
       reCaptchaSitekey: '6Ld8cR4UAAAAAC-zBLP9m2bC35xyyYwTbvkBcx4q',
       user: {},
       charter: false,

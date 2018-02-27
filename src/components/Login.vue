@@ -1,10 +1,17 @@
 
 <template>
-<div class="container mt-4">
-  <div id="logo" class="mb-2 text-center mx-auto">
+<div class="container mt-4 text-center">
+  <div id="logo" class="mb-2 mx-auto">
     <img src="../assets/disc-iotlab.svg">
   </div>
-  <div class="login-box mx-auto text-center" :class="{ 'error': failed }">
+  <div class="card border-danger my-2 mx-auto d-inline-block text-left" v-if="hostname === 'devwww.iot-lab.info'">
+    <div class="card-body text-danger">
+      Development site for <b>internal purpose only</b>.<br>
+      <!-- FIT IoT-LAB public site is located at <a class="text-danger" href="https://www.iot-lab.info/testbed">www.iot-lab.info</a> -->
+      Go to <a class="text-danger alert-link" href="https://www.iot-lab.info/testbed">www.iot-lab.info</a> for FIT IoT-LAB public site.
+    </div>
+  </div>
+  <div class="login-box mx-auto" :class="{ 'error': failed }">
     <h2 style="font-size: 1.75rem">Welcome to FIT IoT-LAB</h2>
     <form @submit.prevent="login" class="mx-auto">
       <input v-model="username" type="text" class="form-control" :class="{ 'is-invalid': failed }" placeholder="Username" autofocus required>
@@ -30,6 +37,7 @@ export default {
       username: '',
       password: '',
       failed: false,
+      hostname: location.hostname,
     }
   },
   methods: {
