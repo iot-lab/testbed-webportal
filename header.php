@@ -139,7 +139,7 @@ if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) $body_
                             <a href="#" data-toggle="dropdown" data-hover="dropdown">Admin <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li id="admin_users"><a href="./admin_users.php">Users</a></li>
-                                <li id="admin_exps"><a href="./admin_exps.php">Experiments</a></li>
+                                <!--<li id="admin_exps"><a href="./admin_exps.php">Experiments</a></li>-->
                                 <li id="admin_nodes"><a href="./admin_nodes.php">Nodes</a></li>
                                 <li id="admin_stats"><a href="./admin_stats.php">Statistics</a></li>
                             </ul>
