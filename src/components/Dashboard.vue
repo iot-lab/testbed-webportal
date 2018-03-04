@@ -21,6 +21,7 @@
       <template v-if="total.running + total.upcoming">
         <h4 class="text-secondary">Scheduled</h4>
         <experiment-list user="@self" state="all_scheduled" :total="total.running + total.upcoming"></experiment-list>        
+        <!-- <experiment-list user="@self" state="all_scheduled" :total="total.running + total.upcoming"></experiment-list>         -->
       </template>
       <p>
         <router-link :to="{name:'experiment'}" class="btn btn-primary">New experiment</router-link>
@@ -50,9 +51,9 @@
       <p v-else>
         <i class="fa fa-spinner fa-spin fa-fw"></i>
       </p>
-      <p>
+      <!-- <p>
         <a class="btn btn-light" href="" @click.prevent="this.alert('todo')">Check future availability</a>
-      </p>
+      </p> -->
     </div>
   </div>
 
