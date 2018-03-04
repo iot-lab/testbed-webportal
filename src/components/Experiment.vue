@@ -112,16 +112,16 @@
                 </multiselect>
                 <button class="btn btn-success" @click="addNodes">Add to experiment</button>
               </div>
-              <p class="ml-1 mt-2 font-size-sm">
+              <!-- <p class="ml-1 mt-2 font-size-sm">
                 <a href="" data-toggle="collapse" href="#collapseMap" aria-expanded="false" aria-controls="collapseMap"><i class="fa fa-map-o fa-lg" aria-hidden="true"></i> View/select nodes on map <i class="fa fa-caret-down" aria-hidden="true"></i></a> 
               </p>
               <div class="collapse" id="collapseMap">
                 <div class="card card-body">
-                  <!-- <div id="div3d" oncontextmenu="return false"></div>           
-                  <div id="infobox"></div> -->
+                  <!- <div id="div3d" oncontextmenu="return false"></div>           
+                  <div id="infobox"></div> ->
                   <router-link :to="{name:'map'}">(TODO) Map !</router-link>
                 </div>
-              </div>
+              </div> -->
             </div>
             <!-- Select By PROPS -->
             <div class="tab-pane fade show" id="list-byprop" role="tabpanel" aria-labelledby="list-byprop-list">
@@ -228,7 +228,7 @@
         </div>
       </div>
     </div>
-    <div class="card">
+    <!-- <div class="card">
       <div class="card-header pl-3" role="tab" id="headingFour">
         <a class="collapsed text-dark" data-toggle="collapse" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
           <h6 class="mb-0"><i class="fa fa-fw fa-terminal" aria-hidden="true"></i> Scripts <small class="text-muted">(optional)</small></h6>
@@ -244,7 +244,7 @@
           TODO
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 
   <h5 class="my-3">Summary</h5>
