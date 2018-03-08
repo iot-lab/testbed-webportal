@@ -149,7 +149,12 @@
                 <filter-select title="Architecture" v-model="filterArchi"
                   :items="archis4Site.map(archi => Object({value: archi, option: this.$options.filters.formatArchiRadio(archi)}))">
                 </filter-select>
-                <input v-model="nodeIds" class="form-control form-control-sm mr-2" type="text" placeholder="IDs (e.g. 1-5+7)">
+                <input v-model="nodeIds" class="form-control form-control-sm mr-2" type="text" placeholder="IDs (e.g. 1-5+7)"
+                  data-toggle="popover"
+                  data-placement="bottom"
+                  data-title="Available node ids"
+                  :data-content="nodeIdsInfo"
+                >
                 <button class="btn btn-sm btn-success" @click="expandNodeIds"><i class="fa fa-plus" aria-hidden="true"></i> Add to experiment</button>
               </div>
             </div>
@@ -333,6 +338,7 @@ export default {
       currentMonitoring: {name: undefined},
       firmwares: {},
       sites: [],
+      node_ids: [],
       nodes: [],
       qty: 0,
       nodeIds: '',
@@ -352,6 +358,11 @@ export default {
                        this.$notify({text: 'An error occured while fetching data', type: 'error'})
                        throw err
                      })
+    iotlab.getNodesIds().then(data => { this.nodes_ids = data })
+                     .catch(err => {
+                       this.$notify({text: 'An error occured while fetching data', type: 'error'})
+                       throw err
+                     })
   },
 
   mounted () {
@@ -361,6 +372,10 @@ export default {
     })
     $('#datetimepicker1').on('change.datetimepicker', (e) => {
       this.startDate = e.date
+    })
+    $('[data-toggle="popover"]').popover({
+      trigger: 'focus',
+      html: true,
     })
   },
 
@@ -399,6 +414,15 @@ export default {
         return `Search among ${this.filteredNodes.length} nodes`
       }
       return 'No matching nodes found. Try to clear filters.'
+    },
+    nodeIdsInfo () {
+      if (this.filterSite === 'all' || this.filterArchi === 'all') return 'Select a site and architecture first'
+      return this.nodes_ids
+        .filter(site => site.site === this.filterSite)[0].archis
+        .filter(archi => archi.archi === this.filterArchi)[0].states
+        .sort((a, b) => a.state > b.state)
+        .map(state => `<span class="badge ${this.$options.filters.stateBadgeClass(state.state)}">${state.state}</span> ${state.ids}`)
+        .join('<br>')
     },
     selectedNodes () {
       return this.selectedNodeGroups.reduce((a, e) => a.concat(e.nodes), [])
