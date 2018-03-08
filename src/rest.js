@@ -207,6 +207,10 @@ export const iotlab = {
     return await iotlab.api.get('/nodes').then(resp => resp.data.items)
   },
 
+  async getNodesIds () {
+    return await iotlab.api.get('/nodes/ids').then(resp => resp.data.items)
+  },
+
   // API V1
 
   async getStats () {
