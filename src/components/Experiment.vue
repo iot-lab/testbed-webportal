@@ -655,7 +655,7 @@ export default {
         await sleep(200)
         this.$router.push('dashboard')
       } catch (err) {
-        this.$notify({text: 'An error occured', type: 'error'})
+        this.$notify({text: err.message + '<br><br>' + err.response.data.message, type: 'error'})
         throw err
       }
     },
