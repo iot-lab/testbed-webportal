@@ -2,6 +2,9 @@
 // e.g. await sleep(1000)
 export const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
+// Capitalize
+export const capitalize = (str) => str.replace(/\b\w/g, l => l.toUpperCase())
+
 // Expand a list of nodes containing dash intervals
 // "1-3+5+9" -> 1,2,3,5,9
 export const expandIds = function (factExp) {
