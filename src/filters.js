@@ -20,6 +20,12 @@ Vue.filter('formatDateTime', function (value) {
   }
 })
 
+Vue.filter('formatDateTimeSec', function (value) {
+  if (value) {
+    return moment(String(value)).format('YYYY-MM-DD HH:mm:ss')
+  }
+})
+
 Vue.filter('humanizeDuration', function (value) {
   if (value) {
     let ms = value * 60 * 1000

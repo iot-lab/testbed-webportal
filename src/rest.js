@@ -132,9 +132,9 @@ export const iotlab = {
 
   async getAllExperimentsCount (user) {
     if (user) {
-      return await iotlab.apiv1.get(`admin/experiments?total&user=${user}`).then(resp => resp.data)
+      return await iotlab.api.get(`/experiments/total/users/${user}`).then(resp => resp.data)
     } else {
-      return await iotlab.apiv1.get(`admin/experiments?total`).then(resp => resp.data)
+      return await iotlab.api.get(`/experiments/total/all`).then(resp => resp.data)
     }
   },
 
@@ -160,6 +160,15 @@ export const iotlab = {
 
   async getExperiment (id) {
     return await iotlab.api.get(`/experiments/${id}`).then(resp => resp.data)
+  },
+
+  async getExperimentArchive (id) {
+    return await iotlab.api.get(`/experiments/${id}/data`).then(resp => resp.data)
+    // return
+  },
+
+  async getExperimentDeployment (id) {
+    return await iotlab.api.get(`/experiments/${id}/deployment`).then(resp => resp.data)
   },
 
   async stopExperiment (id) {
@@ -189,6 +198,13 @@ export const iotlab = {
     return await iotlab.api.post('/firmwares/checker', formData).then(resp => resp.data)
   },
 
+  async flashFirmware (id, nodes, fileString) {
+    const formData = new FormData()
+    formData.append(`experiment${id}.json`, JSON.stringify(nodes))
+    formData.append('firmware.bin', new Blob([fileString], {type: 'application/octet-stream'}), 'firmware.bin')
+    return await iotlab.api.post(`/experiments/${id}/nodes/flash`, formData).then(resp => resp.data)
+  },
+
   async reloadExperiment (id) {
     return await iotlab.api.post(`/experiments/${id}/reload`, {}).then(resp => resp.data)
   },
@@ -209,6 +225,11 @@ export const iotlab = {
 
   async getNodesIds () {
     return await iotlab.api.get('/nodes/ids').then(resp => resp.data.items)
+  },
+
+  async sendNodesCommand (id, cmd, nodes) {
+    // cmd in [start, stop, reset, flash-idle, profile-reset, debug-start, debug-stop]
+    return await iotlab.api.post(`/experiments/${id}/nodes/${cmd}`, nodes).then(resp => resp.data)
   },
 
   // API V1
