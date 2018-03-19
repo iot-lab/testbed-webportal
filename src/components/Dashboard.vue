@@ -18,18 +18,11 @@
       <p v-else>
         <i class="fa fa-spinner fa-spin fa-fw"></i>
       </p>
-      <template v-if="total.running + total.upcoming">
-        <h4 class="text-secondary">Scheduled</h4>
-        <experiment-list user="@self" state="all_scheduled" :total="total.running + total.upcoming"></experiment-list>        
-        <!-- <experiment-list user="@self" state="all_scheduled" :total="total.running + total.upcoming"></experiment-list>         -->
-      </template>
+      <experiment-list title="Scheduled" user="@self" state="all_scheduled" :show="500"></experiment-list>
       <p>
         <router-link :to="{name:'experiment'}" class="btn btn-primary">New experiment</router-link>
       </p>
-      <template v-if="total.terminated">
-        <h4 class="text-secondary">Recent</h4>
-        <experiment-list user="@self" state="all_terminated" :total="total.terminated"></experiment-list>
-      </template>
+      <experiment-list title="Recent" user="@self" state="all_terminated" :total="total.terminated"></experiment-list>
     </div>
     <div class="col">
       <h2>Platform status</h2>
