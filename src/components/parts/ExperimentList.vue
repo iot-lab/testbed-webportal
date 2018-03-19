@@ -1,6 +1,7 @@
 <template>
   <div>
-    <table class="table table-striped table-sm">
+    <h4 class="text-secondary" v-if="title && experiments.length">{{title}}</h4>
+    <table class="table table-striped table-sm" v-if="experiments.length">
       <thead>
         <tr>
           <th>Id</th>
@@ -37,12 +38,17 @@
                   v-if="expStates.stoppable.includes(exp.state)">
                   <i class="fa fa-fw fa-ban"></i> Cancel
                 </a>
-                <a class="dropdown-item" href="" @click.prevent="reloadExperiment(exp)">
+                <a class="dropdown-item" href="" @click.prevent="startExperiment(exp)"
+                  v-if="exp.state === 'Waiting'">
+                  <i class="fa fa-fw fa-play"></i> Start
+                </a>
+                <a class="dropdown-item" href="" @click.prevent="reloadExperiment(exp)"
+                  v-if="expStates.completed.includes(exp.state)">
                   <i class="fa fa-fw fa-refresh"></i> Restart
                 </a>
-                <a class="dropdown-item" href="" @click.prevent="this.alert('todo')">
+                <!-- <a class="dropdown-item" href="" @click.prevent="this.alert('todo')">
                   <i class="fa fa-fw fa-clone"></i> Clone
-                </a>
+                </a> -->
               </div>
             </div>
 
@@ -67,11 +73,17 @@
 <script>
 import { iotlab } from '@/rest'
 import { experimentStates } from '@/assets/js/iotlab-utils'
+import { sleep } from '@/utils'
 
 export default {
   name: 'ExperimentList',
 
   props: {
+    title: {
+      // Optional title
+      type: String,
+      default: '',
+    },
     user: {
       // Filter experiments by user. Leave empty for all users. Or '@self' for current (logged in) user.
       type: String,
@@ -107,6 +119,7 @@ export default {
       states: undefined,
       expStates: experimentStates,
       experiments: [],
+      polling: undefined,
     }
   },
 
@@ -122,6 +135,10 @@ export default {
     this.loadMore(this.show)
   },
 
+  destroyed () {
+    this.stopPolling()
+  },
+
   methods: {
 
     showProgress: exp => exp.state === 'Running',
@@ -129,11 +146,24 @@ export default {
     experimentProgress (exp) {
       // Gives the percentage of progress
       if (experimentStates.completed.includes(exp.state)) return 0
-      return Math.min(100, 100 * exp.effective_duration / exp.submitted_duration)
+      return Math.min(100, Math.round(100 * exp.effective_duration / exp.submitted_duration))
     },
 
     startDate (exp) {
-      return [exp.start_date, exp.scheduled_date, exp.submission_date].find(date => date !== '1970-01-01T01:00:00Z')
+      return [exp.start_date, exp.scheduled_date, exp.submission_date].find(date => date !== '1970-01-01T00:00:00Z')
+    },
+
+    async refresh () {
+      this.experiments = (await iotlab.getAllExperiments({
+        user: this.user,
+        state: this.states,
+        offset: 0,
+        limit: Math.max(this.experiments.length, this.show),
+      })).sort((exp1, exp2) => exp2.id - exp1.id) // order by reverse ID
+
+      if (!this.experiments.some(exp => experimentStates.scheduled.includes(exp.state))) {
+        this.stopPolling()
+      }
     },
 
     async loadMore (qty) {
@@ -147,6 +177,19 @@ export default {
       })).sort((exp1, exp2) => exp2.id - exp1.id)) // order by reverse ID
 
       this.spinner = false
+
+      // create watchdog to poll for scheduled experiments update
+      if (!this.polling && this.experiments.some(exp => experimentStates.scheduled.includes(exp.state))) {
+        this.startPolling()
+      }
+    },
+
+    startPolling () {
+      this.polling = setInterval(() => this.refresh(), 5000)
+    },
+
+    stopPolling () {
+      clearInterval(this.polling)
     },
 
     async stopExperiment (exp, confirmed = false) {
@@ -156,15 +199,23 @@ export default {
         this.$notify({text: `Experiment ${exp.id} stopped`, type: 'success'})
         exp.state = 'Finishing'
       } catch (err) {
-        console.log(err)
         this.$notify({text: err.message, type: 'error'})
       }
+    },
+
+    async startExperiment (exp) {
+      if (!confirm('Resubmit now and cancel this experiment?')) return
+      await this.stopExperiment(exp, true)
+      await this.reloadExperiment(exp)
     },
 
     async reloadExperiment (exp) {
       try {
         let newExp = await iotlab.reloadExperiment(exp.id)
         this.$notify({text: `Experiment ${newExp.id} submitted`, type: 'success'})
+        await sleep(200)
+        this.$router.push('dashboard')
+        this.$router.go() // force dashboard reload
       } catch (err) {
         this.$notify({text: err.message, type: 'error'})
       }
@@ -182,9 +233,6 @@ export default {
   position: relative;
   z-index: 1;
   text-align: center;
-  /*background: var(--light);*/
-  /*border: 1px solid lightgrey;*/
-  /*border-radius: 10px;*/
 }
 .durationProgress::after {
   content: '';
