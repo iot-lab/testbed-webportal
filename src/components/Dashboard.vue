@@ -22,7 +22,9 @@
       <p>
         <router-link :to="{name:'experiment'}" class="btn btn-primary">New experiment</router-link>
       </p>
-      <experiment-list title="Recent" user="@self" state="all_terminated" :total="total.terminated"></experiment-list>
+      <template v-if="total.terminated">
+        <experiment-list title="Recent" user="@self" state="all_terminated" :total="total.terminated"></experiment-list>
+      </template>
     </div>
     <div class="col">
       <h2>Platform status</h2>

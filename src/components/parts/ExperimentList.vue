@@ -154,6 +154,7 @@ export default {
     },
 
     async refresh () {
+      let oldExp = this.experiments
       this.experiments = (await iotlab.getAllExperiments({
         user: this.user,
         state: this.states,
@@ -164,6 +165,8 @@ export default {
       if (!this.experiments.some(exp => experimentStates.scheduled.includes(exp.state))) {
         this.stopPolling()
       }
+
+      if (this.experiments.length < oldExp.length) this.$router.go() // new terminated experiment, let's refresh
     },
 
     async loadMore (qty) {
