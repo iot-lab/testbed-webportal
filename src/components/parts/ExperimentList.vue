@@ -34,21 +34,23 @@
                   <i class="fa fa-fw fa-eye"></i> View details
                 </router-link>
                 </a>
-                <a class="dropdown-item text-danger" href="" @click.prevent="stopExperiment(exp)"
-                  v-if="expStates.stoppable.includes(exp.state)">
-                  <i class="fa fa-fw fa-ban"></i> Cancel
-                </a>
-                <a class="dropdown-item" href="" @click.prevent="startExperiment(exp)"
-                  v-if="exp.state === 'Waiting'">
-                  <i class="fa fa-fw fa-play"></i> Start
-                </a>
-                <a class="dropdown-item" href="" @click.prevent="reloadExperiment(exp)"
-                  v-if="expStates.completed.includes(exp.state)">
-                  <i class="fa fa-fw fa-refresh"></i> Restart
-                </a>
-                <!-- <a class="dropdown-item" href="" @click.prevent="this.alert('todo')">
-                  <i class="fa fa-fw fa-clone"></i> Clone
-                </a> -->
+                <template v-if="exp.user === currentUser">
+                  <a class="dropdown-item text-danger" href="" @click.prevent="stopExperiment(exp)"
+                    v-if="expStates.stoppable.includes(exp.state)">
+                    <i class="fa fa-fw fa-ban"></i> Cancel
+                  </a>
+                  <a class="dropdown-item" href="" @click.prevent="startExperiment(exp)"
+                    v-if="exp.state === 'Waiting'">
+                    <i class="fa fa-fw fa-play"></i> Start
+                  </a>
+                  <a class="dropdown-item" href="" @click.prevent="reloadExperiment(exp)"
+                    v-if="expStates.completed.includes(exp.state)">
+                    <i class="fa fa-fw fa-refresh"></i> Restart
+                  </a>
+                  <!-- <a class="dropdown-item" href="" @click.prevent="this.alert('todo')">
+                    <i class="fa fa-fw fa-clone"></i> Clone
+                  </a> -->
+                </template>
               </div>
             </div>
 
@@ -71,6 +73,7 @@
 </template>
 
 <script>
+import { auth } from '@/auth'
 import { iotlab } from '@/rest'
 import { experimentStates } from '@/assets/js/iotlab-utils'
 import { sleep } from '@/utils'
@@ -120,6 +123,7 @@ export default {
 
   data () {
     return {
+      currentUser: auth.username,
       spinner: false,
       states: undefined,
       expStates: experimentStates,
