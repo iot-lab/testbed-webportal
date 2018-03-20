@@ -18,12 +18,12 @@
       <p v-else>
         <i class="fa fa-spinner fa-spin fa-fw"></i>
       </p>
-      <experiment-list title="Scheduled" user="@self" state="all_scheduled" :show="500"></experiment-list>
+      <experiment-list title="Scheduled" user="@self" state="all_scheduled" @completed="updateTotal" :started="started"></experiment-list>
       <p>
         <router-link :to="{name:'experiment'}" class="btn btn-primary">New experiment</router-link>
       </p>
       <template v-if="total.terminated">
-        <experiment-list title="Recent" user="@self" state="all_terminated" :total="total.terminated"></experiment-list>
+        <experiment-list title="Recent" user="@self" state="all_terminated" :show="5" :total="total.terminated" @started="refreshScheduled"></experiment-list>
       </template>
     </div>
     <div class="col">
@@ -78,11 +78,12 @@ export default {
       currentSite: 'all',
       auth: auth,
       nbPendingUsers: 0,
+      started: 0,
     }
   },
 
   created () {
-    iotlab.getUserExperimentsCount().then(data => { this.total = data })
+    this.updateTotal()
     // iotlab.getStats().then(data => { this.stats = data })
     iotlab.getSites().then(data => { this.sites = data })
     iotlab.getSiteResources().then(data => { this.resources = data })
@@ -92,6 +93,13 @@ export default {
   },
 
   methods: {
+    updateTotal () {
+      iotlab.getUserExperimentsCount().then(data => { this.total = data })
+    },
+    refreshScheduled () {
+      // increment started counter so that scheduled xp component can refresh itself
+      this.started += 1
+    },
     getNodesCount (site, stateList) {
       let siteList = (site === 'all') ? this.sites.map(key => key.site) : [site.site]
       return this.resources.filter(node => siteList.includes(node.site)).filter(node => stateList.includes(node.state)).length
