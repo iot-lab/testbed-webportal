@@ -14,14 +14,14 @@
               <span class="badge badge-pill badge-warning">{{total.upcoming}}</span> Scheduled
             </div>
           </div>
-          <experiment-list :user="username" state="all_scheduled" :show="15" :total="total.running + total.upcoming"></experiment-list>
+          <experiment-list :user="username" state="all_scheduled" @completed="updateTotal" :started="started"></experiment-list>
           <div class="d-flex align-items-baseline">
             <h4 class="text-secondary mr-3">Recent</h4>
             <div>
               <span class="badge badge-pill badge-dark">{{total.terminated}}</span> Completed
             </div>
           </div>
-          <experiment-list :user="username" state="all_terminated" :show="40" :total="total.terminated" :step="100"></experiment-list>
+          <experiment-list :user="username" state="all_terminated" :show="40" :total="total.terminated" :step="100" @started="refreshScheduled"></experiment-list>
         </template>
         <p v-else>
           <i class="fa fa-spinner fa-spin fa-fw"></i>
@@ -52,11 +52,22 @@ export default {
   data () {
     return {
       total: undefined,
+      started: 0,
     }
   },
 
   created () {
-    iotlab.getAllExperimentsCount(this.username).then(data => { this.total = data })
+    this.updateTotal()
+  },
+
+  methods: {
+    updateTotal () {
+      iotlab.getAllExperimentsCount(this.username).then(data => { this.total = data })
+    },
+    refreshScheduled () {
+      // increment started counter so that scheduled xp component can refresh itself
+      this.started += 1
+    },
   },
 }
 </script>

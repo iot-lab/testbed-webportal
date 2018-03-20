@@ -104,12 +104,17 @@ export default {
     show: {
       // Max number of items to load intially
       type: Number,
-      default: 5,
+      default: 500,
     },
     step: {
       // Number of items to load on "load more" action
       type: Number,
       default: 50,
+    },
+    started: {
+      // Started experiment counter, increment to force component to refresh
+      type: Number,
+      default: 0,
     },
   },
 
@@ -119,7 +124,7 @@ export default {
       states: undefined,
       expStates: experimentStates,
       experiments: [],
-      polling: undefined,
+      polling: false,
     }
   },
 
@@ -139,6 +144,17 @@ export default {
     this.stopPolling()
   },
 
+  watch: {
+    total: function (newTotal, oldTotal) {
+      // experiment total changed, let's refresh including new xp
+      this.refresh(newTotal - oldTotal)
+    },
+    started: function () {
+      // started counter has been touched, let's refresh
+      this.refresh()
+    },
+  },
+
   methods: {
 
     showProgress: exp => exp.state === 'Running',
@@ -153,22 +169,6 @@ export default {
       return [exp.start_date, exp.scheduled_date, exp.submission_date].find(date => date !== '1970-01-01T00:00:00Z')
     },
 
-    async refresh () {
-      let oldExp = this.experiments
-      this.experiments = (await iotlab.getAllExperiments({
-        user: this.user,
-        state: this.states,
-        offset: 0,
-        limit: Math.max(this.experiments.length, this.show),
-      })).sort((exp1, exp2) => exp2.id - exp1.id) // order by reverse ID
-
-      if (!this.experiments.some(exp => experimentStates.scheduled.includes(exp.state))) {
-        this.stopPolling()
-      }
-
-      if (this.experiments.length < oldExp.length) this.$router.go() // new terminated experiment, let's refresh
-    },
-
     async loadMore (qty) {
       this.spinner = true
 
@@ -181,26 +181,49 @@ export default {
 
       this.spinner = false
 
-      // create watchdog to poll for scheduled experiments update
-      if (!this.polling && this.experiments.some(exp => experimentStates.scheduled.includes(exp.state))) {
+      if (this.experiments.some(exp => experimentStates.scheduled.includes(exp.state))) {
         this.startPolling()
       }
     },
 
+    async refresh (more = 0) {
+      let previous = this.experiments
+      this.experiments = (await iotlab.getAllExperiments({
+        user: this.user,
+        state: this.states,
+        // offset: Math.max(this.total - this.experiments.length - qty, 0),
+        offset: Math.max(this.total - this.experiments.length - more, 0),
+        limit: Math.max(this.experiments.length, this.show) + more,
+      })).sort((exp1, exp2) => exp2.id - exp1.id) // order by reverse ID
+
+      if (this.experiments.some(exp => experimentStates.scheduled.includes(exp.state))) {
+        this.startPolling()
+      } else {
+        this.stopPolling()
+      }
+
+      if (this.experiments.length < previous.length) {
+        // some experiments have ended, let's notify
+        this.$emit('completed')
+      }
+    },
+
     startPolling () {
-      this.polling = setInterval(() => this.refresh(), 5000)
+      // create watchdog to poll for scheduled experiments update
+      if (!this.polling) this.polling = setInterval(() => this.refresh(), 5000)
     },
 
     stopPolling () {
       clearInterval(this.polling)
+      this.polling = false
     },
 
     async stopExperiment (exp, confirmed = false) {
       if (!confirmed && !confirm('Cancel this experiment?')) return
       try {
         await iotlab.stopExperiment(exp.id)
-        this.$notify({text: `Experiment ${exp.id} stopped`, type: 'success'})
-        exp.state = 'Finishing'
+        this.$notify({text: `Experiment ${exp.id} stopping`, type: 'success'})
+        if (exp.state === 'Running') exp.state = 'Finishing'
       } catch (err) {
         this.$notify({text: err.message, type: 'error'})
       }
@@ -217,8 +240,7 @@ export default {
         let newExp = await iotlab.reloadExperiment(exp.id)
         this.$notify({text: `Experiment ${newExp.id} submitted`, type: 'success'})
         await sleep(200)
-        this.$router.push('dashboard')
-        this.$router.go() // force dashboard reload
+        this.$emit('started')
       } catch (err) {
         this.$notify({text: err.message, type: 'error'})
       }

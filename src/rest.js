@@ -144,7 +144,7 @@ export const iotlab = {
       params.state = state
     }
     if (limit) {
-      params.limit = limit
+      params.limit = Math.min(limit, 500) // IoT-LAB api restrict queries to 500 entries
     }
     if (offset) {
       params.offset = offset
