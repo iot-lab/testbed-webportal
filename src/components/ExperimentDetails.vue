@@ -19,25 +19,27 @@
       <!-- <li>Type <b>{{experiment.type}}</b></li> -->
       <li>State <span class="badge" :class="experiment.state | stateBadgeClass">{{experiment.state}}</span></li>
     </ul>
-    <a href="" class="btn btn-sm btn-outline-danger mb-3" @click.prevent="stopExperiment(id)"
-      v-if="states.stoppable.includes(experiment.state)">
-      <i class="fa fa-ban"></i> Cancel
-    </a>
-    <a href="" class="btn btn-sm btn-outline-secondary mb-3" @click.prevent="reloadExperiment(id)"
-      v-if="states.completed.includes(experiment.state)">
-      <i class="fa fa-refresh"></i> Restart
-    </a>
-    <!-- <a href="" class="btn btn-sm btn-outline-secondary mb-3" @click.prevent="this.alert('todo')">
-      <i class="fa fa-clone"></i> Clone
-    </a> -->
-    <a href="" class="btn btn-sm btn-outline-secondary mb-3" @click.prevent="downloadExperiment(id)">
-      <i class="fa fa-download"></i> Download
-    </a>
+    <template v-if="experiment.user === currentUser">
+      <a href="" class="btn btn-sm btn-outline-danger mb-3" @click.prevent="stopExperiment(id)"
+        v-if="states.stoppable.includes(experiment.state)">
+        <i class="fa fa-ban"></i> Cancel
+      </a>
+      <a href="" class="btn btn-sm btn-outline-secondary mb-3" @click.prevent="reloadExperiment(id)"
+        v-if="states.completed.includes(experiment.state)">
+        <i class="fa fa-refresh"></i> Restart
+      </a>
+      <!-- <a href="" class="btn btn-sm btn-outline-secondary mb-3" @click.prevent="this.alert('todo')">
+        <i class="fa fa-clone"></i> Clone
+      </a> -->
+      <a href="" class="btn btn-sm btn-outline-secondary mb-3" @click.prevent="downloadExperiment(id)">
+        <i class="fa fa-download"></i> Download
+      </a>
+    </template>
 
     <table class="table table-striped table-sm">
       <thead>
         <tr>
-          <th width="15px" v-if="experiment.state === 'Running'">
+          <th width="15px" v-if="showNodesCommands">
             <input type="checkbox" @change="toggleSelectedNodes" v-model="allSelected">
           </th>
           <th>Nodes</th>
@@ -49,7 +51,7 @@
       </thead>
       <tbody>
         <tr v-for="node in experiment.nodes" :class="{'text-danger': getDeploymentStatus(node) === 'Error'}">
-          <td v-if="experiment.state === 'Running'">
+          <td v-if="showNodesCommands">
             <input type="checkbox" :value="node" v-model="selectedNodes" :disabled="getDeploymentStatus(node) === 'Error'" @click="uncheckAll">
           </td>
           <td v-html="nodeOrAlias(node)"></td>
@@ -61,7 +63,7 @@
       </tbody>
     </table>
 
-    <div v-if="experiment.state === 'Running'">
+    <div v-if="showNodesCommands">
       <button class="btn btn-sm dropdown-toggle cursor" type="button" data-toggle="popover" v-show="selectedNodes.length === 0" data-placement="right"
         data-content="<i class='fa fa-fw fa-lg fa-exclamation-circle text-warning'></i> Select nodes first">
         <i class="fa fa-wrench text-dark"></i> Actions on selected nodes
@@ -106,6 +108,7 @@
 
 <script>
 import { iotlab } from '@/rest'
+import { auth } from '@/auth'
 import { experimentStates } from '@/assets/js/iotlab-utils'
 import { capitalize } from '@/utils'
 import axios from 'axios'
@@ -130,6 +133,7 @@ export default {
       showFirmware: false,
       firmwareFile: undefined,
       firmware: undefined,
+      currentUser: auth.username,
     }
   },
 
@@ -139,6 +143,9 @@ export default {
     },
     startDate () {
       return [this.experiment.start_date, this.experiment.scheduled_date, this.experiment.submission_date].find(date => date !== '1970-01-01T00:00:00Z')
+    },
+    showNodesCommands () {
+      return this.experiment.state === 'Running' && this.experiment.user === this.currentUser
     },
   },
 
@@ -234,7 +241,10 @@ export default {
         this.$notify({text: `Select some nodes first`, type: 'warning'})
         return
       }
-      let nodes = await iotlab.sendNodesCommand(this.id, cmd, this.selectedNodes)
+      let nodes = await iotlab.sendNodesCommand(this.id, cmd, this.selectedNodes).catch(err => {
+        this.$notify({text: err.response.data.message, type: 'error'})
+        return
+      })
       let validNodes = Object.values(nodes).reduce((a, b) => a.concat(b))
       let invalidNodes = this.selectedNodes.filter(n => !validNodes.includes(n))
 
@@ -277,7 +287,10 @@ export default {
           vm.$notify({text: 'Flashing firmware...', type: 'info', duration: -1})
           this.showFirmware = false
 
-          let nodes = await iotlab.flashFirmware(vm.id, vm.selectedNodes, e.target.result)
+          let nodes = await iotlab.flashFirmware(vm.id, vm.selectedNodes, e.target.result).catch(err => {
+            this.$notify({text: err.response.data.message, type: 'error'})
+            return
+          })
           let validNodes = Object.values(nodes).reduce((a, b) => a.concat(b))
           let invalidNodes = vm.selectedNodes.filter(n => !validNodes.includes(n))
 
