@@ -43,7 +43,7 @@
         <!-- <label class="radio"><input type="radio" name="or_nodearch" id="or_nodearch_wsn430" value="wsn430"
                                     data-target="#wsn430panel" checked> WSN430</label>&nbsp;&nbsp; -->
         <label class="radio"><input type="radio" name="or_nodearch" id="or_nodearch_m3" value="m3"
-                                    data-target="#m3panel"> M3</label>&nbsp;&nbsp;
+                                    data-target="#m3panel" checked> M3</label>&nbsp;&nbsp;
         <label class="radio"><input type="radio" name="or_nodearch" id="or_nodearch_a8" value="a8"
                                     data-target="#m3panel"> A8</label>&nbsp;&nbsp;
     	<label class="radio"><input type="radio" name="or_nodearch" id="or_nodearch_custom" value="custom"
@@ -58,7 +58,7 @@
 <!--  WSN430 PROFILE FORM  -->
 <!-- --------------------- -->
 
-<div id="wsn430panel" class="tab-pane active">
+<div id="wsn430panel" class="tab-pane">
     <div style="border-top: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;margin:5px;">
         <div class="form-group" style="width:100%;margin-bottom:10px">
             <label class="col-lg-4 control-label">Power mode</label>
@@ -155,7 +155,7 @@
 <!--  M3 PROFILE FORM  -->
 <!-- ----------------- -->
 
-<div class="tab-pane" id="m3panel">
+<div class="tab-pane active" id="m3panel">
     <!-- postfixer tous les id et les noms des input avec _m3 comme _wsn430 plus haut -->
     <div style="border-top: 1px solid rgba(0, 0, 0, 0.05);border-radius:4px;margin:5px;">
         <div class="form-group" style="width:100%;margin-bottom:10px">
@@ -393,9 +393,10 @@ $(document).ready(function () {
 
         $("#my_profiles_modal option:selected").removeAttr("selected");
 
-        $("#m3panel").removeClass("active");
-        $("#wsn430panel").addClass("active");
+        $("#m3panel").addClass("active");
+        $("#wsn430panel").removeClass("active");
 
+        $("#m3RadioNonePanel").addClass("active");
         $("#m3RadioMeasurePanel").removeClass("active");
         $("#m3RadioSnifferPanel").removeClass("active");
     });
