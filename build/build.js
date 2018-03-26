@@ -1,8 +1,11 @@
 require('./check-versions')()
 
 process.env.NODE_ENV = 'production'
-// process.env.IOTLAB_ENV = 'prod' // deploys to /testbed/
-process.env.IOTLAB_ENV = 'dev'     // deploys to /testbed-beta/
+
+if (!process.env.IOTLAB_ENV) {
+  // process.env.IOTLAB_ENV = 'prod' // deploys to www
+  process.env.IOTLAB_ENV = 'dev'     // deploys to devwww
+}
 
 var ora = require('ora')
 var rm = require('rimraf')
