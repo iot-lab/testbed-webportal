@@ -7,9 +7,9 @@ def test():
     local('npm test')
     
 
-def build():
+def build(toto='dev'):
     """ Build Web portal (to ./dist). """
-    local('npm run build')
+    local('npm run build:%s' % toto)
     
 def deploy(dist="./dist"):
     """ Deploy Web portal. """
