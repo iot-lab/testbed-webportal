@@ -2,15 +2,27 @@ require('./check-versions')()
 
 process.env.NODE_ENV = 'production'
 
+// IOTLAB_ENV environnements:
+// - dev       -> deploy to devwww.iot-lab.info/testbed
+// - dev-beta  -> deploy to devwww.iot-lab.info/testbed-beta
+// - prod      -> deploy to www.iot-lab.info/testbed
+// - prod-beta -> deploy to www.iot-lab.info/testbed-beta
+
 if (!process.env.IOTLAB_ENV) {
-  // process.env.IOTLAB_ENV = 'prod' // deploys to www
-  process.env.IOTLAB_ENV = 'dev'     // deploys to devwww
+  process.env.IOTLAB_ENV = 'dev-beta'
 }
+
+process.env.IOTLAB_HOST = process.env.IOTLAB_ENV.startsWith('prod') ? 'www.iot-lab.info' : 'devwww.iot-lab.info'
+process.env.IOTLAB_PATH = process.env.IOTLAB_ENV.endsWith('-beta') ? 'testbed-beta' : 'testbed'
+
+var chalk = require('chalk')
+
+console.log(chalk.cyan(`Building for IOTLAB_ENV ${process.env.IOTLAB_ENV}`))
+console.log(chalk.yellow(`=> Deploy to ${process.env.IOTLAB_HOST}/${process.env.IOTLAB_PATH}\n`))
 
 var ora = require('ora')
 var rm = require('rimraf')
 var path = require('path')
-var chalk = require('chalk')
 var webpack = require('webpack')
 var config = require('../config')
 var webpackConfig = require('./webpack.prod.conf')
