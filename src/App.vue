@@ -57,7 +57,7 @@
     </div>
     </nav>
 
-    <notifications position="top right" :duration="3000" animation-type="velocity"  style="margin: 10px;">
+    <notifications position="top right" :duration="3000" animation-type="velocity" style="margin: 10px;">
       <template slot="body" slot-scope="props" style="margin: 10px">
         <!-- <div :class="['alert', `alert-${props.item.type==='error'?'danger':props.item.type}`]" @click="props.close"> -->
         <div class="alert text-light border-0" :class="[`bg-${props.item.type==='error'?'danger':props.item.type}`]" @click="props.close">
