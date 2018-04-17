@@ -9,6 +9,7 @@ import AdminUsers from '@/components/AdminUsers'
 import AdminAddUser from '@/components/AdminAddUser'
 import AdminExperiments from '@/components/AdminExperiments'
 import Resources from '@/components/Resources'
+import Monitoring from '@/components/Monitoring'
 import Experiment from '@/components/Experiment'
 import ExperimentDetails from '@/components/ExperimentDetails'
 import Dashboard from '@/components/Dashboard'
@@ -28,12 +29,14 @@ const router = new Router({
     { path: '/dashboard', name: 'dashboard', component: Dashboard, meta: { requiresAuth: true } },
     { path: '/experiment', name: 'experiment', component: Experiment, meta: { requiresAuth: true } },
     { path: '/resources', name: 'resources', component: Resources, meta: { requiresAuth: true } },
+    { path: '/resources/monitoring/new', name: 'newMonitoring', component: Monitoring, meta: { requiresAuth: true } },
+    { path: '/resources/monitoring/:name/edit', name: 'monitoring', component: Monitoring, props: true, meta: { requiresAuth: true } },
     { path: '/account', name: 'account', component: UserAccount, meta: { requiresAuth: true } },
     { path: '/users', name: 'users', component: AdminUsers, meta: { requiresAdmin: true } },
     { path: '/users/add', name: 'addUsers', component: AdminAddUser, meta: { requiresAdmin: true } },
     { path: '/users/:username/experiments', name: 'userExperiments', component: AdminExperiments, props: true, meta: { requiresAdmin: true } },
     { path: '/experiments', name: 'allExperiments', component: AdminExperiments, props: {username: ''}, meta: { requiresAdmin: true } },
-    { path: '/experiments/:id', name: 'experimentDetails', component: ExperimentDetails, props: true, meta: { requiresAdmin: true } },
+    { path: '/experiments/:id', name: 'experimentDetails', component: ExperimentDetails, props: true, meta: { requiresAuth: true } },
   ],
 })
 
