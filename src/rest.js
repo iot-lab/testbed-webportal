@@ -223,6 +223,26 @@ export const iotlab = {
     return await iotlab.api.post(`/experiments/${id}/nodes/${cmd}`, nodes).then(resp => resp.data)
   },
 
+  async getMonitoringProfiles () {
+    return await iotlab.api.get('/monitoring').then(resp => resp.data)
+  },
+
+  async getMonitoringProfile (name) {
+    return await iotlab.api.get(`/monitoring/${name}`).then(resp => resp.data)
+  },
+
+  async updateMonitoringProfile (name, profile) {
+    return await iotlab.api.put(`/monitoring/${name}`, profile)
+  },
+
+  async createMonitoringProfile (profile) {
+    return await iotlab.api.post(`/monitoring`, profile)
+  },
+
+  async deleteMonitoringProfile (name) {
+    return await iotlab.api.delete(`/monitoring/${name}`)
+  },
+
   // API V1
 
   async getStats () {

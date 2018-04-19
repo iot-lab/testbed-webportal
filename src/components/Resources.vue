@@ -16,7 +16,7 @@
           TODO
         </div> -->
         <div class="tab-pane fade show active" id="list-monitoring" role="tabpanel" aria-labelledby="list-monitoring-list">
-          TODO
+          <monitoring-list @select="editMonitoring"></monitoring-list>
         </div>
         <!-- <div class="tab-pane fade" id="list-mobility" role="tabpanel" aria-labelledby="list-mobility-list">
           TODO
@@ -32,21 +32,19 @@
 </template>
 
 <script>
-// import {iotlab} from '@/rest'
+import MonitoringList from '@/components/parts/MonitoringList'
 
 export default {
   name: 'Resources',
 
-  data () {
-    return {
-    }
-  },
-
-  created () {
-    // iotlab.getUsers().then(data => { this.users = data })
+  components: {
+    MonitoringList,
   },
 
   methods: {
+    editMonitoring (profile) {
+      this.$router.push({name: 'monitoring', params: { name: profile }})
+    },
   },
 }
 </script>

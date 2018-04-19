@@ -182,12 +182,12 @@
           </div>
           <span>
             <span class="badge badge-light badge-tag cursor" data-toggle="dropdown" v-tooltip="'Add monitoring profile'">
-              <span><i class="fa fa-thermometer text-dark" style="width: 12px;"></i> {{group.monitoring.name}}</span> <span v-if="group.monitoring.name" class="tag-remove cursor" @click="group.monitoring = {name:undefined}">&times;</span>
+              <span><i class="fa fa-thermometer text-dark" style="width: 12px;"></i> {{group.monitoring}}</span> <span v-if="group.monitoring" class="tag-remove cursor" @click="group.monitoring = undefined">&times;</span>
             </span>
             <div class="dropdown-menu dropdown-menu-right">
               <div class="card-body">
                 <p class="lead">Assign a monitoring profile <span class="text-muted">(optional)</span></p>
-                <p>TODO</p>
+                <monitoring-list :archi="group.archi" @select="profile => { group.monitoring = profile }"></monitoring-list>
               </div>
             </div>
           </span>
@@ -218,12 +218,12 @@
           </div>
           <span>
             <span class="badge badge-light badge-tag cursor" data-toggle="dropdown" v-tooltip="'Add monitoring profile'">
-              <span><i class="fa fa-thermometer text-dark" style="width: 12px;"></i> {{p.monitoring.name}}</span> <span v-if="p.monitoring.name" class="tag-remove cursor" @click="p.monitoring = {name:undefined}">&times;</span>
+              <span><i class="fa fa-thermometer text-dark" style="width: 12px;"></i> {{p.monitoring}}</span> <span v-if="p.monitoring" class="tag-remove cursor" @click="p.monitoring = undefined">&times;</span>
             </span>
             <div class="dropdown-menu dropdown-menu-right">
               <div class="card-body">
                 <p class="lead">Assign a monitoring profile <span class="text-muted">(optional)</span></p>
-                <p>TODO</p>
+                <monitoring-list :archi="p.archi" @select="profile => { p.monitoring = profile }"></monitoring-list>
               </div>
             </div>
           </span>
@@ -265,6 +265,7 @@
 import $ from 'jquery'
 import Multiselect from 'vue-multiselect'
 import FilterSelect from '@/components/parts/FilterSelect'
+import MonitoringList from '@/components/parts/MonitoringList'
 import 'vue-multiselect/dist/vue-multiselect.min.css'
 import 'tempusdominus-bootstrap-4'
 import 'tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4.min.css'
@@ -290,7 +291,7 @@ function newNodeGroup (nodes) {
   return Object.assign({}, {
     nodes: nodes,
     firmware: {name: undefined},
-    monitoring: {name: undefined},
+    monitoring: undefined,
     archi: nodes[0].shortArchi,
     allowedFirmwareTypes: allowedFirmwares4Archi(nodes[0].shortArchi),
     hasFirmware: allowedFirmwares4Archi(nodes[0].shortArchi).length > 0,
@@ -301,7 +302,7 @@ function newPropGroup (prop) {
   return Object.assign({}, {
     prop: prop,
     firmware: {name: undefined},
-    monitoring: {name: undefined},
+    monitoring: undefined,
     archi: extractArchi(prop.properties.archi),
     allowedFirmwareTypes: allowedFirmwares4Archi(extractArchi(prop.properties.archi)),
     hasFirmware: allowedFirmwares4Archi(extractArchi(prop.properties.archi)).length > 0,
@@ -314,6 +315,7 @@ export default {
   components: {
     Multiselect,
     FilterSelect,
+    MonitoringList,
   },
 
   data () {
@@ -328,7 +330,6 @@ export default {
       filterArchi: 'all',
       filterMobile: 'all',
       propMobile: false,
-      monitoringFile: {name: undefined},
       firmwareFiles: [{name: undefined}],
       scriptFile: {name: undefined},
       selectedNodeGroups: [],
@@ -495,6 +496,24 @@ export default {
       if (fwasso.length === 0) return null
       return fwasso
     },
+    monitoringAssociations () {
+      let monasso
+      if (this.mode === 'byprop') {
+        monasso = this.selectedProps.filter(prop => prop.monitoring !== undefined)
+                                    .map(prop => ({
+                                      nodes: [prop.prop.alias],
+                                      profilename: prop.monitoring,
+                                    }))
+      } else {
+        monasso = this.selectedNodeGroups.filter(group => group.monitoring !== undefined)
+                                        .map(group => ({
+                                          nodes: group.nodes.map(node => node.network_address),
+                                          profilename: group.monitoring,
+                                        }))
+      }
+      if (monasso.length === 0) return null
+      return monasso
+    },
   },
 
   methods: {
@@ -515,9 +534,6 @@ export default {
       this.filterArchi = 'all'
       this.filterSite = 'all'
       this.filterMobile = 'all'
-    },
-    previewMonitoringFile () {
-      this.monitoringFile = this.$refs.monitoringFile.files[0]
     },
     loadFirmwareFile (ref, index) {
       this.firmwareFiles[index] = this.$refs[ref][0].files[0]
@@ -647,15 +663,16 @@ export default {
           duration: this.duration * this.durationMultiplier,
           reservation: this.scheduleEpoch,
           nodes: (this.mode === 'byprop') ? this.selectedProps.map(p => p.prop) : this.selectedNodes.map(node => node.network_address),
+          profileassociations: this.monitoringAssociations,
           firmwareassociations: this.firmwareAssociations,
           firmwares: this.firmwares,
         })
         await sleep(200)
-        this.$notify({text: `Experiment ${newExp.id} submitted`, type: 'success'})
+        this.$notify({text: `Experiment ${newExp.id} submitted`, type: 'success', duration: 6000})
         await sleep(200)
-        this.$router.push('dashboard')
+        this.$router.push({name: 'dashboard'})
       } catch (err) {
-        this.$notify({text: err.message + '<br><br>' + err.response.data.message, type: 'error'})
+        this.$notify({text: err.message + '<br><br>' + err.response.data.message, type: 'error', duration: 10000})
         throw err
       }
     },
