@@ -4,13 +4,13 @@
     <table class="table table-striped table-sm" v-if="experiments.length">
       <thead>
         <tr>
-          <th>Id</th>
-          <th v-if="user != '@self'">User</th>
-          <th>Name</th>
-          <th>Date</th>
-          <th style="text-align: center">Duration</th>
-          <th style="text-align: right">Nodes</th>
-          <th style="text-align: right">State</th>
+          <th class="cursor" title="sort by id" @click="sortBy(xp => xp.id)">Id</th>
+          <th class="cursor" title="sort by user" @click="sortBy(xp => xp.user)" v-if="user != '@self'">User</th>
+          <th class="cursor" title="sort by name" @click="sortBy(xp => xp.name)">Name</th>
+          <th class="cursor" title="sort by date" @click="sortBy(xp => expDate(xp))">Date</th>
+          <th class="cursor" title="sort by duration" @click="sortBy(xp => expDuration(xp))" style="text-align: center">Duration</th>
+          <th class="cursor" title="sort by nodes" @click="sortBy(xp => xp.nb_nodes)" style="text-align: right">Nodes</th>
+          <th class="cursor" title="sort by state" @click="sortBy(xp => xp.state)" style="text-align: right">State</th>
           <th width="10px"></th>
         </tr>
       </thead>
@@ -19,9 +19,9 @@
           <td><router-link :to="{name: 'experimentDetails', params: { id: exp.id }}">{{exp.id}}</router-link></td>
           <td v-if="user != '@self'"><router-link :to="{name: 'users', query: { search: exp.user }}">{{exp.user}}</router-link></td>
           <td>{{exp.name}}</td>
-          <td>{{startDate(exp) | formatDateTime}}</td>
+          <td>{{expDate(exp) | formatDateTime}}</td>
           <td :class="{'durationProgress': showProgress(exp)}" :style="`text-align: center; --progress: ${experimentProgress(exp)}%`">
-            {{(exp.effective_duration || exp.submitted_duration) | humanizeDuration}}
+            {{expDuration(exp) | humanizeDuration}}
             <small class="text-dark" v-if="showProgress(exp)">({{experimentProgress(exp)}}%)</small>
           </td>
           <td style="text-align: right">{{exp.nb_nodes}}</td>
@@ -37,7 +37,12 @@
                 <template v-if="exp.user === currentUser">
                   <a class="dropdown-item text-danger" href="" @click.prevent="stopExperiment(exp)"
                     v-if="expStates.stoppable.includes(exp.state)">
-                    <i class="fa fa-fw fa-ban"></i> Cancel
+                    <template v-if="exp.state === 'Running'">
+                      <i class="fa fa-fw fa-stop-circle"></i> Stop
+                    </template>
+                    <template v-else>
+                      <i class="fa fa-fw fa-ban"></i> Cancel
+                    </template>
                   </a>
                   <a class="dropdown-item" href="" @click.prevent="startExperiment(exp)"
                     v-if="exp.state === 'Waiting'">
@@ -78,6 +83,12 @@ import { iotlab } from '@/rest'
 import { experimentStates } from '@/assets/js/iotlab-utils'
 import { sleep } from '@/utils'
 
+const pollingInterval = 5000
+var stopTime = Date.now()
+var restartTimer
+var polling
+var paused = false
+
 export default {
   name: 'ExperimentList',
 
@@ -112,7 +123,7 @@ export default {
     step: {
       // Number of items to load on "load more" action
       type: Number,
-      default: 50,
+      default: 40,
     },
     started: {
       // Started experiment counter, increment to force component to refresh
@@ -125,27 +136,43 @@ export default {
     return {
       currentUser: auth.username,
       spinner: false,
-      states: undefined,
+      states: [],
       expStates: experimentStates,
       experiments: [],
-      polling: false,
     }
   },
 
-  async created () {
-    this.states = this.state
-    if (this.states === 'all_scheduled') {
-      this.states = 'Running,Finishing,Resuming,toError,Waiting,Launching,Hold,toLaunch,toAckReservation,Suspended'
+  created () {
+    this.states = this.state.split(',')
+
+    if (this.state === 'all_scheduled') {
+      this.states = experimentStates.scheduled
     }
-    if (this.states === 'all_terminated') {
-      this.states = 'Terminated,Stopped,Error'
+    if (this.state === 'all_terminated') {
+      this.states = experimentStates.completed
+    }
+
+    if (this.hasPolling) {
+      // stop polling when browser window goes inactive
+      addEventListener('blur', this.pausePolling)
+      // start polling when browser window goes active
+      addEventListener('focus', this.restartPolling)
     }
 
     this.loadMore(this.show)
   },
 
   destroyed () {
+    paused = true
     this.stopPolling()
+    removeEventListener('blur', this.pausePolling)
+    removeEventListener('focus', this.restartPolling)
+  },
+
+  computed: {
+    hasPolling () {
+      return this.states.some(state => experimentStates.scheduled.includes(state))
+    },
   },
 
   watch: {
@@ -169,42 +196,51 @@ export default {
       return Math.min(100, Math.round(100 * exp.effective_duration / exp.submitted_duration))
     },
 
-    startDate (exp) {
+    expDate (exp) {
       return [exp.start_date, exp.scheduled_date, exp.submission_date].find(date => date !== '1970-01-01T00:00:00Z')
+    },
+
+    expDuration (exp) {
+      return exp.effective_duration || exp.submitted_duration
+    },
+
+    sortBy (func) {
+      this.experiments = this.experiments.sort((a, b) => {
+        if (func(a) === func(b)) return b.id - a.id
+        if (typeof func(a) === 'string' || typeof func(b) === 'string') return func(b).localeCompare(func(a))
+        if (typeof func(a) === 'number' || typeof func(b) === 'number') return func(b) - func(a)
+        console.log('Unhandled', a.id, func(a), b.id, func(b))
+      })
     },
 
     async loadMore (qty) {
       this.spinner = true
 
+      // await sleep(2000)
       this.experiments = this.experiments.concat((await iotlab.getAllExperiments({
         user: this.user,
-        state: this.states,
+        state: this.states.join(','),
         offset: Math.max(this.total - this.experiments.length - qty, 0),
         limit: Math.min(this.total - this.experiments.length, qty),
       })).sort((exp1, exp2) => exp2.id - exp1.id)) // order by reverse ID
 
       this.spinner = false
 
-      if (this.experiments.some(exp => experimentStates.scheduled.includes(exp.state))) {
-        this.startPolling()
-      }
+      if (this.hasPolling && !polling && !paused) this.startPolling()
     },
 
     async refresh (more = 0) {
+      console.debug('refresh')
       let previous = this.experiments
       this.experiments = (await iotlab.getAllExperiments({
         user: this.user,
-        state: this.states,
+        state: this.states.join(','),
         // offset: Math.max(this.total - this.experiments.length - qty, 0),
         offset: Math.max(this.total - this.experiments.length - more, 0),
         limit: Math.max(this.experiments.length, this.show) + more,
       })).sort((exp1, exp2) => exp2.id - exp1.id) // order by reverse ID
 
-      if (this.experiments.some(exp => experimentStates.scheduled.includes(exp.state))) {
-        this.startPolling()
-      } else {
-        this.stopPolling()
-      }
+      if (this.hasPolling && !polling && !paused) this.startPolling()
 
       if (this.experiments.length < previous.length) {
         // some experiments have ended, let's notify
@@ -214,12 +250,31 @@ export default {
 
     startPolling () {
       // create watchdog to poll for scheduled experiments update
-      if (!this.polling) this.polling = setInterval(() => this.refresh(), 5000)
+      polling = setInterval(() => this.refresh(), pollingInterval)
     },
 
     stopPolling () {
-      clearInterval(this.polling)
-      this.polling = false
+      console.debug('polling stopped')
+      polling = clearInterval(polling)
+      restartTimer = clearTimeout(restartTimer)
+    },
+
+    pausePolling () {
+      stopTime = Date.now()
+      paused = true
+      this.stopPolling()
+      this.$notify({text: 'Dashboard refresh paused', type: 'info', duration: -1, group: 'alt'})
+    },
+
+    restartPolling () {
+      console.debug('polling restarted')
+      this.$notify({group: 'alt', clean: true})
+      paused = false
+      if (Date.now() - stopTime >= pollingInterval) {
+        this.refresh()
+      } else {
+        restartTimer = setTimeout(() => this.refresh(), pollingInterval - (Date.now() - stopTime))
+      }
     },
 
     async stopExperiment (exp, confirmed = false) {
