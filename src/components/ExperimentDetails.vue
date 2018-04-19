@@ -22,7 +22,12 @@
     <template v-if="experiment.user === currentUser">
       <a href="" class="btn btn-sm btn-outline-danger mb-3" @click.prevent="stopExperiment(id)"
         v-if="states.stoppable.includes(experiment.state)">
-        <i class="fa fa-ban"></i> Cancel
+        <template v-if="experiment.state === 'Running'">
+          <i class="fa fa-stop-circle"></i> Stop
+        </template>
+        <template v-else>
+          <i class="fa fa-ban"></i> Cancel
+        </template>
       </a>
       <a href="" class="btn btn-sm btn-outline-secondary mb-3" @click.prevent="reloadExperiment(id)"
         v-if="states.completed.includes(experiment.state)">
@@ -114,6 +119,8 @@ import { capitalize } from '@/utils'
 import axios from 'axios'
 import $ from 'jquery'
 
+var polling = true
+
 export default {
   name: 'ExperimentDetails',
 
@@ -150,14 +157,7 @@ export default {
   },
 
   async created () {
-    try {
-      this.experiment = await iotlab.getExperiment(this.id)
-      if (!['Waiting', 'Launching'].includes(this.experiment.state)) {
-        this.deploymentStatus = await iotlab.getExperimentDeployment(this.id)
-      }
-    } catch (err) {
-      this.$notify({text: err.message, type: 'error'})
-    }
+    await this.getExperiment()
     this.$nextTick(function () {
       $('[data-toggle="popover"]').popover({
         trigger: 'focus',
@@ -166,7 +166,29 @@ export default {
     })
   },
 
+  destroyed () {
+    polling = clearTimeout(polling)
+  },
+
   methods: {
+    async getExperiment () {
+      try {
+        this.experiment = await iotlab.getExperiment(this.id)
+
+        // poll for experiment update
+        if (polling && ['Launching', 'Finishing'].includes(this.experiment.state)) {
+          polling = setTimeout(this.getExperiment, 3000) // fast poll
+        } else if (experimentStates.scheduled.includes(this.experiment.state)) {
+          polling = setTimeout(this.getExperiment, 10000) // slow poll
+        }
+
+        if (!this.deploymentStatus && !['Waiting', 'toLaunch', 'Launching'].includes(this.experiment.state)) {
+          this.deploymentStatus = await iotlab.getExperimentDeployment(this.id)
+        }
+      } catch (err) {
+        this.$notify({text: err.message, type: 'error'})
+      }
+    },
     nodeOrAlias (node) {
       if (typeof node === 'string') return node
       // else it's an alias
@@ -181,8 +203,8 @@ export default {
       return this.experiment.associations.mobility.reduce((acc, asso) => (asso.nodes.some(n => n === (node.alias || node)) ? asso.mobilityname : acc), '')
     },
     getMonitoring (node) {
-      if (!this.experiment.profilenameassociations) return
-      return this.experiment.profilenameassociations.reduce((acc, asso) => (asso.nodes.some(n => n === (node.alias || node)) ? asso.profilenamename : acc), '')
+      if (!this.experiment.profileassociations) return
+      return this.experiment.profileassociations.reduce((acc, asso) => (asso.nodes.some(n => n === (node.alias || node)) ? asso.profilename : acc), '')
     },
     getDeploymentStatus (node) {
       if (this.deploymentStatus === undefined) return ''
@@ -204,6 +226,7 @@ export default {
       try {
         let newExp = await iotlab.reloadExperiment(id)
         this.$notify({text: `Experiment ${newExp.id} submitted`, type: 'success'})
+        this.$router.push({name: 'dashboard'})
       } catch (err) {
         this.$notify({text: err.message, type: 'error'})
       }
@@ -211,7 +234,7 @@ export default {
     downloadExperiment (id) {
       axios({
         method: 'get',
-        url: `https://devwww.iot-lab.info/api/experiments/${id}/data`,
+        url: `https://${process.env.IOTLAB_HOST}/api/experiments/${id}/data`,
         responseType: 'arraybuffer',
         auth: JSON.parse(localStorage.getItem('apiAuth') || '{}'),
       })
@@ -288,7 +311,8 @@ export default {
           this.showFirmware = false
 
           let nodes = await iotlab.flashFirmware(vm.id, vm.selectedNodes, e.target.result).catch(err => {
-            this.$notify({text: err.response.data.message, type: 'error'})
+            vm.$notify({clean: true}) // close pending notification
+            vm.$notify({text: err.response.data.message, type: 'error'})
             return
           })
           let validNodes = Object.values(nodes).reduce((a, b) => a.concat(b))
