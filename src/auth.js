@@ -8,13 +8,6 @@ export const auth = {
   username: localStorage.getItem('username') || '',
 
   async doLogin (username, password) {
-    // let iotlab = axios.create({
-    //   baseURL: 'https://devwww.iot-lab.info/rest/',
-    //   auth: {
-    //     username: username,
-    //     password: password,
-    //   },
-    // })
     iotlab.create(username, password)
     localStorage.setItem('apiAuth', JSON.stringify({
       username: username,

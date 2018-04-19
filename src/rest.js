@@ -1,15 +1,7 @@
 import axios from 'axios'
 
-// const API_v1_URL = 'http://localhost:6060/devwww.iot-lab.info:443/rest/'
-// const API_v1_URL = 'http://localhost:6060/devwww.iot-lab.info:443/api/'
-const API_V1_URL = 'https://devwww.iot-lab.info/rest/'
-const API_V2_URL = 'https://devwww.iot-lab.info/api/'
-
-// export const iotlab = new function () {
-
-//   this.apiv1 = axios.create({baseURL: API_V1_URL, auth: JSON.parse(localStorage.getItem('apiAuth') || '{}')})
-//   this.apiv2 = axios.create({baseURL: API_V2_URL, auth: JSON.parse(localStorage.getItem('apiAuth') || '{}')})
-//   this.api = this.apiv2
+const API_V1_URL = `https://${process.env.IOTLAB_HOST}/rest/`
+const API_V2_URL = `https://${process.env.IOTLAB_HOST}/api/`
 
 export const iotlab = {
 
