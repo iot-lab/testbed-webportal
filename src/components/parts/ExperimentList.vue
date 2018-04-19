@@ -83,11 +83,8 @@ import { iotlab } from '@/rest'
 import { experimentStates } from '@/assets/js/iotlab-utils'
 import { sleep } from '@/utils'
 
-const pollingInterval = 5000
-var stopTime = Date.now()
-var restartTimer
 var polling
-var paused = false
+var blured = false
 
 export default {
   name: 'ExperimentList',
@@ -153,20 +150,23 @@ export default {
     }
 
     if (this.hasPolling) {
-      // stop polling when browser window goes inactive
-      addEventListener('blur', this.pausePolling)
-      // start polling when browser window goes active
-      addEventListener('focus', this.restartPolling)
+      console.debug('polling started')
+      // start polling callback (5 seconds)
+      polling = setInterval(() => this.pollingLoop(), 5000)
+      // poll only when browser window is active
+      addEventListener('blur', this.disablePolling)
+      addEventListener('focus', this.enablePolling)
     }
 
     this.loadMore(this.show)
   },
 
   destroyed () {
-    paused = true
-    this.stopPolling()
-    removeEventListener('blur', this.pausePolling)
-    removeEventListener('focus', this.restartPolling)
+    if (polling) {
+      this.stopPolling()
+      removeEventListener('blur', this.disablePolling)
+      removeEventListener('focus', this.enablePolling)
+    }
   },
 
   computed: {
@@ -225,8 +225,6 @@ export default {
       })).sort((exp1, exp2) => exp2.id - exp1.id)) // order by reverse ID
 
       this.spinner = false
-
-      if (this.hasPolling && !polling && !paused) this.startPolling()
     },
 
     async refresh (more = 0) {
@@ -240,41 +238,33 @@ export default {
         limit: Math.max(this.experiments.length, this.show) + more,
       })).sort((exp1, exp2) => exp2.id - exp1.id) // order by reverse ID
 
-      if (this.hasPolling && !polling && !paused) this.startPolling()
-
       if (this.experiments.length < previous.length) {
         // some experiments have ended, let's notify
         this.$emit('completed')
       }
     },
 
-    startPolling () {
-      // create watchdog to poll for scheduled experiments update
-      polling = setInterval(() => this.refresh(), pollingInterval)
+    pollingLoop () {
+      // console.debug('polling loop')
+      // refresh experiments only if browser is active
+      if (this.hasPolling && !blured) this.refresh()
     },
 
     stopPolling () {
       console.debug('polling stopped')
       polling = clearInterval(polling)
-      restartTimer = clearTimeout(restartTimer)
     },
 
-    pausePolling () {
-      stopTime = Date.now()
-      paused = true
-      this.stopPolling()
+    disablePolling () {
+      // console.debug('polling disabled')
+      blured = true
       this.$notify({text: 'Dashboard refresh paused', type: 'info', duration: -1, group: 'alt'})
     },
 
-    restartPolling () {
-      console.debug('polling restarted')
+    enablePolling () {
+      // console.debug('polling enabled')
+      blured = false
       this.$notify({group: 'alt', clean: true})
-      paused = false
-      if (Date.now() - stopTime >= pollingInterval) {
-        this.refresh()
-      } else {
-        restartTimer = setTimeout(() => this.refresh(), pollingInterval - (Date.now() - stopTime))
-      }
     },
 
     async stopExperiment (exp, confirmed = false) {
