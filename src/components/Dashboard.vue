@@ -88,7 +88,7 @@ export default {
     iotlab.getSites().then(data => { this.sites = data })
     iotlab.getSiteResources().then(data => { this.resources = data })
     if (auth.isAdmin) {
-      iotlab.getUsers().then(data => { this.nbPendingUsers = data.length })
+      iotlab.getUsers({status: 'pending'}).then(data => { this.nbPendingUsers = data.length })
     }
   },
 
