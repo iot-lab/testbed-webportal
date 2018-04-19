@@ -90,7 +90,7 @@ export default {
           this.success = true
         } catch (err) {
           this.success = false
-          this.$notify({text: 'Error during signup', type: 'error'})
+          this.$notify({text: 'Error during signup<br>' + err.response.data.message, type: 'error'})
         }
       })
     },
