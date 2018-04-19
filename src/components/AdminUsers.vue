@@ -193,13 +193,12 @@ export default {
       this.users = await iotlab.getUsers({isAdmin: true})
     },
     async search () {
+      this.show = false
       if (this.pattern) {
         delete this.$route.query.search
-        this.show = false
         this.users = await iotlab.getUsers({search: this.pattern})
       } else {
-        this.show = 'pending'
-        this.showPending()
+        this.users = []
       }
     },
     async updateProfile () {
@@ -218,7 +217,6 @@ export default {
           try {
             await iotlab.activateUser(user.login)
             user.status = 'active'
-            user.admin = false
           } catch (err) {
             this.$notify({text: 'An error occured', type: 'error'})
           }
@@ -228,7 +226,6 @@ export default {
           try {
             await iotlab.deactivateUser(user.login)
             user.status = 'pending'
-            user.admin = false
           } catch (err) {
             this.$notify({text: 'An error occured', type: 'error'})
           }

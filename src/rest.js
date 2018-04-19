@@ -80,7 +80,6 @@ export const iotlab = {
     }
     if (isAdmin) {
       params.isadmin = isAdmin
-      params.status = 'active'
     }
     if (search) {
       params.search = search
