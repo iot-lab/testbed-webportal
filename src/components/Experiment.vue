@@ -57,7 +57,7 @@
     </div>
     <div class="card">
       <div class="card-header pl-3" role="tab" id="headingOne">
-        <a data-toggle="collapse" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed text-dark">
+        <a data-toggle="collapse" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed text-dark" @click="refreshNodes">
           <h6 class="mb-0"><i class="fa fa-fw fa-share-alt" aria-hidden="true"></i> Nodes <span class="badge float-right" :class="nodeCount ? 'badge-info' : 'badge-secondary' ">{{nodeCount}}</span></h6>
         </a>
       </div>
@@ -69,13 +69,13 @@
               <span class="nav-link disabled text-dark fdont-weight-bold">Select by</span>
             </li>
             <li class="nav-item" v-tooltip:top="'Select nodes from a list'">
-              <a class="nav-link active" id="list-byname-list" data-toggle="list" href="#list-byname" role="tab" aria-controls="byname" @click="setMode('byname')"> host name </a>
+              <a class="nav-link active" id="list-byname-list" data-toggle="list" href="#list-byname" role="tab" aria-controls="byname" @click="setMode('byname'); refreshNodes()"> host name </a>
             </li>
             <li class="nav-item" v-tooltip:top="'Select sets of nodes with the same properties'">
               <a class="nav-link" id="list-byprop-list" data-toggle="list" href="#list-byprop" role="tab" aria-controls="byprop" @click="setMode('byprop')"> node properties </a>
             </li>
             <li class="nav-item" v-tooltip:top="'Select nodes with given ids'">
-              <a class="nav-link" id="list-byid-list" data-toggle="list" href="#list-byid" role="tab" aria-controls="byid" @click="setMode('byid')"> node id </a>
+              <a class="nav-link" id="list-byid-list" data-toggle="list" href="#list-byid" role="tab" aria-controls="byid" @click="setMode('byid'); refreshNodes()"> node id </a>
             </li>
           </ul>
         <div class="py-3 card-body">
@@ -354,16 +354,7 @@ export default {
 
   created () {
     iotlab.getSites().then(data => { this.sites = data })
-    iotlab.getNodes().then(data => { this.nodes = data.map(node => newNode(node)) })
-                     .catch(err => {
-                       this.$notify({text: 'An error occured while fetching data', type: 'error'})
-                       throw err
-                     })
-    iotlab.getNodesIds().then(data => { this.nodes_ids = data })
-                     .catch(err => {
-                       this.$notify({text: 'An error occured while fetching data', type: 'error'})
-                       throw err
-                     })
+    this.refreshNodes()
   },
 
   mounted () {
@@ -517,6 +508,18 @@ export default {
   },
 
   methods: {
+    refreshNodes () {
+      iotlab.getNodes().then(data => { this.nodes = data.map(node => newNode(node)) })
+                       .catch(err => {
+                         this.$notify({text: 'An error occured while fetching data', type: 'error'})
+                         throw err
+                       })
+      iotlab.getNodesIds().then(data => { this.nodes_ids = data })
+                       .catch(err => {
+                         this.$notify({text: 'An error occured while fetching data', type: 'error'})
+                         throw err
+                       })
+    },
     loadMap () {
       // loadNodes(this.mapNodes)
       // init3d()
