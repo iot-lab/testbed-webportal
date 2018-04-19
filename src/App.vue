@@ -69,6 +69,14 @@
         </div>
       </template>
     </notifications>
+    <notifications group="alt" position="top center" :duration="-1" animation-type="css" style="margin-top: 6px;">
+      <template slot="body" slot-scope="props" style="margin-top: 10px">
+        <div class="alert alert-secondary text-center">
+          <h6 class="alert-heading" v-if="props.item.title" v-html="props.item.title"></h6>
+          <div v-html="props.item.text" style="line-height: 1.3"></div>
+        </div>
+      </template>
+    </notifications>
     <keep-alive include="NewExperiment,AdminUsers">
       <router-view></router-view>
     </keep-alive>
