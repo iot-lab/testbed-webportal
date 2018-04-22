@@ -68,11 +68,11 @@
               <!-- <a class="nav-link disabled px-1"></a> -->
               <span class="nav-link disabled text-dark fdont-weight-bold">Select by</span>
             </li>
-            <li class="nav-item" v-tooltip:top="'Select nodes from a list'">
-              <a class="nav-link active" id="list-byname-list" data-toggle="list" href="#list-byname" role="tab" aria-controls="byname" @click="setMode('byname'); refreshNodes()"> host name </a>
-            </li>
             <li class="nav-item" v-tooltip:top="'Select sets of nodes with the same properties'">
-              <a class="nav-link" id="list-byprop-list" data-toggle="list" href="#list-byprop" role="tab" aria-controls="byprop" @click="setMode('byprop')"> node properties </a>
+              <a class="nav-link active" id="list-byprop-list" data-toggle="list" href="#list-byprop" role="tab" aria-controls="byprop" @click="setMode('byprop')"> node properties </a>
+            </li>
+            <li class="nav-item" v-tooltip:top="'Select nodes from a list'">
+              <a class="nav-link" id="list-byname-list" data-toggle="list" href="#list-byname" role="tab" aria-controls="byname" @click="setMode('byname'); refreshNodes()"> host name </a>
             </li>
             <li class="nav-item" v-tooltip:top="'Select nodes with given ids'">
               <a class="nav-link" id="list-byid-list" data-toggle="list" href="#list-byid" role="tab" aria-controls="byid" @click="setMode('byid'); refreshNodes()"> node id </a>
@@ -81,7 +81,25 @@
         <div class="py-3 card-body">
 
           <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="list-byname" role="tabpanel" aria-labelledby="list-byname-list">
+            <!-- Select By PROPS -->
+            <div class="tab-pane fade show active" id="list-byprop" role="tabpanel" aria-labelledby="list-byprop-list">
+              <p class="mb-2 lead text-muted">Select an architecture, site and quantity.</p>
+              <div class="d-md-flex" style="max-width: 850px">
+                <filter-select v-model="filterArchi" title="Architecture" @input="filterSite = sites4Archi[0]; qty = 1"
+                  :items="archis.map(archi => Object({value: archi, option: this.$options.filters.formatArchiRadio(archi)}))">
+                </filter-select>
+                <filter-select title="Site" :items="sites4Archi" v-model="filterSite"></filter-select>
+                <filter-select :items="qtyAvailable" title="Qty" v-model.number="qty" style="max-width: 90px"></filter-select>
+                <label class="custom-control custom-checkbox mb-0 mt-1">
+                  <input v-model="propMobile" type="checkbox" class="custom-control-input">
+                  <span class="custom-control-indicator"></span>
+                  <span class="custom-control-description">Mobile</span>
+                </label>
+                <button class="btn btn-sm btn-success" @click="addProps"><i class="fa fa-plus" aria-hidden="true"></i> Add to experiment</button>
+              </div>
+            </div>
+            <!-- Select By HOSTNAME -->
+            <div class="tab-pane fade show" id="list-byname" role="tabpanel" aria-labelledby="list-byname-list">
               
               <p class="mb-2 lead text-muted">Pick nodes from the list. Add some filters or a search pattern.</p>
               <div>
@@ -117,28 +135,9 @@
               </p>
               <div class="collapse" id="collapseMap">
                 <div class="card card-body">
-                  <!- <div id="div3d" oncontextmenu="return false"></div>           
-                  <div id="infobox"></div> ->
                   <router-link :to="{name:'map'}">(TODO) Map !</router-link>
                 </div>
               </div> -->
-            </div>
-            <!-- Select By PROPS -->
-            <div class="tab-pane fade show" id="list-byprop" role="tabpanel" aria-labelledby="list-byprop-list">
-              <p class="mb-2 lead text-muted">Select an architecture, site and quantity.</p>
-              <div class="d-md-flex" style="max-width: 850px">
-                <filter-select v-model="filterArchi" title="Architecture" @input="filterSite = sites4Archi[0]; qty = 1"
-                  :items="archis.map(archi => Object({value: archi, option: this.$options.filters.formatArchiRadio(archi)}))">
-                </filter-select>
-                <filter-select title="Site" :items="sites4Archi" v-model="filterSite"></filter-select>
-                <label class="custom-control custom-checkbox mb-0 mt-1">
-                  <input v-model="propMobile" type="checkbox" class="custom-control-input">
-                  <span class="custom-control-indicator"></span>
-                  <span class="custom-control-description">Mobile</span>
-                </label>
-                <filter-select :items="qtyAvailable" title="Qty" v-model.number="qty" style="max-width: 90px"></filter-select>
-                <button class="btn btn-sm btn-success" @click="addProps"><i class="fa fa-plus" aria-hidden="true"></i> Add to experiment</button>
-              </div>
             </div>
             <!-- Select By ID -->
             <div class="tab-pane fade show" id="list-byid" role="tabpanel" aria-labelledby="list-byid-list">
