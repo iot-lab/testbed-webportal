@@ -16,15 +16,22 @@
         <span class="badge badge-pill badge-dark">{{total.terminated}}</span> Completed
       </p>
       <p v-else>
-        <i class="fa fa-spinner fa-spin fa-fw"></i>
+        <span class="badge badge-pill badge-success">?</span> Running
+        <span class="badge badge-pill badge-warning">?</span> Scheduled
+        <span class="badge badge-pill badge-dark">?</span> Completed
       </p>
       <experiment-list title="Scheduled" user="@self" state="all_scheduled" @completed="updateTotal" :started="started"></experiment-list>
       <p>
         <router-link :to="{name:'experiment'}" class="btn btn-primary">New experiment</router-link>
       </p>
       <template v-if="total.terminated">
-        <experiment-list title="Recent" user="@self" state="all_terminated" :show="5" :total="total.terminated" @started="refreshScheduled"></experiment-list>
+        <experiment-list title="Recent" user="@self" state="all_terminated" :show="5" :total="total.terminated" @started="refreshScheduled" @loaded="spinner = false"></experiment-list>
       </template>
+      <template v-if="spinner">
+        <i class="fa fa-spinner fa-spin fa-fw"></i>
+        <i>loading experiments</i>
+      </template>
+      
     </div>
     <div class="col">
       <h2>Platform status</h2>
@@ -62,6 +69,7 @@
 import ExperimentList from '@/components/parts/ExperimentList'
 import {iotlab} from '@/rest'
 import {auth} from '@/auth'
+// import { sleep } from '@/utils'
 
 export default {
   name: 'Dashboard',
@@ -79,6 +87,7 @@ export default {
       auth: auth,
       nbPendingUsers: 0,
       started: 0,
+      spinner: true,
     }
   },
 
@@ -93,8 +102,9 @@ export default {
   },
 
   methods: {
-    updateTotal () {
-      iotlab.getUserExperimentsCount().then(data => { this.total = data })
+    async updateTotal () {
+      // await sleep(2000)
+      this.total = await iotlab.getUserExperimentsCount()
     },
     refreshScheduled () {
       // increment started counter so that scheduled xp component can refresh itself

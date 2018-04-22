@@ -71,9 +71,10 @@
         </tr>
       </tfoot>
     </table>
-    <p v-show="spinner">
+    <div v-show="spinner">
       <i class="fa fa-spinner fa-spin fa-fw"></i>
-    </p>
+      <i>loading experiments</i>
+    </div>
   </div>
 </template>
 
@@ -127,6 +128,11 @@ export default {
       type: Number,
       default: 0,
     },
+    loader: {
+      // Show a loading message during initial render
+      type: Boolean,
+      default: false,
+    },
   },
 
   data () {
@@ -139,7 +145,7 @@ export default {
     }
   },
 
-  created () {
+  async created () {
     this.states = this.state.split(',')
 
     if (this.state === 'all_scheduled') {
@@ -158,7 +164,8 @@ export default {
       addEventListener('focus', this.enablePolling)
     }
 
-    this.loadMore(this.show)
+    await this.loadMore(this.show, this.loader)
+    this.$emit('loaded')
   },
 
   destroyed () {
@@ -213,8 +220,8 @@ export default {
       })
     },
 
-    async loadMore (qty) {
-      this.spinner = true
+    async loadMore (qty, spinner = true) {
+      if (spinner) this.spinner = true
 
       // await sleep(2000)
       this.experiments = this.experiments.concat((await iotlab.getAllExperiments({
@@ -224,7 +231,7 @@ export default {
         limit: Math.min(this.total - this.experiments.length, qty),
       })).sort((exp1, exp2) => exp2.id - exp1.id)) // order by reverse ID
 
-      this.spinner = false
+      if (spinner) this.spinner = false
     },
 
     async refresh (more = 0) {
