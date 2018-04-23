@@ -20,7 +20,7 @@
           <td v-if="user != '@self'"><router-link :to="{name: 'users', query: { search: exp.user }}">{{exp.user}}</router-link></td>
           <td>{{exp.name}}</td>
           <td>{{expDate(exp) | formatDateTime}}</td>
-          <td :class="{'durationProgress': showProgress(exp)}" :style="`text-align: center; --progress: ${experimentProgress(exp)}%`">
+          <td :class="{'durationProgress': showProgress(exp)}" :style="`text-align: center; --progress: ${experimentProgress(exp)}%`" :title="showRemaining(exp)">
             {{expDuration(exp) | humanizeDuration}}
             <small class="text-dark" v-if="showProgress(exp)">({{experimentProgress(exp)}}%)</small>
           </td>
@@ -196,6 +196,12 @@ export default {
   methods: {
 
     showProgress: exp => exp.state === 'Running',
+
+    showRemaining (exp) {
+      if (this.showProgress(exp)) {
+        return `remaining ${this.$options.filters.humanizeDuration(exp.submitted_duration - exp.effective_duration)}`
+      }
+    },
 
     experimentProgress (exp) {
       // Gives the percentage of progress
