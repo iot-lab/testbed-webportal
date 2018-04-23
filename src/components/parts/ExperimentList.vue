@@ -170,6 +170,7 @@ export default {
 
   destroyed () {
     if (polling) {
+      this.enablePolling()
       this.stopPolling()
       removeEventListener('blur', this.disablePolling)
       removeEventListener('focus', this.enablePolling)
@@ -270,8 +271,10 @@ export default {
 
     disablePolling () {
       // console.debug('polling disabled')
-      blured = true
-      this.$notify({text: 'Dashboard refresh paused', type: 'info', duration: -1, group: 'alt'})
+      if (!blured) {
+        blured = true
+        this.$notify({text: 'Dashboard refresh paused', type: 'info', duration: -1, group: 'alt'})
+      }
     },
 
     enablePolling () {
