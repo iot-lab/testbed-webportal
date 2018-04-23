@@ -12,13 +12,19 @@
           <span class="badge badge-pill badge-dark">{{total.terminated}}</span> Completed
         </p>
         <p v-else>
-          <i class="fa fa-spinner fa-spin fa-fw"></i>
+          <span class="badge badge-pill badge-success">?</span> Running
+          <span class="badge badge-pill badge-warning">?</span> Scheduled
+          <span class="badge badge-pill badge-dark">?</span> Completed
         </p>
         <experiment-list title="Scheduled" :user="username" state="all_scheduled" @completed="updateTotal" :started="started"></experiment-list>
         <template v-if="total.terminated">
-          <experiment-list title="Recent" :user="username" state="all_terminated" :show="20" :total="total.terminated" :step="100" @started="refreshScheduled"></experiment-list>
+          <experiment-list title="Recent" :user="username" state="all_terminated" :show="20" :total="total.terminated" :step="100" @started="refreshScheduled" @loaded="spinner = false"></experiment-list>
         </template>
-      </div>
+        <template v-if="spinner">
+          <i class="fa fa-spinner fa-spin fa-fw"></i>
+          <i>loading experiments</i>
+        </template>
+    </div>
       <div class="col"></div>
     </div>
 
@@ -45,6 +51,7 @@ export default {
     return {
       total: {},
       started: 0,
+      spinner: true,
     }
   },
 
