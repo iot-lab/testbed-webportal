@@ -324,7 +324,7 @@ export default {
       duration: 20,
       durationMultiplier: 1,
       startDate: '',
-      mode: 'byname',
+      mode: 'byprop',
       filterSite: 'all',
       filterArchi: 'all',
       filterMobile: 'all',
