@@ -71,8 +71,8 @@
             <li class="nav-item" v-tooltip:top="'Select sets of nodes with the same properties'">
               <a class="nav-link active" id="list-byprop-list" data-toggle="list" href="#list-byprop" role="tab" aria-controls="byprop" @click="setMode('byprop')"> node properties </a>
             </li>
-            <li class="nav-item" v-tooltip:top="'Select nodes from a list'">
-              <a class="nav-link" id="list-byname-list" data-toggle="list" href="#list-byname" role="tab" aria-controls="byname" @click="setMode('byname'); refreshNodes()"> host name </a>
+            <li class="nav-item" v-tooltip:top="'Select nodes from list or map'">
+              <a class="nav-link" id="list-byname-list" data-toggle="list" href="#list-byname" role="tab" aria-controls="byname" @click="setMode('byname'); refreshNodes()"> host name / map </a>
             </li>
             <li class="nav-item" v-tooltip:top="'Select nodes with given ids'">
               <a class="nav-link" id="list-byid-list" data-toggle="list" href="#list-byid" role="tab" aria-controls="byid" @click="setMode('byid'); refreshNodes()"> node id </a>
@@ -130,14 +130,14 @@
                 </multiselect>
                 <button class="btn btn-success" @click="addNodes">Add to experiment</button>
               </div>
-              <!-- <p class="ml-1 mt-2 font-size-sm">
-                <a href="" data-toggle="collapse" href="#collapseMap" aria-expanded="false" aria-controls="collapseMap"><i class="fa fa-map-o fa-lg" aria-hidden="true"></i> View/select nodes on map <i class="fa fa-caret-down" aria-hidden="true"></i></a> 
+              <p class="ml-1 mt-2 mb-2 font-size-sm">
+                <a href="" data-toggle="collapse" href="#collapseMap" aria-expanded="false" aria-controls="collapseMap">
+                  <i class="fa fa-map-o fa-lg" aria-hidden="true"></i> View/select nodes on map <i class="fa fa-caret-down" aria-hidden="true"></i>
+                </a> 
               </p>
               <div class="collapse" id="collapseMap">
-                <div class="card card-body">
-                  <router-link :to="{name:'map'}">(TODO) Map !</router-link>
-                </div>
-              </div> -->
+                <map-3d :nodes="filteredNodes" v-model="currentNodes" :selectedNodes="selectedNodesForSite" @selectSite="(site) => filterSite = site"></map-3d>
+              </div>
             </div>
             <!-- Select By ID -->
             <div class="tab-pane fade show" id="list-byid" role="tabpanel" aria-labelledby="list-byid-list">
@@ -265,6 +265,7 @@ import $ from 'jquery'
 import Multiselect from 'vue-multiselect'
 import FilterSelect from '@/components/parts/FilterSelect'
 import MonitoringList from '@/components/parts/MonitoringList'
+import Map3d from '@/components/parts/Map3d'
 import 'vue-multiselect/dist/vue-multiselect.min.css'
 import 'tempusdominus-bootstrap-4'
 import 'tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4.min.css'
@@ -286,7 +287,7 @@ function newNode (node) {
 }
 
 function newNodeGroup (nodes) {
-  if ([...new Set(nodes.map(node => node.shortArchi))].length > 1) throw new Exception('Node groups should have the same archi')
+  if (new Set(nodes.map(node => node.shortArchi)).size > 1) throw new Exception('Node groups should have the same archi')
   return Object.assign({}, {
     nodes: nodes,
     firmware: {name: undefined},
@@ -315,6 +316,7 @@ export default {
     Multiselect,
     FilterSelect,
     MonitoringList,
+    Map3d,
   },
 
   data () {
@@ -417,6 +419,10 @@ export default {
     },
     selectedNodes () {
       return this.selectedNodeGroups.reduce((a, e) => a.concat(e.nodes), [])
+    },
+    selectedNodesForSite () {
+      // selected nodes for current site to display on the map
+      return this.selectedNodes.filter(node => node.site === this.filterSite)
     },
     nodeCount () {
       if (this.mode === 'byprop') {
@@ -619,6 +625,12 @@ export default {
     removeProp (i) {
       this.selectedProps.splice(i, 1)
     },
+
+    // touchFilteredNodes () {
+    //   this.$nextTick(function () {
+    //     this.filteredNodes.push(this.filteredNodes.pop())
+    //   })
+    // },
 
     expandNodeIds () {
       var node

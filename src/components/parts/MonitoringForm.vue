@@ -200,10 +200,7 @@ export default {
 
   watch: {
     monitoringProfile: function (profile) {
-      console.log(this.profile)
-      console.log(profile)
       this.profile = Object.assign({}, this.profile, profile)
-      console.log(this.profile)
       this.showConso = this.profileHasConsumption(profile)
       this.showRadio = profile.radio !== undefined
       this.$refs.name.blur()

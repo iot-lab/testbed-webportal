@@ -12,27 +12,26 @@ var renderer, scene, camera, projector
 
 var nodeInfo, container
 
+var selectedCallback
+
 var objects
 
 var window3DWidth, window3DHeight
 // var offX, offY
 
 // list of selected nodes
-var selectedNodes
+var selectedNodes = []
 // node list used in 3D vue
 var mapNodes
 
-var logInfo, selectedInfo
+var logInfo
 
 /*
  * Fonction qui récupère la liste de tous les noeuds de la vue
  *
  */
 function loadNodes (liste) {
-  mapNodes = []
-  for (var i = 0; i < (liste.length); i++) {
-    mapNodes[i] = liste[i]
-  }
+  mapNodes = liste
 }
 
 /*
@@ -47,9 +46,14 @@ function init3d () {
 
   mouseX = mouseY = 0
 
-  container = document.getElementById('div3d')
+  container = document.getElementById('map3d')
   nodeInfo = document.getElementById('nodeInfo')
-  selectedInfo = document.getElementById('selectedInfo')
+  container.innerHTML = ''
+  nodeInfo.innerHTML = ''
+
+  // selectedInfo = document.getElementById('selectedInfo')
+  // selectedInfo.innerHTML = ''
+  // selectedNodes = []
 
   objects = []
 
@@ -57,15 +61,15 @@ function init3d () {
   renderer = new THREE.CanvasRenderer()
   scene = new THREE.Scene()
   camera = new THREE.PerspectiveCamera(75, window3DWidth / window3DHeight, 1, 10000)
+  // Projecteur utiliser pour la selection de noeuds.
+  projector = new THREE.Projector()
+
   // pointLight = new THREE.PointLight( 0xffffff )
   // pointLight.position.set(0,0,0)
   // camera.add(pointLight)
   // var pointLight2 = new THREE.PointLight( 0xffffff )
   // pointLight2.position.set(3,3,3)
   // camera.add(pointLight2)
-
-  // Projecteur utiliser pour la selection de noeuds.
-  projector = new THREE.Projector()
 
   // CONTROLS
   // controls = new TrackballControls( camera );
@@ -114,10 +118,6 @@ function init3d () {
   // dirLightHeper = new THREE.DirectionalLightHelper( dirLight, 10 )
   // scene.add( dirLightHeper )
 
-  nodeInfo.innerHTML = ''
-  selectedInfo.innerHTML = ''
-  selectedNodes = []
-
   // offY = container.offsetTop
   // offX = container.offsetLeft
 
@@ -143,7 +143,7 @@ function init3d () {
   container.onmousewheel = wheel // IE - Chrome
 
   // Mise à jour de l'affichage
-  myrender()
+  render()
 }
 
 function set3dsize () {
@@ -156,7 +156,7 @@ function set3dsize () {
   camera.aspect = window3DWidth / window3DHeight
   camera.updateProjectionMatrix()
 
-  // myrender()
+  // render()
 }
 
 /*
@@ -200,13 +200,15 @@ function createParticles (nodes) {
         context.fill()
       },
     }))
+    particle.node = nodes[i]
     particle.name = nodes[i].network_address
     particle.position.x = (parseFloat(nodes[i].x) - xcenter)
     particle.position.y = (parseFloat(nodes[i].y) - ycenter)
     particle.position.z = (parseFloat(nodes[i].z) - zcenter)
     particle.position.multiplyScalar(10)
-    particle.archi = nodes[i].archi.split(':')[0]
     particle.state = nodes[i].state
+    // particle.archi = nodes[i].archi.split(':')[0]
+    // particle.mobile = nodes[i].mobile
     particle.scale.x = particle.scale.y = 1
     objects.push(particle)
     scene.add(particle)
@@ -217,7 +219,7 @@ function createParticles (nodes) {
 function initColors () {
   for (var i = 0; i < objects.length; i++) {
     objects[i].scale.x = objects[i].scale.y = 1
-    if (selectedNodes.indexOf(objects[i].name) !== -1) {
+    if (selectedNodes.findIndex(obj => obj.network_address === objects[i].name) !== -1) {
       // bleu clair
       // objects[i].material.color.setHex(0x0099CC)
       // objects[i].material.color.setHex(0x17a2b8)
@@ -248,8 +250,9 @@ function initColors () {
  * (fonction d'affichage)
  *
  */
-function myrender () {
-  requestAnimationFrame(myrender)
+function render () {
+  requestAnimationFrame(render)
+  initColors()
   // controls.update();
   // nodeInfo.innerHTML = " Cam Pos = " + camera.position.x + "," + camera.position.y + "," + camera.position.z
                  // + " - " + theta + "," + phi + ","+ distance
@@ -308,18 +311,19 @@ function findNodeUnderMouse (event) {
  *
  */
 function toggleNode (obj) {
-  var nodeId = obj.object.name
-  var i = selectedNodes.indexOf(nodeId)
+  var node = obj.object.node
+  var i = selectedNodes.findIndex(n => n.network_address === node.network_address)
   if (i === -1) {
-    selectedNodes.push(nodeId)
+    selectedNodes.push(node)
   } else {
     selectedNodes.splice(i, 1)
   }
   initColors()
-  selectedInfo.innerHTML = selectedNodes.length > 0 ? 'Selected nodes' : ''
-  for (let node of selectedNodes) {
-    selectedInfo.innerHTML += ` <span class="badge badge-primary">${node}</span>`
-  }
+  // selectedInfo.innerHTML = selectedNodes.length > 0 ? 'Selected nodes' : ''
+  // for (let node of selectedNodes) {
+    // selectedInfo.innerHTML += ` <span class="badge badge-primary">${node}</span>`
+  // }
+  if (selectedCallback) selectedCallback(selectedNodes)
 }
 
 /*
@@ -427,15 +431,18 @@ function displayNodeInfo (e) {
   // display some info of the node under the mouse
   var obj = findNodeUnderMouse(e)
   if (obj) {
+    var node = obj.object.node
     nodeInfo.innerHTML = `
-      <b>${obj.object.name}</b>
-      <span class="badge badge-primary">${obj.object.archi}</span>
-      <span class="badge ${badgeClass(obj.object.state)}">${obj.object.state}</span>
+      <b>${node.network_address}</b>
+      <span class="badge badge-primary">${node.shortArchi || node.archi}</span>
+      <span class="badge ${badgeClass(node.state)}">${node.state}</span>
     `
+    if (node.mobile) {
+      nodeInfo.innerHTML += '<span class="badge badge-infomobile</span>'
+    }
   } else {
     nodeInfo.innerHTML = ''
   }
-
   // else nodeInfo.innerHTML ='Node info 2: '+ e.clientX + "," + e.clientY + " - " + offX + "," + offY
 }
 
@@ -463,16 +470,6 @@ function onDocumentMouseMoveRot (event) {
  *
  */
 function onDocumentMouseMoveTranslate (event) {
-  var NewmouseX = event.clientX
-  var NewmouseY = event.clientY
-  var DeltaX = NewmouseX - mouseX
-  var DeltaY = NewmouseY - mouseY
-
-  mouseX = NewmouseX
-  mouseY = NewmouseY
-
-  camera.position.x += DeltaX
-  camera.position.y += DeltaY
 }
 
 /*
@@ -515,10 +512,28 @@ function wheel (event) {
  */
 function Zoom (delta) {
   distance += delta * 5
-  // myrender()
+  // render()
+}
+
+/*
+ * Set callback when node selection changes
+ *
+ */
+function setSelectedCallback (func) {
+  selectedCallback = func
+}
+
+/*
+ * Set selected nodes
+ *
+ */
+function setSelectedNodes (nodes) {
+  selectedNodes = nodes
 }
 
 export {
   loadNodes,
   init3d,
+  setSelectedCallback,
+  setSelectedNodes,
 }
