@@ -45,12 +45,8 @@
           <li>
             <a class="nav-link" href="" @click="logout" v-tooltip:bottom="'Log out'"><i class="fa fa-lg fa-fw fa-sign-out" aria-label="Logout"></i></a>
           </li>
-          <li class="dropdown nav-item" v-if="auth.isAdmin">
-            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" data-hover="dropdown">Admin</a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="" @click.prevent="this.alert('todo')">Nodes</a>
-              <a class="dropdown-item" href="" @click.prevent="this.alert('todo')">Statistics</a>
-            </div>
+          <li>
+            <a class="nav-link icon-beta" href="/testbed" v-tooltip:bottom="'Switch to legacy'"><i class="fa fa-lg fa-fw" aria-label="Beta"></i></a>
           </li>
         </ul>
       </div>
@@ -127,5 +123,34 @@ export default {
 }
 .scrollable.h600 {
   max-height: 600px;
+}
+.icon-beta {
+  position: relative;
+}
+.icon-beta::before, .icon-beta::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.icon-beta::after {
+  content: "β";
+  color: var(--light);
+  font-size: 1em;
+}
+.icon-beta::before {
+  font-family: fontawesome;
+  content: "\f0a3";
+  color: var(--info);
+  font-size: 2em;
+  top: 1px;
+}
+.icon-beta:hover::before {
+  color: var(--dark);
 }
 </style>
