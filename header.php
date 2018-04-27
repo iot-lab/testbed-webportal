@@ -155,6 +155,13 @@ if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) $body_
 
 <!--  END LOGGED IN NAV BAR  -->
 
+<div class="alert alert-warning" style="padding: 8px 0">
+    <div class="container">
+        <span class="glyphicon glyphicon-fire" style="font-size: 1.5em; vertical-align: sub; margin-right: 4px;"></span>
+        The new testbed web portal is coming soon! <a href="/testbed-beta/"><b>Try it out</b></a> and help us improve.
+    </div>
+</div>
+
 <!-- ------------------------------------- -->
 <!--            END HEADER                 -->
 <!-- ------------------------------------- -->
