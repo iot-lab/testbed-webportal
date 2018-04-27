@@ -38,7 +38,7 @@
           <div class="form-group">
             <label class="lead mr-3 my-label">Start</label>
             <label class="custom-control custom-radio">
-              <input id="radioStacked1" name="radio-stacked" type="radio" class="custom-control-input" v-model="start" value="asap" @click="startAsap">
+              <input id="radioStacked1" name="radio-stacked" type="radio" class="custom-control-input" v-model="start" value="asap">
               <span class="custom-control-indicator"></span>
               <span class="custom-control-description">As soon as possible</span>
             </label>
@@ -130,9 +130,9 @@
                 </multiselect>
                 <button class="btn btn-success" @click="addNodes">Add to experiment</button>
               </div>
-              <p class="ml-1 mt-2 mb-2 font-size-sm">
+              <p class="mt-2 mb-2 font-size-sm">
                 <a href="" data-toggle="collapse" href="#collapseMap" aria-expanded="false" aria-controls="collapseMap">
-                  <i class="fa fa-map-o fa-lg" aria-hidden="true"></i> View/select nodes on map <i class="fa fa-caret-down" aria-hidden="true"></i>
+                  <i class="fa fa-map-o fa-fw fa-lg" aria-hidden="true"></i> View/select nodes on map <i class="fa fa-caret-down" aria-hidden="true"></i>
                 </a> 
               </p>
               <div class="collapse" id="collapseMap">
@@ -409,13 +409,18 @@ export default {
       return 'No matching nodes found. Try to clear filters.'
     },
     nodeIdsInfo () {
+      if (this.mode !== 'byid') return 'select node by ids tab'
       if (this.filterSite === 'all' || this.filterArchi === 'all') return 'Select a site and architecture first'
-      return this.nodes_ids
-        .filter(site => site.site === this.filterSite)[0].archis
-        .filter(archi => archi.archi === this.filterArchi)[0].states
-        .sort((a, b) => a.state > b.state)
-        .map(state => `<span class="badge ${this.$options.filters.stateBadgeClass(state.state)}">${state.state}</span> ${state.ids}`)
-        .join('<br>')
+      try {
+        return this.nodes_ids
+          .filter(site => site.site === this.filterSite)[0].archis
+          .filter(archi => archi.archi === this.filterArchi)[0].states
+          .sort((a, b) => a.state > b.state)
+          .map(state => `<span class="badge ${this.$options.filters.stateBadgeClass(state.state)}">${state.state}</span> ${state.ids}`)
+          .join('<br>')
+      } catch (err) {
+        return 'no matching ids'
+      }
     },
     selectedNodes () {
       return this.selectedNodeGroups.reduce((a, e) => a.concat(e.nodes), [])
@@ -524,12 +529,6 @@ export default {
                          this.$notify({text: 'An error occured while fetching data', type: 'error'})
                          throw err
                        })
-    },
-    loadMap () {
-      // loadNodes(this.mapNodes)
-      // init3d()
-    },
-    startAsap () {
     },
     startScheduled () {
       this.$forceUpdate()

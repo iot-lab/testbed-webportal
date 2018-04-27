@@ -1,7 +1,10 @@
 <template>
   <div id="map">
     <div class="card card-body bg-light text-center" v-if="nbSites > 1">
-      <p class="lead mt-2">Select a site to view its map</p>
+      <p class="lead mt-2">
+        <i class="fa fa-map-o fa-fw fa-lg" aria-hidden="true"></i>
+        Select a site to view its map
+      </p>
       <ul class="nav nav-pills justify-content-center">
         <li class="nav-item" v-for="site in sites">
           <a class="nav-link text-capitalize bg-light" href="#" @click.prevent="setSite(site)">{{site}}</a>
