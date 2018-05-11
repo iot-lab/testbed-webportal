@@ -53,3 +53,7 @@ h2{
 .navbar-onelab .navbar-nav > li.active > a {
     border-bottom: solid 3px rgb(139, 176, 222);
 }
+
+.navbar-onelab .dropdown-menu > li > a {
+    padding: 8px 35px;
+}
