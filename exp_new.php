@@ -578,7 +578,7 @@ $("#btn_assoc").click(function () {
     var profileNodearch = ((profil_set in user_profiles) ? user_profiles[profil_set] : null);
 
 	// fwNodearch = ["wsn430", ".."]
-    var fwNodearch = ((firmware_set in user_firmwares) ? user_firmwares[firmware_set] : null);
+    var fwNodearch = ((firmware_set in user_firmwares) ? user_firmwares[firmware_set] : []);
  
     // profile and firware are compatible ?
     //if (profileNodearch != null && fwNodearch != null && profileNodearch != fwNodearch) {
@@ -598,8 +598,16 @@ $("#btn_assoc").click(function () {
             //    alert("The firmware is not compatible with some nodes architecture.");
             //    return false;
             //}
-			if (fwNodearch != null) {
+            // if (fwNodearch != null) {
+			if (fwNodearch.length >= 1) {
 				var nodearch = sites_nodes[nodes_set[i]]
+                switch (nodearch) {
+                    case 'a8':
+                    case 'm3':
+                        break
+                    default:
+                        nodearch = 'custom'
+                }
 				if (fwNodearch.indexOf(nodearch)==-1) {
 					return false;
 				}
@@ -998,7 +1006,7 @@ $("#my_nodes").change(function () {
     var profil_set = $("#my_profiles").val();
     var firmware_set = $("#my_firmwares").val();
     var profileNodearch = ((profil_set in user_profiles) ? user_profiles[profil_set] : null);
-    var fwNodearch = ((firmware_set in user_firmwares) ? user_firmwares[firmware_set] : null);
+    var fwNodearch = ((firmware_set in user_firmwares) ? user_firmwares[firmware_set] : []);
     if (nodearch != profileNodearch) $("#my_profiles option:selected").removeAttr("selected");
     //if (nodearch != fwNodearch) $("#my_firmwares option:selected").removeAttr("selected");
 	if (fwNodearch.indexOf(nodearch)==-1) $("#my_firmwares option:selected").removeAttr("selected");
