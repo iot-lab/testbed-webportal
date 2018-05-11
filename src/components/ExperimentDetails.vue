@@ -298,17 +298,22 @@ export default {
         this.$notify({text: `Select some nodes first`, type: 'warning'})
         return
       }
+
+      this.$notify({text: 'Uploading file...', type: 'info', duration: -1})
+
       this.firmwareFile = this.$refs[ref].files[0]
       var reader = new FileReader()
 
       reader.onload = (function (vm) {
         return async function (e) {
+          vm.$notify({clean: true}) // close pending notification
+
           let res = await iotlab.checkFirmware(e.target.result)
           vm.$notify({text: `firmware format ${res.format}`, type: res.format === 'unknown' ? 'error' : 'info'})
           if (res.format === 'unknown') return
 
           vm.$notify({text: 'Flashing firmware...', type: 'info', duration: -1})
-          this.showFirmware = false
+          vm.showFirmware = false
 
           let nodes = await iotlab.flashFirmware(vm.id, vm.selectedNodes, e.target.result).catch(err => {
             vm.$notify({clean: true}) // close pending notification
