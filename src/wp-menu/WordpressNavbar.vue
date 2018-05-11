@@ -1,0 +1,149 @@
+<template>
+  <header class="navbar navbar-light bg-white navbar-onelab navbar-expand-md" role="banner">
+    <div class="container">
+      <button type="button" class="navbar-toggler" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+        <span class="sr-only">Toggle navigation</span> &#x2630;
+      </button> 
+
+      <a href="/"> 
+        <img src="https://www.iot-lab.info/wp-content/themes/alienship-1.2.5-child/templates/parts/fit-iotlab3.png">
+      </a>
+      <div v-html="topmenu"></div>
+
+      <nav class="navbar-collapse collapse navbar-ex1-collapse" role="navigation">
+
+        <ul class="nav navbar-nav ml-auto">
+          <li class="dropdown nav-item"> <a href="./stats.php" title="Testbed activity" data-toggle="dropdown"
+            data-hover="dropdown" class="nav-link dropdown-toggle">
+            <i class="fa fa-info-circle"></i> Activity</a>
+            <ul class="dropdown-menu">
+              <li id="stats"><a href="../testbed/stats.php">Statistics</a></li>
+              <li id="monika"><a href="../testbed/monika.php">View nodes status</a></li>
+              <li id="drawgantt"><a href="../testbed/drawgantt.php">View gantt chart</a></li>
+            </ul>
+          </li>
+          <li class="active nav-item">
+            <a href="#" title="Testbed" class="nav-link"><i class="fa fa-wrench"></i> Testbed</a>
+          </li>
+        </ul>
+      </nav>
+      <!--/.nav-collapse -->
+    </div>
+    <!--/.container -->
+  </header>
+</template>
+
+<script>
+// import iotlab wordpress top menu
+import template from '@/wp-menu/wp-menu.html'
+import { replaceAll } from '@/utils'
+import $ from 'jquery'
+
+function convertToBootstrap4 (menu) {
+  /* Convert top menu from bootstrap 3 to bootstrap 4 */
+
+  // remove domain from links url
+  menu = replaceAll(menu, 'href="https://www.iot-lab.info', 'href="')
+  menu = replaceAll(menu, 'href="https://devwww.iot-lab.info', 'href="')
+
+  var $html = $('<div>', {html: menu})
+
+  // add nav-link class
+  $html.find('ul.nav > li > a').addClass('nav-link')
+
+  // add class for carets
+  $html.find('a[data-toggle="dropdown"]').addClass('dropdown-toggle')
+
+  // remove carets span
+  $html.find('span.caret').remove()
+
+  return $html.html()
+}
+
+export default {
+  name: 'WordpressNavbar',
+  data () {
+    return {
+      topmenu: convertToBootstrap4(template),
+    }
+  },
+}
+</script>
+
+<style>
+.navbar-onelab img {
+  /*margin: 7px;*/
+  margin-left: -4px;
+  padding: 2px;
+  height: 47px;
+}
+.navbar-onelab.navbar-light .navbar-nav .nav-link {
+  text-transform: uppercase;
+  font-weight: bold;
+  /*font-size: 0.9em;*/
+  /*padding: 21px 15px 17px 15px;*/
+  /*text-decoration: none;*/
+  color: #4480ca;
+  /*outline: 0;*/
+  /*font-family: 'open_sansbold', sans-serif;*/
+  font-size: 10pt;
+  font-size: 13.3333px;
+  /*font-weight: normal;*/
+  /*line-height: 0.8em;*/
+  letter-spacing: 0.4pt;
+  /*list-style: none;*/
+  /*float: left;*/
+  /*margin: 0;*/
+  /*text-transform: uppercase;*/
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.navbar-onelab .navbar-nav > li.active > a {
+  position: relative;
+  color: rgb(32, 83, 157) !important;
+}
+.navbar-onelab .navbar-nav > li:hover > a {
+  position: relative;
+  color: rgb(32, 83, 157) !important;
+}
+.navbar-onelab .navbar-nav > li.active > a:before {
+  content: '';
+  position: absolute;
+  bottom: -14px;
+  left: 0;
+  right: -10px;
+  height: 1px;
+  border-bottom: solid 3px rgb(139, 176, 222);
+}
+.navbar-onelab .navbar-nav > li > a:focus:before {
+  content: '';
+  position: absolute;
+  bottom: -14px;
+  left: 0;
+  right: -10px;
+  height: 1px;
+  border-bottom: solid 3px rgb(32, 83, 157);
+}
+.navbar-onelab .dropdown-menu > li > a {
+  display: block;
+  padding: 8px 35px;
+  clear: both;
+  font-weight: bold;
+  line-height: 1.42857143;
+  color: #4480ca;
+  white-space: nowrap;
+  text-transform: uppercase;
+  font-size: 14px;
+  text-decoration: none;
+}
+.navbar-onelab .dropdown-menu > li > a:hover {
+  color: rgb(32, 83, 157) !important;
+}
+.navbar-onelab .dropdown-menu {
+  transform: translateY(11px);
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/*@import url("https://www.iot-lab.info/wp-content/themes/alienship-1.2.5-child/fonts/opensans_bold_macroman/stylesheet.css");*/
+</style>

@@ -37,3 +37,9 @@ export const groupBy = function (array, key) {
     return rv
   }, {})
 }
+
+// Replace all occurences of a substring in a string
+export const replaceAll = function (str, search, replacement) {
+  // could be done with a RegExp paying attention to escape chars, but this solution is not bad in performance
+  return str.split(search).join(replacement)
+}
