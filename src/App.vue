@@ -1,13 +1,9 @@
 <template>
   <div id="app">
-    <!-- <img src="./assets/logo.png"> -->
-    <!--  LOGGED IN NAV BAR  -->
-
-    <!-- <?php if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) { ?> -->
-        <!-- <div class="navbar navbar-default navbar-fixed-top navbar-grey" role="banner"> -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light" v-if="auth.loggedIn">
+    <wordpress-navbar></wordpress-navbar>
+    <nav class="navbar navbar-expand-md navbar-light bg-light" v-if="auth.loggedIn">
     <div class="container"> 
-      <a class="navbar-brand" href="#"><img src="./assets/disc-iotlab.svg" width="30"></a>
+      <!-- <a class="navbar-brand" href="#"><img src="./assets/disc-iotlab.svg" width="30"></a> -->
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -65,6 +61,7 @@
         </div>
       </template>
     </notifications>
+
     <notifications group="alt" position="top center" :duration="-1" animation-type="css" style="margin-top: 6px;">
       <template slot="body" slot-scope="props" style="margin-top: 10px">
         <div class="alert alert-secondary text-center">
@@ -80,10 +77,12 @@
 </template>
 
 <script>
-import {auth} from '@/auth'
+import WordpressNavbar from '@/wp-menu/WordpressNavbar'
+import { auth } from '@/auth'
 
 export default {
   name: 'app',
+  components: { WordpressNavbar },
   data () {
     return {
       auth: auth,
