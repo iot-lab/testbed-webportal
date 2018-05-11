@@ -18,7 +18,7 @@
         <tr v-for="exp in experiments">
           <td><router-link :to="{name: 'experimentDetails', params: { id: exp.id }}">{{exp.id}}</router-link></td>
           <td v-if="user != '@self'"><router-link :to="{name: 'users', query: { search: exp.user }}">{{exp.user}}</router-link></td>
-          <td>{{exp.name}}</td>
+          <td v-html="allowBreak(exp.name)"></td>
           <td>{{expDate(exp) | formatDateTime}}</td>
           <td :class="{'durationProgress': showProgress(exp)}" :style="`text-align: center; --progress: ${experimentProgress(exp)}%`" :title="showRemaining(exp)">
             {{expDuration(exp) | humanizeDuration}}
@@ -195,6 +195,11 @@ export default {
   },
 
   methods: {
+
+    allowBreak (name) {
+      // Insert break points for the browser to split long names into several lines if necessary
+      return name.replace(/_/g, '_<wbr>') // allow split on "_"
+    },
 
     showProgress: exp => exp.state === 'Running',
 
