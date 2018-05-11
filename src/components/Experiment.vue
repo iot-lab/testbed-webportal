@@ -543,6 +543,8 @@ export default {
       this.filterMobile = 'all'
     },
     loadFirmwareFile (ref, index) {
+      this.$notify({text: 'Uploading file...', type: 'info', duration: -1})
+
       this.firmwareFiles[index] = this.$refs[ref][0].files[0]
       // console.log(this.$refs[ref][0])
       var group = (this.mode === 'byprop') ? this.selectedProps[index] : this.selectedNodeGroups[index]
@@ -550,6 +552,8 @@ export default {
 
       reader.onload = (function (file, vm, index, allowedFirmwares) {
         return async function (e) {
+          vm.$notify({clean: true}) // close pending notification
+
           var res = await iotlab.checkFirmware(e.target.result)
           vm.$notify({text: `firmware format ${res.format}`, type: res.format === 'unknown' ? 'error' : 'info'})
           if (allowedFirmwares.includes(res.format)) {
