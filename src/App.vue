@@ -41,8 +41,14 @@
           <li>
             <a class="nav-link" href="" @click="logout" v-tooltip:bottom="'Log out'"><i class="fa fa-lg fa-fw fa-sign-out" aria-label="Logout"></i></a>
           </li>
-          <li>
-            <a class="nav-link icon-beta" href="/testbed" v-tooltip:bottom="'Switch to legacy'"><i class="fa fa-lg fa-fw" aria-label="Beta"></i></a>
+          <li class="nav-link icon-beta"
+              data-toggle="popover"
+              data-placement="bottom"
+              :data-title="`<b>Welcome to IoT-LAB's new web portal Beta</b>`"
+              :data-content="`<h6 class='font-italic font-weight-light'>We want it fast and ergonomic, we hope you'll like it!</h6>
+              <a href='/testbed'>Switch to legacy</a>`"
+            >
+            <i class="fa fa-lg fa-fw" aria-label="Beta"></i>
           </li>
         </ul>
       </div>
