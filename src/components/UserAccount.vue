@@ -105,6 +105,13 @@ export default {
   created () {
     iotlab.getSSHkeys().then(data => { this.keys = data })
     iotlab.getUserInfo().then(data => { this.user = data })
+      .then(_ => {
+        if (this.$route.query.validate !== undefined) {
+          this.$nextTick(function () {
+            this.updateProfile()
+          })
+        }
+      })
   },
 
   methods: {

@@ -101,6 +101,14 @@ export default {
     }
   },
 
+  async mounted () {
+    this.$notify({group: 'popup', clean: true})
+    let user = await iotlab.getUserInfo()
+    if (!user.category) {
+      this.$notify({group: 'popup', type: 'fill-user-profile'})
+    }
+  },
+
   methods: {
     async updateTotal () {
       // await sleep(2000)

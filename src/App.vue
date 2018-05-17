@@ -76,6 +76,22 @@
         </div>
       </template>
     </notifications>
+
+    <notifications group="popup" position="top left" :duration="-1" animation-type="css" style="width: 100%">
+      <template slot="body" slot-scope="props">
+        <div class="alert-popup">
+          <div class="card">
+            <div class="card-body">
+              <h3 class="card-title">We care about knowing our users</h3>
+              <p class="card-text">Please take a minute to fill your profile with your <i><b>user category</b></i> (student, academic, startup, industrial...)</p>
+              <router-link :to="{name:'account', query: {validate: null}}" class="btn btn-primary" @click.native="props.close">Go to my profile</router-link>
+              <a href="#" class="btn btn-link" @click="props.close">Later</a>
+            </div>
+          </div>
+        </div>
+      </template>
+    </notifications>
+
     <keep-alive include="NewExperiment,AdminUsers">
       <router-view></router-view>
     </keep-alive>
@@ -85,6 +101,7 @@
 <script>
 import WordpressNavbar from '@/wp-menu/WordpressNavbar'
 import { auth } from '@/auth'
+import $ from 'jquery'
 
 export default {
   name: 'app',
@@ -94,6 +111,15 @@ export default {
       auth: auth,
     }
   },
+
+  mounted () {
+    $('[data-toggle="popover"]').popover({
+      trigger: 'click hover',
+      delay: { show: 250, hide: 500 },
+      html: true,
+    })
+  },
+
   methods: {
     logout: function (event) {
       auth.doLogout()
@@ -157,5 +183,21 @@ export default {
 }
 .icon-beta:hover::before {
   color: var(--dark);
+}
+
+.alert-popup {
+  width: 100vw;
+  height: 100vh;
+  background-color: #868e96cc;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.alert-popup .card {
+  max-width: 80%;
+  min-width: 500px;
+  box-shadow: 0px 0px 50px 2px #222;
+  padding: 1.5em 2.5em;
+  margin-top: 200px;
 }
 </style>
