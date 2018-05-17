@@ -6,12 +6,11 @@
       </button> 
 
       <a href="/"> 
-        <img src="https://www.iot-lab.info/wp-content/themes/alienship-1.2.5-child/templates/parts/fit-iotlab3.png">
+        <img src="../assets/fit-iotlab3.png">
       </a>
-      <div v-html="topmenu"></div>
 
       <nav class="navbar-collapse collapse navbar-ex1-collapse" role="navigation">
-
+        <div v-html="topmenu"></div>
         <ul class="nav navbar-nav ml-auto">
           <li class="dropdown nav-item"> <a href="./stats.php" title="Testbed activity" data-toggle="dropdown"
             data-hover="dropdown" class="nav-link dropdown-toggle">
@@ -80,21 +79,13 @@ export default {
 .navbar-onelab.navbar-light .navbar-nav .nav-link {
   text-transform: uppercase;
   font-weight: bold;
-  /*font-size: 0.9em;*/
-  /*padding: 21px 15px 17px 15px;*/
-  /*text-decoration: none;*/
   color: #4480ca;
-  /*outline: 0;*/
-  /*font-family: 'open_sansbold', sans-serif;*/
+  font-family: open_sansbold;
   font-size: 10pt;
   font-size: 13.3333px;
   /*font-weight: normal;*/
   /*line-height: 0.8em;*/
   letter-spacing: 0.4pt;
-  /*list-style: none;*/
-  /*float: left;*/
-  /*margin: 0;*/
-  /*text-transform: uppercase;*/
   padding-left: 15px;
   padding-right: 15px;
 }
@@ -145,5 +136,4 @@ export default {
   border-top-right-radius: 0;
 }
 
-/*@import url("https://www.iot-lab.info/wp-content/themes/alienship-1.2.5-child/fonts/opensans_bold_macroman/stylesheet.css");*/
 </style>
