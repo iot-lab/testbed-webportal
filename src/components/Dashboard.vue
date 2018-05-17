@@ -1,10 +1,10 @@
 <template>
 <div>
 <div class="alert alert-info rounded-0" v-if="auth.isAdmin && nbPendingUsers > 0">
-  <router-link :to="{name:'users'}" class="container d-block alert-link font-weight-light" style="text-decoration: none">
+  <a href="/testbed/admin_users.php" class="container d-block alert-link font-weight-light" style="text-decoration: none">
     <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
     {{nbPendingUsers}} pending user accounts awaiting validation
-  </router-link>
+  </a>
 </div>
 <div class="container mt-3">
   <div class="row">
