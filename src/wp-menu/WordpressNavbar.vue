@@ -66,6 +66,22 @@ export default {
       topmenu: convertToBootstrap4(template),
     }
   },
+
+  mounted () {
+    // Show dropdown menu on hover
+    $('body').on('mouseenter mouseleave', '.navbar-onelab .dropdown', function (e) {
+      $('.navbar-onelab .dropdown').removeClass('show')
+      $('.navbar-onelab .dropdown-menu').removeClass('show')
+      var dropdown = $(e.target).closest('.dropdown')
+      var menu = $('.dropdown-menu', dropdown)
+      dropdown.addClass('show')
+      menu.addClass('show')
+      setTimeout(function () {
+        dropdown[dropdown.is(':hover') ? 'addClass' : 'removeClass']('show')
+        menu[dropdown.is(':hover') ? 'addClass' : 'removeClass']('show')
+      }, 200)
+    })
+  },
 }
 </script>
 
@@ -106,7 +122,7 @@ export default {
   height: 1px;
   border-bottom: solid 3px rgb(139, 176, 222);
 }
-.navbar-onelab .navbar-nav > li > a:focus:before {
+.navbar-onelab .navbar-nav > li.show > a:before {
   content: '';
   position: absolute;
   bottom: -14px;

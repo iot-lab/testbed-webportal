@@ -115,7 +115,7 @@ export default {
   mounted () {
     $('[data-toggle="popover"]').popover({
       trigger: 'click hover',
-      delay: { show: 250, hide: 500 },
+      delay: { show: 250, hide: 750 },
       html: true,
     })
   },
