@@ -1,11 +1,4 @@
 <template>
-<div>
-<div class="alert alert-info rounded-0" v-if="auth.isAdmin && nbPendingUsers > 0">
-  <a href="/testbed/admin_users.php" class="container d-block alert-link font-weight-light" style="text-decoration: none">
-    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-    {{nbPendingUsers}} pending user accounts awaiting validation
-  </a>
-</div>
 <div class="container mt-3">
   <div class="row">
     <div class="col-md-9">
@@ -59,8 +52,6 @@
     </div>
   </div>
 
-</div>
-
 </div> <!-- container -->
 
 </template>
@@ -85,7 +76,6 @@ export default {
       experiments: [],
       currentSite: 'all',
       auth: auth,
-      nbPendingUsers: 0,
       started: 0,
       spinner: true,
     }
@@ -96,9 +86,6 @@ export default {
     // iotlab.getStats().then(data => { this.stats = data })
     iotlab.getSites().then(data => { this.sites = data })
     iotlab.getSiteResources().then(data => { this.resources = data })
-    if (auth.isAdmin) {
-      iotlab.getUsers({status: 'pending'}).then(data => { this.nbPendingUsers = data.length })
-    }
   },
 
   async mounted () {
