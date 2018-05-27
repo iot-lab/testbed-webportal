@@ -156,7 +156,7 @@ function set3dsize () {
   camera.aspect = window3DWidth / window3DHeight
   camera.updateProjectionMatrix()
 
-  // render()
+  render()
 }
 
 /*
@@ -251,7 +251,7 @@ function initColors () {
  *
  */
 function render () {
-  requestAnimationFrame(render)
+  // requestAnimationFrame(render)
   initColors()
   // controls.update();
   // nodeInfo.innerHTML = " Cam Pos = " + camera.position.x + "," + camera.position.y + "," + camera.position.z
@@ -463,6 +463,8 @@ function onDocumentMouseMoveRot (event) {
   phi += DeltaY
   if (phi > 180) phi = 180
   if (phi < -180) phi = -180
+
+  render()
 }
 
 /*
@@ -512,7 +514,7 @@ function wheel (event) {
  */
 function Zoom (delta) {
   distance += delta * 5
-  // render()
+  render()
 }
 
 /*
@@ -529,6 +531,7 @@ function setSelectedCallback (func) {
  */
 function setSelectedNodes (nodes) {
   selectedNodes = nodes
+  render()
 }
 
 export {
