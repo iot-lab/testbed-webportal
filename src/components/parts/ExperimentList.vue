@@ -228,7 +228,7 @@ export default {
         if (func(a) === func(b)) return b.id - a.id
         if (typeof func(a) === 'string' || typeof func(b) === 'string') return func(b).localeCompare(func(a))
         if (typeof func(a) === 'number' || typeof func(b) === 'number') return func(b) - func(a)
-        console.log('Unhandled', a.id, func(a), b.id, func(b))
+        console.log('Unhandled sort criteria', a.id, func(a), b.id, func(b))
       })
     },
 

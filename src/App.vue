@@ -13,6 +13,9 @@
           <router-link tag="li" :to="{name:'dashboard'}" active-class="active">
             <a class="nav-link"><i class="fa fa-tasks" aria-hidden="true"></i> Dashboard</a>
           </router-link>
+          <router-link tag="li" :to="{name:'nodes'}" active-class="active">
+            <a class="nav-link"><i class="fa fa-share-alt" aria-hidden="true"></i> Nodes</a>
+          </router-link>
           <router-link tag="li" :to="{name:'experiment'}" active-class="active">
             <a class="nav-link"><i class="fa fa-flask" aria-hidden="true"></i> Experiment</a>
           </router-link>

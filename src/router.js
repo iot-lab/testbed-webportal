@@ -13,6 +13,7 @@ import Monitoring from '@/components/Monitoring'
 import Experiment from '@/components/Experiment'
 import ExperimentDetails from '@/components/ExperimentDetails'
 import Dashboard from '@/components/Dashboard'
+import Nodes from '@/components/Nodes'
 import Map from '@/components/Map'
 import {auth} from './auth'
 
@@ -27,6 +28,7 @@ const router = new Router({
     { path: '/login', name: 'login', component: Login },
     { path: '/activate', name: 'activate', component: ActivateAccount },
     { path: '/dashboard', name: 'dashboard', component: Dashboard, meta: { requiresAuth: true } },
+    { path: '/nodes', name: 'nodes', component: Nodes, meta: { requiresAuth: true } },
     { path: '/experiment', name: 'experiment', component: Experiment, meta: { requiresAuth: true } },
     { path: '/resources', name: 'resources', component: Resources, meta: { requiresAuth: true } },
     { path: '/resources/monitoring/new', name: 'newMonitoring', component: Monitoring, meta: { requiresAuth: true } },
