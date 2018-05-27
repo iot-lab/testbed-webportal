@@ -131,12 +131,12 @@
                 <button class="btn btn-success" @click="addNodes">Add to experiment</button>
               </div>
               <p class="mt-2 mb-2 font-size-sm">
-                <a href="" data-toggle="collapse" href="#collapseMap" aria-expanded="false" aria-controls="collapseMap">
+                <a xdata-toggle="collapse" href="#collapseMap" aria-expanded="false" aria-controls="collapseMap" @click.prevent="showMap = !showMap">
                   <i class="fa fa-map-o fa-fw fa-lg" aria-hidden="true"></i> View/select nodes on map <i class="fa fa-caret-down" aria-hidden="true"></i>
                 </a> 
               </p>
-              <div class="collapse" id="collapseMap">
-                <map-3d :nodes="filteredNodes" v-model="currentNodes" :selectedNodes="selectedNodesForSite" @selectSite="(site) => filterSite = site"></map-3d>
+              <div xclass="collapse" id="collapseMap" v-show="showMap">
+                <map-3d :nodes="filteredNodes" v-model="currentNodes" :selectedNodes="selectedNodesForSite" :shows="showMap" @selectSite="(site) => filterSite = site"></map-3d>
               </div>
             </div>
             <!-- Select By ID -->
@@ -330,6 +330,7 @@ export default {
       filterSite: 'all',
       filterArchi: 'all',
       filterMobile: 'all',
+      showMap: false,
       propMobile: false,
       firmwareFiles: [{name: undefined}],
       scriptFile: {name: undefined},
@@ -369,6 +370,14 @@ export default {
     $('[data-toggle="popover"]').popover({
       trigger: 'focus',
       html: true,
+    })
+    $('#collapseMap').on('shown.bs.collapse', function () {
+      this.showMap = true
+      console.log('show', this.showMap)
+    })
+    $('#collapseMap').on('hidden.bs.collapse', function () {
+      this.showMap = false
+      console.log('show', this.showMap)
     })
   },
 

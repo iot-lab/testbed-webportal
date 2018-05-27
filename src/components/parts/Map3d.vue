@@ -39,6 +39,11 @@ export default {
       type: Array,
       default: [],
     },
+    shows: {
+      // Start/stop rendering when map is shown/hidden
+      type: Boolean,
+      default: true,
+    },
   },
 
   data () {
@@ -67,8 +72,11 @@ export default {
       } else {
         $('#map3d').show()
         $('#nodeInfo').show()
-        loadNodes(this.nodes)
-        init3d()
+        if (this.shows) {
+          console.log(this.shows)
+          loadNodes(this.nodes)
+          init3d()
+        }
       }
     },
     selectedNodes: function (nodes) {
@@ -76,6 +84,13 @@ export default {
     },
     value: function (value) {
       setSelectedNodes(value)
+    },
+    shows: function (shows) {
+      console.log('shows', shows)
+      if (shows) {
+        loadNodes(this.nodes)
+        init3d()
+      }
     },
   },
 
