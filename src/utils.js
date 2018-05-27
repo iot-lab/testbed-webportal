@@ -43,3 +43,13 @@ export const replaceAll = function (str, search, replacement) {
   // could be done with a RegExp paying attention to escape chars, but this solution is not bad in performance
   return str.split(search).join(replacement)
 }
+
+// Download JSON object as file in the browser
+export const downloadObjectAsJson = function (exportObj, exportName) {
+  var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportObj))
+  var downloadAnchorNode = document.createElement('a')
+  downloadAnchorNode.setAttribute('href', dataStr)
+  downloadAnchorNode.setAttribute('download', exportName + '.json')
+  downloadAnchorNode.click()
+  downloadAnchorNode.remove()
+}
