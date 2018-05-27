@@ -115,6 +115,14 @@ export const iotlab = {
     })
   },
 
+  async getUserMailingList () {
+    return await iotlab.api.get('/user/mailing_list').then(resp => resp.data)
+  },
+
+  async setUserMailingList (subscription) {
+    return await iotlab.api.put('/user/mailing_list', subscription)
+  },
+
   // EXPERIMENT API
 
   async getUserExperimentsCount () {
