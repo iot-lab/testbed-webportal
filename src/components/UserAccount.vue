@@ -31,12 +31,25 @@
             <p class="mb-4">Your username cannot be modified.</p>
             <h5><i class="fa fa-fw fa-unlock-alt" aria-hidden="true"></i> Change your password</h5>
             <div class="row">
-              <form class="" @submit.prevent="changePassword" class="col-md-6"> 
+              <form class="" @submit.prevent="changePassword" class="col-md-5"> 
                 <input v-model="pwd.old" type="password" placeholder="Current password" class="form-control" style="margin-top: 8px;" required>
-                <input v-model="pwd.new" type="password" placeholder="New password" class="form-control" style="margin-top: 8px;" required>
+                <input v-model="pwd.new" type="password" placeholder="New password" class="form-control" style="margin-top: 8px;" required @focus.once="showPolicy">
                 <input v-model="pwd.confirm" type="password" placeholder="Confirm password" class="form-control" style="margin-top: 8px;" required>
                 <button class="btn btn-success" type="submit" style="margin-top: 10px;">Change Password</button>
-              </form>            
+              </form>
+              <div class="col-md-6">
+                <div id="policy" class="card mt-2 border-danger text-danger" style="display: none;">
+                  <div class="card-body"><h6>Password Policy</h6>
+                    <ul class="pl-3 mb-0">
+                      <li>one upper case letter [A-Z]</li>
+                      <li>three lower case letters [a-z]</li>
+                      <li>one digit [0-9]</li>
+                      <li>one special character [!@#$%^&*_=+-/]</li>
+                      <li>minimum length of eight characters</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -87,6 +100,7 @@
 import UserForm from '@/components/parts/UserForm'
 import {iotlab} from '@/rest'
 import {auth} from '@/auth'
+import $ from 'jquery'
 
 export default {
   name: 'UserAccount',
@@ -135,7 +149,7 @@ export default {
         this.$notify({text: 'Password successfully changed', type: 'success'})
       } catch (err) {
         this.pwd = {}
-        this.$notify({text: 'Failed to change password', type: 'error'})
+        this.$notify({title: 'Failed to change password', text: err.response.data.message, type: 'error', duration: 5000})
       }
     },
     async saveKeys () {
@@ -153,6 +167,9 @@ export default {
     delKey (index) {
       this.keys.splice(index, 1)
       this.activeKey = Math.min(this.activeKey, this.keys.length - 1)
+    },
+    showPolicy () {
+      $('#policy').fadeIn()
     },
   },
 }
