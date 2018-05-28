@@ -33,15 +33,10 @@
         <span v-for="site in sites" class="badge badge-pill" :class="{'badge-primary': currentSite === site, 'badge-secondary': currentSite !== site}" style="margin-right: 4px; cursor: pointer"
         @click="currentSite = site">{{site.site}}</span>
       </p>
-      <!-- <p v-if="stats.nodes">
-          <span class="badge badge-pill badge-success">{{stats.nodes.Alive}}</span> nodes available
-          <span class="badge badge-pill badge-warning">{{stats.nodes.Busy}}</span> busy
-          <span class="badge badge-pill badge-danger">{{stats.nodes.Unavailable}}</span> unavailable
-      </p> -->
-      <p v-if="resources">
+      <p v-if="nodes">
         <span class="badge badge-pill badge-success">{{getNodesCount(currentSite, ['Alive'])}}</span> nodes available
         <span class="badge badge-pill badge-warning">{{getNodesCount(currentSite, ['Busy'])}}</span> busy
-        <span class="badge badge-pill badge-danger">{{getNodesCount(currentSite, ['Absent','Suspected'])}}</span> unavailable
+        <span class="badge badge-pill badge-danger">{{getNodesCount(currentSite, ['Absent','Suspected','Dead'])}}</span> unavailable
       </p>
       <p v-else>
         <i class="fa fa-spinner fa-spin fa-fw"></i>
@@ -70,9 +65,8 @@ export default {
   data () {
     return {
       total: {},
-      // stats: {},
-      resources: [],
       sites: [],
+      nodes: [],
       experiments: [],
       currentSite: 'all',
       auth: auth,
@@ -83,9 +77,8 @@ export default {
 
   created () {
     this.updateTotal()
-    // iotlab.getStats().then(data => { this.stats = data })
     iotlab.getSites().then(data => { this.sites = data })
-    iotlab.getSiteResources().then(data => { this.resources = data })
+    iotlab.getNodes().then(data => { this.nodes = data })
   },
 
   async mounted () {
@@ -107,7 +100,7 @@ export default {
     },
     getNodesCount (site, stateList) {
       let siteList = (site === 'all') ? this.sites.map(key => key.site) : [site.site]
-      return this.resources.filter(node => siteList.includes(node.site)).filter(node => stateList.includes(node.state)).length
+      return this.nodes.filter(node => siteList.includes(node.site)).filter(node => stateList.includes(node.state)).length
     },
   },
 
