@@ -242,17 +242,6 @@ export const iotlab = {
   async deleteMonitoringProfile (name) {
     return await iotlab.api.delete(`/monitoring/${name}`)
   },
-
-  // API V1
-
-  async getStats () {
-    return await iotlab.apiv1.get('/stats').then(resp => resp.data)
-  },
-
-  async getSiteResources () {
-    return await iotlab.apiv1.get('/experiments?resources').then(resp => resp.data.items)
-  },
-
 }
 
 // GET /experiments?state(Running,Terminated),limit(500),offset(0)  (user:current)
