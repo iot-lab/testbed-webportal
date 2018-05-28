@@ -94,7 +94,6 @@ export default {
 }
 .navbar-onelab.navbar-light .navbar-nav .nav-link {
   text-transform: uppercase;
-  font-weight: bold;
   color: #4480ca;
   font-family: open_sansbold;
   font-size: 10pt;
