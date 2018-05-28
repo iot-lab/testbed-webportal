@@ -86,9 +86,14 @@
           </div>
           <div class="tab-pane fade" id="list-mailing" role="tabpanel" aria-labelledby="list-mailing-list">
             <h5 class="mb-3"><i class="fa fa-envelope-o" aria-hidden="true"></i> Mailing list subscription</h5>
-            <p>You can manage your subscription to the mailing list for FIT IoT-LAB users from this page:<br>
-              <a href="https://lists.gforge.inria.fr/mailman/listinfo/senslab-users">https://lists.gforge.inria.fr/mailman/listinfo/senslab-users</a>
-            </p>
+            <template v-if="mailinglist.subscription">
+              <p>You are currently <i>subscribed</i> to the mailing list for FIT IoT-LAB users.</p>
+              <a href="" class="btn btn-danger" @click.prevent="subscribe(false)">Unsubscribe</a>              
+            </template>
+            <template v-else>
+              <p>You are currently <i><b>not</b> subscribed</i> to the mailing list for FIT IoT-LAB users.</p>
+              <a href="" class="btn btn-success" @click.prevent="subscribe(true)">Subscribe</a>          
+            </template>
           </div>
         </div>
       </div>
@@ -113,6 +118,9 @@ export default {
       pwd: {},
       auth: auth,
       activeKey: 0,
+      mailinglist: {
+        subscription: true,
+      },
     }
   },
 
@@ -126,6 +134,7 @@ export default {
           })
         }
       })
+    iotlab.getUserMailingList().then(data => { this.mailinglist = data })
   },
 
   methods: {
@@ -167,6 +176,17 @@ export default {
     delKey (index) {
       this.keys.splice(index, 1)
       this.activeKey = Math.min(this.activeKey, this.keys.length - 1)
+    },
+    async subscribe (bool) {
+      this.mailinglist = {
+        subscription: bool,
+      }
+      try {
+        await iotlab.setUserMailingList(this.mailinglist)
+        this.$notify({text: `${bool ? 'Subscribed' : 'Unsubscribed'} to user mailing list`, type: 'success'})
+      } catch (err) {
+        this.$notify({text: 'An error occured', type: 'error'})
+      }
     },
     showPolicy () {
       $('#policy').fadeIn()
