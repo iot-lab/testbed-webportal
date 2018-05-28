@@ -50,6 +50,7 @@ export const downloadObjectAsJson = function (exportObj, exportName) {
   var downloadAnchorNode = document.createElement('a')
   downloadAnchorNode.setAttribute('href', dataStr)
   downloadAnchorNode.setAttribute('download', exportName + '.json')
+  document.body.appendChild(downloadAnchorNode)
   downloadAnchorNode.click()
   downloadAnchorNode.remove()
 }
