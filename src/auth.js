@@ -14,7 +14,7 @@ export const auth = {
       password: password,
     }))
 
-    await iotlab.getUserInfo(username)
+    await iotlab.getUserInfo()
     .then(user => {
       this.loggedIn = true
       this.username = username
