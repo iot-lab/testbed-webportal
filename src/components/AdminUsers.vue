@@ -28,11 +28,20 @@
       </div>
       <div class="col-md-8 text-right align-self-end mb-4">
         <router-link :to="{name:'addUsers'}" class="btn btn-success"><i class="fa fa-user-plus"></i> Add Users</router-link>
+        <div class="dropdown d-inline-block">
+          <button class="btn dropdown-toggle cursor" type="button" id="actionMenuBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-wrench text-dark"></i> Actions on {{selectedUsers.length || 'selected'}} users
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="actionMenuBtn">
+            <a class="dropdown-item text-danger" href="#" @click.prevent="deleteSelectedUsers"><i class="fa fa-fw fa-trash"></i> Delete users</a>
+          </div>
+        </div>
       </div>
     </div>
     <table class="table table-striped table-sm">
       <thead>
         <tr>
+          <th class="header" width="15px"><input type="checkbox" @change="toggleSelectedUsers" v-model="allSelected"></th>
           <th class="header headerSortDown" aria-sort="ascending">Login</th>
           <th class="header">First name</th>
           <th class="header">Last name</th>
@@ -45,6 +54,7 @@
       </thead>
       <tbody>
         <tr v-for="(user, i) in users">
+          <td><input type="checkbox" :value="user" v-model="selectedUsers" @click="checkUncheckAll"></td>
           <td>{{user.login}}</td>
           <td>{{user.firstName}}</td>
           <td>{{user.lastName}}</td>
@@ -82,8 +92,7 @@
                 <i class="fa fa-fw fa-envelope"></i>
               </a>
               <a href="" class="btn btn-sm border-0 btn-outline-danger" v-tooltip="'Reset password'" @click.prevent="resetPassword(user)">
-                <i class="fa fa-fw fa-unlock-alt"></i>
-              </a>
+                <i class="fa fa-fw fa-unlock-alt"></i>              </a>
               <a href="" class="btn btn-sm border-0 btn-outline-danger" v-tooltip="'Delete'" @click.prevent="deleteUser(user)">
                 <i class="fa fa-fw fa-trash"></i>
               </a>
@@ -148,8 +157,9 @@
 <script>
 import UserForm from '@/components/parts/UserForm'
 import EmailForm from '@/components/parts/EmailForm'
-import {iotlab} from '@/rest'
-import {auth} from '@/auth'
+import { iotlab } from '@/rest'
+import { auth } from '@/auth'
+import { sleep } from '@/utils'
 import $ from 'jquery'
 
 export default {
@@ -164,12 +174,20 @@ export default {
       auth: auth,
       pattern: '',
       show: 'pending',
+      selectedUsers: [],
+      allSelected: false,
     }
   },
 
   async created () {
     this.pattern = this.$route.query.search
     this.search()
+    this.$nextTick(function () {
+      $('[data-toggle="popover"]').popover({
+        trigger: 'focus',
+        html: true,
+      })
+    })
   },
 
   async beforeUpdate () {
@@ -265,6 +283,43 @@ export default {
     },
     hideTooltip () {
       $('.tooltip').fadeOut()
+    },
+    toggleSelectedUsers () {
+      if (this.selectedUsers.length === this.users.length) {
+        this.selectedUsers = []
+      } else {
+        this.selectedUsers = this.users
+      }
+    },
+    checkUncheckAll () {
+      this.$nextTick(function () {
+        this.allSelected = this.selectedUsers.length === this.users.length
+      })
+    },
+    async deleteSelectedUsers () {
+      if (this.selectedUsers.length === 0) {
+        this.$notify({text: `No user selected`, type: 'warning'})
+        return
+      }
+      if (!confirm(`Delete ${this.selectedUsers.length} users. Are you sure?`)) return
+      let count = 0
+      let deleted = 0
+      this.selectedUsers.forEach(async user => {
+        try {
+          await iotlab.deleteUser(user.login)
+          this.users = this.users.filter(item => item.login !== user.login)
+          count += 1
+          deleted += 1
+        } catch (err) {
+          this.$notify({text: `Delete user <b>${user.login}</b> failed`, type: 'error'})
+          count += 1
+        }
+      })
+      // wait for all requests to complete
+      while (count < this.selectedUsers.length) {
+        await sleep(50)
+      }
+      this.$notify({text: `${deleted} users deleted`, type: 'success'})
     },
   },
 }
