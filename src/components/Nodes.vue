@@ -1,11 +1,16 @@
 <template>
 <div class="container mt-3">
-  <p class="float-right mt-2 mb-4" v-if="isAdmin">
-    <span class="d-block h5 text-right"><i class="fa fa-lock"></i> Admin</span>
-    <a class="btn btn-warning" href="" @click.prevent="updateNodesProperties">Update nodes</a>
-  </p>
-  
-  <h2>IoT-LAB nodes <button class="btn btn-light text-dark ml-2" @click="downloadJson" v-tooltip:right="'Download all nodes (JSON)'"><i class="fa fa-download"></i></button></h2>
+  <div class="float-right mt-1 mb-4">
+    <div class="dropdown d-inline-block ">
+      <button class="btn btn-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-fw fa-download"></i> Download</button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="#" @click.prevent="downloadJson">IoT-LAB nodes <span class="badge badge-pill badge-info">JSON</span></a>
+        <a class="dropdown-item" href="#" @click.prevent="downloadCsv">IoT-LAB nodes <span class="badge badge-pill badge-info">CSV</span></a>
+      </div>
+    </div>
+    <button v-if="isAdmin" class="btn btn-warning " @click="updateNodesProperties"><i class="fa fa-lock"></i> Update properties</button>
+  </div>
+  <h2>IoT-LAB nodes</h2>
   <p class="lead mb-0">Sites</p>
   <p class="mb-2" v-if="sites">
     <span class="badge badge-pill" :class="{'badge-primary': currentSite === 'all', 'badge-secondary': currentSite !== 'all'}" @click="currentSite = 'all'" style="cursor: pointer">{{sites.length}} sites</span>
@@ -24,7 +29,7 @@
   <p class="mb-2" v-if="nodes">
     <span class="cursor badge badge-pill" :class="(nodeFilter === null) ? 'badge-primary' : 'badge-secondary'" @click="nodeFilter = null">{{getNodes().length}} nodes</span>
     <span class="cursor badge badge-pill" :class="(nodeFilter === nodeFilters.alive) ? 'badge-primary' : 'badge-success'" @click="nodeFilter = nodeFilters.alive" v-if="getNodes(['Alive']).length">available {{getNodes(['Alive']).length}}</span>
-    <span class="cursor badge badge-pill" :class="(nodeFilter === nodeFilters.busy) ? 'badge-primary' : 'badge-warning'" @click="nodeFilter = nodeFilters.busy" v-if="getNodes(['Busy']).length">busy {{getNodes(['Busy']).length}}</span> 
+    <span class="cursor badge badge-pill" :class="(nodeFilter === nodeFilters.busy) ? 'badge-primary' : 'badge-warning'" @click="nodeFilter = nodeFilters.busy" v-if="getNodes(['Busy']).length">busy {{getNodes(['Busy']).length}}</span>
     <span class="cursor badge badge-pill" :class="(nodeFilter === nodeFilters.unavailable) ? 'badge-primary' : 'badge-danger'" @click="nodeFilter = nodeFilters.unavailable" v-if="getNodes(['Absent','Suspected']).length">unavailable {{getNodes(['Absent','Suspected']).length}}</span>
     <span class="cursor badge badge-pill" :class="(nodeFilter === nodeFilters.dead) ? 'badge-primary' : 'badge-dark'" @click="nodeFilter = nodeFilters.dead" v-if="getNodes(['Dead']).length">dead {{getNodes(['Dead']).length}}</span>
     <span class="cursor badge badge-pill" :class="(nodeFilter === nodeFilters.mobile) ? 'badge-primary' : 'badge-info'" @click="nodeFilter = nodeFilters.mobile" v-if="getNodes().filter(node => node.mobile).length">mobile {{getNodes().filter(node => node.mobile).length}}</span>
@@ -79,8 +84,7 @@
 <script>
 import { iotlab } from '@/rest'
 import { auth } from '@/auth'
-import { downloadObjectAsJson } from '@/utils'
-import json2csv from 'json2csv'
+import { downloadObjectAsJson, downloadObjectAsCsv } from '@/utils'
 
 export default {
   name: 'Nodes',
@@ -134,8 +138,13 @@ export default {
 
   methods: {
     async downloadJson () {
-      console.log(json2csv.parse(await iotlab.getNodes()))
-      downloadObjectAsJson(await iotlab.getNodes(), 'iotlab-nodes')
+      let nodes = await iotlab.getNodes()
+      downloadObjectAsJson(nodes, 'iotlab-nodes')
+    },
+
+    async downloadCsv () {
+      let nodes = await iotlab.getNodes()
+      downloadObjectAsCsv(nodes, 'iotlab-nodes', {fields: Object.keys(nodes[0]).sort()})
     },
 
     getNodes (stateList = null) {
@@ -169,7 +178,7 @@ export default {
     },
 
     async updateNodesProperties () {
-      if (!confirm('This can take a while. Are you sure?')) return
+      if (!confirm('Update node properties can take a while. Are you sure?')) return
       try {
         await iotlab.updateNodesProperties()
         this.$notify({text: 'Nodes properties updated', type: 'success'})
