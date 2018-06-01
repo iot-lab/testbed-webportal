@@ -37,7 +37,7 @@
       <label class="mt-2 text-muted font-italic">Showing {{filteredNodes.length}} nodes</label>
     </div>
     <div class="col-md-4">
-      <input type="text" class="form-control mb-3" placeholder="Search hostname" v-model="search">
+      <input type="text" class="form-control mb-3" placeholder="Search hostname or uid" v-model="search">
     </div>
   </div>
   <table class="table table-striped table-sm" v-if="nodes.length">
@@ -48,6 +48,7 @@
         <th class="cursor" title="sort by archi" @click="sortBy(node => node.archi)">Archi <span class="text-muted font-weight-normal">(radio)</span></th>
         <th class="cursor" title="sort by site" @click="sortBy(node => node.site)">Site</th>
         <th class="cursor" title="sort by mobility" @click="sortBy(node => node.mobility_type, reverse = true)">Mobility</th>
+        <th class="cursor" title="sort by uid" @click="sortBy(node => node.uid)">UID</th>
         <th class="cursor" title="sort by X" @click="sortBy(node => node.x, reverse = true)">X</th>
         <th class="cursor" title="sort by Y" @click="sortBy(node => node.y, reverse = true)">Y</th>
         <th class="cursor" title="sort by Z" @click="sortBy(node => node.z, reverse = true)">Z</th>
@@ -63,6 +64,7 @@
         <td class="text-capitalize">{{node.site}}</td>
         <td v-if="node.mobile">Yes <span class="text-muted">({{node.mobility_type}})</span></td>
         <td v-else></td>
+        <td>{{node.uid}}</td>
         <td>{{node.x}}</td>
         <td>{{node.y}}</td>
         <td>{{node.z}}</td>
@@ -78,6 +80,7 @@
 import { iotlab } from '@/rest'
 import { auth } from '@/auth'
 import { downloadObjectAsJson } from '@/utils'
+import json2csv from 'json2csv'
 
 export default {
   name: 'Nodes',
@@ -121,7 +124,7 @@ export default {
     },
     filteredNodes () {
       let nodes = this.getNodes()
-      if (this.search) nodes = nodes.filter(node => node.network_address.includes(this.search))
+      if (this.search) nodes = nodes.filter(node => node.network_address.includes(this.search) || node.uid.includes(this.search))
       if (this.nodeFilter) nodes = nodes.filter(this.nodeFilter)
       if (this.currentSite !== 'all') nodes = nodes.filter(node => node.site === this.currentSite.site)
       if (this.currentArchi !== 'all') nodes = nodes.filter(node => node.archi === this.currentArchi)
@@ -131,6 +134,7 @@ export default {
 
   methods: {
     async downloadJson () {
+      console.log(json2csv.parse(await iotlab.getNodes()))
       downloadObjectAsJson(await iotlab.getNodes(), 'iotlab-nodes')
     },
 
