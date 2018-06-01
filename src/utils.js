@@ -1,3 +1,5 @@
+import json2csv from 'json2csv'
+
 // Sleep function (in millisecond)
 // e.g. await sleep(1000)
 export const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
@@ -44,12 +46,23 @@ export const replaceAll = function (str, search, replacement) {
   return str.split(search).join(replacement)
 }
 
-// Download JSON object as file in the browser
+// Download JS object as JSON file in the browser
 export const downloadObjectAsJson = function (exportObj, exportName) {
   var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportObj))
   var downloadAnchorNode = document.createElement('a')
   downloadAnchorNode.setAttribute('href', dataStr)
   downloadAnchorNode.setAttribute('download', exportName + '.json')
+  document.body.appendChild(downloadAnchorNode)
+  downloadAnchorNode.click()
+  downloadAnchorNode.remove()
+}
+
+// Download JS object as CSV file in the browser
+export const downloadObjectAsCsv = function (exportObj, exportName, opts) {
+  var dataStr = 'data:text/csv;charset=utf-8,' + encodeURIComponent(json2csv.parse(exportObj, opts))
+  var downloadAnchorNode = document.createElement('a')
+  downloadAnchorNode.setAttribute('href', dataStr)
+  downloadAnchorNode.setAttribute('download', exportName + '.csv')
   document.body.appendChild(downloadAnchorNode)
   downloadAnchorNode.click()
   downloadAnchorNode.remove()
