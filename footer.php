@@ -9,6 +9,7 @@
             <div class="footer-text col-sm-9">
                 <a href="/what-is-iot-lab/">WHAT IS IOT-LAB?</a> 
                 <a href="/about-us/">ABOUT US</a>
+                <a href="https://github.com/iot-lab/iot-lab/issues">SUPPORT</a>
                 <a href="mailto:admin@iot-lab.info">CONTACT US</a> &nbsp;
                 Copyright &copy; FIT IoT-LAB
             </div>
