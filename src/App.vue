@@ -37,7 +37,7 @@
             </a>
           </router-link>
           <router-link tag="li" :to="{name:'account'}" active-class="active" v-if="auth.loggedIn">
-            <a class="nav-link" v-tooltip:bottom="'Account'">
+            <a class="nav-link" v-tooltip:bottom.html="`Account <b>${auth.username}</b>`">
               <i class="fa fa-lg fa-fw fa-user" aria-label="Account"></i>
             </a>
           </router-link>

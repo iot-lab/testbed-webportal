@@ -8,6 +8,7 @@ Vue.directive('tooltip', function (el, binding) {
     title: binding.value,
     placement: binding.arg,
     trigger: 'hover',
+    html: binding.modifiers.html || false,
     delay: 400,
   })
 })
