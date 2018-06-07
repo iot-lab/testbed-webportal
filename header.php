@@ -71,13 +71,9 @@ if (isset($_SESSION['is_auth']) && $_SESSION['is_auth'] && !$is_activity) $body_
 
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown <?php echo($is_activity ? 'active' : ''); ?>">
-                    <a href="./stats.php" title="Testbed activity" data-toggle="dropdown" data-hover="dropdown"><span
-                            class="glyphicon glyphicon-info"></span> Activity <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li id="stats"><a href="./stats.php">Statistics</a></li>
-                        <li id="monika"><a href="./monika.php">View nodes status</a></li>
-                        <li id="drawgantt"><a href="./drawgantt.php">View gantt chart</a></li>
-                    </ul>
+                    <a href="./drawgantt.php" title="Testbed activity">
+                        <span class="glyphicon glyphicon-calendar"></span> Activity
+                    </a>
                 </li>
                 <?php if (isset($_SESSION['is_auth']) && $_SESSION['is_auth']) { ?>
                     <li class="dropdown <?php echo($is_activity ? '' : 'active'); ?>">
