@@ -48,7 +48,7 @@
           <th class="header">Email</th>
           <th class="header">Created</th>
           <th class="header" width="50px">State</th>
-          <th class="header" width="50px">Role</th>
+          <th class="header">Groups</th>
           <th class="header" width="50px">Actions</th>
         </tr>
       </thead>
@@ -61,23 +61,25 @@
           <td><a :href="'mailto:' + user.email" class="email">{{user.email}}</a></td>
           <td :title="user.created | formatDateTime" style="white-space: nowrap">{{user.created | formatDate}}</td>
           <td>
-            <a href="" class="btn btn-sm" style="width: 70px"
-              :class="(user.status === 'pending') ? 'btn-primary' : 'btn-outline-primary'"
+            <a href="" class="badge"
+              :class="(user.status === 'pending') ? 'badge-dark' : 'badge-info'"
               v-tooltip:top="(user.status === 'pending') ? 'Activate' : 'Deactivate'"
               @click.prevent="toggleActive(user)">
               {{user.status}}
             </a>
           </td>
           <td>
-            <a href="" class="btn btn-sm" style="width: 70px"
-              :class="user.admin ? 'btn-warning' : 'btn-outline-primary'"
-              v-tooltip:top="user.admin ? ' User' : 'Admin'"
-              @click.prevent="toggleAdmin(user)">
-              {{user.admin ? 'Admin': 'User'}}
-            </a>
+            <span class="badge mr-1" v-for="group in [...user.groups].sort()" 
+              :class="group === 'admin' ? 'badge-warning' : 'badge-primary'">
+              {{group}}
+            </span>
           </td>
           <td>
             <div class="btn-group" role="group" aria-label="User actions">
+              <a href="" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Groups'"
+                data-toggle="modal" data-target=".edit-groups-modal" @click="currentUser = user; currentGroups = getCurrentGroups(user)">
+                <i class="fa fa-fw fa-user-circle"></i>
+              </a>
               <router-link :to="{name: 'userExperiments', params: {username: user.login}}"
                 class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Experiments'">
                 <i class="fa fa-fw fa-flask" @click="hideTooltip"></i>
@@ -91,8 +93,9 @@
                 data-toggle="modal" data-target=".email-user-modal" @click="currentUser = user; $refs.mail.$validator.clean()">
                 <i class="fa fa-fw fa-envelope"></i>
               </a>
-              <a href="" class="btn btn-sm border-0 btn-outline-danger" v-tooltip="'Reset password'" @click.prevent="resetPassword(user)">
-                <i class="fa fa-fw fa-unlock-alt"></i>              </a>
+              <a href="" class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Reset password'" @click.prevent="resetPassword(user)">
+                <i class="fa fa-fw fa-unlock-alt"></i>
+              </a>
               <a href="" class="btn btn-sm border-0 btn-outline-danger" v-tooltip="'Delete'" @click.prevent="deleteUser(user)">
                 <i class="fa fa-fw fa-trash"></i>
               </a>
@@ -106,6 +109,30 @@
       <p v-if="users && users.length == 1">{{users.length}} matching user</p>
       <p v-else-if="users && users.length > 1">{{users.length}} matching users</p>
       <p v-else>No matching user found</p>        
+    </div>
+
+    <div class="modal fade edit-groups-modal" tabindex="-1" role="dialog" aria-labelledby="editGroupsModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-light">
+            <h5 class="modal-title"><i class="fa fa-fw fa-pencil"></i> Edit user groups for <span class="text-primary">{{currentUser.login}}</span></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body pl-5 pt-3 pb-0">
+            <label class="custom-control custom-checkbox d-block" v-for="group in groups">
+              <input name="checkbox-monitor" type="checkbox" class="custom-control-input" v-model="currentGroups[group.name]">
+              <span class="custom-control-indicator"></span>
+              <span class="custom-control-description text-capitalize">{{group.name}}</span>
+            </label>
+          </div>
+          <div class="modal-footer border-0 dbg-light">
+            <button type="button" class="btn" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-success" @click.prevent="updateGroups">Save groups</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="modal fade edit-user-modal" tabindex="-1" role="dialog" aria-labelledby="editUserModal" aria-hidden="true">
@@ -169,8 +196,10 @@ export default {
 
   data () {
     return {
+      groups: [],
       users: [],
       currentUser: {},
+      currentGroups: {},
       auth: auth,
       pattern: '',
       show: 'pending',
@@ -188,6 +217,7 @@ export default {
         html: true,
       })
     })
+    this.groups = (await iotlab.getUserGroups()).sort((a, b) => a.name.localeCompare(b.name))
   },
 
   async beforeUpdate () {
@@ -198,6 +228,14 @@ export default {
   },
 
   methods: {
+    getCurrentGroups (user) {
+      const groups = {}
+      if (!user.groups) return {}
+      for (const g of this.groups) {
+        groups[g.name] = user.groups.includes(g.name)
+      }
+      return groups
+    },
     async showPending () {
       delete this.$route.query.search
       this.pattern = ''
@@ -229,6 +267,12 @@ export default {
         }
       }
     },
+    async updateGroups () {
+      const groups = Object.keys(this.currentGroups).filter(g => this.currentGroups[g] === true)
+      await iotlab.setUserGroups(this.currentUser.login, groups)
+      this.currentUser.groups = groups
+      $('.edit-groups-modal').modal('hide')
+    },
     async toggleActive (user) {
       if (user.status === 'pending') {
         if (confirm('Activate user?')) {
@@ -251,10 +295,11 @@ export default {
       }
     },
     async toggleAdmin (user) {
-      if (confirm(`${user.admin ? 'Remove' : 'Set'} role admin for user?`)) {
+      let groups = user.groups.includes('admin') ? user.groups.filter(g => g !== 'admin') : user.groups.concat(['admin'])
+      if (confirm(`${groups.includes('admin') ? 'Set' : 'Remove'} group admin for user ${user.login}?`)) {
         try {
-          await iotlab.setAdminRole(user.login, !user.admin)
-          user.admin = !user.admin
+          await iotlab.setUserGroups(user.login, groups)
+          user.groups = groups
         } catch (err) {
           this.$notify({text: 'An error occured', type: 'error'})
         }

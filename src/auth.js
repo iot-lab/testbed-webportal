@@ -18,7 +18,7 @@ export const auth = {
     .then(user => {
       this.loggedIn = true
       this.username = username
-      this.isAdmin = user.admin
+      this.isAdmin = user.groups.includes('admin')
       localStorage.setItem('loggedIn', this.loggedIn)
       localStorage.setItem('isAdmin', this.isAdmin)
       localStorage.setItem('username', this.username)

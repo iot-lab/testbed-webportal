@@ -103,8 +103,8 @@ export const iotlab = {
     return await iotlab.api.put(`/users/${login}`, {'status': 'pending'})
   },
 
-  async setAdminRole (login, bool) {
-    return await iotlab.api.put(`/users/${login}`, {'admin': bool})
+  async setUserGroups (login, groups) {
+    return await iotlab.api.put(`/users/${login}`, {'groups': groups})
   },
 
   async sendMail (recipients, subject, message) {
@@ -201,6 +201,10 @@ export const iotlab = {
   },
 
   // OTHER API
+
+  async getUserGroups () {
+    return await iotlab.api.get('/groups').then(resp => resp.data)
+  },
 
   async getSites () {
     return await iotlab.api.get('/sites').then(resp => resp.data.items)
