@@ -3,8 +3,8 @@ import {iotlab} from './rest'
 
 export const auth = {
 
-  loggedIn: localStorage.getItem('loggedIn') || false,
-  isAdmin: localStorage.getItem('isAdmin') || false,
+  loggedIn: localStorage.getItem('loggedIn') === 'true',
+  isAdmin: localStorage.getItem('isAdmin') === 'true',
   username: localStorage.getItem('username') || '',
 
   async doLogin (username, password) {
@@ -36,6 +36,7 @@ export const auth = {
     this.loggedIn = false
     localStorage.removeItem('loggedIn')
     localStorage.removeItem('apiAuth')
+    localStorage.removeItem('isAdmin')
   },
 }
 
