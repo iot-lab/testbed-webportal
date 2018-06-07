@@ -93,6 +93,8 @@ export default {
     async updateTotal () {
       // await sleep(2000)
       this.total = await iotlab.getUserExperimentsCount()
+      // hide spinner as we are not going to fetch terminated experiments
+      if (this.total.terminated === 0) this.spinner = false
     },
     refreshScheduled () {
       // increment started counter so that scheduled xp component can refresh itself
