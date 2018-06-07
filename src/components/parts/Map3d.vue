@@ -27,17 +27,17 @@ export default {
     nodes: {
       // Node list to display on the map for selection
       type: Array,
-      default: [],
+      default: () => [],
     },
     selectedNodes: {
       // Already selected nodes to highlight on the map
       type: Array,
-      default: [],
+      default: () => [],
     },
     value: {
       // Currently selected nodes value or v-model
       type: Array,
-      default: [],
+      default: () => [],
     },
     shows: {
       // Start/stop rendering when map is shown/hidden

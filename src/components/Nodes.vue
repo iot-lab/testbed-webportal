@@ -45,6 +45,7 @@
       <input type="text" class="form-control mb-3" placeholder="Search hostname or uid" v-model="search">
     </div>
   </div>
+  <map-3d :nodes="filteredNodes" @selectSite="(site) => currentSite = sites.find(s => s.site === site)"></map-3d>
   <table class="table table-striped table-sm" v-if="nodes.length">
     <thead>
       <tr>
@@ -82,12 +83,17 @@
 </template>
 
 <script>
+import Map3d from '@/components/parts/Map3d'
 import { iotlab } from '@/rest'
 import { auth } from '@/auth'
 import { downloadObjectAsJson, downloadObjectAsCsv } from '@/utils'
 
 export default {
   name: 'Nodes',
+
+  components: {
+    Map3d,
+  },
 
   data () {
     return {
