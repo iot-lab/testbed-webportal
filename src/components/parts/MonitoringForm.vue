@@ -236,7 +236,7 @@ export default {
         if (typeof profile.radio.channels === 'object') profile.radio.channels = [profile.radio.channels[0]]
         if (typeof profile.radio.channels === 'number') profile.radio.channels = [profile.radio.channels]
       }
-      if (profile.radio.channels.length < 2) delete profile.radio.num_per_channel
+      if (profile.radio.channels.length < 2) profile.radio.num_per_channel = 0
       if (!this.showConso) delete profile.consumption
       if (!this.showRadio) delete profile.radio
 
