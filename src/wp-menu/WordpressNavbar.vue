@@ -12,14 +12,8 @@
       <nav class="navbar-collapse collapse navbar-ex1-collapse" role="navigation">
         <div v-html="topmenu"></div>
         <ul class="nav navbar-nav ml-auto">
-          <li class="dropdown nav-item"> <a href="./stats.php" title="Testbed activity" data-toggle="dropdown"
-            data-hover="dropdown" class="nav-link dropdown-toggle">
-            <i class="fa fa-info-circle"></i> Activity</a>
-            <ul class="dropdown-menu">
-              <li id="stats"><a href="../testbed/stats.php">Statistics</a></li>
-              <li id="monika"><a href="../testbed/monika.php">View nodes status</a></li>
-              <li id="drawgantt"><a href="../testbed/drawgantt.php">View gantt chart</a></li>
-            </ul>
+          <li class="nav-item">
+            <a href="/testbed/drawgantt.php" title="Testbed Activity" class="nav-link"><i class="fa fa-fw fa-calendar"></i> Activity</a>
           </li>
           <li class="active nav-item">
             <a href="#" title="Testbed" class="nav-link"><i class="fa fa-wrench"></i> Testbed</a>
