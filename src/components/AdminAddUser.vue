@@ -69,7 +69,7 @@
                 <user-form :user="users" ref="users" :admin="true" :hidden="['firstName','lastName','email']"></user-form>
                 <div class="form-group">
                   <button class="btn btn-success" type="submit">Create accounts</button>
-                  <button class="btn btn-secondary" type="reset" @click="$refs.users.clean(); baseLogin = ''; $validator.clean()">Clear</button>
+                  <button class="btn btn-secondary" type="reset" @click="$refs.users.clean(); baseLogin = ''; $validator.reset()">Clear</button>
                 </div>
             </form>
             

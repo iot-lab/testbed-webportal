@@ -177,7 +177,7 @@ export default {
   methods: {
     clean (newUser = {}) {
       // clear errors
-      this.$validator.clean()
+      this.$validator.reset()
       this.dirty = {
         category: false,
         country: false,
