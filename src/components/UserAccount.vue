@@ -118,6 +118,9 @@ export default {
 
   created () {
     iotlab.getSSHkeys().then(data => { this.keys = data })
+      .catch(err => {
+        this.$notify({text: err.response.data.message || 'An error occured', type: 'error'})
+      })
     iotlab.getUserInfo().then(data => { this.user = data })
       .then(_ => {
         if (this.$route.query.validate !== undefined) {
@@ -125,6 +128,9 @@ export default {
             this.updateProfile()
           })
         }
+      })
+      .catch(err => {
+        this.$notify({text: err.response.data.message || 'An error occured', type: 'error'})
       })
   },
 
@@ -138,7 +144,7 @@ export default {
           await iotlab.setUserInfo(this.user)
           this.$notify({text: 'Profile updated', type: 'success'})
         } catch (err) {
-          this.$notify({text: 'An error occured', type: 'error'})
+          this.$notify({text: err.response.data.message || 'An error occured', type: 'error'})
         }
       }
     },
