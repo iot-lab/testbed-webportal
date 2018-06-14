@@ -199,9 +199,6 @@ export default {
 </script>
 
 <style scoped>
-.text-capitalize-first:first-letter {
-  text-transform: uppercase;
-}
 .badge {
   font-size: 80%;
 }

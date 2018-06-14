@@ -132,6 +132,9 @@ export default {
 </script>
 
 <style>
+.text-capitalize-first:first-letter {
+  text-transform: uppercase;
+}
 .cursor:hover {
     cursor: pointer;
 }

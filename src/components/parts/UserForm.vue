@@ -5,7 +5,7 @@
         <div class="form-group" v-if="!hidden.includes('firstName')">
           <label class="form-control-label">First name</label>
           <input placeholder="First name" v-model="user.firstName" name="firstname"
-            class="form-control" type="text"v-validate="'required'"
+            class="form-control" type="text" v-validate="'required'"
             :class="{'is-invalid': errors.has('firstname') }">
           <div class="invalid-feedback" v-show="errors.has('firstname')">
             {{ errors.first('firstname') }}
