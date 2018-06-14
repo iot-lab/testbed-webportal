@@ -95,7 +95,7 @@
       </template>
     </notifications>
 
-    <keep-alive include="NewExperiment,AdminUsers">
+    <keep-alive include="NewExperiment,AdminUsers,Dashboard">
       <router-view></router-view>
     </keep-alive>
   </div>

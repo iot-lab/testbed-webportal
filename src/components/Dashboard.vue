@@ -75,6 +75,16 @@ export default {
     }
   },
 
+  beforeRouteEnter (to, from, next) {
+    // refresh data when reentering the dashboard
+    next(vm => {
+      if (vm.sites.length === 0) return // do not refresh until initial render as be done in created()
+      vm.$notify({group: 'popup', clean: true})
+      vm.updateTotal()
+      iotlab.getNodes().then(data => { vm.nodes = data })
+    })
+  },
+
   created () {
     this.updateTotal()
     iotlab.getSites().then(data => { this.sites = data })
