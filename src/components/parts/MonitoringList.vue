@@ -11,7 +11,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="profile in profiles" v-if="filterByArchi(profile)">
+        <tr v-for="profile in store.profiles" v-if="filterByArchi(profile)">
           <td>
             <a href="#" @click.prevent="select(profile)">{{profile.profilename}}</a>
           </td>
@@ -30,7 +30,7 @@
             </template>
           </td>
         </tr>
-        <tr v-if="profiles.length === 0">
+        <tr v-if="store.profiles.length === 0">
           <td colspan="3" class="font-italic bg-light">
             <router-link :to="{name: 'newMonitoring'}" class="fsont-italic">create a monitoring profile</router-link>
           </td>
@@ -42,6 +42,7 @@
 
 <script>
 import { iotlab } from '@/rest'
+import store from '@/store'
 
 export default {
   name: 'MonitoringList',
@@ -56,18 +57,18 @@ export default {
 
   data () {
     return {
-      profiles: [],
+      store: store,
     }
   },
 
   async created () {
-    this.profiles = (await iotlab.getMonitoringProfiles()).sort((a, b) => a.profilename.localeCompare(b.profilename))
+    this.store.profiles = (await iotlab.getMonitoringProfiles()).sort((a, b) => a.profilename.localeCompare(b.profilename))
   },
 
   methods: {
     sortBy (func) {
       // sort by func() then by profile name
-      this.profiles = this.profiles.sort((a, b) => func(a) === func(b) ? a.profilename.localeCompare(b.profilename) : func(a).localeCompare(func(b)))
+      this.store.profiles = this.store.profiles.sort((a, b) => func(a) === func(b) ? a.profilename.localeCompare(b.profilename) : func(a).localeCompare(func(b)))
     },
     nodeArchi (profile) {
       return profile.nodearch.replace('custom', 'other')
