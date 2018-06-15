@@ -115,8 +115,12 @@ export default {
   },
 
   created () {
-    iotlab.getSitesDetails().then(data => { this.sites = data.sort((a, b) => a.site.localeCompare(b.site)) })
-    iotlab.getNodes().then(data => { this.nodes = data })
+    iotlab.getSitesDetails().then(data => { this.sites = data.sort((a, b) => a.site.localeCompare(b.site)) }).catch(err => {
+      this.$notify({text: err.response.data.message || 'Failed to fetch sites details', type: 'error'})
+    })
+    iotlab.getNodes().then(data => { this.nodes = data }).catch(err => {
+      this.$notify({text: err.response.data.message || 'Failed to fetch nodes', type: 'error'})
+    })
   },
 
   computed: {
