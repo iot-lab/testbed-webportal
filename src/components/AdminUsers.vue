@@ -2,49 +2,39 @@
   <div class="container mt-3">
 
     <h2>Users</h2>
-    <div class="row">
-      <div class="col-md-4 mb-4">
-        <div class="my-2">
-          <span class="lead mr-3">Show</span>                
-          <label class="custom-control custom-radio">
-            <input id="radioStacked1" name="radio-stacked" type="radio" class="custom-control-input" v-model="show" value="pending" @click="showPending">
-            <span class="custom-control-indicator"></span>
-            <span class="custom-control-description">Pending users</span>
-          </label>
-          <label class="custom-control custom-radio mr-0">
-            <input id="radioStacked2" name="radio-stacked" type="radio" class="custom-control-input" v-model="show" value="admin" @click="showAdmin">
-            <span class="custom-control-indicator"></span>
-            <span class="custom-control-description">Administrators</span>
-          </label>
-        </div>
-        <form @submit.prevent="search">
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search for users" v-model="pattern">
-            <div class="input-group-btn">
-              <button type="submit" class="btn btn-secondary" aria-label="Search"> <i class="fa fa-search"></i> </button>
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="col-md-8 text-right align-self-end mb-4">
-        <router-link :to="{name:'addUsers'}" class="btn btn-success"><i class="fa fa-user-plus"></i> Add Users</router-link>
-        <div class="dropdown d-inline-block">
-          <button class="btn dropdown-toggle cursor" type="button" id="actionMenuBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fa fa-wrench text-dark"></i> Actions on {{selectedUsers.length || 'selected'}} users
-          </button>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="actionMenuBtn">
-            <a class="dropdown-item text-danger" href="#" @click.prevent="deleteSelectedUsers"><i class="fa fa-fw fa-trash"></i> Delete users</a>
-          </div>
+    <form class="form-inline my-4" @submit.prevent="search">
+      <label class="lead mr-2">Show</label>
+      <select class="form-control custom-select mr-2" v-model="show" @change="showUsers">
+        <option value="" disabled>select user group</option>
+        <option value="pending">pending users</option>
+        <option v-for="group in store.groups" :value="group.name">{{group.name}}</option>
+      </select>
+      <div class="input-group mr-auto">
+        <input type="text" class="form-control" placeholder="search for users" v-model="searchPattern">
+        <div class="input-group-btn">
+          <button type="submit" class="btn btn-secondary" aria-label="Search"> <i class="fa fa-search"></i> </button>
         </div>
       </div>
-    </div>
+      <router-link :to="{name:'addUsers'}" class="btn btn-success mr-2"><i class="fa fa-user-plus"></i> Add Users</router-link>
+      <router-link :to="{name:'groups'}" class="btn btn-secondary mr-2"><i class="fa fa-cog"></i> Groups</router-link>
+      <div class="dropdown d-inline-block">
+        <button class="btn dropdown-toggle cursor" type="button" id="actionMenuBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-wrench text-dark"></i> Actions on {{selectedUsers.length || ''}} users
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="actionMenuBtn">
+          <a class="dropdown-item" href="#" @click.prevent="showGroupsModal('add')"><i class="fa fa-fw fa-user-plus"></i> Add groups</a>
+          <a class="dropdown-item" href="#" @click.prevent="showGroupsModal('remove')"><i class="fa fa-fw fa-user-times"></i> Remove groups</a>
+          <a class="dropdown-item text-danger" href="#" @click.prevent="deleteSelectedUsers"><i class="fa fa-fw fa-trash"></i> Delete users</a>
+        </div>
+      </div>
+    </form>
+
     <table class="table table-striped table-sm">
       <thead>
         <tr>
           <th class="header" width="15px"><input type="checkbox" @change="toggleSelectedUsers" v-model="allSelected"></th>
           <th class="header headerSortDown" aria-sort="ascending">Login</th>
-          <th class="header">First name</th>
-          <th class="header">Last name</th>
+          <th class="header">Name</th>
           <th class="header">Email</th>
           <th class="header">Created</th>
           <th class="header" width="50px">State</th>
@@ -55,9 +45,8 @@
       <tbody>
         <tr v-for="(user, i) in users">
           <td><input type="checkbox" :value="user" v-model="selectedUsers" @click="checkUncheckAll"></td>
-          <td>{{user.login}}</td>
-          <td>{{user.firstName}}</td>
-          <td>{{user.lastName}}</td>
+          <td @click="toggleUserSelected(user)">{{user.login}}</td>
+          <td>{{user.firstName}} {{user.lastName}} <i v-if="user.login === 'clochett'" class="fa fa-bell-o"></i></td>
           <td><a :href="'mailto:' + user.email" class="email">{{user.email}}</a></td>
           <td :title="user.created | formatDateTime" style="white-space: nowrap">{{user.created | formatDate}}</td>
           <td>
@@ -90,7 +79,7 @@
                 <i class="fa fa-fw fa-pencil"></i>
               </a>
               <a href="" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Email'"
-                data-toggle="modal" data-target=".email-user-modal" @click="currentUser = user; $refs.mail.$validator.clean()">
+                data-toggle="modal" data-target=".email-user-modal" @click="currentUser = user; $refs.mail.$validator.reset()">
                 <i class="fa fa-fw fa-envelope"></i>
               </a>
               <a href="" class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Reset password'" @click.prevent="resetPassword(user)">
@@ -106,34 +95,46 @@
     </table>
 
     <div class="text-muted">
-      <p v-if="users && users.length == 1">{{users.length}} matching user</p>
-      <p v-else-if="users && users.length > 1">{{users.length}} matching users</p>
+      <p v-if="!show && !searchPattern">Select a search criterion</p>
+      <p v-else-if="users.length === 1">{{users.length}} matching user</p>
+      <p v-else-if="users.length > 1">{{users.length}} matching users</p>
       <p v-else>No matching user found</p>        
     </div>
 
-    <div class="modal fade edit-groups-modal" tabindex="-1" role="dialog" aria-labelledby="editGroupsModal" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header bg-light">
-            <h5 class="modal-title"><i class="fa fa-fw fa-pencil"></i> Edit user groups for <span class="text-primary">{{currentUser.login}}</span></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body pl-5 pt-3 pb-0">
-            <label class="custom-control custom-checkbox d-block" v-for="group in groups">
-              <input name="checkbox-monitor" type="checkbox" class="custom-control-input" v-model="currentGroups[group.name]">
-              <span class="custom-control-indicator"></span>
-              <span class="custom-control-description text-capitalize">{{group.name}}</span>
-            </label>
-          </div>
-          <div class="modal-footer border-0 dbg-light">
-            <button type="button" class="btn" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-success" @click.prevent="updateGroups">Save groups</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <modal-dialog name="add-groups-modal" @save="setGroups('add')">
+      <template slot="title">
+        <i class="fa fa-fw fa-user-plus"></i> Add groups to <span class="text-primary">{{selectedUsers.length}} users</span>
+      </template>
+      <label class="custom-control custom-checkbox d-block" v-for="group in store.groups">
+        <input name="checkbox-monitor" type="checkbox" class="custom-control-input" v-model="currentGroups[group.name]">
+        <span class="custom-control-indicator"></span>
+        <span class="custom-control-description text-capitalize">{{group.name}}</span>
+      </label>
+      <template slot="action">Add groups</template>
+    </modal-dialog>
+
+    <modal-dialog name="remove-groups-modal" @save="setGroups('remove')">
+      <template slot="title">
+        <i class="fa fa-fw fa-user-plus"></i> Remove groups to <span class="text-primary">{{selectedUsers.length}} users</span>
+      </template>
+      <label class="custom-control custom-checkbox d-block" v-for="group in store.groups">
+        <input name="checkbox-monitor" type="checkbox" class="custom-control-input" v-model="currentGroups[group.name]">
+        <span class="custom-control-indicator"></span>
+        <span class="custom-control-description text-capitalize">{{group.name}}</span>
+      </label>
+      <template slot="action">Remove groups</template>
+    </modal-dialog>
+
+    <modal-dialog name="edit-groups-modal" @save="updateGroups">
+      <template slot="title">
+        <i class="fa fa-fw fa-pencil"></i> Edit user groups for <span class="text-primary">{{currentUser.login}}</span>
+      </template>
+      <label class="custom-control custom-checkbox d-block" v-for="group in store.groups">
+        <input name="checkbox-monitor" type="checkbox" class="custom-control-input" v-model="currentGroups[group.name]">
+        <span class="custom-control-indicator"></span>
+        <span class="custom-control-description text-capitalize">{{group.name}}</span>
+      </label>
+    </modal-dialog>
 
     <div class="modal fade edit-user-modal" tabindex="-1" role="dialog" aria-labelledby="editUserModal" aria-hidden="true">
       <div class="modal-dialog modal-lg">
@@ -170,7 +171,7 @@
           <div class="modal-body px-4 pt-3 pb-0">
             <email-form ref="mail" :to="currentUser.email + ', admin@iot-lab.info'"></email-form>
           </div>
-          <div class="modal-footer border-0 dbg-light">
+          <div class="modal-footer border-0">
             <button type="button" class="btn" data-dismiss="modal">Close</button>
             <button type="button" class="btn btn-success" @click.prevent="$refs.mail.send">Send</button>
           </div>
@@ -184,32 +185,34 @@
 <script>
 import UserForm from '@/components/parts/UserForm'
 import EmailForm from '@/components/parts/EmailForm'
+import ModalDialog from '@/components/parts/ModalDialog'
 import { iotlab } from '@/rest'
 import { auth } from '@/auth'
 import { sleep } from '@/utils'
+import store from '@/store'
 import $ from 'jquery'
 
 export default {
   name: 'AdminUsers',
 
-  components: {UserForm, EmailForm},
+  components: { UserForm, EmailForm, ModalDialog },
 
   data () {
     return {
-      groups: [],
+      store: store,
       users: [],
       currentUser: {},
       currentGroups: {},
       auth: auth,
-      pattern: '',
-      show: 'pending',
+      searchPattern: '',
+      show: '',
       selectedUsers: [],
       allSelected: false,
     }
   },
 
   async created () {
-    this.pattern = this.$route.query.search
+    this.searchPattern = this.$route.query.search
     this.search()
     this.$nextTick(function () {
       $('[data-toggle="popover"]').popover({
@@ -217,12 +220,16 @@ export default {
         html: true,
       })
     })
-    this.groups = (await iotlab.getUserGroups()).sort((a, b) => a.name.localeCompare(b.name))
+    try {
+      this.store.groups = (await iotlab.getUserGroups()).sort((a, b) => a.name.localeCompare(b.name))
+    } catch (err) {
+      this.$notify({text: err.response.data.message || 'Failed to fetch groups', type: 'error'})
+    }
   },
 
   async beforeUpdate () {
-    if (this.$route.query.search && this.$route.query.search !== this.pattern) {
-      this.pattern = this.$route.query.search
+    if (this.$route.query.search && this.$route.query.search !== this.searchPattern) {
+      this.searchPattern = this.$route.query.search
       this.search()
     }
   },
@@ -231,28 +238,26 @@ export default {
     getCurrentGroups (user) {
       const groups = {}
       if (!user.groups) return {}
-      for (const g of this.groups) {
+      for (const g of this.store.groups) {
         groups[g.name] = user.groups.includes(g.name)
       }
       return groups
     },
-    async showPending () {
+    async showUsers () {
       delete this.$route.query.search
-      this.pattern = ''
-      this.show = 'pending'
-      this.users = await iotlab.getUsers({status: 'pending'})
-    },
-    async showAdmin () {
-      delete this.$route.query.search
-      this.pattern = ''
-      this.show = 'admin'
-      this.users = await iotlab.getUsers({isAdmin: true})
+      this.searchPattern = ''
+      const filter = this.show === 'pending' ? {status: 'pending'} : {group: this.show}
+      this.users = await iotlab.getUsers(filter).catch(err => {
+        this.$notify({text: err.response.data.message || 'Failed to fetch users', type: 'error'})
+      })
     },
     async search () {
-      this.show = false
-      if (this.pattern) {
+      this.show = ''
+      if (this.searchPattern) {
         delete this.$route.query.search
-        this.users = await iotlab.getUsers({search: this.pattern})
+        this.users = await iotlab.getUsers({search: this.searchPattern}).catch(err => {
+          this.$notify({text: err.response.data.message || 'Failed to fetch users', type: 'error'})
+        })
       } else {
         this.users = []
       }
@@ -266,12 +271,6 @@ export default {
           this.$notify({text: 'An error occured', type: 'error'})
         }
       }
-    },
-    async updateGroups () {
-      const groups = Object.keys(this.currentGroups).filter(g => this.currentGroups[g] === true)
-      await iotlab.setUserGroups(this.currentUser.login, groups)
-      this.currentUser.groups = groups
-      $('.edit-groups-modal').modal('hide')
     },
     async toggleActive (user) {
       if (user.status === 'pending') {
@@ -291,17 +290,6 @@ export default {
           } catch (err) {
             this.$notify({text: 'An error occured', type: 'error'})
           }
-        }
-      }
-    },
-    async toggleAdmin (user) {
-      let groups = user.groups.includes('admin') ? user.groups.filter(g => g !== 'admin') : user.groups.concat(['admin'])
-      if (confirm(`${groups.includes('admin') ? 'Set' : 'Remove'} group admin for user ${user.login}?`)) {
-        try {
-          await iotlab.setUserGroups(user.login, groups)
-          user.groups = groups
-        } catch (err) {
-          this.$notify({text: 'An error occured', type: 'error'})
         }
       }
     },
@@ -336,6 +324,13 @@ export default {
         this.selectedUsers = this.users
       }
     },
+    toggleUserSelected (user) {
+      if (this.selectedUsers.includes(user)) {
+        this.selectedUsers = this.selectedUsers.filter(u => u !== user)
+      } else {
+        this.selectedUsers.push(user)
+      }
+    },
     checkUncheckAll () {
       this.$nextTick(function () {
         this.allSelected = this.selectedUsers.length === this.users.length
@@ -366,10 +361,45 @@ export default {
       }
       this.$notify({text: `${deleted} users deleted`, type: 'success'})
     },
+    showGroupsModal (op) {
+      if (this.selectedUsers.length === 0) {
+        this.$notify({text: `No user selected`, type: 'warning'})
+        return
+      }
+      this.currentUser = {}
+      this.currentGroups = {}
+      $(`.${op}-groups-modal`).modal('show')
+    },
+    setGroups (op) {
+      $(`.${op}-groups-modal`).modal('hide')
+      const groups = Object.keys(this.currentGroups).filter(g => this.currentGroups[g] === true)
+      let g
+      this.selectedUsers.forEach(async user => {
+        try {
+          g = op === 'add' ? [...new Set([...user.groups, ...groups])] : user.groups.filter(g => !groups.includes(g))
+          await iotlab.setUserGroups(user.login, g)
+          user.groups = g
+        } catch (err) {
+          this.$notify({text: `Set group failed for <b>${user.login}</b>`, type: 'error'})
+        }
+      })
+    },
+    async updateGroups () {
+      const groups = Object.keys(this.currentGroups).filter(g => this.currentGroups[g] === true)
+      try {
+        await iotlab.setUserGroups(this.currentUser.login, groups)
+        this.currentUser.groups = groups
+      } catch (err) {
+        this.$notify({text: `Set group failed for <b>${this.currentUser.login}</b>`, type: 'error'})
+      }
+      $('.edit-groups-modal').modal('hide')
+    },
   },
 }
 </script>
 
-<style>
-
+<style scoped>
+.badge {
+  font-size: 80%;
+}
 </style>

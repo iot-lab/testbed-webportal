@@ -65,13 +65,13 @@ export const iotlab = {
     return await iotlab.api.delete(`/user/keys/${id}`)
   },
 
-  async getUsers ({status, isAdmin, search} = {}) {
+  async getUsers ({status, group, search} = {}) {
     let params = {}
     if (status) {
       params.status = status
     }
-    if (isAdmin) {
-      params.isadmin = isAdmin
+    if (group) {
+      params.group = group
     }
     if (search) {
       params.search = search
@@ -200,11 +200,21 @@ export const iotlab = {
     return await iotlab.api.post(`/experiments/${id}/reload`, {}).then(resp => resp.data)
   },
 
-  // OTHER API
+  // USER GROUPS
 
   async getUserGroups () {
     return await iotlab.api.get('/groups').then(resp => resp.data)
   },
+
+  async createGroup (name) {
+    return await iotlab.api.post(`/groups`, {name: name})
+  },
+
+  async deleteGroup (group) {
+    return await iotlab.api.delete(`/groups/${group}`)
+  },
+
+  // OTHER API
 
   async getSites () {
     return await iotlab.api.get('/sites').then(resp => resp.data.items)

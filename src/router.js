@@ -5,6 +5,7 @@ import ResetPassword from '@/components/ResetPassword'
 import Signup from '@/components/Signup'
 import ActivateAccount from '@/components/ActivateAccount'
 import UserAccount from '@/components/UserAccount'
+import AdminGroups from '@/components/AdminGroups'
 import AdminUsers from '@/components/AdminUsers'
 import AdminAddUser from '@/components/AdminAddUser'
 import AdminExperiments from '@/components/AdminExperiments'
@@ -34,6 +35,7 @@ const router = new Router({
     { path: '/resources/monitoring/new', name: 'newMonitoring', component: Monitoring, meta: { requiresAuth: true } },
     { path: '/resources/monitoring/:name/edit', name: 'monitoring', component: Monitoring, props: true, meta: { requiresAuth: true } },
     { path: '/account', name: 'account', component: UserAccount, meta: { requiresAuth: true } },
+    { path: '/groups', name: 'groups', component: AdminGroups, meta: { requiresAdmin: true } },
     { path: '/users', name: 'users', component: AdminUsers, meta: { requiresAdmin: true } },
     { path: '/users/add', name: 'addUsers', component: AdminAddUser, meta: { requiresAdmin: true } },
     { path: '/users/:username/experiments', name: 'userExperiments', component: AdminExperiments, props: true, meta: { requiresAdmin: true } },
