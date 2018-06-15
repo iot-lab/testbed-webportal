@@ -14,7 +14,7 @@ import Experiment from '@/components/Experiment'
 import ExperimentDetails from '@/components/ExperimentDetails'
 import Dashboard from '@/components/Dashboard'
 import Nodes from '@/components/Nodes'
-import Map from '@/components/Map'
+import Drawgantt from '@/wp-menu/Drawgantt'
 import {auth} from './auth'
 
 Vue.use(Router)
@@ -22,7 +22,7 @@ Vue.use(Router)
 const router = new Router({
   routes: [
     { path: '/', redirect: '/dashboard' },
-    { path: '/map', name: 'map', component: Map },
+    { path: '/drawgantt', name: 'drawgantt', component: Drawgantt },
     { path: '/signup', name: 'signup', component: Signup },
     { path: '/reset', name: 'reset', component: ResetPassword },
     { path: '/login', name: 'login', component: Login },

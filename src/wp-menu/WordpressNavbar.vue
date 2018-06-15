@@ -12,11 +12,11 @@
       <nav class="navbar-collapse collapse navbar-ex1-collapse" role="navigation">
         <div v-html="topmenu"></div>
         <ul class="nav navbar-nav ml-auto">
-          <li class="nav-item">
-            <a href="/testbed/drawgantt.php" title="Testbed Activity" class="nav-link"><i class="fa fa-fw fa-calendar"></i> Activity</a>
+          <li class="nav-item" :class="{'active': $route.name === 'drawgantt'}">
+            <router-link :to="{name: 'drawgantt'}" title="Testbed Activity" class="nav-link"><i class="fa fa-fw fa-calendar"></i> Activity</router-link>
           </li>
-          <li class="active nav-item">
-            <a href="#" title="Testbed" class="nav-link"><i class="fa fa-wrench"></i> Testbed</a>
+          <li class="nav-item" :class="{'active': $route.name !== 'drawgantt'}">
+            <router-link :to="{name: 'dashboard'}" title="Testbed" class="nav-link"><i class="fa fa-wrench"></i> Testbed</router-link>
           </li>
         </ul>
       </nav>
