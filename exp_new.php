@@ -582,7 +582,7 @@ $("#btn_assoc").click(function () {
  
     // profile and firware are compatible ?
     //if (profileNodearch != null && fwNodearch != null && profileNodearch != fwNodearch) {
-    if (profileNodearch != null && fwNodearch != null && fwNodearch.indexOf(profileNodearch)==-1) {
+    if (profileNodearch != null && fwNodearch.length > 0 && fwNodearch.indexOf(profileNodearch)==-1) {
         alert("The profile and the firmware are not for the same architecture.");
         return false;
     }
