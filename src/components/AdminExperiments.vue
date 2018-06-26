@@ -62,6 +62,8 @@ export default {
   methods: {
     updateTotal () {
       iotlab.getAllExperimentsCount(this.username).then(data => { this.total = data })
+      // hide spinner as we are not going to fetch terminated experiments
+      if (this.total.terminated === 0) this.spinner = false
     },
     refreshScheduled () {
       // increment started counter so that scheduled xp component can refresh itself
