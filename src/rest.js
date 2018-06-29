@@ -29,8 +29,14 @@ export const iotlab = {
 
   // USERS API
 
-  async signup (user) {
-    await iotlab.api.post('/users', user)
+  async signup (user, nbUsers) {
+    if (nbUsers) {
+      // create multiple user accounts
+      await iotlab.api.post(`/users?nbusers=${nbUsers}`, user)
+    } else {
+      // create single user account
+      await iotlab.api.post('/users', user)
+    }
   },
 
   async activateAccount (hash) {

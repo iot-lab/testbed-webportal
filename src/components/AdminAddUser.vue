@@ -52,7 +52,7 @@
                       <label class="form-control-label">How many accounts?</label>
                       <div class="input-group">
                         <span class="input-group-btn">
-                          <button type="button" class="btn btn-danger" :disabled="qty<=1" @click="qty--">
+                          <button type="button" class="btn btn-danger" :disabled="qty<=2" @click="qty--">
                             <i class="fa fa-minus"></i>
                           </button>
                         </span>
@@ -144,16 +144,9 @@ export default {
           return
         }
         try {
-          for (let i of Array(this.qty).keys()) {
-            this.users.login = `${this.baseLogin}${i + 1}`
-            this.users.firstName = this.users.lastName = this.users.login
-            this.users.email = `${this.users.login}@iot-lab.info`
-            this.users.status = 'active'
-            console.log('creating user', this.users.login)
-            await iotlab.signup(this.users)
-          }
+          this.users.login = this.baseLogin
+          await iotlab.signup(this.users, this.qty)
           this.$notify({text: `${this.qty} users created`, type: 'success'})
-          this.user = {}
         } catch (err) {
           this.$notify({text: 'An error occured', type: 'error'})
         }
