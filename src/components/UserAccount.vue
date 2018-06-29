@@ -17,7 +17,7 @@
             
             <h5><i class="fa fa-fw fa-pencil" aria-hidden="true"></i> Edit your profile</h5>
             <form @submit.prevent="updateProfile">
-              <user-form :user="user" ref="user"></user-form>
+              <user-form :user="user" ref="user" :hidden="['sshkeys']"></user-form>
               <div class="form-group">
                 <button class="btn btn-success" type="submit">Update profile</button>
                 <button class="btn btn-secondary" type="button" @click="reset">Reset</button>
@@ -57,25 +57,7 @@
 
             <h5><i class="fa fa-fw fa-key" aria-hidden="true"></i> SSH keys</h5>
             <form class="" @submit.prevent="saveKeys">
-                <ul class="nav nav-tabs" style="border-bottom: 1px solid transparent; position: relative; top: 1px">
-                    <li v-for="(key, i) in keys" class="nav-item"> <a :href="'#tab_SSH'+i" :class="{ 'active': i === activeKey }" data-toggle="tab" @click="activeKey = i"
-                        class="nav-link">
-                        SSH key {{i+1}}
-                        <a @click.stop.prevent="delKey(i)" v-show="i === activeKey && keys.length > 1"><i class="fa fa-times-circle"></i></a> </a>
-                    </li>
-                    <li class="nav-item"><a @click="addKey" class="nav-link"><i class="fa fa-plus"></i></a>
-                    </li>
-                </ul>
-                <div class="tab-content" id="sshkeysTabContent">
-                    <div v-for="(key, i) in keys" class="tab-pane" :class="{ 'active': i === activeKey, 'show': i === 0 }"
-                    :id="'tab_SSH'+i">
-                        <div class="control-group">
-                            <div class="controls">
-                                <textarea v-model="keys[i]" class="form-control" rows="5"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <ssh-keys :keys="keys" :rows="6"></ssh-keys>
                 <button class="btn btn-success" type="submit" style="margin-top: 10px;">Update SSH keys</button>
             </form>
           </div>
@@ -98,13 +80,14 @@
 
 <script>
 import UserForm from '@/components/parts/UserForm'
-import {iotlab} from '@/rest'
-import {auth} from '@/auth'
+import SshKeys from '@/components/parts/SshKeysForm'
+import { iotlab } from '@/rest'
+import { auth } from '@/auth'
 import $ from 'jquery'
 
 export default {
   name: 'UserAccount',
-  components: {UserForm},
+  components: { UserForm, SshKeys },
 
   data () {
     return {
@@ -162,6 +145,7 @@ export default {
       try {
         await iotlab.modifySSHkeys(this.keys)
         this.$notify({text: 'SSH keys updated', type: 'success'})
+        this.user.sshkeys = this.keys
       } catch (err) {
         this.$notify({text: 'Failed to update SSH keys', type: 'error'})
       }

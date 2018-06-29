@@ -3,18 +3,17 @@
 
     <h2>Users</h2>
     <form class="form-inline my-4" @submit.prevent="search">
-      <label class="lead mr-2">Show</label>
-      <select class="form-control custom-select mr-2" v-model="show" @change="showUsers">
-        <option value="" disabled>select user group</option>
-        <option value="pending">pending users</option>
-        <option v-for="group in store.groups" :value="group.name">{{group.name}}</option>
-      </select>
-      <div class="input-group mr-auto">
-        <input type="text" class="form-control" placeholder="search for users" v-model="searchPattern">
+      <div class="input-group mr-2">
+        <input type="text" class="form-control" placeholder="Search for users" v-model="searchPattern">
         <div class="input-group-btn">
           <button type="submit" class="btn btn-secondary" aria-label="Search"> <i class="fa fa-search"></i> </button>
         </div>
       </div>
+      <select class="form-control custom-select mr-auto" v-model="show" @change="showUsers">
+        <option value="" disabled>Show user group</option>
+        <option value="pending">pending users</option>
+        <option v-for="group in store.groups" :value="group.name">{{group.name}}</option>
+      </select>
       <router-link :to="{name:'addUsers'}" class="btn btn-success mr-2"><i class="fa fa-user-plus"></i> Add Users</router-link>
       <router-link :to="{name:'groups'}" class="btn btn-secondary mr-2"><i class="fa fa-cog"></i> Groups</router-link>
       <div class="dropdown d-inline-block">
@@ -146,7 +145,7 @@
             </button>
           </div>
           <div class="modal-body px-4 pt-3 pb-0">
-            <user-form ref="user" :user="currentUser" :admin="true"></user-form>
+            <user-form ref="user" :user="currentUser" :admin="true" mode="edit"></user-form>
           </div>
           <div class="modal-footer border-0 dbg-light">
             <button type="button" class="btn" data-dismiss="modal">Close</button>
@@ -266,6 +265,8 @@ export default {
       if (await this.$refs.user.validate()) {
         try {
           await iotlab.setUserInfo(this.currentUser, this.currentUser.login)
+          // update user in array
+          this.$set(this.users, this.users.findIndex(user => user.login === this.currentUser.login), this.currentUser)
           $('.edit-user-modal').modal('hide')
         } catch (err) {
           this.$notify({text: 'An error occured', type: 'error'})

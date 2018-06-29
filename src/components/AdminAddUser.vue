@@ -111,8 +111,11 @@ export default {
 
   data () {
     return {
-      user: {},
+      user: {
+        sshkeys: [''],
+      },
       users: {
+        sshkeys: [''],
         'motivations': `# created by ${auth.username} for <DESCRIBE THE EVENT>`,
       },
       qty: 3,

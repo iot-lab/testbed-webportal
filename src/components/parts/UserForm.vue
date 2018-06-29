@@ -121,12 +121,27 @@
         </ul>
       </div>
     </div>
+    <div class="form-group" v-if="!hidden.includes('sshkeys')">
+      <a data-toggle="collapse" href=".collapse-ssh" role="button" aria-expanded="false" aria-controls="collapseSSH">
+        <label class="form-control-label" v-if="mode === 'edit'">
+          <i class="fa fa-caret-right"></i> SSH keys</span>
+        </label>
+        <label class="form-control-label" v-else>
+          <i class="fa fa-caret-right"></i> add SSH key <span class="text-muted">(optional, can be done later)</span>
+        </label>
+      </a>
+      <ssh-keys :keys="user.sshkeys" class="collapse collapse-ssh"></ssh-keys>
+      <div class="invalid-feedback" v-show="errors.has('motivations')">
+        {{ errors.first('motivations') }}
+      </div>
+    </div>
   </div>
 </template>
 
 
 <script>
 import Multiselect from 'vue-multiselect'
+import SshKeys from '@/components/parts/SshKeysForm'
 import WebmailDomains from '@/assets/js/webmail-domains'
 import countries from '@/assets/js/countries'
 import UserCategories from '@/assets/js/categories'
@@ -135,7 +150,7 @@ import { Validator } from 'vee-validate'
 
 export default {
   name: 'UserForm',
-  components: {Multiselect},
+  components: { Multiselect, SshKeys },
 
   props: {
     user: {
@@ -152,6 +167,11 @@ export default {
       // when admin=true, no validation on user email domain & no motivations help text
       type: Boolean,
       default: () => false,
+    },
+    mode: {
+      // when mode=edit, the caption for ssh-keys collapse link will be different
+      type: String,
+      default: 'create',
     },
   },
 
