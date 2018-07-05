@@ -138,6 +138,9 @@ export default {
 .cursor:hover {
     cursor: pointer;
 }
+.cursor-help:hover {
+    cursor: help;
+}
 .v-select .dropdown-toggle {
     padding: 1px !important; /* adjust v-select to bootstrap-4 */
 }

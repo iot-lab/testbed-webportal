@@ -63,7 +63,11 @@
     <tbody>
       <tr v-for="node in filteredNodes">
         <td>{{node.network_address}}</td>
-        <td class="text-center"><span class="badge badge-state" :class="node.state | stateBadgeClass">{{node.state}}</span></td>
+        <td class="text-center">
+          <span v-if="node.state !== 'Busy'" class="badge badge-state" :class="node.state | stateBadgeClass">{{node.state}}</span>
+          <router-link v-else-if="isAdmin" :to="{name: 'experimentDetails', params: { id: getBusyJob(node).id }}" class="badge badge-state" :class="node.state | stateBadgeClass" :title="getBusyTitle(node)">{{node.state}}</router-link>
+          <span v-else class="badge badge-state cursor-help" :class="node.state | stateBadgeClass" :title="getBusyTitle(node)">{{node.state}}</span>
+        </td>
         <td class="text-capitalize-first">{{node.archi | formatArchi}}
           <span class="text-muted" v-if="$options.filters.formatRadio(node.archi)">({{node.archi | formatRadio}})</span>
         </td>
@@ -100,6 +104,7 @@ export default {
       isAdmin: auth.isAdmin,
       sites: [],
       nodes: [],
+      runningExp: [],
       currentSite: 'all',
       currentArchi: 'all',
       nodeFilter: null,
@@ -120,6 +125,9 @@ export default {
     })
     iotlab.getNodes().then(data => { this.nodes = data }).catch(err => {
       this.$notify({text: err.response.data.message || 'Failed to fetch nodes', type: 'error'})
+    })
+    iotlab.getRunningExperiments().then(data => { this.runningExp = data }).catch(err => {
+      this.$notify({text: err.response.data.message || 'Failed to fetch running experiments', type: 'error'})
     })
   },
 
@@ -195,6 +203,18 @@ export default {
       } catch (err) {
         this.$notify({text: 'An error occured', type: 'error'})
       }
+    },
+
+    getBusyJob (node) {
+      return this.runningExp.find(xp => xp.nodes.includes(node.network_address))
+    },
+
+    getBusyTitle (node) {
+      const job = this.getBusyJob(node)
+      return `job #${job.id}
+user ${job.user}
+ending ${this.$options.filters.formatDateTime(job.start_date, job.submitted_duration)}
+remaining ${this.$options.filters.humanizeDuration(job.submitted_duration - job.effective_duration)}`
     },
 
   },

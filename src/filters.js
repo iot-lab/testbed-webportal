@@ -14,9 +14,9 @@ Vue.filter('formatDate', function (value) {
   }
 })
 
-Vue.filter('formatDateTime', function (value) {
+Vue.filter('formatDateTime', function (value, duration = 0) {
   if (value) {
-    return moment(String(value)).format('YYYY-MM-DD HH:mm')
+    return moment(String(value)).add(duration, 'minutes').format('YYYY-MM-DD HH:mm')
   }
 })
 

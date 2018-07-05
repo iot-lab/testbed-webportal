@@ -155,6 +155,10 @@ export const iotlab = {
     }
   },
 
+  async getRunningExperiments () {
+    return await iotlab.api.get('/experiments/running').then(resp => resp.data.items)
+  },
+
   async getExperiment (id) {
     return await iotlab.api.get(`/experiments/${id}`).then(resp => resp.data)
   },
