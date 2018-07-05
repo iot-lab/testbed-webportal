@@ -67,7 +67,9 @@ export default {
     return {
       hostname: location.hostname,
       reCaptchaSitekey: '6Ld8cR4UAAAAAC-zBLP9m2bC35xyyYwTbvkBcx4q',
-      user: {},
+      user: {
+        'sshkeys': [''],
+      },
       charter: false,
       success: false,
       captcha: {
