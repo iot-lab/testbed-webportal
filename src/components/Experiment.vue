@@ -638,12 +638,6 @@ export default {
       this.selectedProps.splice(i, 1)
     },
 
-    // touchFilteredNodes () {
-    //   this.$nextTick(function () {
-    //     this.filteredNodes.push(this.filteredNodes.pop())
-    //   })
-    // },
-
     expandNodeIds () {
       var node
       var nodeGroup = []
