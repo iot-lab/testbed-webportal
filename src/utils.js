@@ -31,7 +31,7 @@ export const expandIds = function (factExp) {
 }
 
 // Group an array of items by item.key
-// groupBy(['one', 'two', 'three'], 'length'))
+// groupBy(['one', 'two', 'three'], 'length')
 // => {3: ["one", "two"], 5: ["three"]}
 export const groupBy = function (array, key) {
   return array.reduce(function (rv, x) {

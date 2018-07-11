@@ -7,7 +7,6 @@
   <div class="card border-danger my-2 mx-auto d-inline-block text-left" v-if="hostname === 'devwww.iot-lab.info'">
     <div class="card-body text-danger">
       Development site for <b>internal purpose only</b>.<br>
-      <!-- FIT IoT-LAB public site is located at <a class="text-danger" href="https://www.iot-lab.info/testbed">www.iot-lab.info</a> -->
       Go to <a class="text-danger alert-link" href="https://www.iot-lab.info/testbed">www.iot-lab.info</a> for FIT IoT-LAB public site.
     </div>
   </div>

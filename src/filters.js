@@ -84,6 +84,7 @@ Vue.filter('formatRadio', function (value) {
   if (value && value.includes(':')) {
     return value.split(':')[1]
   }
+  return value
 })
 
 Vue.filter('formatArchiRadio', function (value) {

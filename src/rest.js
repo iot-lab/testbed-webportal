@@ -165,7 +165,6 @@ export const iotlab = {
 
   async getExperimentArchive (id) {
     return await iotlab.api.get(`/experiments/${id}/data`).then(resp => resp.data)
-    // return
   },
 
   async getExperimentDeployment (id) {
@@ -271,30 +270,3 @@ export const iotlab = {
     return await iotlab.api.delete(`/monitoring/${name}`)
   },
 }
-
-// GET /experiments?state(Running,Terminated),limit(500),offset(0)  (user:current)
-// POST /experiments
-// GET /experiments/total
-// GET /experiments/:id
-// GET /experiments/:id/anystate ???
-// GET /experiments/:id/state
-// GET /experiments/:id/data
-// GET /experiments/:id/result
-// GET /experiments/:id/nodes
-// GET /experiments/:id/nodes_id
-// GET /experiments/:id/start (get start time)
-// DEL /experiments/:id
-// POST /experiments/:id/reload
-// POST /experiments/:id/scripts/run
-// POST /experiments/:id/scripts/kill
-// POST /experiments/:id/scripts/status
-// POST /experiments/:id/scripts/flash
-// POST /experiments/:id/nodes/monitoring
-// POST /experiments/:id/nodes/:cmd     { "start", "stop", "reset", "debug-start", "debug-stop", "update-idle", "profile-reset" };
-// POST /experiments/:id/nodes/monitoring/:name
-
-// GET /nodes?site(all),archi(all),state(all)
-// GET /nodes?site(all),archi(all),state(all)
-
-// note: send mail par l'api ?
-// admin filter when pending....
