@@ -123,11 +123,6 @@ export default {
       type: Number,
       default: 40,
     },
-    started: {
-      // Started experiment counter, increment to force component to refresh
-      type: Number,
-      default: 0,
-    },
     loader: {
       // Show a loading message during initial render
       type: Boolean,
@@ -155,26 +150,14 @@ export default {
       this.states = experimentStates.completed
     }
 
-    if (this.hasPolling) {
-      console.debug('polling started')
-      // start polling callback (5 seconds)
-      polling = setInterval(() => this.pollingLoop(), 5000)
-      // poll only when browser window is active
-      addEventListener('blur', this.disablePolling)
-      addEventListener('focus', this.enablePolling)
-    }
+    this.createPolling()
 
     await this.loadMore(this.show, this.loader)
     this.$emit('loaded')
   },
 
   destroyed () {
-    if (polling) {
-      this.enablePolling()
-      this.stopPolling()
-      removeEventListener('blur', this.disablePolling)
-      removeEventListener('focus', this.enablePolling)
-    }
+    this.destroyPolling()
   },
 
   computed: {
@@ -187,10 +170,6 @@ export default {
     total: function (newTotal, oldTotal) {
       // experiment total changed, let's refresh including new xp
       this.refresh(newTotal - oldTotal)
-    },
-    started: function () {
-      // started counter has been touched, let's refresh
-      this.refresh()
     },
   },
 
@@ -288,6 +267,26 @@ export default {
       this.$notify({group: 'alt', clean: true})
     },
 
+    createPolling () {
+      if (this.hasPolling) {
+        console.debug('polling started')
+        // start polling callback (5 seconds)
+        polling = setInterval(() => this.pollingLoop(), 5000)
+        // poll only when browser window is active
+        addEventListener('blur', this.disablePolling)
+        addEventListener('focus', this.enablePolling)
+      }
+    },
+
+    destroyPolling () {
+      if (polling) {
+        this.enablePolling()
+        this.stopPolling()
+        removeEventListener('blur', this.disablePolling)
+        removeEventListener('focus', this.enablePolling)
+      }
+    },
+
     async stopExperiment (exp, confirmed = false) {
       if (!confirmed && !confirm('Cancel this experiment?')) return
       try {
@@ -295,7 +294,7 @@ export default {
         this.$notify({text: `Experiment ${exp.id} stopping`, type: 'success'})
         if (exp.state === 'Running') exp.state = 'Finishing'
       } catch (err) {
-        this.$notify({text: err.message, type: 'error'})
+        this.$notify({text: err.response.data.message || 'Failed to stop experiment', type: 'error'})
       }
     },
 
@@ -312,7 +311,7 @@ export default {
         await sleep(200)
         this.$emit('started')
       } catch (err) {
-        this.$notify({text: err.message, type: 'error'})
+        this.$notify({text: err.response.data.message || 'Failed to reload experiment', type: 'error'})
       }
     },
   },

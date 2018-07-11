@@ -13,12 +13,12 @@
         <span class="badge badge-pill badge-warning">?</span> Scheduled
         <span class="badge badge-pill badge-dark">?</span> Completed
       </p>
-      <experiment-list title="Scheduled" user="@self" state="all_scheduled" @completed="updateTotal" :started="started"></experiment-list>
+      <experiment-list ref="runningExpList" title="Scheduled" user="@self" state="all_scheduled" @completed="updateTotal"></experiment-list>
       <p>
         <router-link :to="{name:'experiment'}" class="btn btn-primary">New experiment</router-link>
       </p>
       <template v-if="total.terminated">
-        <experiment-list title="Recent" user="@self" state="all_terminated" :show="5" :total="total.terminated" @started="refreshScheduled" @loaded="spinner = false"></experiment-list>
+        <experiment-list title="Recent" user="@self" state="all_terminated" :show="5" :total="total.terminated" @started="refreshRunning" @loaded="spinner = false"></experiment-list>
       </template>
       <template v-if="spinner">
         <i class="fa fa-spinner fa-spin fa-fw"></i>
@@ -80,9 +80,19 @@ export default {
     next(vm => {
       if (vm.sites.length === 0) return // do not refresh until initial render as be done in created()
       vm.$notify({group: 'popup', clean: true})
+      vm.$refs.runningExpList.refresh()
+      vm.$refs.runningExpList.createPolling()
       vm.updateTotal()
       iotlab.getNodes().then(data => { vm.nodes = data })
     })
+  },
+
+  beforeRouteLeave (to, from, next) {
+    // Indicate to the SubComponent to stop experiments polling
+    this.$refs.runningExpList.destroyPolling()
+    // Make sure to always call the next function, otherwise the hook will never be resolved
+    // Ref: https://router.vuejs.org/en/advanced/navigation-guards.html
+    next()
   },
 
   created () {
@@ -106,9 +116,8 @@ export default {
       // hide spinner as we are not going to fetch terminated experiments
       if (this.total.terminated === 0) this.spinner = false
     },
-    refreshScheduled () {
-      // increment started counter so that scheduled xp component can refresh itself
-      this.started += 1
+    refreshRunning () {
+      this.$refs.runningExpList.refresh()
     },
     getNodesCount (site, stateList) {
       let siteList = (site === 'all') ? this.sites.map(key => key.site) : [site.site]
