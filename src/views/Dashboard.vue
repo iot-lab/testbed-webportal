@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import ExperimentList from '@/components/parts/ExperimentList'
+import ExperimentList from '@/components/ExperimentList'
 import {iotlab} from '@/rest'
 import {auth} from '@/auth'
 // import { sleep } from '@/utils'

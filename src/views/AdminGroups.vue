@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import ModalDialog from '@/components/parts/ModalDialog'
+import ModalDialog from '@/components/ModalDialog'
 import { iotlab } from '@/rest'
 import { sleep } from '@/utils'
 import store from '@/store'

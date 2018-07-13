@@ -19,7 +19,7 @@
         
 <script>
 import { iotlab } from '@/rest'
-import Map3d from '@/components/parts/Map3d'
+import Map3d from '@/components/Map3d'
 
 export default {
   name: 'map',

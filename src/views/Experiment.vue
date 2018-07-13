@@ -263,9 +263,9 @@
 <script>
 import $ from 'jquery'
 import Multiselect from 'vue-multiselect'
-import FilterSelect from '@/components/parts/FilterSelect'
-import MonitoringList from '@/components/parts/MonitoringList'
-import Map3d from '@/components/parts/Map3d'
+import FilterSelect from '@/components/FilterSelect'
+import MonitoringList from '@/components/MonitoringList'
+import Map3d from '@/components/Map3d'
 import 'vue-multiselect/dist/vue-multiselect.min.css'
 import 'tempusdominus-bootstrap-4'
 import 'tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4.min.css'

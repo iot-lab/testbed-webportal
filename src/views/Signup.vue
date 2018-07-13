@@ -57,7 +57,7 @@
 <script>
 import VueRecaptcha from 'vue-recaptcha'
 import {iotlab} from '@/rest'
-import UserForm from '@/components/parts/UserForm'
+import UserForm from '@/components/UserForm'
 
 export default {
   name: 'signup',

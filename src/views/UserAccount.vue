@@ -79,8 +79,8 @@
 </template>
 
 <script>
-import UserForm from '@/components/parts/UserForm'
-import SshKeys from '@/components/parts/SshKeysForm'
+import UserForm from '@/components/UserForm'
+import SshKeys from '@/components/SshKeysForm'
 import { iotlab } from '@/rest'
 import { auth } from '@/auth'
 import $ from 'jquery'

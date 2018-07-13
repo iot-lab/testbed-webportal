@@ -83,7 +83,7 @@
 
 <script>
 import {Validator} from 'vee-validate'
-import UserForm from '@/components/parts/UserForm'
+import UserForm from '@/components/UserForm'
 import {iotlab} from '@/rest'
 import {auth} from '@/auth'
 

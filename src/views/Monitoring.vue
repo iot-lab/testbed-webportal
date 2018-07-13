@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import MonitoringForm from '@/components/parts/MonitoringForm'
+import MonitoringForm from '@/components/MonitoringForm'
 import { iotlab } from '@/rest'
 
 export default {

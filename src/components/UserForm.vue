@@ -141,7 +141,7 @@
 
 <script>
 import Multiselect from 'vue-multiselect'
-import SshKeys from '@/components/parts/SshKeysForm'
+import SshKeys from '@/components/SshKeysForm'
 import WebmailDomains from '@/assets/js/webmail-domains'
 import countries from '@/assets/js/countries'
 import UserCategories from '@/assets/js/categories'

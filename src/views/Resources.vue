@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import MonitoringList from '@/components/parts/MonitoringList'
+import MonitoringList from '@/components/MonitoringList'
 
 export default {
   name: 'Resources',

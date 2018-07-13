@@ -33,7 +33,7 @@
 
 <script>
 import {iotlab} from '@/rest'
-import ExperimentList from '@/components/parts/ExperimentList'
+import ExperimentList from '@/components/ExperimentList'
 
 export default {
   name: 'AdminExperiments',

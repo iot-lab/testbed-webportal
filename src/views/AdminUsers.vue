@@ -182,9 +182,9 @@
 </template>
 
 <script>
-import UserForm from '@/components/parts/UserForm'
-import EmailForm from '@/components/parts/EmailForm'
-import ModalDialog from '@/components/parts/ModalDialog'
+import UserForm from '@/components/UserForm'
+import EmailForm from '@/components/EmailForm'
+import ModalDialog from '@/components/ModalDialog'
 import { iotlab } from '@/rest'
 import { auth } from '@/auth'
 import { sleep } from '@/utils'
