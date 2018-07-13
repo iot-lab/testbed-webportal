@@ -48,8 +48,8 @@ fab test build deploy -H root@devwww:2222
 
 ## IoT-LAB API
 
-New API is located at `https://devwww.iot-lab.info/api/`
-[Documentation on wiki](https://github.com/iot-lab/testbed-webportal/wiki/API-v2-Proposal)
+New API url is `https://devwww|www.iot-lab.info/api/`
+[Documentation](https://devapi.iot-lab.info)
 
 ``` bash
 # test API
