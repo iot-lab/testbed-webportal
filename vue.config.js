@@ -1,6 +1,9 @@
 var webpack = require('webpack')
 
 module.exports = {
+  baseUrl: process.env.NODE_ENV === 'production'
+    ? process.env.VUE_APP_IOTLAB_PATH
+    : '/',
   configureWebpack: {
     plugins: [
       new webpack.ProvidePlugin({
