@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import ResetPassword from '@/components/ResetPassword'
+import ResetPassword from '@/views/ResetPassword'
 
 describe('ResetPassword.vue', () => {
   it('should render ResetPassword form', () => {

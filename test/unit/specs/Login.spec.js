@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Login from '@/components/Login'
+import Login from '@/views/Login'
 
 describe('Login.vue', () => {
   it('should render login form', () => {
