@@ -2,7 +2,7 @@
 <div class="container mt-3">
   <div class="float-right mt-1 mb-4">
     <div class="dropdown d-inline-block ">
-      <button class="btn btn-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-fw fa-download"></i> Download</button>
+      <button class="btn btn-light mr-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-fw fa-download"></i> Download</button>
       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         <a class="dropdown-item" href="#" @click.prevent="downloadJson">IoT-LAB nodes <span class="badge badge-pill badge-info">JSON</span></a>
         <a class="dropdown-item" href="#" @click.prevent="downloadCsv">IoT-LAB nodes <span class="badge badge-pill badge-info">CSV</span></a>
@@ -13,26 +13,26 @@
   <h2>IoT-LAB nodes</h2>
   <p class="lead mb-0">Sites</p>
   <p class="mb-2" v-if="sites">
-    <span class="badge badge-pill" :class="{'badge-primary': currentSite === 'all', 'badge-secondary': currentSite !== 'all'}" @click="currentSite = 'all'" style="cursor: pointer">{{sites.length}} sites</span>
-    <span v-for="site in sites" class="badge badge-pill" :class="{'badge-primary': currentSite === site, 'badge-secondary': currentSite !== site}" style="margin-right: 4px; cursor: pointer"
+    <span class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentSite === 'all', 'badge-secondary': currentSite !== 'all'}" @click="currentSite = 'all'">{{sites.length}} sites</span>
+    <span v-for="site in sites" class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentSite === site, 'badge-secondary': currentSite !== site}"
     @click="currentSite = site">{{site.site}}</span>
   </p>
   <p class="lead mb-0">Architectures</p>
   <p class="mb-2" v-if="sites">
-    <span class="badge badge-pill" :class="{'badge-primary': currentArchi === 'all', 'badge-secondary': currentArchi !== 'all'}" @click="currentArchi = 'all'" style="cursor: pointer">{{archis.length}} archis</span>
-    <span v-for="archi in archis" class="badge badge-pill" :class="{'badge-primary': currentArchi === archi, 'badge-secondary': currentArchi !== archi}" style="margin-right: 4px; cursor: pointer"
+    <span class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentArchi === 'all', 'badge-secondary': currentArchi !== 'all'}" @click="currentArchi = 'all'">{{archis.length}} archis</span>
+    <span v-for="archi in archis" class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentArchi === archi, 'badge-secondary': currentArchi !== archi}"
     @click="currentArchi = archi">{{archi | formatArchi}}
       <span class="font-weight-normal" v-if="$options.filters.formatRadio(archi)">({{archi | formatRadio}})</span>
     </span>
   </p>
   <p class="lead mb-0">Nodes</p>
   <p class="mb-2" v-if="nodes">
-    <span class="cursor badge badge-pill" :class="(nodeFilter === null) ? 'badge-primary' : 'badge-secondary'" @click="nodeFilter = null">{{getNodes().length}} nodes</span>
-    <span class="cursor badge badge-pill" :class="(nodeFilter === nodeFilters.alive) ? 'badge-primary' : 'badge-success'" @click="nodeFilter = nodeFilters.alive" v-if="getNodes(['Alive']).length">available {{getNodes(['Alive']).length}}</span>
-    <span class="cursor badge badge-pill" :class="(nodeFilter === nodeFilters.busy) ? 'badge-primary' : 'badge-warning'" @click="nodeFilter = nodeFilters.busy" v-if="getNodes(['Busy']).length">busy {{getNodes(['Busy']).length}}</span>
-    <span class="cursor badge badge-pill" :class="(nodeFilter === nodeFilters.unavailable) ? 'badge-primary' : 'badge-danger'" @click="nodeFilter = nodeFilters.unavailable" v-if="getNodes(['Absent','Suspected']).length">unavailable {{getNodes(['Absent','Suspected']).length}}</span>
-    <span class="cursor badge badge-pill" :class="(nodeFilter === nodeFilters.dead) ? 'badge-primary' : 'badge-dark'" @click="nodeFilter = nodeFilters.dead" v-if="getNodes(['Dead']).length">dead {{getNodes(['Dead']).length}}</span>
-    <span class="cursor badge badge-pill" :class="(nodeFilter === nodeFilters.mobile) ? 'badge-primary' : 'badge-info'" @click="nodeFilter = nodeFilters.mobile" v-if="getNodes().filter(node => node.mobile).length">mobile {{getNodes().filter(node => node.mobile).length}}</span>
+    <span class="badge badge-pill mr-1 cursor" :class="(nodeFilter === null) ? 'badge-primary' : 'badge-secondary'" @click="nodeFilter = null">{{getNodes().length}} nodes</span>
+    <span class="badge badge-pill mr-1 cursor" :class="(nodeFilter === nodeFilters.alive) ? 'badge-primary' : 'badge-success'" @click="nodeFilter = nodeFilters.alive" v-if="getNodes(['Alive']).length">available {{getNodes(['Alive']).length}}</span>
+    <span class="badge badge-pill mr-1 cursor" :class="(nodeFilter === nodeFilters.busy) ? 'badge-primary' : 'badge-warning'" @click="nodeFilter = nodeFilters.busy" v-if="getNodes(['Busy']).length">busy {{getNodes(['Busy']).length}}</span>
+    <span class="badge badge-pill mr-1 cursor" :class="(nodeFilter === nodeFilters.unavailable) ? 'badge-primary' : 'badge-danger'" @click="nodeFilter = nodeFilters.unavailable" v-if="getNodes(['Absent','Suspected']).length">unavailable {{getNodes(['Absent','Suspected']).length}}</span>
+    <span class="badge badge-pill mr-1 cursor" :class="(nodeFilter === nodeFilters.dead) ? 'badge-primary' : 'badge-dark'" @click="nodeFilter = nodeFilters.dead" v-if="getNodes(['Dead']).length">dead {{getNodes(['Dead']).length}}</span>
+    <span class="badge badge-pill mr-1 cursor" :class="(nodeFilter === nodeFilters.mobile) ? 'badge-primary' : 'badge-info'" @click="nodeFilter = nodeFilters.mobile" v-if="getNodes().filter(node => node.mobile).length">mobile {{getNodes().filter(node => node.mobile).length}}</span>
   </p>
   <p v-else>
     <i class="fa fa-spinner fa-spin fa-fw"></i>

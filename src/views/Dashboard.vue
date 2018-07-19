@@ -29,8 +29,9 @@
     <div class="col">
       <h2>Platform status</h2>
       <p v-if="sites">
-        <span class="badge badge-pill" :class="{'badge-primary': currentSite === 'all', 'badge-secondary': currentSite !== 'all'}" @click="currentSite = 'all'" style="cursor: pointer">{{sites.length}} sites</span>
-        <span v-for="site in sites" class="badge badge-pill" :class="{'badge-primary': currentSite === site, 'badge-secondary': currentSite !== site}" style="margin-right: 4px; cursor: pointer"
+        <span class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentSite === 'all', 'badge-secondary': currentSite !== 'all'}"
+        @click="currentSite = 'all'">{{sites.length}} sites</span>
+        <span v-for="site in sites" class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentSite === site, 'badge-secondary': currentSite !== site}"
         @click="currentSite = site">{{site.site}}</span>
       </p>
       <p v-if="nodes">
