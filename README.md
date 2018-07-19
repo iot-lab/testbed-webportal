@@ -26,18 +26,15 @@ npm run build:<mode>
 npm run build --report
 
 # run unit tests
-npm run unit
+npm run test:unit
 
-# run e2e tests
-npm run e2e
-
-# run all tests
-npm test
+# run end to end tests
+npm run test:e2e
 ```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
-Note: project structure created with vue-cli `vue init webpack testbed-webportal`
+Note: project structure created with vue-cli 3.0 `vue create testbed-webportal` with this tooling (Babel, Router, Linter (standard), Unit tests (Jest), e2e tests (cypress))
 
 ## Deployment
 
