@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const API_V1_URL = `https://${process.env.IOTLAB_HOST}/rest/`
-const API_V2_URL = `https://${process.env.IOTLAB_HOST}/api/`
+const API_V1_URL = `https://${process.env.VUE_APP_IOTLAB_HOST}/rest/`
+const API_V2_URL = `https://${process.env.VUE_APP_IOTLAB_HOST}/api/`
 
 export const iotlab = {
 
