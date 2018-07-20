@@ -2,31 +2,42 @@ import Vue from 'vue'
 import moment from 'moment'
 import humanizeDuration from 'humanize-duration'
 
-Vue.filter('fromTimestamp', function (value) {
+Vue.filter('fromTimestamp', fromTimestamp)
+Vue.filter('formatDate', formatDate)
+Vue.filter('formatDateTime', formatDateTime)
+Vue.filter('formatDateTimeSec', formatDateTimeSec)
+Vue.filter('humanizeDuration', humanDuration)
+Vue.filter('stripDomain', stripDomain)
+Vue.filter('stateBadgeClass', stateBadgeClass)
+Vue.filter('formatArchi', formatArchi)
+Vue.filter('formatRadio', formatRadio)
+Vue.filter('formatArchiRadio', formatArchiRadio)
+
+export const fromTimestamp = function (value) {
   if (value) {
     return moment.unix(value).format('YYYY-MM-DD HH:mm:ss')
   }
-})
+}
 
-Vue.filter('formatDate', function (value) {
+export const formatDate = function (value) {
   if (value) {
     return moment(String(value)).format('YYYY-MM-DD')
   }
-})
+}
 
-Vue.filter('formatDateTime', function (value, duration = 0) {
+export const formatDateTime = function (value, duration = 0) {
   if (value) {
     return moment(String(value)).add(duration, 'minutes').format('YYYY-MM-DD HH:mm')
   }
-})
+}
 
-Vue.filter('formatDateTimeSec', function (value) {
+export const formatDateTimeSec = function (value) {
   if (value) {
     return moment(String(value)).format('YYYY-MM-DD HH:mm:ss')
   }
-})
+}
 
-Vue.filter('humanizeDuration', function (value) {
+export const humanDuration = function (value) {
   if (value) {
     let ms = value * 60 * 1000
     return humanizeDuration(ms, {
@@ -35,15 +46,15 @@ Vue.filter('humanizeDuration', function (value) {
       round: true,
     })
   }
-})
+}
 
-Vue.filter('stripDomain', function (value) {
+export const stripDomain = function (value) {
   if (value) {
     return value.replace('.iot-lab.info', '')
   }
-})
+}
 
-Vue.filter('stateBadgeClass', function (value) {
+export const stateBadgeClass = function (value) {
   if (value) {
     switch (value) {
       case 'Alive':
@@ -72,26 +83,26 @@ Vue.filter('stateBadgeClass', function (value) {
         return 'badge-secondary'
     }
   }
-})
+}
 
-Vue.filter('formatArchi', function (value) {
+export const formatArchi = function (value) {
   if (value) {
     return value.split(':')[0].replace('_', ' ')
   }
-})
+}
 
-Vue.filter('formatRadio', function (value) {
+export const formatRadio = function (value) {
   if (value && value.includes(':')) {
     return value.split(':')[1]
   }
   return value
-})
+}
 
-Vue.filter('formatArchiRadio', function (value) {
+export const formatArchiRadio = function (value) {
   if (value) {
     if (value.split(':')[1]) {
       return value.split(':')[0].replace('_', ' ') + ' (' + value.split(':')[1] + ')'
     }
     return value.split(':')[0].replace('_', ' ')
   }
-})
+}
