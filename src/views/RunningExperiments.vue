@@ -1,0 +1,105 @@
+<template>
+<div class="container mt-3">
+  <h2>Running experiments</h2>
+  <table class="table table-striped table-sm mt-3">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>User</th>
+        <th>Started</th>
+        <th>Ending</th>
+        <th>Progress</th>
+        <th>Nodes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="exp in runningExperiments">
+        <td class="nowrap">{{exp.id}}</td>
+        <td class="nowrap">{{exp.user}}</td>
+        <td class="nowrap">{{exp.start_date | formatDateTime}}</td>
+        <td class="nowrap">{{exp.start_date | formatDateTime(exp.submitted_duration)}}</td>
+        <td class="durationProgress nowrap" :style="`text-align: center; --progress: ${experimentProgress(exp)}%`" :title="showRemaining(exp)">
+          {{exp.effective_duration | humanizeDuration}}
+          <small class="text-dark">({{experimentProgress(exp)}}%)</small>
+        </td>
+        <td>
+          <span class="nodes mr-1" :class="{'comma': index + 1 < exp.nodes.length}" v-for="(node, index) in [...exp.nodes].sort((a, b) => nodeSortByHostname(a, b))">{{node | stripDomain}}</span>
+          <span class="text-muted">({{exp.nodes.length}} nodes)</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="text-muted">
+    {{runningExperiments.length}} running experiments
+  </p>
+
+</div> <!-- container -->
+
+</template>
+
+<script>
+import { iotlab } from '@/rest'
+
+export default {
+  name: 'RunningExperiments',
+
+  data () {
+    return {
+      runningExperiments: [],
+    }
+  },
+
+  created () {
+    iotlab.getRunningExperiments().then(data => { this.runningExperiments = data }).catch(err => {
+      this.$notify({text: err.response.data.message || 'Failed to fetch running experiments', type: 'error'})
+    })
+  },
+
+  methods: {
+
+    showRemaining (exp) {
+      return `remaining ${this.$options.filters.humanizeDuration(exp.submitted_duration - exp.effective_duration)}`
+    },
+
+    experimentProgress (exp) {
+      return Math.min(100, Math.round(100 * exp.effective_duration / exp.submitted_duration))
+    },
+
+    nodeSortByHostname (a, b) {
+      // Allow sorting of hostnames by domain then by servername
+      // the trick is to append the servername after the domain (e.g 'a8-1.grenoble.iot-lab.info' -> 'grenoble.iot-lab.info.a8-1')
+      // then it's possible to simply sort the strings
+      let sortByHostname = function (node) {
+        let chuncks = node.split('.')
+        chuncks.push(chuncks.shift()) // or we could use chunks.reverse()
+        return chuncks.join('.')
+      }
+      return sortByHostname(a).localeCompare(sortByHostname(b))
+    },
+
+    displayNodes (exp) {
+      return exp.nodes.map(n => this.$options.filters.stripDomain(n)).sort().map(n => `<i>${n}</i>`).join(', ')
+    },
+
+  },
+
+}
+</script>
+
+<style scoped>
+td.nowrap {
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.durationProgress::after,.durationProgress::before {
+  top: calc(50% - 12px);
+  height: 24px;
+}
+.nodes {
+  white-space: nowrap;
+  display: inline-block;
+}
+.nodes.comma::after {
+  content: ", ";
+}
+</style>

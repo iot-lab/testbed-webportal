@@ -322,7 +322,9 @@ export default {
 .dropdown .dropdown-toggle:hover {
   filter: brightness(0.5);
 }
+</style>
 
+<style>
 .durationProgress {
   position: relative;
   z-index: 1;
