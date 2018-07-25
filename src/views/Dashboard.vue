@@ -41,9 +41,9 @@
       <p v-else>
         <i class="fa fa-spinner fa-spin fa-fw"></i>
       </p>
-      <!-- <p>
-        <a class="btn btn-light" href="" @click.prevent="this.alert('todo')">Check future availability</a>
-      </p> -->
+      <p v-if="runningExps">
+        <span class="badge badge-pill badge-dark">{{getRunningCount(currentSite)}}</span> running experiments
+      </p>
     </div>
   </div>
 
@@ -67,6 +67,7 @@ export default {
       total: {},
       sites: [],
       nodes: [],
+      runningExps: [],
       experiments: [],
       currentSite: 'all',
       auth: auth,
@@ -84,6 +85,7 @@ export default {
       vm.$refs.runningExpList.createPolling()
       vm.updateTotal()
       iotlab.getNodes().then(data => { vm.nodes = data })
+      iotlab.getRunningExperiments().then(data => { this.runningExps = data })
     })
   },
 
@@ -99,6 +101,7 @@ export default {
     this.updateTotal()
     iotlab.getSites().then(data => { this.sites = data })
     iotlab.getNodes().then(data => { this.nodes = data })
+    iotlab.getRunningExperiments().then(data => { this.runningExps = data })
   },
 
   async mounted () {
@@ -122,6 +125,9 @@ export default {
     getNodesCount (site, stateList) {
       let siteList = (site === 'all') ? this.sites.map(key => key.site) : [site.site]
       return this.nodes.filter(node => siteList.includes(node.site)).filter(node => stateList.includes(node.state)).length
+    },
+    getRunningCount (site) {
+      return this.runningExps.filter(xp => site === 'all' || xp.nodes.some(node => node.includes(site.site))).length
     },
   },
 
