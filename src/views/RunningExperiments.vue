@@ -6,9 +6,8 @@
       <tr>
         <th>Id</th>
         <th>User</th>
-        <th>Started</th>
         <th>Ending</th>
-        <th>Progress</th>
+        <th>Elapsed</th>
         <th>Nodes</th>
       </tr>
     </thead>
@@ -16,15 +15,14 @@
       <tr v-for="exp in runningExperiments">
         <td class="nowrap">{{exp.id}}</td>
         <td class="nowrap">{{exp.user}}</td>
-        <td class="nowrap">{{exp.start_date | formatDateTime}}</td>
-        <td class="nowrap">{{exp.start_date | formatDateTime(exp.submitted_duration)}}</td>
+        <td class="nowrap" :title="showStarted(exp)">{{exp.start_date | formatDateTime(exp.submitted_duration)}}</td>
         <td class="durationProgress nowrap" :style="`text-align: center; --progress: ${experimentProgress(exp)}%`" :title="showRemaining(exp)">
           {{exp.effective_duration | humanizeDuration}}
           <small class="text-dark">({{experimentProgress(exp)}}%)</small>
         </td>
         <td>
           <span class="nodes mr-1" :class="{'comma': index + 1 < exp.nodes.length}" v-for="(node, index) in [...exp.nodes].sort((a, b) => nodeSortByHostname(a, b))">{{node | stripDomain}}</span>
-          <span class="text-muted">({{exp.nodes.length}} nodes)</span>
+          <span class="text-muted nowrap">({{exp.nodes.length}} nodes)</span>
         </td>
       </tr>
     </tbody>
@@ -57,6 +55,10 @@ export default {
 
   methods: {
 
+    showStarted (exp) {
+      return `started ${this.$options.filters.formatDateTime(exp.start_date)}`
+    },
+
     showRemaining (exp) {
       return `remaining ${this.$options.filters.humanizeDuration(exp.submitted_duration - exp.effective_duration)}`
     },
@@ -87,8 +89,10 @@ export default {
 </script>
 
 <style scoped>
-td.nowrap {
+.nowrap {
   white-space: nowrap;
+}
+td.nowrap {
   vertical-align: middle;
 }
 .durationProgress::after,.durationProgress::before {
