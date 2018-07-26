@@ -15,7 +15,7 @@
         Duration <b>{{experiment.submitted_duration | humanizeDuration}}</b>
         (Elapsed {{experiment.effective_duration | humanizeDuration}} – Remaining {{experiment.submitted_duration - experiment.effective_duration | humanizeDuration}})
       </li>
-      <li>Number of nodes <b>{{experiment.nodes.length}}</b></li>
+      <li>Number of nodes <b>{{experiment.nb_nodes}}</b></li>
       <!-- <li>Type <b>{{experiment.type}}</b></li> -->
       <li>State <span class="badge" :class="experiment.state | stateBadgeClass">{{experiment.state}}</span></li>
     </ul>
