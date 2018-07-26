@@ -19,7 +19,7 @@
           <td><router-link :to="{name: 'experimentDetails', params: { id: exp.id }}">{{exp.id}}</router-link></td>
           <td v-if="user != '@self'"><router-link :to="{name: 'users', query: { search: exp.user }}">{{exp.user}}</router-link></td>
           <td v-html="allowBreak(exp.name)"></td>
-          <td>{{expDate(exp) | formatDateTime}}</td>
+          <td :title="showEnding(exp)">{{expDate(exp) | formatDateTime}}</td>
           <td :class="{'durationProgress': showProgress(exp)}" :style="`text-align: center; --progress: ${experimentProgress(exp)}%`" :title="showRemaining(exp)">
             {{expDuration(exp) | humanizeDuration}}
             <small class="text-dark" v-if="showProgress(exp)">({{experimentProgress(exp)}}%)</small>
@@ -181,6 +181,12 @@ export default {
     },
 
     showProgress: exp => exp.state === 'Running',
+
+    showEnding (exp) {
+      if (this.showProgress(exp)) {
+        return `ending ${this.$options.filters.formatDateTime(exp.start_date, exp.submitted_duration)}`
+      }
+    },
 
     showRemaining (exp) {
       if (this.showProgress(exp)) {
