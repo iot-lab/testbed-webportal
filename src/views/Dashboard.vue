@@ -42,7 +42,9 @@
         <i class="fa fa-spinner fa-spin fa-fw"></i>
       </p>
       <p v-if="runningExps">
-        <span class="badge badge-pill badge-dark">{{getRunningCount(currentSite)}}</span> running experiments
+        <router-link :to="{name:'runningExperiments'}" class="btn btn-light">Running experiments
+          <span class="badge badge-pill badge-dark">{{getRunningCount(currentSite)}}</span>
+        </router-link>
       </p>
     </div>
   </div>
@@ -84,8 +86,6 @@ export default {
       vm.$refs.runningExpList.refresh()
       vm.$refs.runningExpList.createPolling()
       vm.updateTotal()
-      iotlab.getNodes().then(data => { vm.nodes = data })
-      iotlab.getRunningExperiments().then(data => { this.runningExps = data })
     })
   },
 
@@ -114,6 +114,8 @@ export default {
 
   methods: {
     async updateTotal () {
+      iotlab.getNodes().then(data => { this.nodes = data })
+      iotlab.getRunningExperiments().then(data => { this.runningExps = data })
       // await sleep(2000)
       this.total = await iotlab.getUserExperimentsCount()
       // hide spinner as we are not going to fetch terminated experiments
@@ -121,6 +123,8 @@ export default {
     },
     refreshRunning () {
       this.$refs.runningExpList.refresh()
+      iotlab.getNodes().then(data => { this.nodes = data })
+      iotlab.getRunningExperiments().then(data => { this.runningExps = data })
     },
     getNodesCount (site, stateList) {
       let siteList = (site === 'all') ? this.sites.map(key => key.site) : [site.site]
