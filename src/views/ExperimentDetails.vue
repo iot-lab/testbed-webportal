@@ -216,8 +216,7 @@ export default {
       if (!confirm('Cancel this experiment?')) return
       try {
         await iotlab.stopExperiment(id)
-        this.$notify({text: `Experiment ${id} stopped`, type: 'success'})
-        this.experiment.state = 'Finishing'
+        this.$notify({text: `Experiment ${id} stopping`, type: 'success'})
       } catch (err) {
         this.$notify({text: err.message, type: 'error'})
       }

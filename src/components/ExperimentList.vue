@@ -297,7 +297,6 @@ export default {
       try {
         await iotlab.stopExperiment(exp.id)
         this.$notify({text: `Experiment ${exp.id} stopping`, type: 'success'})
-        if (exp.state === 'Running') exp.state = 'Finishing'
       } catch (err) {
         this.$notify({text: err.response.data.message || 'Failed to stop experiment', type: 'error'})
       }
