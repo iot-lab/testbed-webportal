@@ -33,16 +33,16 @@
                 <router-link class="dropdown-item" :to="{name: 'experimentDetails', params: { id: exp.id }}">
                   <i class="fa fa-fw fa-eye"></i> View details
                 </router-link>
+                <a class="dropdown-item text-danger" href="" @click.prevent="stopExperiment(exp)"
+                  v-if="expStates.stoppable.includes(exp.state)">
+                  <template v-if="exp.state === 'Running'">
+                    <i class="fa fa-fw fa-stop-circle"></i> Stop
+                  </template>
+                  <template v-else>
+                    <i class="fa fa-fw fa-ban"></i> Cancel
+                  </template>
+                </a>
                 <template v-if="exp.user === currentUser">
-                  <a class="dropdown-item text-danger" href="" @click.prevent="stopExperiment(exp)"
-                    v-if="expStates.stoppable.includes(exp.state)">
-                    <template v-if="exp.state === 'Running'">
-                      <i class="fa fa-fw fa-stop-circle"></i> Stop
-                    </template>
-                    <template v-else>
-                      <i class="fa fa-fw fa-ban"></i> Cancel
-                    </template>
-                  </a>
                   <a class="dropdown-item" href="" @click.prevent="startExperiment(exp)"
                     v-if="exp.state === 'Waiting'">
                     <i class="fa fa-fw fa-play"></i> Start
