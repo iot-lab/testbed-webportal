@@ -14,7 +14,7 @@
       <div class="col-md-9">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane fade show active" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
-            
+
             <h5><i class="fa fa-fw fa-pencil" aria-hidden="true"></i> Edit your profile</h5>
             <form @submit.prevent="updateProfile">
               <user-form :user="user" ref="user" :hidden="['sshkeys']"></user-form>
@@ -23,15 +23,15 @@
                 <button class="btn btn-secondary" type="button" @click="reset">Reset</button>
               </div>
             </form>
-            
+
           </div>
           <div class="tab-pane fade" id="list-password" role="tabpanel" aria-labelledby="list-password-list">
-            
+
             <h5><i class="fa fa-fw fa-user" aria-hidden="true"></i> Username <span class="text-muted">{{auth.username}}</span></h5>
             <p class="mb-4">Your username cannot be modified.</p>
             <h5><i class="fa fa-fw fa-unlock-alt" aria-hidden="true"></i> Change your password</h5>
             <div class="row">
-              <form class="" @submit.prevent="changePassword" class="col-md-5"> 
+              <form @submit.prevent="changePassword" class="col-md-5">
                 <input v-model="pwd.old" type="password" placeholder="Current password" class="form-control" style="margin-top: 8px;" required>
                 <input v-model="pwd.new" type="password" placeholder="New password" class="form-control" style="margin-top: 8px;" required @focus.once="showPolicy">
                 <input v-model="pwd.confirm" type="password" placeholder="Confirm password" class="form-control" style="margin-top: 8px;" required>
@@ -56,7 +56,7 @@
           <div class="tab-pane fade" id="list-sshkeys" role="tabpanel" aria-labelledby="list-sshkeys-list">
 
             <h5><i class="fa fa-fw fa-key" aria-hidden="true"></i> SSH keys</h5>
-            <form class="" @submit.prevent="saveKeys">
+            <form @submit.prevent="saveKeys">
                 <ssh-keys :keys="keys" :rows="6"></ssh-keys>
                 <button class="btn btn-success" type="submit" style="margin-top: 10px;">Update SSH keys</button>
             </form>

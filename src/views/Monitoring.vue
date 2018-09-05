@@ -50,13 +50,13 @@ export default {
     async deleteProfile () {
       if (confirm(`Delete profile ${this.name}?`)) {
         await iotlab.deleteMonitoringProfile(this.name)
-        .then(_ => {
-          this.$notify({text: `Profile ${this.name} deleted`, type: 'success'})
-          this.$router.push({name: 'resources'})
-        })
-        .catch(err => {
-          this.$notify({text: err.response.data.message, type: 'error'})
-        })
+          .then(_ => {
+            this.$notify({text: `Profile ${this.name} deleted`, type: 'success'})
+            this.$router.push({name: 'resources'})
+          })
+          .catch(err => {
+            this.$notify({text: err.response.data.message, type: 'error'})
+          })
       }
     },
   },

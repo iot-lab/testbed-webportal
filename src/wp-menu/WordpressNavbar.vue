@@ -3,9 +3,9 @@
     <div class="container">
       <button type="button" class="navbar-toggler" data-toggle="collapse" data-target=".navbar-ex1-collapse">
         <span class="sr-only">Toggle navigation</span> &#x2630;
-      </button> 
+      </button>
 
-      <a href="/"> 
+      <a href="/">
         <img src="../assets/fit-iotlab3.png">
       </a>
 
