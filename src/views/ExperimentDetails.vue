@@ -132,7 +132,7 @@ export default {
 
   data () {
     return {
-      experiment: undefined,
+      experiment: {name: undefined},
       deploymentStatus: undefined,
       states: experimentStates,
       selectedNodes: [],

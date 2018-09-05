@@ -24,7 +24,7 @@ export const auth = {
       localStorage.setItem('username', this.username)
     })
     .catch(err => {
-      console.log(err)
+      // console.log(err)
       this.isAdmin = false
       this.loggedIn = false
       this.username = ''

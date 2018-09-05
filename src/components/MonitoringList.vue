@@ -62,7 +62,11 @@ export default {
   },
 
   async created () {
-    this.store.profiles = (await iotlab.getMonitoringProfiles()).sort((a, b) => a.profilename.localeCompare(b.profilename))
+    try {
+      this.store.profiles = (await iotlab.getMonitoringProfiles()).sort((a, b) => a.profilename.localeCompare(b.profilename))
+    } catch (err) {
+      this.$notify({text: 'Failed to load profiles', type: 'error'})
+    }
   },
 
   methods: {

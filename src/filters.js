@@ -2,17 +2,6 @@ import Vue from 'vue'
 import moment from 'moment'
 import humanizeDuration from 'humanize-duration'
 
-Vue.filter('fromTimestamp', fromTimestamp)
-Vue.filter('formatDate', formatDate)
-Vue.filter('formatDateTime', formatDateTime)
-Vue.filter('formatDateTimeSec', formatDateTimeSec)
-Vue.filter('humanizeDuration', humanDuration)
-Vue.filter('stripDomain', stripDomain)
-Vue.filter('stateBadgeClass', stateBadgeClass)
-Vue.filter('formatArchi', formatArchi)
-Vue.filter('formatRadio', formatRadio)
-Vue.filter('formatArchiRadio', formatArchiRadio)
-
 export const fromTimestamp = function (value) {
   if (value) {
     return moment.unix(value).format('YYYY-MM-DD HH:mm:ss')
@@ -106,3 +95,14 @@ export const formatArchiRadio = function (value) {
     return value.split(':')[0].replace('_', ' ')
   }
 }
+
+Vue.filter('fromTimestamp', fromTimestamp)
+Vue.filter('formatDate', formatDate)
+Vue.filter('formatDateTime', formatDateTime)
+Vue.filter('formatDateTimeSec', formatDateTimeSec)
+Vue.filter('humanizeDuration', humanDuration)
+Vue.filter('stripDomain', stripDomain)
+Vue.filter('stateBadgeClass', stateBadgeClass)
+Vue.filter('formatArchi', formatArchi)
+Vue.filter('formatRadio', formatRadio)
+Vue.filter('formatArchiRadio', formatArchiRadio)
