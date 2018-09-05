@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RunningExperiments.vue should match snapshot 1`] = `
+<div
+  class="container mt-3"
+>
+  <h2>
+    Running experiments
+  </h2>
+   
+  <table
+    class="table table-striped table-sm mt-3"
+  >
+    <thead>
+      <tr>
+        <th>
+          Id
+        </th>
+         
+        <th>
+          User
+        </th>
+         
+        <th>
+          Ending
+        </th>
+         
+        <th>
+          Elapsed
+        </th>
+         
+        <th>
+          Nodes
+        </th>
+      </tr>
+    </thead>
+     
+    <tbody />
+  </table>
+   
+  <p
+    class="text-muted"
+  >
+    
+    0 running experiments
+  
+  </p>
+</div>
+`;

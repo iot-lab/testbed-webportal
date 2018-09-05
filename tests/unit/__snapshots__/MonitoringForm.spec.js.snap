@@ -1,0 +1,526 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MonitoringForm.vue should match snapshot 1`] = `
+<form
+  class="mt-3"
+>
+  <div
+    class="form-group"
+  >
+    <label
+      class="mr-3 my-label"
+    >
+      Name
+    </label>
+     
+    <input
+      class="form-control"
+      placeholder="Profile name"
+      style="max-width: 300px; display: inline-block;"
+      type="text"
+    />
+     
+    <div
+      class="invalid-feedback"
+    >
+      
+      Invalid name. Only alphanumeric characters allowed [0-9A-Za-z_]
+    
+    </div>
+  </div>
+   
+  <div
+    class="form-group"
+  >
+    <label
+      class="mr-3 my-label"
+    >
+      Architecture
+    </label>
+     
+    <label
+      class="custom-control custom-radio"
+    >
+      <input
+        class="custom-control-input"
+        name="radio-archi"
+        type="radio"
+        value="m3"
+      />
+       
+      <span
+        class="custom-control-indicator"
+      />
+       
+      <span
+        class="custom-control-description"
+      >
+        M3
+      </span>
+    </label>
+     
+    <label
+      class="custom-control custom-radio"
+    >
+      <input
+        class="custom-control-input"
+        name="radio-archi"
+        type="radio"
+        value="a8"
+      />
+       
+      <span
+        class="custom-control-indicator"
+      />
+       
+      <span
+        class="custom-control-description"
+      >
+        A8
+      </span>
+    </label>
+     
+    <label
+      class="custom-control custom-radio"
+    >
+      <input
+        class="custom-control-input"
+        name="radio-archi"
+        type="radio"
+        value="custom"
+      />
+       
+      <span
+        class="custom-control-indicator"
+      />
+       
+      <span
+        class="custom-control-description"
+      >
+        Other
+      </span>
+    </label>
+  </div>
+   
+  <div
+    class="form-group"
+  >
+    <label
+      class="mr-3 my-label"
+    >
+      Monitor
+    </label>
+     
+    <label
+      class="custom-control custom-checkbox"
+    >
+      <input
+        class="custom-control-input"
+        name="checkbox-monitor"
+        type="checkbox"
+      />
+       
+      <span
+        class="custom-control-indicator"
+      />
+       
+      <span
+        class="custom-control-description"
+      >
+        Consumption 
+        <i
+          class="fa fa-bolt text-muted"
+        />
+      </span>
+    </label>
+     
+    <label
+      class="custom-control custom-checkbox"
+    >
+      <input
+        class="custom-control-input"
+        name="checkbox-monitor"
+        type="checkbox"
+      />
+       
+      <span
+        class="custom-control-indicator"
+      />
+       
+      <span
+        class="custom-control-description"
+      >
+        Radio 
+        <i
+          class="fa fa-wifi text-muted"
+        />
+      </span>
+    </label>
+  </div>
+   
+  <!---->
+   
+  <!---->
+   
+  <div
+    class="form-group"
+  >
+    <button
+      class="btn btn-success"
+      type="submit"
+    >
+      Save profile
+    </button>
+  </div>
+</form>
+`;
+
+exports[`MonitoringForm.vue should match snapshot 2 1`] = `
+<form
+  class="mt-3"
+>
+  <div
+    class="form-group"
+  >
+    <label
+      class="mr-3 my-label"
+    >
+      Name
+    </label>
+     
+    <input
+      class="form-control"
+      placeholder="Profile name"
+      style="max-width: 300px; display: inline-block;"
+      type="text"
+    />
+     
+    <div
+      class="invalid-feedback"
+    >
+      
+      Invalid name. Only alphanumeric characters allowed [0-9A-Za-z_]
+    
+    </div>
+  </div>
+   
+  <div
+    class="form-group"
+  >
+    <label
+      class="mr-3 my-label"
+    >
+      Architecture
+    </label>
+     
+    <label
+      class="custom-control custom-radio"
+    >
+      <input
+        class="custom-control-input"
+        name="radio-archi"
+        type="radio"
+        value="m3"
+      />
+       
+      <span
+        class="custom-control-indicator"
+      />
+       
+      <span
+        class="custom-control-description"
+      >
+        M3
+      </span>
+    </label>
+     
+    <label
+      class="custom-control custom-radio"
+    >
+      <input
+        class="custom-control-input"
+        name="radio-archi"
+        type="radio"
+        value="a8"
+      />
+       
+      <span
+        class="custom-control-indicator"
+      />
+       
+      <span
+        class="custom-control-description"
+      >
+        A8
+      </span>
+    </label>
+     
+    <label
+      class="custom-control custom-radio"
+    >
+      <input
+        class="custom-control-input"
+        name="radio-archi"
+        type="radio"
+        value="custom"
+      />
+       
+      <span
+        class="custom-control-indicator"
+      />
+       
+      <span
+        class="custom-control-description"
+      >
+        Other
+      </span>
+    </label>
+  </div>
+   
+  <div
+    class="form-group"
+  >
+    <label
+      class="mr-3 my-label"
+    >
+      Monitor
+    </label>
+     
+    <label
+      class="custom-control custom-checkbox"
+    >
+      <input
+        class="custom-control-input"
+        name="checkbox-monitor"
+        type="checkbox"
+      />
+       
+      <span
+        class="custom-control-indicator"
+      />
+       
+      <span
+        class="custom-control-description"
+      >
+        Consumption 
+        <i
+          class="fa fa-bolt text-muted"
+        />
+      </span>
+    </label>
+     
+    <label
+      class="custom-control custom-checkbox"
+    >
+      <input
+        class="custom-control-input"
+        name="checkbox-monitor"
+        type="checkbox"
+      />
+       
+      <span
+        class="custom-control-indicator"
+      />
+       
+      <span
+        class="custom-control-description"
+      >
+        Radio 
+        <i
+          class="fa fa-wifi text-muted"
+        />
+      </span>
+    </label>
+  </div>
+   
+  <!---->
+   
+  <!---->
+   
+  <div
+    class="form-group"
+  >
+    <button
+      class="btn btn-success"
+      type="submit"
+    >
+      Save profile
+    </button>
+  </div>
+</form>
+`;
+
+exports[`MonitoringForm.vue should match snapshot 3 1`] = `
+<form
+  class="mt-3"
+>
+  <div
+    class="form-group"
+  >
+    <label
+      class="mr-3 my-label"
+    >
+      Name
+    </label>
+     
+    <input
+      class="form-control"
+      placeholder="Profile name"
+      style="max-width: 300px; display: inline-block;"
+      type="text"
+    />
+     
+    <div
+      class="invalid-feedback"
+    >
+      
+      Invalid name. Only alphanumeric characters allowed [0-9A-Za-z_]
+    
+    </div>
+  </div>
+   
+  <div
+    class="form-group"
+  >
+    <label
+      class="mr-3 my-label"
+    >
+      Architecture
+    </label>
+     
+    <label
+      class="custom-control custom-radio"
+    >
+      <input
+        class="custom-control-input"
+        name="radio-archi"
+        type="radio"
+        value="m3"
+      />
+       
+      <span
+        class="custom-control-indicator"
+      />
+       
+      <span
+        class="custom-control-description"
+      >
+        M3
+      </span>
+    </label>
+     
+    <label
+      class="custom-control custom-radio"
+    >
+      <input
+        class="custom-control-input"
+        name="radio-archi"
+        type="radio"
+        value="a8"
+      />
+       
+      <span
+        class="custom-control-indicator"
+      />
+       
+      <span
+        class="custom-control-description"
+      >
+        A8
+      </span>
+    </label>
+     
+    <label
+      class="custom-control custom-radio"
+    >
+      <input
+        class="custom-control-input"
+        name="radio-archi"
+        type="radio"
+        value="custom"
+      />
+       
+      <span
+        class="custom-control-indicator"
+      />
+       
+      <span
+        class="custom-control-description"
+      >
+        Other
+      </span>
+    </label>
+  </div>
+   
+  <div
+    class="form-group"
+  >
+    <label
+      class="mr-3 my-label"
+    >
+      Monitor
+    </label>
+     
+    <label
+      class="custom-control custom-checkbox"
+    >
+      <input
+        class="custom-control-input"
+        name="checkbox-monitor"
+        type="checkbox"
+      />
+       
+      <span
+        class="custom-control-indicator"
+      />
+       
+      <span
+        class="custom-control-description"
+      >
+        Consumption 
+        <i
+          class="fa fa-bolt text-muted"
+        />
+      </span>
+    </label>
+     
+    <label
+      class="custom-control custom-checkbox"
+    >
+      <input
+        class="custom-control-input"
+        name="checkbox-monitor"
+        type="checkbox"
+      />
+       
+      <span
+        class="custom-control-indicator"
+      />
+       
+      <span
+        class="custom-control-description"
+      >
+        Radio 
+        <i
+          class="fa fa-wifi text-muted"
+        />
+      </span>
+    </label>
+  </div>
+   
+  <!---->
+   
+  <!---->
+   
+  <div
+    class="form-group"
+  >
+    <button
+      class="btn btn-success"
+      type="submit"
+    >
+      Save profile
+    </button>
+  </div>
+</form>
+`;

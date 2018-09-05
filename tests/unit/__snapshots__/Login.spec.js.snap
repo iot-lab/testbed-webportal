@@ -1,0 +1,147 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Login.vue should render blank login form 1`] = `
+<div
+  class="container mt-4 text-center"
+>
+  <div
+    class="mb-2 mx-auto"
+    id="logo"
+  >
+    <img
+      src="../assets/disc-iotlab.svg"
+    />
+  </div>
+   
+  <!---->
+   
+  <div
+    class="login-box mx-auto"
+  >
+    <h2
+      style="font-size: 1.75rem;"
+    >
+      Welcome to FIT IoT-LAB
+    </h2>
+     
+    <form
+      class="mx-auto"
+    >
+      <input
+        autofocus="autofocus"
+        class="form-control"
+        placeholder="Username"
+        required="required"
+        type="text"
+      />
+       
+      <input
+        class="form-control"
+        placeholder="Password"
+        required="required"
+        type="password"
+      />
+       
+      <div
+        class="invalid-feedback mb-2"
+      >
+        Invalid username or password
+      </div>
+       
+      <button
+        class="btn btn-primary btn-block"
+        type="submit"
+      >
+        Log in
+      </button>
+       
+      <vuecomponent-stub
+        class="btn btn-outline-success btn-block"
+        to="[object Object]"
+      />
+       
+      <p
+        class="text-center"
+      >
+        <vuecomponent-stub
+          class="btn btn-block"
+          to="[object Object]"
+        />
+      </p>
+    </form>
+  </div>
+</div>
+`;
+
+exports[`Login.vue should render failed login form 1`] = `
+<div
+  class="container mt-4 text-center"
+>
+  <div
+    class="mb-2 mx-auto"
+    id="logo"
+  >
+    <img
+      src="../assets/disc-iotlab.svg"
+    />
+  </div>
+   
+  <!---->
+   
+  <div
+    class="login-box mx-auto error"
+  >
+    <h2
+      style="font-size: 1.75rem;"
+    >
+      Welcome to FIT IoT-LAB
+    </h2>
+     
+    <form
+      class="mx-auto"
+    >
+      <input
+        autofocus="autofocus"
+        class="form-control is-invalid"
+        placeholder="Username"
+        required="required"
+        type="text"
+      />
+       
+      <input
+        class="form-control is-invalid"
+        placeholder="Password"
+        required="required"
+        type="password"
+      />
+       
+      <div
+        class="invalid-feedback mb-2"
+      >
+        Invalid username or password
+      </div>
+       
+      <button
+        class="btn btn-primary btn-block"
+        type="submit"
+      >
+        Log in
+      </button>
+       
+      <vuecomponent-stub
+        class="btn btn-outline-success btn-block"
+        to="[object Object]"
+      />
+       
+      <p
+        class="text-center"
+      >
+        <vuecomponent-stub
+          class="btn btn-block"
+          to="[object Object]"
+        />
+      </p>
+    </form>
+  </div>
+</div>
+`;

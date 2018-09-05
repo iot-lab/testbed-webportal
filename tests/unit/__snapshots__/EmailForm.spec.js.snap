@@ -1,0 +1,147 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EmailForm.vue should match snapshot 1`] = `
+<div>
+  <div
+    class="form-group"
+  >
+    <label
+      class="form-control-label"
+    >
+      Recipients 
+      <small
+        class="text-muted"
+      >
+        (comma separated)
+      </small>
+    </label>
+     
+    <input
+      class="form-control"
+      name="recipients"
+      placeholder="Recipients"
+      type="text"
+    />
+     
+    <div
+      class="invalid-feedback"
+      style="display: none;"
+    />
+  </div>
+   
+  <div
+    class="form-group"
+  >
+    <label
+      class="form-control-label"
+    >
+      Subject
+    </label>
+     
+    <input
+      class="form-control"
+      name="subject"
+      placeholder="Subject"
+      type="text"
+    />
+     
+    <div
+      class="invalid-feedback"
+      style="display: none;"
+    />
+  </div>
+   
+  <div
+    class="form-group"
+  >
+    <textarea
+      class="form-control"
+      name="message"
+      placeholder="Message"
+      rows="8"
+    />
+     
+    <div
+      class="invalid-feedback"
+      style="display: none;"
+    >
+      
+      
+    
+    </div>
+  </div>
+</div>
+`;
+
+exports[`EmailForm.vue should match snapshot with props 1`] = `
+<div>
+  <div
+    class="form-group"
+  >
+    <label
+      class="form-control-label"
+    >
+      Recipients 
+      <small
+        class="text-muted"
+      >
+        (comma separated)
+      </small>
+    </label>
+     
+    <input
+      class="form-control"
+      name="recipients"
+      placeholder="Recipients"
+      type="text"
+    />
+     
+    <div
+      class="invalid-feedback"
+      style="display: none;"
+    />
+  </div>
+   
+  <div
+    class="form-group"
+  >
+    <label
+      class="form-control-label"
+    >
+      Subject
+    </label>
+     
+    <input
+      class="form-control"
+      name="subject"
+      placeholder="Subject"
+      type="text"
+    />
+     
+    <div
+      class="invalid-feedback"
+      style="display: none;"
+    />
+  </div>
+   
+  <div
+    class="form-group"
+  >
+    <textarea
+      class="form-control"
+      name="message"
+      placeholder="Message"
+      rows="8"
+    />
+     
+    <div
+      class="invalid-feedback"
+      style="display: none;"
+    >
+      
+      
+    
+    </div>
+  </div>
+</div>
+`;
