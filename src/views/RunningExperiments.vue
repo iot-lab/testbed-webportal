@@ -6,8 +6,9 @@
       <tr>
         <th>Id</th>
         <th>User</th>
-        <th>Ending</th>
         <th>Elapsed</th>
+        <th>State</th>
+        <th>Ending</th>
         <th>Nodes</th>
       </tr>
     </thead>
@@ -15,14 +16,20 @@
       <tr v-for="exp in runningExperiments">
         <td class="nowrap">{{exp.id}}</td>
         <td class="nowrap">{{exp.user}}</td>
-        <td class="nowrap" :title="showStarted(exp)">{{exp.start_date | formatDateTime(exp.submitted_duration)}}</td>
         <td class="durationProgress nowrap" :style="`text-align: center; --progress: ${experimentProgress(exp)}%`" :title="showRemaining(exp)">
           {{exp.effective_duration | humanizeDuration}}
           <small class="text-dark">({{experimentProgress(exp)}}%)</small>
         </td>
-        <td>
-          <span class="nodes mr-1" :class="{'comma': index + 1 < exp.nodes.length}" v-for="(node, index) in [...exp.nodes].sort((a, b) => nodeSortByHostname(a, b))">{{node | stripDomain}}</span>
-          <span class="text-muted nowrap">({{exp.nodes.length}} nodes)</span>
+        <td class="nowrap"><span class="badge badge-state" :class="exp.state | stateBadgeClass">{{exp.state}}</span></td>
+        <td class="nowrap" :title="showStarted(exp)">{{exp.start_date | formatDateTime(exp.submitted_duration)}}</td>
+        <td style="width: 600px">
+          <div class="ellipsis ellipsis-indicator cursor" @click="toggleEllipsis">
+            <span class="text-muted nowrap mr-1" v-if="exp.nodes.length <= 1">({{exp.nodes.length}} node)</span>
+            <span class="text-muted nowrap mr-1" v-else>({{exp.nodes.length}} nodes)</span>
+            <span class="nodes mr-1" :class="{'comma': index + 1 < exp.nodes.length}"
+              v-for="(node, index) in [...exp.nodes].sort((a, b) => nodeSortByHostname(a, b))">{{node | stripDomain}}</span>
+            <!-- {{exp.nodes.join(', ')}} -->
+          </div>
         </td>
       </tr>
     </tbody>
@@ -83,6 +90,10 @@ export default {
       return exp.nodes.map(n => this.$options.filters.stripDomain(n)).sort().map(n => `<i>${n}</i>`).join(', ')
     },
 
+    toggleEllipsis (event) {
+      event.path.find(e => e.tagName === 'DIV').classList.toggle('ellipsis')
+    },
+
   },
 
 }
@@ -95,6 +106,12 @@ export default {
 td.nowrap {
   vertical-align: middle;
 }
+.ellipsis {
+  max-width: calc(600px - 0.6rem);
+  overflow: hidden;
+  text-overflow: hidden;
+  white-space: nowrap;
+}
 .durationProgress::after,.durationProgress::before {
   top: calc(50% - 12px);
   height: 24px;
@@ -105,5 +122,24 @@ td.nowrap {
 }
 .nodes.comma::after {
   content: ", ";
+}
+.ellipsis-indicator {
+  position: relative;
+}
+.ellipsis-indicator:hover::after {
+  position: absolute;
+  right: 0;
+  top: calc(50% - 12px);
+  /*top: 50%;*/ 
+  top: 0;
+  padding: 0 5px;
+  font-family: fontawesome;
+  content: "\f141";
+  content: "\f0d7";
+  content: "\f065";
+  color: var(--dark);
+  font-size: 1em;
+  background: #ccc;
+  border-radius: 5px;
 }
 </style>
