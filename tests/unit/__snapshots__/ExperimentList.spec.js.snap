@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ExperimentList.vue should match snapshot 1`] = `
+<div>
+  <!---->
+   
+  <!---->
+   
+  <div
+    style="display: none;"
+  >
+    <i
+      class="fa fa-spinner fa-spin fa-fw"
+    />
+     
+    <i>
+      loading experiments
+    </i>
+  </div>
+</div>
+`;

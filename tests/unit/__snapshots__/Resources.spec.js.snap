@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Resources.vue should match snapshot 1`] = `
+<div
+  class="container my-3"
+>
+  <h2>
+    <i
+      aria-hidden="true"
+      class="fa fa-fw fa-folder-open"
+    />
+     My resources
+  </h2>
+   
+  <div
+    class="row"
+  >
+    <div
+      class="col-md-3 mb-4"
+    >
+      <div
+        class="list-group"
+        id="list-tab"
+        role="tablist"
+      >
+        <a
+          aria-controls="monitoring"
+          class="list-group-item list-group-item-action active"
+          data-toggle="list"
+          href="#list-monitoring"
+          id="list-monitoring-list"
+          role="tab"
+        >
+          <i
+            aria-hidden="true"
+            class="fa fa-fw fa-thermometer"
+          />
+           Monitoring profiles
+        </a>
+      </div>
+    </div>
+     
+    <div
+      class="col-md-9"
+    >
+      <div
+        class="tab-content"
+        id="nav-tabContent"
+      >
+        <div
+          aria-labelledby="list-monitoring-list"
+          class="tab-pane fade show active"
+          id="list-monitoring"
+          role="tabpanel"
+        >
+          <monitoringlist-stub />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

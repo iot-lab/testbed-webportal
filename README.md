@@ -9,7 +9,6 @@
 * [Node.js](https://nodejs.org), for development
 * Python & Fabric, for deployment
 
-
 ## Development
 
 ``` bash
@@ -20,16 +19,18 @@ npm install
 npm run serve
 
 # build for production with minification (mode = [dev|dev-beta|prod|prod-beta])
+# (eg. 'dev[-beta]' <=> devwww.iot-lab.info/testbed[-beta])
 npm run build:<mode>
-
-# build for production and view the bundle analyzer report
-npm run build --report
 
 # run unit tests
 npm run test:unit
+npm run test:unit -- --watch # run tests in interactive mode
+npm run test:unit -- --u     # update all snapshots
 
 # run end to end tests
-npm run test:e2e
+npm run test:e2e                # run tests against local dev server with GUI
+npm run test:e2e -- --headless  # run tests for CI
+npm run test:e2e -- --url <URL> # run tests against given url
 ```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).

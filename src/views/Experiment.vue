@@ -100,7 +100,7 @@
             </div>
             <!-- Select By HOSTNAME -->
             <div class="tab-pane fade show" id="list-byname" role="tabpanel" aria-labelledby="list-byname-list">
-              
+
               <p class="mb-2 lead text-muted">Pick nodes from the list. Add some filters or a search pattern.</p>
               <div>
                 <span>Filters</span>&nbsp;
@@ -109,7 +109,7 @@
                   :items="archis4Site.map(archi => Object({value: archi, option: this.$options.filters.formatArchiRadio(archi)}))">
                 </filter-select>
                 <filter-select all="All mobility" :items="[{value: '1', option:'Mobile'}, {value: '0', option: 'Not mobile'}]" v-model="filterMobile"></filter-select>
-                
+
               </div>
               <div class="d-md-flex flex-row mt-3" style="align-items: center;">
                 <multiselect v-model="currentNodes" :options="filteredNodes" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" :placeholder="searchNodesPlaceholder" label="network_address" track-by="network_address" class="mr-1">
@@ -133,7 +133,7 @@
               <p class="mt-2 mb-2 font-size-sm">
                 <a xdata-toggle="collapse" href="#collapseMap" aria-expanded="false" aria-controls="collapseMap" @click.prevent="showMap = !showMap">
                   <i class="fa fa-map-o fa-fw fa-lg" aria-hidden="true"></i> View/select nodes on map <i class="fa fa-caret-down" aria-hidden="true"></i>
-                </a> 
+                </a>
               </p>
               <div xclass="collapse" id="collapseMap" v-show="showMap">
                 <map-3d :nodes="filteredNodes" v-model="currentNodes" :selectedNodes="selectedNodesForSite" :shows="showMap" @selectSite="(site) => filterSite = site"></map-3d>
@@ -401,15 +401,15 @@ export default {
       return this.nodes.filter((node) => {
         return this.filterArchi === 'all' || node.archi === this.filterArchi
       })
-      .filter((node) => {
-        return this.filterSite === 'all' || node.site === this.filterSite
-      })
-      .filter((node) => {
-        return this.filterMobile === 'all' || node.mobile === parseInt(this.filterMobile)
-      })
-      .filter((node) => {
-        return !this.selectedNodes.some(e => e.network_address === node.network_address)
-      })
+        .filter((node) => {
+          return this.filterSite === 'all' || node.site === this.filterSite
+        })
+        .filter((node) => {
+          return this.filterMobile === 'all' || node.mobile === parseInt(this.filterMobile)
+        })
+        .filter((node) => {
+          return !this.selectedNodes.some(e => e.network_address === node.network_address)
+        })
     },
     searchNodesPlaceholder () {
       if (this.filteredNodes.length > 0) {
@@ -455,19 +455,19 @@ export default {
       return this.nodes.filter((node) => {
         return this.filterSite === 'all' || node.site === this.filterSite
       })
-      .reduce((list, node) => {
-        if (!list.includes(node.archi)) { list.push(node.archi) }
-        return list
-      }, [])
+        .reduce((list, node) => {
+          if (!list.includes(node.archi)) { list.push(node.archi) }
+          return list
+        }, [])
     },
     sites4Archi () {
       return this.nodes.filter((node) => {
         return this.filterArchi === 'all' || node.archi === this.filterArchi
       })
-      .reduce((list, node) => {
-        if (!list.includes(node.site)) { list.push(node.site) }
-        return list
-      }, [])
+        .reduce((list, node) => {
+          if (!list.includes(node.site)) { list.push(node.site) }
+          return list
+        }, [])
     },
     qtyAvailable () {
       // qty available for (site, archi, mobile) = total qty - qty already selected
@@ -477,31 +477,31 @@ export default {
              this.selectedProps.filter((p) => p.prop.properties.site === this.filterSite &&
                                               p.prop.properties.archi === this.filterArchi &&
                                               Boolean(p.prop.properties.mobile) === this.propMobile)
-                               .reduce((a, e) => a + parseInt(e.prop.nbnodes), 0)
+               .reduce((a, e) => a + parseInt(e.prop.nbnodes), 0)
     },
     states () {
       return this.nodes.filter((node) => {
         return this.filterSite === 'all' || node.site === this.filterSite
       })
-      .reduce((list, node) => {
-        if (!list.includes(node.state)) { list.push(node.state) }
-        return list
-      }, [])
+        .reduce((list, node) => {
+          if (!list.includes(node.state)) { list.push(node.state) }
+          return list
+        }, [])
     },
     firmwareAssociations () {
       let fwasso
       if (this.mode === 'byprop') {
         fwasso = this.selectedProps.filter(prop => prop.firmware !== undefined && prop.firmware.name !== undefined)
-                                    .map(prop => ({
-                                      nodes: [prop.prop.alias],
-                                      firmwarename: prop.firmware.name,
-                                    }))
+          .map(prop => ({
+            nodes: [prop.prop.alias],
+            firmwarename: prop.firmware.name,
+          }))
       } else {
         fwasso = this.selectedNodeGroups.filter(group => group.firmware !== undefined && group.firmware.name !== undefined)
-                                        .map(group => ({
-                                          nodes: group.nodes.map(node => node.network_address),
-                                          firmwarename: group.firmware.name,
-                                        }))
+          .map(group => ({
+            nodes: group.nodes.map(node => node.network_address),
+            firmwarename: group.firmware.name,
+          }))
       }
       if (fwasso.length === 0) return null
       return fwasso
@@ -510,16 +510,16 @@ export default {
       let monasso
       if (this.mode === 'byprop') {
         monasso = this.selectedProps.filter(prop => prop.monitoring !== undefined)
-                                    .map(prop => ({
-                                      nodes: [prop.prop.alias],
-                                      profilename: prop.monitoring,
-                                    }))
+          .map(prop => ({
+            nodes: [prop.prop.alias],
+            profilename: prop.monitoring,
+          }))
       } else {
         monasso = this.selectedNodeGroups.filter(group => group.monitoring !== undefined)
-                                        .map(group => ({
-                                          nodes: group.nodes.map(node => node.network_address),
-                                          profilename: group.monitoring,
-                                        }))
+          .map(group => ({
+            nodes: group.nodes.map(node => node.network_address),
+            profilename: group.monitoring,
+          }))
       }
       if (monasso.length === 0) return null
       return monasso
@@ -529,15 +529,15 @@ export default {
   methods: {
     refreshNodes () {
       iotlab.getNodes().then(data => { this.nodes = data.map(node => newNode(node)) })
-                       .catch(err => {
-                         this.$notify({text: 'An error occured while fetching data', type: 'error'})
-                         throw err
-                       })
+        .catch(err => {
+          this.$notify({text: 'An error occured while fetching data', type: 'error'})
+          throw err
+        })
       iotlab.getNodesIds().then(data => { this.nodes_ids = data })
-                       .catch(err => {
-                         this.$notify({text: 'An error occured while fetching data', type: 'error'})
-                         throw err
-                       })
+        .catch(err => {
+          this.$notify({text: 'An error occured while fetching data', type: 'error'})
+          throw err
+        })
     },
     startScheduled () {
       this.$forceUpdate()

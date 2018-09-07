@@ -1,0 +1,110 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dashboard.vue should match snapshot 1`] = `
+<div
+  class="container mt-3"
+>
+  <div
+    class="row"
+  >
+    <div
+      class="col-md-9"
+    >
+      <h2>
+        My experiments
+      </h2>
+       
+      <p>
+        <span
+          class="badge badge-pill badge-success"
+        >
+          ?
+        </span>
+         Running
+        
+        <span
+          class="badge badge-pill badge-warning"
+        >
+          ?
+        </span>
+         Scheduled
+        
+        <span
+          class="badge badge-pill badge-dark"
+        >
+          ?
+        </span>
+         Completed
+      
+      </p>
+       
+      <experimentlist-stub />
+       
+      <p>
+        <vuecomponent-stub
+          class="btn btn-primary"
+          to="[object Object]"
+        />
+      </p>
+       
+      <!---->
+       
+      <i
+        class="fa fa-spinner fa-spin fa-fw"
+      />
+       
+      <i>
+        loading experiments
+      </i>
+    </div>
+     
+    <div
+      class="col"
+    >
+      <h2>
+        Platform status
+      </h2>
+       
+      <p>
+        <span
+          class="badge badge-pill mr-1 cursor badge-primary"
+        >
+          0 sites
+        </span>
+         
+      </p>
+       
+      <p>
+        <span
+          class="badge badge-pill badge-success"
+        >
+          0
+        </span>
+         nodes available
+        
+        <span
+          class="badge badge-pill badge-warning"
+        >
+          0
+        </span>
+         busy
+        
+        <span
+          class="badge badge-pill badge-danger"
+        >
+          0
+        </span>
+         unavailable
+      
+      </p>
+       
+      <p>
+        <vuecomponent-stub
+          class="btn btn-light"
+          to="[object Object]"
+        />
+      </p>
+    </div>
+  </div>
+</div>
+`;

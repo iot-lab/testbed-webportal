@@ -21,7 +21,7 @@
         </div>
 
         <user-form :user="user" ref="user"></user-form>
-        
+
         <div class="form-group">
           <vue-recaptcha ref="recaptcha" @verify="onCaptchaVerify" @expired="onCaptchaExpired"
             :sitekey="reCaptchaSitekey"

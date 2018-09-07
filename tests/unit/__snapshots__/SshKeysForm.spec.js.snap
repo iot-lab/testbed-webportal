@@ -1,0 +1,101 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SshKeysForm.vue should match snapshot 1`] = `
+<div>
+  <ul
+    class="nav nav-tabs"
+    style="border-bottom: 1px solid transparent; position: relative; top: 1px;"
+  >
+    <li
+      class="nav-item"
+    >
+      <a
+        class="nav-link active"
+        data-toggle="tab"
+        href="#tab_SSH0"
+      >
+        
+      SSH key 1
+      
+        <a>
+          <i
+            class="fa fa-times-circle"
+          />
+        </a>
+      </a>
+    </li>
+    <li
+      class="nav-item"
+    >
+      <a
+        class="nav-link"
+        data-toggle="tab"
+        href="#tab_SSH1"
+      >
+        
+      SSH key 2
+      
+        <a
+          style="display: none;"
+        >
+          <i
+            class="fa fa-times-circle"
+          />
+        </a>
+      </a>
+    </li>
+     
+    <li
+      class="nav-item"
+    >
+      <a
+        class="nav-link"
+      >
+        <i
+          class="fa fa-plus"
+        />
+      </a>
+    </li>
+  </ul>
+   
+  <div
+    class="tab-content"
+    id="sshkeysTabContent"
+  >
+    <div
+      class="tab-pane active show"
+      id="tab_SSH0"
+    >
+      <div
+        class="control-group"
+      >
+        <div
+          class="controls"
+        >
+          <textarea
+            class="form-control"
+            rows="4"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      class="tab-pane"
+      id="tab_SSH1"
+    >
+      <div
+        class="control-group"
+      >
+        <div
+          class="controls"
+        >
+          <textarea
+            class="form-control"
+            rows="4"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ModalDialog.vue should match snapshot 1`] = `
+<div
+  aria-hidden="true"
+  class="modal fade"
+  role="dialog"
+  tabindex="-1"
+>
+  <div
+    class="modal-dialog"
+  >
+    <div
+      class="modal-content"
+    >
+      <div
+        class="modal-header bg-light"
+      >
+        <h5
+          class="modal-title"
+        />
+         
+        <button
+          aria-label="Close"
+          class="close"
+          data-dismiss="modal"
+          type="button"
+        >
+          <span
+            aria-hidden="true"
+          >
+            ×
+          </span>
+        </button>
+      </div>
+       
+      <div
+        class="modal-body"
+      />
+       
+      <div
+        class="modal-footer border-0"
+      >
+        <button
+          class="btn"
+          data-dismiss="modal"
+          type="button"
+        >
+          Close
+        </button>
+         
+        <button
+          class="btn btn-success"
+          type="button"
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;

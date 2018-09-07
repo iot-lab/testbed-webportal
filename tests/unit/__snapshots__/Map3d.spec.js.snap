@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Map3d.vue should match snapshot 1`] = `
+<div
+  id="map"
+>
+  <!---->
+   
+  <div
+    id="map3d"
+    oncontextmenu="return false"
+  />
+   
+  <div
+    class="p-2 text-white"
+    id="nodeInfo"
+  />
+</div>
+`;

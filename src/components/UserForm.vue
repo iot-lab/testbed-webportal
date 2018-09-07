@@ -12,7 +12,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md">                    
+      <div class="col-md">
         <div class="form-group" v-if="!hidden.includes('lastName')">
           <label class="form-control-label">Last name</label>
           <input placeholder="Last name" v-model="user.lastName" name="lastname"
@@ -25,7 +25,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md">                    
+      <div class="col-md">
         <div class="form-group" v-if="!hidden.includes('email')">
           <label class="form-control-label">Email</label>
           <input v-model="user.email" name="email" class="form-control" type="email"
@@ -35,7 +35,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md">                    
+      <div class="col-md">
       </div>
     </div>
     <div class="row">
@@ -124,7 +124,7 @@
     <div class="form-group" v-if="!hidden.includes('sshkeys')">
       <a data-toggle="collapse" href=".collapse-ssh" role="button" aria-expanded="false" aria-controls="collapseSSH">
         <label class="form-control-label" v-if="mode === 'edit'">
-          <i class="fa fa-caret-right"></i> SSH keys</span>
+          <i class="fa fa-caret-right"></i> SSH keys
         </label>
         <label class="form-control-label" v-else>
           <i class="fa fa-caret-right"></i> add SSH key <span class="text-muted">(optional, can be done later)</span>
@@ -137,7 +137,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import Multiselect from 'vue-multiselect'

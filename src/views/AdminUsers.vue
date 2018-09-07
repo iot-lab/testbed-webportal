@@ -57,7 +57,7 @@
             </a>
           </td>
           <td>
-            <span class="badge mr-1" v-for="group in [...user.groups].sort()" 
+            <span class="badge mr-1" v-for="group in [...user.groups].sort()"
               :class="group === 'admin' ? 'badge-warning' : 'badge-primary'">
               {{group}}
             </span>
@@ -97,7 +97,7 @@
       <p v-if="!show && !searchPattern">Select a search criterion</p>
       <p v-else-if="users.length === 1">{{users.length}} matching user</p>
       <p v-else-if="users.length > 1">{{users.length}} matching users</p>
-      <p v-else>No matching user found</p>        
+      <p v-else>No matching user found</p>
     </div>
 
     <modal-dialog name="add-groups-modal" @save="setGroups('add')">

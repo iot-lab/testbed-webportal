@@ -1,0 +1,351 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UserAccount.vue should match snapshot 1`] = `
+<div
+  class="container mt-3"
+>
+  <h2>
+    <i
+      aria-hidden="true"
+      class="fa fa-fw fa-user"
+    />
+     My Account
+  </h2>
+   
+  <div
+    class="row"
+  >
+    <div
+      class="col-md-3 mb-4"
+    >
+      <div
+        class="list-group"
+        id="list-tab"
+        role="tablist"
+      >
+        <a
+          aria-controls="profile"
+          class="list-group-item list-group-item-action active"
+          data-toggle="list"
+          href="#list-profile"
+          id="list-profile-list"
+          role="tab"
+        >
+          <i
+            aria-hidden="true"
+            class="fa fa-fw fa-address-card"
+          />
+           Profile
+        </a>
+         
+        <a
+          aria-controls="password"
+          class="list-group-item list-group-item-action"
+          data-toggle="list"
+          href="#list-password"
+          id="list-password-list"
+          role="tab"
+        >
+          <i
+            aria-hidden="true"
+            class="fa fa-fw fa-unlock-alt"
+          />
+           Password
+        </a>
+         
+        <a
+          aria-controls="sshkeys"
+          class="list-group-item list-group-item-action"
+          data-toggle="list"
+          href="#list-sshkeys"
+          id="list-sshkeys-list"
+          role="tab"
+        >
+          <i
+            aria-hidden="true"
+            class="fa fa-fw fa-key"
+          />
+           SSH Keys
+        </a>
+         
+        <a
+          aria-controls="delete"
+          class="list-group-item list-group-item-action"
+          data-toggle="list"
+          href="#list-delete"
+          id="list-delete-list"
+          role="tab"
+        >
+          <i
+            aria-hidden="true"
+            class="fa fa-fw fa-trash-o"
+          />
+           Delete account
+        </a>
+         
+        <a
+          aria-controls="mailing"
+          class="list-group-item list-group-item-action"
+          data-toggle="list"
+          href="#list-mailing"
+          id="list-mailing-list"
+          role="tab"
+        >
+          <i
+            aria-hidden="true"
+            class="fa fa-fw fa-envelope-o"
+          />
+           Mailing list
+        </a>
+      </div>
+    </div>
+     
+    <div
+      class="col-md-9"
+    >
+      <div
+        class="tab-content"
+        id="nav-tabContent"
+      >
+        <div
+          aria-labelledby="list-profile-list"
+          class="tab-pane fade show active"
+          id="list-profile"
+          role="tabpanel"
+        >
+          <h5>
+            <i
+              aria-hidden="true"
+              class="fa fa-fw fa-pencil"
+            />
+             Edit your profile
+          </h5>
+           
+          <form>
+            <userform-stub />
+             
+            <div
+              class="form-group"
+            >
+              <button
+                class="btn btn-success"
+                type="submit"
+              >
+                Update profile
+              </button>
+               
+              <button
+                class="btn btn-secondary"
+                type="button"
+              >
+                Reset
+              </button>
+            </div>
+          </form>
+        </div>
+         
+        <div
+          aria-labelledby="list-password-list"
+          class="tab-pane fade"
+          id="list-password"
+          role="tabpanel"
+        >
+          <h5>
+            <i
+              aria-hidden="true"
+              class="fa fa-fw fa-user"
+            />
+             Username 
+            <span
+              class="text-muted"
+            >
+              
+            </span>
+          </h5>
+           
+          <p
+            class="mb-4"
+          >
+            Your username cannot be modified.
+          </p>
+           
+          <h5>
+            <i
+              aria-hidden="true"
+              class="fa fa-fw fa-unlock-alt"
+            />
+             Change your password
+          </h5>
+           
+          <div
+            class="row"
+          >
+            <form
+              class="col-md-5"
+            >
+              <input
+                class="form-control"
+                placeholder="Current password"
+                required="required"
+                style="margin-top: 8px;"
+                type="password"
+              />
+               
+              <input
+                class="form-control"
+                placeholder="New password"
+                required="required"
+                style="margin-top: 8px;"
+                type="password"
+              />
+               
+              <input
+                class="form-control"
+                placeholder="Confirm password"
+                required="required"
+                style="margin-top: 8px;"
+                type="password"
+              />
+               
+              <button
+                class="btn btn-success"
+                style="margin-top: 10px;"
+                type="submit"
+              >
+                Change Password
+              </button>
+            </form>
+             
+            <div
+              class="col-md-6"
+            >
+              <div
+                class="card mt-2 border-danger text-danger"
+                id="policy"
+                style="display: none;"
+              >
+                <div
+                  class="card-body"
+                >
+                  <h6>
+                    Password Policy
+                  </h6>
+                   
+                  <ul
+                    class="pl-3 mb-0"
+                  >
+                    <li>
+                      one upper case letter [A-Z]
+                    </li>
+                     
+                    <li>
+                      three lower case letters [a-z]
+                    </li>
+                     
+                    <li>
+                      one digit [0-9]
+                    </li>
+                     
+                    <li>
+                      one special character [!@#$%^&*_=+-/]
+                    </li>
+                     
+                    <li>
+                      minimum length of eight characters
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+         
+        <div
+          aria-labelledby="list-sshkeys-list"
+          class="tab-pane fade"
+          id="list-sshkeys"
+          role="tabpanel"
+        >
+          <h5>
+            <i
+              aria-hidden="true"
+              class="fa fa-fw fa-key"
+            />
+             SSH keys
+          </h5>
+           
+          <form>
+            <sshkeys-stub />
+             
+            <button
+              class="btn btn-success"
+              style="margin-top: 10px;"
+              type="submit"
+            >
+              Update SSH keys
+            </button>
+          </form>
+        </div>
+         
+        <div
+          aria-labelledby="list-delete-list"
+          class="tab-pane fade"
+          id="list-delete"
+          role="tabpanel"
+        >
+          <p
+            class="lead"
+          >
+            Permanently delete your account?
+          </p>
+           
+          <p>
+            <strong>
+              All your data will be lost
+            </strong>
+          </p>
+           
+          <button
+            class="btn btn-danger"
+            type="button"
+          >
+            <i
+              aria-hidden="true"
+              class="fa fa-trash-o fa-lg"
+            />
+             Delete Account
+          </button>
+        </div>
+         
+        <div
+          aria-labelledby="list-mailing-list"
+          class="tab-pane fade"
+          id="list-mailing"
+          role="tabpanel"
+        >
+          <h5
+            class="mb-3"
+          >
+            <i
+              aria-hidden="true"
+              class="fa fa-envelope-o"
+            />
+             Mailing list subscription
+          </h5>
+           
+          <p>
+            You can manage your subscription to the mailing list for FIT IoT-LAB users from this page:
+            <br />
+             
+            <a
+              href="https://lists.gforge.inria.fr/mailman/listinfo/senslab-users"
+            >
+              https://lists.gforge.inria.fr/mailman/listinfo/senslab-users
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -24,7 +24,7 @@
         <i class="fa fa-spinner fa-spin fa-fw"></i>
         <i>loading experiments</i>
       </template>
-      
+
     </div>
     <div class="col">
       <h2>Platform status</h2>

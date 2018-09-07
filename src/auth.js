@@ -15,21 +15,21 @@ export const auth = {
     }))
 
     await iotlab.getUserInfo()
-    .then(user => {
-      this.loggedIn = true
-      this.username = username
-      this.isAdmin = user.groups.includes('admin')
-      localStorage.setItem('loggedIn', this.loggedIn)
-      localStorage.setItem('isAdmin', this.isAdmin)
-      localStorage.setItem('username', this.username)
-    })
-    .catch(err => {
-      console.log(err)
-      this.isAdmin = false
-      this.loggedIn = false
-      this.username = ''
-      throw err
-    })
+      .then(user => {
+        this.loggedIn = true
+        this.username = username
+        this.isAdmin = user.groups.includes('admin')
+        localStorage.setItem('loggedIn', this.loggedIn)
+        localStorage.setItem('isAdmin', this.isAdmin)
+        localStorage.setItem('username', this.username)
+      })
+      .catch(err => {
+      // console.log(err)
+        this.isAdmin = false
+        this.loggedIn = false
+        this.username = ''
+        throw err
+      })
   },
 
   doLogout () {
@@ -39,4 +39,3 @@ export const auth = {
     localStorage.removeItem('isAdmin')
   },
 }
-
