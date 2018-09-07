@@ -4,7 +4,8 @@ from fabric.api import local, run, put, lcd
 
 def test():
     """ Run Web portal tests. """
-    local('npm test')
+    local('npm run test:unit')
+    local('npm run test:e2e')
     
 
 def build(env='dev-beta'):

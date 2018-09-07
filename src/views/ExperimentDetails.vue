@@ -233,7 +233,7 @@ export default {
     downloadExperiment (id) {
       axios({
         method: 'get',
-        url: `https://${process.env.IOTLAB_HOST}/api/experiments/${id}/data`,
+        url: `https://${process.env.VUE_APP_IOTLAB_HOST}/api/experiments/${id}/data`,
         responseType: 'arraybuffer',
         auth: JSON.parse(localStorage.getItem('apiAuth') || '{}'),
       })
