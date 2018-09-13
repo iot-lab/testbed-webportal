@@ -1,7 +1,7 @@
 <template>
 <div class="container mt-3">
   <div class="row">
-    <div class="col-md-9">
+    <div class="col-md-10">
       <h2>My experiments</h2>
       <p v-if="total.running != undefined">
         <span class="badge badge-pill badge-success">{{total.running}}</span> Running
@@ -24,40 +24,16 @@
         <i class="fa fa-spinner fa-spin fa-fw"></i>
         <i>loading experiments</i>
       </template>
-
-    </div>
-    <div class="col">
-      <h2>Platform status</h2>
-      <p v-if="sites">
-        <span class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentSite === 'all', 'badge-secondary': currentSite !== 'all'}"
-        @click="currentSite = 'all'">{{sites.length}} sites</span>
-        <span v-for="site in sites" class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentSite === site, 'badge-secondary': currentSite !== site}"
-        @click="currentSite = site">{{site.site}}</span>
-      </p>
-      <p v-if="nodes">
-        <span class="badge badge-pill badge-success">{{getNodesCount(currentSite, ['Alive'])}}</span> nodes available
-        <span class="badge badge-pill badge-warning">{{getNodesCount(currentSite, ['Busy'])}}</span> busy
-        <span class="badge badge-pill badge-danger">{{getNodesCount(currentSite, ['Absent','Suspected','Dead'])}}</span> unavailable
-      </p>
-      <p v-else>
-        <i class="fa fa-spinner fa-spin fa-fw"></i>
-      </p>
-      <p v-if="runningExps">
-        <router-link :to="{name:'runningExperiments'}" class="btn btn-light">Running experiments
-          <span class="badge badge-pill badge-dark">{{getRunningCount(currentSite)}}</span>
-        </router-link>
-      </p>
+      
     </div>
   </div>
-
 </div> <!-- container -->
 
 </template>
 
 <script>
 import ExperimentList from '@/components/ExperimentList'
-import {iotlab} from '@/rest'
-import {auth} from '@/auth'
+import { iotlab } from '@/rest'
 // import { sleep } from '@/utils'
 
 export default {
@@ -68,21 +44,17 @@ export default {
   data () {
     return {
       total: {},
-      sites: [],
-      nodes: [],
-      runningExps: [],
       experiments: [],
-      currentSite: 'all',
-      auth: auth,
       started: 0,
       spinner: true,
+      created: false,
     }
   },
 
   beforeRouteEnter (to, from, next) {
     // refresh data when reentering the dashboard
     next(vm => {
-      if (vm.sites.length === 0) return // do not refresh until initial render as be done in created()
+      if (!vm.created) return // do not refresh until initial render as be done in created()
       vm.$notify({group: 'popup', clean: true})
       vm.$refs.runningExpList.refresh()
       vm.$refs.runningExpList.createPolling()
@@ -100,9 +72,7 @@ export default {
 
   created () {
     this.updateTotal()
-    iotlab.getSites().then(data => { this.sites = data })
-    iotlab.getNodes().then(data => { this.nodes = data })
-    iotlab.getRunningExperiments().then(data => { this.runningExps = data })
+    this.created = true
   },
 
   async mounted () {
@@ -115,8 +85,6 @@ export default {
 
   methods: {
     async updateTotal () {
-      iotlab.getNodes().then(data => { this.nodes = data })
-      iotlab.getRunningExperiments().then(data => { this.runningExps = data })
       // await sleep(2000)
       this.total = await iotlab.getUserExperimentsCount()
       // hide spinner as we are not going to fetch terminated experiments
@@ -124,15 +92,6 @@ export default {
     },
     refreshRunning () {
       this.$refs.runningExpList.refresh()
-      iotlab.getNodes().then(data => { this.nodes = data })
-      iotlab.getRunningExperiments().then(data => { this.runningExps = data })
-    },
-    getNodesCount (site, stateList) {
-      let siteList = (site === 'all') ? this.sites.map(key => key.site) : [site.site]
-      return this.nodes.filter(node => siteList.includes(node.site)).filter(node => stateList.includes(node.state)).length
-    },
-    getRunningCount (site) {
-      return this.runningExps.filter(xp => site === 'all' || xp.nodes.some(node => node.includes(site.site))).length
     },
   },
 
