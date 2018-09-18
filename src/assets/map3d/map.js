@@ -255,7 +255,7 @@ function render () {
   initColors()
   // controls.update();
   // nodeInfo.innerHTML = " Cam Pos = " + camera.position.x + "," + camera.position.y + "," + camera.position.z
-                 // + " - " + theta + "," + phi + ","+ distance
+  // + " - " + theta + "," + phi + ","+ distance
   // nodeInfo.innerHTML = selectedNodes
   camera.position.x = distance * Math.sin(theta * Math.PI / 360) * Math.cos(phi * Math.PI / 360)
   camera.position.y = distance * Math.sin(phi * Math.PI / 360)
@@ -321,7 +321,7 @@ function toggleNode (obj) {
   initColors()
   // selectedInfo.innerHTML = selectedNodes.length > 0 ? 'Selected nodes' : ''
   // for (let node of selectedNodes) {
-    // selectedInfo.innerHTML += ` <span class="badge badge-primary">${node}</span>`
+  // selectedInfo.innerHTML += ` <span class="badge badge-primary">${node}</span>`
   // }
   if (selectedCallback) selectedCallback(selectedNodes)
 }

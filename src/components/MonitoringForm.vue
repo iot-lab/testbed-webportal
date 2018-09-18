@@ -2,7 +2,7 @@
   <form @submit.prevent="updateProfile" class="mt-3">
     <div class="form-group">
       <label class="mr-3 my-label">Name</label>
-      <input v-model="profile.profilename" type="text" class="form-control" placeholder="Profile name" ref="name" 
+      <input v-model="profile.profilename" type="text" class="form-control" placeholder="Profile name" ref="name"
         style="max-width: 300px; display: inline-block"
         :class="{'is-invalid': !nameValidation}">
       <div class="invalid-feedback">
@@ -42,7 +42,7 @@
     </div>
     <fieldset class="card bg-light pt-2 mb-3" v-if="showConso">
       <div class="form-group">
-        <label class="mr-3 my-label"><i class="fa fa-bolt"></i></label>
+        <label class="mr-3 my-label"><i class="fa fa-bolt"></i></label>
         <label class="custom-control custom-checkbox">
           <input name="checkbox-conso" type="checkbox" class="custom-control-input" v-model="profile.consumption.current">
           <span class="custom-control-indicator"></span>
@@ -88,7 +88,7 @@
     </fieldset>
     <fieldset class="card bg-light pt-2 mb-3" v-if="showRadio">
       <div class="form-group">
-        <label class="mr-3 my-label"><i class="fa fa-wifi"></i></label>
+        <label class="mr-3 my-label"><i class="fa fa-wifi"></i></label>
         <label class="custom-control custom-radio">
           <input name="radio-mode" type="radio" class="custom-control-input" v-model="profile.radio.mode" value="rssi">
           <span class="custom-control-indicator"></span>
@@ -147,10 +147,8 @@
       </div>
     </div> -->
 
-    </div>
   </form>
 </template>
-
 
 <script>
 import Multiselect from 'vue-multiselect'

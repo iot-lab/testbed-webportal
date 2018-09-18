@@ -16,7 +16,7 @@
   </div>
 </div> <!-- container -->
 </template>
-        
+
 <script>
 import { iotlab } from '@/rest'
 import Map3d from '@/components/Map3d'

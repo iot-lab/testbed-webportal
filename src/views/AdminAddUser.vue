@@ -2,78 +2,77 @@
 <div class="container mt-3">
   <h2>Add user</h2>
   <div class="row">
-      <div class="col-md-3 mb-4">
-        <div class="list-group" id="list-tab" role="tablist">
-          <a class="list-group-item list-group-item-action active" id="list-single-list" data-toggle="list" href="#list-single" role="tab" aria-controls="single">
-            <i class="fa fa-fw fa-user" aria-hidden="true"></i> Single account
-          </a>
-          <a class="list-group-item list-group-item-action" id="list-multiple-list" data-toggle="list" href="#list-multiple" role="tab" aria-controls="multiple">
-            <i class="fa fa-fw fa-users" aria-hidden="true"></i> Multiple accounts
-          </a>
-        </div>
+    <div class="col-md-3 mb-4">
+      <div class="list-group" id="list-tab" role="tablist">
+        <a class="list-group-item list-group-item-action active" id="list-single-list" data-toggle="list" href="#list-single" role="tab" aria-controls="single">
+          <i class="fa fa-fw fa-user" aria-hidden="true"></i> Single account
+        </a>
+        <a class="list-group-item list-group-item-action" id="list-multiple-list" data-toggle="list" href="#list-multiple" role="tab" aria-controls="multiple">
+          <i class="fa fa-fw fa-users" aria-hidden="true"></i> Multiple accounts
+        </a>
       </div>
-      <div class="col-md-9">
-        <div class="tab-content" id="nav-tabContent">
-          <div class="tab-pane fade show active" id="list-single" role="tabpanel" aria-labelledby="list-single-list">
-            
-            <form @submit.prevent="createSingle">
-              <user-form :user="user" ref="user" :admin="true"></user-form>
-              <div class="form-group">
-                <button class="btn btn-success" type="submit">Create account</button>
-                <button class="btn btn-secondary" type="reset" @click="$refs.user.clean()">Clear</button>
-              </div>
-            </form>
-            
-          </div>
+    </div>
+    <div class="col-md-9">
+      <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="list-single" role="tabpanel" aria-labelledby="list-single-list">
 
-          <div class="tab-pane fade show" id="list-multiple" role="tabpanel" aria-labelledby="list-multiple-list">
-            
-            <form @submit.prevent="createMultiple">
-                <div class="row justify-content-between">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label class="form-control-label">Login</label>
-                      <div class="input-group">
-                        <input v-model="baseLogin"
-                          type="text" placeholder="login" name="login"
-                          class="form-control" :class="{'is-invalid': errors.has('login') }"
-                          v-validate="`required|min:3|max:${20-String(qty).length}|iotlabLogin|checkDuplicate`"
-                          data-vv-delay="400">
-                        <span class="input-group-addon" v-text="`1 to ${qty}`"></span>
-                      </div>
-                      <div class="invalid-feedback" v-show="errors.has('login')"
-                        :style="{'display': errors.has('login') ? 'none': 'block'}">
-                        {{ errors.first('login') }}
-                      </div>
+          <form @submit.prevent="createSingle">
+            <user-form :user="user" ref="user" :admin="true"></user-form>
+            <div class="form-group">
+              <button class="btn btn-success" type="submit">Create account</button>
+              <button class="btn btn-secondary" type="reset" @click="$refs.user.clean()">Clear</button>
+            </div>
+          </form>
+
+        </div>
+
+        <div class="tab-pane fade show" id="list-multiple" role="tabpanel" aria-labelledby="list-multiple-list">
+
+          <form @submit.prevent="createMultiple">
+              <div class="row justify-content-between">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-control-label">Login</label>
+                    <div class="input-group">
+                      <input v-model="baseLogin"
+                        type="text" placeholder="login" name="login"
+                        class="form-control" :class="{'is-invalid': errors.has('login') }"
+                        v-validate="`required|min:3|max:${20-String(qty).length}|iotlabLogin|checkDuplicate`"
+                        data-vv-delay="400">
+                      <span class="input-group-addon" v-text="`1 to ${qty}`"></span>
+                    </div>
+                    <div class="invalid-feedback" v-show="errors.has('login')"
+                      :style="{'display': errors.has('login') ? 'none': 'block'}">
+                      {{ errors.first('login') }}
                     </div>
                   </div>
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <label class="form-control-label">How many accounts?</label>
-                      <div class="input-group">
-                        <span class="input-group-btn">
-                          <button type="button" class="btn btn-danger" :disabled="qty<=2" @click="qty--">
-                            <i class="fa fa-minus"></i>
-                          </button>
-                        </span>
-                        <input type="text" class="form-control" v-model="qty">
-                        <span class="input-group-btn">
-                          <button type="button" class="btn btn-success" @click="qty++">
-                            <i class="fa fa-plus"></i>
-                          </button>
-                        </span>
-                      </div>
-                    </div>                    
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label class="form-control-label">How many accounts?</label>
+                    <div class="input-group">
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-danger" :disabled="qty<=2" @click="qty--">
+                          <i class="fa fa-minus"></i>
+                        </button>
+                      </span>
+                      <input type="text" class="form-control" v-model="qty">
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-success" @click="qty++">
+                          <i class="fa fa-plus"></i>
+                        </button>
+                      </span>
+                    </div>
                   </div>
                 </div>
-                <user-form :user="users" ref="users" :admin="true" :hidden="['firstName','lastName','email']"></user-form>
-                <div class="form-group">
-                  <button class="btn btn-success" type="submit">Create accounts</button>
-                  <button class="btn btn-secondary" type="reset" @click="$refs.users.clean(); baseLogin = ''; $validator.reset()">Clear</button>
-                </div>
-            </form>
-            
-          </div>
+              </div>
+              <user-form :user="users" ref="users" :admin="true" :hidden="['firstName','lastName','email']"></user-form>
+              <div class="form-group">
+                <button class="btn btn-success" type="submit">Create accounts</button>
+                <button class="btn btn-secondary" type="reset" @click="$refs.users.clean(); baseLogin = ''; $validator.reset()">Clear</button>
+              </div>
+          </form>
+
         </div>
       </div>
     </div>

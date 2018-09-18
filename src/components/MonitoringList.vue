@@ -19,9 +19,9 @@
           <td>
             <template v-if="profile.consumption && (profile.consumption.current || profile.consumption.voltage || profile.consumption.power)">
               <i class="fa fa-bolt" title="consumption"></i>
-              <span v-if="profile.consumption.current">current</span>
-              <span v-if="profile.consumption.voltage">voltage</span>
-              <span v-if="profile.consumption.power">power</span>
+              <span v-if="profile.consumption.current"> current </span>
+              <span v-if="profile.consumption.voltage"> voltage </span>
+              <span v-if="profile.consumption.power"> power </span>
               <span class="text-muted" title="period, average">({{profile.consumption.period}}µs, {{profile.consumption.average}})</span>
             </template>
             <template v-if="profile.radio">
@@ -62,7 +62,11 @@ export default {
   },
 
   async created () {
-    this.store.profiles = (await iotlab.getMonitoringProfiles()).sort((a, b) => a.profilename.localeCompare(b.profilename))
+    try {
+      this.store.profiles = (await iotlab.getMonitoringProfiles()).sort((a, b) => a.profilename.localeCompare(b.profilename))
+    } catch (err) {
+      this.$notify({text: 'Failed to load profiles', type: 'error'})
+    }
   },
 
   methods: {

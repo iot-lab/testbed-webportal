@@ -132,7 +132,7 @@ export default {
 
   data () {
     return {
-      experiment: undefined,
+      experiment: {name: undefined},
       deploymentStatus: undefined,
       states: experimentStates,
       selectedNodes: [],
@@ -233,17 +233,17 @@ export default {
     downloadExperiment (id) {
       axios({
         method: 'get',
-        url: `https://${process.env.IOTLAB_HOST}/api/experiments/${id}/data`,
+        url: `https://${process.env.VUE_APP_IOTLAB_HOST}/api/experiments/${id}/data`,
         responseType: 'arraybuffer',
         auth: JSON.parse(localStorage.getItem('apiAuth') || '{}'),
       })
-      .then(function (response) {
-        let blob = new Blob([response.data], { type: 'application/gzip' })
-        let link = document.createElement('a')
-        link.href = window.URL.createObjectURL(blob)
-        link.download = `experiment_${id}.tar.gz`
-        link.click()
-      })
+        .then(function (response) {
+          let blob = new Blob([response.data], { type: 'application/gzip' })
+          let link = document.createElement('a')
+          link.href = window.URL.createObjectURL(blob)
+          link.download = `experiment_${id}.tar.gz`
+          link.click()
+        })
     },
     toggleSelectedNodes () {
       if (this.selectedNodes.length === this.deployedNodes.length) {
@@ -265,7 +265,6 @@ export default {
       }
       let nodes = await iotlab.sendNodesCommand(this.id, cmd, this.selectedNodes).catch(err => {
         this.$notify({text: err.response.data.message, type: 'error'})
-        return
       })
       let validNodes = Object.values(nodes).reduce((a, b) => a.concat(b))
       let invalidNodes = this.selectedNodes.filter(n => !validNodes.includes(n))
@@ -317,7 +316,6 @@ export default {
           let nodes = await iotlab.flashFirmware(vm.id, vm.selectedNodes, e.target.result).catch(err => {
             vm.$notify({clean: true}) // close pending notification
             vm.$notify({text: err.response.data.message, type: 'error'})
-            return
           })
           let validNodes = Object.values(nodes).reduce((a, b) => a.concat(b))
           let invalidNodes = vm.selectedNodes.filter(n => !validNodes.includes(n))
