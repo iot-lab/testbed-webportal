@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Page404 from '@/404'
 import Login from '@/views/Login'
 import ResetPassword from '@/views/ResetPassword'
 import Signup from '@/views/Signup'
@@ -45,6 +46,7 @@ const router = new Router({
     { path: '/users/:username/experiments', name: 'userExperiments', component: AdminExperiments, props: true, meta: { requiresAdmin: true } },
     { path: '/experiments', name: 'allExperiments', component: AdminExperiments, props: {username: ''}, meta: { requiresAdmin: true } },
     { path: '/experiments/:id', name: 'experimentDetails', component: ExperimentDetails, props: true, meta: { requiresAuth: true } },
+    { path: '*', component: Page404 },
   ],
 })
 
