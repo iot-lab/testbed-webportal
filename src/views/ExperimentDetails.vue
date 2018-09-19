@@ -20,7 +20,7 @@
       <li>State <span class="badge" :class="experiment.state | stateBadgeClass">{{experiment.state}}</span></li>
     </ul>
     <template v-if="experiment.user === currentUser">
-      <a href="" class="btn btn-sm btn-outline-danger mb-3" @click.prevent="stopExperiment(id)"
+      <a href="" class="btn btn-sm btn-outline-danger mb-3 mr-1" @click.prevent="stopExperiment(id)"
         v-if="states.stoppable.includes(experiment.state)">
         <template v-if="experiment.state === 'Running'">
           <i class="fa fa-stop-circle"></i> Stop
@@ -29,7 +29,7 @@
           <i class="fa fa-ban"></i> Cancel
         </template>
       </a>
-      <a href="" class="btn btn-sm btn-outline-secondary mb-3" @click.prevent="reloadExperiment(id)"
+      <a href="" class="btn btn-sm btn-outline-secondary mb-3 mr-1" @click.prevent="reloadExperiment(id)"
         v-if="states.completed.includes(experiment.state)">
         <i class="fa fa-refresh"></i> Restart
       </a>
@@ -39,72 +39,79 @@
       <a href="" class="btn btn-sm btn-outline-secondary mb-3" @click.prevent="downloadExperiment(id)">
         <i class="fa fa-download"></i> Download
       </a>
+      <div v-if="showNodesCommands" class="float-right">
+        <button class="btn btn-sm dropdown-toggle cursor" type="button" data-toggle="popover" v-show="selectedNodes.length === 0" data-placement="right"
+          data-content="<i class='fa fa-fw fa-lg fa-exclamation-circle text-warning'></i> Select nodes first">
+          <i class="fa fa-wrench text-dark"></i> Actions on selected nodes
+        </button>
+        <div class="dropdown" v-show="selectedNodes.length">
+          <button class="btn btn-sm dropdown-toggle cursor" type="button" id="actionMenuBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-wrench text-dark"></i> Actions on {{selectedNodes.length | pluralize('node')}}
+          </button>
+          <div class="dropdown-menu" aria-labelledby="actionMenuBtn">
+            <a class="dropdown-item" href="#" @click.prevent="sendCmd('start')"><i class="fa fa-fw fa-play"></i> Start</a>
+            <a class="dropdown-item" href="#" @click.prevent="sendCmd('stop')"><i class="fa fa-fw fa-power-off"></i> Stop</a>
+            <a class="dropdown-item" href="#" @click.prevent="sendCmd('reset')"><i class="fa fa-fw fa-refresh"></i> Reset</a>
+            <li class="dropdown-divider"></li>
+            <!-- <a class="dropdown-item" href="#" @click.prevent="sendCmd('flash-idle')"><i class="fa fa-fw fa-eraser"></i> Flash idle firmware</a> -->
+            <a class="dropdown-item" href="#" data-toggle="modal" data-target=".firmware-modal"><i class="fa fa-fw fa-microchip"></i> Flash firmware</a>
+            <!-- <a class="dropdown-item disabled" href="#" v-tooltip:bottom="'Waiting for current flash to finish'" xv-else><i class="fa fa-fw fa-microchip"></i> Flash firmware</a> -->
+            <!-- <li class="dropdown-divider"></li> -->
+            <!-- <a class="dropdown-item" href="#" @click.prevent="sendCmd('debug-start')"><i class="fa fa-fw fa-step-forward"></i> Start debug</a> -->
+            <!-- <a class="dropdown-item" href="#" @click.prevent="sendCmd('debug-stop')"><i class="fa fa-fw fa-stop"></i> Stop debug</a> -->
+            <li class="dropdown-divider"></li>
+            <a class="dropdown-item" href="#" @click.prevent="this.alert('todo')"><i class="fa fa-fw fa-thermometer fa-strike" style="position: relative"></i> Remove monitoring</a>
+            <a class="dropdown-item" href="#" @click.prevent="this.alert('todo')"><i class="fa fa-fw fa-thermometer"></i> Update monitoring</a>
+          </div>
+        </div>
+      </div>
     </template>
 
     <table class="table table-striped table-sm">
       <thead>
         <tr>
-          <th width="15px" v-if="showNodesCommands">
-            <input type="checkbox" @change="toggleSelectedNodes" v-model="allSelected">
-          </th>
           <th>Nodes</th>
           <th>Firmware</th>
           <th>Monitoring</th>
-          <!-- <th>Mobility</th> -->
           <th>Deployment</th>
+          <th width="15px" v-if="showNodesCommands">
+            <input type="checkbox" @change="toggleSelectedNodes" v-model="allSelected">
+          </th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="node in experiment.nodes" :class="{'text-danger': getDeploymentStatus(node) === 'Error'}">
-          <td v-if="showNodesCommands">
-            <input type="checkbox" :value="node" v-model="selectedNodes" :disabled="getDeploymentStatus(node) === 'Error'" @click="uncheckAll">
-          </td>
           <td v-html="nodeOrAlias(node)"></td>
           <td>{{getFirmware(node)}}</td>
           <td>{{getMonitoring(node)}}</td>
-          <!-- <td>{{getMobility(node)}}</td> -->
           <td>{{getDeploymentStatus(node)}}</td>
+          <td v-if="showNodesCommands">
+            <input type="checkbox" :value="node" v-model="selectedNodes" :disabled="getDeploymentStatus(node) === 'Error'" @click="uncheckAll">
+          </td>
         </tr>
       </tbody>
     </table>
 
-    <div v-if="showNodesCommands">
-      <button class="btn btn-sm dropdown-toggle cursor" type="button" data-toggle="popover" v-show="selectedNodes.length === 0" data-placement="right"
-        data-content="<i class='fa fa-fw fa-lg fa-exclamation-circle text-warning'></i> Select nodes first">
-        <i class="fa fa-wrench text-dark"></i> Actions on selected nodes
-      </button>
-      <div class="dropdown" v-show="selectedNodes.length">
-        <button class="btn btn-sm dropdown-toggle cursor" type="button" id="actionMenuBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @click="showFirmware = false">
-          <i class="fa fa-wrench text-dark"></i> Actions on {{selectedNodes.length}} nodes
-        </button>
-        <div class="dropdown-menu" aria-labelledby="actionMenuBtn">
-          <a class="dropdown-item" href="#" @click.prevent="sendCmd('start')"><i class="fa fa-fw fa-play"></i> Start</a>
-          <a class="dropdown-item" href="#" @click.prevent="sendCmd('stop')"><i class="fa fa-fw fa-power-off"></i> Stop</a>
-          <a class="dropdown-item" href="#" @click.prevent="sendCmd('reset')"><i class="fa fa-fw fa-refresh"></i> Reset</a>
-          <li class="dropdown-divider"></li>
-          <!-- <a class="dropdown-item" href="#" @click.prevent="sendCmd('flash-idle')"><i class="fa fa-fw fa-eraser"></i> Flash idle firmware</a> -->
-          <a class="dropdown-item" href="#" @click.prevent="showFirmware = true"><i class="fa fa-fw fa-microchip"></i> Flash firmware</a>
-          <!-- <li class="dropdown-divider"></li> -->
-          <!-- <a class="dropdown-item" href="#" @click.prevent="sendCmd('debug-start')"><i class="fa fa-fw fa-step-forward"></i> Start debug</a> -->
-          <!-- <a class="dropdown-item" href="#" @click.prevent="sendCmd('debug-stop')"><i class="fa fa-fw fa-stop"></i> Stop debug</a> -->
-          <li class="dropdown-divider"></li>
-          <a class="dropdown-item" href="#" @click.prevent="this.alert('todo')"><i class="fa fa-fw fa-thermometer fa-strike" style="position: relative"></i> Remove monitoring</a>
-          <a class="dropdown-item" href="#" @click.prevent="this.alert('todo')"><i class="fa fa-fw fa-thermometer"></i> Update monitoring</a>
+    <div class="modal fade firmware-modal" tabindex="-1" role="dialog" aria-labelledby="firmwareModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-light">
+            <h5 class="modal-title">Upload firmware</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body py-4">
+            <label class="custom-file">
+              <input type="file" id="file" ref="firmwareFile" class="custom-file-input" @change="flashFirmware('firmwareFile')">
+              <span class="custom-file-control">{{firmwareFile && firmwareFile.name}}</span>
+            </label>
+          </div>
+          <div class="modal-footer dborder-0 dbg-light">
+            <button type="button" class="btn" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-success" @click.prevent="flashFirmware('firmwareFile')">Flash</button>
+          </div>
         </div>
-      </div>
-    </div>
-
-    <div class="card my-3" style="max-width: 400px;" v-show="showFirmware">
-      <div class="card-body">
-        <h5 class="card-title">Upload firmware</h5>
-        <!-- <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> -->
-        <p class="card-text">
-          <label class="custom-file">
-            <input type="file" id="file" ref="firmwareFile" class="custom-file-input" @change="flashFirmware('firmwareFile')">
-            <span class="custom-file-control">{{firmwareFile && firmwareFile.name}}</span>
-          </label>
-        </p>
-        <a href="#" class="card-link" @click.prevent="showFirmware = false">Close</a>
       </div>
     </div>
 
@@ -115,7 +122,7 @@
 import { iotlab } from '@/rest'
 import { auth } from '@/auth'
 import { experimentStates } from '@/assets/js/iotlab-utils'
-import { capitalize } from '@/utils'
+import { capitalize, pluralize } from '@/utils'
 import axios from 'axios'
 import $ from 'jquery'
 
@@ -126,7 +133,7 @@ export default {
 
   props: {
     id: {
-      type: Number,
+      type: [Number, String],
     },
   },
 
@@ -137,7 +144,6 @@ export default {
       states: experimentStates,
       selectedNodes: [],
       allSelected: false,
-      showFirmware: false,
       firmwareFile: undefined,
       firmware: undefined,
       currentUser: auth.username,
@@ -192,10 +198,10 @@ export default {
         }
 
         if (!this.deploymentStatus && !['Waiting', 'toLaunch', 'Launching'].includes(this.experiment.state)) {
-          this.deploymentStatus = await iotlab.getExperimentDeployment(this.id)
+          this.deploymentStatus = await iotlab.getExperimentDeployment(id)
         }
       } catch (err) {
-        this.$notify({text: err.message, type: 'error'})
+        this.$notify({ text: err.message, type: 'error' })
       }
     },
     nodeOrAlias (node) {
@@ -206,10 +212,6 @@ export default {
     getFirmware (node) {
       if (!this.experiment.firmwareassociations) return
       return this.experiment.firmwareassociations.reduce((acc, asso) => (asso.nodes.some(n => n === (node.alias || node)) ? asso.firmwarename : acc), '')
-    },
-    getMobility (node) {
-      if (!this.experiment.associations || !this.experiment.associations.mobility) return
-      return this.experiment.associations.mobility.reduce((acc, asso) => (asso.nodes.some(n => n === (node.alias || node)) ? asso.mobilityname : acc), '')
     },
     getMonitoring (node) {
       if (!this.experiment.profileassociations) return
@@ -225,18 +227,18 @@ export default {
       if (!confirm('Cancel this experiment?')) return
       try {
         await iotlab.stopExperiment(id)
-        this.$notify({text: `Experiment ${id} stopping`, type: 'success'})
+        this.$notify({ text: `Experiment ${id} stopping`, type: 'success' })
       } catch (err) {
-        this.$notify({text: err.message, type: 'error'})
+        this.$notify({ text: err.message, type: 'error' })
       }
     },
     async reloadExperiment (id) {
       try {
         let newExp = await iotlab.reloadExperiment(id)
-        this.$notify({text: `Experiment ${newExp.id} submitted`, type: 'success'})
-        this.$router.push({name: 'dashboard'})
+        this.$notify({ text: `Experiment ${newExp.id} submitted`, type: 'success' })
+        this.$router.push({ name: 'dashboard' })
       } catch (err) {
-        this.$notify({text: err.message, type: 'error'})
+        this.$notify({ text: err.message, type: 'error' })
       }
     },
     downloadExperiment (id) {
@@ -269,32 +271,33 @@ export default {
 
     async sendCmd (cmd) {
       if (this.selectedNodes.length === 0) {
-        this.$notify({text: `Select some nodes first`, type: 'warning'})
+        this.$notify({ text: `Select some nodes first`, type: 'warning' })
         return
       }
-      let nodes = await iotlab.sendNodesCommand(this.id, cmd, this.selectedNodes).catch(err => {
-        this.$notify({text: err.response.data.message, type: 'error'})
+      let selectedNodes = this.selectedNodes
+      let nodes = await iotlab.sendNodesCommand(this.id, cmd, selectedNodes).catch(err => {
+        this.$notify({ text: err.response.data.message, type: 'error' })
       })
       let validNodes = Object.values(nodes).reduce((a, b) => a.concat(b))
-      let invalidNodes = this.selectedNodes.filter(n => !validNodes.includes(n))
+      let invalidNodes = selectedNodes.filter(n => !validNodes.includes(n))
 
       if (invalidNodes.length > 0) {
         this.$notify({
-          text: `${capitalize(cmd)} not supported on ${invalidNodes.length} nodes:<br><br>` + invalidNodes.join('<br>'),
+          text: `${capitalize(cmd)} not supported on ${pluralize(invalidNodes.length, 'node')}:<br><br>` + invalidNodes.join('<br>'),
           type: 'warning',
           duration: 6000,
         })
       }
       if (nodes['1'] && nodes['1'].length > 0) {
         this.$notify({
-          text: `${capitalize(cmd)} failed on ${nodes['1'].length} nodes:<br><br>` + nodes['1'].join('<br>'),
+          text: `${capitalize(cmd)} failed on ${pluralize(nodes['1'].length, 'node')}:<br><br>` + nodes['1'].join('<br>'),
           type: 'error',
           duration: 10000,
         })
       }
       if (nodes['0'] && nodes['0'].length > 0) {
         this.$notify({
-          text: `${capitalize(cmd)} successfull on ${nodes['0'].length} nodes:<br><br>` + nodes['0'].join('<br>'),
+          text: `${capitalize(cmd)} successfull on ${pluralize(nodes['0'].length, 'node')}:<br><br>` + nodes['0'].join('<br>'),
           type: 'success',
           duration: 6000,
         })
@@ -302,58 +305,60 @@ export default {
     },
     flashFirmware (ref) {
       if (this.selectedNodes.length === 0) {
-        this.$notify({text: `Select some nodes first`, type: 'warning'})
+        this.$notify({ text: `Select some nodes first`, type: 'warning' })
         return
       }
 
-      this.$notify({text: 'Uploading file...', type: 'info', duration: -1})
-
       this.firmwareFile = this.$refs[ref].files[0]
+      if (this.firmwareFile === undefined) return
+
+      this.$notify({ text: 'Uploading file...', type: 'info', duration: -1 })
+
       var reader = new FileReader()
 
-      reader.onload = (function (vm) {
+      reader.onload = (function (vm, selectedNodes) {
         return async function (e) {
-          vm.$notify({clean: true}) // close pending notification
+          vm.$notify({ clean: true }) // close pending notification
 
           let res = await iotlab.checkFirmware(e.target.result)
-          vm.$notify({text: `firmware format ${res.format}`, type: res.format === 'unknown' ? 'error' : 'info'})
+          vm.$notify({ text: `firmware format ${res.format}`, type: res.format === 'unknown' ? 'error' : 'info' })
           if (res.format === 'unknown') return
 
-          vm.$notify({text: 'Flashing firmware...', type: 'info', duration: -1})
-          vm.showFirmware = false
+          vm.$notify({ text: 'Flashing firmware...', type: 'info', duration: -1 })
+          $('.modal').modal('hide')
 
-          let nodes = await iotlab.flashFirmware(vm.id, vm.selectedNodes, e.target.result).catch(err => {
-            vm.$notify({clean: true}) // close pending notification
-            vm.$notify({text: err.response.data.message, type: 'error'})
+          let nodes = await iotlab.flashFirmware(vm.id, selectedNodes, e.target.result).catch(err => {
+            vm.$notify({ clean: true }) // close pending notification
+            vm.$notify({ text: err.response.data.message, type: 'error' })
           })
           let validNodes = Object.values(nodes).reduce((a, b) => a.concat(b))
-          let invalidNodes = vm.selectedNodes.filter(n => !validNodes.includes(n))
+          let invalidNodes = selectedNodes.filter(n => !validNodes.includes(n))
 
-          vm.$notify({clean: true}) // close pending notification
+          vm.$notify({ clean: true }) // close pending notification
 
           if (invalidNodes.length > 0) {
             vm.$notify({
-              text: `Flash not supported on ${invalidNodes.length} nodes:<br><br>` + invalidNodes.join('<br>'),
+              text: `Flash not supported on ${pluralize(invalidNodes.length, 'node')}:<br><br>` + invalidNodes.join('<br>'),
               type: 'warning',
               duration: 6000,
             })
           }
           if (nodes['1'] && nodes['1'].length > 0) {
             vm.$notify({
-              text: `Flash failed on ${nodes['1'].length} nodes:<br><br>` + nodes['1'].join('<br>'),
+              text: `Flash failed on ${pluralize(nodes['1'].length, 'node')}:<br><br>` + nodes['1'].join('<br>'),
               type: 'error',
               duration: 10000,
             })
           }
           if (nodes['0'] && nodes['0'].length > 0) {
             vm.$notify({
-              text: `Flash successfull on ${nodes['0'].length} nodes:<br><br>` + nodes['0'].join('<br>'),
+              text: `Flash successfull on ${pluralize(nodes['0'].length, 'node')}:<br><br>` + nodes['0'].join('<br>'),
               type: 'success',
               duration: 6000,
             })
           }
         }
-      })(this)
+      })(this, this.selectedNodes)
 
       reader.readAsDataURL(this.firmwareFile)
     },
