@@ -82,7 +82,7 @@
       "text-summary",
       "html"
     ],
-    "coverageDirectory": "tests/coverage",
+    "coverageDirectory": "coverage",
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,vue}",
       "!src/{main,router,directives,events}.js",
