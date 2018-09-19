@@ -1,6 +1,7 @@
 .DS_Store
 node_modules
 /dist
+/__pycache__
 
 /coverage
 /tests/e2e/videos/
