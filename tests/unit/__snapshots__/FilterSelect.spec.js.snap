@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilterSelect.vue should match snapshot style 1 1`] = `
+<select
+  class="form-control form-control-sm text-capitalize mr-2 d-inline-block"
+>
+  <option
+    disabled="disabled"
+    value="all"
+  >
+    title
+  </option>
+   
+  <!---->
+   
+  <option
+    class="text-capitalize"
+    value="item1"
+  >
+    item1
+  </option>
+  <option
+    class="text-capitalize"
+    value="item2"
+  >
+    item2
+  </option>
+</select>
+`;
+
+exports[`FilterSelect.vue should match snapshot style 2 1`] = `
+<select
+  class="form-control form-control-sm text-capitalize mr-2 d-inline-block"
+  selected="selected"
+>
+  <!---->
+   
+  <option
+    value="all"
+  >
+    all
+  </option>
+   
+  <option
+    class="text-capitalize"
+    value="value1"
+  >
+    option1
+  </option>
+  <option
+    class="text-capitalize"
+    value="value2"
+  >
+    option2
+  </option>
+</select>
+`;

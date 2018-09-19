@@ -1,0 +1,60 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Monitoring.vue should match snapshot 1`] = `
+<div
+  class="container my-3"
+>
+  <h2>
+    <i
+      aria-hidden="true"
+      class="fa fa-fw fa-folder-open"
+    />
+     My resources
+  </h2>
+   
+  <div
+    class="row"
+  >
+    <div
+      class="col-md-3 mb-4"
+    >
+      <div
+        class="list-group"
+        id="list-tab"
+        role="tablist"
+      >
+        <router-link-stub
+          class="list-group-item list-group-item-action"
+          event="click"
+          tag="a"
+          to="[object Object]"
+        >
+          <i
+            aria-hidden="true"
+            class="fa fa-fw fa-thermometer"
+          />
+           Monitoring profiles
+        
+        </router-link-stub>
+      </div>
+    </div>
+     
+    <div
+      class="col-md-6"
+    >
+      <!---->
+       
+      <h5>
+        <i
+          class="fa fa-pencil"
+        />
+         New monitoring profile
+      </h5>
+       
+      <monitoringform-stub
+        monitoringprofile="[object Object]"
+      />
+    </div>
+  </div>
+</div>
+`;

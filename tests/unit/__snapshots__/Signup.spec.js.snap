@@ -1,0 +1,120 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Signup.vue should match snapshot 1`] = `
+<div
+  class="container mt-3"
+>
+  <div
+    class="row"
+  >
+    <div
+      class="col-lg-8"
+    >
+      <h2>
+        Sign up to FIT IoT-LAB
+      </h2>
+       
+      <!---->
+       
+      <form
+        class="mb-5"
+      >
+        <div
+          class="text-right text-italic text-muted small"
+        >
+          
+          * All fields are mandatory
+        
+        </div>
+         
+        <userform-stub
+          hidden=""
+          mode="create"
+          user="[object Object]"
+        />
+         
+        <div
+          class="form-group"
+        >
+          <vuerecaptcha-stub
+            class=""
+            sitekey="6Ld8cR4UAAAAAC-zBLP9m2bC35xyyYwTbvkBcx4q"
+          />
+           
+          <div
+            class="invalid-feedback mb-3"
+            style="display: none;"
+          >
+            
+            Please verify the captcha.
+          
+          </div>
+        </div>
+         
+        <div
+          class="form-check"
+        >
+          <label
+            class="custom-control custom-checkbox"
+          >
+            <input
+              class="custom-control-input"
+              name="charter"
+              type="checkbox"
+            />
+             
+            <span
+              class="custom-control-indicator"
+            />
+             
+            <span
+              class="custom-control-description"
+            >
+              
+              I read and I accept 
+              <a
+                class=""
+                href="/charter/"
+                target="_blank"
+              >
+                IoT-LAB Terms of Service
+              </a>
+              .
+            
+            </span>
+          </label>
+           
+          <div
+            class="invalid-feedback mb-3"
+            style="display: none;"
+          >
+            
+            You must check the box and accept the terms of service.
+          
+          </div>
+        </div>
+         
+        <div
+          class="form-group"
+        >
+          <button
+            class="btn btn-lg btn-primary"
+            type="submit"
+          >
+            Sign up
+          </button>
+           
+          <router-link-stub
+            class="btn btn-lg btn-secondary"
+            event="click"
+            tag="a"
+            to="[object Object]"
+          >
+            Login
+          </router-link-stub>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+`;
