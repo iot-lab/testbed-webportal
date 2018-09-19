@@ -9,11 +9,12 @@
           <button type="submit" class="btn btn-secondary" aria-label="Search"> <i class="fa fa-search"></i> </button>
         </div>
       </div>
-      <select class="form-control custom-select mr-auto" v-model="show" @change="showUsers">
+      <select class="form-control custom-select mr-2" v-model="show" @change="showUsers">
         <option value="" disabled>Show user group</option>
         <option value="pending">pending users</option>
         <option v-for="group in store.groups" :value="group.name">{{group.name}}</option>
       </select>
+      <i class="fa fa-lg fa-spinner fa-spin ml-1 mr-auto" :class="spinner ? 'text-dark' : 'text-white'"></i>
       <router-link :to="{name:'addUsers'}" class="btn btn-success mr-2"><i class="fa fa-user-plus"></i> Add Users</router-link>
       <router-link :to="{name:'groups'}" class="btn btn-secondary mr-2"><i class="fa fa-cog"></i> Groups</router-link>
       <div class="dropdown d-inline-block">
@@ -207,6 +208,7 @@ export default {
       show: '',
       selectedUsers: [],
       allSelected: false,
+      spinner: false,
     }
   },
 
@@ -246,16 +248,22 @@ export default {
       delete this.$route.query.search
       this.searchPattern = ''
       const filter = this.show === 'pending' ? {status: 'pending'} : {group: this.show}
+      this.spinner = true
       this.users = await iotlab.getUsers(filter).catch(err => {
-        this.$notify({text: err.response.data.message || 'Failed to fetch users', type: 'error'})
+        this.$notify({ text: err.response.data.message || 'Failed to fetch users', type: 'error' })
+      }).finally(() => {
+        this.spinner = false
       })
     },
     async search () {
       this.show = ''
       if (this.searchPattern) {
         delete this.$route.query.search
-        this.users = await iotlab.getUsers({search: this.searchPattern}).catch(err => {
-          this.$notify({text: err.response.data.message || 'Failed to fetch users', type: 'error'})
+        this.spinner = true
+        this.users = await iotlab.getUsers({ search: this.searchPattern }).catch(err => {
+          this.$notify({ text: err.response.data.message || 'Failed to fetch users', type: 'error' })
+        }).finally(() => {
+          this.spinner = false
         })
       } else {
         this.users = []
