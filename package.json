@@ -1,6 +1,7 @@
 {
+  "version": "1.0.0",
   "name": "testbed-webportal",
-  "version": "0.1.0",
+  "author": "Benoit Formet",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
