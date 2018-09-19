@@ -157,7 +157,7 @@ export default {
   },
 
   async created () {
-    await this.getExperiment()
+    await this.getExperiment(this.id)
     this.$nextTick(function () {
       $('[data-toggle="popover"]').popover({
         trigger: 'focus',
@@ -166,14 +166,23 @@ export default {
     })
   },
 
+  beforeRouteUpdate (to, from, next) {
+    // called when the route that renders this component has changed,
+    // but this component is reused in the new route.
+    // For example, for a route with dynamic params `/foo/:id`, when we
+    // navigate between `/foo/1` and `/foo/2`, the same `Foo` component instance
+    // will be reused, and this hook will be called when that happens.
+    this.getExperiment(to.params.id)
+  },
+
   destroyed () {
     polling = clearTimeout(polling)
   },
 
   methods: {
-    async getExperiment () {
+    async getExperiment (id) {
       try {
-        this.experiment = await iotlab.getExperiment(this.id)
+        this.experiment = await iotlab.getExperiment(id)
 
         // poll for experiment update
         if (polling && ['Launching', 'Finishing'].includes(this.experiment.state)) {
