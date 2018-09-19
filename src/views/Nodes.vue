@@ -1,16 +1,18 @@
 <template>
 <div class="container mt-3">
+  <h3><i class="fa fa-fw fa-hourglass-half" aria-hidden="true"></i> Running experiments</h3>
+  <running-experiments :exp-list="runningExp"></running-experiments>
   <div class="float-right mt-1 mb-4">
     <div class="dropdown d-inline-block ">
       <button class="btn btn-light mr-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-fw fa-download"></i> Download</button>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" href="#" @click.prevent="downloadJson">IoT-LAB nodes <span class="badge badge-pill badge-info">JSON</span></a>
-        <a class="dropdown-item" href="#" @click.prevent="downloadCsv">IoT-LAB nodes <span class="badge badge-pill badge-info">CSV</span></a>
+      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="#" @click.prevent="downloadJson">IoT-LAB nodes properties <span class="badge badge-pill badge-info">JSON</span></a>
+        <a class="dropdown-item" href="#" @click.prevent="downloadCsv">IoT-LAB nodes  properties <span class="badge badge-pill badge-info">CSV</span></a>
       </div>
     </div>
-    <button v-if="isAdmin" class="btn btn-warning " @click="updateNodesProperties"><i class="fa fa-lock"></i> Update properties</button>
+    <button v-if="isAdmin" class="btn btn-warning" @click="updateNodesProperties"><i class="fa fa-lock"></i> Update properties</button>
   </div>
-  <h2>IoT-LAB nodes</h2>
+  <h3><i class="fa fa-fw fa-share-alt" aria-hidden="true"></i> Nodes properties</h3>
   <p class="lead mb-0">Sites</p>
   <p class="mb-2" v-if="sites">
     <span class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentSite === 'all', 'badge-secondary': currentSite !== 'all'}" @click="currentSite = 'all'">{{sites.length}} sites</span>
@@ -39,13 +41,16 @@
   </p>
   <div class="row">
     <div class="col-md-8">
-      <label class="mt-2 text-muted font-italic">Showing {{filteredNodes.length}} nodes</label>
+      <label class="mt-2 mr-3 text-muted font-italic">Showing {{filteredNodes.length}} nodes</label>
+      <a href="" @click.prevent="showMap = !showMap">
+        <i class="fa fa-map-o fa-fw fa-lg" aria-hidden="true"></i> view on site map <i class="fa fa-caret-down" aria-hidden="true"></i>
+      </a>
     </div>
     <div class="col-md-4">
-      <input type="text" class="form-control mb-3" placeholder="Search hostname or uid" v-model="search">
+      <input type="text" class="form-control mb-3" placeholder="Search by hostname or uid" v-model="search">
     </div>
   </div>
-  <map-3d :nodes="filteredNodes" @selectSite="(site) => currentSite = sites.find(s => s.site === site)"></map-3d>
+  <map-3d :nodes="filteredNodes" :shows="showMap" v-show="showMap" @selectSite="(site) => currentSite = sites.find(s => s.site === site)"></map-3d>
   <table class="table table-striped table-sm" v-if="nodes.length">
     <thead>
       <tr>
@@ -88,6 +93,7 @@
 
 <script>
 import Map3d from '@/components/Map3d'
+import RunningExperiments from '@/components/RunningExperiments'
 import { iotlab } from '@/rest'
 import { auth } from '@/auth'
 import { downloadObjectAsJson, downloadObjectAsCsv } from '@/utils'
@@ -97,6 +103,7 @@ export default {
 
   components: {
     Map3d,
+    RunningExperiments,
   },
 
   data () {
@@ -116,6 +123,7 @@ export default {
         mobile: node => node.mobile,
       },
       search: '',
+      showMap: false,
     }
   },
 
