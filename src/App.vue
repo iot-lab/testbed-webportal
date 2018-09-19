@@ -11,18 +11,17 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <router-link tag="li" :to="{name:'dashboard'}" active-class="active">
-            <a class="nav-link"><i class="fa fa-tasks" aria-hidden="true"></i> Dashboard</a>
-          </router-link>
-          <router-link tag="li" :to="{name:'nodes'}" active-class="active">
-            <a class="nav-link"><i class="fa fa-share-alt" aria-hidden="true"></i> Nodes</a>
+            <a class="nav-link"><i class="fa fa-fw fa-flask" aria-hidden="true"></i> My Experiments</a>
           </router-link>
           <router-link tag="li" :to="{name:'experiment'}" active-class="active">
-            <a class="nav-link"><i class="fa fa-flask" aria-hidden="true"></i> Experiment</a>
+            <a class="nav-link"><i class="fa fa-fw fa-plus" aria-hidden="true"></i> New Experiment</a>
           </router-link>
           <router-link tag="li" :to="{name:'resources'}" active-class="active">
-            <a class="nav-link"><i class="fa fa-folder-open" aria-hidden="true"></i> Resources</a>
+            <a class="nav-link"><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> My Resources</a>
             <!-- <a class="nav-link"><i class="fa fa-briefcase" aria-hidden="true"></i> Resources</a> -->
-            <!-- <a class="nav-link"><i class="fa fa-puzzle-piece" aria-hidden="true"></i> Resources</a> -->
+          </router-link>
+          <router-link tag="li" :to="{name:'nodes'}" active-class="active">
+            <a class="nav-link"><i class="fa fa-fw fa-tasks" aria-hidden="true"></i> Testbed Status</a>
           </router-link>
         </ul>
         <ul class="nav navbar-nav float-xs-right">
@@ -132,17 +131,20 @@ export default {
 </script>
 
 <style>
+html {
+  --iotlab-primary: #20539d;
+}
 .text-capitalize-first:first-letter {
   text-transform: uppercase;
 }
 .cursor:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 .cursor-help:hover {
-    cursor: help;
+  cursor: help;
 }
 .v-select .dropdown-toggle {
-    padding: 1px !important; /* adjust v-select to bootstrap-4 */
+  padding: 1px !important; /* adjust v-select to bootstrap-4 */
 }
 .scrollable {
   overflow-y: auto !important;
