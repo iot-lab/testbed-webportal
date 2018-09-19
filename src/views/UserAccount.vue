@@ -19,7 +19,7 @@
             <form @submit.prevent="updateProfile">
               <user-form :user="user" ref="user" :hidden="['sshkeys']"></user-form>
               <div class="form-group">
-                <button class="btn btn-success" type="submit">Update profile</button>
+                <button class="btn btn-success mr-1" type="submit">Update profile</button>
                 <button class="btn btn-secondary" type="button" @click="reset">Reset</button>
               </div>
             </form>
