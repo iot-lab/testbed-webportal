@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import moment from 'moment'
 import humanizeDuration from 'humanize-duration'
+import { pluralize } from '@/utils'
 
 export const fromTimestamp = function (value) {
   if (value) {
@@ -96,6 +97,11 @@ export const formatArchiRadio = function (value) {
   }
 }
 
+Vue.filter('pluralize', function (qty, str) {
+  if (str) {
+    return pluralize(qty, str)
+  }
+})
 Vue.filter('fromTimestamp', fromTimestamp)
 Vue.filter('formatDate', formatDate)
 Vue.filter('formatDateTime', formatDateTime)

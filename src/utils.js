@@ -7,6 +7,11 @@ export const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 // Capitalize
 export const capitalize = (str) => str.replace(/\b\w/g, l => l.toUpperCase())
 
+// Add 's' after str when qty is plural
+// e.g. pluralize(3, 'node') => '3 nodes'
+//      pluralize(1, 'node') => '1 node'
+export const pluralize = (qty, str) => `${qty} ${qty > 1 ? str + 's' : str}`
+
 // Expand a list of nodes containing dash intervals
 // "1-3+5+9" -> 1,2,3,5,9
 export const expandIds = function (factExp) {
