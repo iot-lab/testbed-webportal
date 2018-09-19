@@ -43,15 +43,6 @@
           <li>
             <a class="nav-link" href="" @click="logout" v-tooltip:bottom="'Log out'"><i class="fa fa-lg fa-fw fa-sign-out" aria-label="Logout"></i></a>
           </li>
-          <li class="nav-link icon-beta"
-              data-toggle="popover"
-              data-placement="bottom"
-              :data-title="`<b>Welcome to IoT-LAB's new web portal Beta</b>`"
-              :data-content="`<h6 class='font-italic font-weight-light'>We want it fast and ergonomic, we hope you'll like it!</h6>
-              <a href='/testbed'>Switch to legacy</a>`"
-            >
-            <i class="fa fa-lg fa-fw" aria-label="Beta"></i>
-          </li>
         </ul>
       </div>
     </div>
@@ -166,36 +157,6 @@ html {
 .scrollable.h600 {
   max-height: 600px;
 }
-.icon-beta {
-  position: relative;
-}
-.icon-beta::before, .icon-beta::after {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-.icon-beta::after {
-  content: "β";
-  color: var(--light);
-  font-size: 1em;
-}
-.icon-beta::before {
-  font-family: fontawesome;
-  content: "\f0a3";
-  color: var(--info);
-  font-size: 2em;
-  top: 1px;
-}
-.icon-beta:hover::before {
-  color: var(--dark);
-}
-
 .alert-popup {
   width: 100vw;
   height: 100vh;
