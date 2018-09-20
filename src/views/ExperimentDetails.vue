@@ -103,6 +103,9 @@
                 <button class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Flash firmware'" data-toggle="modal" data-target=".firmware-modal" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node">
                   <i class="fa fa-fw fa-microchip"></i>
                 </button>
+                <a href="" class="btn btn-sm border-0 btn-dark" data-toggle="button" aria-pressed="false" v-tooltip="'Open Terminal'" @click.prevent="openTerminal(node)">
+                  <i class="fa fa-fw fa-terminal"></i>
+                </a>
                 <button v-show="hasCamera(node)" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Video'" :disabled="getDeploymentStatus(node) === 'Error'" @click.prevent="toggleCamera(node)">
                   <i class="fa fa-fw fa-video-camera"></i>
                 </button>
@@ -115,6 +118,7 @@
           <tr>
             <td colspan="7" class="p-0">
               <img class="camera" v-if="hasCamera(node)" v-show="(token !== undefined) && cameraVisible(node)" :src="cameraUrl(node)" align="right">
+              <div :ref="node" class="p-0"></div>
             </td>
           </tr>
         </template>
@@ -153,6 +157,11 @@ import { auth } from '@/auth'
 import { experimentStates } from '@/assets/js/iotlab-utils'
 import { capitalize, pluralize, downloadAsFile } from '@/utils'
 import $ from 'jquery'
+import 'xterm/dist/xterm.css'
+import { Terminal } from 'xterm'
+import * as fit from 'xterm/dist/addons/fit/fit'
+
+Terminal.applyAddon(fit)
 
 var polling = true
 
@@ -445,6 +454,60 @@ export default {
         let apiHost = process.env.VUE_APP_IOTLAB_HOST
         let url = `https://${apiHost}/camera/${site}/${this.id}/${node}/${this.token}`
         return url
+      }
+    },
+
+    async openTerminal (node) {
+      let [nodeId, site] = node.split('.')
+      let connType = node.startsWith('a8') ? 'ssh' : 'serial'
+
+      let baseUrl = `wss://${process.env.VUE_APP_IOTLAB_HOST}:443/ws`
+      let wsUrl = `${baseUrl}/${site}/${this.id}/${nodeId}/${connType}`
+
+      let token = await iotlab.getExperimentToken(this.id)
+      let ws = new WebSocket(wsUrl, ['token', token])
+
+      var term = new Terminal({
+        cols: 80,
+        rows: 20,
+        screenKeys: true,
+        useStyle: true,
+      })
+
+      ws.onopen = (event) => {
+        term.on('data', function (data) {
+          ws.send(data)
+          if (connType === 'ssh') {
+            term.write('\b \b')
+          }
+        })
+
+        term.on('key', function (key, event) {
+          if (connType === 'serial' && event.key === 'Backspace') {
+            term.write('\b \b')
+          } else if (event.key === 'Del') {
+            term.write('\b \b')
+          } else {
+            term.write(key)
+            if (event.key === 'Enter') {
+              term.write('\n')
+            }
+          }
+        })
+
+        term.open(this.$refs[node][0])
+
+        term.fit()
+
+        ws.onmessage = function (event) {
+          term.write(event.data)
+          if (event.data === '\n') {
+            term.write('\r')
+          }
+        }
+
+        // Set focus on terminal
+        term.focus()
       }
     },
   },
