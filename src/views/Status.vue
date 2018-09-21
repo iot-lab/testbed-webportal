@@ -99,7 +99,7 @@ import { auth } from '@/auth'
 import { downloadObjectAsJson, downloadObjectAsCsv } from '@/utils'
 
 export default {
-  name: 'Nodes',
+  name: 'Status',
 
   components: {
     Map3d,

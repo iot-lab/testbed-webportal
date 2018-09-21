@@ -20,7 +20,7 @@
             <a class="nav-link"><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> My Resources</a>
             <!-- <a class="nav-link"><i class="fa fa-briefcase" aria-hidden="true"></i> Resources</a> -->
           </router-link>
-          <router-link tag="li" :to="{name:'nodes'}" active-class="active">
+          <router-link tag="li" :to="{name:'status'}" active-class="active">
             <a class="nav-link"><i class="fa fa-fw fa-tasks" aria-hidden="true"></i> Testbed Status</a>
           </router-link>
         </ul>

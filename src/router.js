@@ -15,7 +15,7 @@ import Monitoring from '@/views/Monitoring'
 import NewExperiment from '@/views/NewExperiment'
 import ExperimentDetails from '@/views/ExperimentDetails'
 import Dashboard from '@/views/Dashboard'
-import Nodes from '@/views/Nodes'
+import Status from '@/views/Status'
 import Drawgantt from '@/wp-menu/Drawgantt'
 import {auth} from './auth'
 
@@ -34,7 +34,7 @@ const router = new Router({
     { path: '/login', name: 'login', component: Login },
     { path: '/activate', name: 'activate', component: ActivateAccount },
     { path: '/dashboard', name: 'dashboard', component: Dashboard, meta: { requiresAuth: true } },
-    { path: '/nodes', name: 'nodes', component: Nodes, meta: { requiresAuth: true } },
+    { path: '/status', name: 'status', component: Status, meta: { requiresAuth: true } },
     { path: '/experiment', name: 'experiment', component: NewExperiment, meta: { requiresAuth: true } },
     { path: '/resources', name: 'resources', component: Resources, meta: { requiresAuth: true } },
     { path: '/resources/monitoring/new', name: 'newMonitoring', component: Monitoring, meta: { requiresAuth: true } },
