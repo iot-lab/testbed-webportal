@@ -148,7 +148,7 @@
                 <filter-select title="Architecture" v-model="filterArchi"
                   :items="archis4Site.map(archi => Object({value: archi, option: this.$options.filters.formatArchiRadio(archi)}))">
                 </filter-select>
-                <input v-model="nodeIds" class="form-control form-control-sm mr-2" type="text" placeholder="IDs (e.g. 1-5+7)"
+                <input id="nodeIds" v-model="nodeIds" class="form-control form-control-sm mr-2" type="text" placeholder="IDs (e.g. 1-5+7)"
                   data-toggle="popover"
                   data-placement="bottom"
                   data-title="Available node ids"
@@ -373,11 +373,12 @@ export default {
     })
     $('#collapseMap').on('shown.bs.collapse', function () {
       this.showMap = true
-      console.log('show', this.showMap)
     })
     $('#collapseMap').on('hidden.bs.collapse', function () {
       this.showMap = false
-      console.log('show', this.showMap)
+    })
+    $(document).on('click', 'span[data-ids]', function () {
+      $('#nodeIds').val(this.dataset.ids)
     })
   },
 
@@ -425,7 +426,7 @@ export default {
           .filter(site => site.site === this.filterSite)[0].archis
           .filter(archi => archi.archi === this.filterArchi)[0].states
           .sort((a, b) => a.state > b.state)
-          .map(state => `<span class="badge ${this.$options.filters.stateBadgeClass(state.state)}">${state.state}</span> ${state.ids}`)
+          .map(state => `<span class="badge ${this.$options.filters.stateBadgeClass(state.state)}">${state.state}</span> <span class="cursor" data-ids="${state.ids}">${state.ids}</span>`)
           .join('<br>')
       } catch (err) {
         return 'no matching ids'
