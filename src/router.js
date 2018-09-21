@@ -12,7 +12,7 @@ import AdminAddUser from '@/views/AdminAddUser'
 import AdminExperiments from '@/views/AdminExperiments'
 import Resources from '@/views/Resources'
 import Monitoring from '@/views/Monitoring'
-import Experiment from '@/views/Experiment'
+import NewExperiment from '@/views/NewExperiment'
 import ExperimentDetails from '@/views/ExperimentDetails'
 import Dashboard from '@/views/Dashboard'
 import Nodes from '@/views/Nodes'
@@ -35,7 +35,7 @@ const router = new Router({
     { path: '/activate', name: 'activate', component: ActivateAccount },
     { path: '/dashboard', name: 'dashboard', component: Dashboard, meta: { requiresAuth: true } },
     { path: '/nodes', name: 'nodes', component: Nodes, meta: { requiresAuth: true } },
-    { path: '/experiment', name: 'experiment', component: Experiment, meta: { requiresAuth: true } },
+    { path: '/experiment', name: 'experiment', component: NewExperiment, meta: { requiresAuth: true } },
     { path: '/resources', name: 'resources', component: Resources, meta: { requiresAuth: true } },
     { path: '/resources/monitoring/new', name: 'newMonitoring', component: Monitoring, meta: { requiresAuth: true } },
     { path: '/resources/monitoring/:name/edit', name: 'monitoring', component: Monitoring, props: true, meta: { requiresAuth: true } },
