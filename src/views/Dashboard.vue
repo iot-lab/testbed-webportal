@@ -44,8 +44,6 @@ export default {
   data () {
     return {
       total: {},
-      experiments: [],
-      started: 0,
       spinner: true,
       created: false,
     }
