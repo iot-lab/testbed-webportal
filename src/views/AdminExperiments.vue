@@ -60,8 +60,8 @@ export default {
   },
 
   methods: {
-    updateTotal () {
-      iotlab.getAllExperimentsCount(this.username).then(data => { this.total = data })
+    async updateTotal () {
+      this.total = await iotlab.getAllExperimentsCount(this.username)
       // hide spinner as we are not going to fetch terminated experiments
       if (this.total.terminated === 0) this.spinner = false
     },
