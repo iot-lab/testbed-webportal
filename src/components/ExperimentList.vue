@@ -220,12 +220,16 @@ export default {
       if (spinner) this.spinner = true
 
       // await sleep(2000)
-      this.experiments = this.experiments.concat((await iotlab.getAllExperiments({
-        user: this.user,
-        state: this.states.join(','),
-        offset: Math.max(this.total - this.experiments.length - qty, 0),
-        limit: Math.min(this.total - this.experiments.length, qty),
-      })).sort((exp1, exp2) => exp2.id - exp1.id)) // order by reverse ID
+      try {
+        this.experiments = this.experiments.concat((await iotlab.getAllExperiments({
+          user: this.user,
+          state: this.states.join(','),
+          offset: Math.max(this.total - this.experiments.length - qty, 0),
+          limit: Math.min(this.total - this.experiments.length, qty),
+        })).sort((exp1, exp2) => exp2.id - exp1.id)) // order by reverse ID
+      } catch (err) {
+        this.$notify({text: 'Failed to fetch experiments', type: 'error'})
+      }
 
       if (spinner) this.spinner = false
     },
@@ -233,13 +237,17 @@ export default {
     async refresh (more = 0) {
       console.debug('refresh')
       let previous = this.experiments
-      this.experiments = (await iotlab.getAllExperiments({
-        user: this.user,
-        state: this.states.join(','),
-        // offset: Math.max(this.total - this.experiments.length - qty, 0),
-        offset: Math.max(this.total - this.experiments.length - more, 0),
-        limit: Math.max(this.experiments.length, this.show) + more,
-      })).sort((exp1, exp2) => exp2.id - exp1.id) // order by reverse ID
+      try {
+        this.experiments = (await iotlab.getAllExperiments({
+          user: this.user,
+          state: this.states.join(','),
+          // offset: Math.max(this.total - this.experiments.length - qty, 0),
+          offset: Math.max(this.total - this.experiments.length - more, 0),
+          limit: Math.max(this.experiments.length, this.show) + more,
+        })).sort((exp1, exp2) => exp2.id - exp1.id) // order by reverse ID
+      } catch (err) {
+        this.$notify({text: 'Failed to fetch experiments', type: 'error'})
+      }
 
       if (this.experiments.length < previous.length) {
         // some experiments have ended, let's notify
