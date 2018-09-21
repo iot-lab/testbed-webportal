@@ -16,9 +16,9 @@
           <span class="badge badge-pill badge-warning">?</span> Scheduled
           <span class="badge badge-pill badge-dark">?</span> Completed
         </p>
-        <experiment-list title="Scheduled" :user="username" state="all_scheduled" @completed="updateTotal" :started="started"></experiment-list>
+        <experiment-list ref="runningExpList" title="Scheduled" :user="username" state="all_scheduled" @completed="updateTotal"></experiment-list>
         <template v-if="total.terminated">
-          <experiment-list title="Recent" :user="username" state="all_terminated" :show="20" :total="total.terminated" :step="100" @started="refreshScheduled" @loaded="spinner = false"></experiment-list>
+          <experiment-list title="Recent" :user="username" state="all_terminated" :show="20" :total="total.terminated" :step="100" @started="refreshRunning" @loaded="spinner = false"></experiment-list>
         </template>
         <template v-if="spinner">
           <i class="fa fa-spinner fa-spin fa-fw mr-1"></i>
@@ -50,7 +50,6 @@ export default {
   data () {
     return {
       total: {},
-      started: 0,
       spinner: true,
     }
   },
@@ -65,9 +64,8 @@ export default {
       // hide spinner as we are not going to fetch terminated experiments
       if (this.total.terminated === 0) this.spinner = false
     },
-    refreshScheduled () {
-      // increment started counter so that scheduled xp component can refresh itself
-      this.started += 1
+    refreshRunning () {
+      this.$refs.runningExpList.refresh()
     },
   },
 }
