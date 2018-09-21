@@ -9,7 +9,7 @@
           <button type="submit" class="btn btn-secondary" aria-label="Search"> <i class="fa fa-search"></i> </button>
         </div>
       </div>
-      <select class="form-control custom-select mr-2" v-model="show" @change="showUsers">
+      <select class="form-control custom-select mr-2" v-model="showGroup" @change="showUsers">
         <option value="" disabled>Show user group</option>
         <option value="pending">pending users</option>
         <option v-for="group in store.groups" :value="group.name">{{group.name}}</option>
@@ -95,7 +95,7 @@
     </table>
 
     <div class="text-muted">
-      <p v-if="!show && !searchPattern">Select a search criterion</p>
+      <p v-if="!showGroup && !searchPattern">Select a search criterion</p>
       <p v-else-if="users.length === 1">{{users.length}} matching user</p>
       <p v-else-if="users.length > 1">{{users.length}} matching users</p>
       <p v-else>No matching user found</p>
@@ -205,7 +205,7 @@ export default {
       currentGroups: {},
       auth: auth,
       searchPattern: '',
-      show: '',
+      showGroup: '',
       selectedUsers: [],
       allSelected: false,
       spinner: false,
@@ -228,11 +228,21 @@ export default {
     }
   },
 
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      // search pattern from url query string
+      if (vm.$route.query.search && vm.$route.query.search !== vm.searchPattern) {
+        vm.searchPattern = vm.$route.query.search
+        vm.search()
+      }
+      // focus search input (when empty)
+      if (!vm.searchPattern && !vm.showGroup) {
+        $('input[placeholder="Search for users"]').focus()
+      }
+    })
+  },
+
   async beforeUpdate () {
-    if (this.$route.query.search && this.$route.query.search !== this.searchPattern) {
-      this.searchPattern = this.$route.query.search
-      this.search()
-    }
   },
 
   methods: {
@@ -247,7 +257,7 @@ export default {
     async showUsers () {
       delete this.$route.query.search
       this.searchPattern = ''
-      const filter = this.show === 'pending' ? {status: 'pending'} : {group: this.show}
+      const filter = this.showGroup === 'pending' ? {status: 'pending'} : {group: this.showGroup}
       this.spinner = true
       this.users = await iotlab.getUsers(filter).catch(err => {
         this.$notify({ text: err.response.data.message || 'Failed to fetch users', type: 'error' })
@@ -256,7 +266,7 @@ export default {
       })
     },
     async search () {
-      this.show = ''
+      this.showGroup = ''
       if (this.searchPattern) {
         delete this.$route.query.search
         this.spinner = true
