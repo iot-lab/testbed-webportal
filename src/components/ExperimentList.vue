@@ -71,7 +71,7 @@
       </tfoot>
     </table>
     <div v-show="spinner">
-      <i class="fa fa-spinner fa-spin fa-fw"></i>
+      <i class="fa fa-spinner fa-spin fa-fw mr-1"></i>
       <i>loading experiments</i>
     </div>
   </div>

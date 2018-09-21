@@ -21,7 +21,7 @@
         <experiment-list title="Recent" user="@self" state="all_terminated" :show="5" :total="total.terminated" @started="refreshRunning" @loaded="spinner = false"></experiment-list>
       </template>
       <template v-if="spinner">
-        <i class="fa fa-spinner fa-spin fa-fw"></i>
+        <i class="fa fa-spinner fa-spin fa-fw mr-1"></i>
         <i>loading experiments</i>
       </template>
       

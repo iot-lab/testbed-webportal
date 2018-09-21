@@ -21,7 +21,7 @@
           <experiment-list title="Recent" :user="username" state="all_terminated" :show="20" :total="total.terminated" :step="100" @started="refreshScheduled" @loaded="spinner = false"></experiment-list>
         </template>
         <template v-if="spinner">
-          <i class="fa fa-spinner fa-spin fa-fw"></i>
+          <i class="fa fa-spinner fa-spin fa-fw mr-1"></i>
           <i>loading experiments</i>
         </template>
     </div>
@@ -72,7 +72,3 @@ export default {
   },
 }
 </script>
-
-<style>
-
-</style>
