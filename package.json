@@ -44,6 +44,7 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^23.0.1",
     "html-loader": "^0.5.5",
+    "identity-obj-proxy": "^3.0.0",
     "vue-template-compiler": "^2.5.17"
   },
   "eslintConfig": {
@@ -91,7 +92,8 @@
       "!src/wp-menu/**"
     ],
     "setupFiles": [
-      "<rootDir>/tests/unit/mock/localStorageMock.js"
+      "<rootDir>/tests/unit/mock/localStorageMock.js",
+      "<rootDir>/tests/unit/setup-jest.js"
     ],
     "moduleFileExtensions": [
       "js",
@@ -105,7 +107,8 @@
       "^.+\\.jsx?$": "babel-jest"
     },
     "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>/src/$1"
+      "^@/(.*)$": "<rootDir>/src/$1",
+      "^.+\\.(css)$": "identity-obj-proxy"
     },
     "snapshotSerializers": [
       "jest-serializer-vue"
