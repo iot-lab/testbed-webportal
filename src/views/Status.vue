@@ -219,6 +219,7 @@ export default {
 
     getBusyTitle (node) {
       const job = this.getBusyJob(node)
+      if (job === undefined) return ''
       return `job #${job.id}
 user ${job.user}
 ending ${this.$options.filters.formatDateTime(job.start_date, job.submitted_duration)}
