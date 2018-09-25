@@ -10,7 +10,7 @@ exports[`ExperimentList.vue should match snapshot 1`] = `
     style="display: none;"
   >
     <i
-      class="fa fa-spinner fa-spin fa-fw"
+      class="fa fa-spinner fa-spin fa-fw mr-1"
     />
      
     <i>

@@ -8,7 +8,7 @@ exports[`Dashboard.vue should match snapshot 1`] = `
     class="row"
   >
     <div
-      class="col-md-9"
+      class="col-md-10"
     >
       <h2>
         My experiments
@@ -61,70 +61,12 @@ exports[`Dashboard.vue should match snapshot 1`] = `
       <!---->
        
       <i
-        class="fa fa-spinner fa-spin fa-fw"
+        class="fa fa-spinner fa-spin fa-fw mr-1"
       />
        
       <i>
         loading experiments
       </i>
-    </div>
-     
-    <div
-      class="col"
-    >
-      <h2>
-        Platform status
-      </h2>
-       
-      <p>
-        <span
-          class="badge badge-pill mr-1 cursor badge-primary"
-        >
-          0 sites
-        </span>
-         
-      </p>
-       
-      <p>
-        <span
-          class="badge badge-pill badge-success"
-        >
-          0
-        </span>
-         nodes available
-        
-        <span
-          class="badge badge-pill badge-warning"
-        >
-          0
-        </span>
-         busy
-        
-        <span
-          class="badge badge-pill badge-danger"
-        >
-          0
-        </span>
-         unavailable
-      
-      </p>
-       
-      <p>
-        <router-link-stub
-          class="btn btn-light"
-          event="click"
-          tag="a"
-          to="[object Object]"
-        >
-          Running experiments
-          
-          <span
-            class="badge badge-pill badge-dark"
-          >
-            0
-          </span>
-        </router-link-stub>
-      </p>
     </div>
   </div>
 </div>

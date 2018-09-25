@@ -132,7 +132,7 @@ exports[`UserAccount.vue should match snapshot 1`] = `
               class="form-group"
             >
               <button
-                class="btn btn-success"
+                class="btn btn-success mr-1"
                 type="submit"
               >
                 Update profile

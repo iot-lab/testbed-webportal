@@ -83,8 +83,6 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
   >
     <thead>
       <tr>
-        <!---->
-         
         <th>
           Nodes
         </th>
@@ -100,6 +98,8 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
         <th>
           Deployment
         </th>
+         
+        <!---->
       </tr>
     </thead>
      
@@ -107,8 +107,6 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
       <tr
         class=""
       >
-        <!---->
-         
         <td>
           m3-9.saclay.iot-lab.info
         </td>
@@ -124,12 +122,12 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
         <td>
           Success
         </td>
+         
+        <!---->
       </tr>
       <tr
         class=""
       >
-        <!---->
-         
         <td>
           m3-12.saclay.iot-lab.info
         </td>
@@ -145,51 +143,87 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
         <td>
           Success
         </td>
+         
+        <!---->
       </tr>
     </tbody>
   </table>
    
-  <!---->
-   
   <div
-    class="card my-3"
-    style="max-width: 400px; display: none;"
+    aria-hidden="true"
+    aria-labelledby="firmwareModal"
+    class="modal fade firmware-modal"
+    role="dialog"
+    tabindex="-1"
   >
     <div
-      class="card-body"
+      class="modal-dialog"
     >
-      <h5
-        class="card-title"
+      <div
+        class="modal-content"
       >
-        Upload firmware
-      </h5>
-       
-      <p
-        class="card-text"
-      >
-        <label
-          class="custom-file"
+        <div
+          class="modal-header bg-light"
         >
-          <input
-            class="custom-file-input"
-            id="file"
-            type="file"
-          />
-           
-          <span
-            class="custom-file-control"
+          <h5
+            class="modal-title"
           >
-            
-          </span>
-        </label>
-      </p>
-       
-      <a
-        class="card-link"
-        href="#"
-      >
-        Close
-      </a>
+            Upload firmware
+          </h5>
+           
+          <button
+            aria-label="Close"
+            class="close"
+            data-dismiss="modal"
+            type="button"
+          >
+            <span
+              aria-hidden="true"
+            >
+              ×
+            </span>
+          </button>
+        </div>
+         
+        <div
+          class="modal-body py-4"
+        >
+          <label
+            class="custom-file"
+          >
+            <input
+              class="custom-file-input"
+              id="file"
+              type="file"
+            />
+             
+            <span
+              class="custom-file-control"
+            >
+              
+            </span>
+          </label>
+        </div>
+         
+        <div
+          class="modal-footer dborder-0 dbg-light"
+        >
+          <button
+            class="btn"
+            data-dismiss="modal"
+            type="button"
+          >
+            Close
+          </button>
+           
+          <button
+            class="btn btn-success"
+            type="button"
+          >
+            Flash
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

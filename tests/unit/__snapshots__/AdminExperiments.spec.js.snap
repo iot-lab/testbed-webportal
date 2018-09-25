@@ -43,7 +43,6 @@ exports[`AdminExperiments.vue should match snapshot 1`] = `
        
       <experimentlist-stub
         show="500"
-        started="0"
         state="all_scheduled"
         step="40"
         title="Scheduled"
@@ -54,7 +53,7 @@ exports[`AdminExperiments.vue should match snapshot 1`] = `
       <!---->
        
       <i
-        class="fa fa-spinner fa-spin fa-fw"
+        class="fa fa-spinner fa-spin fa-fw mr-1"
       />
        
       <i>

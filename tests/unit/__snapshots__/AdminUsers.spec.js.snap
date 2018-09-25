@@ -36,7 +36,7 @@ exports[`AdminUsers.vue should match snapshot 1`] = `
     </div>
      
     <select
-      class="form-control custom-select mr-auto"
+      class="form-control custom-select mr-2"
     >
       <option
         disabled="disabled"
@@ -52,6 +52,10 @@ exports[`AdminUsers.vue should match snapshot 1`] = `
       </option>
        
     </select>
+     
+    <i
+      class="fa fa-lg fa-spinner fa-spin ml-1 mr-auto text-white"
+    />
      
     <router-link-stub
       class="btn btn-success mr-2"
