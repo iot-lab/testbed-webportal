@@ -68,8 +68,8 @@ export default {
     next()
   },
 
-  created () {
-    this.updateTotal()
+  async created () {
+    await this.updateTotal()
     this.created = true
   },
 

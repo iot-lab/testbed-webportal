@@ -281,7 +281,7 @@ export default {
     },
 
     createPolling () {
-      if (this.hasPolling) {
+      if (this.hasPolling && !polling) {
         console.debug('polling started')
         // start polling callback (5 seconds)
         polling = setInterval(() => this.pollingLoop(), 5000)
