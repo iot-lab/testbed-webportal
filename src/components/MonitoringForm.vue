@@ -231,10 +231,12 @@ export default {
       let profile = Object.assign({}, this.profile)
       if (profile.radio.mode === 'sniffer') {
         delete profile.radio.period
+        delete profile.radio.num_per_channel
         if (typeof profile.radio.channels === 'object') profile.radio.channels = [profile.radio.channels[0]]
         if (typeof profile.radio.channels === 'number') profile.radio.channels = [profile.radio.channels]
+      } else {
+        if (profile.radio.channels.length < 2) profile.radio.num_per_channel = 0
       }
-      if (profile.radio.channels.length < 2) profile.radio.num_per_channel = 0
       if (!this.showConso) delete profile.consumption
       if (!this.showRadio) delete profile.radio
 
