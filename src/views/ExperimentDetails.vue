@@ -186,7 +186,7 @@ export default {
   },
 
   methods: {
-    async getExperiment (id) {
+    async getExperiment (id = this.id) {
       try {
         this.experiment = await iotlab.getExperiment(id)
 
