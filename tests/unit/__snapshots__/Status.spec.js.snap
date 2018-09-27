@@ -1,0 +1,185 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Status.vue should match snapshot 1`] = `
+<div
+  class="container mt-3"
+>
+  <h3>
+    <i
+      aria-hidden="true"
+      class="fa fa-fw fa-hourglass-half"
+    />
+     Running experiments
+  </h3>
+   
+  <runningexperiments-stub
+    explist=""
+  />
+   
+  <div
+    class="float-right mt-1 mb-4"
+  >
+    <div
+      class="dropdown d-inline-block "
+    >
+      <button
+        aria-expanded="false"
+        aria-haspopup="true"
+        class="btn btn-light mr-1"
+        data-toggle="dropdown"
+      >
+        <i
+          class="fa fa-fw fa-download"
+        />
+         Download
+      </button>
+       
+      <div
+        aria-labelledby="dropdownMenuButton"
+        class="dropdown-menu dropdown-menu-right"
+      >
+        <a
+          class="dropdown-item"
+          href="#"
+        >
+          IoT-LAB nodes properties 
+          <span
+            class="badge badge-pill badge-info"
+          >
+            JSON
+          </span>
+        </a>
+         
+        <a
+          class="dropdown-item"
+          href="#"
+        >
+          IoT-LAB nodes  properties 
+          <span
+            class="badge badge-pill badge-info"
+          >
+            CSV
+          </span>
+        </a>
+      </div>
+    </div>
+     
+    <!---->
+  </div>
+   
+  <h3>
+    <i
+      aria-hidden="true"
+      class="fa fa-fw fa-share-alt"
+    />
+     Nodes properties
+  </h3>
+   
+  <p
+    class="lead mb-0"
+  >
+    Sites
+  </p>
+   
+  <p
+    class="mb-2"
+  >
+    <span
+      class="badge badge-pill mr-1 cursor badge-primary"
+    >
+      0 sites
+    </span>
+     
+  </p>
+   
+  <p
+    class="lead mb-0"
+  >
+    Architectures
+  </p>
+   
+  <p
+    class="mb-2"
+  >
+    <span
+      class="badge badge-pill mr-1 cursor badge-primary"
+    >
+      0 archis
+    </span>
+     
+  </p>
+   
+  <p
+    class="lead mb-0"
+  >
+    Nodes
+  </p>
+   
+  <p
+    class="mb-2"
+  >
+    <span
+      class="badge badge-pill mr-1 cursor badge-primary"
+    >
+      0 nodes
+    </span>
+     
+    <!---->
+     
+    <!---->
+     
+    <!---->
+     
+    <!---->
+     
+    <!---->
+  </p>
+   
+  <div
+    class="row"
+  >
+    <div
+      class="col-md-8"
+    >
+      <label
+        class="mt-2 mr-3 text-muted font-italic"
+      >
+        Showing 0 nodes
+      </label>
+       
+      <a
+        href=""
+      >
+        <i
+          aria-hidden="true"
+          class="fa fa-map-o fa-fw fa-lg"
+        />
+         view on site map 
+        <i
+          aria-hidden="true"
+          class="fa fa-caret-down"
+        />
+      </a>
+    </div>
+     
+    <div
+      class="col-md-4"
+    >
+      <input
+        class="form-control mb-3"
+        placeholder="Search by hostname or uid"
+        type="text"
+      />
+    </div>
+  </div>
+   
+  <map3d-stub
+    nodes=""
+    selectednodes=""
+    style="display: none;"
+    value=""
+  />
+   
+  <!---->
+</div>
+`;

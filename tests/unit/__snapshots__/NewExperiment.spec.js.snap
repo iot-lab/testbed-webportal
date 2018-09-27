@@ -1,0 +1,587 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NewExperiment.vue should match snapshot 1`] = `
+<div
+  class="container my-3"
+>
+  <h2
+    class="mb-4"
+  >
+    New experiment
+  </h2>
+   
+  <div
+    id="accordion"
+    role="tablist"
+  >
+    <div
+      class="card"
+    >
+      <div
+        class="card-header pl-3"
+        id="headingZero"
+        role="tab"
+      >
+        <a
+          aria-controls="collapseZero"
+          aria-expanded="true"
+          class="text-dark"
+          data-toggle="collapse"
+          href="#collapseZero"
+        >
+          <h6
+            class="mb-0"
+          >
+            <i
+              aria-hidden="true"
+              class="fa fa-fw fa-clock-o"
+            />
+             Schedule
+            
+            <span
+              class="text-muted font-weight-normal font-size-sm float-right"
+            >
+              <i
+                aria-hidden="true"
+                class="fa fa-clock-o"
+              />
+               20 min, as soon as possible
+            
+            </span>
+          </h6>
+        </a>
+      </div>
+       
+      <div
+        aria-labelledby="headingZero"
+        class="collapse show"
+        data-parent="#accordion"
+        id="collapseZero"
+        role="tabpanel"
+      >
+        <div
+          class="card-body"
+        >
+          <div
+            class="form-group"
+          >
+            <label
+              class="lead mr-3 my-label"
+            >
+              Name
+            </label>
+             
+            <input
+              autofocus="autofocus"
+              class="form-control"
+              placeholder="New experiment"
+              style="max-width: 300px; display: inline-block;"
+              type="text"
+            />
+             
+            <div
+              class="invalid-feedback"
+            >
+              
+              Invalid name. Only alphanumeric characters allowed [0-9A-Za-z_]
+            
+            </div>
+          </div>
+           
+          <div
+            class="form-group"
+          >
+            <label
+              class="lead mr-3 my-label"
+            >
+              Duration
+            </label>
+             
+            <div
+              class="input-group"
+              style="display: inline-flex; max-width: 300px;"
+            >
+              <input
+                class="form-control"
+                min="1"
+                type="number"
+              />
+               
+              <div
+                class="input-group-btn"
+              >
+                <button
+                  class="btn btn-secondary"
+                  type="button"
+                >
+                   minutes 
+                </button>
+                 
+                <button
+                  class="btn"
+                  type="button"
+                >
+                   hours 
+                </button>
+              </div>
+            </div>
+          </div>
+           
+          <div
+            class="form-group"
+          >
+            <label
+              class="lead mr-3 my-label"
+            >
+              Start
+            </label>
+             
+            <label
+              class="custom-control custom-radio"
+            >
+              <input
+                class="custom-control-input"
+                id="radioStacked1"
+                name="radio-stacked"
+                type="radio"
+                value="asap"
+              />
+               
+              <span
+                class="custom-control-indicator"
+              />
+               
+              <span
+                class="custom-control-description"
+              >
+                As soon as possible
+              </span>
+            </label>
+             
+            <label
+              class="custom-control custom-radio mr-0"
+            >
+              <input
+                class="custom-control-input"
+                id="radioStacked2"
+                name="radio-stacked"
+                type="radio"
+                value="scheduled"
+              />
+               
+              <span
+                class="custom-control-indicator"
+              />
+               
+              <span
+                class="custom-control-description"
+              >
+                Scheduled
+              </span>
+            </label>
+          </div>
+           
+          <div
+            class="form-group"
+            style="display: none;"
+          >
+            <label
+              class="lead mr-3 my-label"
+            />
+             
+            <input
+              class="form-control datetimepicker-input"
+              data-target="#datetimepicker1"
+              data-toggle="datetimepicker"
+              id="datetimepicker1"
+              placeholder=""
+              style="max-width: 300px; display: inline-block;"
+              type="text"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <div
+      class="card"
+    >
+      <div
+        class="card-header pl-3"
+        id="headingOne"
+        role="tab"
+      >
+        <a
+          aria-controls="collapseOne"
+          aria-expanded="false"
+          class="collapsed text-dark"
+          data-toggle="collapse"
+          href="#collapseOne"
+        >
+          <h6
+            class="mb-0"
+          >
+            <i
+              aria-hidden="true"
+              class="fa fa-fw fa-share-alt"
+            />
+             Nodes 
+            <span
+              class="badge float-right badge-secondary"
+            >
+              0
+            </span>
+          </h6>
+        </a>
+      </div>
+       
+      <div
+        aria-labelledby="headingOne"
+        class="collapse"
+        data-parent="#accordion"
+        id="collapseOne"
+        role="tabpanel"
+      >
+        <ul
+          class="nav nav-tabs pt-2 font-size-sm bg-light"
+        >
+          <li
+            class="nav-item"
+          >
+            <span
+              class="nav-link disabled text-dark fdont-weight-bold"
+            >
+              Select by
+            </span>
+          </li>
+           
+          <li
+            class="nav-item"
+          >
+            <a
+              aria-controls="byprop"
+              class="nav-link active"
+              data-toggle="list"
+              href="#list-byprop"
+              id="list-byprop-list"
+              role="tab"
+            >
+               node properties 
+            </a>
+          </li>
+           
+          <li
+            class="nav-item"
+          >
+            <a
+              aria-controls="byname"
+              class="nav-link"
+              data-toggle="list"
+              href="#list-byname"
+              id="list-byname-list"
+              role="tab"
+            >
+               host name / map 
+            </a>
+          </li>
+           
+          <li
+            class="nav-item"
+          >
+            <a
+              aria-controls="byid"
+              class="nav-link"
+              data-toggle="list"
+              href="#list-byid"
+              id="list-byid-list"
+              role="tab"
+            >
+               node id 
+            </a>
+          </li>
+        </ul>
+         
+        <div
+          class="py-3 card-body"
+        >
+          <div
+            class="tab-content"
+            id="nav-tabContent"
+          >
+            <div
+              aria-labelledby="list-byprop-list"
+              class="tab-pane fade show active"
+              id="list-byprop"
+              role="tabpanel"
+            >
+              <p
+                class="mb-2 lead text-muted"
+              >
+                Select an architecture, site and quantity.
+              </p>
+               
+              <div
+                class="d-md-flex"
+                style="max-width: 850px;"
+              >
+                <filterselect-stub
+                  all=""
+                  items=""
+                  title="Architecture"
+                  value="all"
+                />
+                 
+                <filterselect-stub
+                  all=""
+                  items=""
+                  title="Site"
+                  value="all"
+                />
+                 
+                <filterselect-stub
+                  all=""
+                  items="0"
+                  style="max-width: 90px;"
+                  title="Qty"
+                  value="0"
+                />
+                 
+                <label
+                  class="custom-control custom-checkbox mb-0 mt-1"
+                >
+                  <input
+                    class="custom-control-input"
+                    type="checkbox"
+                  />
+                   
+                  <span
+                    class="custom-control-indicator"
+                  />
+                   
+                  <span
+                    class="custom-control-description"
+                  >
+                    Mobile
+                  </span>
+                </label>
+                 
+                <button
+                  class="btn btn-sm btn-success"
+                >
+                  <i
+                    aria-hidden="true"
+                    class="fa fa-plus"
+                  />
+                   Add to experiment
+                </button>
+              </div>
+            </div>
+             
+            <div
+              aria-labelledby="list-byname-list"
+              class="tab-pane fade show"
+              id="list-byname"
+              role="tabpanel"
+            >
+              <p
+                class="mb-2 lead text-muted"
+              >
+                Pick nodes from the list. Add some filters or a search pattern.
+              </p>
+               
+              <div>
+                <span>
+                  Filters
+                </span>
+                 
+                
+                <filterselect-stub
+                  all="All sites"
+                  items=""
+                  title=""
+                  value="all"
+                />
+                 
+                <filterselect-stub
+                  all="All architectures"
+                  items=""
+                  title=""
+                  value="all"
+                />
+                 
+                <filterselect-stub
+                  all="All mobility"
+                  items="[object Object],[object Object]"
+                  title=""
+                  value="all"
+                />
+              </div>
+               
+              <div
+                class="d-md-flex flex-row mt-3"
+                style="align-items: center;"
+              >
+                <multiselect-stub
+                  class="mr-1"
+                  deselectgrouplabel="Press enter to deselect group"
+                  deselectlabel="Press enter to remove"
+                  hide-selected="true"
+                  label="network_address"
+                  limit="99999"
+                  limittext="function (t){return\\"and \\".concat(t,\\" more\\")}"
+                  maxheight="300"
+                  multiple="true"
+                  name=""
+                  opendirection=""
+                  options=""
+                  placeholder="No matching nodes found. Try to clear filters."
+                  preserve-search="true"
+                  selectedlabel="Selected"
+                  selectgrouplabel="Press enter to select group"
+                  selectlabel="Press enter to select"
+                  showlabels="true"
+                  shownoresults="true"
+                  tabindex="0"
+                  track-by="network_address"
+                />
+                 
+                <button
+                  class="btn btn-success"
+                >
+                  Add to experiment
+                </button>
+              </div>
+               
+              <p
+                class="mt-2 mb-2 font-size-sm"
+              >
+                <a
+                  aria-controls="collapseMap"
+                  aria-expanded="false"
+                  href="#collapseMap"
+                  xdata-toggle="collapse"
+                >
+                  <i
+                    aria-hidden="true"
+                    class="fa fa-map-o fa-fw fa-lg"
+                  />
+                   View/select nodes on map 
+                  <i
+                    aria-hidden="true"
+                    class="fa fa-caret-down"
+                  />
+                </a>
+              </p>
+               
+              <div
+                id="collapseMap"
+                style="display: none;"
+                xclass="collapse"
+              >
+                <map3d-stub
+                  nodes=""
+                  selectednodes=""
+                  value=""
+                />
+              </div>
+            </div>
+             
+            <div
+              aria-labelledby="list-byid-list"
+              class="tab-pane fade show"
+              id="list-byid"
+              role="tabpanel"
+            >
+              <p
+                class="mb-2 lead text-muted"
+              >
+                Select a site, architecture and desired ids.
+              </p>
+               
+              <div
+                class="d-md-flex"
+                style="max-width: 800px;"
+              >
+                <filterselect-stub
+                  all=""
+                  items=""
+                  title="Site"
+                  value="all"
+                />
+                 
+                <filterselect-stub
+                  all=""
+                  items=""
+                  title="Architecture"
+                  value="all"
+                />
+                 
+                <input
+                  class="form-control form-control-sm mr-2"
+                  data-content="select node by ids tab"
+                  data-placement="bottom"
+                  data-title="Available node ids"
+                  data-toggle="popover"
+                  id="nodeIds"
+                  placeholder="IDs (e.g. 1-5+7)"
+                  type="text"
+                />
+                 
+                <button
+                  class="btn btn-sm btn-success"
+                >
+                  <i
+                    aria-hidden="true"
+                    class="fa fa-plus"
+                  />
+                   Add to experiment
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+       
+      <!---->
+       
+      <!---->
+    </div>
+  </div>
+   
+  <h5
+    class="my-3"
+  >
+    Summary
+  </h5>
+   
+  <p
+    class="lead"
+  >
+    Your experiment on 
+    <span
+      class="text-primary"
+    >
+      0
+    </span>
+     nodes is set to start 
+    <span
+      class="text-primary"
+    >
+      as soon as possible
+    </span>
+     for 
+    <span
+      class="text-primary"
+    >
+      20
+    </span>
+     minutes.
+  </p>
+   
+  <button
+    class="btn btn-lg btn-primary"
+  >
+    Submit experiment
+  </button>
+</div>
+`;
