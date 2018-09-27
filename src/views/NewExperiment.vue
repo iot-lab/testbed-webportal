@@ -367,9 +367,11 @@ export default {
     $('#datetimepicker1').on('change.datetimepicker', (e) => {
       this.startDate = e.date
     })
-    $('[data-toggle="popover"]').popover({
-      trigger: 'focus',
-      html: true,
+    this.$nextTick(function () {
+      $('[data-toggle="popover"]').popover({
+        trigger: 'focus',
+        html: true,
+      })
     })
     $('#collapseMap').on('shown.bs.collapse', function () {
       this.showMap = true
