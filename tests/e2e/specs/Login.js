@@ -9,7 +9,7 @@ describe('Login', () => {
 
   it('Should show login form', () => {
     cy.visit('/')
-    cy.location('hash').should('include', 'login')
+    cy.location('pathname').should('include', 'login')
     cy.contains('h2', 'Welcome to FIT IoT-LAB')
     cy.contains('button', 'Log in')
   })
@@ -22,9 +22,8 @@ describe('Login', () => {
       expect(localStorage.getItem('username')).to.eq('webportal')
     })
       
-    cy.location('hash').should('include', 'dashboard')
-    cy.location('hash').should('not.include', 'login')
-    // cy.location('pathname').should('include', 'dashboard')
+    cy.location('pathname').should('include', 'dashboard')
+    cy.location('pathname').should('not.include', 'login')
     
     cy.contains('h2', 'My experiments')
   })
@@ -46,7 +45,7 @@ describe('Login', () => {
       expect(localStorage.getItem('loggedIn')).to.be.null
     })
 
-    cy.location('hash').should('include', 'login')
+    cy.location('pathname').should('include', 'login')
   })
 
 })

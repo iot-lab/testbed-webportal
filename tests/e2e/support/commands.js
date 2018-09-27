@@ -42,7 +42,7 @@ Cypress.Commands.add('login', (userType, options = {}) => {
 
   cy.server()
   cy.route('/api/user', {"firstName":"Webportal","lastName":"Webportal","email":"admin@iot-lab.info","organization":"Webportal","city":"Webportal","country":"France","login":"toto","motivations":"Webportal account with admin role access","status":"active","created":"2017-10-27T08:37:08Z","groups":["admin"],"sshkeys":["no need"]})
-  cy.visit('/#/login')
+  cy.visit('/login')
   cy.get('input[placeholder=Username]').type(user.login)
   cy.get('input[placeholder=Password]').type(user.password + '{enter}').should(() => {
     expect(localStorage.getItem('loggedIn')).to.eq('true')
