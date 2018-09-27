@@ -1,3 +1,17 @@
+##  1.0.1 (2018-09-27)
+
+### Enhancements
+
+* [New experiment] Click-to-fill available node ids
+* Autofocus search users input
+* Some UI polish (spinner, margins)
+
+### Bug fixes
+
+* Fix edition of radio monitoring profile with sniffer mode
+* Fix running experiment double polling
+* Fix experiment details polling
+
 ##  1.0.0 (2018-09-19)
 
 ### Enhancements
