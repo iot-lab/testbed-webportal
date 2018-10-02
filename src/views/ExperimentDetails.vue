@@ -71,6 +71,7 @@
       <thead>
         <tr>
           <th>Nodes</th>
+          <th>UID</th>
           <th>Firmware</th>
           <th>Monitoring</th>
           <th>Deployment</th>
@@ -82,6 +83,7 @@
       <tbody>
         <tr v-for="node in experiment.nodes" :class="{'text-danger': getDeploymentStatus(node) === 'Error'}">
           <td v-html="nodeOrAlias(node)"></td>
+          <td>{{getUid(node)}}</td>
           <td>{{getFirmware(node)}}</td>
           <td>{{getMonitoring(node)}}</td>
           <td>{{getDeploymentStatus(node)}}</td>
@@ -143,6 +145,7 @@ export default {
       deploymentStatus: undefined,
       states: experimentStates,
       selectedNodes: [],
+      nodes: [],
       allSelected: false,
       firmwareFile: undefined,
       firmware: undefined,
@@ -189,6 +192,7 @@ export default {
     async getExperiment (id = this.id) {
       try {
         this.experiment = await iotlab.getExperiment(id)
+        this.nodes = await iotlab.getExperimentNodes(id)
 
         // poll for experiment update
         if (polling && ['Launching', 'Finishing'].includes(this.experiment.state)) {
@@ -208,6 +212,10 @@ export default {
       if (typeof node === 'string') return node
       // else it's an alias
       return `<span class="badge badge-secondary">${this.$options.filters.formatArchiRadio(node.properties.archi)} ${node.properties.mobile ? '(mobile)' : ''} @ ${node.properties.site}</span> x ${node.nbnodes} `
+    },
+    getUid (node) {
+      let n = this.nodes.find((n) => n.network_address === node)
+      return n ? n.uid : ''
     },
     getFirmware (node) {
       if (!this.experiment.firmwareassociations) return
