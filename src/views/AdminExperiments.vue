@@ -1,33 +1,27 @@
 <template>
   <div class="container mt-3">
-    <div class="row">
-      <div class="col-md-10">
-        <h2>
-          All experiments
-          <span v-if="username">for user <span class="text-muted">{{username}}</span></span>
-        </h2>
-        <p v-if="total.running != undefined">
-          <span class="badge badge-pill badge-success">{{total.running}}</span> Running
-          <span class="badge badge-pill badge-warning">{{total.upcoming}}</span> Scheduled
-          <span class="badge badge-pill badge-dark">{{total.terminated}}</span> Completed
-        </p>
-        <p v-else>
-          <span class="badge badge-pill badge-success">?</span> Running
-          <span class="badge badge-pill badge-warning">?</span> Scheduled
-          <span class="badge badge-pill badge-dark">?</span> Completed
-        </p>
-        <experiment-list ref="runningExpList" title="Scheduled" :user="username" state="all_scheduled" @completed="updateTotal"></experiment-list>
-        <template v-if="total.terminated">
-          <experiment-list title="Recent" :user="username" state="all_terminated" :show="20" :total="total.terminated" :step="100" @started="refreshRunning" @loaded="spinner = false"></experiment-list>
-        </template>
-        <template v-if="spinner">
-          <i class="fa fa-spinner fa-spin fa-fw mr-1"></i>
-          <i>loading experiments</i>
-        </template>
-    </div>
-      <div class="col"></div>
-    </div>
-
+    <h2>
+      All experiments
+      <span v-if="username">for user <span class="text-muted">{{username}}</span></span>
+    </h2>
+    <p v-if="total.running != undefined">
+      <span class="badge badge-pill badge-success">{{total.running}}</span> Running
+      <span class="badge badge-pill badge-warning">{{total.upcoming}}</span> Scheduled
+      <span class="badge badge-pill badge-dark">{{total.terminated}}</span> Completed
+    </p>
+    <p v-else>
+      <span class="badge badge-pill badge-success">?</span> Running
+      <span class="badge badge-pill badge-warning">?</span> Scheduled
+      <span class="badge badge-pill badge-dark">?</span> Completed
+    </p>
+    <experiment-list ref="runningExpList" title="Scheduled" :user="username" state="all_scheduled" @completed="updateTotal"></experiment-list>
+    <template v-if="total.terminated">
+      <experiment-list title="Recent" :user="username" state="all_terminated" :show="20" :total="total.terminated" :step="100" @started="refreshRunning" @loaded="spinner = false"></experiment-list>
+    </template>
+    <template v-if="spinner">
+      <i class="fa fa-spinner fa-spin fa-fw mr-1"></i>
+      <i>loading experiments</i>
+    </template>
   </div> <!-- container -->
 </template>
 
