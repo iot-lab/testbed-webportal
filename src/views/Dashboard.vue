@@ -1,32 +1,27 @@
 <template>
 <div class="container mt-3">
-  <div class="row">
-    <div class="col-md-10">
-      <h2>My experiments</h2>
-      <p v-if="total.running != undefined">
-        <span class="badge badge-pill badge-success">{{total.running}}</span> Running
-        <span class="badge badge-pill badge-warning">{{total.upcoming}}</span> Scheduled
-        <span class="badge badge-pill badge-dark">{{total.terminated}}</span> Completed
-      </p>
-      <p v-else>
-        <span class="badge badge-pill badge-success">?</span> Running
-        <span class="badge badge-pill badge-warning">?</span> Scheduled
-        <span class="badge badge-pill badge-dark">?</span> Completed
-      </p>
-      <experiment-list ref="runningExpList" title="Scheduled" user="@self" state="all_scheduled" @completed="updateTotal"></experiment-list>
-      <p>
-        <router-link :to="{name:'experiment'}" class="btn btn-primary">New experiment</router-link>
-      </p>
-      <template v-if="total.terminated">
-        <experiment-list title="Recent" user="@self" state="all_terminated" :show="5" :total="total.terminated" @started="refreshRunning" @loaded="spinner = false"></experiment-list>
-      </template>
-      <template v-if="spinner">
-        <i class="fa fa-spinner fa-spin fa-fw mr-1"></i>
-        <i>loading experiments</i>
-      </template>
-      
-    </div>
-  </div>
+  <h2>My experiments</h2>
+  <p v-if="total.running != undefined">
+    <span class="badge badge-pill badge-success">{{total.running}}</span> Running
+    <span class="badge badge-pill badge-warning">{{total.upcoming}}</span> Scheduled
+    <span class="badge badge-pill badge-dark">{{total.terminated}}</span> Completed
+  </p>
+  <p v-else>
+    <span class="badge badge-pill badge-success">?</span> Running
+    <span class="badge badge-pill badge-warning">?</span> Scheduled
+    <span class="badge badge-pill badge-dark">?</span> Completed
+  </p>
+  <experiment-list ref="runningExpList" title="Scheduled" user="@self" state="all_scheduled" @completed="updateTotal"></experiment-list>
+  <p>
+    <router-link :to="{name:'experiment'}" class="btn btn-primary">New experiment</router-link>
+  </p>
+  <template v-if="total.terminated">
+    <experiment-list title="Recent" user="@self" state="all_terminated" :show="5" :total="total.terminated" @started="refreshRunning" @loaded="spinner = false"></experiment-list>
+  </template>
+  <template v-if="spinner">
+    <i class="fa fa-spinner fa-spin fa-fw mr-1"></i>
+    <i>loading experiments</i>
+  </template>
 </div> <!-- container -->
 
 </template>
