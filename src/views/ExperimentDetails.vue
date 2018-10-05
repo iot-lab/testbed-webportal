@@ -122,7 +122,7 @@
           </div>
           <div class="modal-body py-4">
             <label class="custom-file">
-              <input type="file" id="file" ref="firmwareFile" class="custom-file-input">
+              <input type="file" id="file" ref="firmwareFile" class="custom-file-input" @change="changeFirmwareFile('firmwareFile')">
               <span class="custom-file-control">{{firmwareFile && firmwareFile.name}}</span>
             </label>
           </div>
@@ -335,6 +335,10 @@ export default {
       }
     },
 
+    changeFirmwareFile (ref) {
+      this.firmwareFile = this.$refs[ref].files[0]
+    },
+
     flashFirmware (ref) {
       if (this.currentNode !== undefined) {
         this.flashFirmwareToCurrentNode(ref)
@@ -356,7 +360,6 @@ export default {
         return
       }
 
-      this.firmwareFile = this.$refs[ref].files[0]
       if (this.firmwareFile === undefined) return
 
       this.$notify({ text: 'Uploading file...', type: 'info', duration: -1 })
