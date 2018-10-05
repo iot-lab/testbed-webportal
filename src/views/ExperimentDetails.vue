@@ -75,6 +75,7 @@
           <th>Firmware</th>
           <th>Monitoring</th>
           <th>Deployment</th>
+          <th width="30px" v-if="showNodesCommands"><span style="margin-left:10px">Actions</span></th>
           <th width="15px" v-if="showNodesCommands">
             <input type="checkbox" @change="toggleSelectedNodes" v-model="allSelected">
           </th>
@@ -87,6 +88,22 @@
           <td>{{getFirmware(node)}}</td>
           <td>{{getMonitoring(node)}}</td>
           <td>{{getDeploymentStatus(node)}}</td>
+          <td v-if="showNodesCommands">
+            <div class="btn-group" role="group" aria-label="Node actions" >
+              <button class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Start'" :disabled="getDeploymentStatus(node) === 'Error'" @click="sendCmdToNode('start', node)">
+                <i class="fa fa-fw fa-play"></i>
+              </button>
+              <button class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Stop'" :disabled="getDeploymentStatus(node) === 'Error'" @click="sendCmdToNode('stop', node)">
+                <i class="fa fa-fw fa-power-off"></i>
+              </button>
+              <button class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Reset'" :disabled="getDeploymentStatus(node) === 'Error'" @click="sendCmdToNode('reset', node)">
+                <i class="fa fa-fw fa-refresh"></i>
+              </button>
+              <button class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Flash firmware'" data-toggle="modal" data-target=".firmware-modal" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node">
+                <i class="fa fa-fw fa-microchip"></i>
+              </button>
+            </div>
+          </td>
           <td v-if="showNodesCommands">
             <input type="checkbox" :value="node" v-model="selectedNodes" :disabled="getDeploymentStatus(node) === 'Error'" @click="uncheckAll">
           </td>
@@ -105,7 +122,7 @@
           </div>
           <div class="modal-body py-4">
             <label class="custom-file">
-              <input type="file" id="file" ref="firmwareFile" class="custom-file-input" @change="flashFirmware('firmwareFile')">
+              <input type="file" id="file" ref="firmwareFile" class="custom-file-input">
               <span class="custom-file-control">{{firmwareFile && firmwareFile.name}}</span>
             </label>
           </div>
@@ -150,6 +167,7 @@ export default {
       firmwareFile: undefined,
       firmware: undefined,
       currentUser: auth.username,
+      currentNode: undefined,
     }
   },
 
@@ -277,17 +295,22 @@ export default {
       })
     },
 
-    async sendCmd (cmd) {
-      if (this.selectedNodes.length === 0) {
+    async sendCmdToNode (cmd, node) {
+      let nodes = [node]
+      await this.sendCmd(cmd, nodes)
+    },
+
+    async sendCmd (cmd, nodesList = this.selectedNodes) {
+      if (nodesList.length === 0) {
         this.$notify({ text: `Select some nodes first`, type: 'warning' })
         return
       }
-      let selectedNodes = this.selectedNodes
-      let nodes = await iotlab.sendNodesCommand(this.id, cmd, selectedNodes).catch(err => {
+
+      let nodes = await iotlab.sendNodesCommand(this.id, cmd, nodesList).catch(err => {
         this.$notify({ text: err.response.data.message, type: 'error' })
       })
       let validNodes = Object.values(nodes).reduce((a, b) => a.concat(b))
-      let invalidNodes = selectedNodes.filter(n => !validNodes.includes(n))
+      let invalidNodes = nodesList.filter(n => !validNodes.includes(n))
 
       if (invalidNodes.length > 0) {
         this.$notify({
@@ -311,8 +334,24 @@ export default {
         })
       }
     },
+
     flashFirmware (ref) {
-      if (this.selectedNodes.length === 0) {
+      if (this.currentNode !== undefined) {
+        this.flashFirmwareToCurrentNode(ref)
+        this.currentNode = undefined
+      }
+      else {
+        this.flashFirmwareToNodes(ref, this.selectedNodes)
+      }
+    },
+
+    flashFirmwareToCurrentNode (ref) {
+      let nodes = [this.currentNode]
+      this.flashFirmwareToNodes(ref, nodes)
+    },
+
+    flashFirmwareToNodes (ref, nodes) {
+      if (nodes.length === 0) {
         this.$notify({ text: `Select some nodes first`, type: 'warning' })
         return
       }
@@ -366,7 +405,7 @@ export default {
             })
           }
         }
-      })(this, this.selectedNodes)
+      })(this, nodes)
 
       reader.readAsDataURL(this.firmwareFile)
     },
