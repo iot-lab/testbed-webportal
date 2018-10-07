@@ -249,6 +249,10 @@ export const iotlab = {
     return iotlab.api.get(`/experiments/${id}/nodes`).then(resp => resp.data.items)
   },
 
+  async getExperimentToken (id) {
+    return iotlab.api.get(`/experiments/${id}/token`).then(resp => resp.data.token)
+  },
+
   async sendNodesCommand (id, cmd, nodes) {
     // cmd in [start, stop, reset, flash-idle, profile-reset, debug-start, debug-stop]
     return iotlab.api.post(`/experiments/${id}/nodes/${cmd}`, nodes).then(resp => resp.data)
