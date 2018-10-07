@@ -75,7 +75,7 @@
           <th>Firmware</th>
           <th>Monitoring</th>
           <th class="text-center">Deployment</th>
-          <th width="30px" v-if="showNodesCommands" class="text-center">Actions</th>
+          <th width="50px" v-if="showNodesCommands" class="text-center">Actions</th>
           <th width="15px" v-if="showNodesCommands">
             <input type="checkbox" @change="toggleSelectedNodes" v-model="allSelected">
           </th>
@@ -102,6 +102,9 @@
               <button class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Flash firmware'" data-toggle="modal" data-target=".firmware-modal" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node">
                 <i class="fa fa-fw fa-microchip"></i>
               </button>
+              <button class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Video'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleCamera(node)">
+                <i class="fa fa-fw fa-video-camera"></i>
+              </button>
             </div>
           </td>
           <td v-if="showNodesCommands">
@@ -110,6 +113,8 @@
         </tr>
       </tbody>
     </table>
+
+    <img v-show="cameraVisible" ref="camera" style="display:none" align='right' width=320 height=240>
 
     <div class="modal fade firmware-modal" tabindex="-1" role="dialog" aria-labelledby="firmwareModal" aria-hidden="true">
       <div class="modal-dialog">
@@ -168,6 +173,7 @@ export default {
       firmware: undefined,
       currentUser: auth.username,
       currentNode: undefined,
+      cameraVisible: false,
     }
   },
 
@@ -410,6 +416,23 @@ export default {
       })(this, nodes)
 
       reader.readAsDataURL(this.firmwareFile)
+    },
+
+    async toggleCamera (hostname) {
+      this.$cameraVisible = !this.$cameraVisible
+      if (this.$cameraVisible) {
+        let exp_id = this.id
+        let [node, site] = hostname.split('.')
+        let token = await iotlab.getExperimentToken(exp_id)
+        let url = `https://devwww.iot-lab.info/camera/${site}/${exp_id}/${node}/${token}`
+
+        this.$refs['camera'].src = url
+        this.$refs['camera'].style = "display:block"
+      }
+      else {
+        this.$refs['camera'].style = "display:none"
+        this.$refs['camera'].src = ''
+      }
     },
   },
 }
