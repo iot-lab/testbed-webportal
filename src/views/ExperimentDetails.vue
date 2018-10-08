@@ -102,7 +102,7 @@
               <button class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Flash firmware'" data-toggle="modal" data-target=".firmware-modal" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node">
                 <i class="fa fa-fw fa-microchip"></i>
               </button>
-              <button class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Video'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleCamera(node)">
+              <button v-show="hasCamera(node)" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Video'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleCamera(node)">
                 <i class="fa fa-fw fa-video-camera"></i>
               </button>
             </div>
@@ -243,6 +243,10 @@ export default {
     getUid (node) {
       let n = this.nodes.find((n) => n.network_address === node)
       return n ? n.uid : ''
+    },
+    hasCamera (node) {
+      let n = this.nodes.find((n) => n.network_address === node)
+      return n ? n.camera === '1' : false
     },
     getFirmware (node) {
       if (!this.experiment.firmwareassociations) return
