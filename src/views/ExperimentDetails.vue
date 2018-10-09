@@ -103,9 +103,9 @@
                 <button class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Flash firmware'" data-toggle="modal" data-target=".firmware-modal" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node">
                   <i class="fa fa-fw fa-microchip"></i>
                 </button>
-                <a href="" class="btn btn-sm border-0 btn-dark" data-toggle="button" aria-pressed="false" v-tooltip="'Open Terminal'" @click.prevent="openTerminal(node)">
+                <button class="btn btn-sm border-0 btn-dark" data-toggle="button" aria-pressed="false" v-tooltip="'Open Terminal'" @click.prevent="openTerminal(node)">
                   <i class="fa fa-fw fa-terminal"></i>
-                </a>
+                </button>
                 <button v-show="hasCamera(node)" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Video'" :disabled="getDeploymentStatus(node) === 'Error'" @click.prevent="toggleCamera(node)">
                   <i class="fa fa-fw fa-video-camera"></i>
                 </button>
