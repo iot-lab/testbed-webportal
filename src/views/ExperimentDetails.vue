@@ -425,16 +425,15 @@ export default {
     async toggleCamera (hostname) {
       this.$cameraVisible = !this.$cameraVisible
       if (this.$cameraVisible) {
-        let exp_id = this.id
+        let expId = this.id
         let [node, site] = hostname.split('.')
-        let token = await iotlab.getExperimentToken(exp_id)
-        let url = `https://devwww.iot-lab.info/camera/${site}/${exp_id}/${node}/${token}`
+        let token = await iotlab.getExperimentToken(expId)
+        let url = `https://devwww.iot-lab.info/camera/${site}/${expId}/${node}/${token}`
 
         this.$refs['camera'].src = url
-        this.$refs['camera'].style = "display:block"
-      }
-      else {
-        this.$refs['camera'].style = "display:none"
+        this.$refs['camera'].style = 'display:block'
+      } else {
+        this.$refs['camera'].style = 'display:none'
         this.$refs['camera'].src = ''
       }
     },
