@@ -1,6 +1,7 @@
 var webpack = require('webpack')
 
 module.exports = {
+  lintOnSave: 'error',
   baseUrl: process.env.NODE_ENV === 'production'
     ? process.env.VUE_APP_IOTLAB_PATH
     : '/',

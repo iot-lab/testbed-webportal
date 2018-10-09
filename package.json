@@ -60,7 +60,9 @@
       "comma-dangle": [
         "error",
         "always-multiline"
-      ]
+      ],
+      "object-curly-spacing": "off",
+      "vue/require-v-for-key": "off"
     },
     "parserOptions": {
       "parser": "babel-eslint"
