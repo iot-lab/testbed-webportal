@@ -74,8 +74,8 @@
           <th>UID</th>
           <th>Firmware</th>
           <th>Monitoring</th>
-          <th>Deployment</th>
-          <th width="30px" v-if="showNodesCommands"><span style="margin-left:10px">Actions</span></th>
+          <th class="text-center">Deployment</th>
+          <th width="30px" v-if="showNodesCommands" class="text-center">Actions</th>
           <th width="15px" v-if="showNodesCommands">
             <input type="checkbox" @change="toggleSelectedNodes" v-model="allSelected">
           </th>
@@ -87,7 +87,7 @@
           <td>{{getUid(node)}}</td>
           <td>{{getFirmware(node)}}</td>
           <td>{{getMonitoring(node)}}</td>
-          <td>{{getDeploymentStatus(node)}}</td>
+          <td class="text-center">{{getDeploymentStatus(node)}}</td>
           <td v-if="showNodesCommands">
             <div class="btn-group" role="group" aria-label="Node actions" >
               <button class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Start'" :disabled="getDeploymentStatus(node) === 'Error'" @click="sendCmdToNode('start', node)">
@@ -343,8 +343,7 @@ export default {
       if (this.currentNode !== undefined) {
         this.flashFirmwareToCurrentNode(ref)
         this.currentNode = undefined
-      }
-      else {
+      } else {
         this.flashFirmwareToNodes(ref, this.selectedNodes)
       }
     },
