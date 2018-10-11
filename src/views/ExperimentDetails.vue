@@ -210,7 +210,10 @@ export default {
     async getExperiment (id = this.id) {
       try {
         this.experiment = await iotlab.getExperiment(id)
-        this.nodes = await iotlab.getExperimentNodes(id)
+
+        if (this.nodes.length === 0) {
+          this.nodes = await iotlab.getExperimentNodes(id)
+        }
 
         // poll for experiment update
         if (polling && ['Launching', 'Finishing'].includes(this.experiment.state)) {
