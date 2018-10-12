@@ -1,3 +1,18 @@
+##  1.0.2 (2018-10-12)
+
+### Enhancements
+
+* Synced with wordpress menu
+* Dashboard experiment list is now full width
+* Experiment details:
+  * add per-node actions
+  * add node uids
+
+### Internal
+
+* Cleaned repo (fabfile, beta envs)
+* Tweaked linter config
+
 ##  1.0.1 (2018-09-27)
 
 ### Enhancements
