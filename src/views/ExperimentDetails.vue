@@ -82,39 +82,44 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="node in experiment.nodes" :class="{'text-danger': getDeploymentStatus(node) === 'Error'}">
-          <td v-html="nodeOrAlias(node)"></td>
-          <td>{{getUid(node)}}</td>
-          <td>{{getFirmware(node)}}</td>
-          <td>{{getMonitoring(node)}}</td>
-          <td class="text-center">{{getDeploymentStatus(node)}}</td>
-          <td v-if="showNodesCommands">
-            <div class="btn-group" role="group" aria-label="Node actions" >
-              <button class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Start'" :disabled="getDeploymentStatus(node) === 'Error'" @click="sendCmdToNode('start', node)">
-                <i class="fa fa-fw fa-play"></i>
-              </button>
-              <button class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Stop'" :disabled="getDeploymentStatus(node) === 'Error'" @click="sendCmdToNode('stop', node)">
-                <i class="fa fa-fw fa-power-off"></i>
-              </button>
-              <button class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Reset'" :disabled="getDeploymentStatus(node) === 'Error'" @click="sendCmdToNode('reset', node)">
-                <i class="fa fa-fw fa-refresh"></i>
-              </button>
-              <button class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Flash firmware'" data-toggle="modal" data-target=".firmware-modal" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node">
-                <i class="fa fa-fw fa-microchip"></i>
-              </button>
-              <button v-show="hasCamera(node)" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Video'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleCamera(node)">
-                <i class="fa fa-fw fa-video-camera"></i>
-              </button>
-            </div>
-          </td>
-          <td v-if="showNodesCommands">
-            <input type="checkbox" :value="node" v-model="selectedNodes" :disabled="getDeploymentStatus(node) === 'Error'" @click="uncheckAll">
-          </td>
-        </tr>
+        <template v-for="node in experiment.nodes">
+          <tr :class="{'text-danger': getDeploymentStatus(node) === 'Error'}">
+            <td v-html="nodeOrAlias(node)"></td>
+            <td>{{getUid(node)}}</td>
+            <td>{{getFirmware(node)}}</td>
+            <td>{{getMonitoring(node)}}</td>
+            <td class="text-center">{{getDeploymentStatus(node)}}</td>
+            <td v-if="showNodesCommands">
+              <div class="btn-group" role="group" aria-label="Node actions" >
+                <button class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Start'" :disabled="getDeploymentStatus(node) === 'Error'" @click="sendCmdToNode('start', node)">
+                  <i class="fa fa-fw fa-play"></i>
+                </button>
+                <button class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Stop'" :disabled="getDeploymentStatus(node) === 'Error'" @click="sendCmdToNode('stop', node)">
+                  <i class="fa fa-fw fa-power-off"></i>
+                </button>
+                <button class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Reset'" :disabled="getDeploymentStatus(node) === 'Error'" @click="sendCmdToNode('reset', node)">
+                  <i class="fa fa-fw fa-refresh"></i>
+                </button>
+                <button class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Flash firmware'" data-toggle="modal" data-target=".firmware-modal" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node">
+                  <i class="fa fa-fw fa-microchip"></i>
+                </button>
+                <button v-show="hasCamera(node)" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Video'" :disabled="getDeploymentStatus(node) === 'Error'" @click.prevent="toggleCamera(node)">
+                  <i class="fa fa-fw fa-video-camera"></i>
+                </button>
+              </div>
+            </td>
+            <td v-if="showNodesCommands">
+              <input type="checkbox" :value="node" v-model="selectedNodes" :disabled="getDeploymentStatus(node) === 'Error'" @click="uncheckAll">
+            </td>
+          </tr>
+          <tr>
+            <td colspan="7" class="p-0">
+              <img v-if="hasCamera(node)" v-show="(token !== undefined) && cameraVisible(node)" :src="cameraUrl(node)" align="right" width=320 height=240>
+            </td>
+          </tr>
+        </template>
       </tbody>
     </table>
-
-    <img v-show="cameraVisible" ref="camera" style="display:none" align='right' width=320 height=240>
 
     <div class="modal fade firmware-modal" tabindex="-1" role="dialog" aria-labelledby="firmwareModal" aria-hidden="true">
       <div class="modal-dialog">
@@ -168,12 +173,13 @@ export default {
       states: experimentStates,
       selectedNodes: [],
       nodes: [],
+      nodesCameraState: {},
+      token: undefined,
       allSelected: false,
       firmwareFile: undefined,
       firmware: undefined,
       currentUser: auth.username,
       currentNode: undefined,
-      cameraVisible: false,
     }
   },
 
@@ -231,6 +237,13 @@ export default {
         if (!this.deploymentStatus && !['Waiting', 'toLaunch', 'Launching'].includes(this.experiment.state)) {
           this.deploymentStatus = await iotlab.getExperimentDeployment(id)
         }
+
+        if (['Running'].includes(this.experiment.state)) {
+          this.token = await iotlab.getExperimentToken(id)
+        }
+        if (['Finishing', 'Terminated', 'Stopped'].includes(this.experiment.state)) {
+          this.token = undefined
+        }
       } catch (err) {
         this.$notify({ text: err.message, type: 'error' })
       }
@@ -243,10 +256,6 @@ export default {
     getUid (node) {
       let n = this.nodes.find((n) => n.network_address === node)
       return n ? n.uid : ''
-    },
-    hasCamera (node) {
-      let n = this.nodes.find((n) => n.network_address === node)
-      return n ? n.camera === '1' : false
     },
     getFirmware (node) {
       if (!this.experiment.firmwareassociations) return
@@ -425,26 +434,34 @@ export default {
       reader.readAsDataURL(this.firmwareFile)
     },
 
-    async toggleCamera (hostname) {
-      this.$cameraVisible = !this.$cameraVisible
-      if (this.$cameraVisible) {
-        let expId = this.id
-        let [node, site] = hostname.split('.')
-        let token = await iotlab.getExperimentToken(expId)
-        let url = `https://devwww.iot-lab.info/camera/${site}/${expId}/${node}/${token}`
+    hasCamera (node) {
+      let n = this.nodes.find((n) => n.network_address === node)
+      return n ? n.camera === '1' : false
+    },
 
-        this.$refs['camera'].src = url
-        this.$refs['camera'].style = 'display:block'
-      } else {
-        this.$refs['camera'].style = 'display:none'
-        this.$refs['camera'].src = ''
+    toggleCamera (node) {
+      this.nodesCameraState[node] = !this.nodesCameraState[node]
+      this.$forceUpdate()
+    },
+
+    cameraVisible (node) {
+      return this.nodesCameraState[node] === true
+    },
+
+    cameraUrl (hostname) {
+      if (this.token !== undefined && this.hasCamera(hostname) && this.cameraVisible(hostname)) {
+        let expId = this.id
+        let token = this.token
+        let [node, site] = hostname.split('.')
+        let url = `https://devwww.iot-lab.info/camera/${site}/${expId}/${node}/${token}`
+        return url
       }
     },
   },
 }
 </script>
 
-<style>
+<style scoped>
 .fa-strike::after {
   content: '';
   position: absolute;
@@ -454,5 +471,17 @@ export default {
   right: 0;
   border-bottom: 1.5px solid var(--danger);
   transform: translateY(-6px) translateX(-5px) rotate(-35deg);
+}
+.table-striped tbody tr:nth-of-type(4n+1),
+.table-striped tbody tr:nth-of-type(4n+2) {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+.table-striped tbody tr:nth-of-type(4n+3),
+.table-striped tbody tr:nth-of-type(4n) {
+  background-color: rgba(0, 0, 0, 0);
+}
+.v-resizable {
+  resize: vertical;
+  overflow-y: scroll;
 }
 </style>
