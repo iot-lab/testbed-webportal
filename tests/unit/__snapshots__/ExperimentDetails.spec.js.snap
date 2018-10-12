@@ -88,6 +88,10 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
         </th>
          
         <th>
+          UID
+        </th>
+         
+        <th>
           Firmware
         </th>
          
@@ -95,9 +99,13 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
           Monitoring
         </th>
          
-        <th>
+        <th
+          class="text-center"
+        >
           Deployment
         </th>
+         
+        <!---->
          
         <!---->
       </tr>
@@ -112,6 +120,10 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
         </td>
          
         <td>
+          
+        </td>
+         
+        <td>
           tutorial_m3.elf
         </td>
          
@@ -119,9 +131,13 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
           
         </td>
          
-        <td>
-          Success
+        <td
+          class="text-center"
+        >
+          
         </td>
+         
+        <!---->
          
         <!---->
       </tr>
@@ -133,6 +149,10 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
         </td>
          
         <td>
+          
+        </td>
+         
+        <td>
           tutorial_m3.elf
         </td>
          
@@ -140,9 +160,13 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
           
         </td>
          
-        <td>
-          Success
+        <td
+          class="text-center"
+        >
+          
         </td>
+         
+        <!---->
          
         <!---->
       </tr>
