@@ -447,10 +447,9 @@ export default {
 
     cameraUrl (hostname) {
       if (this.token !== undefined && this.hasCamera(hostname) && this.cameraVisible(hostname)) {
-        let expId = this.id
-        let token = this.token
         let [node, site] = hostname.split('.')
-        let url = `https://devwww.iot-lab.info/camera/${site}/${expId}/${node}/${token}`
+        let apiHost = process.env.VUE_APP_IOTLAB_HOST || 'devwww.iot-lab.info'
+        let url = `https://${apiHost}/camera/${site}/${this.id}/${node}/${this.token}`
         return url
       }
     },
