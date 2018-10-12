@@ -114,7 +114,7 @@
           </tr>
           <tr>
             <td colspan="7" class="p-0">
-              <img v-if="hasCamera(node)" v-show="(token !== undefined) && cameraVisible(node)" :src="cameraUrl(node)" align="right" width=320 height=240>
+              <img class="camera" v-if="hasCamera(node)" v-show="(token !== undefined) && cameraVisible(node)" :src="cameraUrl(node)" align="right">
             </td>
           </tr>
         </template>
@@ -480,5 +480,12 @@ export default {
 .v-resizable {
   resize: vertical;
   overflow-y: scroll;
+}
+#camera {
+  position: relative;
+  height: 240px;
+  width: 320px;
+  background-color: #999;
+  background-size: 100%;
 }
 </style>
