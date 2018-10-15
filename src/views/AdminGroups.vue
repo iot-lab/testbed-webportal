@@ -12,7 +12,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(group, i) in store.groups">
+        <tr v-for="group in store.groups">
           <td><span class="badge" :class="group.name === 'admin' ? 'badge-warning' : 'badge-primary'">{{group.name}}</span></td>
           <!-- <td><span class="badge badge-info mr-1" v-for="user in group.users.sort()">{{user}}</span></td> -->
           <td>{{[...group.users].sort().join(', ')}} <span class="text-muted">({{group.users.length}} users)</span></td>
@@ -29,7 +29,7 @@
 
     <modal-dialog name="add-group-modal" @save="createGroup" @open="setFocus('group-name')">
       <template slot="title">
-        <i class="fa fa-fw fa-user-circle"></i> New user group</span>
+        <i class="fa fa-fw fa-user-circle"></i> New user group
       </template>
       <form @submit.prevent="createGroup">
         <label>Enter group name</label>

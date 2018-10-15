@@ -43,7 +43,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(user, i) in users">
+        <tr v-for="user in users">
           <td><input type="checkbox" :value="user" v-model="selectedUsers" @click="checkUncheckAll"></td>
           <td @click="toggleUserSelected(user)">{{user.login}}</td>
           <td>{{user.firstName}} {{user.lastName}} <i v-if="user.login === 'clochett'" class="fa fa-bell-o"></i></td>

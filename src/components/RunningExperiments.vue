@@ -71,7 +71,7 @@ export default {
   props: {
     expList: {
       type: Array,
-      default: [],
+      default: () => [],
     },
   },
 
