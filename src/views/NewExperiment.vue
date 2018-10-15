@@ -364,7 +364,7 @@ export default {
       sideBySide: true,
       format: 'YYYY-MM-DD HH:mm',
     })
-    $('#datetimepicker1').on('change.datetimepicker', (e) => {
+    $('#datetimepicker1').on('change.datetimepicker', e => {
       this.startDate = e.date
     })
     this.$nextTick(function () {
@@ -373,14 +373,14 @@ export default {
         html: true,
       })
     })
-    $('#collapseMap').on('shown.bs.collapse', function () {
+    $('#collapseMap').on('shown.bs.collapse', () => {
       this.showMap = true
     })
-    $('#collapseMap').on('hidden.bs.collapse', function () {
+    $('#collapseMap').on('hidden.bs.collapse', () => {
       this.showMap = false
     })
-    $(document).on('click', 'span[data-ids]', function () {
-      $('#nodeIds').val(this.dataset.ids)
+    $(document).on('click', 'span[data-ids]', e => {
+      this.nodeIds = e.target.dataset.ids
     })
   },
 
