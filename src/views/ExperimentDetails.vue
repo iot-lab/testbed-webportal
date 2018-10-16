@@ -116,9 +116,9 @@
             </td>
           </tr>
           <tr>
-            <td colspan="7" class="p-0">
+            <td :ref="node" :colspan="cameraVisible(node) ? '4' : '7'" class="p-0"></td>
+            <td colspan="5" class="p-0">
               <img class="camera" v-if="hasCamera(node)" v-show="(token !== undefined) && cameraVisible(node)" :src="cameraUrl(node)" align="right">
-              <div :ref="node" class="p-0"></div>
             </td>
           </tr>
         </template>
