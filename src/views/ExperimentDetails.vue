@@ -464,8 +464,7 @@ export default {
       let baseUrl = `wss://${process.env.VUE_APP_IOTLAB_HOST}:443/ws`
       let wsUrl = `${baseUrl}/${site}/${this.id}/${nodeId}/${connType}`
 
-      let token = await iotlab.getExperimentToken(this.id)
-      let ws = new WebSocket(wsUrl, ['token', token])
+      let ws = new WebSocket(wsUrl, ['token', this.token])
 
       var term = new Terminal({
         cols: 80,
