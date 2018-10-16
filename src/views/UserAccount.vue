@@ -64,7 +64,7 @@
           <div class="tab-pane fade" id="list-delete" role="tabpanel" aria-labelledby="list-delete-list">
             <p class="lead">Permanently delete your account?</p>
             <p><strong>All your data will be lost</strong></p>
-            <button class="btn btn-danger" type="button"><i class="fa fa-trash-o fa-lg" aria-hidden="true"></i> Delete Account</button>
+            <button class="btn btn-danger" type="button" @click="deleteUser"><i class="fa fa-trash-o fa-lg" aria-hidden="true"></i> Delete Account</button>
           </div>
           <div class="tab-pane fade" id="list-mailing" role="tabpanel" aria-labelledby="list-mailing-list">
             <h5 class="mb-3"><i class="fa fa-envelope-o" aria-hidden="true"></i> Mailing list subscription</h5>
@@ -160,6 +160,18 @@ export default {
     },
     showPolicy () {
       $('#policy').fadeIn()
+    },
+    async deleteUser () {
+      if (confirm(`Delete your account?`)) {
+        try {
+          await iotlab.deleteUser()
+          auth.doLogout()
+          this.$notify({text: `User account deleted`, type: 'success'})
+          this.$router.push({name: 'login'})
+        } catch (err) {
+          this.$notify({title: 'An error occured', text: err.response.data.message, type: 'error'})
+        }
+      }
     },
   },
 }

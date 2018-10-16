@@ -43,8 +43,12 @@ export const iotlab = {
     await iotlab.api.post('/users/activate/', {'hash': hash})
   },
 
-  async deleteUser (login) {
-    await iotlab.api.delete(`/users/${login}`)
+  async deleteUser (login = undefined) {
+    if (login) {
+      await iotlab.api.delete(`/users/${login}`)
+    } else {
+      await iotlab.api.delete(`/user`)
+    }
   },
 
   async resetPassword (email) {
