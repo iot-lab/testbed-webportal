@@ -211,7 +211,7 @@ export default {
       try {
         this.experiment = await iotlab.getExperiment(id)
 
-        if (this.nodes.length === 0) {
+        if (this.nodes.length === 0 && this.experiment.type !== 'alias') {
           this.nodes = await iotlab.getExperimentNodes(id)
         }
 
@@ -232,7 +232,7 @@ export default {
     nodeOrAlias (node) {
       if (typeof node === 'string') return node
       // else it's an alias
-      return `<span class="badge badge-secondary">${this.$options.filters.formatArchiRadio(node.properties.archi)} ${node.properties.mobile ? '(mobile)' : ''} @ ${node.properties.site}</span> x ${node.nbnodes} `
+      return `<span class="badge badge-info">${this.$options.filters.formatArchiRadio(node.properties.archi)} ${node.properties.mobile ? '(mobile)' : ''} @ ${node.properties.site}</span> x ${node.nbnodes} `
     },
     getUid (node) {
       let n = this.nodes.find((n) => n.network_address === node)
