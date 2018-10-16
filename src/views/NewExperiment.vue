@@ -679,6 +679,7 @@ export default {
         this.$notify({text: 'Select nodes first', type: 'warning'})
         return
       }
+      this.$notify({text: 'Submission in progress', type: 'info', duration: -1})
       try {
         let newExp = await iotlab.submitExperiment({
           type: (this.mode === 'byprop') ? 'alias' : 'physical',
@@ -691,10 +692,12 @@ export default {
           firmwares: this.firmwares,
         })
         await sleep(200)
+        this.$notify({clean: true})
         this.$notify({text: `Experiment ${newExp.id} submitted`, type: 'success', duration: 6000})
         await sleep(200)
         this.$router.push({name: 'dashboard'})
       } catch (err) {
+        this.$notify({clean: true})
         this.$notify({text: err.message + '<br><br>' + err.response.data.message, type: 'error', duration: 10000})
         throw err
       }
