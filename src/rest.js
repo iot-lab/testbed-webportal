@@ -157,7 +157,7 @@ export const iotlab = {
   },
 
   async getExperimentArchive (id) {
-    return iotlab.api.get(`/experiments/${id}/data`).then(resp => resp.data)
+    return iotlab.api.get(`/experiments/${id}/data`, {responseType: 'arraybuffer'}).then(resp => resp.data)
   },
 
   async getExperimentDeployment (id) {

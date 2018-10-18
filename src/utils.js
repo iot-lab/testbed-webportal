@@ -54,21 +54,31 @@ export const replaceAll = function (str, search, replacement) {
 // Download JS object as JSON file in the browser
 export const downloadObjectAsJson = function (exportObj, exportName) {
   var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportObj))
-  var downloadAnchorNode = document.createElement('a')
-  downloadAnchorNode.setAttribute('href', dataStr)
-  downloadAnchorNode.setAttribute('download', exportName + '.json')
-  document.body.appendChild(downloadAnchorNode)
-  downloadAnchorNode.click()
-  downloadAnchorNode.remove()
+  var link = document.createElement('a')
+  link.setAttribute('href', dataStr)
+  link.setAttribute('download', exportName + '.json')
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
 }
 
 // Download JS object as CSV file in the browser
 export const downloadObjectAsCsv = function (exportObj, exportName, opts) {
   var dataStr = 'data:text/csv;charset=utf-8,' + encodeURIComponent(json2csv.parse(exportObj, opts))
-  var downloadAnchorNode = document.createElement('a')
-  downloadAnchorNode.setAttribute('href', dataStr)
-  downloadAnchorNode.setAttribute('download', exportName + '.csv')
-  document.body.appendChild(downloadAnchorNode)
-  downloadAnchorNode.click()
-  downloadAnchorNode.remove()
+  var link = document.createElement('a')
+  link.setAttribute('href', dataStr)
+  link.setAttribute('download', exportName + '.csv')
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
+}
+
+// Download binary file in the browser
+export const downloadAsFile = function (filename, file, mimeType = 'application/octet-stream') {
+  let blob = new Blob([file], { type: mimeType })
+  let link = document.createElement('a')
+  link.href = window.URL.createObjectURL(blob)
+  link.download = filename
+  link.click()
+  link.remove()
 }

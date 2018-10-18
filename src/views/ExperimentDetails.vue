@@ -151,8 +151,7 @@
 import { iotlab } from '@/rest'
 import { auth } from '@/auth'
 import { experimentStates } from '@/assets/js/iotlab-utils'
-import { capitalize, pluralize } from '@/utils'
-import axios from 'axios'
+import { capitalize, pluralize, downloadAsFile } from '@/utils'
 import $ from 'jquery'
 
 var polling = true
@@ -289,20 +288,12 @@ export default {
         this.$notify({ text: err.message, type: 'error' })
       }
     },
-    downloadExperiment (id) {
-      axios({
-        method: 'get',
-        url: `https://${process.env.VUE_APP_IOTLAB_HOST}/api/experiments/${id}/data`,
-        responseType: 'arraybuffer',
-        auth: JSON.parse(localStorage.getItem('apiAuth') || '{}'),
-      })
-        .then(function (response) {
-          let blob = new Blob([response.data], { type: 'application/gzip' })
-          let link = document.createElement('a')
-          link.href = window.URL.createObjectURL(blob)
-          link.download = `experiment_${id}.tar.gz`
-          link.click()
-        })
+    async downloadExperiment (id) {
+      try {
+        downloadAsFile(`experiment_${id}.tar.gz`, await iotlab.getExperimentArchive(id), 'application/gzip')
+      } catch (err) {
+        this.$notify({text: err.response.data.message || 'Failed to download archive', type: 'error'})
+      }
     },
     toggleSelectedNodes () {
       if (this.selectedNodes.length === this.deployedNodes.length) {
@@ -451,7 +442,7 @@ export default {
     cameraUrl (hostname) {
       if (this.token !== undefined && this.hasCamera(hostname) && this.cameraVisible(hostname)) {
         let [node, site] = hostname.split('.')
-        let apiHost = process.env.VUE_APP_IOTLAB_HOST || 'devwww.iot-lab.info'
+        let apiHost = process.env.VUE_APP_IOTLAB_HOST
         let url = `https://${apiHost}/camera/${site}/${this.id}/${node}/${this.token}`
         return url
       }
