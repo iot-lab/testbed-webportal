@@ -1,30 +1,19 @@
 import axios from 'axios'
 
-const API_V1_URL = `https://${process.env.VUE_APP_IOTLAB_HOST || 'devwww.iot-lab.info'}/rest/`
-const API_V2_URL = `https://${process.env.VUE_APP_IOTLAB_HOST || 'devwww.iot-lab.info'}/api/`
+const API_URL = `https://${process.env.VUE_APP_IOTLAB_HOST}/api/`
 
 export const iotlab = {
 
-  apiv1: axios.create({baseURL: API_V1_URL, auth: JSON.parse(localStorage.getItem('apiAuth') || '{}')}),
-  apiv2: axios.create({baseURL: API_V2_URL, auth: JSON.parse(localStorage.getItem('apiAuth') || '{}')}),
-  api: axios.create({baseURL: API_V2_URL, auth: JSON.parse(localStorage.getItem('apiAuth') || '{}')}),
+  api: axios.create({baseURL: API_URL, auth: JSON.parse(localStorage.getItem('apiAuth') || '{}')}),
 
   create (username, password) {
-    this.apiv2 = axios.create({
-      baseURL: API_V2_URL,
+    this.api = axios.create({
+      baseURL: API_URL,
       auth: {
         username: username,
         password: password,
       },
     })
-    this.apiv1 = axios.create({
-      baseURL: API_V1_URL,
-      auth: {
-        username: username,
-        password: password,
-      },
-    })
-    this.api = this.apiv2
   },
 
   // USERS API
