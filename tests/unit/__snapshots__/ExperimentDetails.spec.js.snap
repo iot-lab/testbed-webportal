@@ -141,6 +141,15 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
          
         <!---->
       </tr>
+       
+      <tr>
+        <td
+          class="p-0"
+          colspan="7"
+        >
+          <!---->
+        </td>
+      </tr>
       <tr
         class=""
       >
@@ -169,6 +178,15 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
         <!---->
          
         <!---->
+      </tr>
+       
+      <tr>
+        <td
+          class="p-0"
+          colspan="7"
+        >
+          <!---->
+        </td>
       </tr>
     </tbody>
   </table>
