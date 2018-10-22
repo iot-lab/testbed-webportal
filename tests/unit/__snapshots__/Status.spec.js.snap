@@ -85,7 +85,7 @@ exports[`Status.vue should match snapshot 1`] = `
     class="mb-2"
   >
     <span
-      class="badge badge-pill mr-1 cursor badge-primary"
+      class="badge badge-pill mr-1 cursor badge-primary border border-3 border-dark"
     >
       0 sites
     </span>
@@ -102,7 +102,7 @@ exports[`Status.vue should match snapshot 1`] = `
     class="mb-2"
   >
     <span
-      class="badge badge-pill mr-1 cursor badge-primary"
+      class="badge badge-pill mr-1 cursor badge-primary border border-3 border-dark"
     >
       0 archis
     </span>
@@ -119,7 +119,7 @@ exports[`Status.vue should match snapshot 1`] = `
     class="mb-2"
   >
     <span
-      class="badge badge-pill mr-1 cursor badge-primary"
+      class="badge badge-pill mr-1 cursor badge-primary border border-3 border-dark"
     >
       0 nodes
     </span>
