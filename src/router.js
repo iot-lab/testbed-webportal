@@ -10,6 +10,7 @@ import AdminGroups from '@/views/AdminGroups'
 import AdminUsers from '@/views/AdminUsers'
 import AdminAddUser from '@/views/AdminAddUser'
 import AdminExperiments from '@/views/AdminExperiments'
+import AdminStatistics from '@/views/AdminStatistics'
 import Resources from '@/views/Resources'
 import Monitoring from '@/views/Monitoring'
 import MonitoringList from '@/components/MonitoringList'
@@ -54,6 +55,7 @@ const router = new Router({
     },
     { path: '/account', name: 'account', component: UserAccount, meta: { requiresAuth: true } },
     { path: '/groups', name: 'groups', component: AdminGroups, meta: { requiresAdmin: true } },
+    { path: '/statistics', name: 'statistics', component: AdminStatistics, meta: { requiresAdmin: true } },
     { path: '/users', name: 'users', component: AdminUsers, meta: { requiresAdmin: true } },
     { path: '/users/add', name: 'addUsers', component: AdminAddUser, meta: { requiresAdmin: true } },
     { path: '/users/:username/experiments', name: 'userExperiments', component: AdminExperiments, props: true, meta: { requiresAdmin: true } },

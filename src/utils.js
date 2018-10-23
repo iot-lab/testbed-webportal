@@ -53,7 +53,7 @@ export const replaceAll = function (str, search, replacement) {
 
 // Download JS object as JSON file in the browser
 export const downloadObjectAsJson = function (exportObj, exportName) {
-  var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportObj))
+  var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportObj, null, 2))
   var link = document.createElement('a')
   link.setAttribute('href', dataStr)
   link.setAttribute('download', exportName + '.json')

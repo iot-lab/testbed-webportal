@@ -253,6 +253,25 @@ export const iotlab = {
     return oldApi.post('/admin/nodes')
   },
 
+  async updateStatistics () {
+    return iotlab.api.put('/statistics')
+  },
+
+  async getUsersStatistics () {
+    return iotlab.api.get('/statistics/users').then(resp => resp.data)
+  },
+
+  async getExperimentsOffsetStatistics () {
+    return iotlab.api.get('/statistics/experiments/offset').then(resp => resp.data.offset)
+  },
+
+  async getExperimentsStatistics (offset) {
+    return iotlab.api.get('/statistics/experiments', {params: {offset: offset}}).then(resp => ({
+      'items': resp.data,
+      'headers': resp.headers['last-modified'],
+    }))
+  },
+
   async getNodesIds () {
     return iotlab.api.get('/nodes/ids').then(resp => resp.data.items)
   },
