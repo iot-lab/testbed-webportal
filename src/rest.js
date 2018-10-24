@@ -266,10 +266,7 @@ export const iotlab = {
   },
 
   async getExperimentsStatistics (offset) {
-    return iotlab.api.get('/statistics/experiments', {params: {offset: offset}}).then(resp => ({
-      'items': resp.data,
-      'headers': resp.headers['last-modified'],
-    }))
+    return iotlab.api.get('/statistics/experiments', {params: {offset: offset}}).then(resp => resp.data)
   },
 
   async getNodesIds () {
