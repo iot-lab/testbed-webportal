@@ -13,6 +13,8 @@ import AdminExperiments from '@/views/AdminExperiments'
 import Resources from '@/views/Resources'
 import Monitoring from '@/views/Monitoring'
 import MonitoringList from '@/components/MonitoringList'
+import Firmware from '@/views/Firmware'
+import FirmwareList from '@/components/FirmwareList'
 import NewExperiment from '@/views/NewExperiment'
 import ExperimentDetails from '@/views/ExperimentDetails'
 import Dashboard from '@/views/Dashboard'
@@ -45,6 +47,9 @@ const router = new Router({
         { path: 'monitoring', name: 'listMonitoring', component: MonitoringList, meta: { requiresAuth: true } },
         { path: 'monitoring_new', name: 'newMonitoring', component: Monitoring, meta: { requiresAuth: true } },
         { path: 'monitoring/:name', name: 'monitoring', component: Monitoring, props: true, meta: { requiresAuth: true } },
+        { path: 'firmware', name: 'listFirmware', component: FirmwareList, meta: { requiresAuth: true } },
+        { path: 'firmware_new', name: 'newFirmware', component: Firmware, meta: { requiresAuth: true } },
+        { path: 'firmware/:name', name: 'firmware', component: Firmware, props: true, meta: { requiresAuth: true } },
       ],
     },
     { path: '/account', name: 'account', component: UserAccount, meta: { requiresAuth: true } },

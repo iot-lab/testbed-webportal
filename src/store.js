@@ -2,4 +2,5 @@
 export default {
   groups: [],
   profiles: [],
+  firmwares: [],
 }

@@ -172,11 +172,19 @@
           </span>
           <div class="dropdown-menu dropdown-menu-right">
             <div class="card-body">
-              <p class="lead">Assign a firmware <span class="text-muted">(optional)</span></p>
-              <label class="custom-file">
+              <p class="lead">Assign a firmware <span class="text-muted">(upload or select from resources)</span></p>
+              <label class="custom-file mb-2">
                 <input type="file" id="file" :ref="'firmwareFile' + index" class="custom-file-input" @change="loadFirmwareFile('firmwareFile' + index, index)">
                 <span class="custom-file-control">{{group.firmware.name}}</span>
               </label>
+              <div class="form-group">
+                <label class="custom-control custom-checkbox mb-0 mt-1" @click.stop.once="saveFirmware(index)">
+                  <input v-model="saveToResources" type="checkbox" class="custom-control-input">
+                  <span class="custom-control-indicator"></span>
+                  <span class="custom-control-description">Save to my resources?</span>
+                </label>
+              </div>
+              <firmware-list :archi="group.archi" :event="true" @select="fw => { group.firmware = {name: fw} }"></firmware-list>
             </div>
           </div>
           <span>
@@ -185,7 +193,7 @@
             </span>
             <div class="dropdown-menu dropdown-menu-right">
               <div class="card-body">
-                <p class="lead">Assign a monitoring profile <span class="text-muted">(optional)</span></p>
+                <p class="lead">Assign a monitoring profile</p>
                 <monitoring-list :archi="group.archi" :event="true" @select="profile => { group.monitoring = profile }"></monitoring-list>
               </div>
             </div>
@@ -208,11 +216,19 @@
           </span>
           <div class="dropdown-menu dropdown-menu-right">
             <div class="card-body">
-              <p class="lead">Assign a firmware <span class="text-muted">(optional)</span></p>
-              <label class="custom-file">
+              <p class="lead">Assign a firmware <span class="text-muted">(upload or select from resources)</span></p>
+              <label class="custom-file mb-2">
                 <input type="file" id="file" :ref="'firmwarePropFile' + index" class="custom-file-input" @change="loadFirmwareFile('firmwarePropFile' + index, index)">
                 <span class="custom-file-control">{{p.firmware.name}}</span>
               </label>
+              <div class="form-group">
+                <label class="custom-control custom-checkbox mb-0 mt-1" @click.stop.once="saveFirmware(index)">
+                  <input v-model="saveToResources" type="checkbox" class="custom-control-input">
+                  <span class="custom-control-indicator"></span>
+                  <span class="custom-control-description">Save to my resources?</span>
+                </label>
+              </div>
+              <firmware-list :archi="p.archi" :event="true" @select="fw => { p.firmware = {name: fw} }"></firmware-list>
             </div>
           </div>
           <span>
@@ -221,7 +237,7 @@
             </span>
             <div class="dropdown-menu dropdown-menu-right">
               <div class="card-body">
-                <p class="lead">Assign a monitoring profile <span class="text-muted">(optional)</span></p>
+                <p class="lead">Assign a monitoring profile</p>
                 <monitoring-list :archi="p.archi" :event="true" @select="profile => { p.monitoring = profile }"></monitoring-list>
               </div>
             </div>
@@ -265,6 +281,7 @@ import $ from 'jquery'
 import Multiselect from 'vue-multiselect'
 import FilterSelect from '@/components/FilterSelect'
 import MonitoringList from '@/components/MonitoringList'
+import FirmwareList from '@/components/FirmwareList'
 import Map3d from '@/components/Map3d'
 import 'vue-multiselect/dist/vue-multiselect.min.css'
 import 'tempusdominus-bootstrap-4'
@@ -316,6 +333,7 @@ export default {
     Multiselect,
     FilterSelect,
     MonitoringList,
+    FirmwareList,
     Map3d,
   },
 
@@ -332,6 +350,7 @@ export default {
       filterMobile: 'all',
       showMap: false,
       propMobile: false,
+      saveToResources: false,
       firmwareFiles: [{name: undefined}],
       scriptFile: {name: undefined},
       selectedNodeGroups: [],
@@ -345,12 +364,6 @@ export default {
       nodes: [],
       qty: 0,
       nodeIds: '',
-      mapNodes: [
-        ['a8-x0', 1, 0, 1, 'a8', 'alive'],
-        ['a8-x1', 1, 1, 1, 'a8', 'alive'],
-        ['a8-x2', 1, 2, 0, 'a8', 'alive'],
-        ['a8-y1', 1, 1, 1, 'a8', 'alive'],
-      ],
     }
   },
 
@@ -578,6 +591,9 @@ export default {
               vm.selectedNodeGroups[index].firmware = file
             }
             vm.firmwares[file.name] = file.bin
+            if (vm.saveToResources) {
+              vm.saveFirmware(index)
+            }
           } else {
             vm.$notify({text: `Wrong format for this type of nodes.\n(expected ${allowedFirmwares})`, type: 'error'})
             // vm.$refs[ref][0].files[0] = null
@@ -668,6 +684,23 @@ export default {
         this.currentNodes = nodeGroup
         this.addNodes()
       }
+    },
+
+    saveFirmware (index) {
+      this.$nextTick(async () => {
+        if (!this.saveToResources || !this.firmwareFiles[index] || !this.firmwareFiles[index].name) return
+        console.log('save2')
+        let file = this.firmwareFiles[index]
+        try {
+          await iotlab.createFirmware({
+            name: file.name,
+            fileName: file.name,
+          }, file.bin)
+          this.$notify({text: `Firmware saved to my resources`, type: 'success'})
+        } catch (err) {
+          this.$notify({title: 'Failed to save firmware', text: err.response.data.message || 'unknown error', type: 'error'})
+        }
+      })
     },
 
     async submitExperiment () {
