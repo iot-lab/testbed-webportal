@@ -180,7 +180,9 @@ export const iotlab = {
       profileassociations: profileassociations,
     }))
     for (let asso of firmwareassociations || []) {
-      formData.append(asso.firmwarename, new Blob([firmwares[asso.firmwarename]], {type: 'application/octet-stream'}), asso.firmwarename)
+      if (asso.firmwarename in firmwares) {
+        formData.append(asso.firmwarename, new Blob([firmwares[asso.firmwarename]], {type: 'application/octet-stream'}), asso.firmwarename)
+      }
     }
     return iotlab.api.post('/experiments', formData).then(resp => resp.data)
   },
@@ -257,6 +259,8 @@ export const iotlab = {
     return iotlab.api.post(`/experiments/${id}/nodes/${cmd}`, nodes).then(resp => resp.data)
   },
 
+  // STORES (firmwares, profiles, etc)
+
   async getMonitoringProfiles () {
     return iotlab.api.get('/monitoring').then(resp => resp.data)
   },
@@ -275,5 +279,37 @@ export const iotlab = {
 
   async deleteMonitoringProfile (name) {
     return iotlab.api.delete(`/monitoring/${name}`)
+  },
+
+  async getFirmwares () {
+    return iotlab.api.get('/firmwares').then(resp => resp.data)
+  },
+
+  async getFirmware (name) {
+    return iotlab.api.get(`/firmwares/${name}`).then(resp => resp.data)
+  },
+
+  async getFirmwareFile (name) {
+    return iotlab.api.get(`/firmwares/${name}/file`, {responseType: 'arraybuffer'}).then(resp => resp.data)
+  },
+
+  async updateFirmware (name, firmware, fileString) {
+    const formData = new FormData()
+    formData.append(`firmware.json`, JSON.stringify(firmware))
+    if (fileString) {
+      formData.append('firmware.bin', new Blob([fileString], {type: 'application/octet-stream'}), 'firmware.bin')
+    }
+    return iotlab.api.put(`/firmwares/${name}`, formData).then(resp => resp.data)
+  },
+
+  async createFirmware (firmware, fileString) {
+    const formData = new FormData()
+    formData.append(`firmware.json`, JSON.stringify(firmware))
+    formData.append('firmware.bin', new Blob([fileString], {type: 'application/octet-stream'}), 'firmware.bin')
+    return iotlab.api.post(`/firmwares`, formData).then(resp => resp.data)
+  },
+
+  async deleteFirmware (name) {
+    return iotlab.api.delete(`/firmwares/${name}`)
   },
 }

@@ -7,6 +7,9 @@
         <router-link :to="{name:'listMonitoring'}" class="list-group-item list-group-item-action" active-class="active">
           <i class="fa fa-fw fa-thermometer" aria-hidden="true"></i> Monitoring profiles
         </router-link>
+        <router-link :to="{name:'listFirmware'}" class="list-group-item list-group-item-action" active-class="active">
+          <i class="fa fa-fw fa-microchip" aria-hidden="true"></i> Firmwares
+        </router-link>
       </div>
     </div>
     <div class="col-md-9">
