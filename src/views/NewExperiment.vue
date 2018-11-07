@@ -186,7 +186,7 @@
             <div class="dropdown-menu dropdown-menu-right">
               <div class="card-body">
                 <p class="lead">Assign a monitoring profile <span class="text-muted">(optional)</span></p>
-                <monitoring-list :archi="group.archi" @select="profile => { group.monitoring = profile }"></monitoring-list>
+                <monitoring-list :archi="group.archi" :event="true" @select="profile => { group.monitoring = profile }"></monitoring-list>
               </div>
             </div>
           </span>
@@ -222,7 +222,7 @@
             <div class="dropdown-menu dropdown-menu-right">
               <div class="card-body">
                 <p class="lead">Assign a monitoring profile <span class="text-muted">(optional)</span></p>
-                <monitoring-list :archi="p.archi" @select="profile => { p.monitoring = profile }"></monitoring-list>
+                <monitoring-list :archi="p.archi" :event="true" @select="profile => { p.monitoring = profile }"></monitoring-list>
               </div>
             </div>
           </span>

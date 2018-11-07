@@ -1,15 +1,7 @@
 <template>
-<div class="container my-3">
-  <h2><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> My resources</h2>
+<div class="container">
   <div class="row">
-    <div class="col-md-3 mb-4">
-      <div class="list-group" id="list-tab" role="tablist">
-        <router-link :to="{name: 'resources'}" class="list-group-item list-group-item-action">
-          <i class="fa fa-fw fa-thermometer" aria-hidden="true"></i> Monitoring profiles
-        </router-link>
-      </div>
-    </div>
-    <div class="col-md-6">
+    <div class="col-md-7">
       <button v-if="name" class="btn btn-sm btn-outline-danger float-right" type="button" @click="deleteProfile">Delete</button>
       <h5 v-if="name"><i class="fa fa-pencil"></i> Edit monitoring profile</h5>
       <h5 v-else><i class="fa fa-pencil"></i> New monitoring profile</h5>

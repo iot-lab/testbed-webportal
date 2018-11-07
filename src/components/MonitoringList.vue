@@ -13,7 +13,10 @@
       <tbody>
         <tr v-for="profile in store.profiles" v-if="filterByArchi(profile)">
           <td>
-            <a href="#" @click.prevent="select(profile)">{{profile.profilename}}</a>
+            <a v-if="event" href="#" @click.prevent="select(profile)">{{profile.profilename}}</a>
+            <router-link v-else :to="{name: 'monitoring', params: {name: profile.profilename}}">
+              {{profile.profilename}}
+            </router-link>
           </td>
           <td>{{nodeArchi(profile)}}</td>
           <td>
@@ -52,6 +55,12 @@ export default {
       // Display monitoring profiles filtered by archi
       type: String,
       default: '',
+    },
+    event: {
+      // true  -> emits an selected event
+      // false -> router link to object
+      type: Boolean,
+      default: false,
     },
   },
 
