@@ -43,8 +43,8 @@ export default {
 
   props: {
     archi: {
-      // Display Firmware filtered by archi
-      type: String,
+      // Display Firmware filtered by archi(s) (default no filter)
+      type: [String, Array],
       default: '',
     },
     event: {
@@ -75,10 +75,11 @@ export default {
       store.firmwares = store.firmwares.sort((a, b) => func(a) === func(b) ? a.name.localeCompare(b.name) : func(a).localeCompare(func(b)))
     },
     filterByArchi (firmware) {
-      switch (this.archi) {
-        case '': return true
-        default: return firmware.archi === this.archi
+      if (this.archi === '') {
+        return true
       }
+      let archis = (typeof this.archi === 'string') ? Array(this.archi) : this.archi
+      return archis.includes(firmware.archi)
     },
     select (firmware) {
       this.$emit('select', firmware.name)

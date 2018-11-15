@@ -172,12 +172,13 @@
           </span>
           <div class="dropdown-menu dropdown-menu-right">
             <div class="card-body">
-              <p class="lead">Assign a firmware <span class="text-muted">(upload or select from resources)</span></p>
+              <p class="lead">Assign a firmware <span class="text-muted">(upload or select from list)</span></p>
               <label class="custom-file mb-2">
                 <input type="file" id="file" :ref="'firmwareFile' + index" class="custom-file-input" @change="loadFirmwareFile('firmwareFile' + index, index)">
                 <span class="custom-file-control">{{group.firmware.name}}</span>
               </label>
-              <firmware-list :archi="group.archi" :event="true" @select="fw => { group.firmware = {name: fw} }"></firmware-list>
+              <hr>
+              <firmware-list :archi="[group.archi, null]" :event="true" @select="fw => { group.firmware = {name: fw} }"></firmware-list>
             </div>
           </div>
           <span>
@@ -209,12 +210,13 @@
           </span>
           <div class="dropdown-menu dropdown-menu-right">
             <div class="card-body">
-              <p class="lead">Assign a firmware <span class="text-muted">(upload or select from resources)</span></p>
+              <p class="lead">Assign a firmware <span class="text-muted">(upload or select from list)</span></p>
               <label class="custom-file mb-2">
                 <input type="file" id="file" :ref="'firmwarePropFile' + index" class="custom-file-input" @change="loadFirmwareFile('firmwarePropFile' + index, index)">
                 <span class="custom-file-control">{{p.firmware.name}}</span>
               </label>
-              <firmware-list :archi="p.archi" :event="true" @select="fw => { p.firmware = {name: fw} }"></firmware-list>
+              <hr>
+              <firmware-list :archi="[p.archi, null]" :event="true" @select="fw => { p.firmware = {name: fw} }"></firmware-list>
             </div>
           </div>
           <span>

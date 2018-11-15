@@ -19,7 +19,7 @@
       <input v-model="firmwareForm.description"  class="form-control" type="text" name="description" placeholder="Description">
     </div>
     <div class="form-group">
-      <label>Architecture</label>
+      <label>Architecture <span class="text-muted">(optional)</span></label>
       <multiselect v-model="firmwareForm.archi"
         placeholder="Select architecture"
         :options="archis"
