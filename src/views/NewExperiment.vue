@@ -177,13 +177,6 @@
                 <input type="file" id="file" :ref="'firmwareFile' + index" class="custom-file-input" @change="loadFirmwareFile('firmwareFile' + index, index)">
                 <span class="custom-file-control">{{group.firmware.name}}</span>
               </label>
-              <div class="form-group">
-                <label class="custom-control custom-checkbox mb-0 mt-1" @click.stop.once="saveFirmware(index)">
-                  <input v-model="saveToResources" type="checkbox" class="custom-control-input">
-                  <span class="custom-control-indicator"></span>
-                  <span class="custom-control-description">Save to my resources?</span>
-                </label>
-              </div>
               <firmware-list :archi="group.archi" :event="true" @select="fw => { group.firmware = {name: fw} }"></firmware-list>
             </div>
           </div>
@@ -221,13 +214,6 @@
                 <input type="file" id="file" :ref="'firmwarePropFile' + index" class="custom-file-input" @change="loadFirmwareFile('firmwarePropFile' + index, index)">
                 <span class="custom-file-control">{{p.firmware.name}}</span>
               </label>
-              <div class="form-group">
-                <label class="custom-control custom-checkbox mb-0 mt-1" @click.stop.once="saveFirmware(index)">
-                  <input v-model="saveToResources" type="checkbox" class="custom-control-input">
-                  <span class="custom-control-indicator"></span>
-                  <span class="custom-control-description">Save to my resources?</span>
-                </label>
-              </div>
               <firmware-list :archi="p.archi" :event="true" @select="fw => { p.firmware = {name: fw} }"></firmware-list>
             </div>
           </div>
@@ -350,7 +336,6 @@ export default {
       filterMobile: 'all',
       showMap: false,
       propMobile: false,
-      saveToResources: false,
       firmwareFiles: [{name: undefined}],
       scriptFile: {name: undefined},
       selectedNodeGroups: [],
@@ -591,9 +576,6 @@ export default {
               vm.selectedNodeGroups[index].firmware = file
             }
             vm.firmwares[file.name] = file.bin
-            if (vm.saveToResources) {
-              vm.saveFirmware(index)
-            }
           } else {
             vm.$notify({text: `Wrong format for this type of nodes.\n(expected ${allowedFirmwares})`, type: 'error'})
             // vm.$refs[ref][0].files[0] = null
@@ -684,23 +666,6 @@ export default {
         this.currentNodes = nodeGroup
         this.addNodes()
       }
-    },
-
-    saveFirmware (index) {
-      this.$nextTick(async () => {
-        if (!this.saveToResources || !this.firmwareFiles[index] || !this.firmwareFiles[index].name) return
-        console.log('save2')
-        let file = this.firmwareFiles[index]
-        try {
-          await iotlab.createFirmware({
-            name: file.name,
-            fileName: file.name,
-          }, file.bin)
-          this.$notify({text: `Firmware saved to my resources`, type: 'success'})
-        } catch (err) {
-          this.$notify({title: 'Failed to save firmware', text: err.response.data.message || 'unknown error', type: 'error'})
-        }
-      })
     },
 
     async submitExperiment () {
