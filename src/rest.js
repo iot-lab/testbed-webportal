@@ -164,10 +164,6 @@ export const iotlab = {
     return iotlab.api.get(`/experiments/${id}/deployment`).then(resp => resp.data)
   },
 
-  async getExperimentToken (id) {
-    return iotlab.api.get(`/experiments/${id}/token`).then(resp => resp.data.token)
-  },
-
   async stopExperiment (id) {
     return iotlab.api.delete(`/experiments/${id}`)
   },
