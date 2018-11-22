@@ -89,7 +89,7 @@
             <td>{{getFirmware(node)}}</td>
             <td>{{getMonitoring(node)}}</td>
             <td class="text-center">{{getDeploymentStatus(node)}}</td>
-            <td v-if="showNodesCommands">
+            <td xv-if="showNodesCommands">
               <div class="btn-group" role="group" aria-label="Node actions" >
                 <button class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Start'" :disabled="getDeploymentStatus(node) === 'Error'" @click="sendCmdToNode('start', node)">
                   <i class="fa fa-fw fa-play"></i>
@@ -103,10 +103,10 @@
                 <button class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Flash firmware'" data-toggle="modal" data-target=".firmware-modal" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node">
                   <i class="fa fa-fw fa-microchip"></i>
                 </button>
-                <button class="btn btn-sm border-0 btn-dark" data-toggle="button" aria-pressed="false" v-tooltip="'Open Terminal'" @click.prevent="openTerminal(node)">
+                <button class="btn btn-sm border-0 btn-dark" data-toggle="button" aria-pressed="false" v-tooltip="'Open Terminal'" @click="toggleTerminal(node)">
                   <i class="fa fa-fw fa-terminal"></i>
                 </button>
-                <button v-show="hasCamera(node)" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Video'" :disabled="getDeploymentStatus(node) === 'Error'" @click.prevent="toggleCamera(node)">
+                <button v-show="hasCamera(node)" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Video'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleCamera(node)">
                   <i class="fa fa-fw fa-video-camera"></i>
                 </button>
               </div>
@@ -116,7 +116,9 @@
             </td>
           </tr>
           <tr>
-            <td :ref="node" :colspan="cameraVisible(node) ? '4' : '7'" class="p-0"></td>
+            <td :colspan="cameraVisible(node) ? '4' : '7'" class="p-0">
+              <terminal :cols="80" :rows="20" :node="node" :expId="id" :token="token"></terminal>
+            </td>
             <td colspan="5" class="p-0">
               <img class="camera" v-if="hasCamera(node)" v-show="(token !== undefined) && cameraVisible(node)" :src="cameraUrl(node)" align="right">
             </td>
@@ -152,21 +154,26 @@
 </template>
 
 <script>
+import Terminal from '@/components/Terminal'
 import { iotlab } from '@/rest'
 import { auth } from '@/auth'
 import { experimentStates } from '@/assets/js/iotlab-utils'
 import { capitalize, pluralize, downloadAsFile } from '@/utils'
 import $ from 'jquery'
-import 'xterm/dist/xterm.css'
-import { Terminal } from 'xterm'
-import * as fit from 'xterm/dist/addons/fit/fit'
+// import 'xterm/dist/xterm.css'
+// import { Terminal } from 'xterm'
+// import * as fit from 'xterm/dist/addons/fit/fit'
 
-Terminal.applyAddon(fit)
+// Terminal.applyAddon(fit)
 
 var polling = true
 
 export default {
   name: 'ExperimentDetails',
+
+  components: {
+    Terminal,
+  },
 
   props: {
     id: {
