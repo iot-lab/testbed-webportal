@@ -112,7 +112,7 @@
 
               </div>
               <div class="d-md-flex flex-row mt-3" style="align-items: center;">
-                <multiselect v-model="currentNodes" :options="filteredNodes" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" :placeholder="searchNodesPlaceholder" label="network_address" track-by="network_address" class="mr-1">
+                <multiselect v-model="currentNodes" :options="filteredNodes" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" :placeholder="searchNodesPlaceholder" label="network_address" track-by="network_address" class="multiselect-nodes mr-1">
                   <template slot="tag" slot-scope="props">
                     <span class="badge-tag badge badge-primary">
                       <span>{{props.option.network_address | stripDomain}}</span>
@@ -774,8 +774,8 @@ export default {
   background-color: hsl(134, 62%, 61%);
 }
 
-#div3d {
-  height: 500px;
-  background: lightgray;
+/* Hide "press enter to select" during nodes selection */
+.multiselect-nodes .multiselect__option--highlight:hover:after {
+  opacity: 0;
 }
 </style>

@@ -256,7 +256,4 @@ ul {
 .multiselect__option--highlight:after {
   background: linear-gradient(90deg, rgba(0,0,0,0) 0%, var(--primary) 10%, var(--primary) 100%) !important;
 }
-.multiselect__option--highlight:hover:after {
-  opacity: 0;
-}
 </style>
