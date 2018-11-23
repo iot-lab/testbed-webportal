@@ -100,8 +100,7 @@ export default {
         return async function (e) {
           vm.$notify({clean: true}) // close pending notification
 
-          var res = await iotlab.checkFirmware(e.target.result)
-          vm.$notify({text: `firmware format ${res.format}`, type: res.format === 'unknown' ? 'error' : 'info'})
+          vm.$notify({text: 'File uploaded', type: 'info'})
           file.bin = e.target.result
           vm.firmwareFile = file
           vm.firmwareForm.fileName = file.name
