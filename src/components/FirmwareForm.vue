@@ -118,6 +118,7 @@ export default {
         if (this.firmware.name) {
           // update existing firmware
           if (this.firmwareFile && this.firmwareFile.name) {
+            this.$notify({ text: 'Updating firmware...', type: 'info', duration: -1 })
             await iotlab.updateFirmware(this.firmware.name, this.firmwareForm, this.firmwareFile.bin)
           } else {
             await iotlab.updateFirmware(this.firmware.name, this.firmwareForm)
@@ -128,8 +129,10 @@ export default {
             this.$notify({text: 'Select firmware file first', type: 'warning'})
             return
           }
+          this.$notify({ text: 'Creating firmware...', type: 'info', duration: -1 })
           await iotlab.createFirmware(this.firmwareForm, this.firmwareFile.bin)
         }
+        this.$notify({clean: true})
         this.$notify({text: `firmware ${this.firmwareForm.name} saved`, type: 'success'})
         this.$router.push({name: 'listFirmware'})
       } catch (err) {
