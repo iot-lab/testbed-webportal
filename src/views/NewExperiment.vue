@@ -178,7 +178,7 @@
                 <span class="custom-file-control">{{group.firmware.name}}</span>
               </label>
               <hr>
-              <firmware-list :archi="[group.archi, null]" :event="true" @select="fw => { group.firmware = {name: fw} }"></firmware-list>
+              <firmware-list :archi="[group.archi, null]" :select="true" @select="fw => { group.firmware = {name: fw} }"></firmware-list>
             </div>
           </div>
           <span>
@@ -188,7 +188,7 @@
             <div class="dropdown-menu dropdown-menu-right">
               <div class="card-body">
                 <p class="lead">Assign a monitoring profile</p>
-                <monitoring-list :archi="group.archi" :event="true" @select="profile => { group.monitoring = profile }"></monitoring-list>
+                <monitoring-list :archi="group.archi" :select="true" @select="profile => { group.monitoring = profile }"></monitoring-list>
               </div>
             </div>
           </span>
@@ -216,7 +216,7 @@
                 <span class="custom-file-control">{{p.firmware.name}}</span>
               </label>
               <hr>
-              <firmware-list :archi="[p.archi, null]" :event="true" @select="fw => { p.firmware = {name: fw} }"></firmware-list>
+              <firmware-list :archi="[p.archi, null]" :select="true" @select="fw => { p.firmware = {name: fw} }"></firmware-list>
             </div>
           </div>
           <span>
@@ -226,7 +226,7 @@
             <div class="dropdown-menu dropdown-menu-right">
               <div class="card-body">
                 <p class="lead">Assign a monitoring profile</p>
-                <monitoring-list :archi="p.archi" :event="true" @select="profile => { p.monitoring = profile }"></monitoring-list>
+                <monitoring-list :archi="p.archi" :select="true" @select="profile => { p.monitoring = profile }"></monitoring-list>
               </div>
             </div>
           </span>

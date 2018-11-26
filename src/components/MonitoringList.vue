@@ -13,7 +13,7 @@
       <tbody>
         <tr v-for="profile in store.profiles" v-if="filterByArchi(profile)">
           <td>
-            <a v-if="event" href="#" @click.prevent="select(profile)">{{profile.profilename}}</a>
+            <a v-if="select" href="#" @click.prevent="selectItem(profile)">{{profile.profilename}}</a>
             <router-link v-else :to="{name: 'monitoring', params: {name: profile.profilename}}">
               {{profile.profilename}}
             </router-link>
@@ -56,8 +56,8 @@ export default {
       type: String,
       default: '',
     },
-    event: {
-      // true  -> emits an selected event
+    select: {
+      // true  -> emits a selected event
       // false -> router link to object
       type: Boolean,
       default: false,
@@ -94,7 +94,7 @@ export default {
         default: return profile.nodearch === 'custom'
       }
     },
-    select (profile) {
+    selectItem (profile) {
       this.$emit('select', profile.profilename)
     },
   },

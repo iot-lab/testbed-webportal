@@ -22,7 +22,7 @@
       <tbody>
         <tr v-for="firmware in store.firmwares" v-if="filter(firmware)">
           <td>
-            <a v-if="event" href="#" @click.prevent="select(firmware)">{{firmware.name}}</a>
+            <a v-if="select" href="#" @click.prevent="selectItem(firmware)">{{firmware.name}}</a>
             <router-link v-else :to="{name: 'firmware', params: {name: firmware.name}}">
               {{firmware.name}}
             </router-link>
@@ -55,8 +55,8 @@ export default {
       type: [String, Array],
       default: '',
     },
-    event: {
-      // true  -> emits an selected event
+    select: {
+      // true  -> emits a selected event
       // false -> router link to object
       type: Boolean,
       default: false,
@@ -94,7 +94,7 @@ export default {
       let archis = (typeof this.archi === 'string') ? Array(this.archi) : this.archi
       return archis.includes(firmware.archi)
     },
-    select (firmware) {
+    selectItem (firmware) {
       this.$emit('select', firmware.name)
     },
     async download (firmware) {
