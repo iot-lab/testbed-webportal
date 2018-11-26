@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ul class="nav nav-tabs" style="border-bottom: 1px solid transparent; position: relative; top: 1px">
+    <ul class="nav nav-tabs" style="position: relative; top: 1px">
       <li v-for="(key, i) in keys" class="nav-item"> <a :href="'#tab_SSH'+i" :class="{ 'active': i === activeKey }" data-toggle="tab" @click="activeKey = i"
         class="nav-link">
         SSH key {{i+1}}
