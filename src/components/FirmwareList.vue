@@ -2,17 +2,25 @@
   <div>
     <router-link :to="{name: 'newFirmware'}" class="btn btn-sm btn-success float-right"><i class="fa fa-plus"></i> New firmware</router-link>
     <h5>Firmwares</h5>
-    <table class="table table-striped table-sm mt-3">
+    <ul class="nav nav-tabs" style="position: relative; top: 1px">
+      <li class="nav-item" v-tooltip:top="'User firmwares'">
+        <a class="nav-link active" data-toggle="list" href="#userdefined" role="tab" aria-controls="userdefined" @click="filterType = 'userdefined'"> My firmwares </a>
+      </li>
+      <li class="nav-item" v-tooltip:top="'Predefined firmwares'">
+        <a class="nav-link" data-toggle="list" href="#predefined" role="tab" aria-controls="predefined" @click="filterType = 'predefined'"> Presets </a>
+      </li>
+    </ul>
+    <table class="table table-striped table-sm">
       <thead>
         <tr>
           <th class="cursor" title="sort by name" @click="sortBy(f => f.name)">Name</th>
-          <th class="cursor" title="sort by archi" @click="sortBy(f => f.archi)">Archi</th>
-          <th class="cursor" title="sort by archi" @click="sortBy(f => f.description)">Description</th>
+          <th class="cursor" title="sort by archi" @click="sortBy(f => f.archi || '')">Archi</th>
+          <th class="cursor" title="sort by archi" @click="sortBy(f => f.description || '')">Description</th>
           <th width="15"><i class="fa fa-download" v-tooltip:bottom="'Download'"></i></th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="firmware in store.firmwares" v-if="filterByArchi(firmware)">
+        <tr v-for="firmware in store.firmwares" v-if="filter(firmware)">
           <td>
             <a v-if="event" href="#" @click.prevent="select(firmware)">{{firmware.name}}</a>
             <router-link v-else :to="{name: 'firmware', params: {name: firmware.name}}">
@@ -58,12 +66,14 @@ export default {
   data () {
     return {
       store: store,
+      filterType: 'userdefined',
     }
   },
 
   async created () {
     try {
-      store.firmwares = (await iotlab.getFirmwares()).sort((a, b) => a.name.localeCompare(b.name))
+      store.firmwares = await iotlab.getFirmwares()
+      this.sortBy(f => f.archi || 'zzz') // let's put empty archi at the end of the list
     } catch (err) {
       this.$notify({text: 'Failed to load firmwares', type: 'error'})
     }
@@ -74,7 +84,10 @@ export default {
       // sort by func() then by firmware name
       store.firmwares = store.firmwares.sort((a, b) => func(a) === func(b) ? a.name.localeCompare(b.name) : func(a).localeCompare(func(b)))
     },
-    filterByArchi (firmware) {
+    filter (firmware) {
+      if (firmware.type !== this.filterType) {
+        return false
+      }
       if (this.archi === '') {
         return true
       }
