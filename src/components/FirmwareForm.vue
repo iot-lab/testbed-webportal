@@ -5,28 +5,29 @@
       <div v-if="firmware.fileName" class="mb-2">
         <a href="#" @click.prevent="download"><i class="fa fa-download"></i> {{firmware.fileName}}</a>
       </div>
-      <label class="custom-file">
+      <label class="custom-file" v-if="!readOnly">
         <input type="file" id="file" ref="firmwareFile" class="custom-file-input" @change="uploadFirmware">
         <span class="custom-file-control">{{firmwareFile && firmwareFile.name}}</span>
       </label>
     </div>
     <div class="form-group">
       <label>Name</label>
-      <input v-model="firmwareForm.name" class="form-control" type="text" name="name" placeholder="Custom name">
+      <input v-model="firmwareForm.name" class="form-control" type="text" name="name" placeholder="Custom name" :disabled="readOnly">
     </div>
     <div class="form-group">
       <label>Description <span class="text-muted">(optional)</span></label>
-      <input v-model="firmwareForm.description"  class="form-control" type="text" name="description" placeholder="Description">
+      <input v-model="firmwareForm.description"  class="form-control" type="text" name="description" placeholder="Description" :disabled="readOnly">
     </div>
     <div class="form-group">
       <label>Architecture <span class="text-muted">(optional)</span></label>
       <multiselect v-model="firmwareForm.archi"
+        :disabled="readOnly"
         placeholder="Select architecture"
         :options="archis"
         :class="{'mymultiselect': true}">
       </multiselect>
     </div>
-    <div class="form-group">
+    <div class="form-group" v-if="!readOnly">
       <button class="btn btn-success" type="submit">Save</button>
     </div>
   </form>
@@ -46,6 +47,10 @@ export default {
     firmware: {
       type: Object,
       default: () => {},
+    },
+    readOnly: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -136,6 +141,7 @@ export default {
         this.$notify({text: `firmware ${this.firmwareForm.name} saved`, type: 'success'})
         this.$router.push({name: 'listFirmware'})
       } catch (err) {
+        this.$notify({clean: true})
         this.$notify({text: err.response.data.message || 'An error occured', type: 'error'})
       }
     },
