@@ -131,11 +131,11 @@
                 <button class="btn btn-success" @click="addNodes">Add to experiment</button>
               </div>
               <p class="mt-2 mb-2 font-size-sm">
-                <a xdata-toggle="collapse" href="#collapseMap" aria-expanded="false" aria-controls="collapseMap" @click.prevent="showMap = !showMap">
+                <a href="#collapseMap" @click.prevent="showMap = !showMap">
                   <i class="fa fa-map-o fa-fw fa-lg" aria-hidden="true"></i> View/select nodes on map <i class="fa fa-caret-down" aria-hidden="true"></i>
                 </a>
               </p>
-              <div xclass="collapse" id="collapseMap" v-show="showMap">
+              <div id="collapseMap" v-show="showMap">
                 <map-3d :nodes="filteredNodes" v-model="currentNodes" :selectedNodes="selectedNodesForSite" :shows="showMap" @selectSite="(site) => filterSite = site"></map-3d>
               </div>
             </div>
@@ -162,7 +162,7 @@
       </div>
       <!-- Selected nodes by host or ID -->
       <div v-if="selectedNodes.length" v-show="mode !== 'byprop'" class="card-body font-size-sm" style="background: #22222222">
-        <p class="mb-0 font-size-1">{{selectedNodes.length}} nodes selected: <a href="" @click.prevent="selectedNodeGroups = []">clear all</a></p>
+        <p class="mb-0 font-size-1">{{selectedNodes.length}} nodes selected: <a href="" @click.prevent="clearAllNodes">clear all</a></p>
         <div style="margin-top: 0.35rem" v-for="(group, index) in selectedNodeGroups">
           <span class="badge badge-info badge-tag" v-for="node in group.nodes" :class="{'badge-even': index % 2}">
             <span>{{node.network_address | stripDomain}}</span> <span class="tag-remove cursor" @click="removeNode(node)">&times;</span>
@@ -199,7 +199,7 @@
       </div>
       <!-- Selected nodes by Props -->
       <div v-if="selectedProps.length" v-show="mode === 'byprop'" class="card-body font-size-sm" style="background: #22222222">
-        <p class="mb-0 font-size-1">{{nodeCount}} nodes selected: <a href="" @click.prevent="selectedProps = []">clear all</a></p>
+        <p class="mb-0 font-size-1">{{nodeCount}} nodes selected: <a href="" @click.prevent="clearAllNodes">clear all</a></p>
         <div style="margin-top: 0.35rem" v-for="(p, index) in selectedProps">
           <span class="badge badge-info badge-tag"> {{p.prop.properties.archi | formatArchiRadio}} @ {{p.prop.properties.site}}</span>
           x {{p.prop.nbnodes}}
@@ -275,9 +275,8 @@ import 'vue-multiselect/dist/vue-multiselect.min.css'
 import 'tempusdominus-bootstrap-4'
 import 'tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4.min.css'
 import { iotlab } from '@/rest'
-import { expandIds, groupBy, sleep } from '@/utils'
+import { expandIds, groupBy, sleep, md5Hash } from '@/utils'
 import { allowedFirmwares4Archi, extractArchi } from '@/assets/js/iotlab-utils'
-// import { loadNodes, init3d } from '@/assets/map/map3d'
 
 function Exception (message) {
   this.message = message
@@ -346,6 +345,7 @@ export default {
       currentFirmware: {name: undefined},
       currentMonitoring: {name: undefined},
       firmwares: {},
+      firmwaresHashes: {},
       sites: [],
       node_ids: [],
       nodes: [],
@@ -381,6 +381,10 @@ export default {
     })
     $(document).on('click', 'span[data-ids]', e => {
       this.nodeIds = e.target.dataset.ids
+    })
+    $(document).on('click', '.dropdown-menu a[data-toggle="list"]', e => {
+      // prevent dropdown menu to close while switching tabs
+      e.stopPropagation()
     })
   },
 
@@ -554,6 +558,12 @@ export default {
       this.filterSite = 'all'
       this.filterMobile = 'all'
     },
+    clearAllNodes () {
+      this.selectedNodeGroups = []
+      this.selectedProps = []
+      this.firmwares = {}
+      this.firmwaresHashes = {}
+    },
     loadFirmwareFile (ref, index) {
       this.$notify({text: 'Uploading file...', type: 'info', duration: -1})
 
@@ -572,17 +582,20 @@ export default {
             file.bin = e.target.result
             // file.format = res.format
             vm.firmwareFiles[index] = file
-            if (vm.mode === 'byprop') {
-              vm.selectedProps[index].firmware = file
-            } else {
-              vm.selectedNodeGroups[index].firmware = file
+            let name = file.name
+            let hash = md5Hash(file.bin)
+            if (file.name in vm.firmwares && hash !== vm.firmwaresHashes[file.name]) {
+              name = `${hash}_${file.name}` // rename firmware to avoid collision
             }
-            vm.firmwares[file.name] = file.bin
+            vm.firmwares[name] = file.bin
+            vm.firmwaresHashes[name] = hash
+            if (vm.mode === 'byprop') {
+              vm.selectedProps[index].firmware = {name: name}
+            } else {
+              vm.selectedNodeGroups[index].firmware = {name: name}
+            }
           } else {
             vm.$notify({text: `Wrong format for this type of nodes.\n(expected ${allowedFirmwares})`, type: 'error'})
-            // vm.$refs[ref][0].files[0] = null
-            // vm.$refs[ref][0].value = null
-            // vm.$refs[ref].value = null
           }
         }
       })(this.firmwareFiles[index], this, index, group.allowedFirmwareTypes)
