@@ -179,9 +179,12 @@ export const iotlab = {
       firmwareassociations: firmwareassociations,
       profileassociations: profileassociations,
     }))
+    // attached firmware names should be unique
+    let attachedFirmwares = []
     for (let asso of firmwareassociations || []) {
-      if (asso.firmwarename in firmwares) {
+      if (asso.firmwarename in firmwares && !attachedFirmwares.includes(asso.firmwarename)) {
         formData.append(asso.firmwarename, new Blob([firmwares[asso.firmwarename]], {type: 'application/octet-stream'}), asso.firmwarename)
+        attachedFirmwares.push(asso.firmwarename)
       }
     }
     return iotlab.api.post('/experiments', formData).then(resp => resp.data)
