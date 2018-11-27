@@ -178,7 +178,7 @@
                 <span class="custom-file-control">{{group.firmware.name}}</span>
               </label>
               <hr>
-              <firmware-list :archi="[group.archi, null]" :select="true" @select="fw => { group.firmware = {name: fw} }"></firmware-list>
+              <firmware-list :archi="[group.archi, null]" :select="true" @select="fw => { avoidCollision(fw); group.firmware = {name: fw} }"></firmware-list>
             </div>
           </div>
           <span>
@@ -216,7 +216,7 @@
                 <span class="custom-file-control">{{p.firmware.name}}</span>
               </label>
               <hr>
-              <firmware-list :archi="[p.archi, null]" :select="true" @select="fw => { p.firmware = {name: fw} }"></firmware-list>
+              <firmware-list :archi="[p.archi, null]" :select="true" @select="fw => { avoidCollision(fw); p.firmware = {name: fw} }"></firmware-list>
             </div>
           </div>
           <span>
@@ -564,6 +564,27 @@ export default {
       this.firmwares = {}
       this.firmwaresHashes = {}
     },
+    avoidCollision (resourceName) {
+      // Names should be unique in firmwareassociations
+      // Let's rename any uploaded firmware colliding with a firmware from the resources
+      if (resourceName in this.firmwares) {
+        let name = `${this.firmwaresHashes[resourceName] || '0'}_${resourceName}`
+        this.firmwares[name] = this.firmwares[resourceName]
+        this.firmwaresHashes[name] = this.firmwaresHashes[resourceName]
+        delete this.firmwares[resourceName]
+        delete this.firmwaresHashes[resourceName]
+        for (let group of this.selectedNodeGroups) {
+          if (group.firmware && group.firmware.name === resourceName) {
+            group.firmware.name = name
+          }
+        }
+        for (let group of this.selectedProps) {
+          if (group.firmware && group.firmware.name === resourceName) {
+            group.firmware.name = name
+          }
+        }
+      }
+    },
     loadFirmwareFile (ref, index) {
       this.$notify({text: 'Uploading file...', type: 'info', duration: -1})
 
@@ -580,12 +601,17 @@ export default {
           vm.$notify({text: `firmware format ${res.format}`, type: res.format === 'unknown' ? 'error' : 'info'})
           if (allowedFirmwares.includes(res.format)) {
             file.bin = e.target.result
-            // file.format = res.format
             vm.firmwareFiles[index] = file
             let name = file.name
             let hash = md5Hash(file.bin)
-            if (file.name in vm.firmwares && hash !== vm.firmwaresHashes[file.name]) {
-              name = `${hash}_${file.name}` // rename firmware to avoid collision
+            // check if a firmware with the same name is already associated
+            if (vm.selectedNodeGroups.find(group => group.firmware && group.firmware.name === file.name) ||
+              vm.selectedProps.find(group => group.firmware && group.firmware.name === file.name)
+            ) {
+              // if hash already exist and is the same then it's the same firmware, no need to rename
+              if (hash !== vm.firmwaresHashes[file.name]) {
+                name = `${hash}_${file.name}` // rename firmware to avoid collision
+              }
             }
             vm.firmwares[name] = file.bin
             vm.firmwaresHashes[name] = hash
