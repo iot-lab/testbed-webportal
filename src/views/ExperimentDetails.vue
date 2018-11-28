@@ -160,11 +160,6 @@ import { auth } from '@/auth'
 import { experimentStates } from '@/assets/js/iotlab-utils'
 import { capitalize, pluralize, downloadAsFile } from '@/utils'
 import $ from 'jquery'
-// import 'xterm/dist/xterm.css'
-// import { Terminal } from 'xterm'
-// import * as fit from 'xterm/dist/addons/fit/fit'
-
-// Terminal.applyAddon(fit)
 
 var polling = true
 
@@ -481,59 +476,6 @@ export default {
         term.connect()
       }
     },
-
-    // async openTerminal (node) {
-    //   let [nodeId, site] = node.split('.')
-    //   let connType = node.startsWith('a8') ? 'ssh' : 'serial'
-
-    //   let baseUrl = `wss://${process.env.VUE_APP_IOTLAB_HOST}:443/ws`
-    //   let wsUrl = `${baseUrl}/${site}/${this.id}/${nodeId}/${connType}`
-
-    //   let ws = new WebSocket(wsUrl, ['token', this.token])
-
-    //   var term = new Terminal({
-    //     cols: 80,
-    //     rows: 20,
-    //     screenKeys: true,
-    //     useStyle: true,
-    //   })
-
-    //   ws.onopen = (event) => {
-    //     term.on('data', function (data) {
-    //       ws.send(data)
-    //       if (connType === 'ssh') {
-    //         term.write('\b \b')
-    //       }
-    //     })
-
-    //     term.on('key', function (key, event) {
-    //       if (connType === 'serial' && event.key === 'Backspace') {
-    //         term.write('\b \b')
-    //       } else if (event.key === 'Del') {
-    //         term.write('\b \b')
-    //       } else {
-    //         term.write(key)
-    //         if (event.key === 'Enter') {
-    //           term.write('\n')
-    //         }
-    //       }
-    //     })
-
-    //     term.open(this.$refs[node][0])
-
-    //     term.fit()
-
-    //     ws.onmessage = function (event) {
-    //       term.write(event.data)
-    //       if (event.data === '\n') {
-    //         term.write('\r')
-    //       }
-    //     }
-
-    //     // Set focus on terminal
-    //     term.focus()
-    //   }
-    // },
   },
 }
 </script>
@@ -562,10 +504,7 @@ export default {
   overflow-y: scroll;
 }
 .camera {
-  /*position: relative;*/
   height: 240px;
   width: 320px;
-  /*background-color: #999;*/
-  /*background-size: 100%;*/
 }
 </style>
