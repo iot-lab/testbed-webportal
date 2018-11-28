@@ -128,13 +128,14 @@ export default {
       let term = this.$terminal
 
       ws.onopen = (event) => {
-        this.$notify({text: 'Terminal connected to serial port', type: 'info'})
+        // this.$notify({text: 'Terminal connected to serial port', type: 'info'})
 
         let buffer = ''
 
         term.on('key', (key, event) => {
           if (connType === 'serial' && event.key === 'Backspace') {
             term.write('\b \b')
+            buffer = buffer.slice(0, -1)
           } else if (event.key === 'Del') {
             term.write('\b \b')
           } else {
