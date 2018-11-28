@@ -118,6 +118,10 @@ export default {
       this.attached = false
     },
     connect () {
+      if (!this.token) {
+        this.$terminal.write('Experiment token not found')
+        return
+      }
       let [nodeId, site] = this.node.split('.')
       let connType = this.node.startsWith('a8') ? 'ssh' : 'serial'
 
@@ -129,6 +133,8 @@ export default {
 
       ws.onopen = (event) => {
         let term = this.$terminal
+
+        term.write('Connected!')
 
         term.on('data', function (data) {
           ws.send(data)

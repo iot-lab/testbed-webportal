@@ -89,24 +89,24 @@
             <td>{{getFirmware(node)}}</td>
             <td>{{getMonitoring(node)}}</td>
             <td class="text-center">{{getDeploymentStatus(node)}}</td>
-            <td xv-if="showNodesCommands">
+            <td v-if="showNodesCommands">
               <div class="btn-group" role="group" aria-label="Node actions" >
-                <button class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Start'" :disabled="getDeploymentStatus(node) === 'Error'" @click="sendCmdToNode('start', node)">
+                <button class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Start'" :disabled="getDeploymentStatus(node) === 'Error'" @click="sendCmdToNode('start', node)">
                   <i class="fa fa-fw fa-play"></i>
                 </button>
-                <button class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Stop'" :disabled="getDeploymentStatus(node) === 'Error'" @click="sendCmdToNode('stop', node)">
+                <button class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Stop'" :disabled="getDeploymentStatus(node) === 'Error'" @click="sendCmdToNode('stop', node)">
                   <i class="fa fa-fw fa-power-off"></i>
                 </button>
-                <button class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Reset'" :disabled="getDeploymentStatus(node) === 'Error'" @click="sendCmdToNode('reset', node)">
+                <button class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Reset'" :disabled="getDeploymentStatus(node) === 'Error'" @click="sendCmdToNode('reset', node)">
                   <i class="fa fa-fw fa-refresh"></i>
                 </button>
-                <button class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Flash firmware'" data-toggle="modal" data-target=".firmware-modal" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node">
+                <button class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Flash firmware'" data-toggle="modal" data-target=".firmware-modal" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node">
                   <i class="fa fa-fw fa-microchip"></i>
                 </button>
-                <button class="btn btn-sm border-0 btn-dark" data-toggle="button" aria-pressed="false" v-tooltip="'Open Terminal'" @click="toggleTerminal(node)">
+                <button class="btn btn-sm border-0 btn-outline-dark" data-toggle="button" aria-pressed="false" v-tooltip="'Open Terminal'" @click="toggleTerminal(node)">
                   <i class="fa fa-fw fa-terminal"></i>
                 </button>
-                <button v-show="hasCamera(node)" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Video'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleCamera(node)">
+                <button v-show="hasCamera(node)" class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Video'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleCamera(node)">
                   <i class="fa fa-fw fa-video-camera"></i>
                 </button>
               </div>
@@ -117,7 +117,7 @@
           </tr>
           <tr>
             <td :colspan="cameraVisible(node) ? '4' : '7'" class="p-0">
-              <terminal :cols="80" :rows="20" :node="node" :expId="id" :token="token"></terminal>
+              <terminal :ref="`term_${node}`" :cols="80" :rows="20" :node="node" :expId="id" :token="token"></terminal>
             </td>
             <td colspan="5" class="p-0">
               <img class="camera" v-if="hasCamera(node)" v-show="(token !== undefined) && cameraVisible(node)" :src="cameraUrl(node)" align="right">
@@ -253,7 +253,7 @@ export default {
           this.deploymentStatus = await iotlab.getExperimentDeployment(id)
         }
 
-        if (['Running'].includes(this.experiment.state)) {
+        if (!this.token && this.experiment.state === 'Running') {
           this.token = await iotlab.getExperimentToken(id)
         }
         if (['Finishing', 'Terminated', 'Stopped'].includes(this.experiment.state)) {
@@ -464,58 +464,72 @@ export default {
       }
     },
 
-    async openTerminal (node) {
-      let [nodeId, site] = node.split('.')
-      let connType = node.startsWith('a8') ? 'ssh' : 'serial'
-
-      let baseUrl = `wss://${process.env.VUE_APP_IOTLAB_HOST}:443/ws`
-      let wsUrl = `${baseUrl}/${site}/${this.id}/${nodeId}/${connType}`
-
-      let ws = new WebSocket(wsUrl, ['token', this.token])
-
-      var term = new Terminal({
-        cols: 80,
-        rows: 20,
-        screenKeys: true,
-        useStyle: true,
-      })
-
-      ws.onopen = (event) => {
-        term.on('data', function (data) {
-          ws.send(data)
-          if (connType === 'ssh') {
-            term.write('\b \b')
-          }
-        })
-
-        term.on('key', function (key, event) {
-          if (connType === 'serial' && event.key === 'Backspace') {
-            term.write('\b \b')
-          } else if (event.key === 'Del') {
-            term.write('\b \b')
-          } else {
-            term.write(key)
-            if (event.key === 'Enter') {
-              term.write('\n')
-            }
-          }
-        })
-
-        term.open(this.$refs[node][0])
-
-        term.fit()
-
-        ws.onmessage = function (event) {
-          term.write(event.data)
-          if (event.data === '\n') {
-            term.write('\r')
-          }
-        }
-
-        // Set focus on terminal
+    toggleTerminal (node) {
+      let term = this.$refs[`term_${node}`][0]
+      if (term.attached) {
+        // hide terminal
+        term.disconnect()
+        term.detach()
+      } else {
+        // show terminal
+        term.attach()
         term.focus()
+        term.connect()
       }
     },
+
+    // async openTerminal (node) {
+    //   let [nodeId, site] = node.split('.')
+    //   let connType = node.startsWith('a8') ? 'ssh' : 'serial'
+
+    //   let baseUrl = `wss://${process.env.VUE_APP_IOTLAB_HOST}:443/ws`
+    //   let wsUrl = `${baseUrl}/${site}/${this.id}/${nodeId}/${connType}`
+
+    //   let ws = new WebSocket(wsUrl, ['token', this.token])
+
+    //   var term = new Terminal({
+    //     cols: 80,
+    //     rows: 20,
+    //     screenKeys: true,
+    //     useStyle: true,
+    //   })
+
+    //   ws.onopen = (event) => {
+    //     term.on('data', function (data) {
+    //       ws.send(data)
+    //       if (connType === 'ssh') {
+    //         term.write('\b \b')
+    //       }
+    //     })
+
+    //     term.on('key', function (key, event) {
+    //       if (connType === 'serial' && event.key === 'Backspace') {
+    //         term.write('\b \b')
+    //       } else if (event.key === 'Del') {
+    //         term.write('\b \b')
+    //       } else {
+    //         term.write(key)
+    //         if (event.key === 'Enter') {
+    //           term.write('\n')
+    //         }
+    //       }
+    //     })
+
+    //     term.open(this.$refs[node][0])
+
+    //     term.fit()
+
+    //     ws.onmessage = function (event) {
+    //       term.write(event.data)
+    //       if (event.data === '\n') {
+    //         term.write('\r')
+    //       }
+    //     }
+
+    //     // Set focus on terminal
+    //     term.focus()
+    //   }
+    // },
   },
 }
 </script>
