@@ -53,6 +53,7 @@ export default {
         useStyle: true,
       },
       ws: undefined,
+      attached: false,
     }
   },
 
@@ -76,35 +77,46 @@ export default {
   },
 
   mounted () {
-    Object.keys(this.$props).forEach(key => this.$set(this.options, key, this[key]))
-    let term = new Terminal(this.options)
-    // term.linkifier.setHypertextLinkHandler((e, uri) => {
-    //   this.$emit('link', uri)
-    // })
-    // term.open(this.$el, true)
-    if (this.buffer) term.write(this.buffer.replace(/\n/g, '\r\n') + '\r\n')
-
-    term.on('blur', () => this.$emit('blur'))
-    term.on('focus', () => this.$emit('focus'))
-    term.on('resize', size => {
-      if (size.cols !== this.cols) this.$emit('update:cols', size.cols)
-      if (size.rows !== this.rows) this.$emit('update:rows', size.rows)
-    })
-    term.on('title', title => this.$emit('update:title', title))
-
-    this.$terminal = term
-    // this.$stream = new TerminalStream(this)
-
-    Object.keys(this.$props).forEach(key => this.$watch(key, val => { this.options[key] = val }))
+    // this.attach()
   },
 
   beforeDestroy () {
     this.$terminal.selectAll()
     this.$emit('update:buffer', this.$terminal.getSelection().trim())
-    this.$terminal.destroy()
+    // this.$terminal.destroy()
+    this.disconnect()
+    this.detach()
   },
 
   methods: {
+    attach () {
+      Object.keys(this.$props).forEach(key => this.$set(this.options, key, this[key]))
+      let term = new Terminal(this.options)
+      // term.linkifier.setHypertextLinkHandler((e, uri) => {
+      //   this.$emit('link', uri)
+      // })
+      term.open(this.$el, true)
+      if (this.buffer) term.write(this.buffer.replace(/\n/g, '\r\n') + '\r\n')
+
+      term.on('blur', () => this.$emit('blur'))
+      term.on('focus', () => this.$emit('focus'))
+      term.on('resize', size => {
+        if (size.cols !== this.cols) this.$emit('update:cols', size.cols)
+        if (size.rows !== this.rows) this.$emit('update:rows', size.rows)
+      })
+      term.on('title', title => this.$emit('update:title', title))
+
+      this.$terminal = term
+
+      Object.keys(this.$props).forEach(key => this.$watch(key, val => { this.options[key] = val }))
+
+      // this.$terminal.open(this.$el, true)
+      this.attached = true
+    },
+    detach () {
+      this.$terminal.dispose()
+      this.attached = false
+    },
     connect () {
       let [nodeId, site] = this.node.split('.')
       let connType = this.node.startsWith('a8') ? 'ssh' : 'serial'
@@ -154,7 +166,7 @@ export default {
       }
     },
     disconnect () {
-      this.ws.close()
+      if (this.ws) this.ws.close()
     },
     fit () {
       let parent = this.$el.parentNode
