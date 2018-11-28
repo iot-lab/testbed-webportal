@@ -81,9 +81,6 @@ export default {
   },
 
   beforeDestroy () {
-    this.$terminal.selectAll()
-    this.$emit('update:buffer', this.$terminal.getSelection().trim())
-    // this.$terminal.destroy()
     this.disconnect()
     this.detach()
   },
@@ -92,10 +89,11 @@ export default {
     attach () {
       Object.keys(this.$props).forEach(key => this.$set(this.options, key, this[key]))
       let term = new Terminal(this.options)
-      // term.linkifier.setHypertextLinkHandler((e, uri) => {
-      //   this.$emit('link', uri)
-      // })
+
       term.open(this.$el, true)
+      term.fit()
+      this.attached = true
+
       if (this.buffer) term.write(this.buffer.replace(/\n/g, '\r\n') + '\r\n')
 
       term.on('blur', () => this.$emit('blur'))
@@ -109,12 +107,9 @@ export default {
       this.$terminal = term
 
       Object.keys(this.$props).forEach(key => this.$watch(key, val => { this.options[key] = val }))
-
-      // this.$terminal.open(this.$el, true)
-      this.attached = true
     },
     detach () {
-      this.$terminal.dispose()
+      if (this.$terminal) this.$terminal.dispose()
       this.attached = false
     },
     connect () {
@@ -130,20 +125,14 @@ export default {
 
       let ws = new WebSocket(wsUrl, ['token', this.token])
       this.ws = ws
+      let term = this.$terminal
 
       ws.onopen = (event) => {
-        let term = this.$terminal
+        this.$notify({text: 'Terminal connected to serial port', type: 'info'})
 
-        term.write('Connected!')
+        let buffer = ''
 
-        term.on('data', function (data) {
-          ws.send(data)
-          if (connType === 'ssh') {
-            term.write('\b \b')
-          }
-        })
-
-        term.on('key', function (key, event) {
+        term.on('key', (key, event) => {
           if (connType === 'serial' && event.key === 'Backspace') {
             term.write('\b \b')
           } else if (event.key === 'Del') {
@@ -152,29 +141,38 @@ export default {
             term.write(key)
             if (event.key === 'Enter') {
               term.write('\n')
+              ws.send(buffer + '\n')
+              buffer = ''
+            } else {
+              buffer += key
             }
           }
         })
+      }
 
-        // term.open(this.$refs[node][0])
-
-        // term.fit()
-
-        ws.onmessage = function (event) {
-          term.write(event.data)
-          if (event.data === '\n') {
-            term.write('\r')
-          }
+      ws.onmessage = (event) => {
+        term.write(event.data)
+        if (event.data === '\n') {
+          term.write('\r')
         }
+      }
 
-        // Set focus on terminal
-        // term.focus()
+      ws.onclose = (event) => {
+        // console.log(event.code)
+        // this.$notify({ text: 'WebSocket closed abnormally', type: 'error' })
+      }
+
+      ws.onerror = (event) => {
+        this.$notify({ text: 'WebSocket error', type: 'error' })
       }
     },
     disconnect () {
       if (this.ws) this.ws.close()
     },
     fit () {
+      this.$terminal.fit()
+    },
+    fit_ () {
       let parent = this.$el.parentNode
       let term = this.$terminal
       term.element.style.display = 'none'
