@@ -116,11 +116,11 @@
             </td>
           </tr>
           <tr>
-            <td :colspan="cameraVisible(node) ? '4' : '7'" class="p-0">
-              <terminal :ref="`term_${node}`" :cols="80" :rows="20" :node="node" :expId="id" :token="token"></terminal>
-            </td>
-            <td colspan="5" class="p-0">
-              <img class="camera" v-if="hasCamera(node)" v-show="(token !== undefined) && cameraVisible(node)" :src="cameraUrl(node)" align="right">
+            <td colspan="7" class="p-0">
+              <div class="d-flex align-items-center justify-content-between bg-secondary">
+                <terminal :ref="`term_${node}`" :cols="80" :rows="20" :node="node" :expId="id" :token="token" style="flex-grow: 1"></terminal>
+                <img class="camera" v-if="hasCamera(node)" v-show="(token !== undefined) && cameraVisible(node)" :src="cameraUrl(node)" align="right">
+              </div>
             </td>
           </tr>
         </template>
@@ -442,13 +442,17 @@ export default {
     },
 
     hasCamera (node) {
-      let n = this.nodes.find((n) => n.network_address === node)
+      let n = this.nodes.find(n => n.network_address === node)
       return n ? n.camera === '1' : false
     },
 
     toggleCamera (node) {
       this.nodesCameraState[node] = !this.nodesCameraState[node]
       this.$forceUpdate()
+      this.$nextTick(() => {
+        let term = this.$refs[`term_${node}`][0]
+        term.fit()
+      })
     },
 
     cameraVisible (node) {
@@ -557,11 +561,11 @@ export default {
   resize: vertical;
   overflow-y: scroll;
 }
-#camera {
-  position: relative;
+.camera {
+  /*position: relative;*/
   height: 240px;
   width: 320px;
-  background-color: #999;
-  background-size: 100%;
+  /*background-color: #999;*/
+  /*background-size: 100%;*/
 }
 </style>
