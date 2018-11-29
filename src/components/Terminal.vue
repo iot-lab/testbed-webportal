@@ -89,6 +89,7 @@ export default {
     attach () {
       Object.keys(this.$props).forEach(key => this.$set(this.options, key, this[key]))
       let term = new Terminal(this.options)
+      term.setOption('convertEol', true)
 
       term.open(this.$el, true)
       term.fit()
@@ -153,9 +154,6 @@ export default {
 
       ws.onmessage = (event) => {
         term.write(event.data)
-        if (event.data === '\n') {
-          term.write('\r')
-        }
       }
 
       ws.onclose = (event) => {
