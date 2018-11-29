@@ -157,12 +157,14 @@ export default {
       }
 
       ws.onclose = (event) => {
-        // console.log(event.code)
-        // this.$notify({ text: 'WebSocket closed abnormally', type: 'error' })
+        if (event.reason) {
+          this.$notify({ text: `Closing terminal: ${event.reason}`, type: 'warning' })
+          this.detach()
+        }
       }
 
       ws.onerror = (event) => {
-        this.$notify({ text: 'WebSocket error', type: 'error' })
+        this.$notify({ text: 'Terminal error', type: 'error' })
       }
     },
     disconnect () {
