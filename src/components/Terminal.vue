@@ -41,6 +41,7 @@ export default {
 
     node: String,
     expId: [String, Number],
+    user: String,
     token: String,
   },
 
@@ -124,7 +125,7 @@ export default {
       let baseUrl = `wss://${process.env.VUE_APP_IOTLAB_HOST}:443/ws`
       let wsUrl = `${baseUrl}/${site}/${this.expId}/${nodeId}/${connType}`
 
-      let ws = new WebSocket(wsUrl, ['token', this.token])
+      let ws = new WebSocket(wsUrl, [this.user, 'token', this.token])
       this.ws = ws
       let term = this.$terminal
 
@@ -159,12 +160,13 @@ export default {
       ws.onclose = (event) => {
         if (event.reason) {
           this.$notify({ text: `Closing terminal: ${event.reason}`, type: 'warning' })
-          this.detach()
         }
+        this.detach()
       }
 
       ws.onerror = (event) => {
         this.$notify({ text: 'Terminal error', type: 'error' })
+        this.detach()
       }
     },
     disconnect () {
