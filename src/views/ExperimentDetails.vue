@@ -119,7 +119,7 @@
           <tr>
             <td colspan="7" class="p-0">
               <div class="d-flex align-items-center justify-content-between bg-secondary">
-                <terminal :ref="`term_${node}`" :cols="80" :rows="20" :node="node" :expId="id" :token="token" style="flex-grow: 1"></terminal>
+                <terminal :ref="`term_${node}`" :cols="80" :rows="20" :node="node" :expId="id" :user="currentUser" :token="token" style="flex-grow: 1"></terminal>
                 <img class="camera" v-if="hasCamera(node)" v-show="(token !== undefined) && cameraVisible(node)" :src="cameraUrl(node)" align="right">
               </div>
             </td>
