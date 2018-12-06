@@ -203,6 +203,14 @@ export const iotlab = {
     return iotlab.api.post(`/experiments/${id}/nodes/flash`, formData).then(resp => resp.data)
   },
 
+  async flashResourcesFirmware (id, nodes, name) {
+    return iotlab.api.post(`/experiments/${id}/nodes/flash/${name}`, nodes).then(resp => resp.data)
+  },
+
+  async updateMonitoring (id, nodes, name) {
+    return iotlab.api.post(`/experiments/${id}/nodes/monitoring/${name}`, nodes).then(resp => resp.data)
+  },
+
   async reloadExperiment (id) {
     return iotlab.api.post(`/experiments/${id}/reload`, {}).then(resp => resp.data)
   },

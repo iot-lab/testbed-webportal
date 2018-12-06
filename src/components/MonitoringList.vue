@@ -1,6 +1,6 @@
 <template>
   <div>
-    <router-link :to="{name: 'newMonitoring'}" class="btn btn-sm btn-success float-right"><i class="fa fa-plus"></i> New profile</router-link>
+    <router-link :to="{name: 'newMonitoring'}" class="btn btn-sm btn-outline-success float-right"><i class="fa fa-plus"></i> New profile</router-link>
     <h5>Monitoring profiles</h5>
     <table class="table table-striped table-sm mt-3">
       <thead>

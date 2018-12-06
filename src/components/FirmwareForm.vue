@@ -2,8 +2,8 @@
   <form @submit.prevent="saveFirmware" class="mt-3">
     <div class="form-group">
       <label>File</label>
-      <div v-if="firmware.fileName" class="mb-2">
-        <a href="#" @click.prevent="download"><i class="fa fa-download"></i> {{firmware.fileName}}</a>
+      <div v-if="firmware.filename" class="mb-2">
+        <a href="#" @click.prevent="download"><i class="fa fa-download"></i> {{firmware.filename}}</a>
       </div>
       <label class="custom-file" v-if="!readOnly">
         <input type="file" id="file" ref="firmwareFile" class="custom-file-input" @change="uploadFirmware">
@@ -90,7 +90,7 @@ export default {
   methods: {
     async download () {
       try {
-        downloadAsFile(this.firmware.fileName, await iotlab.getFirmwareFile(this.firmware.name))
+        downloadAsFile(this.firmware.filename, await iotlab.getFirmwareFile(this.firmware.name))
       } catch (err) {
         this.$notify({text: err.response.data.message || 'Failed to download file', type: 'error'})
       }
@@ -108,7 +108,7 @@ export default {
           vm.$notify({text: 'File uploaded', type: 'info'})
           file.bin = e.target.result
           vm.firmwareFile = file
-          vm.firmwareForm.fileName = file.name
+          vm.firmwareForm.filename = file.name
           if (!vm.firmwareForm.name) {
             vm.firmwareForm.name = file.name
             vm.$forceUpdate()

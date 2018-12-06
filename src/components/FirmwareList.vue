@@ -1,6 +1,6 @@
 <template>
   <div>
-    <router-link :to="{name: 'newFirmware'}" class="btn btn-sm btn-success float-right"><i class="fa fa-plus"></i> New firmware</router-link>
+    <router-link :to="{name: 'newFirmware'}" class="btn btn-sm btn-outline-success float-right"><i class="fa fa-plus"></i> New firmware</router-link>
     <h5>Firmwares</h5>
     <ul class="nav nav-tabs" style="position: relative; top: 1px">
       <li class="nav-item" v-tooltip:top="'User firmwares'">
@@ -29,7 +29,7 @@
           </td>
           <td>{{firmware.archi}}</td>
           <td>{{firmware.description}}</td>
-          <td><a href="#" @click.prevent="download(firmware)" v-tooltip:bottom.html="`<i class='fa fa-download'></i> <b>${firmware.fileName}</b>`"><i class="fa fa-file-o"></i></a></td>
+          <td><a href="#" @click.prevent="download(firmware)" v-tooltip:bottom.html="`<i class='fa fa-download'></i> <b>${firmware.filename}</b>`"><i class="fa fa-file-o"></i></a></td>
         </tr>
         <tr v-if="store.firmwares.length === 0">
           <td colspan="4" class="font-italic bg-light">
@@ -99,7 +99,7 @@ export default {
     },
     async download (firmware) {
       try {
-        downloadAsFile(firmware.fileName, await iotlab.getFirmwareFile(firmware.name))
+        downloadAsFile(firmware.filename, await iotlab.getFirmwareFile(firmware.name))
       } catch (err) {
         this.$notify({text: err.response.data.message || 'Failed to download file', type: 'error'})
       }
