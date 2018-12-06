@@ -16,7 +16,11 @@
     </div>
     <div class="form-group">
       <label>Description <span class="text-muted">(optional)</span></label>
-      <input v-model="firmwareForm.description"  class="form-control" type="text" name="description" placeholder="Description" :disabled="readOnly">
+      <textarea v-model="firmwareForm.description" class="form-control" rows="3" name="description" placeholder="Description" :disabled="readOnly"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Operating system <span class="text-muted">(optional)</span></label>
+      <input v-model="firmwareForm.os" class="form-control" type="text" name="os" placeholder="OS" :disabled="readOnly">
     </div>
     <div class="form-group">
       <label>Architecture <span class="text-muted">(optional)</span></label>
