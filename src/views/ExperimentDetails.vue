@@ -165,7 +165,6 @@
           </div>
           <div class="modal-footer dborder-0 dbg-light">
             <button type="button" class="btn" data-dismiss="modal">Close</button>
-            <!-- <button type="button" class="btn btn-primary" @click.prevent="updateMonitoring('monitoringFile')">Apply</button> -->
           </div>
         </div>
       </div>
@@ -461,8 +460,9 @@ export default {
       reader.readAsDataURL(this.firmwareFile)
     },
 
-    async updateMonitoring (profile, currentNode = undefined) {
-      let selectedNodes = currentNode ? [currentNode] : this.selectedNodes
+    async updateMonitoring (profile, currentNode) {
+      let selectedNodes = this.currentNode ? [this.currentNode] : this.selectedNodes
+      delete this.currentNode
       $('.modal').modal('hide')
       let nodes = await iotlab.updateMonitoring(this.id, selectedNodes, profile).catch(err => {
         this.$notify({ text: err.response.data.message || 'An error occured', type: 'error' })
@@ -493,14 +493,21 @@ export default {
       }
     },
 
-    async flashResourcesFirmware (firmware, currentNode = undefined) {
-      let selectedNodes = currentNode ? [currentNode] : this.selectedNodes
+    async flashResourcesFirmware (firmware) {
+      let selectedNodes = this.currentNode ? [this.currentNode] : this.selectedNodes
+      delete this.currentNode
       $('.modal').modal('hide')
+
+      this.$notify({ text: 'Flashing firmware...', type: 'info', duration: -1 })
+
       let nodes = await iotlab.flashResourcesFirmware(this.id, selectedNodes, firmware).catch(err => {
+        this.$notify({ clean: true })
         this.$notify({ text: err.response.data.message || 'An error occured', type: 'error' })
       })
       let validNodes = Object.values(nodes).reduce((a, b) => a.concat(b))
       let invalidNodes = selectedNodes.filter(n => !validNodes.includes(n))
+
+      this.$notify({ clean: true })
 
       if (invalidNodes.length > 0) {
         this.$notify({
