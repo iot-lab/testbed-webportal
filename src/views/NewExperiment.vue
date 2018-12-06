@@ -178,7 +178,7 @@
                 <span class="custom-file-control">{{group.firmware.name}}</span>
               </label>
               <hr>
-              <firmware-list :archi="[group.archi, null]" :select="true" @select="fw => { avoidCollision(fw); group.firmware = {name: fw} }"></firmware-list>
+              <firmware-list :archi="[group.archi, undefined]" :select="true" @select="fw => { avoidCollision(fw); group.firmware = {name: fw} }"></firmware-list>
             </div>
           </div>
           <span>
@@ -216,7 +216,7 @@
                 <span class="custom-file-control">{{p.firmware.name}}</span>
               </label>
               <hr>
-              <firmware-list :archi="[p.archi, null]" :select="true" @select="fw => { avoidCollision(fw); p.firmware = {name: fw} }"></firmware-list>
+              <firmware-list :archi="[p.archi, undefined]" :select="true" @select="fw => { avoidCollision(fw); p.firmware = {name: fw} }"></firmware-list>
             </div>
           </div>
           <span>

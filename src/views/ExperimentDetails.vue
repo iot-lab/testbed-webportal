@@ -55,13 +55,11 @@
             <li class="dropdown-divider"></li>
             <!-- <a class="dropdown-item" href="#" @click.prevent="sendCmd('flash-idle')"><i class="fa fa-fw fa-eraser"></i> Flash idle firmware</a> -->
             <a class="dropdown-item" href="#" data-toggle="modal" data-target=".firmware-modal"><i class="fa fa-fw fa-microchip"></i> Flash firmware</a>
-            <!-- <a class="dropdown-item disabled" href="#" v-tooltip:bottom="'Waiting for current flash to finish'" xv-else><i class="fa fa-fw fa-microchip"></i> Flash firmware</a> -->
             <!-- <li class="dropdown-divider"></li> -->
             <!-- <a class="dropdown-item" href="#" @click.prevent="sendCmd('debug-start')"><i class="fa fa-fw fa-step-forward"></i> Start debug</a> -->
             <!-- <a class="dropdown-item" href="#" @click.prevent="sendCmd('debug-stop')"><i class="fa fa-fw fa-stop"></i> Stop debug</a> -->
             <li class="dropdown-divider"></li>
-            <a class="dropdown-item" href="#" @click.prevent="this.alert('todo')"><i class="fa fa-fw fa-thermometer fa-strike" style="position: relative"></i> Remove monitoring</a>
-            <a class="dropdown-item" href="#" @click.prevent="this.alert('todo')"><i class="fa fa-fw fa-thermometer"></i> Update monitoring</a>
+            <a class="dropdown-item" href="#" data-toggle="modal" data-target=".monitoring-modal"><i class="fa fa-fw fa-thermometer"></i> Update monitoring</a>
           </div>
         </div>
       </div>
@@ -132,7 +130,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header bg-light">
-            <h5 class="modal-title">Upload firmware</h5>
+            <h5 class="modal-title">Select firmware</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -142,10 +140,32 @@
               <input type="file" id="file" ref="firmwareFile" class="custom-file-input" @change="changeFirmwareFile('firmwareFile')">
               <span class="custom-file-control">{{firmwareFile && firmwareFile.name}}</span>
             </label>
+            <hr>
+            <firmware-list :archi="['m3', undefined]" :select="true" @select="fw => flashResourcesFirmware(fw)"></firmware-list>
           </div>
           <div class="modal-footer dborder-0 dbg-light">
             <button type="button" class="btn" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-success" @click.prevent="flashFirmware('firmwareFile')">Flash</button>
+            <button type="button" class="btn btn-primary" @click.prevent="flashFirmware('firmwareFile')">Flash</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade monitoring-modal" tabindex="-1" role="dialog" aria-labelledby="monitoringModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-light">
+            <h5 class="modal-title">Select monitoring</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body py-4">
+            <monitoring-list :archi="'m3'" :select="true" @select="profile => updateMonitoring(profile)"></monitoring-list>
+          </div>
+          <div class="modal-footer dborder-0 dbg-light">
+            <button type="button" class="btn" data-dismiss="modal">Close</button>
+            <!-- <button type="button" class="btn btn-primary" @click.prevent="updateMonitoring('monitoringFile')">Apply</button> -->
           </div>
         </div>
       </div>
@@ -156,6 +176,8 @@
 
 <script>
 import Terminal from '@/components/Terminal'
+import MonitoringList from '@/components/MonitoringList'
+import FirmwareList from '@/components/FirmwareList'
 import { iotlab } from '@/rest'
 import { auth } from '@/auth'
 import { experimentStates } from '@/assets/js/iotlab-utils'
@@ -169,6 +191,8 @@ export default {
 
   components: {
     Terminal,
+    MonitoringList,
+    FirmwareList,
   },
 
   props: {
@@ -435,6 +459,70 @@ export default {
       })(this, nodes)
 
       reader.readAsDataURL(this.firmwareFile)
+    },
+
+    async updateMonitoring (profile, currentNode = undefined) {
+      let selectedNodes = currentNode ? [currentNode] : this.selectedNodes
+      $('.modal').modal('hide')
+      let nodes = await iotlab.updateMonitoring(this.id, selectedNodes, profile).catch(err => {
+        this.$notify({ text: err.response.data.message || 'An error occured', type: 'error' })
+      })
+      let validNodes = Object.values(nodes).reduce((a, b) => a.concat(b))
+      let invalidNodes = selectedNodes.filter(n => !validNodes.includes(n))
+
+      if (invalidNodes.length > 0) {
+        this.$notify({
+          text: `Update monitoring not supported on ${pluralize(invalidNodes.length, 'node')}:<br><br>` + invalidNodes.join('<br>'),
+          type: 'warning',
+          duration: 6000,
+        })
+      }
+      if (nodes['1'] && nodes['1'].length > 0) {
+        this.$notify({
+          text: `Update monitoring failed on ${pluralize(nodes['1'].length, 'node')}:<br><br>` + nodes['1'].join('<br>'),
+          type: 'error',
+          duration: 10000,
+        })
+      }
+      if (nodes['0'] && nodes['0'].length > 0) {
+        this.$notify({
+          text: `Update monitoring successfull on ${pluralize(nodes['0'].length, 'node')}:<br><br>` + nodes['0'].join('<br>'),
+          type: 'success',
+          duration: 6000,
+        })
+      }
+    },
+
+    async flashResourcesFirmware (firmware, currentNode = undefined) {
+      let selectedNodes = currentNode ? [currentNode] : this.selectedNodes
+      $('.modal').modal('hide')
+      let nodes = await iotlab.flashResourcesFirmware(this.id, selectedNodes, firmware).catch(err => {
+        this.$notify({ text: err.response.data.message || 'An error occured', type: 'error' })
+      })
+      let validNodes = Object.values(nodes).reduce((a, b) => a.concat(b))
+      let invalidNodes = selectedNodes.filter(n => !validNodes.includes(n))
+
+      if (invalidNodes.length > 0) {
+        this.$notify({
+          text: `Flash not supported on ${pluralize(invalidNodes.length, 'node')}:<br><br>` + invalidNodes.join('<br>'),
+          type: 'warning',
+          duration: 6000,
+        })
+      }
+      if (nodes['1'] && nodes['1'].length > 0) {
+        this.$notify({
+          text: `Flash failed on ${pluralize(nodes['1'].length, 'node')}:<br><br>` + nodes['1'].join('<br>'),
+          type: 'error',
+          duration: 10000,
+        })
+      }
+      if (nodes['0'] && nodes['0'].length > 0) {
+        this.$notify({
+          text: `Flash successfull on ${pluralize(nodes['0'].length, 'node')}:<br><br>` + nodes['0'].join('<br>'),
+          type: 'success',
+          duration: 6000,
+        })
+      }
     },
 
     hasCamera (node) {
