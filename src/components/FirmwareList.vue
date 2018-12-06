@@ -15,7 +15,8 @@
         <tr>
           <th class="cursor" title="sort by name" @click="sortBy(f => f.name)">Name</th>
           <th class="cursor" title="sort by archi" @click="sortBy(f => f.archi || '')">Archi</th>
-          <th class="cursor" title="sort by archi" @click="sortBy(f => f.description || '')">Description</th>
+          <th class="cursor" title="sort by OS" @click="sortBy(f => f.os || '')">OS</th>
+          <th class="cursor" title="sort by description" @click="sortBy(f => f.description || '')">Description</th>
           <th width="15"><i class="fa fa-download" v-tooltip:bottom="'Download'"></i></th>
         </tr>
       </thead>
@@ -28,6 +29,7 @@
             </router-link>
           </td>
           <td>{{firmware.archi}}</td>
+          <td>{{firmware.os}}</td>
           <td>{{firmware.description}}</td>
           <td><a href="#" @click.prevent="download(firmware)" v-tooltip:bottom.html="`<i class='fa fa-download'></i> <b>${firmware.filename}</b>`"><i class="fa fa-file-o"></i></a></td>
         </tr>
