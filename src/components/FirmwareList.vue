@@ -30,7 +30,7 @@
           </td>
           <td>{{firmware.archi}}</td>
           <td>{{firmware.os}}</td>
-          <td>{{firmware.description}}</td>
+          <td class="ellipsis" :title="firmware.description">{{firmware.description}}</td>
           <td><a href="#" @click.prevent="download(firmware)" v-tooltip:bottom.html="`<i class='fa fa-download'></i> <b>${firmware.filename}</b>`"><i class="fa fa-file-o"></i></a></td>
         </tr>
         <tr v-if="store.firmwares.length === 0">
@@ -111,5 +111,10 @@ export default {
 </script>
 
 <style scoped>
-
+.ellipsis {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 </style>
