@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Login.vue should render blank login form 1`] = `
+exports[`Login.vue should have failed state after bad login 1`] = `
 <div
   class="container mt-4 text-center"
 >
@@ -16,7 +16,7 @@ exports[`Login.vue should render blank login form 1`] = `
   <!---->
    
   <div
-    class="login-box mx-auto"
+    class="login-box mx-auto error"
   >
     <h2
       style="font-size: 1.75rem;"
@@ -29,14 +29,14 @@ exports[`Login.vue should render blank login form 1`] = `
     >
       <input
         autofocus="autofocus"
-        class="form-control"
+        class="form-control is-invalid"
         placeholder="Username"
         required="required"
         type="text"
       />
        
       <input
-        class="form-control"
+        class="form-control is-invalid"
         placeholder="Password"
         required="required"
         type="password"
@@ -81,7 +81,7 @@ exports[`Login.vue should render blank login form 1`] = `
 </div>
 `;
 
-exports[`Login.vue should render failed login form 1`] = `
+exports[`Login.vue should render blank login form 1`] = `
 <div
   class="container mt-4 text-center"
 >
@@ -97,7 +97,7 @@ exports[`Login.vue should render failed login form 1`] = `
   <!---->
    
   <div
-    class="login-box mx-auto error"
+    class="login-box mx-auto"
   >
     <h2
       style="font-size: 1.75rem;"
@@ -110,14 +110,14 @@ exports[`Login.vue should render failed login form 1`] = `
     >
       <input
         autofocus="autofocus"
-        class="form-control is-invalid"
+        class="form-control"
         placeholder="Username"
         required="required"
         type="text"
       />
        
       <input
-        class="form-control is-invalid"
+        class="form-control"
         placeholder="Password"
         required="required"
         type="password"

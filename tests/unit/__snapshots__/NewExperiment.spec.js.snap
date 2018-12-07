@@ -422,7 +422,7 @@ exports[`NewExperiment.vue should match snapshot 1`] = `
                 style="align-items: center;"
               >
                 <multiselect-stub
-                  class="mr-1"
+                  class="multiselect-nodes mr-1"
                   deselectgrouplabel="Press enter to deselect group"
                   deselectlabel="Press enter to remove"
                   hide-selected="true"
@@ -456,10 +456,7 @@ exports[`NewExperiment.vue should match snapshot 1`] = `
                 class="mt-2 mb-2 font-size-sm"
               >
                 <a
-                  aria-controls="collapseMap"
-                  aria-expanded="false"
                   href="#collapseMap"
-                  xdata-toggle="collapse"
                 >
                   <i
                     aria-hidden="true"
@@ -476,7 +473,6 @@ exports[`NewExperiment.vue should match snapshot 1`] = `
               <div
                 id="collapseMap"
                 style="display: none;"
-                xclass="collapse"
               >
                 <map3d-stub
                   nodes=""

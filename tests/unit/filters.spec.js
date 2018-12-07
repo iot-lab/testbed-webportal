@@ -76,3 +76,11 @@ describe('Filter "formatArchiRadio".', () => {
     expect(Filters.formatArchiRadio('a8_toto:ble')).toEqual('a8 toto (ble)')
   })
 })
+
+describe('Filter "md5Tag".', () => {
+  it('md5Tag format filename when prefixed with md5 hash', () => {
+    expect(Filters.md5Tag('a8')).toEqual('a8')
+    expect(Filters.md5Tag('tuto_m3.elf')).toEqual('tuto_m3.elf')
+    expect(Filters.md5Tag('9b9ec02e2db623c0bb18106759615086_toto')).toEqual('toto <i class="fa fa-sm fa-tag text-muted" title="MD5: 9b9ec02e2db623c0bb18106759615086"></i>')
+  })
+})

@@ -23,20 +23,35 @@ exports[`Resources.vue should match snapshot 1`] = `
         id="list-tab"
         role="tablist"
       >
-        <a
-          aria-controls="monitoring"
-          class="list-group-item list-group-item-action active"
-          data-toggle="list"
-          href="#list-monitoring"
-          id="list-monitoring-list"
-          role="tab"
+        <router-link-stub
+          activeclass="active"
+          class="list-group-item list-group-item-action"
+          event="click"
+          tag="a"
+          to="[object Object]"
         >
           <i
             aria-hidden="true"
             class="fa fa-fw fa-thermometer"
           />
            Monitoring profiles
-        </a>
+        
+        </router-link-stub>
+         
+        <router-link-stub
+          activeclass="active"
+          class="list-group-item list-group-item-action"
+          event="click"
+          tag="a"
+          to="[object Object]"
+        >
+          <i
+            aria-hidden="true"
+            class="fa fa-fw fa-microchip"
+          />
+           Firmwares
+        
+        </router-link-stub>
       </div>
     </div>
      
@@ -47,16 +62,9 @@ exports[`Resources.vue should match snapshot 1`] = `
         class="tab-content"
         id="nav-tabContent"
       >
-        <div
-          aria-labelledby="list-monitoring-list"
-          class="tab-pane fade show active"
-          id="list-monitoring"
-          role="tabpanel"
-        >
-          <monitoringlist-stub
-            archi=""
-          />
-        </div>
+        <router-view-stub
+          name="default"
+        />
       </div>
     </div>
   </div>
