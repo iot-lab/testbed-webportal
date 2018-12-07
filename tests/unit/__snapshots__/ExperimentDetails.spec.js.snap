@@ -51,16 +51,19 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
     </li>
      
     <li>
+      
       Duration 
       <b>
         20 minutes
       </b>
+       
+      <!---->
     </li>
      
     <!---->
      
     <li>
-      Number of nodes 
+      Nodes 
       <b>
         2
       </b>
@@ -83,6 +86,8 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
   >
     <thead>
       <tr>
+        <!---->
+         
         <th>
           Nodes
         </th>
@@ -106,8 +111,6 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
         </th>
          
         <!---->
-         
-        <!---->
       </tr>
     </thead>
      
@@ -115,6 +118,8 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
       <tr
         class=""
       >
+        <!---->
+         
         <td>
           m3-9.saclay.iot-lab.info
         </td>
@@ -138,8 +143,6 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
         </td>
          
         <!---->
-         
-        <!---->
       </tr>
        
       <tr>
@@ -147,12 +150,26 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
           class="p-0"
           colspan="7"
         >
-          <!---->
+          <div
+            class="d-flex align-items-center justify-content-between bg-secondary"
+          >
+            <terminal-stub
+              cols="80"
+              expid="58099"
+              node="m3-9.saclay.iot-lab.info"
+              rows="20"
+              user=""
+            />
+             
+            <!---->
+          </div>
         </td>
       </tr>
       <tr
         class=""
       >
+        <!---->
+         
         <td>
           m3-12.saclay.iot-lab.info
         </td>
@@ -176,8 +193,6 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
         </td>
          
         <!---->
-         
-        <!---->
       </tr>
        
       <tr>
@@ -185,7 +200,19 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
           class="p-0"
           colspan="7"
         >
-          <!---->
+          <div
+            class="d-flex align-items-center justify-content-between bg-secondary"
+          >
+            <terminal-stub
+              cols="80"
+              expid="58099"
+              node="m3-12.saclay.iot-lab.info"
+              rows="20"
+              user=""
+            />
+             
+            <!---->
+          </div>
         </td>
       </tr>
     </tbody>
@@ -210,7 +237,7 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
           <h5
             class="modal-title"
           >
-            Upload firmware
+            Select firmware
           </h5>
            
           <button
@@ -245,6 +272,13 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
               
             </span>
           </label>
+           
+          <hr />
+           
+          <firmwarelist-stub
+            archi="m3,"
+            select="true"
+          />
         </div>
          
         <div
@@ -259,10 +293,70 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
           </button>
            
           <button
-            class="btn btn-success"
+            class="btn btn-primary"
             type="button"
           >
             Flash
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+   
+  <div
+    aria-hidden="true"
+    aria-labelledby="monitoringModal"
+    class="modal fade monitoring-modal"
+    role="dialog"
+    tabindex="-1"
+  >
+    <div
+      class="modal-dialog"
+    >
+      <div
+        class="modal-content"
+      >
+        <div
+          class="modal-header bg-light"
+        >
+          <h5
+            class="modal-title"
+          >
+            Select monitoring
+          </h5>
+           
+          <button
+            aria-label="Close"
+            class="close"
+            data-dismiss="modal"
+            type="button"
+          >
+            <span
+              aria-hidden="true"
+            >
+              ×
+            </span>
+          </button>
+        </div>
+         
+        <div
+          class="modal-body py-4"
+        >
+          <monitoringlist-stub
+            archi="m3"
+            select="true"
+          />
+        </div>
+         
+        <div
+          class="modal-footer dborder-0 dbg-light"
+        >
+          <button
+            class="btn"
+            data-dismiss="modal"
+            type="button"
+          >
+            Close
           </button>
         </div>
       </div>

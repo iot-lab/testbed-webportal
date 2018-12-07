@@ -16,13 +16,6 @@ describe('Login.vue', () => {
     expect(wrapper.element).toMatchSnapshot()
   })
 
-  it('should render failed login form', () => {
-    const wrapper = shallowMount(Login, {localVue, router})
-    wrapper.setData({failed: true})
-    expect(wrapper.element).toBeDefined()
-    expect(wrapper.element).toMatchSnapshot()
-  })
-
   it('should redirect to dashboard after login', async () => {
     const wrapper = shallowMount(Login, {localVue, router})
     const login = 'login'
@@ -56,66 +49,8 @@ describe('Login.vue', () => {
     wrapper.find('form').trigger('submit')
     expect(auth.doLogin).toHaveBeenCalledWith('', '')
     expect(wrapper.vm.failed).toBe(true)
+    expect(wrapper.element).toBeDefined()
+    expect(wrapper.element).toMatchSnapshot()
   })
   
 })
-
-
-/*
-describe('HelloWorld.vue', () => {
-  it('renders props.msg when passed', () => {
-    const msg = 'new message'
-    const wrapper = shallowMount(HelloWorld, {
-      propsData: { msg },
-    })
-    expect(wrapper.text()).toMatch(msg)
-  })
-})
-
-describe('MessageToggle.vue', () => {
-  it('toggles msg passed to Message when button is clicked', () => {
-    const wrapper = shallowMount(MessageToggle)
-    const button = wrapper.find('#toggle-message')
-    button.trigger('click')
-    const MessageComponent = wrapper.find(Message)
-    expect(MessageComponent.props()).toEqual({msg: 'message'})
-    button.trigger('click')
-    expect(MessageComponent.props()).toEqual({msg: 'toggled message'})
-  })
-})
-
-describe('Message', () => {
-  it('renders props.msg when passed', () => {
-    const msg = 'new message'
-    const wrapper = shallowMount(Message, {
-      propsData: { msg }
-    })
-    expect(wrapper.text()).toBe(msg)
-  })
-
-  it('renders default message if not passed a prop', () => {
-    const defaultMessage = 'default message'
-    const wrapper = shallowMount(Message)
-    expect(wrapper.text()).toBe(defaultMessage)
-  })
-})
-
-
-describe('List.vue', () => {
-  it('renders li for each item in props.items', () => {
-    const items = ['1', '2']
-    const wrapper = shallowMount(List, {
-      propsData: { items }
-    })
-    expect(wrapper.findAll('li')).toHaveLength(items.length)
-  })
-
-  it('matches snapshot', () => {
-    const items = ['item 1', 'item 2']
-    const wrapper = shallowMount(List, {
-      propsData: { items }
-    })
-    expect(wrapper.html()).toMatchSnapshot()
-  })
-})
-*/

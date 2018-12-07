@@ -3,7 +3,7 @@
 exports[`MonitoringList.vue should match snapshot 1`] = `
 <div>
   <router-link-stub
-    class="btn btn-sm btn-success float-right"
+    class="btn btn-sm btn-outline-success float-right"
     event="click"
     tag="a"
     to="[object Object]"
@@ -46,11 +46,15 @@ exports[`MonitoringList.vue should match snapshot 1`] = `
     <tbody>
       <tr>
         <td>
-          <a
-            href="#"
+          <router-link-stub
+            event="click"
+            tag="a"
+            to="[object Object]"
           >
+            
             a8prof
-          </a>
+          
+          </router-link-stub>
         </td>
          
         <td>
@@ -83,11 +87,15 @@ exports[`MonitoringList.vue should match snapshot 1`] = `
       </tr>
       <tr>
         <td>
-          <a
-            href="#"
+          <router-link-stub
+            event="click"
+            tag="a"
+            to="[object Object]"
           >
+            
             conso
-          </a>
+          
+          </router-link-stub>
         </td>
          
         <td>
@@ -124,11 +132,15 @@ exports[`MonitoringList.vue should match snapshot 1`] = `
       </tr>
       <tr>
         <td>
-          <a
-            href="#"
+          <router-link-stub
+            event="click"
+            tag="a"
+            to="[object Object]"
           >
+            
             radio
-          </a>
+          
+          </router-link-stub>
         </td>
          
         <td>

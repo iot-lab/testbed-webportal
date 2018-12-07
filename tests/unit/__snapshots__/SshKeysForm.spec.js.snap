@@ -4,7 +4,7 @@ exports[`SshKeysForm.vue should match snapshot 1`] = `
 <div>
   <ul
     class="nav nav-tabs"
-    style="border-bottom: 1px solid transparent; position: relative; top: 1px;"
+    style="position: relative; top: 1px;"
   >
     <li
       class="nav-item"
