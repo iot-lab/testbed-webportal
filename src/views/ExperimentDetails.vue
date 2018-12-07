@@ -136,7 +136,7 @@
     </table>
 
     <div class="modal fade firmware-modal" tabindex="-1" role="dialog" aria-labelledby="firmwareModal" aria-hidden="true">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header bg-light">
             <h5 class="modal-title">Select firmware</h5>
@@ -150,7 +150,7 @@
               <span class="custom-file-control">{{firmwareFile && firmwareFile.name}}</span>
             </label>
             <hr>
-            <firmware-list :archi="['m3', undefined]" :select="true" @select="fw => flashResourcesFirmware(fw)"></firmware-list>
+            <firmware-list :archi="selectedArchis.concat([undefined])" :select="true" @select="fw => flashResourcesFirmware(fw)"></firmware-list>
           </div>
           <div class="modal-footer dborder-0 dbg-light">
             <button type="button" class="btn" data-dismiss="modal">Close</button>
@@ -170,7 +170,7 @@
             </button>
           </div>
           <div class="modal-body py-4">
-            <monitoring-list :archi="'m3'" :select="true" @select="profile => updateMonitoring(profile)"></monitoring-list>
+            <monitoring-list :archi="selectedArchis[0]" :select="true" @select="profile => updateMonitoring(profile)"></monitoring-list>
           </div>
           <div class="modal-footer dborder-0 dbg-light">
             <button type="button" class="btn" data-dismiss="modal">Close</button>
@@ -188,7 +188,7 @@ import MonitoringList from '@/components/MonitoringList'
 import FirmwareList from '@/components/FirmwareList'
 import { iotlab } from '@/rest'
 import { auth } from '@/auth'
-import { experimentStates } from '@/assets/js/iotlab-utils'
+import { experimentStates, extractArchiFromAddress } from '@/assets/js/iotlab-utils'
 import { capitalize, pluralize, downloadAsFile } from '@/utils'
 import $ from 'jquery'
 
@@ -245,6 +245,10 @@ export default {
     experimentProgress () {
       // Gives the percentage of progress
       return Math.min(100, Math.round(100 * this.experiment.effective_duration / this.experiment.submitted_duration))
+    },
+    selectedArchis () {
+      let nodes = this.currentNode ? [this.currentNode] : this.selectedNodes
+      return [...new Set(nodes.map(node => extractArchiFromAddress(node)))] // remove duplicates from archi list using a set
     },
   },
 

@@ -18,6 +18,11 @@ export const extractArchi = function (nodeArchi) {
   return nodeArchi.split(':')[0]
 }
 
+// Extract archi from a network_address "m3-1.lille.iot-lab.info"
+export const extractArchiFromAddress = function (networkAddress) {
+  return networkAddress.split('-')[0]
+}
+
 // List of existing experiment states
 export const experimentStates = {
   all: 'Terminated,Stopped,Error,Running,Finishing,Resuming,toError,Waiting,Launching,Hold,toLaunch,toAckReservation,Suspended'.split(','),
