@@ -10,13 +10,19 @@
       <li v-if="experiment.state === 'Waiting'">Scheduled <b>{{experiment.scheduled_date | formatDateTimeSec}}</b></li>
       <li v-if="experiment.state !== 'Waiting'">Started <b>{{experiment.start_date | formatDateTimeSec}}</b></li>
       <li v-if="experiment.stop_date !== '1970-01-01T00:00:00Z'">Stopped <b>{{experiment.stop_date | formatDateTimeSec}}</b></li>
-      <li v-if="experiment.state !== 'Running'">Duration <b>{{(experiment.effective_duration || experiment.submitted_duration) | humanizeDuration}}</b></li>
-      <li v-if="experiment.state === 'Running'">
+      <li v-if="experiment.state !== 'Running'">
         Duration <b>{{experiment.submitted_duration | humanizeDuration}}</b>
-        (Elapsed {{experiment.effective_duration | humanizeDuration}} – Remaining {{experiment.submitted_duration - experiment.effective_duration | humanizeDuration}})
+        <span class="ml-1" v-if="experiment.effective_duration && experiment.effective_duration < experiment.submitted_duration">(stopped after {{experiment.effective_duration | humanizeDuration}})</span>
       </li>
-      <li>Number of nodes <b>{{experiment.nb_nodes}}</b></li>
-      <!-- <li>Type <b>{{experiment.type}}</b></li> -->
+      <li v-if="experiment.state === 'Running'">
+        Duration
+        <div class="d-inline-block px-3 durationProgress" :style="`text-align: center; --progress: ${experimentProgress}%`" :title="showRemaining">
+          {{expDuration | humanizeDuration}}
+          <small class="text-dark">({{experimentProgress}}%)</small>
+        </div>
+        of <b>{{experiment.submitted_duration | humanizeDuration}}</b>
+      </li>
+      <li>Nodes <b>{{experiment.nb_nodes}}</b></li>
       <li>State <span class="badge" :class="experiment.state | stateBadgeClass">{{experiment.state}}</span></li>
     </ul>
     <template v-if="experiment.user === currentUser">
@@ -229,6 +235,16 @@ export default {
     },
     showNodesCommands () {
       return this.experiment.state === 'Running' && this.experiment.user === this.currentUser
+    },
+    expDuration () {
+      return this.experiment.effective_duration || '0'
+    },
+    showRemaining () {
+      return `remaining ${this.$options.filters.humanizeDuration(this.experiment.submitted_duration - this.experiment.effective_duration)}`
+    },
+    experimentProgress () {
+      // Gives the percentage of progress
+      return Math.min(100, Math.round(100 * this.experiment.effective_duration / this.experiment.submitted_duration))
     },
   },
 
@@ -605,5 +621,9 @@ export default {
 .camera {
   height: 240px;
   width: 320px;
+}
+.durationProgress::after,.durationProgress::before {
+  top: 0;
+  height: 100%;
 }
 </style>
