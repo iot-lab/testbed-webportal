@@ -84,7 +84,7 @@
           <tr :class="{'text-danger': getDeploymentStatus(node) === 'Error'}">
             <td v-html="nodeOrAlias(node)"></td>
             <td>{{getUid(node)}}</td>
-            <td>{{getFirmware(node)}}</td>
+            <td v-html="$options.filters.md5Tag(getFirmware(node))"></td>
             <td>{{getMonitoring(node)}}</td>
             <td class="text-center">{{getDeploymentStatus(node)}}</td>
             <td v-if="showNodesCommands">
