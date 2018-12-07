@@ -234,6 +234,12 @@ export const iotlab = {
     return iotlab.api.put('/nodes')
   },
 
+  async updateNodesPropertiesOldApi () {
+    const OLD_API = `https://${process.env.VUE_APP_IOTLAB_HOST}/rest/`
+    const oldApi = axios.create({baseURL: OLD_API, auth: JSON.parse(localStorage.getItem('apiAuth') || '{}')})
+    return oldApi.post('/admin/nodes')
+  },
+
   async getNodesIds () {
     return iotlab.api.get('/nodes/ids').then(resp => resp.data.items)
   },

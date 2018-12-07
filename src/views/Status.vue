@@ -204,9 +204,10 @@ export default {
     },
 
     async updateNodesProperties () {
-      if (!confirm('Update node properties can take a while. Are you sure?')) return
+      if (!confirm('Update all nodes properties. Are you sure?')) return
       try {
         await iotlab.updateNodesProperties()
+        await iotlab.updateNodesPropertiesOldApi()
         this.$notify({text: 'Nodes properties updated', type: 'success'})
       } catch (err) {
         this.$notify({text: 'An error occured', type: 'error'})
