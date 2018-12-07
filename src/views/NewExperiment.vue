@@ -168,7 +168,7 @@
             <span>{{node.network_address | stripDomain}}</span> <span class="tag-remove cursor" @click="removeNode(node)">&times;</span>
           </span>
           <span class="badge badge-light badge-tag cursor" v-if="group.hasFirmware" data-toggle="dropdown" v-tooltip="'Add firmware'">
-            <span><i class="fa fa-microchip text-dark"></i> {{group.firmware.name}}</span> <span v-if="group.firmware.name" class="tag-remove cursor" @click="group.firmware = {name:undefined}">&times;</span>
+            <i class="fa fa-microchip text-dark"></i> <span class="mx-1" v-if="group.firmware.name" v-html="$options.filters.md5Tag(group.firmware.name)"></span> <span v-if="group.firmware.name" class="tag-remove cursor" @click.stop="group.firmware = {name:undefined}">&times;</span>
           </span>
           <div class="dropdown-menu dropdown-menu-right">
             <div class="card-body">
@@ -183,7 +183,7 @@
           </div>
           <span>
             <span class="badge badge-light badge-tag cursor" data-toggle="dropdown" v-tooltip="'Add monitoring profile'">
-              <span><i class="fa fa-thermometer text-dark" style="width: 12px;"></i> {{group.monitoring}}</span> <span v-if="group.monitoring" class="tag-remove cursor" @click="group.monitoring = undefined">&times;</span>
+              <i class="fa fa-thermometer text-dark" style="width: 12px;"></i> {{group.monitoring}} <span v-if="group.monitoring" class="tag-remove cursor" @click.stop="group.monitoring = undefined">&times;</span>
             </span>
             <div class="dropdown-menu dropdown-menu-right">
               <div class="card-body">
@@ -206,7 +206,7 @@
           <span class="badge badge-primary badge-tag" v-if="p.prop.properties.mobile"> mobile </span>
 
           <span class="badge badge-light badge-tag cursor" v-if="p.hasFirmware" data-toggle="dropdown" v-tooltip="'Add firmware'">
-            <span><i class="fa fa-microchip text-dark"></i> {{p.firmware.name}}</span> <span v-if="p.firmware.name" class="tag-remove cursor" @click="p.firmware = {name:undefined}">&times;</span>
+            <i class="fa fa-microchip text-dark"></i> <span class="mx-1" v-if="p.firmware.name" v-html="$options.filters.md5Tag(p.firmware.name)"></span> <span v-if="p.firmware.name" class="tag-remove cursor" @click.stop="p.firmware = {name:undefined}">&times;</span>
           </span>
           <div class="dropdown-menu dropdown-menu-right">
             <div class="card-body">
@@ -221,7 +221,7 @@
           </div>
           <span>
             <span class="badge badge-light badge-tag cursor" data-toggle="dropdown" v-tooltip="'Add monitoring profile'">
-              <span><i class="fa fa-thermometer text-dark" style="width: 12px;"></i> {{p.monitoring}}</span> <span v-if="p.monitoring" class="tag-remove cursor" @click="p.monitoring = undefined">&times;</span>
+              <i class="fa fa-thermometer text-dark" style="width: 12px;"></i> {{p.monitoring}} <span v-if="p.monitoring" class="tag-remove cursor" @click.stop="p.monitoring = undefined">&times;</span>
             </span>
             <div class="dropdown-menu dropdown-menu-right">
               <div class="card-body">

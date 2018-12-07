@@ -97,6 +97,15 @@ export const formatArchiRadio = function (value) {
   }
 }
 
+export const md5Tag = function (value) {
+  let firmwareWithMD5 = /([0-9a-f]{32})_(.+)/g
+  let groups = firmwareWithMD5.exec(value)
+  if (groups) {
+    return `${groups[2]} <i class="fa fa-sm fa-tag text-muted" title="MD5: ${groups[1]}"></i>`
+  }
+  return value
+}
+
 Vue.filter('pluralize', function (qty, str) {
   if (str) {
     return pluralize(qty, str)
@@ -112,3 +121,4 @@ Vue.filter('stateBadgeClass', stateBadgeClass)
 Vue.filter('formatArchi', formatArchi)
 Vue.filter('formatRadio', formatRadio)
 Vue.filter('formatArchiRadio', formatArchiRadio)
+Vue.filter('md5Tag', md5Tag)
