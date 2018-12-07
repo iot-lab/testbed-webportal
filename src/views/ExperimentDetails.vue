@@ -379,7 +379,7 @@ export default {
       }
       if (nodes['0'] && nodes['0'].length > 0) {
         this.$notify({
-          text: `${capitalize(cmd)} successfull on ${pluralize(nodes['0'].length, 'node')}:<br><br>` + nodes['0'].join('<br>'),
+          text: `${capitalize(cmd)} successful on ${pluralize(nodes['0'].length, 'node')}:<br><br>` + nodes['0'].join('<br>'),
           type: 'success',
           duration: 6000,
         })
@@ -452,7 +452,7 @@ export default {
           }
           if (nodes['0'] && nodes['0'].length > 0) {
             vm.$notify({
-              text: `Flash successfull on ${pluralize(nodes['0'].length, 'node')}:<br><br>` + nodes['0'].join('<br>'),
+              text: `Flash successful on ${pluralize(nodes['0'].length, 'node')}:<br><br>` + nodes['0'].join('<br>'),
               type: 'success',
               duration: 6000,
             })
@@ -489,7 +489,7 @@ export default {
       }
       if (nodes['0'] && nodes['0'].length > 0) {
         this.$notify({
-          text: `Update monitoring successfull on ${pluralize(nodes['0'].length, 'node')}:<br><br>` + nodes['0'].join('<br>'),
+          text: `Update monitoring successful on ${pluralize(nodes['0'].length, 'node')}:<br><br>` + nodes['0'].join('<br>'),
           type: 'success',
           duration: 6000,
         })
@@ -528,7 +528,7 @@ export default {
       }
       if (nodes['0'] && nodes['0'].length > 0) {
         this.$notify({
-          text: `Flash successfull on ${pluralize(nodes['0'].length, 'node')}:<br><br>` + nodes['0'].join('<br>'),
+          text: `Flash successful on ${pluralize(nodes['0'].length, 'node')}:<br><br>` + nodes['0'].join('<br>'),
           type: 'success',
           duration: 6000,
         })
