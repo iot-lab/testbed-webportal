@@ -3,10 +3,10 @@
   <div class="row">
     <div class="col-lg-8">
       <h2>Sign up to FIT IoT-LAB</h2>
-      <div class="card border-danger bg-danger my-2 mx-auto sd-inline-block text-left" v-if="hostname === 'devwww.iot-lab.info'">
+      <div class="card border-danger bg-danger my-2 mx-auto" v-if="hostname === 'devwww.iot-lab.info'">
         <div class="card-body text-white p-2">
-          Development site for <b>internal purpose only</b>.
-          Go to <a class="text-white alert-link" href="https://www.iot-lab.info/testbed">www.iot-lab.info</a> for FIT IoT-LAB public site.
+          Signup on <b>devwww</b> is restricted to <b>administrators</b>.
+          Users should sign up to <a class="text-white alert-link" href="https://www.iot-lab.info/testbed">www.iot-lab.info</a>.
         </div>
       </div>
       <div v-if="success" class="card border-success my-5">
@@ -85,6 +85,10 @@ export default {
         if (!(await this.$refs.user.validate()) || !validated || !this.captcha.verified) {
           this.captcha.dirty = true
           console.log('Form is not valid.')
+          return
+        }
+        if (location.hostname === 'devwww.iot-lab.info') {
+          alert('Signup on devwww is restricted to IoT-LAB administrators')
           return
         }
         try {
