@@ -74,20 +74,23 @@
     <table class="table table-striped table-sm">
       <thead>
         <tr>
+          <th width="15px" v-if="showNodesCommands">
+            <input type="checkbox" @change="toggleSelectedNodes" v-model="allSelected">
+          </th>
           <th>Nodes</th>
           <th>UID</th>
           <th>Firmware</th>
           <th>Monitoring</th>
           <th class="text-center">Deployment</th>
           <th width="50px" v-if="showNodesCommands" class="text-center">Actions</th>
-          <th width="15px" v-if="showNodesCommands">
-            <input type="checkbox" @change="toggleSelectedNodes" v-model="allSelected">
-          </th>
         </tr>
       </thead>
       <tbody>
         <template v-for="node in experiment.nodes">
           <tr :class="{'text-danger': getDeploymentStatus(node) === 'Error'}">
+            <td v-if="showNodesCommands">
+              <input type="checkbox" :value="node" v-model="selectedNodes" :disabled="getDeploymentStatus(node) === 'Error'" @click="uncheckAll">
+            </td>
             <td v-html="nodeOrAlias(node)"></td>
             <td>{{getUid(node)}}</td>
             <td v-html="$options.filters.md5Tag(getFirmware(node))"></td>
@@ -118,9 +121,6 @@
                   <i class="fa fa-fw fa-video-camera"></i>
                 </button>
               </div>
-            </td>
-            <td v-if="showNodesCommands">
-              <input type="checkbox" :value="node" v-model="selectedNodes" :disabled="getDeploymentStatus(node) === 'Error'" @click="uncheckAll">
             </td>
           </tr>
           <tr>
