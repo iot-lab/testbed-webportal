@@ -98,13 +98,13 @@
             <td class="text-center">{{getDeploymentStatus(node)}}</td>
             <td v-if="showNodesCommands">
               <div class="btn-group" role="group" aria-label="Node actions" >
-                <button class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Start'" :disabled="getDeploymentStatus(node) === 'Error'" @click="sendCmdToNode('start', node)">
+                <button class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Start'" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node; sendCmd('start')">
                   <i class="fa fa-fw fa-play"></i>
                 </button>
-                <button class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Stop'" :disabled="getDeploymentStatus(node) === 'Error'" @click="sendCmdToNode('stop', node)">
+                <button class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Stop'" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node; sendCmd('stop')">
                   <i class="fa fa-fw fa-power-off"></i>
                 </button>
-                <button class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Reset'" :disabled="getDeploymentStatus(node) === 'Error'" @click="sendCmdToNode('reset', node)">
+                <button class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Reset'" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node; sendCmd('reset')">
                   <i class="fa fa-fw fa-refresh"></i>
                 </button>
                 <button class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Flash firmware'" data-toggle="modal" data-target=".firmware-modal" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node">
@@ -362,22 +362,20 @@ export default {
       })
     },
 
-    async sendCmdToNode (cmd, node) {
-      let nodes = [node]
-      await this.sendCmd(cmd, nodes)
-    },
+    async sendCmd (cmd) {
+      let selectedNodes = this.currentNode ? [this.currentNode] : this.selectedNodes
+      delete this.currentNode
 
-    async sendCmd (cmd, nodesList = this.selectedNodes) {
-      if (nodesList.length === 0) {
+      if (selectedNodes.length === 0) {
         this.$notify({ text: `Select some nodes first`, type: 'warning' })
         return
       }
 
-      let nodes = await iotlab.sendNodesCommand(this.id, cmd, nodesList).catch(err => {
+      let nodes = await iotlab.sendNodesCommand(this.id, cmd, selectedNodes).catch(err => {
         this.$notify({ text: err.response.data.message, type: 'error' })
       })
       let validNodes = Object.values(nodes).reduce((a, b) => a.concat(b))
-      let invalidNodes = nodesList.filter(n => !validNodes.includes(n))
+      let invalidNodes = selectedNodes.filter(n => !validNodes.includes(n))
 
       if (invalidNodes.length > 0) {
         this.$notify({
@@ -407,21 +405,10 @@ export default {
     },
 
     flashFirmware (ref) {
-      if (this.currentNode !== undefined) {
-        this.flashFirmwareToCurrentNode(ref)
-        this.currentNode = undefined
-      } else {
-        this.flashFirmwareToNodes(ref, this.selectedNodes)
-      }
-    },
+      let selectedNodes = this.currentNode ? [this.currentNode] : this.selectedNodes
+      delete this.currentNode
 
-    flashFirmwareToCurrentNode (ref) {
-      let nodes = [this.currentNode]
-      this.flashFirmwareToNodes(ref, nodes)
-    },
-
-    flashFirmwareToNodes (ref, nodes) {
-      if (nodes.length === 0) {
+      if (selectedNodes.length === 0) {
         this.$notify({ text: `Select some nodes first`, type: 'warning' })
         return
       }
@@ -474,42 +461,9 @@ export default {
             })
           }
         }
-      })(this, nodes)
+      })(this, selectedNodes)
 
       reader.readAsDataURL(this.firmwareFile)
-    },
-
-    async updateMonitoring (profile, currentNode) {
-      let selectedNodes = this.currentNode ? [this.currentNode] : this.selectedNodes
-      delete this.currentNode
-      $('.modal').modal('hide')
-      let nodes = await iotlab.updateMonitoring(this.id, selectedNodes, profile).catch(err => {
-        this.$notify({ text: err.response.data.message || 'An error occured', type: 'error' })
-      })
-      let validNodes = Object.values(nodes).reduce((a, b) => a.concat(b))
-      let invalidNodes = selectedNodes.filter(n => !validNodes.includes(n))
-
-      if (invalidNodes.length > 0) {
-        this.$notify({
-          text: `Update monitoring not supported on ${pluralize(invalidNodes.length, 'node')}:<br><br>` + invalidNodes.join('<br>'),
-          type: 'warning',
-          duration: 6000,
-        })
-      }
-      if (nodes['1'] && nodes['1'].length > 0) {
-        this.$notify({
-          text: `Update monitoring failed on ${pluralize(nodes['1'].length, 'node')}:<br><br>` + nodes['1'].join('<br>'),
-          type: 'error',
-          duration: 10000,
-        })
-      }
-      if (nodes['0'] && nodes['0'].length > 0) {
-        this.$notify({
-          text: `Update monitoring successful on ${pluralize(nodes['0'].length, 'node')}:<br><br>` + nodes['0'].join('<br>'),
-          type: 'success',
-          duration: 6000,
-        })
-      }
     },
 
     async flashResourcesFirmware (firmware) {
@@ -545,6 +499,40 @@ export default {
       if (nodes['0'] && nodes['0'].length > 0) {
         this.$notify({
           text: `Flash successful on ${pluralize(nodes['0'].length, 'node')}:<br><br>` + nodes['0'].join('<br>'),
+          type: 'success',
+          duration: 6000,
+        })
+      }
+    },
+
+    async updateMonitoring (profile) {
+      let selectedNodes = this.currentNode ? [this.currentNode] : this.selectedNodes
+      delete this.currentNode
+      $('.modal').modal('hide')
+
+      let nodes = await iotlab.updateMonitoring(this.id, selectedNodes, profile).catch(err => {
+        this.$notify({ text: err.response.data.message || 'An error occured', type: 'error' })
+      })
+      let validNodes = Object.values(nodes).reduce((a, b) => a.concat(b))
+      let invalidNodes = selectedNodes.filter(n => !validNodes.includes(n))
+
+      if (invalidNodes.length > 0) {
+        this.$notify({
+          text: `Update monitoring not supported on ${pluralize(invalidNodes.length, 'node')}:<br><br>` + invalidNodes.join('<br>'),
+          type: 'warning',
+          duration: 6000,
+        })
+      }
+      if (nodes['1'] && nodes['1'].length > 0) {
+        this.$notify({
+          text: `Update monitoring failed on ${pluralize(nodes['1'].length, 'node')}:<br><br>` + nodes['1'].join('<br>'),
+          type: 'error',
+          duration: 10000,
+        })
+      }
+      if (nodes['0'] && nodes['0'].length > 0) {
+        this.$notify({
+          text: `Update monitoring successful on ${pluralize(nodes['0'].length, 'node')}:<br><br>` + nodes['0'].join('<br>'),
           type: 'success',
           duration: 6000,
         })
