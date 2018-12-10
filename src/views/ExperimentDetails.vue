@@ -271,6 +271,14 @@ export default {
     this.getExperiment(to.params.id)
   },
 
+  beforeRouteLeave (to, from, next) {
+    // close modal backdrop before leaving
+    // workaround for new firmware/monitoring buttons inside modal dialogs
+    $('body').removeClass('modal-open')
+    $('.modal-backdrop').remove()
+    next()
+  },
+
   destroyed () {
     polling = clearTimeout(polling)
   },
