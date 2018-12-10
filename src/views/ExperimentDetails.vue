@@ -88,7 +88,7 @@
       <tbody>
         <template v-for="node in experiment.nodes">
           <tr :class="{'text-danger': getDeploymentStatus(node) === 'Error'}">
-            <td v-html="nodeOrAlias(node)" @click="toggleNodeSelected(node)" class="cursor"></td>
+            <td v-html="nodeOrAlias(node)" @click="toggleNodeSelected(node)" :class="{'cursor': experiment.state === 'Running'}"></td>
             <td>{{getUid(node)}}</td>
             <td v-html="$options.filters.md5Tag(getFirmware(node))"></td>
             <td>{{getMonitoring(node)}}</td>
@@ -101,20 +101,20 @@
                 <button class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Stop'" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node; sendCmd('stop')">
                   <i class="fa fa-fw fa-power-off"></i>
                 </button>
-                <button class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Reset'" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node; sendCmd('reset')">
+                <button v-if="!isA8(node)" class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Reset'" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node; sendCmd('reset')">
                   <i class="fa fa-fw fa-refresh"></i>
                 </button>
-                <button class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Flash firmware'" data-toggle="modal" data-target=".firmware-modal" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node">
+                <button v-if="!isA8(node)" class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Flash firmware'" data-toggle="modal" data-target=".firmware-modal" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node">
                   <i class="fa fa-fw fa-microchip"></i>
                 </button>
                 <button class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Update monitoring'" data-toggle="modal" data-target=".monitoring-modal" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node">
                   <i class="fa fa-fw fa-thermometer"></i>
                 </button>
                 <!-- <button class="btn btn-sm border-0 btn-outline-dark" data-toggle="button" aria-pressed="false" v-tooltip="'Open Terminal'" @click="toggleTerminal(node)"> -->
-                <button class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Open Terminal'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleTerminal(node)">
+                <button v-if="!isA8(node)" class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Open Terminal'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleTerminal(node)">
                   <i class="fa fa-fw fa-terminal"></i>
                 </button>
-                <button v-show="hasCamera(node)" class="btn btn-sm border-0 btn-outline-dark" data-toggle="button" aria-pressed="false" v-tooltip="'Video'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleCamera(node)">
+                <button v-if="hasCamera(node)" class="btn btn-sm border-0 btn-outline-dark" data-toggle="button" aria-pressed="false" v-tooltip="'Video'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleCamera(node)">
                   <i class="fa fa-fw fa-video-camera"></i>
                 </button>
               </div>
@@ -312,6 +312,9 @@ export default {
       } catch (err) {
         this.$notify({ text: err.message, type: 'error' })
       }
+    },
+    isA8 (node) {
+      return node.startsWith('a8-')
     },
     nodeOrAlias (node) {
       if (typeof node === 'string') return node
