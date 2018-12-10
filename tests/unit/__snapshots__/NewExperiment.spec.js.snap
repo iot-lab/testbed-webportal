@@ -326,7 +326,7 @@ exports[`NewExperiment.vue should match snapshot 1`] = `
               >
                 <filterselect-stub
                   all=""
-                  items=""
+                  items="[object Object]"
                   title="Architecture"
                   value="all"
                 />
@@ -404,7 +404,7 @@ exports[`NewExperiment.vue should match snapshot 1`] = `
                  
                 <filterselect-stub
                   all="All architectures"
-                  items=""
+                  items="[object Object]"
                   title=""
                   value="all"
                 />
@@ -507,7 +507,7 @@ exports[`NewExperiment.vue should match snapshot 1`] = `
                  
                 <filterselect-stub
                   all=""
-                  items=""
+                  items="[object Object]"
                   title="Architecture"
                   value="all"
                 />
