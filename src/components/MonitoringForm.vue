@@ -265,7 +265,7 @@ export default {
           await iotlab.createMonitoringProfile(profile)
         }
         this.$notify({text: `Profile ${profile.profilename} saved`, type: 'success'})
-        this.$router.push({name: 'resources'})
+        this.$router.push({name: 'listMonitoring'})
       } catch (err) {
         this.$notify({text: err.response.data.message, type: 'error'})
         // this.$notify({text: `${JSON.stringify(profile)}`, type: 'info', duration: 10000})
