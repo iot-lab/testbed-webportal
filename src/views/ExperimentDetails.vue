@@ -88,7 +88,7 @@
       <tbody>
         <template v-for="node in experiment.nodes">
           <tr :class="{'text-danger': getDeploymentStatus(node) === 'Error'}">
-            <td v-html="nodeOrAlias(node)" @click="toggleNodeSelected(node)" :class="{'cursor': experiment.state === 'Running'}"></td>
+            <td v-html="nodeOrAlias(node)" @click="toggleNodeSelected(node)" :class="{'cursor': showNodesCommands}"></td>
             <td>{{getUid(node)}}</td>
             <td v-html="$options.filters.md5Tag(getFirmware(node))"></td>
             <td>{{getMonitoring(node)}}</td>
