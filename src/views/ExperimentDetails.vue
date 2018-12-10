@@ -114,7 +114,7 @@
                   <i class="fa fa-fw fa-thermometer"></i>
                 </button>
                 <!-- <button class="btn btn-sm border-0 btn-outline-dark" data-toggle="button" aria-pressed="false" v-tooltip="'Open Terminal'" @click="toggleTerminal(node)"> -->
-                <button class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Open Terminal'" @click="toggleTerminal(node)">
+                <button class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Open Terminal'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleTerminal(node)">
                   <i class="fa fa-fw fa-terminal"></i>
                 </button>
                 <button v-show="hasCamera(node)" class="btn btn-sm border-0 btn-outline-dark" data-toggle="button" aria-pressed="false" v-tooltip="'Video'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleCamera(node)">
