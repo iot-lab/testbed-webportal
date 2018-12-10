@@ -79,6 +79,7 @@ export const downloadAsFile = function (filename, file, mimeType = 'application/
   let link = document.createElement('a')
   link.href = window.URL.createObjectURL(blob)
   link.download = filename
+  document.body.appendChild(link)
   link.click()
   link.remove()
 }
