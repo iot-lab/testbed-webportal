@@ -347,7 +347,7 @@ exports[`UserAccount.vue should match snapshot 1`] = `
             <a
               href="https://sympa.inria.fr/sympa/info/iot-lab-users"
             >
-              https://lists.gforge.inria.fr/mailman/listinfo/senslab-users
+              https://sympa.inria.fr/sympa/info/iot-lab-users
             </a>
           </p>
         </div>

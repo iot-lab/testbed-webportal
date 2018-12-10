@@ -86,8 +86,6 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
   >
     <thead>
       <tr>
-        <!---->
-         
         <th>
           Nodes
         </th>
@@ -111,6 +109,8 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
         </th>
          
         <!---->
+         
+        <!---->
       </tr>
     </thead>
      
@@ -118,9 +118,9 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
       <tr
         class=""
       >
-        <!---->
-         
-        <td>
+        <td
+          class=""
+        >
           m3-9.saclay.iot-lab.info
         </td>
          
@@ -141,6 +141,8 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
         >
           
         </td>
+         
+        <!---->
          
         <!---->
       </tr>
@@ -168,9 +170,9 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
       <tr
         class=""
       >
-        <!---->
-         
-        <td>
+        <td
+          class=""
+        >
           m3-12.saclay.iot-lab.info
         </td>
          
@@ -191,6 +193,8 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
         >
           
         </td>
+         
+        <!---->
          
         <!---->
       </tr>
@@ -226,7 +230,7 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
     tabindex="-1"
   >
     <div
-      class="modal-dialog"
+      class="modal-dialog modal-lg"
     >
       <div
         class="modal-content"
@@ -276,7 +280,7 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
           <hr />
            
           <firmwarelist-stub
-            archi="m3,"
+            archi=""
             select="true"
           />
         </div>
@@ -343,7 +347,7 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
           class="modal-body py-4"
         >
           <monitoringlist-stub
-            archi="m3"
+            archi=""
             select="true"
           />
         </div>
