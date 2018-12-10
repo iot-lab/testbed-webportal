@@ -262,6 +262,18 @@ export default {
     })
   },
 
+  beforeRouteLeave (to, from, next) {
+    // called when the route that renders this component is about to
+    // be navigated away from.
+
+    // remove the Bootstrap modal backdrop
+    let backdrop = document.body.querySelector('.modal-backdrop')
+    if (backdrop) {
+      backdrop.remove()
+    }
+    next()
+  },
+
   beforeRouteUpdate (to, from, next) {
     // called when the route that renders this component has changed,
     // but this component is reused in the new route.
