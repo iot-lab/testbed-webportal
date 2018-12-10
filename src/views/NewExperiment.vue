@@ -86,9 +86,9 @@
               <p class="mb-2 lead text-muted">Select an architecture, site and quantity.</p>
               <div class="d-md-flex" style="max-width: 850px">
                 <filter-select v-model="filterArchi" title="Architecture" @input="filterSite = sites4Archi[0]; qty = 1"
-                  :items="archis.map(archi => Object({value: archi, option: this.$options.filters.formatArchiRadio(archi)}))">
+                  :items="sortedArchis">
                 </filter-select>
-                <filter-select title="Site" :items="sites4Archi" v-model="filterSite"></filter-select>
+                <filter-select title="Site" :items="sites4Archi.sort()" v-model="filterSite"></filter-select>
                 <filter-select :items="qtyAvailable" title="Qty" v-model.number="qty" style="max-width: 90px"></filter-select>
                 <label class="custom-control custom-checkbox mb-0 mt-1">
                   <input v-model="propMobile" type="checkbox" class="custom-control-input">
@@ -106,7 +106,7 @@
                 <span>Filters</span>&nbsp;
                 <filter-select :items="sites.map(s => s.site).sort()" all="All sites" v-model="filterSite"></filter-select>
                 <filter-select all="All architectures" v-model="filterArchi"
-                  :items="archis4Site.map(archi => Object({value: archi, option: this.$options.filters.formatArchiRadio(archi)}))">
+                  :items="sortedArchis4Site">
                 </filter-select>
                 <filter-select all="All mobility" :items="[{value: '1', option:'Mobile'}, {value: '0', option: 'Not mobile'}]" v-model="filterMobile"></filter-select>
 
@@ -146,7 +146,7 @@
                 <filter-select :items="sites.map(s => s.site).sort()" title="Site" v-model="filterSite"
                   @input="testArchi"></filter-select>
                 <filter-select title="Architecture" v-model="filterArchi"
-                  :items="archis4Site.map(archi => Object({value: archi, option: this.$options.filters.formatArchiRadio(archi)}))">
+                  :items="sortedArchis4Site">
                 </filter-select>
                 <input id="nodeIds" v-model="nodeIds" class="form-control form-control-sm mr-2" type="text" placeholder="IDs (e.g. 1-5+7)"
                   data-toggle="popover"
@@ -466,6 +466,26 @@ export default {
           if (!list.includes(node.archi)) { list.push(node.archi) }
           return list
         }, [])
+    },
+    sortedArchis () {
+      // let's sort the archis with (a8, m3 & wsn) on top
+      let mainArchis = ['a8:at86rf231', 'm3:at86rf231', 'wsn430:cc1101']
+      let main = this.archis.filter(a => mainArchis.includes(a)).sort()
+      let other = this.archis.filter(a => !mainArchis.includes(a)).sort()
+      let all = main.map(archi => Object({value: archi, option: this.$options.filters.formatArchiRadio(archi)}))
+        .concat([{value: '_separator_', option: '───────────'}])
+        .concat(other.map(archi => Object({value: archi, option: this.$options.filters.formatArchiRadio(archi)})))
+      return all
+    },
+    sortedArchis4Site () {
+      // let's sort the archis with (a8, m3 & wsn) on top
+      let mainArchis = ['a8:at86rf231', 'm3:at86rf231', 'wsn430:cc1101']
+      let main = this.archis4Site.filter(a => mainArchis.includes(a)).sort()
+      let other = this.archis4Site.filter(a => !mainArchis.includes(a)).sort()
+      let all = main.map(archi => Object({value: archi, option: this.$options.filters.formatArchiRadio(archi)}))
+        .concat([{value: '_separator_', option: '───────────'}])
+        .concat(other.map(archi => Object({value: archi, option: this.$options.filters.formatArchiRadio(archi)})))
+      return all
     },
     sites4Archi () {
       return this.nodes.filter((node) => {

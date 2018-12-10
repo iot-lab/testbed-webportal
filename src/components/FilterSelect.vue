@@ -2,7 +2,9 @@
   <select class="form-control form-control-sm text-capitalize mr-2 d-inline-block" @change="filterChanged">
     <option value="all" :selected="value === 'all' || value === 0" disabled v-if="title">{{title}}</option>
     <option value="all" :selected="value === 'all'" v-if="all">{{all}}</option>
-    <option v-for="item in items" class="text-capitalize" :value="item.value || item" :selected="value === (item.value || item)">{{item.option || item}}</option>
+    <option v-for="item in items" class="text-capitalize" :value="item.value || item" :selected="value === (item.value || item)" :disabled="item.value === '_separator_'">
+      {{item.option || item}}
+    </option>
   </select>
 </template>
 
