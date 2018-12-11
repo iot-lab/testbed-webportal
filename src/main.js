@@ -15,12 +15,15 @@ import {iotlab} from './rest'
 import './filters'
 import './directives'
 
+import { map3d } from '@/assets/map3d/map'
+
 Vue.use(VeeValidate)
 Vue.use(Notifications, {velocity})
 
 Vue.config.productionTip = false
 
 window.iotlab = iotlab
+window.map3d = map3d
 
 /* eslint-disable no-new */
 new Vue({
