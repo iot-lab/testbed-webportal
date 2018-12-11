@@ -39,7 +39,7 @@ function loadNodes (liste) {
  *
  */
 
-function init3d () {
+function init () {
   phi = -100
   theta = 0
   distance = 100
@@ -250,28 +250,31 @@ function initColors () {
  * (fonction d'affichage)
  *
  */
-function render () {
+function render (computeCamPos = true) {
   // requestAnimationFrame(render)
   initColors()
   // controls.update();
   // nodeInfo.innerHTML = " Cam Pos = " + camera.position.x + "," + camera.position.y + "," + camera.position.z
   // + " - " + theta + "," + phi + ","+ distance
   // nodeInfo.innerHTML = selectedNodes
-  camera.position.x = distance * Math.sin(theta * Math.PI / 360) * Math.cos(phi * Math.PI / 360)
-  camera.position.y = distance * Math.sin(phi * Math.PI / 360)
-  camera.position.z = distance * Math.cos(theta * Math.PI / 360) * Math.cos(phi * Math.PI / 360)
+  if (computeCamPos) {
+    camera.position.x = distance * Math.sin(theta * Math.PI / 360) * Math.cos(phi * Math.PI / 360)
+    camera.position.y = distance * Math.sin(phi * Math.PI / 360)
+    camera.position.z = distance * Math.cos(theta * Math.PI / 360) * Math.cos(phi * Math.PI / 360)
+  }
   camera.lookAt(scene.position)
   camera.updateMatrix()
   renderer.setClearColor(0x343a40, 1)
   // renderer.clear()
   renderer.render(scene, camera)
 
-  if (logInfo !== 'Cam Pos = ' + camera.position.x + ',' + camera.position.y + ',' + camera.position.z +
-                 ' - ' + theta + ',' + phi + ',' + distance) {
-    logInfo = 'Cam Pos = ' + camera.position.x + ',' + camera.position.y + ',' + camera.position.z +
-                 ' - ' + theta + ',' + phi + ',' + distance
+  if (logInfo !== 'Cam Pos (x, y, z | theta, phi, dist) = ' + camera.position.x + ',' + camera.position.y + ',' + camera.position.z +
+                 ' | ' + theta + ',' + phi + ',' + distance) {
+    logInfo = 'Cam Pos (x, y, z | theta, phi, dist) = ' + camera.position.x + ',' + camera.position.y + ',' + camera.position.z +
+                 ' | ' + theta + ',' + phi + ',' + distance
     console.log(logInfo)
   }
+  console.log('Scene Pos', scene.position)
 }
 
 /*
@@ -534,9 +537,45 @@ function setSelectedNodes (nodes) {
   render()
 }
 
-export {
+/*
+ * Set camera position with rectangular coordinates
+ *
+ */
+function setCameraRect (x, y, z) {
+  camera.position.x = x
+  camera.position.y = y
+  camera.position.z = z
+  render(false)
+}
+
+/*
+ * Set camera position with spherical coordinates
+ *
+ */
+function setCameraSphere (d, theta_, phi_) {
+  distance = d
+  theta = theta_
+  phi = phi_
+  render()
+}
+
+/*
+ * Set scene origin position
+ *
+ */
+function setScenePosition (x, y, z) {
+  scene.position.x = x
+  scene.position.y = y
+  scene.position.z = z
+  render()
+}
+
+export const map3d = {
   loadNodes,
-  init3d,
+  init,
   setSelectedCallback,
   setSelectedNodes,
+  setCameraRect,
+  setCameraSphere,
+  setScenePosition,
 }
