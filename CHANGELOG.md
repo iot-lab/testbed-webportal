@@ -1,3 +1,32 @@
+##  1.1.0 (2018-12-11)
+
+### New features
+
+* Resources
+  * add user & preset firmwares store
+* Experiment details
+  * add per-node actions
+  * add node uids
+  * add update monitoring to running nodes
+  * add flash firmwares from store
+  * view node camera
+  * access node serial port in web terminal
+* New experiment
+  * handle firmware upload collision (auto add md5 to the filename)
+* User account
+  * delete user account is now functional
+  * updated mailing list link
+
+### Enhancements
+
+* Various bug fixes and UI improvements
+
+### Internal
+
+* Remove old api
+* Update nodes properties to both apis
+* Prevent signup to devwww
+
 ##  1.0.2 (2018-10-12)
 
 ### Enhancements
