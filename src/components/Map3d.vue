@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { loadNodes, init3d, setSelectedCallback, setSelectedNodes } from '@/assets/map3d/map'
+import { map3d } from '@/assets/map3d/map'
 import $ from 'jquery'
 
 export default {
@@ -52,7 +52,7 @@ export default {
   },
 
   created () {
-    setSelectedCallback(this.selectionChanged)
+    map3d.setSelectedCallback(this.selectionChanged)
   },
 
   computed: {
@@ -74,22 +74,22 @@ export default {
         $('#nodeInfo').show()
         if (this.shows) {
           console.log(this.shows)
-          loadNodes(this.nodes)
-          init3d()
+          map3d.loadNodes(this.nodes)
+          map3d.init()
         }
       }
     },
     selectedNodes: function (nodes) {
-      // setSelectedNodes(value)
+      // map3d.setSelectedNodes(value)
     },
     value: function (value) {
-      setSelectedNodes(value)
+      map3d.setSelectedNodes(value)
     },
     shows: function (shows) {
       console.log('shows', shows)
       if (shows) {
-        loadNodes(this.nodes)
-        init3d()
+        map3d.loadNodes(this.nodes)
+        map3d.init()
       }
     },
   },
