@@ -94,7 +94,6 @@
 <script>
 import WordpressNavbar from '@/wp-menu/WordpressNavbar'
 import { auth } from '@/auth'
-import $ from 'jquery'
 
 export default {
   name: 'app',
@@ -103,14 +102,6 @@ export default {
     return {
       auth: auth,
     }
-  },
-
-  mounted () {
-    $('[data-toggle="popover"]').popover({
-      trigger: 'click hover',
-      delay: { show: 250, hide: 750 },
-      html: true,
-    })
   },
 
   methods: {
