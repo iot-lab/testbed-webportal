@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { map3d } from '@/assets/map3d/map'
+import { map3d } from '@/assets/map3d/map3d'
 import $ from 'jquery'
 
 export default {

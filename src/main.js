@@ -15,7 +15,7 @@ import {iotlab} from './rest'
 import './filters'
 import './directives'
 
-import { map3d } from '@/assets/map3d/map'
+import { map3d } from '@/assets/map3d/map3d'
 
 Vue.use(VeeValidate)
 Vue.use(Notifications, {velocity})
