@@ -258,9 +258,9 @@ function render (computeCamPos = true) {
   // + " - " + theta + "," + phi + ","+ distance
   // nodeInfo.innerHTML = selectedNodes
   if (computeCamPos) {
-    camera.position.x = distance * Math.sin(theta * Math.PI / 360) * Math.cos(phi * Math.PI / 360)
-    camera.position.y = distance * Math.sin(phi * Math.PI / 360)
-    camera.position.z = distance * Math.cos(theta * Math.PI / 360) * Math.cos(phi * Math.PI / 360)
+    camera.position.x = scene.position.x + distance * Math.sin(theta * Math.PI / 360) * Math.cos(phi * Math.PI / 360)
+    camera.position.y = scene.position.y + distance * Math.sin(phi * Math.PI / 360)
+    camera.position.z = scene.position.z + distance * Math.cos(theta * Math.PI / 360) * Math.cos(phi * Math.PI / 360)
   }
   camera.lookAt(scene.position)
   camera.updateMatrix()
@@ -475,6 +475,20 @@ function onDocumentMouseMoveRot (event) {
  *
  */
 function onDocumentMouseMoveTranslate (event) {
+  console.log('translate')
+  var NewmouseX = event.clientX
+  var NewmouseY = event.clientY
+  var DeltaX = NewmouseX - mouseX
+  var DeltaY = NewmouseY - mouseY
+
+  mouseX = NewmouseX
+  mouseY = NewmouseY
+
+  scene.position.x -= DeltaX
+  scene.position.y += DeltaY
+  camera.position.x -= DeltaX
+  camera.position.y += DeltaY
+  render(false)
 }
 
 /*
