@@ -193,7 +193,7 @@
             </div>
           </span>
           <span class="badge badge-light badge-tag tag-remove cursor"
-            @click="group.nodes.map(node => removeNode(node))"
+            @click="hideTooltip(); group.nodes.map(node => removeNode(node))"
             v-tooltip="`Clear ${group.nodes.length} nodes`"><i class="fa fa-trash-o"></i></span>
         </div>
       </div>
@@ -231,7 +231,7 @@
             </div>
           </span>
           <span class="badge badge-light badge-tag tag-remove cursor"
-            @click="removeProp(index)"
+            @click="hideTooltip(); removeProp(index)"
             v-tooltip="`Clear ${p.prop.nbnodes} nodes`"><i class="fa fa-trash-o"></i></span>
         </div>
       </div>
@@ -554,6 +554,9 @@ export default {
   },
 
   methods: {
+    hideTooltip () {
+      $('.tooltip[role=tooltip]').remove()
+    },
     refreshNodes () {
       iotlab.getNodes().then(data => { this.nodes = data.map(node => newNode(node)) })
         .catch(err => {
