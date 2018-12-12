@@ -1,4 +1,4 @@
-// Categories for IoT-LAB users
+// Camera views for IoT-LAB sites
 
 const SiteCameras = {
   devgrenoble: [
