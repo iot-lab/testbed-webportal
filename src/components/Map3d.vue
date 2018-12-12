@@ -13,11 +13,23 @@
     </div>
     <div id="map3d" oncontextmenu="return false"></div>
     <div id="nodeInfo" class="p-2 text-white"></div>
+    <form id="cameraInfo" class="m-2 form-inline">
+      <div class="input-group" v-if="nbSites === 1 && siteCameras.length > 1">
+        <span class="input-group-addon">
+          <i class="fa fa-video-camera"></i>
+        </span>
+        <select v-model="camera" class="bg-light form-control custom-select" @change="setCamera">
+          <option disabled>Select view</option>
+          <option v-for="cam in cameras[site]" :value="cam">{{cam.name}}</option>
+        </select>
+      </div>
+    </form>
   </div>
 </template>
 
 <script>
 import { map3d } from '@/assets/map3d/map3d'
+import SiteCameras from '@/assets/map3d/SiteCameras.config'
 import $ from 'jquery'
 
 export default {
@@ -48,6 +60,8 @@ export default {
 
   data () {
     return {
+      cameras: SiteCameras,
+      camera: undefined,
     }
   },
 
@@ -62,6 +76,12 @@ export default {
     nbSites () {
       return new Set(this.nodes.map(node => node.site)).size
     },
+    site () {
+      return this.sites[0]
+    },
+    siteCameras () {
+      return SiteCameras[this.site] || []
+    },
   },
 
   watch: {
@@ -69,13 +89,19 @@ export default {
       if (this.nbSites > 1) {
         $('#map3d').hide()
         $('#nodeInfo').hide()
+        $('#cameraInfo').hide()
       } else {
         $('#map3d').show()
         $('#nodeInfo').show()
+        $('#cameraInfo').show()
         if (this.shows) {
           console.log(this.shows)
           map3d.loadNodes(this.nodes)
           map3d.init()
+          if (this.siteCameras.length > 0) {
+            this.camera = this.siteCameras[0]
+            this.setCamera()
+          }
         }
       }
     },
@@ -102,6 +128,12 @@ export default {
     setSite (site) {
       this.$emit('selectSite', site)
     },
+    setCamera () {
+      let camera = this.camera.camera
+      let origin = this.camera.origin
+      map3d.setScenePosition(origin.x, origin.y, origin.z)
+      map3d.setCameraRect(camera.x, camera.y, camera.z)
+    },
   },
 }
 </script>
@@ -118,6 +150,12 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
+  user-select: none;
+}
+#cameraInfo {
+  position: absolute;
+  top: 0;
+  right: 0;
   user-select: none;
 }
 </style>
