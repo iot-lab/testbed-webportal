@@ -15,12 +15,9 @@
     <div id="nodeInfo" class="p-2 text-white"></div>
     <form id="cameraInfo" class="m-2 form-inline">
       <div class="input-group" v-if="nbSites === 1 && siteCameras.length > 1">
-        <span class="input-group-addon">
-          <i class="fa fa-video-camera"></i>
-        </span>
+        <span class="input-group-addon">View</span>
         <select v-model="camera" class="bg-light form-control custom-select" @change="setCamera">
-          <option disabled>Select view</option>
-          <option v-for="cam in cameras[site]" :value="cam">{{cam.name}}</option>
+          <option v-for="cam in cameras[site]" :value="cam" :selected="cam.name === camera.name">{{cam.name}}</option>
         </select>
       </div>
     </form>
@@ -74,7 +71,7 @@ export default {
       return [...new Set(this.nodes.map(node => node.site))].sort()
     },
     nbSites () {
-      return new Set(this.nodes.map(node => node.site)).size
+      return this.sites.length
     },
     site () {
       return this.sites[0]
@@ -95,7 +92,7 @@ export default {
         $('#nodeInfo').show()
         $('#cameraInfo').show()
         if (this.shows) {
-          console.log(this.shows)
+          console.debug(this.shows)
           map3d.loadNodes(this.nodes)
           map3d.init()
           if (this.siteCameras.length > 0) {
@@ -112,10 +109,14 @@ export default {
       map3d.setSelectedNodes(value)
     },
     shows: function (shows) {
-      console.log('shows', shows)
+      console.debug('shows', shows)
       if (shows) {
         map3d.loadNodes(this.nodes)
         map3d.init()
+        if (this.siteCameras.length > 0) {
+          this.camera = this.siteCameras[0]
+          this.setCamera()
+        }
       }
     },
   },
@@ -129,8 +130,8 @@ export default {
       this.$emit('selectSite', site)
     },
     setCamera () {
-      let camera = this.camera.camera
       let origin = this.camera.origin
+      let camera = this.camera.camera
       map3d.setScenePosition(origin.x, origin.y, origin.z)
       map3d.setCameraRect(camera.x, camera.y, camera.z)
     },
