@@ -1,6 +1,13 @@
 // Camera views for IoT-LAB sites
 
 const SiteCameras = {
+  grenoble: [
+    {
+      name: 'Default',
+      camera: {x: 11, y: -216, z: 176},
+      origin: {x: 11, y: -6, z: 0},
+    },
+  ],
   devgrenoble: [
     {
       name: 'Default',
