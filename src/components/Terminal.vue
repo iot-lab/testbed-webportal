@@ -128,6 +128,7 @@ export default {
       let ws = new WebSocket(wsUrl, [this.user, 'token', this.token])
       this.ws = ws
       let term = this.$terminal
+      let previousCmd = ''
 
       ws.onopen = (event) => {
         // this.$notify({text: 'Terminal connected to serial port', type: 'info'})
@@ -135,7 +136,7 @@ export default {
         let buffer = ''
 
         term.on('key', (key, event) => {
-          if (connType === 'serial' && event.key === 'Backspace') {
+          if (event.key === 'Backspace') {
             term.write('\b \b')
             buffer = buffer.slice(0, -1)
           } else if (event.key === 'Del') {
@@ -147,6 +148,7 @@ export default {
             }
             term.write(key)
             if (event.key === 'Enter') {
+              previousCmd = buffer
               term.write('\n')
               ws.send(buffer + '\n')
               buffer = ''
@@ -158,7 +160,17 @@ export default {
       }
 
       ws.onmessage = (event) => {
-        term.write(event.data)
+        let toPrint = event.data
+        // on A8, the ssh connection reply with the previous command first.
+        // The next block eliminates it from the reply.
+        if (this.node.startsWith('a8')) {
+          let lines = event.data.split('\n')
+          if (lines[0].trim() === previousCmd) {
+            lines.shift()
+          }
+          toPrint = lines.join('\n')
+        }
+        term.write(toPrint)
       }
 
       ws.onclose = (event) => {
