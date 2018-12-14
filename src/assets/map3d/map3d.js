@@ -1,6 +1,4 @@
 import { THREE } from 'three'
-// import { CanvasRenderer, SpriteCanvasMaterial } from '@/assets/map3d/CanvasRenderer'
-// import TrackballControls from 'three-trackballcontrols'
 
 var sTestEventType = 'mousedown'
 
@@ -8,7 +6,6 @@ var phi, theta, distance
 
 var mouseX, mouseY
 var renderer, scene, camera, projector
-// var pointLight, dirLight, dirLightHeper, hemiLight, hemiLightHelper, controls
 
 var nodeInfo, container
 
@@ -17,14 +14,13 @@ var selectedCallback
 var objects
 
 var window3DWidth, window3DHeight
-// var offX, offY
 
 // list of selected nodes
 var selectedNodes = []
 // node list used in 3D vue
 var mapNodes
 
-var logInfo
+// var logInfo
 
 /*
  * Fonction qui récupère la liste de tous les noeuds de la vue
@@ -51,75 +47,13 @@ function init () {
   container.innerHTML = ''
   nodeInfo.innerHTML = ''
 
-  // selectedInfo = document.getElementById('selectedInfo')
-  // selectedInfo.innerHTML = ''
-  // selectedNodes = []
-
   objects = []
 
-  // renderer = new THREE.WebGLRenderer()
   renderer = new THREE.CanvasRenderer()
   scene = new THREE.Scene()
   camera = new THREE.PerspectiveCamera(75, window3DWidth / window3DHeight, 1, 10000)
   // Projecteur utiliser pour la selection de noeuds.
   projector = new THREE.Projector()
-
-  // pointLight = new THREE.PointLight( 0xffffff )
-  // pointLight.position.set(0,0,0)
-  // camera.add(pointLight)
-  // var pointLight2 = new THREE.PointLight( 0xffffff )
-  // pointLight2.position.set(3,3,3)
-  // camera.add(pointLight2)
-
-  // CONTROLS
-  // controls = new TrackballControls( camera );
-  // controls.rotateSpeed = 1.0;
-  // controls.zoomSpeed = 1.2;
-  // controls.panSpeed = 0.8;
-  // controls.noZoom = false;
-  // controls.noPan = false;
-  // controls.staticMoving = true;
-  // controls.dynamicDampingFactor = 0.3;
-  // controls.keys = [ 65, 83, 68 ];
-  // controls.addEventListener( 'change', renderer );
-
-  // LIGHTS
-  // hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.6 )
-  // hemiLight.color.setHSL( 0.6, 1, 0.6 )
-  // hemiLight.groundColor.setHSL( 0.095, 1, 0.75 )
-  // hemiLight.position.set( 0, 50, 0 )
-  // scene.add( hemiLight )
-  // hemiLightHelper = new THREE.HemisphereLightHelper( hemiLight, 10 )
-  // scene.add( hemiLightHelper )
-  //
-  // dirLight = new THREE.DirectionalLight( 0xffffff, 1 )
-  // dirLight.color.setHSL( 0.1, 1, 0.95 )
-  // dirLight.position.set( -1, 1.75, 1 )
-  // dirLight.position.multiplyScalar( 30 )
-  // scene.add( dirLight )
-  // dirLight.castShadow = true
-  // dirLight.shadow.mapSize.width = 2048
-  // dirLight.shadow.mapSize.height = 2048
-  // dirLight.shadowMapWidth = 2048
-  // dirLight.shadowMapHeight = 2048
-  // var d = 50
-  // dirLight.shadow.camera.left = -d
-  // dirLight.shadow.camera.right = d
-  // dirLight.shadow.camera.top = d
-  // dirLight.shadow.camera.bottom = -d
-  // dirLight.shadow.camera.far = 3500
-  // dirLight.shadow.bias = -0.0001
-  // dirLight.shadowCameraLeft = -d
-  // dirLight.shadowCameraRight = d
-  // dirLight.shadowCameraTop = d
-  // dirLight.shadowCameraBottom = -d
-  // dirLight.shadowCameraFar = 3500
-  // dirLight.shadowBias = -0.0001
-  // dirLightHeper = new THREE.DirectionalLightHelper( dirLight, 10 )
-  // scene.add( dirLightHeper )
-
-  // offY = container.offsetTop
-  // offX = container.offsetLeft
 
   container.appendChild(renderer.domElement)
 
@@ -147,8 +81,6 @@ function init () {
 }
 
 function set3dsize () {
-  // offY = container.offsetTop
-  // offX = container.offsetLeft
   window3DWidth = container.offsetWidth
   window3DHeight = container.offsetHeight
   renderer.setSize(window3DWidth, window3DHeight)
@@ -221,9 +153,6 @@ function initColors () {
     objects[i].scale.x = objects[i].scale.y = 1
     if (selectedNodes.findIndex(obj => obj.network_address === objects[i].name) !== -1) {
       // bleu clair
-      // objects[i].material.color.setHex(0x0099CC)
-      // objects[i].material.color.setHex(0x17a2b8)
-      // objects[i].material.color.setHex(0x1ed6f3)
       objects[i].material.color.setHex(0x05a8fd)
       objects[i].scale.x = objects[i].scale.y = 1.4
     } else if (objects[i].state === 'Dead') {
@@ -234,12 +163,9 @@ function initColors () {
       objects[i].material.color.setHex(0xfd7e14)
     } else if (objects[i].state === 'Alive') {
       // vert
-      // objects[i].material.color.setHex(0x20c997)
-      // objects[i].material.color.setHex(0x7FFF00)
       objects[i].material.color.setHex(0x0ce43d)
     } else {
       // rouge
-      // objects[i].material.color.setHex(0xdc3545)
       objects[i].material.color.setHex(0xFF3030)
     }
   }
@@ -253,10 +179,6 @@ function initColors () {
 function render (computeCamPos = true) {
   // requestAnimationFrame(render)
   initColors()
-  // controls.update();
-  // nodeInfo.innerHTML = " Cam Pos = " + camera.position.x + "," + camera.position.y + "," + camera.position.z
-  // + " - " + theta + "," + phi + ","+ distance
-  // nodeInfo.innerHTML = selectedNodes
   if (computeCamPos) {
     camera.position.x = scene.position.x + distance * Math.sin(theta * Math.PI / 360) * Math.cos(phi * Math.PI / 360)
     camera.position.y = scene.position.y + distance * Math.sin(phi * Math.PI / 360)
@@ -268,12 +190,7 @@ function render (computeCamPos = true) {
   // renderer.clear()
   renderer.render(scene, camera)
 
-  if (logInfo !== 'Cam Pos (x, y, z | theta, phi, dist) = ' + camera.position.x + ',' + camera.position.y + ',' + camera.position.z +
-                 ' | ' + theta + ',' + phi + ',' + distance) {
-    logInfo = 'Cam Pos (x, y, z | theta, phi, dist) = ' + camera.position.x + ',' + camera.position.y + ',' + camera.position.z +
-                 ' | ' + theta + ',' + phi + ',' + distance
-    console.log(logInfo)
-  }
+  console.log(`Cam Pos (x, y, z | theta, phi, dist) = ${camera.position.x}, ${camera.position.y}, ${camera.position.z} | ${theta}, ${phi}, ${distance}`)
   console.log('Scene Pos (x, y, z)', scene.position)
 }
 
