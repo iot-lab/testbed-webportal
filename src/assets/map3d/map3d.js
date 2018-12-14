@@ -274,7 +274,7 @@ function render (computeCamPos = true) {
                  ' | ' + theta + ',' + phi + ',' + distance
     console.log(logInfo)
   }
-  console.log('Scene Pos', scene.position)
+  console.log('Scene Pos (x, y, z)', scene.position)
 }
 
 /*
@@ -559,7 +559,13 @@ function setCameraRect (x, y, z) {
   camera.position.x = x
   camera.position.y = y
   camera.position.z = z
-  render(false)
+  let dx = x - scene.position.x
+  let dy = y - scene.position.y
+  let dz = z - scene.position.z
+  distance = Math.sqrt(dx ** 2 + dy ** 2 + dz ** 2)
+  theta = Math.atan2(dx, dz) * 360 / Math.PI
+  phi = Math.asin(dy / distance) * 360 / Math.PI
+  render()
 }
 
 /*
