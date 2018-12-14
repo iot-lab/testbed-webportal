@@ -15,5 +15,12 @@ exports[`Map3d.vue should match snapshot 1`] = `
     class="p-2 text-white"
     id="nodeInfo"
   />
+   
+  <form
+    class="m-2 form-inline"
+    id="cameraInfo"
+  >
+    <!---->
+  </form>
 </div>
 `;
