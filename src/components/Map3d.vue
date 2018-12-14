@@ -14,9 +14,9 @@
     <div id="map3d" oncontextmenu="return false"></div>
     <div id="nodeInfo" class="p-2 text-white"></div>
     <form id="cameraInfo" class="m-2 form-inline">
-      <div class="input-group" v-if="nbSites === 1 && siteCameras.length > 1">
+      <div class="input-group input-group-sm" v-if="nbSites === 1 && siteCameras.length > 1">
         <span class="input-group-addon">View</span>
-        <select v-model="camera" class="bg-light form-control custom-select" @change="setCamera">
+        <select v-model="camera" class="bg-light form-control custom-select" @change="setCamera" style="padding-right: 1.65rem">
           <option v-for="cam in cameras[site]" :value="cam" :selected="cam.name === camera.name">{{cam.name}}</option>
         </select>
       </div>
