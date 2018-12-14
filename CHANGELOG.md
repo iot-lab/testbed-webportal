@@ -1,4 +1,4 @@
-##  1.1.0 (2018-12-11)
+##  1.1.0 (2018-12-1x)
 
 ### New features
 
@@ -16,6 +16,9 @@
 * User account
   * delete user account is now functional
   * updated mailing list link
+* 3D Map
+  * drag scene with left-click (pan)
+  * multiple camera views per site
 
 ### Enhancements
 
