@@ -8,6 +8,28 @@ const SiteCameras = {
       origin: {x: 11, y: -6, z: 0},
     },
   ],
+  saclay: [
+    {
+      name: 'Default',
+      camera: {x: 6, y: -376, z: 130},
+      origin: {x: 10, y: -212, z: 0},
+    },
+    {
+      name: 'Basement',
+      camera: {x: 14, y: -313, z: 189},
+      origin: {x: 10, y: -193, z: 0},
+    },
+    {
+      name: 'Room 1',
+      camera: {x: -107, y: 262, z: 41},
+      origin: {x: -107, y: 342, z: 0},
+    },
+    {
+      name: 'Room 2',
+      camera: {x: -116, y: 110, z: 75},
+      origin: {x: -115, y: 160, z: 0},
+    },
+  ],
   devgrenoble: [
     {
       name: 'Default',
@@ -26,7 +48,23 @@ const SiteCameras = {
     },
   ],
   devlille: [],
-  devsaclay: [],
+  devsaclay: [
+    {
+      name: 'Default',
+      camera: {x: -107, y: 262, z: 41},
+      origin: {x: -107, y: 342, z: 0},
+    },
+    {
+      name: 'Room 2',
+      camera: {x: -116, y: 110, z: 75},
+      origin: {x: -115, y: 160, z: 0},
+    },
+    {
+      name: 'Basement',
+      camera: {x: 14, y: -313, z: 189},
+      origin: {x: 10, y: -193, z: 0},
+    },
+  ],
   devstrasbourg: [],
 }
 
