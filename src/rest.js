@@ -286,6 +286,18 @@ export const iotlab = {
     return iotlab.api.get(`/mobilities/circuits/${name}`).then(resp => resp.data)
   },
 
+  async getMobilityModels () {
+    return iotlab.api.get('/mobilities/models').then(resp => resp.data.items)
+  },
+
+  async getMobilityModel (name) {
+    return iotlab.api.get(`/mobilities/models/${name}`).then(resp => resp.data)
+  },
+
+  async getMobilityModelFile (name) {
+    return iotlab.api.get(`/mobilities/models/${name}/file`).then(resp => resp.data)
+  },
+
   async getRobotsSiteMapImage (site) {
     return iotlab.api.get(`/robots/${site}/map/image`, {
       responseType: 'arraybuffer',
@@ -308,8 +320,27 @@ export const iotlab = {
     return iotlab.api.put(`/mobilities/circuits/${name}`, circuit)
   },
 
+  formModel (model, modelFile) {
+    const formData = new FormData()
+    formData.append('model.json', JSON.stringify(model))
+    formData.append(model.script, new Blob([modelFile], {type: 'application/octet-stream'}), model.script)
+    return formData
+  },
+
+  async createMobilityModel (model, modelFile) {
+    return iotlab.api.post(`/mobilities/models`, this.formModel(model, modelFile))
+  },
+
+  async updateMobilityModel (name, model, modelFile) {
+    return iotlab.api.put(`/mobilities/models/${name}`, this.formModel(model, modelFile))
+  },
+
   async deleteMobilityCircuit (name) {
     return iotlab.api.delete(`/mobilities/circuits/${name}`)
+  },
+
+  async deleteMobilityModel (name) {
+    return iotlab.api.delete(`/mobilities/models/${name}`)
   },
 
   async getMonitoringProfiles () {

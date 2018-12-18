@@ -12,8 +12,8 @@
         <router-link :to="{name:'listFirmware'}" class="list-group-item list-group-item-action" active-class="active">
           <i class="fa fa-fw fa-microchip" aria-hidden="true"></i> Firmwares
         </router-link>
-        <router-link :to="{name:'listMobilityCircuit'}" class="list-group-item list-group-item-action" active-class="active">
-          <i class="fa fa-fw fa-random" aria-hidden="true"></i> Mobility circuits
+        <router-link :to="{name:'listMobility'}" class="list-group-item list-group-item-action" active-class="active">
+          <i class="fa fa-fw fa-random" aria-hidden="true"></i> Mobilities
         </router-link>
       </div>
     </div>
@@ -24,5 +24,4 @@
     </div>
   </div>
 </div> <!-- container -->
-
 </template>

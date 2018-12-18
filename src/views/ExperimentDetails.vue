@@ -209,7 +209,7 @@
 import Terminal from '@/components/Terminal'
 import MonitoringList from '@/components/MonitoringList'
 import FirmwareList from '@/components/FirmwareList'
-import CircuitList from '@/components/mobility/CircuitList'
+import MobilityList from '@/components/mobility/List'
 import { iotlab } from '@/rest'
 import { auth } from '@/auth'
 import { experimentStates, extractArchiFromAddress, extractSiteFromAddress } from '@/assets/js/iotlab-utils'
@@ -225,7 +225,7 @@ export default {
     Terminal,
     MonitoringList,
     FirmwareList,
-    CircuitList,
+    MobilityList,
   },
 
   props: {

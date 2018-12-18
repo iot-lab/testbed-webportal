@@ -198,7 +198,7 @@
             <div class="dropdown-menu dropdown-menu-right">
               <div class="card-body">
                 <p class="lead">Assign a mobility <span class="text-muted">(optional)</span></p>
-                <circuit-list :site="group.site" :select="true" @select="mobility => { group.mobility = mobility }"></circuit-list>
+                <mobility-list :site="group.site" :select="true" @select="mobility => { group.mobility = mobility }"></mobility-list>
               </div>
             </div>
           </span>
@@ -247,7 +247,7 @@
             <div class="dropdown-menu dropdown-menu-right">
               <div class="card-body">
                 <p class="lead">Assign a mobility <span class="text-muted">(optional)</span></p>
-                <circuit-list :site="p.site" :select="true" @select="mobility => { p.mobility = mobility }"></circuit-list>
+                <mobility-list :site="p.site" :select="true" @select="mobility => { p.mobility = mobility }"></mobility-list>
               </div>
             </div>
           </span>
@@ -291,7 +291,7 @@ import Multiselect from 'vue-multiselect'
 import FilterSelect from '@/components/FilterSelect'
 import MonitoringList from '@/components/MonitoringList'
 import FirmwareList from '@/components/FirmwareList'
-import CircuitList from '@/components/mobility/CircuitList'
+import MobilityList from '@/components/mobility/List'
 import Map3d from '@/components/Map3d'
 import 'vue-multiselect/dist/vue-multiselect.min.css'
 import 'tempusdominus-bootstrap-4'
@@ -346,7 +346,7 @@ export default {
     FilterSelect,
     MonitoringList,
     FirmwareList,
-    CircuitList,
+    MobilityList,
     Map3d,
   },
 
@@ -559,7 +559,7 @@ export default {
       if (fwasso.length === 0) return null
       return fwasso
     },
-    associations () {
+    mobilityAssociations () {
       let asso
       if (this.mode === 'byprop') {
         asso = this.selectedProps.filter(prop => prop.mobility !== undefined)
@@ -793,7 +793,7 @@ export default {
           duration: this.duration * this.durationMultiplier,
           reservation: this.scheduleEpoch,
           nodes: (this.mode === 'byprop') ? this.selectedProps.map(p => p.prop) : this.selectedNodes.map(node => node.network_address),
-          associations: this.associations,
+          assocations: this.mobilityAssociations,
           profileassociations: this.monitoringAssociations,
           firmwareassociations: this.firmwareAssociations,
           firmwares: this.firmwares,

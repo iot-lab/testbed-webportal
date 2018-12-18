@@ -4,4 +4,5 @@ export default {
   profiles: [],
   firmwares: [],
   circuits: [],
+  models: [],
 }

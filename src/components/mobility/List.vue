@@ -1,0 +1,158 @@
+<template>
+  <div>
+    <div class="float-right" style="display: block">
+      <router-link :to="{name: 'newMobilityCircuit'}" class="btn btn-sm btn-success"><i class="fa fa-plus"></i>New Mobility Circuit</router-link>
+      <router-link :to="{name: 'newMobilityModel'}" class="btn btn-sm btn-success"><i class="fa fa-plus"></i>New Mobility Model</router-link>
+    </div>
+    <ul class="nav nav-tabs" style="position: relative; top: 1px">
+      <li class="nav-item" v-tooltip:top="'All'">
+        <a class="nav-link active" data-toggle="list" href="#all" role="tab" aria-controls="all" @click="filterMobilityType = 'all'"> All mobilities </a>
+      </li>
+      <li class="nav-item" v-tooltip:top="'Circuits'">
+        <a class="nav-link" data-toggle="list" href="#circuits" role="tab" aria-controls="circuits" @click="filterMobilityType = 'circuits'"> Circuits </a>
+      </li>
+      <li class="nav-item" v-tooltip:top="'Models'">
+        <a class="nav-link" data-toggle="list" href="#models" role="tab" aria-controls="models" @click="filterMobilityType = 'models'"> Models </a>
+      </li>
+    </ul>
+    <p v-if="sites && filterMobilityType === 'circuits'" class="mb-2">
+      <span class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentSite === 'all', 'badge-secondary': currentSite !== 'all'}" @click="currentSite = 'all'">{{sites.length}} sites</span>
+      <span v-for="site in sites" class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentSite === site, 'badge-secondary': currentSite !== site}"
+            @click="currentSite = site">{{site.site}}</span>
+    </p>
+    <ul class="nav nav-tabs" style="position: relative; top: 1px">
+      <li class="nav-item" v-tooltip:top="'User'">
+        <a class="nav-link active" data-toggle="list" href="#userdefined" role="tab" aria-controls="userdefined" @click="filterType = 'userdefined'"> User </a>
+      </li>
+      <li class="nav-item" v-tooltip:top="'Presets'">
+        <a class="nav-link" data-toggle="list" href="#predefined" role="tab" aria-controls="predefined" @click="filterType = 'predefined'"> Presets </a>
+      </li>
+    </ul>
+    <table class="table table-striped table-sm mt-3">
+      <thead>
+      <tr v-if="filterMobilityType === 'circuits'">
+        <th class="cursor" title="sort by name" @click="sortBy(p => p.name)">Circuit</th>
+        <th class="cursor" title="sort by site" @click="sortBy(p => p.site)">Site</th>
+      </tr>
+      <tr v-else-if="filterMobilityType === 'models'">
+        <th class="cursor" title="sort by name" @click="sortBy(p => p.name)">Model</th>
+      </tr>
+      <tr v-else>
+        <th class="cursor" title="sort by name" @click="sortBy(p => p.name)">Mobility</th>
+      </tr>
+      </thead>
+      <tbody v-for="mobility_type in mobility_types">
+      <tr v-for="mobility in store[mobility_type.name]" v-if="filter(mobility_type, mobility)" v-bind:key="mobility.name">
+        <td>
+          <a v-if="select" href="#" @click.prevent="selectItem(mobility)">{{mobility.name}}</a>
+          <router-link v-else :to="{name: mobility_type.rlink, params: {name: mobility.name}}">
+            {{mobility.name}}
+          </router-link>
+        </td>
+        <td v-if="filterMobilityType === 'circuits'">{{mobility.site}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<script>
+import { iotlab } from '@/rest'
+import store from '@/store'
+
+export default {
+  name: 'MobilityList',
+
+  props: {
+    site: {
+      // Display mobility circuits filtered by site
+      type: String,
+      default: '',
+    },
+    select: {
+      // true  -> emits a selected event
+      // false -> router link to object
+      type: Boolean,
+      default: false,
+    },
+  },
+
+  data () {
+    return {
+      store: store,
+      currentSite: 'all',
+      sites: [],
+      filterType: 'userdefined',
+      filterMobilityType: 'all',
+
+    }
+  },
+
+  async created () {
+    iotlab.getSitesDetails().then(data => {
+      this.sites = data
+        .filter(site => {
+          return site.archis.some(a => Boolean(a.mobile))
+        }).sort((a, b) => a.site.localeCompare(b.site))
+    }).catch(err => {
+      this.$notify({text: err.response.data.message || 'Failed to fetch sites details', type: 'error'})
+    })
+    iotlab.getMobilityCircuits().then(data => { this.store.circuits = data.sort((a, b) => a.name.localeCompare(b.name)) }).catch(err => {
+      this.$notify({text: err.response.data.message || 'Failed to fetch circuits details', type: 'error'})
+    })
+    iotlab.getMobilityModels().then(data => { this.store.models = data.sort((a, b) => a.name.localeCompare(b.name)) }).catch(err => {
+      this.$notify({text: err.response.data.message || 'Failed to fetch models details', type: 'error'})
+    })
+  },
+
+  computed: {
+    mobility_types () {
+      let value = []
+      if (this.filterMobilityType === 'all' || this.filterMobilityType === 'circuits') {
+        value.push({
+          name: 'circuits',
+          label: 'Circuit',
+          rlink: 'mobilityCircuit',
+        })
+      }
+      if (this.filterMobilityType === 'all' || this.filterMobilityType === 'models') {
+        value.push({
+          name: 'models',
+          label: 'Model',
+          rlink: 'mobilityModel',
+        })
+      }
+      return value
+    },
+  },
+
+  methods: {
+    sortBy (func) {
+      // sort by func() then by name
+      this.store.circuits = this.store.circuits.sort((a, b) => func(a) === func(b) ? a.name.localeCompare(b.name) : func(a).localeCompare(func(b)))
+      this.store.models = this.store.models.sort((a, b) => func(a) === func(b) ? a.name.localeCompare(b.name) : func(a).localeCompare(func(b)))
+      this.store.all = this.store.circuits.concat(this.store.models)
+    },
+    selectItem (mobility) {
+      this.$emit('select', mobility.name)
+    },
+    filter (mobilityType, mobility) {
+      if (mobility.type !== this.filterType) {
+        return false
+      }
+      if (mobilityType.name === 'circuits') {
+        if (this.currentSite !== 'all') {
+          if (mobility.site !== this.currentSite.site) {
+            return false
+          }
+        }
+      }
+      return true
+    },
+  },
+}
+</script>
+
+<style scoped>
+
+</style>
