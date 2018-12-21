@@ -8,6 +8,18 @@ const SiteCameras = {
       origin: {x: 11, y: -6, z: 0},
     },
   ],
+  lille: [
+    {
+      name: 'Default',
+      origin: {x: -470, y: -270, z: 270},
+      camera: {x: -458, y: -263, z: 176},
+    },
+    {
+      name: 'lecube',
+      origin: {x: 590, y: -303, z: -100},
+      camera: {x: 687, y: -185, z: 176},
+    },
+  ],
   saclay: [
     {
       name: 'Default',
