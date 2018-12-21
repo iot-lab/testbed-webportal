@@ -20,6 +20,20 @@ const SiteCameras = {
       camera: {x: 687, y: -185, z: 176},
     },
   ],
+  lyon: [
+    {
+      name: 'Default',
+      camera: {x: 0, y: -30.155, z: 66.711},
+      origin: {x: 0, y: 14, z: 0},
+    },
+  ],
+  paris: [
+    {
+      name: 'Default',
+      camera: {x: 0, y: -57.453, z: 48.21},
+      origin: {x: 0, y: 0, z: 0},
+    },
+  ],
   saclay: [
     {
       name: 'Default',
