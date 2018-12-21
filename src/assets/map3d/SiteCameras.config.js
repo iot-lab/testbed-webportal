@@ -11,13 +11,13 @@ const SiteCameras = {
   lille: [
     {
       name: 'Default',
-      origin: {x: -470, y: -270, z: 270},
-      camera: {x: -458, y: -263, z: 176},
+      camera: {x: -457, y: -274.783, z: 147.191},
+      origin: {x: -457, y: -125, z: 0},
     },
     {
-      name: 'lecube',
-      origin: {x: 590, y: -303, z: -100},
-      camera: {x: 687, y: -185, z: 176},
+      name: 'Le Cube',
+      camera: {x: 620, y: -328.35, z: 2.46},
+      origin: {x: 620, y: -324, z: 0},
     },
   ],
   lyon: [
