@@ -1,7 +1,6 @@
 <template>
   <div class="container mt-3">
-
-    <h2>Users</h2>
+    <h4 class="d-none d-sm-block d-md-none">Users</h4>
     <form class="form-inline my-4" @submit.prevent="search">
       <div class="input-group mr-2">
         <input type="text" class="form-control" placeholder="Search for users" v-model="searchPattern">

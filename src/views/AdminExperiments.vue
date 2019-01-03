@@ -1,9 +1,8 @@
 <template>
   <div class="container mt-3">
-    <h2>
-      All experiments
+    <h4>All experiments
       <span v-if="username">for user <span class="text-muted">{{username}}</span></span>
-    </h2>
+    </h4>
     <p v-if="total.running != undefined">
       <span class="badge badge-pill badge-success">{{total.running}}</span> Running
       <span class="badge badge-pill badge-warning">{{total.upcoming}}</span> Scheduled

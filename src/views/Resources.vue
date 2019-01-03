@@ -1,6 +1,8 @@
 <template>
 <div class="container my-3">
-  <h2><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> My resources</h2>
+  <h2 class="d-none d-sm-block d-md-none">
+    <i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> My resources
+  </h2>
   <div class="row">
     <div class="col-md-3 mb-4">
       <div class="list-group" id="list-tab" role="tablist">
