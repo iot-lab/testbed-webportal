@@ -1,6 +1,6 @@
 <template>
 <div class="container mt-3">
-  <h3><i class="fa fa-fw fa-hourglass-half" aria-hidden="true"></i> Running experiments</h3>
+  <h4><i class="fa fa-fw fa-hourglass-half" aria-hidden="true"></i> Running experiments</h4>
   <running-experiments :exp-list="runningExp"></running-experiments>
   <div class="float-right mt-1 mb-4">
     <div class="dropdown d-inline-block ">
@@ -12,7 +12,7 @@
     </div>
     <button v-if="isAdmin" class="btn btn-warning" @click="updateNodesProperties"><i class="fa fa-lock"></i> Update properties</button>
   </div>
-  <h3><i class="fa fa-fw fa-share-alt" aria-hidden="true"></i> Nodes properties</h3>
+  <h4><i class="fa fa-fw fa-share-alt" aria-hidden="true"></i> Nodes properties</h4>
   <p class="lead mb-0">Sites</p>
   <p class="mb-2" v-if="sites">
     <span class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentSite === 'all', 'badge-secondary': currentSite !== 'all'}" @click="currentSite = 'all'">{{sites.length}} sites</span>

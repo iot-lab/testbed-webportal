@@ -1,7 +1,6 @@
 <template>
 <div class="container my-3">
-  <h2 class="mb-4">New experiment</h2>
-
+  <h2 class="mb-4 d-none d-sm-block d-md-none">New experiment</h2>
   <div id="accordion" role="tablist">
     <div class="card">
       <div class="card-header pl-3" role="tab" id="headingZero">
