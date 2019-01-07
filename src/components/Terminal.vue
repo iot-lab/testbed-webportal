@@ -141,10 +141,6 @@ export default {
           } else if (event.key === 'Del') {
             term.write('\b \b')
           } else {
-            /* Only accept ASCII characters */
-            if (key.charCodeAt(0) >= 127) {
-              return
-            }
             term.write(key)
             if (event.key === 'Enter') {
               term.write('\n')
