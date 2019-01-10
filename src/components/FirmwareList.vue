@@ -1,7 +1,6 @@
 <template>
   <div>
     <router-link :to="{name: 'newFirmware'}" class="btn btn-sm btn-outline-success float-right"><i class="fa fa-plus"></i> New firmware</router-link>
-    <h5>Firmwares</h5>
     <ul class="nav nav-tabs" style="position: relative; top: 1px">
       <li class="nav-item" v-tooltip:top="'User firmwares'">
         <a class="nav-link active" data-toggle="list" href="#userdefined" role="tab" aria-controls="userdefined" @click="filterType = 'userdefined'"> My firmwares </a>

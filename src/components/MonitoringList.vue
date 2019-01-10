@@ -1,8 +1,9 @@
 <template>
   <div>
-    <router-link :to="{name: 'newMonitoring'}" class="btn btn-sm btn-outline-success float-right"><i class="fa fa-plus"></i> New profile</router-link>
-    <h5>Monitoring profiles</h5>
-    <table class="table table-striped table-sm mt-3">
+    <div class="text-right">
+      <router-link :to="{name: 'newMonitoring'}" class="btn btn-sm btn-outline-success"><i class="fa fa-plus"></i> New profile</router-link>
+    </div>
+    <table class="table table-striped table-sm mt-2">
       <thead>
         <tr>
           <th class="cursor" title="sort by name" @click="sortBy(p => p.profilename)">Profile</th>
