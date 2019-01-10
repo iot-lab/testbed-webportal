@@ -4,13 +4,13 @@ exports[`Status.vue should match snapshot 1`] = `
 <div
   class="container mt-3"
 >
-  <h3>
+  <h4>
     <i
       aria-hidden="true"
       class="fa fa-fw fa-hourglass-half"
     />
      Running experiments
-  </h3>
+  </h4>
    
   <runningexperiments-stub
     explist=""
@@ -67,13 +67,13 @@ exports[`Status.vue should match snapshot 1`] = `
     <!---->
   </div>
    
-  <h3>
+  <h4>
     <i
       aria-hidden="true"
       class="fa fa-fw fa-share-alt"
     />
      Nodes properties
-  </h3>
+  </h4>
    
   <p
     class="lead mb-0"

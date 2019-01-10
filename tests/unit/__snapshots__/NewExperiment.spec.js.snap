@@ -5,7 +5,7 @@ exports[`NewExperiment.vue should match snapshot 1`] = `
   class="container my-3"
 >
   <h2
-    class="mb-4"
+    class="mb-4 d-none d-sm-block d-md-none"
   >
     New experiment
   </h2>

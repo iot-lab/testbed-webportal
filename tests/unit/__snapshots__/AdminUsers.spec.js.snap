@@ -4,9 +4,11 @@ exports[`AdminUsers.vue should match snapshot 1`] = `
 <div
   class="container mt-3"
 >
-  <h2>
+  <h4
+    class="d-none d-sm-block d-md-none"
+  >
     Users
-  </h2>
+  </h4>
    
   <form
     class="form-inline my-4"
