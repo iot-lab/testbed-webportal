@@ -2,24 +2,24 @@
 
 exports[`MonitoringList.vue should match snapshot 1`] = `
 <div>
-  <router-link-stub
-    class="btn btn-sm btn-outline-success float-right"
-    event="click"
-    tag="a"
-    to="[object Object]"
+  <div
+    class="text-right"
   >
-    <i
-      class="fa fa-plus"
-    />
-     New profile
-  </router-link-stub>
-   
-  <h5>
-    Monitoring profiles
-  </h5>
+    <router-link-stub
+      class="btn btn-sm btn-outline-success"
+      event="click"
+      tag="a"
+      to="[object Object]"
+    >
+      <i
+        class="fa fa-plus"
+      />
+       New profile
+    </router-link-stub>
+  </div>
    
   <table
-    class="table table-striped table-sm mt-3"
+    class="table table-striped table-sm mt-2"
   >
     <thead>
       <tr>
