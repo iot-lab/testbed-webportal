@@ -4,12 +4,15 @@ exports[`Resources.vue should match snapshot 1`] = `
 <div
   class="container my-3"
 >
-  <h2>
+  <h2
+    class="d-none d-sm-block d-md-none"
+  >
     <i
       aria-hidden="true"
       class="fa fa-fw fa-folder-open"
     />
      My resources
+  
   </h2>
    
   <div
