@@ -25,13 +25,13 @@ describe('Login', () => {
     cy.location('pathname').should('include', 'dashboard')
     cy.location('pathname').should('not.include', 'login')
     
-    cy.contains('h2', 'My experiments')
+    cy.contains('h4', 'My experiments')
   })
 
   it('test', () => {
     cy.login('user')
     // cy.visit('/#/dashboard')      
-    cy.contains('h2', 'My experiments')
+    cy.contains('h4', 'My experiments')
   })
 
   it('Log out should clear auth and redirect to login', () => {
