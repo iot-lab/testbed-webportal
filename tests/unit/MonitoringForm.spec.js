@@ -53,7 +53,7 @@ describe('MonitoringForm.vue', () => {
     
     wrapper.vm.$router.push = jest.fn()
     wrapper.vm.$nextTick(() => {
-      expect(wrapper.vm.$router.push).toHaveBeenCalledWith({name: 'resources'})
+      expect(wrapper.vm.$router.push).toHaveBeenCalledWith({name: 'listMonitoring'})
     })
   })
 
