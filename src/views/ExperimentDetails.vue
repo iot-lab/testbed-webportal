@@ -101,17 +101,17 @@
                 <button class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Stop'" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node; sendCmd('stop')">
                   <i class="fa fa-fw fa-power-off"></i>
                 </button>
-                <button v-if="!isA8(node)" class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Reset'" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node; sendCmd('reset')">
+                <button v-if="canReset(node)" class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Reset'" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node; sendCmd('reset')">
                   <i class="fa fa-fw fa-refresh"></i>
                 </button>
-                <button v-if="!isA8(node)" class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Flash firmware'" data-toggle="modal" data-target=".firmware-modal" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node">
+                <button v-if="canFlash(node)" class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Flash firmware'" data-toggle="modal" data-target=".firmware-modal" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node">
                   <i class="fa fa-fw fa-microchip"></i>
                 </button>
-                <button class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Update monitoring'" data-toggle="modal" data-target=".monitoring-modal" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node">
+                <button v-if="hasProfile(node)" class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Update monitoring'" data-toggle="modal" data-target=".monitoring-modal" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node">
                   <i class="fa fa-fw fa-thermometer"></i>
                 </button>
                 <!-- <button class="btn btn-sm border-0 btn-outline-dark" data-toggle="button" aria-pressed="false" v-tooltip="'Open Terminal'" @click="toggleTerminal(node)"> -->
-                <button v-if="!isA8(node)" class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Open Terminal'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleTerminal(node)">
+                <button v-if="hasSerial(node)" class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Open Terminal'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleTerminal(node)">
                   <i class="fa fa-fw fa-terminal"></i>
                 </button>
                 <button v-if="hasCamera(node)" class="btn btn-sm border-0 btn-outline-dark" data-toggle="button" aria-pressed="false" v-tooltip="'Video'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleCamera(node)">
@@ -313,8 +313,17 @@ export default {
         this.$notify({ text: err.message, type: 'error' })
       }
     },
-    isA8 (node) {
-      return node.startsWith('a8-')
+    canFlash (node) {
+      return !(node.startsWith('a8-') || node.startsWith('rtl-sdr-'))
+    },
+    canReset (node) {
+      return !(node.startsWith('a8-') || node.startsWith('rtl-sdr-'))
+    },
+    hasProfile (node) {
+      return !node.startsWith('rtl-sdr-')
+    },
+    hasSerial (node) {
+      return !(node.startsWith('a8-') || node.startsWith('rtl-sdr-'))
     },
     nodeOrAlias (node) {
       if (typeof node === 'string') return node
