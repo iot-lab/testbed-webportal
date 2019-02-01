@@ -16,6 +16,7 @@ module.exports = {
         'window.moment': 'moment',
       }),
     ],
+    devtool: 'source-map'
   },
   chainWebpack: config => {
     // HTML Loader

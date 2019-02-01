@@ -21,6 +21,9 @@ export const formatDateTime = function (value, duration = 0) {
   }
 }
 
+// radians to degrees
+export const formatRadians = (qty) => Math.round(180 * qty / Math.PI)
+
 export const formatDateTimeSec = function (value) {
   if (value) {
     return moment(String(value)).format('YYYY-MM-DD HH:mm:ss')
@@ -115,6 +118,7 @@ Vue.filter('fromTimestamp', fromTimestamp)
 Vue.filter('formatDate', formatDate)
 Vue.filter('formatDateTime', formatDateTime)
 Vue.filter('formatDateTimeSec', formatDateTimeSec)
+Vue.filter('formatRadians', formatRadians)
 Vue.filter('humanizeDuration', humanDuration)
 Vue.filter('stripDomain', stripDomain)
 Vue.filter('stateBadgeClass', stateBadgeClass)

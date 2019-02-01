@@ -211,6 +211,10 @@ export const iotlab = {
     return iotlab.api.post(`/experiments/${id}/nodes/monitoring/${name}`, nodes).then(resp => resp.data)
   },
 
+  async updateExperimentMobilityCircuit (id, nodes, name) {
+    return iotlab.api.post(`/experiments/${id}/robots/mobility/${name}`, nodes).then(resp => resp.data)
+  },
+
   async reloadExperiment (id) {
     return iotlab.api.post(`/experiments/${id}/reload`, {}).then(resp => resp.data)
   },
@@ -271,6 +275,40 @@ export const iotlab = {
   },
 
   // STORES (firmwares, profiles, etc)
+
+  async getMobilityCircuits () {
+    return iotlab.api.get('/mobilities/circuits').then(resp => resp.data.items)
+  },
+
+  async getMobilityCircuit (name) {
+    return iotlab.api.get(`/mobilities/circuits/${name}`).then(resp => resp.data)
+  },
+
+  async getRobotsSiteMapImage (site) {
+    return iotlab.api.get(`/robots/${site}/map/image`, {
+      responseType: 'arraybuffer',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    }).then(resp => Buffer.from(resp.data, 'binary').toString('base64')
+    )
+  },
+
+  async getRobotsSiteMapConfig (site) {
+    return iotlab.api.get(`/robots/${site}/map/config`).then(resp => resp.data)
+  },
+
+  async createMobilityCircuit (circuit) {
+    return iotlab.api.post(`/mobilities/circuits`, circuit)
+  },
+
+  async updateMobilityCircuit (name, circuit) {
+    return iotlab.api.put(`/mobilities/circuits/${name}`, circuit)
+  },
+
+  async deleteMobilityCircuit (name) {
+    return iotlab.api.delete(`/mobilities/circuits/${name}`)
+  },
 
   async getMonitoringProfiles () {
     return iotlab.api.get('/monitoring').then(resp => resp.data)

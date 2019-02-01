@@ -15,6 +15,8 @@ import Monitoring from '@/views/Monitoring'
 import MonitoringList from '@/components/MonitoringList'
 import Firmware from '@/views/Firmware'
 import FirmwareList from '@/components/FirmwareList'
+import MobilityCircuit from '@/views/MobilityCircuit'
+import CircuitList from '@/components/mobility/CircuitList'
 import NewExperiment from '@/views/NewExperiment'
 import ExperimentDetails from '@/views/ExperimentDetails'
 import Dashboard from '@/views/Dashboard'
@@ -44,6 +46,9 @@ const router = new Router({
       component: Resources,
       meta: { requiresAuth: true },
       children: [
+        { path: 'mobility/circuit', name: 'listMobilityCircuit', component: CircuitList, meta: { requiresAuth: true } },
+        { path: 'mobility/circuit_new', name: 'newMobilityCircuit', component: MobilityCircuit, meta: { requiresAuth: true } },
+        { path: 'mobility/circuit/:name', name: 'mobilityCircuit', component: MobilityCircuit, props: true, meta: { requiresAuth: true } },
         { path: 'monitoring', name: 'listMonitoring', component: MonitoringList, meta: { requiresAuth: true } },
         { path: 'monitoring_new', name: 'newMonitoring', component: Monitoring, meta: { requiresAuth: true } },
         { path: 'monitoring/:name', name: 'monitoring', component: Monitoring, props: true, meta: { requiresAuth: true } },

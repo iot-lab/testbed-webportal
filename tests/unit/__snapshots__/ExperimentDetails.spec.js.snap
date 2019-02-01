@@ -366,5 +366,65 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
       </div>
     </div>
   </div>
+   
+  <div
+    aria-hidden="true"
+    aria-labelledby="circuitModal"
+    class="modal fade circuit-modal"
+    role="dialog"
+    tabindex="-1"
+  >
+    <div
+      class="modal-dialog"
+    >
+      <div
+        class="modal-content"
+      >
+        <div
+          class="modal-header bg-light"
+        >
+          <h5
+            class="modal-title"
+          >
+            Select circuit
+          </h5>
+           
+          <button
+            aria-label="Close"
+            class="close"
+            data-dismiss="modal"
+            type="button"
+          >
+            <span
+              aria-hidden="true"
+            >
+              ×
+            </span>
+          </button>
+        </div>
+         
+        <div
+          class="modal-body py-4"
+        >
+          <circuitlist-stub
+            select="true"
+            site=""
+          />
+        </div>
+         
+        <div
+          class="modal-footer dborder-0 dbg-light"
+        >
+          <button
+            class="btn"
+            data-dismiss="modal"
+            type="button"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 `;

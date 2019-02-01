@@ -191,6 +191,17 @@
               </div>
             </div>
           </span>
+          <span v-if="group.mobile">
+            <span class="badge badge-light badge-tag cursor" data-toggle="dropdown" v-tooltip="'Add mobility'">
+              <span><i class="fa fa-random" aria-hidden="true"></i> {{group.mobility}}</span> <span v-if="group.mobility" class="tag-remove cursor" @click="group.mobility = undefined">&times;</span>
+            </span>
+            <div class="dropdown-menu dropdown-menu-right">
+              <div class="card-body">
+                <p class="lead">Assign a mobility <span class="text-muted">(optional)</span></p>
+                <circuit-list :site="group.site" :select="true" @select="mobility => { group.mobility = mobility }"></circuit-list>
+              </div>
+            </div>
+          </span>
           <span class="badge badge-light badge-tag tag-remove cursor"
             @click="hideTooltip(); group.nodes.map(node => removeNode(node))"
             v-tooltip="`Clear ${group.nodes.length} nodes`"><i class="fa fa-trash-o"></i></span>
@@ -226,6 +237,17 @@
               <div class="card-body">
                 <p class="lead">Assign a monitoring profile</p>
                 <monitoring-list :archi="p.archi" :select="true" @select="profile => { p.monitoring = profile }"></monitoring-list>
+              </div>
+            </div>
+          </span>
+          <span v-if="p.prop.properties.mobile">
+            <span class="badge badge-light badge-tag cursor" data-toggle="dropdown" v-tooltip="'Add mobility'">
+              <span><i class="fa fa-random" aria-hidden="true"></i> {{p.mobility}}</span> <span v-if="p.mobility" class="tag-remove cursor" @click="p.mobility = undefined">&times;</span>
+            </span>
+            <div class="dropdown-menu dropdown-menu-right">
+              <div class="card-body">
+                <p class="lead">Assign a mobility <span class="text-muted">(optional)</span></p>
+                <circuit-list :site="p.site" :select="true" @select="mobility => { p.mobility = mobility }"></circuit-list>
               </div>
             </div>
           </span>
@@ -269,6 +291,7 @@ import Multiselect from 'vue-multiselect'
 import FilterSelect from '@/components/FilterSelect'
 import MonitoringList from '@/components/MonitoringList'
 import FirmwareList from '@/components/FirmwareList'
+import CircuitList from '@/components/mobility/CircuitList'
 import Map3d from '@/components/Map3d'
 import 'vue-multiselect/dist/vue-multiselect.min.css'
 import 'tempusdominus-bootstrap-4'
@@ -295,6 +318,7 @@ function newNodeGroup (nodes) {
     nodes: nodes,
     firmware: {name: undefined},
     monitoring: undefined,
+    mobile: nodes.every(node => Boolean(node.mobile)),
     archi: nodes[0].shortArchi,
     allowedFirmwareTypes: allowedFirmwares4Archi(nodes[0].shortArchi),
     hasFirmware: allowedFirmwares4Archi(nodes[0].shortArchi).length > 0,
@@ -320,6 +344,7 @@ export default {
     FilterSelect,
     MonitoringList,
     FirmwareList,
+    CircuitList,
     Map3d,
   },
 
@@ -531,6 +556,24 @@ export default {
       }
       if (fwasso.length === 0) return null
       return fwasso
+    },
+    associations () {
+      let asso
+      if (this.mode === 'byprop') {
+        asso = this.selectedProps.filter(prop => prop.mobility !== undefined)
+          .map(prop => ({
+            nodes: [prop.prop.alias],
+            mobilityname: prop.mobility,
+          }))
+      } else {
+        asso = this.selectedNodeGroups.filter(group => group.mobility !== undefined)
+          .map(group => ({
+            nodes: group.nodes.map(node => node.network_address),
+            mobilityname: group.mobility,
+          }))
+      }
+      if (asso.length === 0) return null
+      return { mobility: asso }
     },
     monitoringAssociations () {
       let monasso
@@ -748,6 +791,7 @@ export default {
           duration: this.duration * this.durationMultiplier,
           reservation: this.scheduleEpoch,
           nodes: (this.mode === 'byprop') ? this.selectedProps.map(p => p.prop) : this.selectedNodes.map(node => node.network_address),
+          assocations: this.assocations,
           profileassociations: this.monitoringAssociations,
           firmwareassociations: this.firmwareAssociations,
           firmwares: this.firmwares,

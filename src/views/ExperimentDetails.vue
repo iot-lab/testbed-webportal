@@ -66,6 +66,7 @@
             <!-- <a class="dropdown-item" href="#" @click.prevent="sendCmd('debug-stop')"><i class="fa fa-fw fa-stop"></i> Stop debug</a> -->
             <li class="dropdown-divider"></li>
             <a class="dropdown-item" href="#" data-toggle="modal" data-target=".monitoring-modal"><i class="fa fa-fw fa-thermometer"></i> Update monitoring</a>
+            <a v-if="showMobilityCommand" class="dropdown-item" href="#" data-toggle="modal" data-target=".circuit-modal"><i class="fa fa-fw fa-random"></i> Update circuit</a>
           </div>
         </div>
       </div>
@@ -113,6 +114,9 @@
                 <!-- <button class="btn btn-sm border-0 btn-outline-dark" data-toggle="button" aria-pressed="false" v-tooltip="'Open Terminal'" @click="toggleTerminal(node)"> -->
                 <button v-if="hasSerial(node)" class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Open Terminal'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleTerminal(node)">
                   <i class="fa fa-fw fa-terminal"></i>
+                </button>
+                <button v-if="isMobile(node)" class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Update circuit'" data-toggle="modal" data-target=".circuit-modal" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node">
+                  <i class="fa fa-fw fa-random"></i>
                 </button>
                 <button v-if="hasCamera(node)" class="btn btn-sm border-0 btn-outline-dark" data-toggle="button" aria-pressed="false" v-tooltip="'Video'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleCamera(node)">
                   <i class="fa fa-fw fa-video-camera"></i>
@@ -179,6 +183,25 @@
       </div>
     </div>
 
+    <div class="modal fade circuit-modal" tabindex="-1" role="dialog" aria-labelledby="circuitModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-light">
+            <h5 class="modal-title">Select circuit</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body py-4">
+            <circuit-list :site="selectedSites[0]" :select="true" @select="circuit => updateMobilityCircuit(circuit)"></circuit-list>
+          </div>
+          <div class="modal-footer dborder-0 dbg-light">
+            <button type="button" class="btn" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div> <!-- container -->
 </template>
 
@@ -186,9 +209,10 @@
 import Terminal from '@/components/Terminal'
 import MonitoringList from '@/components/MonitoringList'
 import FirmwareList from '@/components/FirmwareList'
+import CircuitList from '@/components/mobility/CircuitList'
 import { iotlab } from '@/rest'
 import { auth } from '@/auth'
-import { experimentStates, extractArchiFromAddress } from '@/assets/js/iotlab-utils'
+import { experimentStates, extractArchiFromAddress, extractSiteFromAddress } from '@/assets/js/iotlab-utils'
 import { capitalize, pluralize, downloadAsFile } from '@/utils'
 import $ from 'jquery'
 
@@ -201,6 +225,7 @@ export default {
     Terminal,
     MonitoringList,
     FirmwareList,
+    CircuitList,
   },
 
   props: {
@@ -233,6 +258,9 @@ export default {
     startDate () {
       return [this.experiment.start_date, this.experiment.scheduled_date, this.experiment.submission_date].find(date => date !== '1970-01-01T00:00:00Z')
     },
+    showMobilityCommand () {
+      return this.selectedNodes.every(this.isMobile)
+    },
     showNodesCommands () {
       return this.experiment.state === 'Running' && this.experiment.user === this.currentUser
     },
@@ -249,6 +277,10 @@ export default {
     selectedArchis () {
       let nodes = this.currentNode ? [this.currentNode] : this.selectedNodes
       return [...new Set(nodes.map(node => extractArchiFromAddress(node)))] // remove duplicates from archi list using a set
+    },
+    selectedSites () {
+      let nodes = this.currentNode ? [this.currentNode] : this.selectedNodes
+      return [...new Set(nodes.map(node => extractSiteFromAddress(node)))] // remove duplicates from archi list using a set
     },
   },
 
@@ -574,6 +606,45 @@ export default {
           duration: 6000,
         })
       }
+    },
+
+    async updateMobilityCircuit (circuit) {
+      let selectedNodes = this.currentNode ? [this.currentNode] : this.selectedNodes
+      delete this.currentNode
+      $('.modal').modal('hide')
+
+      let nodes = await iotlab.updateExperimentMobilityCircuit(this.id, selectedNodes, circuit).catch(err => {
+        this.$notify({ text: err.response.data.message || 'An error occured', type: 'error' })
+      })
+      let validNodes = Object.values(nodes).reduce((a, b) => a.concat(b))
+      let invalidNodes = selectedNodes.filter(n => !validNodes.includes(n))
+
+      if (invalidNodes.length > 0) {
+        this.$notify({
+          text: `Update mobility circuit not supported on ${pluralize(invalidNodes.length, 'node')}:<br><br>` + invalidNodes.join('<br>'),
+          type: 'warning',
+          duration: 6000,
+        })
+      }
+      if (nodes['1'] && nodes['1'].length > 0) {
+        this.$notify({
+          text: `Update mobility circuit failed on ${pluralize(nodes['1'].length, 'node')}:<br><br>` + nodes['1'].join('<br>'),
+          type: 'error',
+          duration: 10000,
+        })
+      }
+      if (nodes['0'] && nodes['0'].length > 0) {
+        this.$notify({
+          text: `Update mobility circuit successful on ${pluralize(nodes['0'].length, 'node')}:<br><br>` + nodes['0'].join('<br>'),
+          type: 'success',
+          duration: 6000,
+        })
+      }
+    },
+
+    isMobile (node) {
+      let n = this.nodes.find((n) => n.network_address === node)
+      return n ? n.mobile === '1' : ''
     },
 
     hasCamera (node) {
