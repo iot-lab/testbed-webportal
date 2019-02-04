@@ -17,7 +17,7 @@
     </ul>
     <p v-if="sites && filterMobilityType === 'circuits'" class="mb-2">
       <span class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentSite === 'all', 'badge-secondary': currentSite !== 'all'}" @click="currentSite = 'all'">{{sites.length}} sites</span>
-      <span v-for="site in sites" class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentSite === site, 'badge-secondary': currentSite !== site}"
+      <span v-for="site in sites" :key="site.site" class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentSite === site, 'badge-secondary': currentSite !== site}"
             @click="currentSite = site">{{site.site}}</span>
     </p>
     <ul class="nav nav-tabs" style="position: relative; top: 1px">
@@ -41,8 +41,8 @@
         <th class="cursor" title="sort by name" @click="sortBy(p => p.name)">Mobility</th>
       </tr>
       </thead>
-      <tbody v-for="mobility_type in mobility_types">
-      <tr v-for="mobility in store[mobility_type.name]" v-if="filter(mobility_type, mobility)" v-bind:key="mobility.name">
+      <tbody v-for="mobility_type in mobility_types" :key="mobility_type">
+      <tr v-for="mobility in filterByType(mobility_type, store[mobility_type.name])" :key="mobility.name">
         <td>
           <a v-if="select" href="#" @click.prevent="selectItem(mobility)">{{mobility.name}}</a>
           <router-link v-else :to="{name: mobility_type.rlink, params: {name: mobility.name}}">
@@ -136,7 +136,7 @@ export default {
     selectItem (mobility) {
       this.$emit('select', mobility.name)
     },
-    filter (mobilityType, mobility) {
+    filterOneByType (mobilityType, mobility) {
       if (mobility.type !== this.filterType) {
         return false
       }
@@ -148,6 +148,9 @@ export default {
         }
       }
       return true
+    },
+    filterByType (mobilityType, mobilities) {
+      return mobilities.filter((m) => this.filterOneByType(mobilityType, m))
     },
   },
 }
