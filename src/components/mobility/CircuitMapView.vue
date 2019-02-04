@@ -69,6 +69,7 @@
           </div>
           <div class="col">
             <label>Point rotation:</label>
+            <angle-input v-model="currentPointTheta"></angle-input>
           </div>
         </div>
       </div>
@@ -87,10 +88,12 @@
 <script>
 import { iotlab } from '@/rest'
 import { nextString } from '@/utils'
+import AngleInput from '@/components/mobility/AngleInput'
 
 export default {
   name: 'CircuitMapView',
   components: {
+    AngleInput,
   },
   props: {
     site: {

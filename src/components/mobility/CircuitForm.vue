@@ -244,7 +244,8 @@ export default {
 </script>
 
 <style scoped>
-.table tbody > tr > td.vert-aligned {
+td {
+  text-align: center;
   vertical-align: middle;
 }
 </style>
