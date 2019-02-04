@@ -559,7 +559,7 @@ export default {
       if (fwasso.length === 0) return null
       return fwasso
     },
-    mobilityAssociations () {
+    associations () {
       let asso
       if (this.mode === 'byprop') {
         asso = this.selectedProps.filter(prop => prop.mobility !== undefined)
@@ -574,6 +574,7 @@ export default {
             mobilityname: group.mobility,
           }))
       }
+      console.log(asso)
       if (asso.length === 0) return null
       return { mobility: asso }
     },
@@ -793,7 +794,7 @@ export default {
           duration: this.duration * this.durationMultiplier,
           reservation: this.scheduleEpoch,
           nodes: (this.mode === 'byprop') ? this.selectedProps.map(p => p.prop) : this.selectedNodes.map(node => node.network_address),
-          assocations: this.mobilityAssociations,
+          associations: this.associations,
           profileassociations: this.monitoringAssociations,
           firmwareassociations: this.firmwareAssociations,
           firmwares: this.firmwares,

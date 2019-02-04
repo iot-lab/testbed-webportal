@@ -193,7 +193,7 @@
             </button>
           </div>
           <div class="modal-body py-4">
-            <circuit-list :site="selectedSites[0]" :select="true" @select="circuit => updateMobilityCircuit(circuit)"></circuit-list>
+            <mobility-list :site="selectedSites[0]" :select="true" @select="circuit => updateMobilityCircuit(circuit)"></mobility-list>
           </div>
           <div class="modal-footer dborder-0 dbg-light">
             <button type="button" class="btn" data-dismiss="modal">Close</button>
