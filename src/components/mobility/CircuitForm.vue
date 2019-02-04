@@ -63,7 +63,7 @@
           </thead>
           <tbody>
             <tr v-for="(coordinate, coordinate_name) in circuitForm.coordinates" :key="coordinate_name">
-              <td><input class="form-control form-control-sm" type="text" :value="coordinate_name" @change="changeCoordinateName(coordinate_name, coordinate, $event.target.value)"></td>
+              <td><input class="form-control form-control-sm" type="text" :value="coordinate_name" :readOnly="readOnly" @change="changeCoordinateName(coordinate_name, coordinate, $event.target.value)"></td>
               <td><input class="form-control form-control-sm" type="text" v-model="coordinate.x" :readOnly="readOnly"></td>
               <td><input class="form-control form-control-sm" type="text" v-model="coordinate.y" :readOnly="readOnly"></td>
               <td>
