@@ -56,7 +56,7 @@ export default {
         await iotlab.deleteMobilityCircuit(this.name)
           .then(_ => {
             this.$notify({text: `Circuit ${this.name} deleted`, type: 'success'})
-            this.$router.push({name: 'listMobilityCircuit'})
+            this.$router.push({name: 'listMobility'})
           })
           .catch(err => {
             this.$notify({text: err.response.data.message, type: 'error'})

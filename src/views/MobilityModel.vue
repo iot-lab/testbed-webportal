@@ -60,7 +60,7 @@ export default {
         await iotlab.deleteMobilityModel(this.name)
           .then(_ => {
             this.$notify({text: `Model ${this.name} deleted`, type: 'success'})
-            this.$router.push({name: 'listMobilityModel'})
+            this.$router.push({name: 'listMobility'})
           })
           .catch(err => {
             this.$notify({text: err.response.data.message, type: 'error'})

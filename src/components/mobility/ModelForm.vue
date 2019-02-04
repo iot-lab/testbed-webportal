@@ -125,7 +125,7 @@ export default {
         }
         this.$notify({ text: `model ${model.name} saved`, type: 'success' })
 
-        this.$router.push({ name: 'listMobilityModel' })
+        this.$router.push({ name: 'listMobility' })
       } catch (err) {
         this.$notify({ text: err.response.data.message, type: 'error' })
         // this.$notify({text: `${JSON.stringify(profile)}`, type: 'info', duration: 10000})

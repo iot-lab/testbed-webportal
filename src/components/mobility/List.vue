@@ -41,7 +41,7 @@
         <th class="cursor" title="sort by name" @click="sortBy(p => p.name)">Mobility</th>
       </tr>
       </thead>
-      <tbody v-for="mobility_type in mobility_types" :key="mobility_type">
+      <tbody v-for="mobility_type in mobility_types" :key="mobility_type.name">
       <tr v-for="mobility in filterByType(mobility_type, store[mobility_type.name])" :key="mobility.name">
         <td>
           <a v-if="select" href="#" @click.prevent="selectItem(mobility)">{{mobility.name}}</a>
