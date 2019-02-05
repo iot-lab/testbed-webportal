@@ -87,7 +87,7 @@ export default {
           console.log('Form is not valid.')
           return
         }
-        if (location.hostname === 'devwww.iot-lab.info' && this.user.email.endsWith('@iot-lab.info')) {
+        if (location.hostname === 'devwww.iot-lab.info') {
           alert('Signup on devwww is restricted to IoT-LAB administrators')
           return
         }
