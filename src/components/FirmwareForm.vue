@@ -11,8 +11,11 @@
       </label>
     </div>
     <div class="form-group">
-      <label>Name</label>
-      <input v-model="firmwareForm.name" class="form-control" type="text" name="name" placeholder="Custom name" :disabled="readOnly">
+      <label>Identifier</label>
+      <input v-model="firmwareForm.name" v-validate="'required|alpha_dash'" class="form-control" type="text" name="name" placeholder="Unique identifier name" :class="{'is-invalid': errors.has('name') }" :disabled="readOnly">
+      <div class="invalid-feedback" v-show="errors.has('name')">
+        {{ errors.first('name') }}
+      </div>
     </div>
     <div class="form-group">
       <label>Description <span class="text-muted">(optional)</span></label>
