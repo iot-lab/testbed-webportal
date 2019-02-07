@@ -12,7 +12,7 @@
     <table class="table table-striped table-sm">
       <thead>
         <tr>
-          <th class="cursor" title="sort by name" @click="sortBy(f => f.name)">Name</th>
+          <th class="cursor" title="sort by identifier" @click="sortBy(f => f.name)">Identifier</th>
           <th class="cursor" title="sort by archi" @click="sortBy(f => f.archi || '')">Archi</th>
           <th class="cursor" title="sort by OS" @click="sortBy(f => f.os || '')">OS</th>
           <th class="cursor" title="sort by description" @click="sortBy(f => f.description || '')">Description</th>
