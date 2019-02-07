@@ -111,14 +111,17 @@ export default {
       reader.onload = (function (file, vm) {
         return async function (e) {
           vm.$notify({clean: true}) // close pending notification
-
-          vm.$notify({text: 'File uploaded', type: 'info'})
           file.bin = e.target.result
           vm.firmwareFile = file
           vm.firmwareForm.filename = file.name
-          if (!vm.firmwareForm.name) {
-            vm.firmwareForm.name = file.name
-            vm.$forceUpdate()
+          if (/^[0-9A-Za-z_-]+(\.[0-9A-Za-z_-]+)?$/.test(file.name)) {
+            vm.$notify({text: 'File uploaded', type: 'info'})
+            if (!vm.firmwareForm.name) {
+              vm.firmwareForm.name = file.name.replace(/\.[^.$]+$/, '')
+              vm.$forceUpdate()
+            }
+          } else {
+            vm.$notify({text: `Invalid file name format. Only alphanumeric characters allowed [0-9A-Za-z_]`, type: 'error'})
           }
         }
       })(this.firmwareFile, this)
