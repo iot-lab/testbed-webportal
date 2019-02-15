@@ -168,7 +168,8 @@ export const iotlab = {
     return iotlab.api.delete(`/experiments/${id}`)
   },
 
-  async submitExperiment ({type, name, duration, reservation, nodes, firmwareassociations, firmwares, profileassociations, profiles} = {}) {
+  async submitExperiment ({type, name, duration, reservation, nodes,
+    associations, firmwareassociations, firmwares, profileassociations, profiles} = {}) {
     const formData = new FormData()
     formData.append('experiment.json', JSON.stringify({
       type: type,
@@ -176,6 +177,7 @@ export const iotlab = {
       reservation: reservation,
       name: name,
       nodes: nodes,
+      associations: associations,
       firmwareassociations: firmwareassociations,
       profileassociations: profileassociations,
     }))

@@ -45,16 +45,8 @@
           </text>
         </g>
       </g>
-<!---
-    <rect :x="realOrigin.x" :y="realOrigin.y" :width="realWidth"  :height="realHeight" fill="none" stroke="#000000" stroke-width='0.1'></rect>
-    <text v-if="showTooltip" :x="tooltip.x" :y="tooltip.y">{{tooltip}}</text>
-    <circle :cx="realOrigin.x" :cy="realOrigin.y" r="0.2" fill="none" stroke-width="0.1" stroke="#FF0000"></circle>
-    <circle :cx="realOrigin.x" :cy="realOrigin.y + realHeight" r="0.2" fill="none" stroke-width="0.1" stroke="#FF0000"></circle>
-    <circle :cx="19" :cy="realHeight - 2" r="0.2" fill="none" stroke-width="0.1" stroke="#FF0000"></circle>
-    <circle :cx="19" :cy="realHeight - 5" r="0.2" fill="none" stroke-width="0.1" stroke="#FF0000"></circle>
-    -->
     </svg>
-    <div :style="{'visibility': this.selectedPoint ? '': 'hidden'}">
+    <div v-if="!readOnly" :style="{'visibility': this.selectedPoint ? '': 'hidden'}">
       <div class="form-group">
         <div class="row">
           <div class="col">
@@ -299,7 +291,7 @@ export default {
       console.log(pos)
       let ptName = this.selectedPoint
       let coord = this.coordinates[ptName]
-      if (coord) pos.theta = coord.theta
+      pos.theta = coord ? coord.theta : 0
       if (this.selectedIndex === undefined) {
         let lastPoint = this.points.slice(-1)[0]
         ptName = nextString(lastPoint)

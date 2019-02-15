@@ -162,8 +162,8 @@
       <!-- Selected nodes by host or ID -->
       <div v-if="selectedNodes.length" v-show="mode !== 'byprop'" class="card-body font-size-sm" style="background: #22222222">
         <p class="mb-0 font-size-1">{{selectedNodes.length}} nodes selected: <a href="" @click.prevent="clearAllNodes">clear all</a></p>
-        <div style="margin-top: 0.35rem" v-for="(group, index) in selectedNodeGroups">
-          <span class="badge badge-info badge-tag" v-for="node in group.nodes" :class="{'badge-even': index % 2}">
+        <div style="margin-top: 0.35rem" v-for="(group, index) in selectedNodeGroups" :key="index">
+          <span class="badge badge-info badge-tag" v-for="node in group.nodes" :class="{'badge-even': index % 2}" :key="node.network_address">
             <span>{{node.network_address | stripDomain}}</span> <span class="tag-remove cursor" @click="removeNode(node)">&times;</span>
           </span>
           <span class="badge badge-light badge-tag cursor" v-if="group.hasFirmware" data-toggle="dropdown" v-tooltip="'Add firmware'">
@@ -193,7 +193,7 @@
           </span>
           <span v-if="group.mobile">
             <span class="badge badge-light badge-tag cursor" data-toggle="dropdown" v-tooltip="'Add mobility'">
-              <span><i class="fa fa-random" aria-hidden="true"></i> {{group.mobility}}</span> <span v-if="group.mobility" class="tag-remove cursor" @click="group.mobility = undefined">&times;</span>
+              <i class="fa fa-random text-dark" style="width: 12px;"></i> {{group.mobility}} <span v-if="group.mobility" class="tag-remove cursor" @click="group.mobility = undefined">&times;</span>
             </span>
             <div class="dropdown-menu dropdown-menu-right">
               <div class="card-body">
@@ -210,7 +210,7 @@
       <!-- Selected nodes by Props -->
       <div v-if="selectedProps.length" v-show="mode === 'byprop'" class="card-body font-size-sm" style="background: #22222222">
         <p class="mb-0 font-size-1">{{nodeCount}} nodes selected: <a href="" @click.prevent="clearAllNodes">clear all</a></p>
-        <div style="margin-top: 0.35rem" v-for="(p, index) in selectedProps">
+        <div style="margin-top: 0.35rem" v-for="(p, index) in selectedProps" :key="index">
           <span class="badge badge-info badge-tag"> {{p.prop.properties.archi | formatArchiRadio}} @ {{p.prop.properties.site}}</span>
           x {{p.prop.nbnodes}}
           <span class="badge badge-primary badge-tag" v-if="p.prop.properties.mobile"> mobile </span>
@@ -242,7 +242,7 @@
           </span>
           <span v-if="p.prop.properties.mobile">
             <span class="badge badge-light badge-tag cursor" data-toggle="dropdown" v-tooltip="'Add mobility'">
-              <span><i class="fa fa-random" aria-hidden="true"></i> {{p.mobility}}</span> <span v-if="p.mobility" class="tag-remove cursor" @click="p.mobility = undefined">&times;</span>
+              <i class="fa fa-random text-dark" style="width: 12px;"></i> {{p.mobility}} <span v-if="p.mobility" class="tag-remove cursor" @click="p.mobility = undefined">&times;</span>
             </span>
             <div class="dropdown-menu dropdown-menu-right">
               <div class="card-body">
@@ -319,6 +319,7 @@ function newNodeGroup (nodes) {
     firmware: {name: undefined},
     monitoring: undefined,
     mobile: nodes.every(node => Boolean(node.mobile)),
+    mobility: undefined,
     archi: nodes[0].shortArchi,
     allowedFirmwareTypes: allowedFirmwares4Archi(nodes[0].shortArchi),
     hasFirmware: allowedFirmwares4Archi(nodes[0].shortArchi).length > 0,
@@ -330,6 +331,7 @@ function newPropGroup (prop) {
     prop: prop,
     firmware: {name: undefined},
     monitoring: undefined,
+    mobility: undefined,
     archi: extractArchi(prop.properties.archi),
     allowedFirmwareTypes: allowedFirmwares4Archi(extractArchi(prop.properties.archi)),
     hasFirmware: allowedFirmwares4Archi(extractArchi(prop.properties.archi)).length > 0,
@@ -791,7 +793,7 @@ export default {
           duration: this.duration * this.durationMultiplier,
           reservation: this.scheduleEpoch,
           nodes: (this.mode === 'byprop') ? this.selectedProps.map(p => p.prop) : this.selectedNodes.map(node => node.network_address),
-          assocations: this.assocations,
+          associations: this.associations,
           profileassociations: this.monitoringAssociations,
           firmwareassociations: this.firmwareAssociations,
           firmwares: this.firmwares,
