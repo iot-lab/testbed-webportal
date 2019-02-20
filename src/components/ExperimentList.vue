@@ -247,6 +247,9 @@ export default {
         })).sort((exp1, exp2) => exp2.id - exp1.id) // order by reverse ID
       } catch (err) {
         this.$notify({text: 'Failed to fetch experiments', type: 'error'})
+        blured = true
+        this.$notify({text: 'Dashboard refresh stopped due to an error, do a manual refresh to retry', type: 'info', duration: -1, group: 'alt'})
+        this.stopPolling()
       }
 
       if (this.experiments.length < previous.length) {
