@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="float-right" style="display: block">
-      <router-link :to="{name: 'newMobilityCircuit'}" class="btn btn-sm btn-success"><i class="fa fa-plus"></i>New Mobility Circuit</router-link>
+      <router-link :to="{name: 'newMobilityCircuit'}" class="btn btn-sm btn-success mr-1"><i class="fa fa-plus"></i>New Mobility Circuit</router-link>
       <router-link :to="{name: 'newMobilityModel'}" class="btn btn-sm btn-success"><i class="fa fa-plus"></i>New Mobility Model</router-link>
     </div>
     <ul class="nav nav-tabs" style="position: relative; top: 1px">

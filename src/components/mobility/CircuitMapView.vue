@@ -1,7 +1,7 @@
 <template>
   <div class="container mt-3">
     <svg xmlns='http://www.w3.org/2000/svg' class="map" v-if="siteLoaded"
-      :width="svgWidth" :viewBox="`0 0 ${svgWidth} ${svgHeight}`" :height="svgHeight"  style="border: 1px solid black;">
+       :viewBox="`0 0 ${svgWidth} ${svgHeight}`"  style="border: 1px solid black;">
       <svg id='svgMap' :width="mapWidth" :height="mapHeight" :viewBox="`0 0 ${realWidth} ${realHeight}`" :x="this.xAxisMargin" y="0">
         <defs>
           <g id="middlePoint">

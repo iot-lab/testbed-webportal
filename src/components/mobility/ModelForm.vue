@@ -20,7 +20,6 @@
           placeholder="file name"
           v-model="modelForm.script" class="form-control" type="text">
         <editor
-          class="mt-3"
           v-model="modelFileForm.data"
           @init="editorInit"
           :options="cmOptions"
@@ -107,7 +106,7 @@ export default {
 
       if (!model.name) {
         this.$notify({text: 'Name is empty', type: 'warning'})
-        this.$refs.name.focus()
+        this.$refs.modelName.focus()
         return
       }
 
@@ -116,6 +115,7 @@ export default {
           // modify existing model
           console.log('modify model ' + this.mobilityModel.name)
           console.log(model)
+          console.log(modelFile.data)
           await iotlab.updateMobilityModel(this.mobilityModel.name, model, modelFile.data)
         } else {
           console.log('create model ' + model.name)
