@@ -1,18 +1,12 @@
 <template>
   <div class="container" style="max-width: 1250px" id="container_drawgantt">
     <div id="panel" style="top: 0px; left: 0px;" align="center">
-      <select id="filterSelect" onchange="select_filter(true)">
-        <option selected="" value="production!='NO'">all nodes</option>
-        <option value="site='devgrenoble' and production!='NO'">devgrenoble only</option>
-        <option value="site='devstrasbourg' and production!='NO'">devstrasbourg only</option>
-        <option value="site='devlille' and production!='NO'">devlille only</option>
-        <option value="site='devsaclay' and production!='NO'">devsaclay only</option>
-        <option value="archi='m3:at86rf231' and production!='NO'">all m3</option>
-        <option value="archi='a8:at86rf231' and production!='NO'">all a8</option>
-        <option value="archi='wsn430:cc2420' and production!='NO'">all wsn430 w/ cc2420</option>
-        <option value="archi='wsn430:cc1101' and production!='NO'">all wsn430 w/ cc1101</option>
-        <option value="mobile=1 and production!='NO'">mobile only</option>
-        <option value="mobility_type='turtlebot2' and production!='NO'">all turtlebot2</option>
+      <select id="filterSelect" v-on:change="select_filter(true)">
+        <option selected="" value="">all nodes</option>
+        <option v-for="site in sites" v-bind:key="site.site" :value="`site='${site.site}'`">{{site.site}} only</option>
+        <option v-for="archi in archis" v-bind:key="archi.name" :value="`archi='${archi.full}'`">all {{archi.name}}{{archi.radio ? ' w ' + archi.radio : ''}}</option>
+        <option value="mobile=1">mobile only</option>
+        <option value="mobility_type='turtlebot2'">all turtlebot2</option>
       </select>
       <button class="btn mr-2" type="button" v-on:click="shift(-S_PER_WEEK)">&lt;1w</button>
       <button class="btn mr-2" type="button" v-on:click="shift(-S_PER_DAY)">&lt;1d</button>
@@ -34,8 +28,7 @@
         <option value="Europe/Paris">Paris</option>
       </select>
     </div>
-    {{ svgUrl }}
-    <object ref="svgObj" id="svgObj" type="image/svg+xml" :data="svgUrl" onload="restore_scrolling()">{{ svgUrl }}</object>
+    <object ref="svgObj" id="svgObj" type="image/svg+xml" :data="svgUrl" v-on:load="restore_scrolling()">{{ svgUrl }}</object>
     <div id="waiter" v-if="processing">Processing data... please wait...</div>
   </div>
 </template>
@@ -53,7 +46,6 @@ export default {
       processing: true,
       relative_start: -S_PER_DAY,
       relative_stop: S_PER_DAY,
-      filter: 'production != \'NO\'',
       filterSQL: null,
       timezoneSQL: null,
       timezone: 'UTC',
@@ -179,7 +171,8 @@ export default {
     },
     select_filter (reload) {
       var filterSelect = document.getElementById('filterSelect')
-      this.filterSQL = filterSelect.value
+      const production = 'production != \'NO\''
+      this.filterSQL = filterSelect.value ? filterSelect.value + ' and ' + production : production
       window.scrollTo(0, 0)
       reload && this.reload_content()
     },
