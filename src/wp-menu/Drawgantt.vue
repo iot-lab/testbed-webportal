@@ -43,6 +43,7 @@
 <script>
 
 import { S_PER_DAY, S_PER_WEEK, S_PER_HOUR } from '@/constants'
+import { iotlab } from '@/rest'
 
 export default {
   name: 'Drawgantt',
@@ -58,6 +59,7 @@ export default {
       timezone: 'UTC',
       scrolledX: 0,
       scrolledY: 0,
+      sites: [],
       zoom_relative_start: 0,
       zoom_relative_stop: 0,
       windowWidth: 500,
@@ -70,6 +72,17 @@ export default {
   },
 
   computed: {
+    archis () {
+      return Array.from(this.sites.reduce((acc, site) => {
+        site.archis.map(archi => acc.add(archi.archi))
+        return acc
+      }, new Set()))
+        .sort((a, b) => a.localeCompare(b))
+        .map(a => {
+          let archiRadio = a.split(':')
+          return { full: a, name: archiRadio[0], radio: archiRadio[1] }
+        })
+    },
     svgUrl () {
       const query = {
         width: this.windowWidth - 50,
@@ -85,6 +98,12 @@ export default {
         .map(k => esc(k) + '=' + esc(query[k]))
         .join('&')
     },
+  },
+
+  created () {
+    iotlab.getSitesDetails().then(data => { this.sites = data.sort((a, b) => a.site.localeCompare(b.site)) }).catch(err => {
+      this.$notify({text: err.response.data.message || 'Failed to fetch sites details', type: 'error'})
+    })
   },
 
   mounted () {
