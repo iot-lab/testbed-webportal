@@ -80,7 +80,7 @@ export default {
       }
 
       var esc = encodeURIComponent
-      return 'http://localhost:6060/devwww.iot-lab.info/drawgantt/drawgantt-svg.php?' + Object.keys(query)
+      return `https://${process.env.VUE_APP_IOTLAB_HOST}/drawgantt/drawgantt-svg.php?` + Object.keys(query)
         .filter(k => query[k])
         .map(k => esc(k) + '=' + esc(query[k]))
         .join('&')
