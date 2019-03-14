@@ -96,6 +96,7 @@ export default {
     iotlab.getSitesDetails().then(data => { this.sites = data.sort((a, b) => a.site.localeCompare(b.site)) }).catch(err => {
       this.$notify({text: err.response.data.message || 'Failed to fetch sites details', type: 'error'})
     })
+    window.set_zoom_window = this.set_zoom_window
   },
 
   mounted () {
