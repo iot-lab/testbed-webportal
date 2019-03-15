@@ -1,13 +1,20 @@
 <template>
-  <div class="container" style="max-width: 1250px" id="container_drawgantt">
-    <div id="panel" style="top: 0px; left: 0px;" align="center">
-      <select id="filterSelect" v-on:change="select_filter(true)">
-        <option selected="" value="">all nodes</option>
-        <option v-for="site in sites" v-bind:key="site.site" :value="`site='${site.site}'`">{{site.site}} only</option>
-        <option v-for="archi in archis" v-bind:key="archi.name" :value="`archi='${archi.full}'`">all {{archi.name}}{{archi.radio ? ' w ' + archi.radio : ''}}</option>
-        <option value="mobile=1">mobile only</option>
-        <option value="mobility_type='turtlebot2'">all turtlebot2</option>
-      </select>
+  <div ref="container" class="container mt-3" id="container_drawgantt">
+    <p class="lead mb-0">Sites</p>
+    <p class="mb-2" v-if="sites">
+      <span class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentSite === 'all', 'badge-secondary': currentSite !== 'all'}" @click="currentSite = 'all'">{{sites.length}} sites</span>
+      <span v-bind:key="site.site" v-for="site in sites" class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentSite === site, 'badge-secondary': currentSite !== site}"
+      @click="currentSite = site">{{site.site}}</span>
+    </p>
+    <p class="lead mb-0">Architectures</p>
+    <p class="mb-2" v-if="sites">
+      <span class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentArchi === 'all', 'badge-secondary': currentArchi !== 'all'}" @click="currentArchi = 'all'">{{archis.length}} archis</span>
+      <span v-bind:key="archi.name"  v-for="archi in archis" class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentArchi === archi, 'badge-secondary': currentArchi !== archi}"
+      @click="currentArchi = archi">{{archi | formatArchi}}
+        <span class="font-weight-normal" v-if="$options.filters.formatRadio(archi)">({{archi | formatRadio}})</span>
+      </span>
+    </p>
+    <div id="panel" class="row center">
       <button class="btn mr-2" type="button" v-on:click="shift(-S_PER_WEEK)">&lt;1w</button>
       <button class="btn mr-2" type="button" v-on:click="shift(-S_PER_DAY)">&lt;1d</button>
       <button class="btn mr-2" type="button" v-on:click="shift(-6 * S_PER_HOUR)">&lt;6h</button>
@@ -23,10 +30,17 @@
       <button class="btn mr-2" type="button" v-on:click="shift(S_PER_WEEK)">&gt;1w</button>
       <button class="btn mr-2" type="button" v-on:click="reload_content()">reload</button>
       <button class="btn mr-2" type="button" v-on:click="reset()">reset</button>
-      <select id="timezoneSelect" v-on:change="select_timezone(true)">
-        <option selected="" value="UTC">UTC</option>
-        <option value="Europe/Paris">Paris</option>
-      </select>
+      <!--<select id="timezoneSelect" v-on:change="select_timezone(true)">
+        <option v-for="name in tzNames" v-bind:key="name" :selected="name === timezone">{{name}}</option>
+      </select> -->
+      <div style="align-items: center;">
+        <multiselect v-model="timezone" placeholder="select timezone"
+                  :options="tzNames"
+                  :allow-empty="false"
+                  width="50"
+                  id="timezoneSelect" v-on:change="select_timezone(true)"
+      />
+      </div>
     </div>
     <object ref="svgObj" id="svgObj" type="image/svg+xml" :data="svgUrl" v-on:load="restore_scrolling()">{{ svgUrl }}</object>
     <div id="waiter" v-if="processing">Processing data... please wait...</div>
@@ -34,28 +48,35 @@
 </template>
 
 <script>
-
+import Multiselect from 'vue-multiselect'
 import { S_PER_DAY, S_PER_WEEK, S_PER_HOUR } from '@/constants'
 import { iotlab } from '@/rest'
+import moment from 'moment-timezone'
 
 export default {
   name: 'Drawgantt',
+
+  components: {
+    Multiselect,
+  },
 
   data () {
     return {
       processing: true,
       relative_start: -S_PER_DAY,
       relative_stop: S_PER_DAY,
-      filterSQL: null,
-      timezoneSQL: null,
       timezone: 'UTC',
       scrolledX: 0,
       scrolledY: 0,
       sites: [],
       zoom_relative_start: 0,
       zoom_relative_stop: 0,
-      windowWidth: 500,
+      width: 500,
       svgURL2: null,
+      nodes: [],
+      currentSite: 'all',
+      currentArchi: 'all',
+      tzUser: moment.tz.guess(),
 
       S_PER_DAY: S_PER_DAY,
       S_PER_WEEK: S_PER_WEEK,
@@ -64,24 +85,46 @@ export default {
   },
 
   computed: {
+    tzNames () {
+      // filtered tz names
+      let tzNames = Object.keys(moment.tz._zones)
+        .map(k => moment.tz._zones[k].split('|')[0])
+        .filter(z => z.indexOf('/') >= 0)
+        .filter(z => z !== 'UTC' && z !== this.tzUser)
+        .sort()
+      tzNames.unshift(this.tzUser)
+      tzNames.unshift('UTC')
+      return tzNames
+    },
     archis () {
-      return Array.from(this.sites.reduce((acc, site) => {
-        site.archis.map(archi => acc.add(archi.archi))
-        return acc
-      }, new Set()))
-        .sort((a, b) => a.localeCompare(b))
-        .map(a => {
-          let archiRadio = a.split(':')
-          return { full: a, name: archiRadio[0], radio: archiRadio[1] }
-        })
+      let archis
+      if (this.currentSite === 'all') {
+        archis = Array.from(this.sites.reduce((acc, site) => {
+          site.archis.map(archi => acc.add(archi.archi))
+          return acc
+        }, new Set()))
+      } else {
+        archis = this.sites.find(site => site.site === this.currentSite.site).archis.map(archi => archi.archi)
+      }
+      return archis.sort((a, b) => a.localeCompare(b))
+    },
+    filter () {
+      let filters = ['production!=\'NO\'']
+      if (this.currentSite !== 'all') {
+        filters.push(`site='${this.currentSite.site}'`)
+      }
+      if (this.currentArchi !== 'all') {
+        filters.push(`archi='${this.currentArchi}'`)
+      }
+      return filters.join(' and ')
     },
     svgUrl () {
       const query = {
-        width: this.windowWidth - 50,
+        width: this.width,
         relative_start: this.relative_start,
         relative_stop: this.relative_stop,
-        filter: this.filterSQL ? this.filterSQL : undefined,
-        timezone: this.timezoneSQL ? this.timezoneSQL : undefined,
+        filter: this.filter,
+        timezone: this.timezone,
       }
 
       var esc = encodeURIComponent
@@ -96,13 +139,15 @@ export default {
     iotlab.getSitesDetails().then(data => { this.sites = data.sort((a, b) => a.site.localeCompare(b.site)) }).catch(err => {
       this.$notify({text: err.response.data.message || 'Failed to fetch sites details', type: 'error'})
     })
+    iotlab.getNodes().then(data => { this.nodes = data }).catch(err => {
+      this.$notify({text: err.response.data.message || 'Failed to fetch nodes', type: 'error'})
+    })
     window.set_zoom_window = this.set_zoom_window
   },
 
   mounted () {
     window.addEventListener('resize', () => {
-      this.windowWidth = window.innerWidth
-      this.reload_content()
+      this.width = this.$refs.container.clientWidth - 50
     })
   },
 
@@ -170,13 +215,6 @@ export default {
       svgObj.parent_content = window
       this.processing = true
     },
-    select_filter (reload) {
-      var filterSelect = document.getElementById('filterSelect')
-      const production = 'production != \'NO\''
-      this.filterSQL = filterSelect.value ? filterSelect.value + ' and ' + production : production
-      window.scrollTo(0, 0)
-      reload && this.reload_content()
-    },
     select_timezone (reload) {
       var timezoneSelect = document.getElementById('timezoneSelect')
       this.timezoneSQL = timezoneSelect.value
@@ -192,7 +230,6 @@ export default {
     },
     init () {
       this.show_panel()
-      this.select_filter(false)
       this.select_timezone(false)
       this.sleep(100, this.reload_content)
     },
