@@ -66,7 +66,7 @@
     :y1="gantt_top - 5" :x2="date2px(gantt_now)" :y2="gantt_top + gantt_height + 5" />
 
     <!-- infobox -->
-    <rect id="resourcemark" :x="resourcemark_x" y="0" rx="0" ry="0" width="2" :height="scale" fill="#888888" stroke="#888888" stroke-width="1" style="opacity: 0.9" />
+    <!-- <rect id="resourcemark" :x="resourcemark_x" y="0" rx="0" ry="0" width="2" :height="scale" fill="#888888" stroke="#888888" stroke-width="1" style="opacity: 0.9" /> -->
     <g id="infobox" display="none">
       <rect id="infoboxrect" x="0" y="0" rx="10" ry="10" width="200" height="150" fill="#FFFFFF" stroke="#888888" stroke-width="1" style="opacity: 0.9" />
       <text font-size="10" id="infoboxtext" x="10" y="10" fill="#000000" />
@@ -238,9 +238,6 @@ export default {
   },
 
   computed: {
-    resourcemark_x () {
-      return CONF.label_right_align + 1
-    },
     ruler_step () {
       let value = (this.gantt_stop_date - this.gantt_start_date) / CONF.time_ruler_scale
       return CONF.time_ruler_steps.filter(r => r < value).pop()
