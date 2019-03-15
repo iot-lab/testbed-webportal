@@ -44,8 +44,6 @@
     </div>
 
     <drawgantt-svg :width="windowWidth" :gantt_relative_start_date="relative_start" :gantt_relative_stop_date="relative_stop"></drawgantt-svg>
-    <object ref="svgObj" id="svgObj" type="image/svg+xml" :data="svgUrl" v-on:load="restore_scrolling()">{{ svgUrl }}</object>
-    <div id="waiter" v-if="processing">Processing data... please wait...</div>
   </div>
 </template>
 
