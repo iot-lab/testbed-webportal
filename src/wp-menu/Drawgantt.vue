@@ -42,6 +42,8 @@
       />
       </div>
     </div>
+
+    <drawgantt-svg :width="windowWidth" :gantt_relative_start_date="relative_start" :gantt_relative_stop_date="relative_stop"></drawgantt-svg>
     <object ref="svgObj" id="svgObj" type="image/svg+xml" :data="svgUrl" v-on:load="restore_scrolling()">{{ svgUrl }}</object>
     <div id="waiter" v-if="processing">Processing data... please wait...</div>
   </div>
@@ -52,12 +54,14 @@ import Multiselect from 'vue-multiselect'
 import { S_PER_DAY, S_PER_WEEK, S_PER_HOUR } from '@/constants'
 import { iotlab } from '@/rest'
 import moment from 'moment-timezone'
+import DrawganttSvg from '@/wp-menu/DrawganttSvg'
 
 export default {
   name: 'Drawgantt',
 
   components: {
     Multiselect,
+    DrawganttSvg,
   },
 
   data () {

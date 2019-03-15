@@ -164,6 +164,18 @@ export const iotlab = {
     return iotlab.api.get(`/experiments/${id}/deployment`).then(resp => resp.data)
   },
 
+  async getNodesStates (start, stop) {
+    console.log(start)
+    console.log(stop)
+    return iotlab.api.get(`/experiments/nodes_states?start=${start.toISOString()}&stop=${stop.toISOString()}`).then(resp => resp.data.items)
+  },
+
+  async getExperimentsJobs (start, stop) {
+    console.log(start)
+    console.log(stop)
+    return iotlab.api.get(`/experiments/jobs?start=${start.toISOString()}&stop=${stop.toISOString()}`).then(resp => resp.data.items)
+  },
+
   async stopExperiment (id) {
     return iotlab.api.delete(`/experiments/${id}`)
   },
