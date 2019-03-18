@@ -43,7 +43,7 @@
       </div>
     </div>
 
-    <drawgantt-svg :width="windowWidth" :gantt_relative_start_date="relative_start" :gantt_relative_stop_date="relative_stop"></drawgantt-svg>
+    <drawgantt-svg :timezone="timezone" :resource_filter="resource_filter" :width="width" :gantt_relative_start_date="relative_start" :gantt_relative_stop_date="relative_stop"></drawgantt-svg>
   </div>
 </template>
 
@@ -75,7 +75,6 @@ export default {
       zoom_relative_stop: 0,
       width: 500,
       svgURL2: null,
-      nodes: [],
       currentSite: 'all',
       currentArchi: 'all',
       tzUser: moment.tz.guess(),
@@ -110,6 +109,20 @@ export default {
       }
       return archis.sort((a, b) => a.localeCompare(b))
     },
+    resource_filter () {
+      let filter = {}
+      if (this.currentSite !== 'all') {
+        filter.site = this.currentSite.site
+      } else {
+        filter.site_all = true
+      }
+      if (this.currentArchi !== 'all') {
+        filter.archi = this.currentArchi
+      } else {
+        filter.archi_all = true
+      }
+      return filter
+    },
     filter () {
       let filters = ['production!=\'NO\'']
       if (this.currentSite !== 'all') {
@@ -138,12 +151,14 @@ export default {
   },
 
   created () {
-    iotlab.getSitesDetails().then(data => { this.sites = data.sort((a, b) => a.site.localeCompare(b.site)) }).catch(err => {
-      this.$notify({text: err.response.data.message || 'Failed to fetch sites details', type: 'error'})
+    Promise.all([
+      iotlab.getSitesDetails().catch((err) => this.errorHandler('sites', err)),
+      iotlab.getNodes().catch((err) => this.errorHandler('nodes', err)),
+    ]).then(([sites, nodes, nodesStates, jobs]) => {
+      this.setSites(sites)
+      this.setNodes(nodes)
     })
-    iotlab.getNodes().then(data => { this.nodes = data }).catch(err => {
-      this.$notify({text: err.response.data.message || 'Failed to fetch nodes', type: 'error'})
-    })
+
     window.set_zoom_window = this.set_zoom_window
   },
 
@@ -154,8 +169,17 @@ export default {
   },
 
   methods: {
+    errorHandler (type, err) {
+      this.$notify({text: err.response.data.message || 'Failed to fetch ' + type, type: 'error'})
+    },
+    setSites (sites) {
+      this.sites = sites.sort((a, b) => a.site.localeCompare(b.site))
+    },
     sleep (millis, callback) {
       setTimeout(() => callback(), millis)
+    },
+    setNodes (nodes) {
+      this.nodes = nodes
     },
     show_panel () {
       var panelDiv = document.getElementById('panel')

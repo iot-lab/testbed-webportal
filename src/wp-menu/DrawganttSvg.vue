@@ -110,6 +110,7 @@
 </template>
 <script>
 import { iotlab } from '@/rest'
+import moment from 'moment-timezone'
 
 var svgDocument
 var infobox, infoboxtext, infoboxrect
@@ -201,12 +202,8 @@ export default {
       default: 86400,
     },
     resource_filter: {
-      type: String,
-      default: '',
-    },
-    resource_base: {
-      type: String,
-      default: 'cpuset',
+      type: Object,
+      default: () => { return {'archi_all': true, 'site_all': true} },
     },
     timezone: {
       type: String,
@@ -299,18 +296,35 @@ export default {
     if (!this.scale) {
       this.scale = CONF.scale
     }
+    global.moment = moment
 
     this.reload()
   },
+
+  watch: {
+    resource_filter () {
+      this.reload()
+    },
+    timezone () {
+      this.reload()
+    },
+    gantt_relative_start_date () {
+      this.reload()
+    },
+    gantt_relative_stop_date () {
+      this.reload()
+    },
+  },
+
   methods: {
     reload () {
-      this.now = new Date((new Date()).getTime())
-      this.start = new Date(this.now.getTime() + 1000 * this.gantt_relative_start_date)
-      this.stop = new Date(this.now.getTime() + 1000 * this.gantt_relative_stop_date)
+      this.now = moment.tz(this.timezone)
+      this.start = moment(this.now).add(this.gantt_relative_start_date, 'seconds')
+      this.stop = moment(this.now).add(this.gantt_relative_stop_date, 'seconds')
 
-      this.gantt_now = this.now.getTime() / 1000
-      this.gantt_start_date = this.start.getTime() / 1000
-      this.gantt_stop_date = this.stop.getTime() / 1000
+      this.gantt_now = this.now.unix()
+      this.gantt_start_date = this.start.unix()
+      this.gantt_stop_date = this.stop.unix()
 
       // Compute gantt start and stop dates
       if (this.gantt_start_date === 0) {
@@ -356,8 +370,6 @@ export default {
         let short2 = this.$options.filters.stripDomain(n2.network_address).split(/[.-]/)
         let [archi2, id2] = [short2[0], Number(short2[1])]
 
-        console.log(short1)
-        console.log(short2)
         // sort by site, archi then id
         if (n1.site > n2.site) return 1
         if (n1.site < n2.site) return -1
@@ -393,6 +405,13 @@ export default {
       }
     },
     setNodes (nodes) {
+      nodes = nodes.filter(n => {
+        if (this.resource_filter.archi_all || this.resource_filter.archi === n.archi) {
+          if (this.resource_filter.site_all || this.resource_filter.site === n.site) {
+            return n
+          }
+        }
+      })
       this.nodes = nodes
       this.sortNodes()
       let y = this.gantt_top
