@@ -7,7 +7,7 @@
         <div class="card-header bg-success text-white"><i class="fa fa-check mr-1"></i> Your account has been activated</div>
         <div class="card-body text-success">
           <h5>Welcome to FIT IoT-LAB</h5>
-          <p>You will receive an email with your username and password.</p>
+          <p>You will receive an email with your username.</p>
           <router-link :to="{name:'login'}" class="btn btn-block btn-outline-success w-25 mx-auto mt-3">Log in</router-link>
         </div>
       </div>

@@ -135,6 +135,22 @@
         {{ errors.first('motivations') }}
       </div>
     </div>
+    <div class="form-group"  v-if="!hidden.includes('password')">
+      <label class="form-control-label">Password</label>
+      <input placeholder="Password" v-model="user.password" name="password"
+        class="form-control" type="password" v-validate="'required'" ref="password"
+        :class="{'is-invalid': errors.has('password') }">
+      <div class="invalid-feedback" v-show="errors.has('password')">
+        {{ errors.first('password') }}
+      </div>
+      <label class="form-control-label">Confirm password</label>
+      <input placeholder="Password" name="password_confirmation"
+        data-vv-as="password" class="form-control" type="password" v-validate="'required|confirmed:password'"
+        :class="{'is-invalid': errors.has('password_confirmation') }">
+      <div class="invalid-feedback" v-show="errors.has('password_confirmation')">
+        {{ errors.first('password_confirmation') }}
+      </div>
+    </div>
   </div>
 </template>
 
