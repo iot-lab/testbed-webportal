@@ -341,10 +341,6 @@ export default {
         this.gantt_stop_date = this.gantt_start_date + timespan
       }
 
-      function handler (type, err) {
-        this.$notify({text: err.response.data.message || 'Failed to fetch ' + type, type: 'error'})
-      }
-
       this.nodes = []
       this.svgNodes = []
       this.jobs = []
@@ -354,14 +350,18 @@ export default {
       this.svgNodesMap = {}
 
       Promise.all([
-        iotlab.getNodes().catch((err) => handler('nodes', err)),
-        iotlab.getNodesStates(this.start, this.stop).catch((err) => handler('nodes states', err)),
-        iotlab.getExperimentsJobs(this.start, this.now).catch((err) => handler('jobs', err)),
+        iotlab.getNodes().catch((err) => this.errorHandler('nodes', err)),
+        iotlab.getNodesStates(this.start, this.stop).catch((err) => this.errorHandler('nodes states', err)),
+        iotlab.getExperimentsJobs(this.start, this.now).catch((err) => this.errorHandler('jobs', err)),
       ]).then(([nodes, nodesStates, jobs]) => {
         this.setNodes(nodes)
         this.setNodesStates(nodesStates)
         this.setJobs(jobs)
       })
+    },
+    errorHandler (type, err) {
+      console.log(err)
+      this.$notify({text: err.response.data.message || 'Failed to fetch ' + type, type: 'error'})
     },
     sortNodes () {
       this.nodes.sort((n1, n2) => {

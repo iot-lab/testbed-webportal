@@ -42,7 +42,10 @@
       />
       </div>
     </div>
-
+    <h1> Regular Drawgantt-SVG PHP </h1>
+    <object ref="svgObj" id="svgObj" type="image/svg+xml" :data="svgUrl" v-on:load="restore_scrolling()">{{ svgUrl }}</object>
+    <div id="waiter" v-if="processing">Processing data... please wait...</div>
+    <h1> Pure JS Drawgantt-SVG </h1>
     <drawgantt-svg :timezone="timezone" :resource_filter="resource_filter" :width="width" :gantt_relative_start_date="relative_start" :gantt_relative_stop_date="relative_stop"></drawgantt-svg>
   </div>
 </template>
@@ -74,7 +77,6 @@ export default {
       zoom_relative_start: 0,
       zoom_relative_stop: 0,
       width: 500,
-      svgURL2: null,
       currentSite: 'all',
       currentArchi: 'all',
       tzUser: moment.tz.guess(),
