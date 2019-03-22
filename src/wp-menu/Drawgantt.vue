@@ -42,10 +42,12 @@
       />
       </div>
     </div>
-    <h1> Regular Drawgantt-SVG PHP </h1>
+    <h4> Gantt with Table &amp; DIV </h4>
+    <gantt :timezone="timezone" :resource_filter="resource_filter" :width="width" :gantt_relative_start_date="relative_start" :gantt_relative_stop_date="relative_stop"></gantt>
+    <h4> Regular Drawgantt-SVG PHP </h4>
     <object ref="svgObj" id="svgObj" type="image/svg+xml" :data="svgUrl" v-on:load="restore_scrolling()">{{ svgUrl }}</object>
     <div id="waiter" v-if="processing">Processing data... please wait...</div>
-    <h1> Pure JS Drawgantt-SVG </h1>
+    <h4> Pure JS Drawgantt-SVG </h4>
     <drawgantt-svg :timezone="timezone" :resource_filter="resource_filter" :width="width" :gantt_relative_start_date="relative_start" :gantt_relative_stop_date="relative_stop"></drawgantt-svg>
   </div>
 </template>
@@ -56,6 +58,7 @@ import { S_PER_DAY, S_PER_WEEK, S_PER_HOUR } from '@/constants'
 import { iotlab } from '@/rest'
 import moment from 'moment-timezone'
 import DrawganttSvg from '@/wp-menu/DrawganttSvg'
+import Gantt from '@/wp-menu/Gantt'
 
 export default {
   name: 'Drawgantt',
@@ -63,6 +66,7 @@ export default {
   components: {
     Multiselect,
     DrawganttSvg,
+    Gantt,
   },
 
   data () {

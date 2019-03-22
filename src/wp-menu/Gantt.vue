@@ -1,133 +1,135 @@
 <template>
-  <svg ref="svgObj" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events" xml:space="preserve"
-  :width="page_width" :height="page_height" :viewBox="`0 0 ${ page_width } ${ page_height}`"
-  zoomAndPan="magnify" color-rendering="optimizeSpeed" image-rendering="optimizeSpeed" text-rendering="optimizeSpeed" shape-rendering="optimizeSpeed" >
+  <div class="container">
+  <table class="table table-striped table-sm" v-if="nodes.length">
+    <thead>
+      <tr>
+        <th class="cursor" title="sort by hostname" @click="sortBy(node => nodeSortByHostname(node))">Node hostname</th>
+        <th>State</th>
+        <th class="cursor text-center" title="sort by state" @click="sortBy(node => node.state)">Schedule</th>
+      </tr>
+      <tr>
+        <th></th><th></th>
+        <th>
+          <div :style="`position: relative; height: 100px; width: ${gantt_width}px`">
+            <div class="timeRulerBorder" v-for="d in rulerValues" v-bind:key="d"
+              v-bind:style="{
+                position: 'absolute',
+                left: date2px(d) + 'px',
+                width: '1px',
+                top: '85%',
+                height: (gantt_height + 5) + 'px',
+                borderWidth: '1px',
+                borderLeft: 'solid blue 1px',
+                }">
+            </div>
+            <div class="ruler" v-for="d in rulerValues" v-bind:key="d"
+              v-bind:style="{
+                position: 'absolute',
+                top: '0px',
+                left: date2px(d) + 'px',
+                textAlign: 'middle',
+                display: 'inline-block',
+                }">
+              <div style="position: relative; left:-50%; text-align:">
+                <div>{{ ymddate(d) }}</div>
+                <div>{{ hmsdate(d) }}</div>
+              </div>
+            </div>
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="nodeIteration" v-for="node in svgNodes" v-bind:key='node.network_address'>
+        <td>
+          {{node.label}}
+        </td>
+        <td class="text-center">
+          <span class="badge badge-state cursor" :class="node.state | stateBadgeClass">{{node.state}}</span>
+        </td>
+        <td>
+          <div :style="`position: relative; height: 25px; width: ${gantt_width}px`">
+            <div v-for="nodesState in node.states" v-bind:key="nodesState.network_address"
+                v-bind:style="nodeStateStyle(nodesState)"
+                @mouseover="e => mouseOver(e, nodesState.info, '')"
+                @mouseout="mouseOut"
+                @mousemove="mouseMove">
+            </div>
 
-<!-- outside box -->
-    <rect :x="gantt_left_align" :y="gantt_top" :width="gantt_width" :height="gantt_height"
-    stroke="#0000FF" stroke-width="1" fill="none" />-->
-    <g class="node" v-for="node in svgNodes" v-bind:key='node.network_address'>
-      <line stroke="#0000FF" stroke-width="1" shape-rendering="crispEdges"
-          :x1="gantt_left_align"
-          :x2="gantt_left_align + gantt_width"
-          :y1="node.y + 0.5"
-          :y2="node.y + 0.5" />
+            <!--<div class='gridLine'
+                v-bind:style="{
+                  position: 'absolute',
+                  left: date2px(0) + 'px',
+                  textAlign: 'right',
+                  width: gantt_width + 'px',
+                  top: node.y + 'px',
+                  borderWidth: '1px',
+                  borderBottom: '1px blue solid',
+                }">
+            </div>-->
 
-      <text font-size="10" text-anchor="end" dominant-baseline="central"
-            :x="CONF.label_right_align"
-            :y="node.y + scale/2" >
-            {{node.label}}
-      </text>
-
-      <g class="job" v-for="job in node.jobs" v-bind:key="job.key"
-        @mouseover="e => mouseOver(e, job.info, '')"
-        @mouseout="mouseOut"
-        @mousemove="mouseMove">
-        <rect stroke-width="1" style="opacity: 0.3" stroke="#000088"
-              :class="'job' + job.id"
-              :x="date2px(job.start)"
-              :y="job.y"
-              :width="job.width"
-              :height="job.height"
-              :fill="`hsl(${job2int(job)},${CONF.job_color_saturation_lightness})`"/>
-        <text font-size="10" text-anchor="middle" dominant-baseline="central"
-              v-if="job.width > CONF.gantt_min_job_width_for_label"
-              :x="date2px(job.start) + job.width / 2"
-              :y="job.y + job.height / 2">
-          {{job.id}}
-        </text>
-      </g>
-      <g class="nodeState" v-for="nodesState in node.states" v-bind:key="nodesState.network_address">
-        <rect stroke-width="0" style="opacity: 0.75"
-              :fill="CONF.state_colors[nodesState.state]"
-              :width="date2px(nodesState.stop) - date2px(nodesState.start)"
-              :height="nodesState.height"
-              @mouseover="e => mouseOver(e, nodesState.info, '')"
-              @mouseout="mouseOut"
-              @mousemove="mouseMove"
-              :x="date2px(nodesState.start)" :y="nodesState.y" />
-      </g>
-    </g>
-
-    <g class="ruler" v-for="d in rulerValues" v-bind:key="d">
-      <!-- top time ruler-->
-      <text :x="date2px(d)" :y="gantt_top - 15" text-anchor="middle" font-size="10"  >{{ ymddate(d) }}</text>
-      <text :x="date2px(d)" :y="gantt_top - 5" text-anchor="middle" font-size="10"  >{{ hmsdate(d) }}</text>
-      <!-- bottom time ruler-->
-      <text :x="date2px(d)" :y="gantt_top + gantt_height + 25" text-anchor="middle" font-size="10"  >{{ ymddate(d) }}</text>
-      <text :x="date2px(d)" :y="gantt_top + gantt_height + 15" text-anchor="middle" font-size="10"  >{{ hmsdate(d) }}</text>
-      <!-- time grid lines -->
-      <line v-for="d in rulerValues" v-bind:key="d"
-            :x1="date2px(d)"
-            :y1="gantt_top-5"
-            :x2="date2px(d)"
-            :y2="gantt_top + gantt_height + 5"
-            stroke="#0000FF" stroke-width="1" />
-    </g>
-
-    <!-- now line -->
-    <line stroke="#FF0000" stroke-width="2" stroke-dasharray="10,10"
-    :x1="date2px(gantt_now)"
-    :y1="gantt_top - 5" :x2="date2px(gantt_now)" :y2="gantt_top + gantt_height + 5" />
-
-    <!-- infobox -->
-    <!-- <rect id="resourcemark" :x="resourcemark_x" y="0" rx="0" ry="0" width="2" :height="scale" fill="#888888" stroke="#888888" stroke-width="1" style="opacity: 0.9" /> -->
-    <g ref="infobox" id="infobox"
-       :display="infobox.visible ? 'inline' : 'none'"
-       :transform="`translate(${infobox.x+20}, ${infobox.y+20})`"
+            <div v-for="job in node.jobs" v-bind:key="job.key"
+                class="job"
+                v-bind:style="{
+                  position: 'absolute',
+                  backgroundColor: `hsl(${job2int(job)},${CONF.job_color_saturation_lightness})`,
+                  // height: job.height + 'px',
+                  width: job.width + 'px',
+                  left: date2px(job.start) + 'px',
+                  zIndex: 50,
+                  userSelect: 'none',
+                }"
+                @mouseover="e => mouseOver(e, job.info, '')"
+                @mouseout="mouseOut"
+                @mousemove="mouseMove">
+              {{job.id}}
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+        <!--<line v-for="d in rulerValues" v-bind:key="d"
+              :x1="date2px(d)"
+              :y1="gantt_top-5"
+              :x2="date2px(d)"
+              :y2="gantt_top + gantt_height + 5"
+              stroke="#0000FF" stroke-width="1" />
+      </div>
+    <div class="row">
+      <div class='ganttBorder'
+          v-bind:style="{
+            position: 'absolute',
+            left: date2px(0) + 'px',
+            textAlign: 'right',
+            width: gantt_width + 'px',
+            height: gantt_height + 'px',
+            borderStyle: 'solid',
+            borderWidth: '1px',
+            borderColor: 'blue',
+            top: gantt_top + 'px',
+          }">
+        </div>
+    </div>-->
+  </table>
+  <div ref='infobox' class="infobox rounded" v-show="infobox.visible" id="infobox"
+       :style="{
+         position: 'absolute',
+         backgroundColor: 'white',
+         left: (infobox.x + 20) + 'px',
+         top: (infobox.y + 20) + 'px',
+         zIndex: 70,
+        }"
        >
-      <rect ref="infoboxrect" id="infoboxrect" x="0" y="0" rx="10" ry="10" fill="#FFFFFF" stroke="#888888" stroke-width="1" style="opacity: 0.9"
-            :width="infobox.width" :height="infobox.height" />
-      <text ref="infoboxtext" font-size="10" id="infoboxtext" x="10" y="10" fill="#000000">
-        <tspan x=10 dy=10 v-for="line in infobox.text">{{line}}</tspan>
-      </text>
-    </g>
-    <rect x="0" y="0" width="0" height="0" id="zoom" stroke="#0000FF" stroke-width="1" fill="#8888FF" style="opacity: 0.25" display="none" />
-
-    <defs>
-      <pattern id="absentPattern" patternUnits="userSpaceOnUse" x="0" y="0" width="5" height="5" viewBox="0 0 5 5" >
-      <line x1="5" y1="0" x2="0" y2="5" stroke="#000000" stroke-width="2" />
-      </pattern>
-      <pattern id="suspectedPattern" patternUnits="userSpaceOnUse" x="0" y="0" width="5" height="5" viewBox="0 0 5 5" >
-      <line x1="5" y1="0" x2="0" y2="5" stroke="#ff0000" stroke-width="2" />
-      </pattern>
-      <pattern id="deadPattern" patternUnits="userSpaceOnUse" x="0" y="0" width="5" height="5" viewBox="0 0 5 5" >
-      <line x1="5" y1="0" x2="0" y2="5" stroke="#ff8080" stroke-width="2" />
-      </pattern>
-      <pattern id="standbyPattern" patternUnits="userSpaceOnUse" x="0" y="0" width="5" height="5" viewBox="0 0 5 5" >
-      <line x1="5" y1="0" x2="0" y2="5" stroke="#00ff00" stroke-width="2" />
-      </pattern>
-      <pattern id="drainPattern" patternUnits="userSpaceOnUse" x="0" y="0" width="15" height="10" viewBox="0 0 10 10" >
-      <circle cx="5" cy="5" r="4" fill="#ff0000" stroke="#ff0000" stroke-width="1" />
-      <line x1="2" y1="5" x2="9" y2="5" stroke="#ffffff" stroke-width="2" />
-      </pattern>
-      <pattern id="containerPattern" patternUnits="userSpaceOnUse" x="0" y="0" width="20" height="20" viewBox="0 0 20 20" >
-      <text font-size="10" x="0" y="20" fill="#888888">C</text>
-      </pattern>
-      <pattern id="besteffortPattern" patternUnits="userSpaceOnUse" x="0" y="0" width="20" height="20" viewBox="0 0 20 20" >
-      <text font-size="10" x="10" y="20" fill="#888888">B</text>
-      </pattern>
-      <pattern id="placeholderPattern" patternUnits="userSpaceOnUse" x="0" y="0" width="20" height="20" viewBox="0 0 20 20" >
-      <text font-size="10" x="10" y="20" fill="#888888">P</text>
-      </pattern>
-      <pattern id="deployPattern" patternUnits="userSpaceOnUse" x="0" y="0" width="20" height="20" viewBox="0 0 20 20" >
-      <text font-size="10" x="10" y="10" fill="#888888">D</text>
-      </pattern>
-      <pattern id="timesharingPattern" patternUnits="userSpaceOnUse" x="0" y="0" width="20" height="20" viewBox="0 0 20 20" >
-      <text font-size="10" x="10" y="20" fill="#888888">T</text>
-      </pattern>
-    </defs>
-  </svg>
+      <div v-for="line in infobox.text">{{line}}</div>
+  </div>
+  </div>
 </template>
 <script>
 import { iotlab } from '@/rest'
-import Vue from 'vue'
 import moment from 'moment-timezone'
 
 var svgDocument
 var timeruler
-var zoom, zoomDraw, zoomX1, zoomX2, zoomWidth
-var resourcemark
 var parentContent
 var y
 const CONF = {
@@ -150,11 +152,9 @@ const CONF = {
   resource_group_level: 'network_address',
   resource_drain_property: 'drain',
   state_colors: {
-    Absent: 'url(#absentPattern)',
-    Suspected: 'url(#suspectedPattern)',
-    Dead: 'url(#deadPattern)',
-    Standby: 'url(#standbyPattern)',
-    Drain: 'url(#drainPattern)',
+    Absent: '#ff0000',
+    Suspected: '#000000',
+    Dead: '#ff8080',
   },
   job_colors: {
     'besteffort': 'url(#besteffortPattern)',
@@ -189,7 +189,7 @@ const CONF = {
 }
 
 export default {
-  name: 'DrawganttSvg',
+  name: 'Gantt',
 
   props: {
     width: {
@@ -235,6 +235,8 @@ export default {
         visible: false,
         x: 0,
         y: 0,
+        width: 10,
+        height: 10,
         text: '',
       },
     }
@@ -336,6 +338,9 @@ export default {
     gantt_relative_stop_date () {
       this.load()
     },
+    resource_filter () {
+      this.load()
+    },
   },
 
   methods: {
@@ -361,6 +366,18 @@ export default {
     errorHandler (type, err) {
       console.log(err)
       this.$notify({text: err.response.data.message || 'Failed to fetch ' + type, type: 'error'})
+    },
+    nodeStateStyle (nodesState) {
+      let stateColor = CONF.state_colors[nodesState.state]
+      return {
+        background: `repeating-linear-gradient(-45deg, transparent, transparent 2.5px, ${stateColor} 2.5px, ${stateColor} 4.5px)`,
+        backgroundSize: '5px 5px',
+        position: 'absolute',
+        height: '100%',
+        width: (this.date2px(nodesState.stop) - this.date2px(nodesState.start)) + 'px',
+        left: this.date2px(nodesState.start) + 'px',
+        // top: nodesState.y + 'px',
+      }
     },
     sortNodes () {
       this.nodes.sort((n1, n2) => {
@@ -400,6 +417,7 @@ export default {
         let svgNode = {
           y: y,
           label: this.$options.filters.stripDomain(node.network_address),
+          state: node.state,
           network_address: node.network_address,
           states: [],
           jobs: [],
@@ -410,24 +428,26 @@ export default {
 
       for (let nodesState of nodesStates) {
         let stopDate = (new Date(nodesState.stop_date)).getTime() / 1000
-        stopDate = nodesState.stop_date === 0 ? this.gantt_stop_date : stopDate
-
+        let openEnded = stopDate === 0
         let svgNodeState = {
           y: svgNodesMap[nodesState.network_address].y,
           start: moment(nodesState.start_date).unix(),
           start_date: moment(nodesState.start_date).tz(this.timezone),
-          stop: stopDate,
+          stop: openEnded ? this.gantt_stop_date : stopDate,
           stop_date: moment(nodesState.stop_date).tz(this.timezone),
-          closed_end: nodesState.stop_date === 0,
           height: this.scale,
           state: nodesState.state,
+          open_ended: openEnded,
         }
         svgNodeState.info = `State: ${svgNodeState.state}|Since: ${this.formatDateTime(svgNodeState.start_date)}`
-        if (svgNodeState.closed_end) {
+        if (!svgNodeState.open_ended) {
           svgNodeState.info += `|Until: ${this.formatDateTime(svgNodeState.stop_date)}`
         }
 
         svgNodesMap[nodesState.network_address].states.push(svgNodeState)
+        if (svgNodeState.start === this.start && svgNodeState.stop === this.stop) {
+          svgNodesMap[nodesState.network_address].state = svgNodeState
+        }
       }
 
       let nodesNetworkAddresses = this.nodes.map(el => el.network_address)
@@ -454,21 +474,20 @@ export default {
           let svgJob = {
             y: svgNodesMap[node].y,
             start: (new Date(job.start_date)).getTime() / 1000,
-            stop: job.stop_date === 0 ? (job.submitted_duration ? this.gantt_start_date + 60 * job.submitted_duration : this.gantt_stop_date) : stopDate,
-            closed_end: job.stop_date === 0,
+            stop: stopDate === 0 ? (job.submitted_duration ? this.gantt_start_date + 60 * job.submitted_duration : this.gantt_stop_date) : stopDate,
             id: job.id,
             height: this.scale * (indicesArray[1] - indicesArray[0] + 1),
             color: '#00FF00',
-            info: `Id: ${job.id}|User: ${job.user}|Name: ${job.name}|Nodes: ${job.nb_nodes}|Submission: ${job.submission_date}`,
+            info: `Id: ${job.id}|User: ${job.user}|Name: ${job.name}|Nodes: ${job.nb_nodes}|Submission: ${job.submission_date}| Duration: ${job.submitted_duration} min`,
           }
           svgJob.width = this.date2px(svgJob.stop) - this.date2px(svgJob.start)
           svgNodesMap[node].jobs.push(svgJob)
         }
       }
 
-      console.log(svgNodesMap)
       this.svgNodes = Object.values(svgNodesMap)
     },
+
     setNodesStatesJobs (nodes, nodesStates, jobs) {
       nodes = nodes.filter(n => {
         if (this.resource_filter.archi_all || this.resource_filter.archi === n.archi) {
@@ -488,18 +507,6 @@ export default {
       return Number((a - (Math.floor(a / b) * b)).toPrecision(8))
     },
 
-    init (evt) {
-      svgDocument = evt.target.ownerDocument
-      resourcemark = svgDocument.getElementById('resourcemark')
-      timeruler = svgDocument.getElementById('timeruler')
-      zoom = svgDocument.getElementById('zoom')
-      zoomX1 = 0
-      zoomX2 = 0
-      zoomWidth = 0
-      zoomDraw = false
-      this.drawTimeRuler()
-    },
-
     px2date (y) {
       if (y < this.gantt_left_align) {
         return this.gantt_start_date
@@ -510,57 +517,6 @@ export default {
       return Math.round((y - this.gantt_left_align) * (this.gantt_stop_date - this.gantt_start_date) / this.gantt_width + this.gantt_start_date)
     },
 
-    zoomDraw () {
-      if (zoomWidth > 5) {
-        zoom.setAttribute('x', Math.min(zoomX1, zoomX2))
-        zoom.setAttribute('y', this.gantt_top)
-        zoom.setAttribute('width', zoomWidth)
-        zoom.setAttribute('height', this.gantt_height)
-        zoom.setAttribute('display', 'inline')
-      } else {
-        zoom.setAttribute('display', 'none')
-      }
-    },
-    rootMouseDown (evt) {
-      if (parentContent != null && typeof (parentContent.setZoomWindow) === 'function' && evt.pageX > this.gantt_left_align && evt.pageX < (this.gantt_left_align + this.gantt_width) && evt.pageY > this.gantt_top && evt.pageY < (this.gantt_top + this.gantt_height)) {
-        zoomX1 = evt.pageX
-        zoomX2 = zoomX1
-        zoomWidth = 0
-        zoomDraw = true
-      }
-    },
-    rootMouseUp (evt) {
-      zoomDraw = false
-      if (zoomWidth > 5 && parentContent != null && typeof (parentContent.setZoomWindow) === 'function') {
-        parentContent.setZoomWindow(this.gantt_now, this.px2date(Math.min(zoomX1, zoomX2)), this.px2date(Math.max(zoomX1, zoomX2)))
-      }
-      zoomX1 = 0
-      zoomX2 = 0
-      zoomWidth = 0
-    },
-    rootMouseMove (evt) {
-      if (zoomDraw &&
-        (evt.pageX > this.gantt_left_align) && (evt.pageX < (this.gantt_left_align + this.gantt_width)) &&
-        (evt.pageY > this.gantt_top) && (evt.pageY < (this.gantt_top + this.gantt_height))) {
-        zoomX2 = evt.pageX
-        zoomWidth = Math.abs(zoomX2 - zoomX1)
-        zoomDraw()
-      }
-      if (evt.pageY > this.gantt_top && evt.pageY < (this.gantt_top + this.gantt_height)) {
-        y = Math.floor((evt.pageY - this.gantt_top) / this.scale) * this.scale + this.gantt_top
-        resourcemark.setAttribute('transform', 'translate(0,' + y + ')')
-        resourcemark.setAttribute('display', 'inline')
-      } else {
-        resourcemark.setAttribute('display', 'none')
-      }
-    },
-    rootClick (evt) {
-      zoomDraw = false
-      zoomX1 = 0
-      zoomX2 = 0
-      zoomWidth = 0
-      zoomDraw()
-    },
     drawTimeRuler (evt) {
       if (this.display !== 'mobile_ruler_only' && timeruler != null) {
         if (parentContent != null && this.page_height > parentContent.innerHeight) {
@@ -604,15 +560,6 @@ export default {
       let array = message.split('|')
       this.infobox.visible = true
       this.infobox.text = array
-
-      Vue.nextTick(() => {
-        var length = 0
-        for (var tspan of this.$refs.infoboxtext.childNodes) {
-          length = Math.max(length, tspan.getComputedTextLength())
-        }
-        this.infobox.width = length + 20
-      })
-
       this.infobox.height = array.length * CONF.text_scale + 20
 
       /* var length = 0
@@ -645,18 +592,18 @@ export default {
       this.infobox.visible = false
     },
     mouseMove (evt) {
-      let dim = this.$refs.svgObj.getBoundingClientRect()
-      this.infobox.x = evt.clientX - dim.left
-      this.infobox.y = evt.clientY - dim.top
+      // let dim = this.$refs.table.getBoundingClientRect()
+      this.infobox.x = evt.pageX
+      this.infobox.y = evt.pageY
     },
     date2px (date) {
       if (date < this.gantt_start_date) {
-        return this.gantt_left_align
+        return 0
       }
       if (date > this.gantt_stop_date) {
-        return this.gantt_left_align + this.gantt_width
+        return this.gantt_width
       }
-      return Math.round(this.gantt_left_align + (this.gantt_width * (date - this.gantt_start_date)) / (this.gantt_stop_date - this.gantt_start_date))
+      return Math.round((this.gantt_width * (date - this.gantt_start_date)) / (this.gantt_stop_date - this.gantt_start_date))
     },
     job2int (job) {
       // compute a suffled number for id, so that colors are not too close
@@ -667,7 +614,7 @@ export default {
 }
 </script>
 <style>
-svg text {
+.infobox .job {
   -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
@@ -675,7 +622,7 @@ svg text {
 
   cursor: default;
 }
-svg text::selection {
+.job::selection .infobox::selection {
     background: none;
 }
 </style>
