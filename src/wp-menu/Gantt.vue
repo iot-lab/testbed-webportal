@@ -11,7 +11,7 @@
         <th></th><th></th>
         <th>
           <div :style="`position: relative; height: 100px; width: ${gantt_width}px`">
-            <div class="timeRulerBorder" v-for="d in rulerValues" v-bind:key="d"
+            <div class="timeRulerBorder" v-for="d in rulerValues"
               v-bind:style="{
                 position: 'absolute',
                 left: date2px(d) + 'px',
@@ -22,7 +22,7 @@
                 borderLeft: 'solid blue 1px',
                 }">
             </div>
-            <div class="ruler" v-for="d in rulerValues" v-bind:key="d"
+            <div class="ruler" v-for="d in rulerValues"
               v-bind:style="{
                 position: 'absolute',
                 top: '0px',
@@ -128,45 +128,15 @@
 import { iotlab } from '@/rest'
 import moment from 'moment-timezone'
 
-var svgDocument
-var timeruler
-var parentContent
-var y
 const CONF = {
   timezone: 'UTC',
   resources_labels: ['network_address', 'cpuset'],
-  cpuset_label_display_string: '%02d',
-  label_display_regex: {
-    network_address: /([^.]+)\..*/g,
-  },
-  label_cmp_regex: {
-    network_address: /([^-]+)-(\d+)\..*/g,
-  },
-  resource_properties: [
-    'deploy', 'cpuset', 'besteffort', 'network_address', 'type', 'drain',
-  ],
-  resource_hierarchy: [
-    'site', 'network_address',
-  ],
-  resource_base: 'cpuset',
-  resource_group_level: 'network_address',
-  resource_drain_property: 'drain',
   state_colors: {
     Absent: '#ff0000',
     Suspected: '#000000',
     Dead: '#ff8080',
   },
-  job_colors: {
-    'besteffort': 'url(#besteffortPattern)',
-    'deploy(=\\w)?': 'url(#deployPattern)',
-    'container(=\\w+)?': 'url(#containerPattern)',
-    'timesharing=(\\*|user),(\\*|name)': 'url(#timesharingPattern)',
-    'placeholder=\\w+': 'url(#placeholderPattern)',
-  },
-  job_click_url: '',
-  resource_click_url: '',
 
-  hierarchy_resource_width: 10,
   scale: 10,
   text_scale: 10,
   time_ruler_scale: 6,
@@ -179,12 +149,7 @@ const CONF = {
   gantt_left_align: 200,
   gantt_min_width: 900,
   gantt_min_height: 100,
-  gantt_min_job_width_for_label: 0,
-  min_state_duration: 2,
   job_color_saturation_lightness: '75%,75%',
-  job_color_saturation_lightness_highlight: '50%,50%',
-  standby_truncate_state_to_now: 1,
-  min_timespan: 480,
 
 }
 
@@ -266,7 +231,7 @@ export default {
       }
     },
     gantt_left_align () {
-      return CONF.hierarchy_left_align + (3 + CONF.resource_hierarchy.indexOf(this.resource_base)) * CONF.hierarchy_resource_width
+      return CONF.hierarchy_left_align
     },
     gantt_top () {
       if (this.display !== 'no_ruler') {
@@ -427,6 +392,9 @@ export default {
       }
 
       for (let nodesState of nodesStates) {
+        if (!(nodesState.network_address in svgNodesMap)) {
+          continue
+        }
         let stopDate = (new Date(nodesState.stop_date)).getTime() / 1000
         let openEnded = stopDate === 0
         let svgNodeState = {
@@ -454,6 +422,9 @@ export default {
       for (let job of this.jobs) {
         let indices = []
         for (let node of job.nodes) {
+          if (!(node in svgNodesMap)) {
+            continue
+          }
           indices.push(nodesNetworkAddresses.indexOf(node))
         }
         indices.sort()
@@ -487,7 +458,6 @@ export default {
 
       this.svgNodes = Object.values(svgNodesMap)
     },
-
     setNodesStatesJobs (nodes, nodesStates, jobs) {
       nodes = nodes.filter(n => {
         if (this.resource_filter.archi_all || this.resource_filter.archi === n.archi) {
@@ -502,91 +472,14 @@ export default {
 
       this.addNodesStatesJobs(nodesStates, jobs)
     },
-
     fmod (a, b) {
       return Number((a - (Math.floor(a / b) * b)).toPrecision(8))
-    },
-
-    px2date (y) {
-      if (y < this.gantt_left_align) {
-        return this.gantt_start_date
-      }
-      if (y > this.gantt_left_align + this.gantt_width) {
-        return this.gantt_stop_date
-      }
-      return Math.round((y - this.gantt_left_align) * (this.gantt_stop_date - this.gantt_start_date) / this.gantt_width + this.gantt_start_date)
-    },
-
-    drawTimeRuler (evt) {
-      if (this.display !== 'mobile_ruler_only' && timeruler != null) {
-        if (parentContent != null && this.page_height > parentContent.innerHeight) {
-          y = parentContent.scrollY + parentContent.innerHeight - 45
-          timeruler.setAttribute('transform', 'translate(0,' + y + ')')
-          timeruler.setAttribute('display', 'inline')
-        } else {
-          timeruler.setAttribute('display', 'none')
-        }
-      }
-    },
-    resourceclick (evt, type, id) {
-      var url = CONF.resource_click_url
-      if (url !== '' && evt.detail > 1) {
-        window.open(url.replace('%%TYPE%%', type).replace('%%ID%%', id))
-      }
-    },
-    jobclick (evt, jobid) {
-      var url = CONF.job_click_url
-      if (url !== '' && evt.detail > 1) {
-        window.open(url.replace('%%JOBID%%', jobid))
-      }
-    },
-    highlight (object, hlElementClass, bool) {
-      if (object == null || object !== svgDocument.object_ref) {
-        var elems = document.getElementsByClassName(hlElementClass)
-        for (var i = 0; i < elems.length; i++) {
-          if (bool) {
-            elems[i].setAttribute('fill', elems[i].getAttribute('fill').replace(CONF['job_color_saturation_lightness'], ',', CONF.job_color_saturation_lightness_highlight))
-            elems[i].setAttribute('fill', elems[i].getAttribute('fill').replace('besteffort', 'besteffortHL'))
-            elems[i].setAttribute('stroke-width', 1.5)
-          } else {
-            elems[i].setAttribute('fill', elems[i].getAttribute('fill').replace(CONF['job_color_saturation_lightness_highlight'], ',', CONF.job_color_saturation_lightness))
-            elems[i].setAttribute('fill', elems[i].getAttribute('fill').replace('besteffortHL', 'besteffort'))
-            elems[i].setAttribute('stroke-width', 1)
-          }
-        }
-      }
     },
     mouseOver (evt, message, hlElementClass) {
       let array = message.split('|')
       this.infobox.visible = true
       this.infobox.text = array
       this.infobox.height = array.length * CONF.text_scale + 20
-
-      /* var length = 0
-      var array
-      var i = 0
-      var tspan
-      if (hlElementClass !== '') {
-        this.highlight(null, hlElementClass, true)
-      }
-      array = message.split('|')
-      let infoboxtext = this.$refs.infoboxtext
-      let infoboxrect = this.$refs.infoboxrect
-      let infobox = this.$refs.infobox
-      while (infoboxtext.hasChildNodes()) {
-        infoboxtext.removeChild(infoboxtext.lastChild)
-      }
-      infobox.setAttribute('display', 'inline')
-      for (i in array) {
-        tspan = svgDocument.createElementNS('http://www.w3.org/2000/svg', 'tspan')
-        tspan.setAttribute('x', 10)
-        tspan.setAttribute('dy', 10)
-        tspan.appendChild(svgDocument.createTextNode(array[i]))
-        infoboxtext.appendChild(tspan)
-        length = Math.max(length, tspan.getComputedTextLength())
-      }
-      infoboxrect.setAttribute('width', length + 20)
-      infoboxrect.setAttribute('height', array.length * CONF['text_scale'] + 20) */
     },
     mouseOut (evt, hlElementClass) {
       this.infobox.visible = false

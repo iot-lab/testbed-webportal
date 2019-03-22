@@ -42,13 +42,20 @@
       />
       </div>
     </div>
-    <h4> Gantt with Table &amp; DIV </h4>
-    <gantt :timezone="timezone" :resource_filter="resource_filter" :width="width" :gantt_relative_start_date="relative_start" :gantt_relative_stop_date="relative_stop"></gantt>
-    <h4> Regular Drawgantt-SVG PHP </h4>
-    <object ref="svgObj" id="svgObj" type="image/svg+xml" :data="svgUrl" v-on:load="restore_scrolling()">{{ svgUrl }}</object>
-    <div id="waiter" v-if="processing">Processing data... please wait...</div>
-    <h4> Pure JS Drawgantt-SVG </h4>
-    <drawgantt-svg :timezone="timezone" :resource_filter="resource_filter" :width="width" :gantt_relative_start_date="relative_start" :gantt_relative_stop_date="relative_stop"></drawgantt-svg>
+    <ul class="nav nav-tabs" style="position: relative; top: 1px">
+      <li class="nav-item">
+        <a class="nav-link" :class="{'active': 0 === active }" data-toggle="tab" href="#tablediv" role="tab" @click="active = 0" aria-controls="tablediv"> Table &amp; div </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" :class="{ 'active': 1 === active }" data-toggle="tab" href="#jssvg" role="tab" @click="active = 1" aria-controls="jssvg"> JS SVG </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" :class="{ 'active': 2 === active }" data-toggle="tab" href="#phpsvg" role="tab" @click="active = 2" aria-controls="phpsvg"> PHP SVG </a>
+      </li>
+    </ul>
+    <gantt v-if="active == 0" :timezone="timezone" :resource_filter="resource_filter" :width="width" :gantt_relative_start_date="relative_start" :gantt_relative_stop_date="relative_stop"></gantt>
+    <object v-if="active == 1" ref="svgObj" id="svgObj" type="image/svg+xml" :data="svgUrl" v-on:load="restore_scrolling()">{{ svgUrl }}</object>
+    <drawgantt-svg v-if="active == 2" :timezone="timezone" :resource_filter="resource_filter" :width="width" :gantt_relative_start_date="relative_start" :gantt_relative_stop_date="relative_stop"></drawgantt-svg>
   </div>
 </template>
 
@@ -71,6 +78,7 @@ export default {
 
   data () {
     return {
+      active: 0,
       processing: true,
       relative_start: -S_PER_DAY,
       relative_stop: S_PER_DAY,
