@@ -14,48 +14,29 @@
         <span class="font-weight-normal" v-if="$options.filters.formatRadio(archi)">({{archi | formatRadio}})</span>
       </span>
     </p>
-    <div id="panel" class="row center">
+    <p class="mb-2">
       <button class="btn mr-2" type="button" v-on:click="shift(-S_PER_WEEK)">&lt;1w</button>
       <button class="btn mr-2" type="button" v-on:click="shift(-S_PER_DAY)">&lt;1d</button>
       <button class="btn mr-2" type="button" v-on:click="shift(-6 * S_PER_HOUR)">&lt;6h</button>
       <button class="btn mr-2" type="button" v-on:click="shift(-S_PER_HOUR)">&lt;1h</button>
       <button class="btn mr-2" type="button" v-on:click="prev()">&lt;&lt;</button>
       <button class="btn mr-2" type="button" v-on:click="zoomout()">-</button>
-      <button class="btn mr-2" type="button" v-on:click="zoom()">zoom</button>
       <button class="btn mr-2" type="button" v-on:click="zoomin()">+</button>
       <button class="btn mr-2" type="button" v-on:click="next()">&gt;&gt;</button>
       <button class="btn mr-2" type="button" v-on:click="shift(S_PER_HOUR)">&gt;1h</button>
       <button class="btn mr-2" type="button" v-on:click="shift(6 * S_PER_HOUR)">&gt;6h</button>
       <button class="btn mr-2" type="button" v-on:click="shift(S_PER_DAY)">&gt;1d</button>
       <button class="btn mr-2" type="button" v-on:click="shift(S_PER_WEEK)">&gt;1w</button>
-      <button class="btn mr-2" type="button" v-on:click="reload_content()">reload</button>
-      <button class="btn mr-2" type="button" v-on:click="reset()">reset</button>
-      <!--<select id="timezoneSelect" v-on:change="select_timezone(true)">
-        <option v-for="name in tzNames" v-bind:key="name" :selected="name === timezone">{{name}}</option>
-      </select> -->
-      <div style="align-items: center;">
-        <multiselect v-model="timezone" placeholder="select timezone"
-                  :options="tzNames"
-                  :allow-empty="false"
-                  width="50"
-                  id="timezoneSelect" v-on:change="select_timezone(true)"
-      />
-      </div>
-    </div>
-    <ul class="nav nav-tabs" style="position: relative; top: 1px">
-      <li class="nav-item">
-        <a class="nav-link" :class="{'active': 0 === active }" data-toggle="tab" href="#tablediv" role="tab" @click="active = 0" aria-controls="tablediv"> Table &amp; div </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" :class="{ 'active': 1 === active }" data-toggle="tab" href="#jssvg" role="tab" @click="active = 1" aria-controls="jssvg"> JS SVG </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" :class="{ 'active': 2 === active }" data-toggle="tab" href="#phpsvg" role="tab" @click="active = 2" aria-controls="phpsvg"> PHP SVG </a>
-      </li>
-    </ul>
-    <gantt v-if="active == 0" :timezone="timezone" :resource_filter="resource_filter" :width="width" :gantt_relative_start_date="relative_start" :gantt_relative_stop_date="relative_stop"></gantt>
-    <object v-if="active == 1" ref="svgObj" id="svgObj" type="image/svg+xml" :data="svgUrl" v-on:load="restore_scrolling()">{{ svgUrl }}</object>
-    <drawgantt-svg v-if="active == 2" :timezone="timezone" :resource_filter="resource_filter" :width="width" :gantt_relative_start_date="relative_start" :gantt_relative_stop_date="relative_stop"></drawgantt-svg>
+    </p>
+    <p class="mb-2" style="align-items: center;">
+      <multiselect v-model="timezone" placeholder="select timezone"
+                :options="tzNames"
+                :allow-empty="false"
+                style="width: 250px; z-index: 2"
+                id="timezoneSelect"
+    />
+    </p>
+    <gantt :timezone="timezone" :resource_filter="resource_filter" :gantt_relative_start_date="relative_start" :gantt_relative_stop_date="relative_stop"></gantt>
   </div>
 </template>
 
@@ -64,7 +45,6 @@ import Multiselect from 'vue-multiselect'
 import { S_PER_DAY, S_PER_WEEK, S_PER_HOUR } from '@/constants'
 import { iotlab } from '@/rest'
 import moment from 'moment-timezone'
-import DrawganttSvg from '@/wp-menu/DrawganttSvg'
 import Gantt from '@/wp-menu/Gantt'
 
 export default {
@@ -72,19 +52,15 @@ export default {
 
   components: {
     Multiselect,
-    DrawganttSvg,
     Gantt,
   },
 
   data () {
     return {
       active: 0,
-      processing: true,
       relative_start: -S_PER_DAY,
       relative_stop: S_PER_DAY,
       timezone: 'UTC',
-      scrolledX: 0,
-      scrolledY: 0,
       sites: [],
       zoom_relative_start: 0,
       zoom_relative_stop: 0,
@@ -172,8 +148,6 @@ export default {
       this.setSites(sites)
       this.setNodes(nodes)
     })
-
-    window.set_zoom_window = this.set_zoom_window
   },
 
   mounted () {
@@ -186,93 +160,58 @@ export default {
     errorHandler (type, err) {
       this.$notify({text: err.response.data.message || 'Failed to fetch ' + type, type: 'error'})
     },
+
     setSites (sites) {
       this.sites = sites.sort((a, b) => a.site.localeCompare(b.site))
     },
+
     sleep (millis, callback) {
       setTimeout(() => callback(), millis)
     },
+
     setNodes (nodes) {
       this.nodes = nodes
     },
-    show_panel () {
-      var panelDiv = document.getElementById('panel')
-      panelDiv.style.top = window.scrollY + 'px'
-      panelDiv.style.left = window.scrollX + 'px'
-    },
+
     reset () {
       this.relative_start = -S_PER_DAY
       this.relative_stop = S_PER_DAY
-      this.reload_content()
     },
+
     shift (time) {
       this.relative_start += time
       this.relative_stop += time
-      this.reload_content()
     },
+
     next () {
       var t = this.relative_stop + (this.relative_stop - this.relative_start)
       this.relative_start = this.relative_stop
       this.relative_stop = t
-      this.reload_content()
     },
+
     prev () {
       var t = this.relative_start - (this.relative_stop - this.relative_start)
       this.relative_stop = this.relative_start
       this.relative_start = t
-      this.reload_content()
     },
+
     zoomin () {
       var t = this.relative_start + (this.relative_stop - this.relative_start) / 4
       this.relative_stop = this.relative_stop - (this.relative_stop - this.relative_start) / 4
       this.relative_start = t
-      this.reload_content()
     },
+
     zoomout () {
       var t = (this.relative_stop - this.relative_start) / 2
       this.relative_stop += t
       this.relative_start -= t
-      this.reload_content()
-    },
-    set_zoom_window (now, start, stop) {
-      this.zoom_relative_start = start - now
-      this.zoom_relative_stop = stop - now
-    },
-    zoom () {
-      if (this.zoom_relative_start !== this.zoom_relative_stop) {
-        this.relative_start = this.zoom_relative_start
-        this.relative_stop = this.zoom_relative_stop
-        this.reload_content()
-      }
-    },
-    reload_content () {
-      this.scrolledX = window.scrollX
-      this.scrolledY = window.scrollY
-      this.show_panel()
-      var svgObj = document.getElementById('svgObj')
-      svgObj.data = this.svgUrl
-      svgObj.innerHTML = this.svgUrl
-      svgObj.parent_content = window
-      this.processing = true
-    },
-    select_timezone (reload) {
-      var timezoneSelect = document.getElementById('timezoneSelect')
-      this.timezoneSQL = timezoneSelect.value
-      window.scrollTo(0, 0)
-      reload && this.reload_content()
-    },
-    openURL (url) {
-      window.open(url)
-    },
-    restore_scrolling () {
-      window.scrollTo(this.scrolledX, this.scrolledY)
-      this.processing = false
-    },
-    init () {
-      this.show_panel()
-      this.select_timezone(false)
-      this.sleep(100, this.reload_content)
     },
   },
 }
 </script>
+<style>
+.sidebar {
+  position: sticky;
+  top: 0px;
+}
+</style>

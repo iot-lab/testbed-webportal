@@ -1,33 +1,42 @@
 <template>
-  <div class="container">
-  <table class="table table-striped table-sm" v-if="nodes.length">
+  <div>
+  <table class="table table-striped table-lg" ref="table" v-if="nodes.length">
+    <col width="10%"/>
+    <col width="10%"/>
+    <col width="80%"/>
     <thead>
       <tr>
-        <th class="cursor" title="sort by hostname" @click="sortBy(node => nodeSortByHostname(node))">Node hostname</th>
-        <th>State</th>
-        <th class="cursor text-center" title="sort by state" @click="sortBy(node => node.state)">Schedule</th>
-      </tr>
-      <tr>
-        <th></th><th></th>
-        <th>
-          <div :style="`position: relative; height: 100px; width: ${gantt_width}px`">
-            <div class="timeRulerBorder" v-for="d in rulerValues"
+        <th class="col-sticky">Node hostname</th>
+        <th class="col-sticky text-center">State</th>
+        <th class="col-sticky">
+          <div>Schedule</div>
+          <div :style="`position: relative; height: 50px; width: 100%`">
+            <div class="timeRuler primary" v-for="d in rulerValues"
+              v-bind:style="{
+                left: date2pc(d) + '%',
+                height: (table_height - 47) + 'px',
+                }">
+            </div>
+            <div class="timeRuler secondary" v-for="d in secondaryRulerValues"
+              v-bind:style="{
+                left: date2pc(d) + '%',
+                height: (table_height - 50) + 'px',
+                }">
+            </div>
+            <div class="timeRuler now"
               v-bind:style="{
                 position: 'absolute',
-                left: date2px(d) + 'px',
-                width: '1px',
-                top: '85%',
-                height: (gantt_height + 5) + 'px',
-                borderWidth: '1px',
-                borderLeft: 'solid blue 1px',
+                left: date2pc(gantt_now) + '%',
+                height: (table_height - 50) + 'px',
                 }">
             </div>
             <div class="ruler" v-for="d in rulerValues"
+                 v-infobox.auto=""
               v-bind:style="{
                 position: 'absolute',
                 top: '0px',
-                left: date2px(d) + 'px',
-                textAlign: 'middle',
+                left: date2pc(d) + '%',
+                textAlign: 'center',
                 display: 'inline-block',
                 }">
               <div style="position: relative; left:-50%; text-align:">
@@ -39,18 +48,19 @@
         </th>
       </tr>
     </thead>
-    <tbody>
+    <tbody ref='table'>
       <tr class="nodeIteration" v-for="node in svgNodes" v-bind:key='node.network_address'>
-        <td>
+        <td class="col-lg-2" v-tooltip:bottom="node.label">
           {{node.label}}
         </td>
-        <td class="text-center">
+        <td class="col-lg-1 text-center">
           <span class="badge badge-state cursor" :class="node.state | stateBadgeClass">{{node.state}}</span>
         </td>
-        <td>
-          <div :style="`position: relative; height: 25px; width: ${gantt_width}px`">
+        <td class="col-lg-8">
+          <div :style="`position: relative; height: 25px; width: 100%`">
             <div v-for="nodesState in node.states" v-bind:key="nodesState.network_address"
                 v-bind:style="nodeStateStyle(nodesState)"
+                v-tooltip:auto="nodesState.info"
                 @mouseover="e => mouseOver(e, nodesState.info, '')"
                 @mouseout="mouseOut"
                 @mousemove="mouseMove">
@@ -74,11 +84,11 @@
                   position: 'absolute',
                   backgroundColor: `hsl(${job2int(job)},${CONF.job_color_saturation_lightness})`,
                   // height: job.height + 'px',
-                  width: job.width + 'px',
-                  left: date2px(job.start) + 'px',
-                  zIndex: 50,
+                  width: job.width + '%',
+                  left: date2pc(job.start) + '%',
                   userSelect: 'none',
                 }"
+                v-tooltip:auto="job.info"
                 @mouseover="e => mouseOver(e, job.info, '')"
                 @mouseout="mouseOut"
                 @mousemove="mouseMove">
@@ -87,41 +97,20 @@
           </div>
         </td>
       </tr>
+      <tr ref="lastRow"></tr>
     </tbody>
-        <!--<line v-for="d in rulerValues" v-bind:key="d"
-              :x1="date2px(d)"
-              :y1="gantt_top-5"
-              :x2="date2px(d)"
-              :y2="gantt_top + gantt_height + 5"
-              stroke="#0000FF" stroke-width="1" />
-      </div>
-    <div class="row">
-      <div class='ganttBorder'
-          v-bind:style="{
-            position: 'absolute',
-            left: date2px(0) + 'px',
-            textAlign: 'right',
-            width: gantt_width + 'px',
-            height: gantt_height + 'px',
-            borderStyle: 'solid',
-            borderWidth: '1px',
-            borderColor: 'blue',
-            top: gantt_top + 'px',
-          }">
-        </div>
-    </div>-->
   </table>
-  <div ref='infobox' class="infobox rounded" v-show="infobox.visible" id="infobox"
+  <!--<div ref='infobox' class="infobox rounded" v-show="infobox.visible" id="infobox"
        :style="{
          position: 'absolute',
          backgroundColor: 'white',
          left: (infobox.x + 20) + 'px',
          top: (infobox.y + 20) + 'px',
-         zIndex: 70,
+         zIndex: 1,
         }"
        >
       <div v-for="line in infobox.text">{{line}}</div>
-  </div>
+  </div>-->
   </div>
 </template>
 <script>
@@ -137,20 +126,10 @@ const CONF = {
     Dead: '#ff8080',
   },
 
-  scale: 10,
   text_scale: 10,
   time_ruler_scale: 6,
   time_ruler_steps: [60, 120, 180, 300, 600, 1200, 1800, 3600, 7200, 10800, 21600, 28800, 43200, 86400, 172800, 259200, 604800],
-  gantt_top: 50,
-  bottom_margin: 45,
-  right_margin: 30,
-  label_right_align: 160,
-  hierarchy_left_align: 190,
-  gantt_left_align: 200,
-  gantt_min_width: 900,
-  gantt_min_height: 100,
   job_color_saturation_lightness: '75%,75%',
-
 }
 
 export default {
@@ -160,11 +139,6 @@ export default {
     width: {
       type: Number,
       required: false,
-    },
-    scale: {
-      type: Number,
-      required: false,
-      default: CONF.scale,
     },
     gantt_relative_start_date: {
       type: Number,
@@ -193,7 +167,6 @@ export default {
       nodes: [],
       nodesStates: [],
       jobs: [],
-      svgNodes: [],
       CONF: CONF,
       now: null,
       infobox: {
@@ -204,13 +177,121 @@ export default {
         height: 10,
         text: '',
       },
+      table_height: 100,
     }
   },
 
   computed: {
+    filteredNodes () {
+      let nodes = this.nodes.concat().sort(this.nodeHostnameSort)
+      return nodes.filter(n => {
+        if (this.resource_filter.archi_all || this.resource_filter.archi === n.archi) {
+          if (this.resource_filter.site_all || this.resource_filter.site === n.site) {
+            return n
+          }
+        }
+      })
+    },
+    svgNodes () {
+      let svgNodesMap = {}
+      let nodes = this.filteredNodes
+
+      for (let node of nodes) {
+        let svgNode = {
+          label: this.$options.filters.stripDomain(node.network_address),
+          state: node.state,
+          network_address: node.network_address,
+          states: [],
+          jobs: [],
+        }
+        svgNodesMap[node.network_address] = svgNode
+      }
+
+      for (let nodesState of this.nodesStates) {
+        if (!(nodesState.network_address in svgNodesMap)) {
+          continue
+        }
+        let stopDate = (new Date(nodesState.stop_date)).getTime() / 1000
+        let openEnded = stopDate === 0
+        let svgNodeState = {
+          y: svgNodesMap[nodesState.network_address].y,
+          start: moment(nodesState.start_date).unix(),
+          start_date: moment(nodesState.start_date).tz(this.timezone),
+          stop: openEnded ? this.gantt_stop_date : stopDate,
+          stop_date: moment(nodesState.stop_date).tz(this.timezone),
+          height: this.scale,
+          state: nodesState.state,
+          open_ended: openEnded,
+        }
+        svgNodeState.info = `State: ${svgNodeState.state}|Since: ${this.formatDateTime(svgNodeState.start_date)}`
+        if (!svgNodeState.open_ended) {
+          svgNodeState.info += `|Until: ${this.formatDateTime(svgNodeState.stop_date)}`
+        }
+
+        svgNodesMap[nodesState.network_address].states.push(svgNodeState)
+        if (svgNodeState.start === this.start && svgNodeState.stop === this.stop) {
+          svgNodesMap[nodesState.network_address].state = svgNodeState
+        }
+      }
+
+      let nodesNetworkAddresses = nodes.map(el => el.network_address)
+      for (let job of this.jobs) {
+        let indices = []
+        for (let node of job.nodes) {
+          if (!(node in svgNodesMap)) {
+            continue
+          }
+          indices.push(nodesNetworkAddresses.indexOf(node))
+        }
+        indices.sort()
+        indices = indices.reduce((r, n) => {
+          const lastSubArray = r[r.length - 1]
+          if (!lastSubArray || lastSubArray[1] !== n - 1) {
+            r.push([n, n])
+          } else {
+            r[r.length - 1][1] = n
+          }
+          return r
+        }, [])
+
+        let stopDate = (new Date(job.stop_date)).getTime() / 1000
+
+        for (let indicesArray of indices) {
+          let node = nodes[indicesArray[0]].network_address
+          let svgNode = svgNodesMap[node]
+          if (svgNode) {
+            let svgJob = {
+              y: svgNode.y,
+              start: (new Date(job.start_date)).getTime() / 1000,
+              stop: stopDate === 0 ? (job.submitted_duration ? this.gantt_start_date + 60 * job.submitted_duration : this.gantt_stop_date) : stopDate,
+              id: job.id,
+              height: this.scale * (indicesArray[1] - indicesArray[0] + 1),
+              color: '#00FF00',
+              info: `Id: ${job.id}|User: ${job.user}|Name: ${job.name}|Nodes: ${job.nb_nodes}|Submission: ${job.submission_date}| Duration: ${job.submitted_duration} min`,
+            }
+            svgJob.width = this.date2pc(svgJob.stop) - this.date2pc(svgJob.start)
+            svgNode.jobs.push(svgJob)
+          }
+        }
+      }
+
+      return Object.values(svgNodesMap)
+    },
     ruler_step () {
       let value = (this.gantt_stop_date - this.gantt_start_date) / CONF.time_ruler_scale
       return CONF.time_ruler_steps.filter(r => r < value).pop()
+    },
+    secondary_ruler_step () {
+      let value = (this.gantt_stop_date - this.gantt_start_date) / (4 * CONF.time_ruler_scale)
+      return CONF.time_ruler_steps.filter(r => r < value).pop()
+    },
+    secondaryRulerValues () {
+      let d = this.gantt_start_date - this.gantt_start_date % this.secondary_ruler_step
+      let values = []
+      while ((d += this.secondary_ruler_step) < this.gantt_stop_date) {
+        values.push(d)
+      }
+      return values
     },
     rulerValues () {
       let d = this.gantt_start_date - this.gantt_start_date % this.ruler_step
@@ -220,49 +301,12 @@ export default {
       }
       return values
     },
-    page_width () {
-      return this.gantt_left_align + this.gantt_width + CONF.right_margin
-    },
-    page_height () {
-      if (this.display !== 'mobile_ruler_only') {
-        return Math.max(this.gantt_min_height, this.gantt_top + this.gantt_height + this.bottom_margin)
-      } else {
-        return 30
-      }
-    },
-    gantt_left_align () {
-      return CONF.hierarchy_left_align
-    },
     gantt_top () {
       if (this.display !== 'no_ruler') {
         return CONF.gantt_top
       } else {
         return 1
       }
-    },
-    gantt_min_height () {
-      if (this.display !== 'no_ruler') {
-        return CONF.gantt_min_height
-      } else {
-        return 0
-      }
-    },
-    bottom_margin () {
-      if (this.display !== 'no_ruler') {
-        return CONF.bottom_margin
-      } else {
-        return 0
-      }
-    },
-    gantt_width () {
-      let val = CONF.gantt_min_width
-      if (this.width && this.width > this.gantt_left_align + CONF.gantt_min_width + CONF.right_margin) {
-        val = this.width - this.gantt_left_align - CONF.right_margin
-      }
-      return val
-    },
-    gantt_height () {
-      return this.scale * this.nodes.length
     },
     start () {
       return moment(this.now).add(this.gantt_relative_start_date, 'seconds')
@@ -297,6 +341,16 @@ export default {
   },
 
   watch: {
+    nodes (val) {
+      console.log(val)
+      if (val.length) {
+        let this_ = this
+        this.$nextTick(() => {
+          console.log(this_.$refs.lastRow.offsetTop)
+          this_.table_height = this_.$refs.lastRow.offsetTop
+        })
+      }
+    },
     gantt_relative_start_date () {
       this.load()
     },
@@ -311,7 +365,6 @@ export default {
   methods: {
     load () {
       this.nodes = []
-      this.svgNodes = []
       this.jobs = []
       this.svgJobs = []
       this.nodesStates = []
@@ -321,17 +374,22 @@ export default {
         iotlab.getNodes(this.start, this.stop).catch((err) => this.errorHandler('nodes', err)),
         iotlab.getNodesStates(this.start, this.stop).catch((err) => this.errorHandler('nodes states', err)),
         iotlab.getExperimentsJobs(this.start, this.now).catch((err) => this.errorHandler('jobs', err)),
-      ]).then((data) => {
-        this.setNodesStatesJobs(...data)
+      ]).then(([nodes, nodesStates, jobs]) => {
+        this.nodes = nodes
+        this.nodesStates = nodesStates
+        this.jobs = jobs
       })
     },
+
     formatDateTime (value) {
       return value.format('YYYY-MM-DD HH:mm')
     },
+
     errorHandler (type, err) {
       console.log(err)
       this.$notify({text: err.response.data.message || 'Failed to fetch ' + type, type: 'error'})
     },
+
     nodeStateStyle (nodesState) {
       let stateColor = CONF.state_colors[nodesState.state]
       return {
@@ -339,165 +397,69 @@ export default {
         backgroundSize: '5px 5px',
         position: 'absolute',
         height: '100%',
-        width: (this.date2px(nodesState.stop) - this.date2px(nodesState.start)) + 'px',
-        left: this.date2px(nodesState.start) + 'px',
+        width: (this.date2pc(nodesState.stop) - this.date2pc(nodesState.start)) + '%',
+        left: this.date2pc(nodesState.start) + '%',
         // top: nodesState.y + 'px',
       }
     },
-    sortNodes () {
-      this.nodes.sort((n1, n2) => {
-        let short1 = this.$options.filters.stripDomain(n1.network_address).split(/[.-]/)
-        let [archi1, id1] = [short1[0], Number(short1[1])]
-        let short2 = this.$options.filters.stripDomain(n2.network_address).split(/[.-]/)
-        let [archi2, id2] = [short2[0], Number(short2[1])]
 
-        // sort by site, archi then id
-        if (n1.site > n2.site) return 1
-        if (n1.site < n2.site) return -1
+    nodeHostnameSort (n1, n2) {
+      let short1 = this.$options.filters.stripDomain(n1.network_address).split(/[.-]/)
+      let [archi1, id1] = [short1[0], Number(short1[1])]
+      let short2 = this.$options.filters.stripDomain(n2.network_address).split(/[.-]/)
+      let [archi2, id2] = [short2[0], Number(short2[1])]
 
-        // by archi
-        if (archi1 > archi2) return 1
-        if (archi1 < archi2) return -1
+      // sort by site, archi then id
+      if (n1.site > n2.site) return 1
+      if (n1.site < n2.site) return -1
 
-        // by id
-        if (id1 > id2) return 1
-        if (id1 < id2) return -1
-      })
+      // by archi
+      if (archi1 > archi2) return 1
+      if (archi1 < archi2) return -1
+
+      // by id
+      if (id1 > id2) return 1
+      if (id1 < id2) return -1
     },
+
     ymddate (d) {
-      let date = new Date(d * 1000)
-      return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2)
+      return moment(d * 1000).tz(this.timezone).format('YYYY-MM-DD')
     },
+
     hmsdate (d) {
-      let date = new Date(d * 1000)
-      return ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2)
+      return moment(d * 1000).tz(this.timezone).format('HH:mm')
     },
-    addNodesStatesJobs (nodesStates, jobs) {
-      this.sortNodes()
 
-      let svgNodesMap = {}
-
-      let y = this.gantt_top
-      for (let node of this.nodes) {
-        let svgNode = {
-          y: y,
-          label: this.$options.filters.stripDomain(node.network_address),
-          state: node.state,
-          network_address: node.network_address,
-          states: [],
-          jobs: [],
-        }
-        svgNodesMap[node.network_address] = svgNode
-        y += this.scale
-      }
-
-      for (let nodesState of nodesStates) {
-        if (!(nodesState.network_address in svgNodesMap)) {
-          continue
-        }
-        let stopDate = (new Date(nodesState.stop_date)).getTime() / 1000
-        let openEnded = stopDate === 0
-        let svgNodeState = {
-          y: svgNodesMap[nodesState.network_address].y,
-          start: moment(nodesState.start_date).unix(),
-          start_date: moment(nodesState.start_date).tz(this.timezone),
-          stop: openEnded ? this.gantt_stop_date : stopDate,
-          stop_date: moment(nodesState.stop_date).tz(this.timezone),
-          height: this.scale,
-          state: nodesState.state,
-          open_ended: openEnded,
-        }
-        svgNodeState.info = `State: ${svgNodeState.state}|Since: ${this.formatDateTime(svgNodeState.start_date)}`
-        if (!svgNodeState.open_ended) {
-          svgNodeState.info += `|Until: ${this.formatDateTime(svgNodeState.stop_date)}`
-        }
-
-        svgNodesMap[nodesState.network_address].states.push(svgNodeState)
-        if (svgNodeState.start === this.start && svgNodeState.stop === this.stop) {
-          svgNodesMap[nodesState.network_address].state = svgNodeState
-        }
-      }
-
-      let nodesNetworkAddresses = this.nodes.map(el => el.network_address)
-      for (let job of this.jobs) {
-        let indices = []
-        for (let node of job.nodes) {
-          if (!(node in svgNodesMap)) {
-            continue
-          }
-          indices.push(nodesNetworkAddresses.indexOf(node))
-        }
-        indices.sort()
-        indices = indices.reduce((r, n) => {
-          const lastSubArray = r[r.length - 1]
-          if (!lastSubArray || lastSubArray[1] !== n - 1) {
-            r.push([n, n])
-          } else {
-            r[r.length - 1][1] = n
-          }
-          return r
-        }, [])
-
-        let stopDate = (new Date(job.stop_date)).getTime() / 1000
-
-        for (let indicesArray of indices) {
-          let node = this.nodes[indicesArray[0]].network_address
-          let svgJob = {
-            y: svgNodesMap[node].y,
-            start: (new Date(job.start_date)).getTime() / 1000,
-            stop: stopDate === 0 ? (job.submitted_duration ? this.gantt_start_date + 60 * job.submitted_duration : this.gantt_stop_date) : stopDate,
-            id: job.id,
-            height: this.scale * (indicesArray[1] - indicesArray[0] + 1),
-            color: '#00FF00',
-            info: `Id: ${job.id}|User: ${job.user}|Name: ${job.name}|Nodes: ${job.nb_nodes}|Submission: ${job.submission_date}| Duration: ${job.submitted_duration} min`,
-          }
-          svgJob.width = this.date2px(svgJob.stop) - this.date2px(svgJob.start)
-          svgNodesMap[node].jobs.push(svgJob)
-        }
-      }
-
-      this.svgNodes = Object.values(svgNodesMap)
-    },
-    setNodesStatesJobs (nodes, nodesStates, jobs) {
-      nodes = nodes.filter(n => {
-        if (this.resource_filter.archi_all || this.resource_filter.archi === n.archi) {
-          if (this.resource_filter.site_all || this.resource_filter.site === n.site) {
-            return n
-          }
-        }
-      })
-      this.nodes = nodes
-      this.nodesStates = nodesStates
-      this.jobs = jobs
-
-      this.addNodesStatesJobs(nodesStates, jobs)
-    },
     fmod (a, b) {
       return Number((a - (Math.floor(a / b) * b)).toPrecision(8))
     },
+
     mouseOver (evt, message, hlElementClass) {
       let array = message.split('|')
       this.infobox.visible = true
       this.infobox.text = array
       this.infobox.height = array.length * CONF.text_scale + 20
     },
+
     mouseOut (evt, hlElementClass) {
       this.infobox.visible = false
     },
+
     mouseMove (evt) {
-      // let dim = this.$refs.table.getBoundingClientRect()
       this.infobox.x = evt.pageX
       this.infobox.y = evt.pageY
     },
-    date2px (date) {
+
+    date2pc (date) {
       if (date < this.gantt_start_date) {
         return 0
       }
       if (date > this.gantt_stop_date) {
-        return this.gantt_width
+        return 100
       }
-      return Math.round((this.gantt_width * (date - this.gantt_start_date)) / (this.gantt_stop_date - this.gantt_start_date))
+      return 100 * (date - this.gantt_start_date) / (this.gantt_stop_date - this.gantt_start_date)
     },
+
     job2int (job) {
       // compute a suffled number for id, so that colors are not too close
       let magicNumber = (1 + Math.sqrt(5)) / 2
@@ -517,5 +479,35 @@ export default {
 }
 .job::selection .infobox::selection {
     background: none;
+}
+th.col-sticky {
+  position: sticky;
+  top: 0px;  /* 0px if you don't have a navbar, but something is required */
+  background: white;
+  z-index: 1;
+}
+table {
+  table-layout: fixed;
+}
+td, th {
+  white-space: nowrap;
+}
+.timeRuler {
+  position: absolute;
+  width: 1px;
+  border-width: 1px;
+  z-index: 8;
+}
+.primary {
+  border-left: solid blue 1px;
+  top: 47px;
+}
+.now {
+  border-left: dotted red 2px;
+  top: 47px;
+}
+.secondary {
+  border-left: dotted blue 1px;
+  top: 50px;
 }
 </style>
