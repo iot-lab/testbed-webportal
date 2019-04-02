@@ -1,5 +1,5 @@
 <template>
-  <div ref="container" class="container mt-3" id="container_drawgantt">
+  <div ref="container" class="container-fluid mt-3" id="container_drawgantt">
     <p class="lead mb-0">Sites</p>
     <p class="mb-2" v-if="sites">
       <span class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentSite === 'all', 'badge-secondary': currentSite !== 'all'}" @click="currentSite = 'all'">{{sites.length}} sites</span>
@@ -78,8 +78,10 @@ export default {
   computed: {
     tzNames () {
       // filtered tz names
-      let tzNames = Object.keys(moment.tz._zones)
-        .map(k => moment.tz._zones[k].split('|')[0])
+      let zones = moment.tz._zones
+      console.log(zones)
+      let tzNames = Object.keys(zones)
+        .map(k => zones[k].split('|')[0])
         .filter(z => z.indexOf('/') >= 0)
         .filter(z => z !== 'UTC' && z !== this.tzUser)
         .sort()

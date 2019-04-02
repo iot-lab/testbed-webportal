@@ -1,6 +1,6 @@
 <template>
   <div>
-  <table class="table table-striped table-lg" ref="table" v-if="nodes.length">
+  <table class="table table-striped table-sm" ref="table" v-if="nodes.length">
     <col width="10%"/>
     <col width="10%"/>
     <col width="80%"/>
@@ -8,30 +8,10 @@
       <tr>
         <th class="col-sticky">Node hostname</th>
         <th class="col-sticky text-center">State</th>
-        <th class="col-sticky">
+        <th class="col-sticky text-center">
           <div>Schedule</div>
           <div :style="`position: relative; height: 50px; width: 100%`">
-            <div class="timeRuler primary" v-for="d in rulerValues"
-              v-bind:style="{
-                left: date2pc(d) + '%',
-                height: (table_height - 47) + 'px',
-                }">
-            </div>
-            <div class="timeRuler secondary" v-for="d in secondaryRulerValues"
-              v-bind:style="{
-                left: date2pc(d) + '%',
-                height: (table_height - 50) + 'px',
-                }">
-            </div>
-            <div class="timeRuler now"
-              v-bind:style="{
-                position: 'absolute',
-                left: date2pc(gantt_now) + '%',
-                height: (table_height - 50) + 'px',
-                }">
-            </div>
             <div class="ruler" v-for="d in rulerValues"
-                 v-infobox.auto=""
               v-bind:style="{
                 position: 'absolute',
                 top: '0px',
@@ -58,12 +38,32 @@
         </td>
         <td class="col-lg-8">
           <div :style="`position: relative; height: 25px; width: 100%`">
+            <div class="timeRuler primary" v-for="d in rulerValues"
+              v-bind:style="{
+                top: '0px',
+                left: date2pc(d) + '%',
+                height: '100%',
+                }">
+            </div>
+            <div class="timeRuler secondary" v-for="d in secondaryRulerValues"
+              v-bind:style="{
+                top: '0px',
+                left: date2pc(d) + '%',
+                height: '100%',
+                }">
+            </div>
+            <div class="timeRuler now"
+              v-bind:style="{
+                position: 'absolute',
+                top: '0px',
+                left: date2pc(gantt_now) + '%',
+                height: '100%',
+                }">
+            </div>
+
             <div v-for="nodesState in node.states" v-bind:key="nodesState.network_address"
                 v-bind:style="nodeStateStyle(nodesState)"
-                v-tooltip:auto="nodesState.info"
-                @mouseover="e => mouseOver(e, nodesState.info, '')"
-                @mouseout="mouseOut"
-                @mousemove="mouseMove">
+                v-tooltip:auto="nodesState.info">
             </div>
 
             <!--<div class='gridLine'
@@ -88,29 +88,14 @@
                   left: date2pc(job.start) + '%',
                   userSelect: 'none',
                 }"
-                v-tooltip:auto="job.info"
-                @mouseover="e => mouseOver(e, job.info, '')"
-                @mouseout="mouseOut"
-                @mousemove="mouseMove">
+                v-tooltip:auto="job.info">
               {{job.id}}
             </div>
           </div>
         </td>
       </tr>
-      <tr ref="lastRow"></tr>
     </tbody>
   </table>
-  <!--<div ref='infobox' class="infobox rounded" v-show="infobox.visible" id="infobox"
-       :style="{
-         position: 'absolute',
-         backgroundColor: 'white',
-         left: (infobox.x + 20) + 'px',
-         top: (infobox.y + 20) + 'px',
-         zIndex: 1,
-        }"
-       >
-      <div v-for="line in infobox.text">{{line}}</div>
-  </div>-->
   </div>
 </template>
 <script>
@@ -169,14 +154,6 @@ export default {
       jobs: [],
       CONF: CONF,
       now: null,
-      infobox: {
-        visible: false,
-        x: 0,
-        y: 0,
-        width: 10,
-        height: 10,
-        text: '',
-      },
       table_height: 100,
     }
   },
@@ -341,16 +318,6 @@ export default {
   },
 
   watch: {
-    nodes (val) {
-      console.log(val)
-      if (val.length) {
-        let this_ = this
-        this.$nextTick(() => {
-          console.log(this_.$refs.lastRow.offsetTop)
-          this_.table_height = this_.$refs.lastRow.offsetTop
-        })
-      }
-    },
     gantt_relative_start_date () {
       this.load()
     },
@@ -434,22 +401,6 @@ export default {
       return Number((a - (Math.floor(a / b) * b)).toPrecision(8))
     },
 
-    mouseOver (evt, message, hlElementClass) {
-      let array = message.split('|')
-      this.infobox.visible = true
-      this.infobox.text = array
-      this.infobox.height = array.length * CONF.text_scale + 20
-    },
-
-    mouseOut (evt, hlElementClass) {
-      this.infobox.visible = false
-    },
-
-    mouseMove (evt) {
-      this.infobox.x = evt.pageX
-      this.infobox.y = evt.pageY
-    },
-
     date2pc (date) {
       if (date < this.gantt_start_date) {
         return 0
@@ -469,17 +420,6 @@ export default {
 }
 </script>
 <style>
-.infobox .job {
-  -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-
-  cursor: default;
-}
-.job::selection .infobox::selection {
-    background: none;
-}
 th.col-sticky {
   position: sticky;
   top: 0px;  /* 0px if you don't have a navbar, but something is required */
