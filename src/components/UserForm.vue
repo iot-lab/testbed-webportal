@@ -38,6 +38,34 @@
       <div class="col-md">
       </div>
     </div>
+    <div class="row mb-5">
+      <div class="col form-group password" ref="passwordGroup" v-if="!hidden.includes('password')">
+        <label class="form-control-label">Password</label>
+        <input placeholder="Password" v-model="user.password" name="password"
+          class="form-control" type="password" v-validate="'required'" ref="password"
+          v-adv-tooltip="{
+            title: passwordPolicy,
+            placement: 'auto',
+            trigger: 'hover',
+            html: true,
+            delay: 400,
+            container: this.$refs.passwordGroup,
+            }"
+          :class="{'is-invalid': errors.has('password') }">
+        <div class="invalid-feedback" v-show="errors.has('password')">
+          {{ errors.first('password') }}
+        </div>
+      </div>
+      <div class="col form-group"  v-if="!hidden.includes('password')">
+        <label class="form-control-label">Confirm password</label>
+        <input placeholder="Password" name="password_confirmation"
+          data-vv-as="password" class="form-control" type="password" v-validate="'required|confirmed:password'"
+          :class="{'is-invalid': errors.has('password_confirmation') }">
+        <div class="invalid-feedback" v-show="errors.has('password_confirmation')">
+          {{ errors.first('password_confirmation') }}
+        </div>
+      </div>
+    </div>
     <div class="row">
       <div class="col-md">
         <div class="form-group" v-if="!hidden.includes('category')">
@@ -135,24 +163,6 @@
         {{ errors.first('motivations') }}
       </div>
     </div>
-    <div class="form-group"  v-if="!hidden.includes('password')">
-      <label class="form-control-label">Password</label>
-      <input placeholder="Password" v-model="user.password" name="password"
-        class="form-control" type="password" v-validate="'required'" ref="password"
-        :class="{'is-invalid': errors.has('password') }">
-      <div class="invalid-feedback" v-show="errors.has('password')">
-        {{ errors.first('password') }}
-      </div>
-    </div>
-    <div class="form-group"  v-if="!hidden.includes('password')">
-      <label class="form-control-label">Confirm password</label>
-      <input placeholder="Password" name="password_confirmation"
-        data-vv-as="password" class="form-control" type="password" v-validate="'required|confirmed:password'"
-        :class="{'is-invalid': errors.has('password_confirmation') }">
-      <div class="invalid-feedback" v-show="errors.has('password_confirmation')">
-        {{ errors.first('password_confirmation') }}
-      </div>
-    </div>
   </div>
 </template>
 
@@ -241,6 +251,12 @@ export default {
       }
     },
   },
+
+  computed: {
+    passwordPolicy () {
+      return '<h6>Password Policy</h6><ul class="pl-3 mb-0"><li>one upper case letter [A-Z]</li><li>three lower case letters [a-z]</li><li>one digit [0-9]</li><li>one special character [!@#$%^&*_=+-/]</li><li>minimum length of eight characters</li></ul>'
+    },
+  },
 }
 </script>
 
@@ -249,7 +265,6 @@ ul {
   padding-left: 20px;
 }
 </style>
-
 <style>
 /* Let multiselect style match bootstrap 4 */
 
@@ -273,5 +288,10 @@ ul {
 }
 .multiselect__option--highlight:after {
   background: linear-gradient(90deg, rgba(0,0,0,0) 0%, var(--primary) 10%, var(--primary) 100%) !important;
+}
+
+.password>.tooltip>.tooltip-inner {
+  max-width: 400px;
+  text-align: left;
 }
 </style>

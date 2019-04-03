@@ -1,6 +1,6 @@
 <template>
 <div class="container mt-3">
-  <div class="row">
+  <div class="row justify-content-center">
     <div class="col-lg-8">
       <h2>Sign up to FIT IoT-LAB</h2>
       <div class="card border-danger bg-danger my-2 mx-auto" v-if="hostname === 'devwww.iot-lab.info'">
@@ -96,7 +96,7 @@ export default {
           this.success = true
         } catch (err) {
           this.success = false
-          this.$notify({text: 'Error during signup<br>' + err.response.data.message, type: 'error'})
+          this.$notify({text: 'Error during signup<br>' + err.response.data.message, type: 'error', duration: -1})
         }
       })
     },
