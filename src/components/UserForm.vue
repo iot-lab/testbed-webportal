@@ -143,6 +143,8 @@
       <div class="invalid-feedback" v-show="errors.has('password')">
         {{ errors.first('password') }}
       </div>
+    </div>
+    <div class="form-group"  v-if="!hidden.includes('password')">
       <label class="form-control-label">Confirm password</label>
       <input placeholder="Password" name="password_confirmation"
         data-vv-as="password" class="form-control" type="password" v-validate="'required|confirmed:password'"
