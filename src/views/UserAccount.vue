@@ -19,7 +19,7 @@
 
             <h5><i class="fa fa-fw fa-pencil" aria-hidden="true"></i> Edit your profile</h5>
             <form @submit.prevent="updateProfile">
-              <user-form :user="user" ref="user" :hidden="['sshkeys']"></user-form>
+              <user-form :user="user" ref="user" :hidden="['sshkeys', 'password']"></user-form>
               <div class="form-group">
                 <button class="btn btn-success mr-1" type="submit">Update profile</button>
                 <button class="btn btn-secondary" type="button" @click="reset">Reset</button>
