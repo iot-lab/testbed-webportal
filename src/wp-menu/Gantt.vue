@@ -117,7 +117,7 @@ export default {
     },
     resource_filter: {
       type: Object,
-      default: () => { return {archi_all: true, site_all: true} },
+      default: () => { return { archi: n => true, site: n => true, node: n => true } },
     },
     timezone: {
       type: String,
@@ -142,16 +142,12 @@ export default {
 
   computed: {
     filteredNodes () {
-      let nodes = this.nodes.concat().sort(this.nodeHostnameSort)
-      return nodes.filter(n => {
-        if (this.resource_filter.archi === null || this.resource_filter.archi(n)) {
-          if (this.resource_filter.site === null || this.resource_filter.site(n)) {
-            if (this.resource_filter.node === null || this.resource_filter.node(n)) {
-              return n
-            }
-          }
-        }
-      })
+      return this.nodes
+        .concat()
+        .sort(this.nodeHostnameSort)
+        .filter(this.resource_filter.archi)
+        .filter(this.resource_filter.site)
+        .filter(this.resource_filter.node)
     },
     svgNodes () {
       let svgNodesMap = {}

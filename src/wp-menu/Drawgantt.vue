@@ -16,7 +16,7 @@
     </p>
     <p class="lead mb-0">Nodes</p>
     <p class="mb-2" v-if="nodes">
-      <span class="badge badge-pill mr-1 cursor" :class="(nodeFilter === null) ? 'badge-primary' : 'badge-secondary'" @click="nodeFilter = null">{{getNodes().length}} nodes</span>
+      <span class="badge badge-pill mr-1 cursor" :class="(nodeFilter === nodeFilters.all) ? 'badge-primary' : 'badge-secondary'" @click="nodeFilter = nodeFilters.all">{{getNodes().length}} nodes</span>
       <span class="badge badge-pill mr-1 cursor" :class="(nodeFilter === nodeFilters.alive) ? 'badge-primary' : 'badge-success'" @click="nodeFilter = nodeFilters.alive" v-if="getNodes(['Alive']).length">{{getNodes(['Alive']).length}} available</span>
       <span class="badge badge-pill mr-1 cursor" :class="(nodeFilter === nodeFilters.busy) ? 'badge-primary' : 'badge-warning'" @click="nodeFilter = nodeFilters.busy" v-if="getNodes(['Busy']).length">{{getNodes(['Busy']).length}} busy</span>
       <span class="badge badge-pill mr-1 cursor" :class="(nodeFilter === nodeFilters.unavailable) ? 'badge-primary' : 'badge-danger'" @click="nodeFilter = nodeFilters.unavailable" v-if="getNodes(['Absent','Suspected']).length">{{getNodes(['Absent','Suspected']).length}} unavailable</span>
@@ -76,8 +76,9 @@ export default {
       width: 500,
       currentSite: 'all',
       currentArchi: 'all',
-      nodeFilter: null,
+      nodeFilter: node => true,
       nodeFilters: {
+        all: node => true,
         alive: node => node.state === 'Alive',
         busy: node => node.state === 'Busy',
         unavailable: node => ['Absent', 'Suspected'].includes(node.state),
