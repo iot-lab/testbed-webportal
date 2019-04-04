@@ -68,6 +68,7 @@
             <router-link v-for="job in node.jobs" v-bind:key="job.key"
                 tag="div" :to="{name: 'experimentDetails', params: { id: job.id }}"
                 class="job justify-text-center cursor"
+                :class="{ disabled: !job.reachable }"
                 v-on:click.native="closeTooltip"
                 v-bind:style="{
                   position: 'absolute',
@@ -89,6 +90,7 @@
 import { iotlab } from '@/rest'
 import moment from 'moment-timezone'
 import $ from 'jquery'
+import { auth } from '@/auth'
 
 const CONF = {
   timezone: 'UTC',
@@ -228,6 +230,7 @@ export default {
               height: this.scale * (indicesArray[1] - indicesArray[0] + 1),
               color: '#00FF00',
               info: `Id:&nbsp;${job.id}<br>User:&nbsp;${job.user}<br>Name:&nbsp;${job.name}<br>Nodes:&nbsp;${job.nb_nodes}<br>Submission:&nbsp;${job.submission_date}<br>Duration:&nbsp;${job.submitted_duration}&nbsp;min`,
+              reachable: auth.isAdmin || job.user === auth.username,
             }
             svgJob.width = this.date2pc(svgJob.stop) - this.date2pc(svgJob.start)
             svgNode.jobs.push(svgJob)
