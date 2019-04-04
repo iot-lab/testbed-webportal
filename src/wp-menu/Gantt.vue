@@ -144,9 +144,11 @@ export default {
     filteredNodes () {
       let nodes = this.nodes.concat().sort(this.nodeHostnameSort)
       return nodes.filter(n => {
-        if (this.resource_filter.archi_all || this.resource_filter.archi === n.archi) {
-          if (this.resource_filter.site_all || this.resource_filter.site === n.site) {
-            return n
+        if (this.resource_filter.archi === null || this.resource_filter.archi(n)) {
+          if (this.resource_filter.site === null || this.resource_filter.site(n)) {
+            if (this.resource_filter.node === null || this.resource_filter.node(n)) {
+              return n
+            }
           }
         }
       })

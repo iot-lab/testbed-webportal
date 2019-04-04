@@ -14,14 +14,22 @@
         <span class="font-weight-normal" v-if="$options.filters.formatRadio(archi)">({{archi | formatRadio}})</span>
       </span>
     </p>
-    <p class="mb-2" style="align-items: center;">
+    <p class="lead mb-0">Nodes</p>
+    <p class="mb-2" v-if="nodes">
+      <span class="badge badge-pill mr-1 cursor" :class="(nodeFilter === null) ? 'badge-primary' : 'badge-secondary'" @click="nodeFilter = null">{{getNodes().length}} nodes</span>
+      <span class="badge badge-pill mr-1 cursor" :class="(nodeFilter === nodeFilters.alive) ? 'badge-primary' : 'badge-success'" @click="nodeFilter = nodeFilters.alive" v-if="getNodes(['Alive']).length">{{getNodes(['Alive']).length}} available</span>
+      <span class="badge badge-pill mr-1 cursor" :class="(nodeFilter === nodeFilters.busy) ? 'badge-primary' : 'badge-warning'" @click="nodeFilter = nodeFilters.busy" v-if="getNodes(['Busy']).length">{{getNodes(['Busy']).length}} busy</span>
+      <span class="badge badge-pill mr-1 cursor" :class="(nodeFilter === nodeFilters.unavailable) ? 'badge-primary' : 'badge-danger'" @click="nodeFilter = nodeFilters.unavailable" v-if="getNodes(['Absent','Suspected']).length">{{getNodes(['Absent','Suspected']).length}} unavailable</span>
+      <span class="badge badge-pill mr-1 cursor" :class="(nodeFilter === nodeFilters.dead) ? 'badge-primary' : 'badge-dark'" @click="nodeFilter = nodeFilters.dead" v-if="getNodes(['Dead']).length">{{getNodes(['Dead']).length}} dead</span>
+      <span class="badge badge-pill mr-1 cursor" :class="(nodeFilter === nodeFilters.mobile) ? 'badge-primary' : 'badge-info'" @click="nodeFilter = nodeFilters.mobile" v-if="getNodes().filter(node => node.mobile).length">{{getNodes().filter(node => node.mobile).length}} mobile</span>
+    </p>
+    <div class="mb-2 center col-5">
       <multiselect v-model="timezone" placeholder="select timezone"
                 :options="tzNames"
                 :allow-empty="false"
-                style="width: 250px; z-index: 2"
-                id="timezoneSelect"
-    />
-    </p>
+                style="z-index: 10"
+                id="timezoneSelect"/>
+    </div>
     <div class="text-center time-header">
       <div>
         <button class="btn mr-2" type="button" v-on:click="shift(-S_PER_WEEK)">&lt;1w</button>
@@ -30,6 +38,7 @@
         <button class="btn mr-2" type="button" v-on:click="shift(-S_PER_HOUR)">&lt;1h</button>
         <button class="btn mr-2" type="button" v-on:click="prev()">&lt;&lt;</button>
         <button class="btn mr-2" type="button" v-on:click="zoomout()">-</button>
+        <button class="btn mr-2" type="button" v-on:click="refresh()">-</button>
         <button class="btn mr-2" type="button" v-on:click="zoomin()">+</button>
         <button class="btn mr-2" type="button" v-on:click="next()">&gt;&gt;</button>
         <button class="btn mr-2" type="button" v-on:click="shift(S_PER_HOUR)">&gt;1h</button>
@@ -63,9 +72,18 @@ export default {
       relative_window: {start: -S_PER_DAY, stop: S_PER_DAY},
       timezone: 'UTC',
       sites: [],
+      nodes: [],
       width: 500,
       currentSite: 'all',
       currentArchi: 'all',
+      nodeFilter: null,
+      nodeFilters: {
+        alive: node => node.state === 'Alive',
+        busy: node => node.state === 'Busy',
+        unavailable: node => ['Absent', 'Suspected'].includes(node.state),
+        dead: node => node.state === 'Dead',
+        mobile: node => node.mobile,
+      },
       tzUser: moment.tz.guess(),
 
       S_PER_DAY: S_PER_DAY,
@@ -103,43 +121,11 @@ export default {
       return archis.sort((a, b) => a.localeCompare(b))
     },
     resource_filter () {
-      let filter = {}
-      if (this.currentSite !== 'all') {
-        filter.site = this.currentSite.site
-      } else {
-        filter.site_all = true
+      return {
+        site: n => this.currentSite !== 'all' ? n.site === this.currentSite.site : true,
+        archi: n => this.currentArchi !== 'all' ? n.archi === this.currentArchi : true,
+        node: this.nodeFilter,
       }
-      if (this.currentArchi !== 'all') {
-        filter.archi = this.currentArchi
-      } else {
-        filter.archi_all = true
-      }
-      return filter
-    },
-    filter () {
-      let filters = ['production!=\'NO\'']
-      if (this.currentSite !== 'all') {
-        filters.push(`site='${this.currentSite.site}'`)
-      }
-      if (this.currentArchi !== 'all') {
-        filters.push(`archi='${this.currentArchi}'`)
-      }
-      return filters.join(' and ')
-    },
-    svgUrl () {
-      const query = {
-        width: this.width,
-        relative_start: this.relative_start,
-        relative_stop: this.relative_stop,
-        filter: this.filter,
-        timezone: this.timezone,
-      }
-
-      var esc = encodeURIComponent
-      return `https://${process.env.VUE_APP_IOTLAB_HOST}/drawgantt/drawgantt-svg.php?` + Object.keys(query)
-        .filter(k => query[k])
-        .map(k => esc(k) + '=' + esc(query[k]))
-        .join('&')
     },
   },
 
@@ -147,9 +133,9 @@ export default {
     Promise.all([
       iotlab.getSitesDetails().catch((err) => this.errorHandler('sites', err)),
       iotlab.getNodes().catch((err) => this.errorHandler('nodes', err)),
-    ]).then(([sites, nodes, nodesStates, jobs]) => {
-      this.setSites(sites)
-      this.setNodes(nodes)
+    ]).then(([sites, nodes]) => {
+      this.sites = sites.sort((a, b) => a.site.localeCompare(b.site))
+      this.nodes = nodes
     })
   },
 
@@ -160,20 +146,27 @@ export default {
   },
 
   methods: {
+    refresh () {
+      this.$ref.gantt.refresh()
+    },
+
     errorHandler (type, err) {
       this.$notify({text: err.response.data.message || 'Failed to fetch ' + type, type: 'error'})
     },
 
-    setSites (sites) {
-      this.sites = sites.sort((a, b) => a.site.localeCompare(b.site))
+    getNodes (stateList = null) {
+      let nodes = this.nodes
+      if (this.currentSite !== 'all') nodes = nodes.filter(node => node.site === this.currentSite.site)
+      if (this.currentArchi !== 'all') nodes = nodes.filter(node => node.archi === this.currentArchi)
+      if (stateList) {
+        return nodes.filter(node => stateList.includes(node.state))
+      } else {
+        return nodes
+      }
     },
 
     sleep (millis, callback) {
       setTimeout(() => callback(), millis)
-    },
-
-    setNodes (nodes) {
-      this.nodes = nodes
     },
 
     reset () {
