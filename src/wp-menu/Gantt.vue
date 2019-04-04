@@ -1,5 +1,4 @@
 <template>
-  <div>
   <table class="table table-striped table-sm" ref="table" v-if="nodes.length">
     <col width="10%"/>
     <col width="10%"/>
@@ -63,40 +62,26 @@
 
             <div v-for="nodesState in node.states" v-bind:key="nodesState.network_address"
                 v-bind:style="nodeStateStyle(nodesState)"
-                v-tooltip:auto="nodesState.info">
+                v-tooltip.auto.html="nodesState.info">
             </div>
 
-            <!--<div class='gridLine'
-                v-bind:style="{
-                  position: 'absolute',
-                  left: date2px(0) + 'px',
-                  textAlign: 'right',
-                  width: gantt_width + 'px',
-                  top: node.y + 'px',
-                  borderWidth: '1px',
-                  borderBottom: '1px blue solid',
-                }">
-            </div>-->
-
             <div v-for="job in node.jobs" v-bind:key="job.key"
-                class="job"
+                class="job justify-text-center"
                 v-bind:style="{
                   position: 'absolute',
                   backgroundColor: `hsl(${job2int(job)},${CONF.job_color_saturation_lightness})`,
-                  // height: job.height + 'px',
                   width: job.width + '%',
                   left: date2pc(job.start) + '%',
                   userSelect: 'none',
                 }"
-                v-tooltip:auto="job.info">
-              {{job.id}}
+                v-tooltip.auto.html="job.info">
+              {{ job.id }}
             </div>
           </div>
         </td>
       </tr>
     </tbody>
   </table>
-  </div>
 </template>
 <script>
 import { iotlab } from '@/rest'
@@ -115,6 +100,7 @@ const CONF = {
   time_ruler_scale: 6,
   time_ruler_steps: [60, 120, 180, 300, 600, 1200, 1800, 3600, 7200, 10800, 21600, 28800, 43200, 86400, 172800, 259200, 604800],
   job_color_saturation_lightness: '75%,75%',
+  min_width: 10,
 }
 
 export default {
@@ -200,9 +186,9 @@ export default {
           state: nodesState.state,
           open_ended: openEnded,
         }
-        svgNodeState.info = `State: ${svgNodeState.state}|Since: ${this.formatDateTime(svgNodeState.start_date)}`
+        svgNodeState.info = `<b>${svgNodeState.state}</b><br>Since: ${this.formatDateTime(svgNodeState.start_date)}`
         if (!svgNodeState.open_ended) {
-          svgNodeState.info += `|Until: ${this.formatDateTime(svgNodeState.stop_date)}`
+          svgNodeState.info += `<br>Until: ${this.formatDateTime(svgNodeState.stop_date)}`
         }
 
         svgNodesMap[nodesState.network_address].states.push(svgNodeState)
@@ -244,7 +230,7 @@ export default {
               id: job.id,
               height: this.scale * (indicesArray[1] - indicesArray[0] + 1),
               color: '#00FF00',
-              info: `Id: ${job.id}|User: ${job.user}|Name: ${job.name}|Nodes: ${job.nb_nodes}|Submission: ${job.submission_date}| Duration: ${job.submitted_duration} min`,
+              info: `Id:&nbsp;${job.id}<br>User:&nbsp;${job.user}<br>Name:&nbsp;${job.name}<br>Nodes:&nbsp;${job.nb_nodes}<br>Submission:&nbsp;${job.submission_date}<br>Duration:&nbsp;${job.submitted_duration}&nbsp;min`,
             }
             svgJob.width = this.date2pc(svgJob.stop) - this.date2pc(svgJob.start)
             svgNode.jobs.push(svgJob)
@@ -422,9 +408,9 @@ export default {
 <style scoped>
 th.col-sticky {
   position: sticky;
-  top: 0px;  /* 0px if you don't have a navbar, but something is required */
+  top: 35px;  /* 0px if you don't have a navbar, but something is required */
   background: white;
-  z-index: 1;
+  z-index: 2;
 }
 table {
   table-layout: fixed;
@@ -436,7 +422,7 @@ td, th {
   position: absolute;
   width: 1px;
   border-width: 1px;
-  z-index: 8;
+  z-index: 1;
 }
 .primary {
   border-left: solid blue 1px;

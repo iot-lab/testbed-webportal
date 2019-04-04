@@ -14,20 +14,6 @@
         <span class="font-weight-normal" v-if="$options.filters.formatRadio(archi)">({{archi | formatRadio}})</span>
       </span>
     </p>
-    <p class="mb-2">
-      <button class="btn mr-2" type="button" v-on:click="shift(-S_PER_WEEK)">&lt;1w</button>
-      <button class="btn mr-2" type="button" v-on:click="shift(-S_PER_DAY)">&lt;1d</button>
-      <button class="btn mr-2" type="button" v-on:click="shift(-6 * S_PER_HOUR)">&lt;6h</button>
-      <button class="btn mr-2" type="button" v-on:click="shift(-S_PER_HOUR)">&lt;1h</button>
-      <button class="btn mr-2" type="button" v-on:click="prev()">&lt;&lt;</button>
-      <button class="btn mr-2" type="button" v-on:click="zoomout()">-</button>
-      <button class="btn mr-2" type="button" v-on:click="zoomin()">+</button>
-      <button class="btn mr-2" type="button" v-on:click="next()">&gt;&gt;</button>
-      <button class="btn mr-2" type="button" v-on:click="shift(S_PER_HOUR)">&gt;1h</button>
-      <button class="btn mr-2" type="button" v-on:click="shift(6 * S_PER_HOUR)">&gt;6h</button>
-      <button class="btn mr-2" type="button" v-on:click="shift(S_PER_DAY)">&gt;1d</button>
-      <button class="btn mr-2" type="button" v-on:click="shift(S_PER_WEEK)">&gt;1w</button>
-    </p>
     <p class="mb-2" style="align-items: center;">
       <multiselect v-model="timezone" placeholder="select timezone"
                 :options="tzNames"
@@ -36,6 +22,22 @@
                 id="timezoneSelect"
     />
     </p>
+    <div class="text-center time-header">
+      <div>
+        <button class="btn mr-2" type="button" v-on:click="shift(-S_PER_WEEK)">&lt;1w</button>
+        <button class="btn mr-2" type="button" v-on:click="shift(-S_PER_DAY)">&lt;1d</button>
+        <button class="btn mr-2" type="button" v-on:click="shift(-6 * S_PER_HOUR)">&lt;6h</button>
+        <button class="btn mr-2" type="button" v-on:click="shift(-S_PER_HOUR)">&lt;1h</button>
+        <button class="btn mr-2" type="button" v-on:click="prev()">&lt;&lt;</button>
+        <button class="btn mr-2" type="button" v-on:click="zoomout()">-</button>
+        <button class="btn mr-2" type="button" v-on:click="zoomin()">+</button>
+        <button class="btn mr-2" type="button" v-on:click="next()">&gt;&gt;</button>
+        <button class="btn mr-2" type="button" v-on:click="shift(S_PER_HOUR)">&gt;1h</button>
+        <button class="btn mr-2" type="button" v-on:click="shift(6 * S_PER_HOUR)">&gt;6h</button>
+        <button class="btn mr-2" type="button" v-on:click="shift(S_PER_DAY)">&gt;1d</button>
+        <button class="btn mr-2" type="button" v-on:click="shift(S_PER_WEEK)">&gt;1w</button>
+      </div>
+    </div>
     <gantt :timezone="timezone" :resource_filter="resource_filter" :gantt_relative_start_date="relative_start" :gantt_relative_stop_date="relative_stop"></gantt>
   </div>
 </template>
@@ -78,11 +80,7 @@ export default {
   computed: {
     tzNames () {
       // filtered tz names
-      let zones = moment.tz._zones
-      console.log(zones)
-      let tzNames = Object.keys(zones)
-        .map(k => zones[k].split('|')[0])
-        .filter(z => z.indexOf('/') >= 0)
+      let tzNames = moment.tz.names()
         .filter(z => z !== 'UTC' && z !== this.tzUser)
         .sort()
       tzNames.unshift(this.tzUser)
@@ -212,8 +210,12 @@ export default {
 }
 </script>
 <style>
-.sidebar {
+.time-header {
   position: sticky;
   top: 0px;
+  background: white;
+  z-index: 2;
+  margin-bottom: 0;
+  height: 35px;
 }
 </style>
