@@ -419,7 +419,7 @@ export default {
   },
 }
 </script>
-<style>
+<style scoped>
 th.col-sticky {
   position: sticky;
   top: 0px;  /* 0px if you don't have a navbar, but something is required */
