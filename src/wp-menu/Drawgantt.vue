@@ -73,7 +73,6 @@ export default {
       timezone: 'UTC',
       sites: [],
       nodes: [],
-      width: 500,
       currentSite: 'all',
       currentArchi: 'all',
       nodeFilter: node => true,
@@ -140,12 +139,6 @@ export default {
     })
   },
 
-  mounted () {
-    window.addEventListener('resize', () => {
-      this.width = this.$refs.container.clientWidth - 50
-    })
-  },
-
   methods: {
     refresh () {
       this.$ref.gantt.refresh()
@@ -207,6 +200,6 @@ export default {
   background: white;
   z-index: 2;
   margin-bottom: 0;
-  height: 35px;
+  height: 40px;
 }
 </style>

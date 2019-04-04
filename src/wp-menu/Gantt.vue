@@ -65,8 +65,10 @@
                 v-tooltip.auto.html="nodesState.info">
             </div>
 
-            <div v-for="job in node.jobs" v-bind:key="job.key"
-                class="job justify-text-center"
+            <router-link v-for="job in node.jobs" v-bind:key="job.key"
+                tag="div" :to="{name: 'experimentDetails', params: { id: job.id }}"
+                class="job justify-text-center cursor"
+                v-on:click.native="closeTooltip"
                 v-bind:style="{
                   position: 'absolute',
                   backgroundColor: `hsl(${job2int(job)},${CONF.job_color_saturation_lightness})`,
@@ -76,7 +78,7 @@
                 }"
                 v-tooltip.auto.html="job.info">
               {{ job.id }}
-            </div>
+            </router-link>
           </div>
         </td>
       </tr>
@@ -86,6 +88,7 @@
 <script>
 import { iotlab } from '@/rest'
 import moment from 'moment-timezone'
+import $ from 'jquery'
 
 const CONF = {
   timezone: 'UTC',
@@ -310,6 +313,9 @@ export default {
   },
 
   methods: {
+    closeTooltip () {
+      $('.tooltip').remove()
+    },
     time (val) {
       return moment(this.now).add(val, 'seconds')
     },
@@ -410,7 +416,7 @@ export default {
 <style scoped>
 th.col-sticky {
   position: sticky;
-  top: 35px;  /* 0px if you don't have a navbar, but something is required */
+  top: 40px;  /* 0px if you don't have a navbar, but something is required */
   background: white;
   z-index: 2;
 }
