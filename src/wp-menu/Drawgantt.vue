@@ -38,7 +38,7 @@
         <button class="btn mr-2" type="button" v-on:click="shift(-S_PER_HOUR)">&lt;1h</button>
         <button class="btn mr-2" type="button" v-on:click="prev()">&lt;&lt;</button>
         <button class="btn mr-2" type="button" v-on:click="zoomout()">-</button>
-        <button class="btn mr-2" type="button" v-on:click="refresh()">-</button>
+        <button class="btn mr-2" type="button" v-on:click="refresh()">refresh</button>
         <button class="btn mr-2" type="button" v-on:click="zoomin()">+</button>
         <button class="btn mr-2" type="button" v-on:click="next()">&gt;&gt;</button>
         <button class="btn mr-2" type="button" v-on:click="shift(S_PER_HOUR)">&gt;1h</button>
