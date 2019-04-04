@@ -38,7 +38,7 @@
         <button class="btn mr-2" type="button" v-on:click="shift(S_PER_WEEK)">&gt;1w</button>
       </div>
     </div>
-    <gantt :timezone="timezone" :resource_filter="resource_filter" :gantt_relative_start_date="relative_start" :gantt_relative_stop_date="relative_stop"></gantt>
+    <gantt ref='gantt' :timezone="timezone" :resource_filter="resource_filter" :gantt_relative_window="relative_window"></gantt>
   </div>
 </template>
 
@@ -60,12 +60,9 @@ export default {
   data () {
     return {
       active: 0,
-      relative_start: -S_PER_DAY,
-      relative_stop: S_PER_DAY,
+      relative_window: {start: -S_PER_DAY, stop: S_PER_DAY},
       timezone: 'UTC',
       sites: [],
-      zoom_relative_start: 0,
-      zoom_relative_stop: 0,
       width: 500,
       currentSite: 'all',
       currentArchi: 'all',
@@ -78,6 +75,12 @@ export default {
   },
 
   computed: {
+    relative_start () {
+      return this.relative_window.start
+    },
+    relative_stop () {
+      return this.relative_window.stop
+    },
     tzNames () {
       // filtered tz names
       let tzNames = moment.tz.names()
@@ -174,37 +177,31 @@ export default {
     },
 
     reset () {
-      this.relative_start = -S_PER_DAY
-      this.relative_stop = S_PER_DAY
+      this.relative_window = { start: -S_PER_DAY, stop: S_PER_DAY }
     },
 
     shift (time) {
-      this.relative_start += time
-      this.relative_stop += time
+      this.relative_window = { start: this.relative_start + time, stop: this.relative_stop + time }
     },
 
     next () {
       var t = this.relative_stop + (this.relative_stop - this.relative_start)
-      this.relative_start = this.relative_stop
-      this.relative_stop = t
+      this.relative_window = { start: this.relative_stop, stop: t }
     },
 
     prev () {
       var t = this.relative_start - (this.relative_stop - this.relative_start)
-      this.relative_stop = this.relative_start
-      this.relative_start = t
+      this.relative_window = { start: t, stop: this.relative_start }
     },
 
     zoomin () {
       var t = this.relative_start + (this.relative_stop - this.relative_start) / 4
-      this.relative_stop = this.relative_stop - (this.relative_stop - this.relative_start) / 4
-      this.relative_start = t
+      this.relative_window = { start: t, stop: this.relative_stop - (this.relative_stop - this.relative_start) / 4 }
     },
 
     zoomout () {
       var t = (this.relative_stop - this.relative_start) / 2
-      this.relative_stop += t
-      this.relative_start -= t
+      this.relative_window = { start: this.relative_start - t, stop: this.relative_stop + t }
     },
   },
 }

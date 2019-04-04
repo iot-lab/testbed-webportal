@@ -111,17 +111,13 @@ export default {
       type: Number,
       required: false,
     },
-    gantt_relative_start_date: {
-      type: Number,
-      default: -86400,
-    },
-    gantt_relative_stop_date: {
-      type: Number,
-      default: 86400,
+    gantt_relative_window: {
+      type: Object,
+      default: () => { return {start: -86400, stop: 86400} },
     },
     resource_filter: {
       type: Object,
-      default: () => { return {'archi_all': true, 'site_all': true} },
+      default: () => { return {archi_all: true, site_all: true} },
     },
     timezone: {
       type: String,
@@ -271,11 +267,17 @@ export default {
         return 1
       }
     },
+    gantt_relative_stop_date () {
+      return this.gantt_relative_window.stop
+    },
+    gantt_relative_start_date () {
+      return this.gantt_relative_window.start
+    },
     start () {
-      return moment(this.now).add(this.gantt_relative_start_date, 'seconds')
+      return this.time(this.gantt_relative_start_date)
     },
     stop () {
-      return moment(this.now).add(this.gantt_relative_stop_date, 'seconds')
+      return this.time(this.gantt_relative_stop_date)
     },
     gantt_start_date () {
       let ganttStartDate = this.start.unix()
@@ -304,34 +306,36 @@ export default {
   },
 
   watch: {
-    gantt_relative_start_date () {
-      this.load()
-    },
-    gantt_relative_stop_date () {
-      this.load()
-    },
-    resource_filter () {
-      this.load()
+    gantt_relative_window (val, oldVal) {
+      this.update(this.time(val.start), this.time(val.stop))
     },
   },
 
   methods: {
-    load () {
-      this.nodes = []
+    time (val) {
+      return moment(this.now).add(val, 'seconds')
+    },
+    update (start, stop) {
+      // only the time window changed, update the nodes states and jobs
       this.jobs = []
-      this.svgJobs = []
       this.nodesStates = []
-      this.svgNodesStates = []
 
       Promise.all([
-        iotlab.getNodes(this.start, this.stop).catch((err) => this.errorHandler('nodes', err)),
-        iotlab.getNodesStates(this.start, this.stop).catch((err) => this.errorHandler('nodes states', err)),
-        iotlab.getExperimentsJobs(this.start, this.now).catch((err) => this.errorHandler('jobs', err)),
-      ]).then(([nodes, nodesStates, jobs]) => {
-        this.nodes = nodes
+        iotlab.getNodesStates(start, stop).catch((err) => this.errorHandler('nodes states', err)),
+        iotlab.getExperimentsJobs(start, stop).catch((err) => this.errorHandler('jobs', err)),
+      ]).then(([nodesStates, jobs]) => {
         this.nodesStates = nodesStates
         this.jobs = jobs
       })
+    },
+
+    load () {
+      iotlab.getNodes(this.start, this.stop)
+        .catch((err) => this.errorHandler('nodes', err))
+        .then(nodes => {
+          this.nodes = nodes
+          this.update(this.start, this.stop)
+        })
     },
 
     formatDateTime (value) {
