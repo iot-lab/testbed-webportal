@@ -40,7 +40,7 @@
                 <button class="btn btn-success" type="submit" style="margin-top: 10px;">Change Password</button>
               </form>
               <div class="col-md-6">
-                <div id="policy" class="card mt-2 border-danger text-danger" style="display: none;">
+                <div id="policy" class="card mt-2 border-info text-info" style="display: none;">
                   <div class="card-body"><h6>Password Policy</h6>
                     <ul class="pl-3 mb-0">
                       <li>one upper case letter [A-Z]</li>
