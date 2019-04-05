@@ -38,8 +38,8 @@
       <div class="col-md">
       </div>
     </div>
-    <div class="row mb-5">
-      <div class="col form-group password" ref="passwordGroup" v-if="!hidden.includes('password')">
+    <div class="row mb-5" v-if="!hidden.includes('password')">
+      <div class="col form-group password" ref="passwordGroup">
         <label class="form-control-label">Password</label>
         <input placeholder="Password" v-model="user.password" name="password"
           class="form-control" type="password" v-validate="'required'" ref="password"
@@ -56,7 +56,7 @@
           {{ errors.first('password') }}
         </div>
       </div>
-      <div class="col form-group"  v-if="!hidden.includes('password')">
+      <div class="col form-group">
         <label class="form-control-label">Confirm password</label>
         <input placeholder="Password" name="password_confirmation"
           data-vv-as="password" class="form-control" type="password" v-validate="'required|confirmed:password'"
