@@ -163,4 +163,7 @@ html {
   padding: 1.5em 2.5em;
   margin-top: 200px;
 }
+a:focus {
+  outline: none;
+}
 </style>
