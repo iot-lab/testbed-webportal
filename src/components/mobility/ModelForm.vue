@@ -25,7 +25,7 @@
           :options="cmOptions"
           lang="python" theme="chrome" width="600" height="500"></editor>
       </div>
-      <div class="form-group">
+      <div class="form-group" v-if="!readOnly">
         <button class="btn btn-success" type="submit">Save Mobility model
         </button>
       </div>
@@ -64,10 +64,6 @@ export default {
       modelFileForm: {
         data: '',
       },
-      cmOptions: {
-        displayIndentGuides: true,
-        fontSize: '16pt',
-      },
     }
   },
 
@@ -90,6 +86,13 @@ export default {
         return this.modelForm.name.match(/^[0-9A-Za-z_]*$/)
       } else {
         return true
+      }
+    },
+    cmOptions () {
+      return {
+        displayIndentGuides: true,
+        fontSize: '16pt',
+        readOnly: this.readOnly,
       }
     },
   },

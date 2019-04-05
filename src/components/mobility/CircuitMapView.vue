@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-3">
+  <div>
     <svg xmlns='http://www.w3.org/2000/svg' class="map" v-if="siteLoaded"
        :viewBox="`0 0 ${svgWidth} ${svgHeight}`"  style="border: 1px solid black;">
       <svg id='svgMap' :width="mapWidth" :height="mapHeight" :viewBox="`0 0 ${realWidth} ${realHeight}`" :x="this.xAxisMargin" y="0">
@@ -46,33 +46,46 @@
         </g>
       </g>
     </svg>
-    <div v-if="!readOnly" :style="{'visibility': this.selectedPoint ? '': 'hidden'}">
-      <div class="form-group">
-        <div class="row">
-          <div class="col">
-            <label>Select existing coordinate point:</label>
-            <select class="form-control" v-model.lazy="currentPointName">
-              <option v-for="c in Object.keys(this.coordinates)" :key="c">{{c}}</option>
-            </select>
-          </div>
-          <div class="col">
-            <label>Enter name for new coordinate point:</label>
-            <input class="form-control" type="text" v-model.lazy="currentPointName"/>
-          </div>
-          <div class="col">
-            <label>Point rotation:</label>
-            <angle-input v-model="currentPointTheta"></angle-input>
-          </div>
-        </div>
-      </div>
-      <i class="btn btn-success fa fa-check-circle" v-tooltip:top="'Modify the point'" @click="submitModifyPoint"></i>
-      <i class="btn btn-info fa fa-window-close" v-tooltip:top="'Close'" @click="deselectPoint"></i>
-      <i class="btn btn-danger fa fa-trash float-right" v-tooltip:top="'Delete the point'" @click="deletePoint"></i>
+    <div class="card float-top" v-if="!readOnly && this.selectedPoint">
+      <table>
+        <thead class="form-group">
+          <th>
+            Existing coordinate point
+          </th>
+          <th>
+            Name for new coordinate point
+          </th>
+          <th colspan="2">
+            Point rotation
+          </th>
+          <th></th>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <select class="form-control" v-model.lazy="currentPointName">
+                <option v-for="c in Object.keys(this.coordinates)" :key="c">{{c}}</option>
+              </select>
+            </td>
+            <td>
+              <input class="form-control" type="text" v-model.lazy="currentPointName"/>
+            </td>
+            <td>
+              <angle-picker :value="currentPointTheta" @input="value => { currentPointTheta = value }"/>
+            </td>
+            <td>
+              <angle-input :value="currentPointTheta" @input="value => { currentPointTheta = value }"/>
+            </td>
+            <td>
+              <i class="btn btn-success fa fa-check-circle float-right" v-tooltip.right="'Modify the point'" @click="submitModifyPoint"></i>
+              <i class="btn btn-info fa fa-window-close float-right" v-tooltip.right="'Close'" @click="deselectPoint"></i>
+              <i class="btn btn-danger fa fa-trash float-right" v-tooltip.right="'Delete'" @click="deletePoint"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <div :style="{'visibility': this.selectedPoint ? '': 'hidden'}">
-    </div>
-    <div class="pull-right">
-      <img height=50 src="../../assets/turtlebot2_top.svg"> Robot front
     </div>
   </div>
 
@@ -81,10 +94,12 @@
 import { iotlab } from '@/rest'
 import { nextString } from '@/utils'
 import AngleInput from '@/components/mobility/AngleInput'
+import AnglePicker from '@/components/mobility/AnglePicker'
 
 export default {
   name: 'CircuitMapView',
   components: {
+    AnglePicker,
     AngleInput,
   },
   props: {
@@ -109,6 +124,9 @@ export default {
   },
 
   computed: {
+    currentPointDegree () {
+      return Math.round((180 / Math.PI) * (1e4 * this.currentPointTheta)) / 1e4
+    },
     valid_points () {
       return this.points.filter(p => this.coordinate(p) !== undefined)
     },

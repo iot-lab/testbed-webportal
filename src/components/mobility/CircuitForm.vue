@@ -31,6 +31,11 @@
                :readOnly="readOnly">
       </div>
       <div v-if="circuitForm.site">
+      <label class="custom-control custom-checkbox">
+        <input v-model="circuitForm.loop" type="checkbox" :readOnly="readOnly" class="custom-control-input">
+        <span class="custom-control-indicator"></span>
+        <span class="custom-control-description">Loop</span>
+      </label>
       <circuit-map-view
         v-if="circuitForm.site"
         :site="circuitForm.site"
@@ -42,13 +47,8 @@
         @addPoint="(ptName) => circuitForm.points.push(ptName)"
         @setPoint="setPoint"
         @removePoint="removePoint"></circuit-map-view>
-      <label class="custom-control custom-checkbox">
-        <input v-model="circuitForm.loop" type="checkbox" :readOnly="readOnly" class="custom-control-input">
-        <span class="custom-control-indicator"></span>
-        <span class="custom-control-description">Loop</span>
-      </label>
-      <div class="btn btn-sm btn-secondary" v-on:click="showDetails=!showDetails">Toggle Details</div>
-      <div class="container" v-show="showDetails">
+      <div class="btn btn-sm btn-secondary" v-on:click="showDetails=!showDetails">{{showDetails ? 'Hide ' : 'Show '}} Details</div>
+      <div class="container" v-if="showDetails">
       <div class="form-group">
         <h3 class="text-muted">Points coordinates</h3>
         <table class="table table-sm">
@@ -57,7 +57,7 @@
             <th>Point name</th>
             <th>X</th>
             <th>Y</th>
-            <th>Direction (°)</th>
+            <th colspan="2">Direction (°)</th>
             <th v-if="!readOnly"></th>
           </tr>
           </thead>
@@ -67,7 +67,10 @@
               <td><input class="form-control form-control-sm" type="text" v-model="coordinate.x" :readOnly="readOnly"></td>
               <td><input class="form-control form-control-sm" type="text" v-model="coordinate.y" :readOnly="readOnly"></td>
               <td>
-                <angle-input v-model="coordinate.theta" :read-only="readOnly"></angle-input>
+                <angle-picker :value="coordinate.theta" :readOnly="readOnly" @input="value => { coordinate.theta = value }"/>
+              </td>
+              <td>
+                <angle-input :value="coordinate.theta" :readOnly="readOnly" @input="value => { coordinate.theta = value }"/>
               </td>
               <td v-if="!readOnly">
                 <div class="btn-group">
@@ -121,6 +124,7 @@
 import Multiselect from 'vue-multiselect'
 import { iotlab } from '@/rest'
 import AngleInput from '@/components/mobility/AngleInput'
+import AnglePicker from '@/components/mobility/AnglePicker'
 import CircuitMapView from '@/components/mobility/CircuitMapView'
 import $ from 'jquery'
 import Vue from 'vue'
@@ -129,7 +133,7 @@ import Vue from 'vue'
 
 export default {
   name: 'CircuitForm',
-  components: {Multiselect, CircuitMapView, AngleInput},
+  components: {Multiselect, CircuitMapView, AngleInput, AnglePicker},
 
   props: {
     mobilityCircuit: {
@@ -192,7 +196,7 @@ export default {
       $('.tooltip[role=tooltip]').remove()
     },
     addCoordinate () {
-      Vue.set(this.circuitForm.coordinates, '', { theta: 0 })
+      Vue.set(this.circuitForm.coordinates, '', { theta: 0, degree: 0 })
     },
     addPoint (index) {
       this.circuitForm.points.splice(index, 0, '')

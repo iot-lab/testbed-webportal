@@ -5,29 +5,23 @@
       <router-link :to="{name: 'newMobilityModel'}" class="btn btn-sm btn-success"><i class="fa fa-plus"></i>New Mobility Model</router-link>
     </div>
     <ul class="nav nav-tabs" style="position: relative; top: 1px">
-      <li class="nav-item" v-tooltip:top="'All'">
-        <a class="nav-link active" data-toggle="list" href="#all" role="tab" aria-controls="all" @click="filterMobilityType = 'all'"> All mobilities </a>
-      </li>
-      <li class="nav-item" v-tooltip:top="'Circuits'">
-        <a class="nav-link" data-toggle="list" href="#circuits" role="tab" aria-controls="circuits" @click="filterMobilityType = 'circuits'"> Circuits </a>
-      </li>
-      <li class="nav-item" v-tooltip:top="'Models'">
-        <a class="nav-link" data-toggle="list" href="#models" role="tab" aria-controls="models" @click="filterMobilityType = 'models'"> Models </a>
-      </li>
-    </ul>
-    <p v-if="sites && filterMobilityType === 'circuits'" class="mb-2">
-      <span class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentSite === 'all', 'badge-secondary': currentSite !== 'all'}" @click="currentSite = 'all'">{{sites.length}} sites</span>
-      <span v-for="site in sites" :key="site.site" class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentSite === site, 'badge-secondary': currentSite !== site}"
-            @click="currentSite = site">{{site.site}}</span>
-    </p>
-    <ul class="nav nav-tabs" style="position: relative; top: 1px">
-      <li class="nav-item" v-tooltip:top="'User'">
-        <a class="nav-link active" data-toggle="list" href="#userdefined" role="tab" aria-controls="userdefined" @click="filterType = 'userdefined'"> User </a>
+      <li class="nav-item" v-tooltip:top="'My mobilities'">
+        <a class="nav-link active" data-toggle="list" href="#userdefined" role="tab" aria-controls="userdefined" @click="filterType = 'userdefined'"> My mobilities </a>
       </li>
       <li class="nav-item" v-tooltip:top="'Presets'">
         <a class="nav-link" data-toggle="list" href="#predefined" role="tab" aria-controls="predefined" @click="filterType = 'predefined'"> Presets </a>
       </li>
     </ul>
+    <p class="mb-2">
+      <span class="badge badge-pill mr-1 cursor" :class="{'badge-primary': filterMobilityType === 'all', 'badge-secondary': filterMobilityType !== 'all'}" @click="filterMobilityType = 'all'">All mobilities</span>
+      <span class="badge badge-pill mr-1 cursor" :class="{'badge-primary': filterMobilityType === 'circuits', 'badge-secondary': filterMobilityType !== 'circuits'}" @click="filterMobilityType = 'circuits'">Circuits</span>
+      <span class="badge badge-pill mr-1 cursor" :class="{'badge-primary': filterMobilityType === 'models', 'badge-secondary': filterMobilityType !== 'models'}" @click="filterMobilityType = 'models'">Models</span>
+    </p>
+    <p v-if="sites" class="mb-2">
+      <span class="badge badge-pill mr-1 cursor" :class="{'badge-info': currentSite === 'all', 'badge-secondary': currentSite !== 'all'}" @click="currentSite = 'all'">{{sites.length}} sites</span>
+      <span v-for="site in sites" :key="site.site" class="badge badge-pill mr-1 cursor" :class="{'badge-info': currentSite === site, 'badge-secondary': currentSite !== site}"
+            @click="currentSite = site">{{site.site}}</span>
+    </p>
     <table class="table table-striped table-sm mt-3">
       <thead>
       <tr v-if="filterMobilityType === 'circuits'">
