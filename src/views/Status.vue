@@ -2,7 +2,15 @@
 <div class="container mt-3">
   <h4><i class="fa fa-fw fa-hourglass-half" aria-hidden="true"></i> Running experiments ({{runningExp.length}})</h4>
   <running-experiments :exp-list="runningExp"></running-experiments>
-  <div class="float-right mt-1 mb-4">
+  <ul class="nav nav-tabs">
+    <li class="nav-item" v-tooltip:top="'Nodes properties'">
+      <a class="nav-link" :class="{active: showData=='properties'}" data-toggle="list" href="#properties" role="tab" aria-controls="properties" @click="showData = 'properties'"><i class="fa fa-fw fa-share-alt" aria-hidden="true"></i>Nodes properties</a>
+    </li>
+    <li class="nav-item" v-tooltip:top="'Testbed Activity'">
+      <a class="nav-link" :class="{active: showData=='activity'}" data-toggle="list" href="#activity" role="tab" aria-controls="activity" @click="showData = 'activity'"><i class="fa fa-fw fa-calendar" aria-hidden="true"></i>Testbed Activity</a>
+    </li>
+  </ul>
+  <div class="float-right mt-1 mb-4" v-if="showData == 'properties'">
     <div class="dropdown d-inline-block ">
       <button class="btn btn-light mr-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-fw fa-download"></i> Download</button>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
@@ -12,7 +20,6 @@
     </div>
     <button v-if="isAdmin" class="btn btn-warning" @click="updateNodesProperties"><i class="fa fa-lock"></i> Update properties</button>
   </div>
-  <h4><i class="fa fa-fw fa-share-alt" aria-hidden="true"></i> Nodes properties</h4>
   <p class="lead mb-0">Sites</p>
   <p class="mb-2" v-if="sites">
     <span class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentSite === 'all', 'badge-secondary': currentSite !== 'all'}" @click="currentSite = 'all'">{{sites.length}} sites</span>
@@ -51,7 +58,7 @@
     </div>
   </div>
   <map-3d :nodes="filteredNodes" :shows="showMap" v-show="showMap" @selectSite="(site) => currentSite = sites.find(s => s.site === site)"></map-3d>
-  <table class="table table-striped table-sm" v-if="nodes.length">
+  <table class="table table-striped table-sm" v-if="nodes.length && showData == 'properties'">
     <thead>
       <tr>
         <th class="cursor" title="sort by hostname" @click="sortBy(node => nodeSortByHostname(node))">Node hostname</th>
@@ -86,7 +93,7 @@
       </tr>
     </tbody>
   </table>
-
+  <drawgantt :nodes="filteredNodes" :sites="sites" v-if="showData == 'activity'"/>
 </div> <!-- container -->
 
 </template>
@@ -94,6 +101,7 @@
 <script>
 import Map3d from '@/components/Map3d'
 import RunningExperiments from '@/components/RunningExperiments'
+import Drawgantt from '@/wp-menu/Drawgantt'
 import { iotlab } from '@/rest'
 import { auth } from '@/auth'
 import { downloadObjectAsJson, downloadObjectAsCsv } from '@/utils'
@@ -104,6 +112,13 @@ export default {
   components: {
     Map3d,
     RunningExperiments,
+    Drawgantt,
+  },
+
+  props: {
+    tab: {
+      type: String,
+    },
   },
 
   data () {
@@ -124,10 +139,12 @@ export default {
       },
       search: '',
       showMap: false,
+      showData: 'properties',
     }
   },
 
   created () {
+    this.showData = this.tab ? this.tab : this.showData
     iotlab.getSitesDetails().then(data => { this.sites = data.sort((a, b) => a.site.localeCompare(b.site)) }).catch(err => {
       this.$notify({text: err.response.data.message || 'Failed to fetch sites details', type: 'error'})
     })

@@ -19,7 +19,6 @@ import NewExperiment from '@/views/NewExperiment'
 import ExperimentDetails from '@/views/ExperimentDetails'
 import Dashboard from '@/views/Dashboard'
 import Status from '@/views/Status'
-import Drawgantt from '@/wp-menu/Drawgantt'
 import {auth} from './auth'
 
 Vue.use(Router)
@@ -31,7 +30,7 @@ const router = new Router({
   mode: 'history',
   routes: [
     { path: '/', redirect: '/dashboard' },
-    { path: '/drawgantt', name: 'drawgantt', component: Drawgantt },
+    { path: '/status/activity', name: 'drawgantt', component: Status, props: {tab: 'activity'} },
     { path: '/signup', name: 'signup', component: Signup },
     { path: '/reset', name: 'reset', component: ResetPassword },
     { path: '/login', name: 'login', component: Login },

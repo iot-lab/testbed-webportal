@@ -23,9 +23,6 @@
           <router-link tag="li" :to="{name:'status'}" active-class="active">
             <a class="nav-link"><i class="fa fa-fw fa-tasks" aria-hidden="true"></i> Testbed Status</a>
           </router-link>
-          <router-link tag="li" :to="{name:'drawgantt'}" active-class="active">
-            <a class="nav-link"><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Activity</a>
-          </router-link>
         </ul>
         <ul class="nav navbar-nav float-xs-right">
           <router-link tag="li" :to="{name:'allExperiments'}" active-class="active" v-if="auth.isAdmin">

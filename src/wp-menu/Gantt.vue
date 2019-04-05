@@ -120,9 +120,8 @@ export default {
       type: Object,
       default: () => { return {start: -86400, stop: 86400} },
     },
-    resource_filter: {
-      type: Object,
-      default: () => { return { archi: n => true, site: n => true, node: n => true } },
+    nodes: {
+      type: Array,
     },
     timezone: {
       type: String,
@@ -136,7 +135,6 @@ export default {
 
   data () {
     return {
-      nodes: [],
       nodesStates: [],
       jobs: [],
       CONF: CONF,
@@ -146,17 +144,9 @@ export default {
   },
 
   computed: {
-    filteredNodes () {
-      return this.nodes
-        .concat()
-        .sort(this.nodeHostnameSort)
-        .filter(this.resource_filter.archi)
-        .filter(this.resource_filter.site)
-        .filter(this.resource_filter.node)
-    },
     svgNodes () {
       let svgNodesMap = {}
-      let nodes = this.filteredNodes
+      let nodes = this.nodes
 
       for (let node of nodes) {
         let svgNode = {
@@ -337,12 +327,7 @@ export default {
     },
 
     load () {
-      iotlab.getNodes(this.start, this.stop)
-        .catch((err) => this.errorHandler('nodes', err))
-        .then(nodes => {
-          this.nodes = nodes
-          this.update(this.start, this.stop)
-        })
+      this.update(this.start, this.stop)
     },
 
     formatDateTime (value) {
