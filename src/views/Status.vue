@@ -2,14 +2,6 @@
 <div class="container mt-3">
   <h4><i class="fa fa-fw fa-hourglass-half" aria-hidden="true"></i> Running experiments ({{runningExp.length}})</h4>
   <running-experiments :exp-list="runningExp"></running-experiments>
-  <ul class="nav nav-tabs">
-    <li class="nav-item" v-tooltip:top="'Nodes properties'">
-      <a class="nav-link" :class="{active: showData=='properties'}" data-toggle="list" href="#properties" role="tab" aria-controls="properties" @click="showData = 'properties'"><i class="fa fa-fw fa-share-alt" aria-hidden="true"></i>Nodes properties</a>
-    </li>
-    <li class="nav-item" v-tooltip:top="'Testbed Activity'">
-      <a class="nav-link" :class="{active: showData=='activity'}" data-toggle="list" href="#activity" role="tab" aria-controls="activity" @click="showData = 'activity'"><i class="fa fa-fw fa-calendar" aria-hidden="true"></i>Testbed Activity</a>
-    </li>
-  </ul>
   <div class="float-right mt-1 mb-4" v-if="showData == 'properties'">
     <div class="dropdown d-inline-block ">
       <button class="btn btn-light mr-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-fw fa-download"></i> Download</button>
@@ -46,6 +38,14 @@
   <p v-else>
     <i class="fa fa-spinner fa-spin fa-fw"></i>
   </p>
+  <ul class="nav nav-tabs">
+    <li class="nav-item" v-tooltip:top="'Nodes properties'">
+      <a class="nav-link" :class="{active: showData=='properties'}" data-toggle="list" href="#properties" role="tab" aria-controls="properties" @click="showData = 'properties'"><i class="fa fa-fw fa-share-alt" aria-hidden="true"></i>Nodes properties</a>
+    </li>
+    <li class="nav-item" v-tooltip:top="'Testbed Activity'">
+      <a class="nav-link" :class="{active: showData=='activity'}" data-toggle="list" href="#activity" role="tab" aria-controls="activity" @click="showData = 'activity'"><i class="fa fa-fw fa-calendar" aria-hidden="true"></i>Testbed Activity</a>
+    </li>
+  </ul>
   <div class="row">
     <div class="col-md-8">
       <label class="mt-2 mr-3 text-muted font-italic">Showing {{filteredNodes.length}} nodes</label>
