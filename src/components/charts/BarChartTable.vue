@@ -3,7 +3,7 @@
     <label>{{label}}: </label>
     <div>
       <a class="cursor" title="Show Table" @click="toggle"><i class="fa fa-fw fa-eye"></i>Show Table</a>
-      <a class="cursor" title="Download Data" @click="download"><i class="fa fa-fw fa-download"></i>Download Data</a>
+      <a class="cursor" title="Download CSV" @click="download"><i class="fa fa-fw fa-download"></i>Download CSV</a>
     </div>
     <table v-if="table" class="table table-striped table-sm mt-2">
       <thead>
@@ -14,7 +14,7 @@
       </thead>
       <tbody>
       <template v-for="element in data">
-        <tr class="d-table-row">
+        <tr class="d-table-row" :key="element.category">
           <td>{{element.category}}</td><td>{{element.value}}</td>
         </tr>
       </template>
