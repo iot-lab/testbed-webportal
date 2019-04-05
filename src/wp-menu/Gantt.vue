@@ -159,6 +159,8 @@ export default {
         svgNodesMap[node.network_address] = svgNode
       }
 
+      if (!this.nodesStates) return Object.values(svgNodesMap)
+
       for (let nodesState of this.nodesStates) {
         if (!(nodesState.network_address in svgNodesMap)) {
           continue
@@ -187,6 +189,9 @@ export default {
       }
 
       let nodesNetworkAddresses = nodes.map(el => el.network_address)
+
+      if (!this.jobs) return Object.values(svgNodesMap)
+
       for (let job of this.jobs) {
         let indices = []
         for (let node of job.nodes) {

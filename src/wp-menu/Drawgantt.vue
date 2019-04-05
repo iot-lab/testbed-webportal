@@ -16,6 +16,7 @@
         <button class="btn mr-2" type="button" v-on:click="prev()">&lt;&lt;</button>
         <button class="btn mr-2" type="button" v-on:click="zoomout()">-</button>
         <button class="btn mr-2" type="button" v-on:click="refresh()">refresh</button>
+        <button class="btn mr-2" type="button" v-on:click="reset()">reset</button>
         <button class="btn mr-2" type="button" v-on:click="zoomin()">+</button>
         <button class="btn mr-2" type="button" v-on:click="next()">&gt;&gt;</button>
         <button class="btn mr-2" type="button" v-on:click="shift(S_PER_HOUR)">&gt;1h</button>
@@ -34,6 +35,8 @@ import { S_PER_DAY, S_PER_WEEK, S_PER_HOUR } from '@/constants'
 import moment from 'moment-timezone'
 import Gantt from '@/wp-menu/Gantt'
 
+const DEFAULT_RELATIVE_WINDOW = {start: -S_PER_DAY, stop: S_PER_DAY}
+
 export default {
   name: 'Drawgantt',
 
@@ -43,9 +46,10 @@ export default {
   },
 
   data () {
+    
     return {
       active: 0,
-      relative_window: {start: -S_PER_DAY, stop: S_PER_DAY},
+      relative_window: Object.assign({}, DEFAULT_RELATIVE_WINDOW),
       timezone: 'UTC',
       tzUser: moment.tz.guess(),
 
@@ -100,7 +104,7 @@ export default {
     },
 
     reset () {
-      this.relative_window = { start: -S_PER_DAY, stop: S_PER_DAY }
+      this.relative_window = DEFAULT_RELATIVE_WINDOW
     },
 
     shift (time) {
