@@ -219,7 +219,7 @@ export default {
               id: job.id,
               height: this.scale * (indicesArray[1] - indicesArray[0] + 1),
               color: '#00FF00',
-              info: `Id:&nbsp;${job.id}<br>User:&nbsp;${job.user}<br>Name:&nbsp;${job.name}<br>Nodes:&nbsp;${job.nb_nodes}<br>Submission:&nbsp;${job.submission_date}<br>Duration:&nbsp;${job.submitted_duration}&nbsp;min`,
+              info: `Id:&nbsp;${job.id}<br>User:&nbsp;${job.user}${job.name ? '<br>Name:&nbsp;' + job.name : ''}<br>Nodes:&nbsp;${job.nb_nodes}<br>Submission:&nbsp;${job.submission_date}<br>Duration:&nbsp;${job.submitted_duration}&nbsp;min`,
               reachable: auth.isAdmin || job.user === auth.username,
             }
             svgJob.width = this.date2pc(svgJob.stop) - this.date2pc(svgJob.start)
