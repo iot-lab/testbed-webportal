@@ -137,7 +137,7 @@ export default {
         await iotlab.signup(this.user)
         this.$notify({text: 'User created', type: 'success'})
       } catch (err) {
-        this.$notify({text: 'An error occured', type: 'error'})
+        this.$notify({text: err.response.data.message, type: 'error'})
       }
     },
     createMultiple () {
