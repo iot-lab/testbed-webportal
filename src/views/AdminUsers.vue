@@ -145,7 +145,7 @@
             </button>
           </div>
           <div class="modal-body px-4 pt-3 pb-0">
-            <user-form ref="user" :user="currentUser" :admin="true" mode="edit"></user-form>
+            <user-form ref="user" :user="currentUser" :admin="true" mode="edit" :hidden="['password']"></user-form>
           </div>
           <div class="modal-footer border-0 dbg-light">
             <button type="button" class="btn" data-dismiss="modal">Close</button>
