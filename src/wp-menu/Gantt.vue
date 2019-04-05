@@ -91,6 +91,7 @@ import { iotlab } from '@/rest'
 import moment from 'moment-timezone'
 import $ from 'jquery'
 import { auth } from '@/auth'
+import { S_PER_MIN, S_PER_DAY, S_PER_HOUR } from '@/constants'
 
 const CONF = {
   timezone: 'UTC',
@@ -103,7 +104,28 @@ const CONF = {
 
   text_scale: 10,
   time_ruler_scale: 6,
-  time_ruler_steps: [60, 120, 180, 300, 600, 1200, 1800, 3600, 7200, 10800, 21600, 28800, 43200, 86400, 172800, 259200, 604800],
+  time_ruler_steps: [
+    S_PER_MIN,
+    2 * S_PER_MIN,
+    3 * S_PER_MIN,
+    5 * S_PER_MIN,
+    10 * S_PER_MIN,
+    20 * S_PER_MIN,
+    30 * S_PER_MIN,
+
+    S_PER_HOUR,
+    2 * S_PER_HOUR,
+    3 * S_PER_HOUR,
+    6 * S_PER_HOUR,
+    8 * S_PER_HOUR,
+    12 * S_PER_HOUR,
+
+    S_PER_DAY,
+    2 * S_PER_DAY,
+    4 * S_PER_DAY,
+    8 * S_PER_DAY,
+    12 * S_PER_DAY,
+  ],
   job_color_saturation_lightness: '75%,75%',
   min_width: 10,
 }
@@ -118,7 +140,6 @@ export default {
     },
     gantt_relative_window: {
       type: Object,
-      default: () => { return {start: -86400, stop: 86400} },
     },
     nodes: {
       type: Array,
@@ -240,8 +261,7 @@ export default {
       return CONF.time_ruler_steps.filter(r => r < value).pop()
     },
     secondary_ruler_step () {
-      let value = (this.gantt_stop_date - this.gantt_start_date) / (4 * CONF.time_ruler_scale)
-      return CONF.time_ruler_steps.filter(r => r < value).pop()
+      return this.ruler_step / 4
     },
     secondaryRulerValues () {
       let d = this.gantt_start_date - this.gantt_start_date % this.secondary_ruler_step
