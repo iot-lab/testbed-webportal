@@ -1,5 +1,5 @@
 <template>
-  <div ref="container" class="container mt-3" id="container_drawgantt">
+  <div ref="container" class="container-fluid mt-3" id="container_drawgantt">
     <p class="lead mb-0">Sites</p>
     <p class="mb-2" v-if="sites">
       <span class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentSite === 'all', 'badge-secondary': currentSite !== 'all'}" @click="currentSite = 'all'">{{sites.length}} sites</span>
@@ -201,5 +201,8 @@ export default {
   z-index: 2;
   margin-bottom: 0;
   height: 40px;
+}
+.container-fluid {
+  max-width: 1200 px;
 }
 </style>
