@@ -15,7 +15,6 @@
     "test:e2e": "vue-cli-service test:e2e"
   },
   "dependencies": {
-    "alasql": "^0.4.11",
     "apexcharts": "^2.1.5",
     "axios": "^0.18.0",
     "bootstrap": "^4.0.0-beta.2",

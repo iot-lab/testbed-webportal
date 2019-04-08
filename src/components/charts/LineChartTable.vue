@@ -3,7 +3,6 @@
     <label>{{label}}: </label>
     <div>
       <a class="cursor" title="Show Table" @click="toggle"><i class="fa fa-fw fa-eye"></i>{{table?'Hide' : 'Show'}} Table</a>
-      <a class="cursor" title="Download CSV" @click="download"><i class="fa fa-fw fa-download"></i>Download CSV</a>
     </div>
     <table v-if="table" class="table table-striped table-sm mt-2">
       <thead>
@@ -13,7 +12,7 @@
       </tr>
       </thead>
       <tbody>
-      <template v-for="(category, value) in data">
+      <template v-for="([category, value]) in data">
         <tr class="d-table-row" :key="category">
           <td>{{category}}</td><td>{{value}}</td>
         </tr>
@@ -24,11 +23,10 @@
   </div>
 </template>
 <script>
-import { downloadObjectAsCsv } from '@/utils'
 import VueApexCharts from 'vue-apexcharts'
 
 export default {
-  name: 'BarChartTable',
+  name: 'LineChartTable',
 
   components: {
     apexcharts: VueApexCharts,
@@ -44,8 +42,8 @@ export default {
       default: () => '',
     },
     data: {
-      type: Object,
-      default: () => {},
+      type: Array,
+      default: () => [],
     },
     label: {
       type: String,
@@ -57,11 +55,30 @@ export default {
     return {
       table: false,
       options: {
+        chart: {
+          zoom: {
+            type: 'x',
+            enabled: true,
+          },
+        },
         xaxis: {
-          categories: [],
+          type: 'datetime',
+          min: null,
+          max: null,
         },
         dataLabels: {
           enabled: false,
+        },
+        plotOptions: {
+          line: {
+            curve: 'straight',
+          },
+        },
+        stroke: {
+          show: true,
+        },
+        markers: {
+          size: 0,
         },
       },
       series: [{
@@ -73,22 +90,22 @@ export default {
 
   watch: {
     data: function () {
-      this.options = {
+      this.series[0].data = this.data.map(el => [el[0].unix(), el[1]])
+      let times = this.series[0].data.map(el => el[0])
+      let minTimes = Math.min(...times)
+      let maxTimes = Math.max(...times)
+      this.$refs.chart.updateOptions({
         xaxis: {
-          categories: Object.keys(this.data),
+          min: minTimes,
+          max: maxTimes,
         },
-      }
-      this.series[0].data = Object.values(this.data)
+      })
     },
   },
 
   methods: {
     toggle () {
       this.table = !this.table
-    },
-    async download () {
-      downloadObjectAsCsv(this.data, 'iotlab-table-statistics',
-        {fields: ['category', 'value'], header: [this.category_title, this.value_title]})
     },
   },
 }

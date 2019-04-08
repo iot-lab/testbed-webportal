@@ -45,6 +45,16 @@ export const groupBy = function (array, key) {
   }, {})
 }
 
+// Count size of group in an array of items by item.key
+// countGroupBy(['one', 'two', 'three'], 'length')
+// => {3: 2, 5: 1}
+export const countGroupBy = function (array, key) {
+  return array.reduce(function (rv, x) {
+    rv[x[key]] = (rv[x[key]] + 1 || 1)
+    return rv
+  }, {})
+}
+
 // Replace all occurences of a substring in a string
 export const replaceAll = function (str, search, replacement) {
   // could be done with a RegExp paying attention to escape chars, but this solution is not bad in performance

@@ -13,14 +13,14 @@
     <select v-model="filterUserYear" class="mr-1 bg-light form-control" >
       <option v-for="year in userYears" :key="year" :value="year" :selected="year === filterUserYear">{{year}}</option>
     </select>
-    <barcharttable label='Number of users by country'
-                   category_title='Country'
-                   value_title='Number of users'
-                   v-bind:data='usersByCountry'></barcharttable>
-    <barcharttable label='Number of users by category'
-                   category_title='Category'
-                   value_title='Number of users'
-                   v-bind:data='usersByCategory'></barcharttable>
+    <bar-chart-table label='Number of users by country'
+                     category_title='Country'
+                     value_title='Number of users'
+                     v-bind:data='usersByCountry'/>
+    <bar-chart-table label='Number of users by category'
+                     category_title='Category'
+                     value_title='Number of users'
+                     v-bind:data='usersByCategory'/>
     <h3><i class='fa fa-lg fa-fw fa-flask' aria-hidden='true'></i> Experiments statistics</h3>
     <div class='dropdasn d-inline-block '>
       <button class='btn btn-light mr-1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fa fa-fw fa-download'></i> Download All Experiments statistics</button>
@@ -30,32 +30,37 @@
       </div>
     </div>
     <h2 v-if='experimentsStatistics'>Total number of experiments: {{experimentsStatistics.length}}</h2>
-    <barcharttable label='Number of experiment per month'
-                   category_title='Month (YYYY-MM)'
-                   value_title='Number of experiments'
-                   v-bind:data='experimentsPerMonth'></barcharttable>
+    <bar-chart-table label='Number of experiment per month'
+                     category_title='Month (YYYY-MM)'
+                     value_title='Number of experiments'
+                     v-bind:data='experimentsPerMonth'/>
+    <line-chart-table labels="Running count number of experiment"
+                      category_title="Date"
+                      value_title='Number of experiments over time'
+                      v-bind:data="experimentsRunningCount"/>
   </div> <!-- container -->
 </template>
 
 <script>
 import { iotlab } from '@/rest'
-import { downloadObjectAsJson, downloadObjectAsCsv } from '@/utils'
+import { downloadObjectAsJson, countGroupBy, downloadObjectAsCsv } from '@/utils'
 import moment from 'moment'
 import BarChartTable from '@/components/charts/BarChartTable'
+import LineChartTable from '@/components/charts/LineChartTable'
 import localForage from 'localforage'
-import alasql from 'alasql'
 
 export default {
   name: 'AdminStatistics',
 
   components: {
-    barcharttable: BarChartTable,
+    BarChartTable, LineChartTable,
   },
 
   data () {
     return {
       experimentsStore: null,
       experimentsStatistics: [],
+      experimentsRunningCount: [],
       usersStatistics: [],
       filterUserYear: null,
       tableOk: false,
@@ -64,39 +69,48 @@ export default {
 
   computed: {
     usersByCountry () {
-      if (this.filterUserYear) {
-        return alasql(`SELECT country AS category, COUNT(*) AS [value] FROM ? WHERE created_year = "?" GROUP BY country`, [this.usersStatistics, this.filterUserYear])
-      } else {
-        return alasql('SELECT country AS category, COUNT(*) AS [value] FROM ? GROUP BY country', [this.usersStatistics])
-      }
+      return countGroupBy(this.filteredUsers, 'country')
     },
 
     usersByCategory () {
+      return countGroupBy(this.filteredUsers, 'category')
+    },
+
+    filteredUsers () {
       if (this.filterUserYear) {
-        return alasql('SELECT IFNULL(category, "") AS category, COUNT(*) AS [value] FROM ? WHERE created_year = "?" GROUP BY category', [this.usersStatistics, this.filterUserYear])
+        return this.usersStatistics.filter(el => el.created_year === this.filterUserYear)
       } else {
-        return alasql('SELECT IFNULL(category, "") AS category, COUNT(*) AS [value] FROM ? GROUP BY category', [this.usersStatistics])
+        return this.usersStatistics
       }
     },
 
+    userRunningCount () {
+      let total = 0
+      return this.usersStatistics.forEach(el => [el.created.unix(), total++])
+    },
+
     experimentsPerMonth () {
-      return alasql('SELECT month AS category, COUNT(*) AS [value] FROM ? GROUP BY month', [this.experimentsStatistics])
+      return countGroupBy(this.experimentsStatistics, 'month')
     },
 
     userYears () {
-      return alasql('SELECT UNIQUE created_year FROM ?', [this.usersStatistics]).map(o => o.created_year)
+      return this.unique(this.usersStatistics.map(o => o.created_year))
     },
 
     experimentYears () {
-      return alasql('SELECT UNIQUE year FROM ?', [this.experimentsStatistics]).map(o => o.year)
+      return this.unique(this.experimentsStatistics.map(o => o.year))
     },
 
     months () {
-      return alasql('SELECT UNIQUE month FROM ?', [this.experimentsStatistics]).map(o => o.month)
+      return this.unique(this.experimentsStatistics.map(o => o.month))
     },
   },
 
   methods: {
+    unique (array) {
+      return [...new Set(array)]
+    },
+
     async downloadExperimentsStatisticsJson () {
       let data = this.experimentsStatistics
       downloadObjectAsJson(data, 'iotlab-experiments-statistics',
@@ -129,6 +143,7 @@ export default {
       data.forEach((d, i, a) => {
         if (d.created) {
           let date = moment(String(d.created))
+          d.created = date
           d.created_year = date.format('YYYY')
           a[i] = d
         }
@@ -159,12 +174,18 @@ export default {
       data.forEach((d, i, a) => {
         if (d.submission_date) {
           let momDate = moment(String(d.submission_date))
+          d.submission_date = momDate
           d.month = momDate.format('YYYY-MM')
           d.year = momDate.format('YYYY')
           a[i] = d
         }
+        if (d.start_date) d.start_date = moment(String(d.start_date))
+        if (d.stop_date) d.stop_date = moment(String(d.stop_date))
+        if (d.scheduled_date) d.scheduled_date = moment(String(d.scheduled_date))
       })
 
+      let total = (this.experimentsRunningCount.length > 0) ? this.experimentsRunningCount[this.experimentsStatistics.length - 1][1] : 0
+      this.experimentsRunningCount.push(...data.map(el => [el.submission_date, total++]))
       this.experimentsStatistics.push(...data)
     },
 
@@ -199,13 +220,6 @@ export default {
 
   async created () {
     await this.setupDB()
-    window.alasql = alasql
-
-    // alasql('CREATE TABLE IF NOT EXISTS users (created_year, groups,firstName,city,lastName,created,email,motivations,sshkeys,country,login,status,organization,category)')
-    // alasql('CREATE TABLE IF NOT EXISTS experiments (month,year,submitted_duration,name,nodes,id,start_date,submission_date,nb_nodes,state,user,scheduled_date,stop_date,effective_duration)')
-    // alasql('CREATE TABLE IF NOT EXISTS nodes (site,uid,y,camera,network_address,state,mobility_type,z,rtl_sdr,mobile,archi,x)')
-    // this.tableOk = true
-
     await this.getUsersStatistics()
     await this.getExperimentsStatistics()
     await this.getNodesStatistics()
