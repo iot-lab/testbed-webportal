@@ -46,7 +46,6 @@ export default {
   },
 
   data () {
-    
     return {
       active: 0,
       relative_window: Object.assign({}, DEFAULT_RELATIVE_WINDOW),
