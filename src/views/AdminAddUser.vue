@@ -115,6 +115,7 @@ export default {
       },
       users: {
         sshkeys: [''],
+        groups: ['training'],
         'motivations': `# created by ${auth.username} for <DESCRIBE THE EVENT>`,
       },
       qty: 3,
