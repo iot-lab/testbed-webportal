@@ -19,7 +19,14 @@
 
             <h5><i class="fa fa-fw fa-pencil" aria-hidden="true"></i> Edit your profile</h5>
             <form @submit.prevent="updateProfile">
-              <user-form :user="user" ref="user" :hidden="['sshkeys', 'password']"></user-form>
+              <div class="form-group">
+                <span class="lead text-muted mr-1">{{auth.username}}</span>
+                <span class="badge ml-1" v-for="group in [...user.groups].sort()"
+                        :class="group === 'admin' ? 'badge-warning' : 'badge-primary'">
+                        {{group}}
+                </span>
+              </div>
+              <user-form :user="user" ref="user" :hidden="['sshkeys', 'groups', 'password']"></user-form>
               <div class="form-group">
                 <button class="btn btn-success mr-1" type="submit">Update profile</button>
                 <button class="btn btn-secondary" type="button" @click="reset">Reset</button>
@@ -29,8 +36,6 @@
           </div>
           <div class="tab-pane fade" id="list-password" role="tabpanel" aria-labelledby="list-password-list">
 
-            <h5><i class="fa fa-fw fa-user" aria-hidden="true"></i> Username <span class="text-muted">{{auth.username}}</span></h5>
-            <p class="mb-4">Your username cannot be modified.</p>
             <h5><i class="fa fa-fw fa-unlock-alt" aria-hidden="true"></i> Change your password</h5>
             <div class="row">
               <form @submit.prevent="changePassword" class="col-md-5">
