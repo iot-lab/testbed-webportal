@@ -20,7 +20,7 @@
           * All fields are mandatory
         </div>
 
-        <user-form :user="user" ref="user"></user-form>
+        <user-form :user="user" ref="user" :hidden="['groups']"></user-form>
 
         <div class="form-group">
           <vue-recaptcha ref="recaptcha" @verify="onCaptchaVerify" @expired="onCaptchaExpired"

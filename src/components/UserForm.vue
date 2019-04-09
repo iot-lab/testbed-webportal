@@ -163,6 +163,18 @@
         {{ errors.first('motivations') }}
       </div>
     </div>
+    <div class="form-group" v-if="!hidden.includes('groups')">
+      <label class="form-control-label">User groups</label>
+      <multiselect v-model="user.groups"
+                    placeholder="Groups"
+                    :options="store.groups ? store.groups.map(el => el.name) : []"
+                    :allow-empty="true"
+                    :searchable="false"
+                    :multiple="true"
+                    :close-on-select="false"
+                    :show-labels="false"
+                    :class="{'mymultiselect': true}"/>
+    </div>
   </div>
 </template>
 
@@ -174,6 +186,8 @@ import countries from '@/assets/js/countries'
 import UserCategories from '@/assets/js/categories'
 import $ from 'jquery'
 import { Validator } from 'vee-validate'
+import { iotlab } from '@/rest'
+import store from '@/store'
 
 export default {
   name: 'UserForm',
@@ -211,6 +225,7 @@ export default {
         category: false,
         country: false,
       },
+      store: store,
     }
   },
 
@@ -219,6 +234,11 @@ export default {
       getMessage: field => `Your email must be <b>academic</b> or <b>professional</b> in order to validate your account (<b>${this.user.email.split('@')[1]}</b> not allowed).`,
       validate: email => this.admin || !WebmailDomains.includes(email.split('@')[1].toLowerCase()),
     })
+    if (!this.hidden.includes('groups')) {
+      iotlab.getUserGroups()
+        .then(data => { this.store.groups = data })
+        .catch(err => this.$notify({text: err.response.data.message || 'Failed to fetch groups', type: 'error'}))
+    }
   },
 
   methods: {
