@@ -6,16 +6,16 @@
     <table class="table table-striped table-sm mt-4">
       <thead>
         <tr>
-          <th class="header" style="width: 130px;">Name</th>
+          <th class="header">Name</th>
           <th class="header">Users</th>
-          <th class="header text-center" style="width: 10px;"></th>
+          <th class="header text-center"></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="group in store.groups">
           <td><span class="badge" :class="group.name === 'admin' ? 'badge-warning' : 'badge-primary'">{{group.name}}</span></td>
           <!-- <td><span class="badge badge-info mr-1" v-for="user in group.users.sort()">{{user}}</span></td> -->
-          <td>{{[...group.users].sort().join(', ')}} <span class="text-muted">({{group.users.length}} users)</span></td>
+          <td><span class="badge badge-pill badge-secondary">{{group.users.length}}</span> {{[...group.users].sort().join(', ')}}</td>
           <td>
             <a href="" class="btn btn-sm border-0 btn-outline-danger" v-tooltip="'Delete group'" @click.prevent="deleteGroup(group.name)">
               <i class="fa fa-fw fa-trash-o"></i>
