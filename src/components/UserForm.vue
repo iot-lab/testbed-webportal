@@ -172,8 +172,19 @@
                     :searchable="false"
                     :multiple="true"
                     :close-on-select="false"
+                    :hide-selected="true"
                     :show-labels="false"
-                    :class="{'mymultiselect': true}"/>
+                    :class="{'mymultiselect': true}">
+        <template slot="tag" slot-scope="props">
+          <span class="badge-tag badge" :class="props.option === 'admin' ? 'badge-warning' : 'badge-primary'">
+            <span>{{props.option}}</span>
+            <span class="tag-remove cursor ml-1" @click="props.remove(props.option)">&times;</span>
+          </span>
+        </template>
+        <template slot="option" slot-scope="props">
+          <span :class="props.option === 'admin' ? 'text-warning' : ''"><em>{{props.option}}</em></span>
+        </template>
+      </multiselect>
     </div>
   </div>
 </template>
