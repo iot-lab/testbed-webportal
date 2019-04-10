@@ -20,7 +20,7 @@
             <user-form :user="user" ref="user" :admin="true" :hidden="['password']"></user-form>
             <div class="form-group">
               <button class="btn btn-success" type="submit">Create account</button>
-              <button class="btn btn-secondary" type="reset" @click="$refs.user.clean()">Clear</button>
+              <button class="btn btn-secondary ml-1" type="reset" @click="$refs.user.clean()">Clear</button>
             </div>
           </form>
 
@@ -29,7 +29,7 @@
         <div class="tab-pane fade show" id="list-multiple" role="tabpanel" aria-labelledby="list-multiple-list">
 
           <form @submit.prevent="createMultiple">
-              <div class="row justify-content-between">
+              <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
                     <label class="form-control-label">Login</label>
@@ -47,18 +47,18 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-6 col-lg-4">
                   <div class="form-group">
                     <label class="form-control-label">How many accounts?</label>
                     <div class="input-group">
                       <span class="input-group-btn">
-                        <button type="button" class="btn btn-danger" :disabled="qty<=2" @click="qty--">
+                        <button type="button" class="btn btn-outline-secondary" :disabled="qty<=2" @click="qty--">
                           <i class="fa fa-minus"></i>
                         </button>
                       </span>
                       <input type="text" class="form-control" v-model="qty">
                       <span class="input-group-btn">
-                        <button type="button" class="btn btn-success" @click="qty++">
+                        <button type="button" class="btn btn-outline-secondary" @click="qty++">
                           <i class="fa fa-plus"></i>
                         </button>
                       </span>
@@ -69,7 +69,7 @@
               <user-form :user="users" ref="users" :admin="true" :hidden="['firstName','lastName','email', 'password']"></user-form>
               <div class="form-group">
                 <button class="btn btn-success" type="submit">Create accounts</button>
-                <button class="btn btn-secondary" type="reset" @click="$refs.users.clean(); baseLogin = ''; $validator.reset()">Clear</button>
+                <button class="btn btn-secondary ml-1" type="reset" @click="$refs.users.clean(); baseLogin = ''; $validator.reset()">Clear</button>
               </div>
           </form>
 
