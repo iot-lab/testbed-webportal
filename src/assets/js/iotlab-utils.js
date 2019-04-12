@@ -5,6 +5,7 @@ export const allowedFirmwares4Archi = function (archi) {
   archi = archi.split(':')[0].toLowerCase()
   switch (archi) {
     case 'a8':
+    case 'rpi3':
     case 'pycom':
     case 'lora-gw':
     case 'rtl-sdr':
