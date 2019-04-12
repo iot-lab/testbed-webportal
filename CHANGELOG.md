@@ -1,3 +1,26 @@
+##  1.2.0 (2019-04-12)
+
+### New features
+
+* User can specify a password when Signing up
+* Introduce user groups in account management views
+
+### Enhancements
+
+* Hide some not available actions for some nodes, like pycom, lora-gw or rtl-sdr
+* Various UI improvements
+  * reduce some titles or change sizes
+
+### Bug fixes
+
+* Accept all character from websockets
+* Stop polling the API on first error from the Dashbord
+* Remove borders around links from the testbed navbar under Firefox
+
+### Internal
+
+* Replace `pending` notion with `inactive`
+
 ##  1.1.0 (2019-01-21)
 
 ### New features
