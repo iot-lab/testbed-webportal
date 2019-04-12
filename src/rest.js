@@ -99,7 +99,7 @@ export const iotlab = {
   },
 
   async deactivateUser (login) {
-    return iotlab.api.put(`/users/${login}`, {'status': 'pending'})
+    return iotlab.api.put(`/users/${login}`, {'status': 'inactive'})
   },
 
   async setUserGroups (login, groups) {

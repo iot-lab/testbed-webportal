@@ -10,7 +10,7 @@
       </div>
       <select class="form-control custom-select mr-2" v-model="showGroup" @change="showUsers">
         <option value="" disabled>Show user group</option>
-        <option value="pending">pending users</option>
+        <option value="inactive">inactive users</option>
         <option v-for="group in store.groups" :value="group.name">{{group.name}}</option>
       </select>
       <i class="fa fa-lg fa-spinner fa-spin ml-1 mr-auto" :class="spinner ? 'text-dark' : 'text-white'"></i>
@@ -50,8 +50,8 @@
           <td :title="user.created | formatDateTime" style="white-space: nowrap">{{user.created | formatDate}}</td>
           <td>
             <a href="" class="badge"
-              :class="(user.status === 'pending') ? 'badge-dark' : 'badge-info'"
-              v-tooltip:top="(user.status === 'pending') ? 'Activate' : 'Deactivate'"
+              :class="(user.status === 'inactive') ? 'badge-dark' : 'badge-info'"
+              v-tooltip:top="(user.status === 'inactive') ? 'Activate' : 'Deactivate'"
               @click.prevent="toggleActive(user)">
               {{user.status}}
             </a>
@@ -256,7 +256,7 @@ export default {
     async showUsers () {
       delete this.$route.query.search
       this.searchPattern = ''
-      const filter = this.showGroup === 'pending' ? {status: 'pending'} : {group: this.showGroup}
+      const filter = this.showGroup === 'inactive' ? {status: 'inactive'} : {group: this.showGroup}
       this.spinner = true
       this.users = await iotlab.getUsers(filter).catch(err => {
         this.$notify({ text: err.response.data.message || 'Failed to fetch users', type: 'error' })
@@ -291,7 +291,7 @@ export default {
       }
     },
     async toggleActive (user) {
-      if (user.status === 'pending') {
+      if (user.status === 'inactive') {
         if (confirm('Activate user?')) {
           try {
             await iotlab.activateUser(user.login)
@@ -304,7 +304,7 @@ export default {
         if (confirm('Deactivate user?')) {
           try {
             await iotlab.deactivateUser(user.login)
-            user.status = 'pending'
+            user.status = 'inactive'
           } catch (err) {
             this.$notify({text: 'An error occured', type: 'error'})
           }

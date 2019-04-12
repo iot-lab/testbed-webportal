@@ -48,9 +48,9 @@ exports[`AdminUsers.vue should match snapshot 1`] = `
       </option>
        
       <option
-        value="pending"
+        value="inactive"
       >
-        pending users
+        inactive users
       </option>
        
     </select>
