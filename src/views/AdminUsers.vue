@@ -9,8 +9,7 @@
         </div>
       </div>
       <select class="form-control custom-select mr-2" v-model="showGroup" @change="showUsers">
-        <option value="" disabled>Show user group</option>
-        <option value="inactive">inactive users</option>
+        <option value="" disabled>Show users in group</option>
         <option v-for="group in store.groups" :value="group.name">{{group.name}}</option>
       </select>
       <i class="fa fa-lg fa-spinner fa-spin ml-1 mr-auto" :class="spinner ? 'text-dark' : 'text-white'"></i>
@@ -256,7 +255,7 @@ export default {
     async showUsers () {
       delete this.$route.query.search
       this.searchPattern = ''
-      const filter = this.showGroup === 'inactive' ? {status: 'inactive'} : {group: this.showGroup}
+      const filter = {group: this.showGroup}
       this.spinner = true
       this.users = await iotlab.getUsers(filter).catch(err => {
         this.$notify({ text: err.response.data.message || 'Failed to fetch users', type: 'error' })
