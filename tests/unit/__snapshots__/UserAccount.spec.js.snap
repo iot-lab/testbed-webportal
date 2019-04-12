@@ -125,8 +125,26 @@ exports[`UserAccount.vue should match snapshot 1`] = `
           </h5>
            
           <form>
+            <div
+              class="form-group"
+            >
+              <span
+                class="lead text-muted mr-1"
+              >
+                
+              </span>
+               
+              <span
+                class="badge ml-1 badge-primary"
+              >
+                
+                        
+                
+              </span>
+            </div>
+             
             <userform-stub
-              hidden="sshkeys"
+              hidden="sshkeys,groups,password"
               mode="create"
               user="[object Object]"
             />
@@ -160,25 +178,6 @@ exports[`UserAccount.vue should match snapshot 1`] = `
           <h5>
             <i
               aria-hidden="true"
-              class="fa fa-fw fa-user"
-            />
-             Username 
-            <span
-              class="text-muted"
-            >
-              
-            </span>
-          </h5>
-           
-          <p
-            class="mb-4"
-          >
-            Your username cannot be modified.
-          </p>
-           
-          <h5>
-            <i
-              aria-hidden="true"
               class="fa fa-fw fa-unlock-alt"
             />
              Change your password
@@ -190,33 +189,89 @@ exports[`UserAccount.vue should match snapshot 1`] = `
             <form
               class="col-md-5"
             >
-              <input
-                class="form-control"
-                placeholder="Current password"
-                required="required"
-                style="margin-top: 8px;"
-                type="password"
-              />
+              <div
+                class="form-group"
+              >
+                <label
+                  class="form-control-label"
+                >
+                  Current password
+                </label>
+                 
+                <input
+                  class="form-control"
+                  data-vv-as="current password"
+                  name="current_password"
+                  placeholder="Type your current password"
+                  type="password"
+                />
+                 
+                <div
+                  class="invalid-feedback"
+                  style="display: none;"
+                >
+                  
+                  
+                
+                </div>
+              </div>
                
-              <input
-                class="form-control"
-                placeholder="New password"
-                required="required"
-                style="margin-top: 8px;"
-                type="password"
-              />
+              <div
+                class="form-group"
+              >
+                <label
+                  class="form-control-label"
+                >
+                  New password
+                </label>
+                 
+                <input
+                  class="form-control"
+                  data-vv-as="new password"
+                  name="new_password"
+                  placeholder="Choose a new password"
+                  type="password"
+                />
+                 
+                <div
+                  class="invalid-feedback"
+                  style="display: none;"
+                >
+                  
+                    
+                  
+                </div>
+              </div>
                
-              <input
-                class="form-control"
-                placeholder="Confirm password"
-                required="required"
-                style="margin-top: 8px;"
-                type="password"
-              />
+              <div
+                class="form-group"
+              >
+                <label
+                  class="form-control-label"
+                >
+                  Confirm new password
+                </label>
+                 
+                <input
+                  class="form-control"
+                  data-vv-as="new password"
+                  name="confirm_new_password"
+                  placeholder="Type again your new password"
+                  type="password"
+                />
+                 
+                <div
+                  class="invalid-feedback"
+                  style="display: none;"
+                >
+                  
+                    
+                  
+                </div>
+              </div>
                
               <button
                 class="btn btn-success"
-                style="margin-top: 10px;"
                 type="submit"
               >
                 Change Password
@@ -227,9 +282,8 @@ exports[`UserAccount.vue should match snapshot 1`] = `
               class="col-md-6"
             >
               <div
-                class="card mt-2 border-danger text-danger"
+                class="card mt-2 border-info text-info"
                 id="policy"
-                style="display: none;"
               >
                 <div
                   class="card-body"

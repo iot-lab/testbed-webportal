@@ -317,7 +317,7 @@ exports[`AdminUsers.vue should match snapshot 1`] = `
         >
           <userform-stub
             admin="true"
-            hidden=""
+            hidden="password"
             mode="edit"
             user="[object Object]"
           />

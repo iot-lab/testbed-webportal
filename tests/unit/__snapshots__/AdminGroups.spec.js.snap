@@ -15,7 +15,6 @@ exports[`AdminGroups.vue should match snapshot 1`] = `
       <tr>
         <th
           class="header"
-          style="width: 130px;"
         >
           Name
         </th>
@@ -28,7 +27,6 @@ exports[`AdminGroups.vue should match snapshot 1`] = `
          
         <th
           class="header text-center"
-          style="width: 10px;"
         />
       </tr>
     </thead>
