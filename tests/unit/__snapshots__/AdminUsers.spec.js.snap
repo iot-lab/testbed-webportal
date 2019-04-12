@@ -44,13 +44,7 @@ exports[`AdminUsers.vue should match snapshot 1`] = `
         disabled="disabled"
         value=""
       >
-        Show user group
-      </option>
-       
-      <option
-        value="inactive"
-      >
-        inactive users
+        Show users in group
       </option>
        
     </select>

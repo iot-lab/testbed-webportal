@@ -20,6 +20,7 @@
 ### Internal
 
 * Replace `pending` notion with `inactive`
+* Remove the `inactive` state from the groups list for listing users (admin view)
 
 ##  1.1.0 (2019-01-21)
 
