@@ -315,18 +315,19 @@ export default {
     },
     canFlash (node) {
       return !(node.startsWith('a8-') || node.startsWith('rtl-sdr-') ||
-               node.startsWith('pycom-') || node.startsWith('lora-gw-'))
+               node.startsWith('pycom-') || node.startsWith('lora-gw-') ||
+               node.startsWith('rpi3-'))
     },
     canReset (node) {
       return !(node.startsWith('a8-') || node.startsWith('rtl-sdr-') ||
-               node.startsWith('lora-gw-'))
+               node.startsWith('lora-gw-') || node.startsWith('rpi3-'))
     },
     hasProfile (node) {
       return !(node.startsWith('rtl-sdr-') || node.startsWith('lora-gw-'))
     },
     hasSerial (node) {
       return !(node.startsWith('a8-') || node.startsWith('rtl-sdr-') ||
-               node.startsWith('lora-gw-'))
+               node.startsWith('lora-gw-') || node.startsWith('rpi3-'))
     },
     nodeOrAlias (node) {
       if (typeof node === 'string') return node
