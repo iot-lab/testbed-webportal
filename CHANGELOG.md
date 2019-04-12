@@ -7,7 +7,7 @@
 
 ### Enhancements
 
-* Hide some not available actions for some nodes, like pycom, lora-gw or rtl-sdr
+* Hide some not available actions for some nodes, like pycom, open-node-rpi3, lora-gw or rtl-sdr
 * Various UI improvements
   * reduce some titles or change sizes
 
