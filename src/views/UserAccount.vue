@@ -34,13 +34,37 @@
             <h5><i class="fa fa-fw fa-unlock-alt" aria-hidden="true"></i> Change your password</h5>
             <div class="row">
               <form @submit.prevent="changePassword" class="col-md-5">
-                <input v-model="pwd.old" type="password" placeholder="Current password" class="form-control" style="margin-top: 8px;" required>
-                <input v-model="pwd.new" type="password" placeholder="New password" class="form-control" style="margin-top: 8px;" required @focus.once="showPolicy">
-                <input v-model="pwd.confirm" type="password" placeholder="Confirm password" class="form-control" style="margin-top: 8px;" required>
-                <button class="btn btn-success" type="submit" style="margin-top: 10px;">Change Password</button>
+                <div class="form-group">
+                  <label class="form-control-label">Current password</label>
+                  <input v-model="pwd.old" type="password" placeholder="Type your current password" class="form-control"
+                         name="current_password" data-vv-as="current password" v-validate="'required'"
+                         :class="{'is-invalid': errors.has('current_password') }">
+                <div class="invalid-feedback" v-show="errors.has('current_password')">
+                  {{ errors.first('current_password') }}
+                </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-control-label">New password</label>
+                  <input v-model="pwd.new" type="password" placeholder="Choose a new password" class="form-control"
+                         name="new_password" data-vv-as="new password" v-validate="'required'" ref="new_password"
+                         :class="{'is-invalid': errors.has('new_password') }">
+                  <div class="invalid-feedback" v-show="errors.has('new_password')">
+                    {{ errors.first('new_password') }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-control-label">Confirm new password</label>
+                  <input v-model="pwd.confirm" type="password" placeholder="Type again your new password" class="form-control"
+                         name="confirm_new_password" data-vv-as="new password" v-validate="'required|confirmed:new_password'"
+                         :class="{'is-invalid': errors.has('confirm_new_password') }">
+                  <div class="invalid-feedback" v-show="errors.has('confirm_new_password')">
+                    {{ errors.first('confirm_new_password') }}
+                  </div>
+                </div>
+                <button class="btn btn-success" type="submit">Change Password</button>
               </form>
               <div class="col-md-6">
-                <div id="policy" class="card mt-2 border-info text-info" style="display: none;">
+                <div id="policy" class="card mt-2 border-info text-info">
                   <div class="card-body"><h6>Password Policy</h6>
                     <ul class="pl-3 mb-0">
                       <li>one upper case letter [A-Z]</li>
@@ -85,7 +109,6 @@ import UserForm from '@/components/UserForm'
 import SshKeys from '@/components/SshKeysForm'
 import { iotlab } from '@/rest'
 import { auth } from '@/auth'
-import $ from 'jquery'
 
 export default {
   name: 'UserAccount',
@@ -159,9 +182,6 @@ export default {
     delKey (index) {
       this.keys.splice(index, 1)
       this.activeKey = Math.min(this.activeKey, this.keys.length - 1)
-    },
-    showPolicy () {
-      $('#policy').fadeIn()
     },
     async deleteUser () {
       if (confirm(`Delete your account?`)) {
