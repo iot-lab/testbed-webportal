@@ -23,7 +23,8 @@
           v-model="modelFileForm.data"
           @init="editorInit"
           :options="cmOptions"
-          lang="python" theme="chrome" width="600" height="500"></editor>
+          height="800"
+          lang="python" theme="chrome"></editor>
       </div>
       <div class="form-group" v-if="!readOnly">
         <button class="btn btn-success" type="submit">Save Mobility model
@@ -60,9 +61,18 @@ export default {
   data () {
     return {
       sites: [],
-      modelForm: {},
+      modelForm: {
+        script: 'script.py',
+      },
       modelFileForm: {
-        data: '',
+        data: `# Here, you enter some calls to the robot API to make it move
+# You can look at the script for the \`random\` model for inspiration
+# the server is at robot:8081 
+# Content-type header should be application/json
+#
+# GET /robot/position
+# GET /robot/is_reachable?x=<...>&y=<...>
+# POST /robot/go_to_point   JSON body {x: <...>, y: <...>}`,
       },
     }
   },

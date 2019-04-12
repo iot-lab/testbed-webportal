@@ -1,14 +1,14 @@
 <template>
 <div class="container">
-  <div class="row">
-    <div class="col-md-9">
-      <button v-if="name" v-show="!readOnly" class="btn btn-sm btn-outline-danger float-right" type="button" @click="deleteCircuit">Delete</button>
-      <h5 v-if="name && !readOnly"><i class="fa fa-pencil"></i> Edit mobility circuit</h5>
-      <h5 v-else-if="name && readOnly"><i class="fa fa-eye"></i> View mobility circuit</h5>
-      <h5 v-else><i class="fa fa-pencil"></i> New mobility circuit</h5>
-      <circuit-form :read-only="readOnly" :mobility-circuit="circuit" :name="name"></circuit-form>
+    <div class="row">
+      <div class="col-md-12">
+        <button v-if="name" v-show="!readOnly" class="btn btn-sm btn-outline-danger float-right" type="button" @click="deleteCircuit">Delete</button>
+        <h5 v-if="name && !readOnly"><i class="fa fa-pencil"></i> Edit mobility circuit</h5>
+        <h5 v-else-if="name && readOnly"><i class="fa fa-eye"></i> View mobility circuit</h5>
+        <h5 v-else><i class="fa fa-pencil"></i> New mobility circuit</h5>
+        <circuit-form :read-only="readOnly" :mobility-circuit="circuit" :name="name"></circuit-form>
+      </div>
     </div>
-  </div>
 </div> <!-- container -->
 
 </template>
