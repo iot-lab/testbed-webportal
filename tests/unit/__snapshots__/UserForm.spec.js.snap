@@ -101,6 +101,63 @@ exports[`UserForm.vue should match snapshot 1`] = `
   </div>
    
   <div
+    class="row mb-5"
+  >
+    <div
+      class="col form-group password"
+    >
+      <label
+        class="form-control-label"
+      >
+        Password
+      </label>
+       
+      <input
+        class="form-control"
+        name="password"
+        placeholder="Password"
+        type="password"
+      />
+       
+      <div
+        class="invalid-feedback"
+        style="display: none;"
+      >
+        
+        
+      
+      </div>
+    </div>
+     
+    <div
+      class="col form-group"
+    >
+      <label
+        class="form-control-label"
+      >
+        Confirm password
+      </label>
+       
+      <input
+        class="form-control"
+        data-vv-as="password"
+        name="password_confirmation"
+        placeholder="Password"
+        type="password"
+      />
+       
+      <div
+        class="invalid-feedback"
+        style="display: none;"
+      >
+        
+        
+      
+      </div>
+    </div>
+  </div>
+   
+  <div
     class="row"
   >
     <div
@@ -363,47 +420,29 @@ exports[`UserForm.vue should match snapshot 1`] = `
     <label
       class="form-control-label"
     >
-      Password
+      User groups
     </label>
      
-    <input
-      class="form-control"
-      name="password"
-      placeholder="Password"
-      type="password"
+    <multiselect-stub
+      allow-empty="true"
+      class="mymultiselect"
+      deselectgrouplabel="Press enter to deselect group"
+      deselectlabel="Press enter to remove"
+      hide-selected="true"
+      limit="99999"
+      limittext="function (t){return\\"and \\".concat(t,\\" more\\")}"
+      maxheight="300"
+      multiple="true"
+      name=""
+      opendirection=""
+      options=""
+      placeholder="Groups"
+      selectedlabel="Selected"
+      selectgrouplabel="Press enter to select group"
+      selectlabel="Press enter to select"
+      shownoresults="true"
+      tabindex="0"
     />
-     
-    <div
-      class="invalid-feedback"
-      style="display: none;"
-    >
-      
-      
-    
-    </div>
-     
-    <label
-      class="form-control-label"
-    >
-      Confirm password
-    </label>
-     
-    <input
-      class="form-control"
-      data-vv-as="password"
-      name="password_confirmation"
-      placeholder="Password"
-      type="password"
-    />
-     
-    <div
-      class="invalid-feedback"
-      style="display: none;"
-    >
-      
-      
-    
-    </div>
   </div>
 </div>
 `;
@@ -438,6 +477,63 @@ exports[`UserForm.vue should match snapshot 2 1`] = `
     <div
       class="col-md"
     />
+  </div>
+   
+  <div
+    class="row mb-5"
+  >
+    <div
+      class="col form-group password"
+    >
+      <label
+        class="form-control-label"
+      >
+        Password
+      </label>
+       
+      <input
+        class="form-control"
+        name="password"
+        placeholder="Password"
+        type="password"
+      />
+       
+      <div
+        class="invalid-feedback"
+        style="display: none;"
+      >
+        
+        
+      
+      </div>
+    </div>
+     
+    <div
+      class="col form-group"
+    >
+      <label
+        class="form-control-label"
+      >
+        Confirm password
+      </label>
+       
+      <input
+        class="form-control"
+        data-vv-as="password"
+        name="password_confirmation"
+        placeholder="Password"
+        type="password"
+      />
+       
+      <div
+        class="invalid-feedback"
+        style="display: none;"
+      >
+        
+        
+      
+      </div>
+    </div>
   </div>
    
   <div
@@ -699,47 +795,29 @@ exports[`UserForm.vue should match snapshot 2 1`] = `
     <label
       class="form-control-label"
     >
-      Password
+      User groups
     </label>
      
-    <input
-      class="form-control"
-      name="password"
-      placeholder="Password"
-      type="password"
+    <multiselect-stub
+      allow-empty="true"
+      class="mymultiselect"
+      deselectgrouplabel="Press enter to deselect group"
+      deselectlabel="Press enter to remove"
+      hide-selected="true"
+      limit="99999"
+      limittext="function (t){return\\"and \\".concat(t,\\" more\\")}"
+      maxheight="300"
+      multiple="true"
+      name=""
+      opendirection=""
+      options=""
+      placeholder="Groups"
+      selectedlabel="Selected"
+      selectgrouplabel="Press enter to select group"
+      selectlabel="Press enter to select"
+      shownoresults="true"
+      tabindex="0"
     />
-     
-    <div
-      class="invalid-feedback"
-      style="display: none;"
-    >
-      
-      
-    
-    </div>
-     
-    <label
-      class="form-control-label"
-    >
-      Confirm password
-    </label>
-     
-    <input
-      class="form-control"
-      data-vv-as="password"
-      name="password_confirmation"
-      placeholder="Password"
-      type="password"
-    />
-     
-    <div
-      class="invalid-feedback"
-      style="display: none;"
-    >
-      
-      
-    
-    </div>
   </div>
 </div>
 `;

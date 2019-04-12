@@ -69,7 +69,7 @@ exports[`AdminAddUser.vue should match snapshot 1`] = `
           <form>
             <userform-stub
               admin="true"
-              hidden=""
+              hidden="password"
               mode="create"
               user="[object Object]"
             />
@@ -85,7 +85,7 @@ exports[`AdminAddUser.vue should match snapshot 1`] = `
               </button>
                
               <button
-                class="btn btn-secondary"
+                class="btn btn-secondary ml-1"
                 type="reset"
               >
                 Clear
@@ -102,7 +102,7 @@ exports[`AdminAddUser.vue should match snapshot 1`] = `
         >
           <form>
             <div
-              class="row justify-content-between"
+              class="row"
             >
               <div
                 class="col-md-6"
@@ -146,7 +146,7 @@ exports[`AdminAddUser.vue should match snapshot 1`] = `
               </div>
                
               <div
-                class="col-md-3"
+                class="col-6 col-lg-4"
               >
                 <div
                   class="form-group"
@@ -164,7 +164,7 @@ exports[`AdminAddUser.vue should match snapshot 1`] = `
                       class="input-group-btn"
                     >
                       <button
-                        class="btn btn-danger"
+                        class="btn btn-outline-secondary"
                         type="button"
                       >
                         <i
@@ -182,7 +182,7 @@ exports[`AdminAddUser.vue should match snapshot 1`] = `
                       class="input-group-btn"
                     >
                       <button
-                        class="btn btn-success"
+                        class="btn btn-outline-secondary"
                         type="button"
                       >
                         <i
@@ -197,7 +197,7 @@ exports[`AdminAddUser.vue should match snapshot 1`] = `
              
             <userform-stub
               admin="true"
-              hidden="firstName,lastName,email"
+              hidden="firstName,lastName,email,password"
               mode="create"
               user="[object Object]"
             />
@@ -213,7 +213,7 @@ exports[`AdminAddUser.vue should match snapshot 1`] = `
               </button>
                
               <button
-                class="btn btn-secondary"
+                class="btn btn-secondary ml-1"
                 type="reset"
               >
                 Clear
