@@ -33,7 +33,7 @@
 import Multiselect from 'vue-multiselect'
 import { S_PER_DAY, S_PER_WEEK, S_PER_HOUR } from '@/constants'
 import moment from 'moment-timezone'
-import Gantt from '@/wp-menu/Gantt'
+import Gantt from '@/components/Gantt'
 
 const DEFAULT_RELATIVE_WINDOW = {start: -S_PER_DAY, stop: S_PER_DAY}
 

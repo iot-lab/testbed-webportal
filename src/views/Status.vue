@@ -101,7 +101,7 @@
 <script>
 import Map3d from '@/components/Map3d'
 import RunningExperiments from '@/components/RunningExperiments'
-import Drawgantt from '@/wp-menu/Drawgantt'
+import Drawgantt from '@/components/Drawgantt'
 import { iotlab } from '@/rest'
 import { auth } from '@/auth'
 import { downloadObjectAsJson, downloadObjectAsCsv } from '@/utils'
