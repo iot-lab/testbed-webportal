@@ -1,13 +1,11 @@
 <template>
   <table class="table table-striped table-sm" ref="table" v-if="nodes.length">
-    <col width="10%"/>
-    <col width="10%"/>
-    <col width="80%"/>
+    <col width="15%"/>
+    <col width="85%"/>
     <thead>
       <tr>
-        <th class="col-sticky">Node hostname</th>
-        <th class="col-sticky text-center">State</th>
-        <th class="col-sticky text-center">
+        <th class="col-sticky text-center">Node hostname</th>
+        <th class="col-sticky">
           <div>Schedule</div>
           <div :style="`position: relative; height: 50px; width: 100%`">
             <div class="ruler" v-for="d in rulerValues"
@@ -29,13 +27,10 @@
     </thead>
     <tbody ref='table'>
       <tr class="nodeIteration" v-for="node in svgNodes" v-bind:key='node.network_address'>
-        <td class="col-lg-2" v-tooltip:bottom="node.label">
+        <td class="text-center" v-tooltip:bottom="node.label">
           {{node.label}}
         </td>
-        <td class="col-lg-1 text-center">
-          <span class="badge badge-state cursor" :class="node.state | stateBadgeClass">{{node.state}}</span>
-        </td>
-        <td class="col-lg-8">
+        <td>
           <div :style="`position: relative; height: 25px; width: 100%`">
             <div class="timeRuler primary" v-for="d in rulerValues"
               v-bind:style="{
