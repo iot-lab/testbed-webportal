@@ -91,7 +91,7 @@ export default {
 
   methods: {
     refresh () {
-      this.$ref.gantt.refresh()
+      this.$refs.gantt.refresh()
     },
 
     errorHandler (type, err) {

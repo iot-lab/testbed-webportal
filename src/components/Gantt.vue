@@ -332,6 +332,10 @@ export default {
     time (val) {
       return moment(this.now).add(val, 'seconds')
     },
+    refresh () {
+      console.log('Refreshing...')
+      this.update(this.start, this.stop)
+    },
     update (start, stop) {
       // only the time window changed, update the nodes states and jobs
       this.jobs = []
