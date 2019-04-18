@@ -119,6 +119,12 @@ const CONF = {
     4 * S_PER_DAY,
     8 * S_PER_DAY,
     12 * S_PER_DAY,
+
+    S_PER_WEEK,
+    2 * S_PER_WEEK,
+    4 * S_PER_WEEK,
+    8 * S_PER_WEEK,
+    12 * S_PER_WEEK,
   ],
   job_color_saturation_lightness: '75%,75%',
   min_width: 10,

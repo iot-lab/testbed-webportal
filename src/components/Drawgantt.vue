@@ -36,6 +36,7 @@ import moment from 'moment-timezone'
 import Gantt from '@/components/Gantt'
 
 const DEFAULT_RELATIVE_WINDOW = {start: -S_PER_DAY, stop: S_PER_DAY}
+const MAX_WINDOW = 50 * S_PER_WEEK
 
 export default {
   name: 'Drawgantt',
@@ -90,6 +91,15 @@ export default {
   },
 
   methods: {
+
+    update (window) {
+      if (window.stop - window.start < MAX_WINDOW) {
+        this.relative_window = window
+      } else {
+        this.$notify({text: 'can\'t zoom out more than ', type: 'error'})
+      }
+    },
+
     refresh () {
       this.$refs.gantt.refresh()
     },
@@ -103,31 +113,31 @@ export default {
     },
 
     reset () {
-      this.relative_window = DEFAULT_RELATIVE_WINDOW
+      this.update(DEFAULT_RELATIVE_WINDOW)
     },
 
     shift (time) {
-      this.relative_window = { start: this.relative_start + time, stop: this.relative_stop + time }
+      this.update({ start: this.relative_start + time, stop: this.relative_stop + time })
     },
 
     next () {
       var t = this.relative_stop + (this.relative_stop - this.relative_start)
-      this.relative_window = { start: this.relative_stop, stop: t }
+      this.update({ start: this.relative_stop, stop: t })
     },
 
     prev () {
       var t = this.relative_start - (this.relative_stop - this.relative_start)
-      this.relative_window = { start: t, stop: this.relative_start }
+      this.update({ start: t, stop: this.relative_start })
     },
 
     zoomin () {
       var t = this.relative_start + (this.relative_stop - this.relative_start) / 4
-      this.relative_window = { start: t, stop: this.relative_stop - (this.relative_stop - this.relative_start) / 4 }
+      this.update({ start: t, stop: this.relative_stop - (this.relative_stop - this.relative_start) / 4 })
     },
 
     zoomout () {
       var t = (this.relative_stop - this.relative_start) / 2
-      this.relative_window = { start: this.relative_start - t, stop: this.relative_stop + t }
+      this.update({ start: this.relative_start - t, stop: this.relative_stop + t })
     },
   },
 }
