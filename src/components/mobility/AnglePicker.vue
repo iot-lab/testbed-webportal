@@ -16,6 +16,11 @@ export default {
       type: Boolean,
       default: false,
     },
+    angles: { // values that will get a clickable round
+      type: Array,
+      required: false,
+      default: () => [],
+    },
   },
   data () {
     return {
@@ -45,13 +50,12 @@ export default {
     },
     render () {
       this.draw.clear()
-      let radius = (this.side * 2 / 3) / 2
       let pointerSize = this.side * 2 / 10
-      let centerCircleSize = this.side * 2 / 3
+      let radius = (this.side - pointerSize) / 2
       let center = {x: this.side / 2, y: this.side / 2}
 
       let centerCircle = this.draw
-        .circle(centerCircleSize)
+        .circle(2 * radius)
         .center(center.x, center.y)
         .attr('fill', '#CCC')
       var that = this
@@ -81,6 +85,28 @@ export default {
         }
         if (this.angleEqual(theta, this.value)) {
           circle.attr({ fill: '#000' })
+        }
+      }
+      for (let angle of this.angles) {
+        let theta = (Math.PI / 180) * angle.value
+        let that = this
+        let points = [
+          [center.x + radius / 2, center.y + pointerSize / 2],
+          [center.x + radius / 2, center.y - pointerSize / 2],
+          [center.x + radius - pointerSize / 2, center.y],
+        ]
+        let pointer = this.draw
+          .polygon(points.map(el => el.join(',')).join(' '))
+          .transform({rotation: -angle.value, cx: center.x, cy: center.y})
+          .attr({ fill: '#fff', stroke: '#000' })
+        if (!this.readOnly) {
+          pointer.click(function (evt) {
+            that.$emit('input', theta)
+            that.$forceUpdate()
+          })
+        }
+        if (this.angleEqual(theta, this.value)) {
+          pointer.attr({ fill: '#000' })
         }
       }
       let x = center.x + radius * Math.cos(-this.value)

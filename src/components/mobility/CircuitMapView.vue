@@ -23,11 +23,11 @@
           <use xlink:href="#turtlebot" :transform="`rotate(${- 180 * coordinate(point).theta / Math.PI})`"/>
           <circle r="0.3" fill="#00FF00DD" v-if="selectedIndex === index ? 'active' : ''"></circle>
           <circle r="0.25" fill="#FF000055" v-if="index === 0"></circle>
-          <text class="label" text-anchor="middle" font-size="1">{{point}}</text>
+          <text class="label" text-anchor="left" font-size="0.5">{{point}}</text>
         </g>
       </svg>
       <g :transform="`translate(${xAxisMargin}, ${mapHeight})`">
-        <path stroke-width="0.2" stroke="#000000" class="axis" :d="axisPathString"></path>
+        <path stroke-width="0.2" stroke="#000000" class="axis" :d="`M 0,${-mapHeight} L 0,0 L ${mapWidth},0`"></path>
         <g v-for="y in stepArray(0, this.mapHeight / 10, 10)" :key="`Y-${y}`">
           <path class="axis" :d="`M 0,${-y} L ${ -xTickHeight},${-y}`"/>
           <text
@@ -47,45 +47,32 @@
       </g>
     </svg>
     <div class="card float-top" v-if="!readOnly && this.selectedPoint">
-      <table>
-        <thead class="form-group">
-          <th>
-            Existing coordinate point
-          </th>
-          <th>
-            Name for new coordinate point
-          </th>
-          <th colspan="2">
-            Point rotation
-          </th>
-          <th></th>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <select class="form-control" v-model.lazy="currentPointName">
-                <option v-for="c in Object.keys(this.coordinates)" :key="c">{{c}}</option>
-              </select>
-            </td>
-            <td>
-              <input class="form-control" type="text" v-model.lazy="currentPointName"/>
-            </td>
-            <td>
-              <angle-picker :value="currentPointTheta" @input="value => { currentPointTheta = value }"/>
-            </td>
-            <td>
-              <angle-input :value="currentPointTheta" @input="value => { currentPointTheta = value }"/>
-            </td>
-            <td>
-              <i class="btn btn-success fa fa-check-circle float-right" v-tooltip.right="'Modify the point'" @click="submitModifyPoint"></i>
-              <i class="btn btn-info fa fa-window-close float-right" v-tooltip.right="'Close'" @click="deselectPoint"></i>
-              <i class="btn btn-danger fa fa-trash float-right" v-tooltip.right="'Delete'" @click="deletePoint"></i>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div :style="{'visibility': this.selectedPoint ? '': 'hidden'}">
+      <div class="row m-2">
+        <div class="col-6">
+          <div class="form-group">
+            <label class="form-control-label">Existing coordinate point</label>
+            <select class="form-control" v-model.lazy="currentPointName">
+              <option v-for="c in Object.keys(this.coordinates)" :key="c">{{c}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label">Name for new coordinate point</label>
+            <input class="form-control" type="text" v-model.lazy="currentPointName"/>
+          </div>
+        </div>
+        <div class="form-group col-6">
+          <label class="form-control-label">Point rotation</label>
+          <div class="form-control">
+            <angle-picker :value="currentPointTheta" :angles="[previousPointAngle, nextPointAngle]" @input="value => { currentPointTheta = value }"/>
+            <angle-input :value="currentPointTheta" @input="value => { currentPointTheta = value }"/>
+          </div>
+        </div>
+      </div>
+      <div>
+        <i class="btn btn-success fa fa-check-circle float-right" v-tooltip.right="'Modify the point'" @click="submitModifyPoint"></i>
+        <i class="btn btn-info fa fa-window-close float-right" v-tooltip.right="'Close'" @click="deselectPoint"></i>
+        <i class="btn btn-danger fa fa-trash float-right" v-tooltip.right="'Delete'" @click="deletePoint"></i>
+      </div>
     </div>
   </div>
 
@@ -124,6 +111,20 @@ export default {
   },
 
   computed: {
+    previousPointAngle () {
+      let previousPoint = this.coordinates[this.previousPoint(this.selectedIndex)]
+      let thisPoint = this.coordinates[this.selectedPoint]
+      return {
+        value: 180 + (180 / Math.PI) * Math.atan2(previousPoint.y - thisPoint.y, previousPoint.x - thisPoint.x),
+      }
+    },
+    nextPointAngle () {
+      let nextPoint = this.coordinates[this.nextPoint(this.selectedIndex)]
+      let thisPoint = this.coordinates[this.selectedPoint]
+      return {
+        value: (180 / Math.PI) * Math.atan2(nextPoint.y - thisPoint.y, nextPoint.x - thisPoint.x),
+      }
+    },
     currentPointDegree () {
       return Math.round((180 / Math.PI) * (1e4 * this.currentPointTheta)) / 1e4
     },
@@ -134,18 +135,9 @@ export default {
       let middlePoints = []
       let pointsLength = this.points.length
       for (var i = 0; i < pointsLength; i++) {
-        var next
-        if (i === pointsLength - 1) {
-          if (this.loop) {
-            next = this.points[0]
-          } else {
-            break
-          }
-        } else {
-          next = this.points[i + 1]
-        }
-        let point = this.points[i]
-        let pointCoord = this.toSvg(this.coordinates[point])
+        var next = this.nextPoint(i)
+        if (!next) break
+        let pointCoord = this.toSvg(this.coordinates[this.points[i]])
         let nextCoord = this.toSvg(this.coordinates[next])
         middlePoints.push({
           x: (nextCoord.x + pointCoord.x) / 2,
@@ -163,14 +155,6 @@ export default {
     },
     xTickHeight () {
       return this.xAxisMargin / 3
-    },
-    axisPathString () {
-      let path = `
-      M 0,${-this.mapHeight} 
-      L 0,0
-      L ${this.mapWidth},0
-      `
-      return path
     },
     pathString () {
       let path = ''
@@ -241,6 +225,24 @@ export default {
   },
 
   methods: {
+    nextPoint (i) {
+      if (i === this.points.length - 1) {
+        if (this.loop) {
+          return this.points[0]
+        }
+      } else {
+        return this.points[i + 1]
+      }
+    },
+    previousPoint (i) {
+      if (i === 0) {
+        if (this.loop) {
+          return this.points[this.points.length - 1]
+        }
+      } else {
+        return this.points[i - 1]
+      }
+    },
     stepArray (start, step, n) {
       let values = []
       let value = start
@@ -292,7 +294,6 @@ export default {
       return {x: svgP.x, y: svgP.y}
     },
     robotMouseDown (evt, pointIndex, pointName) {
-      console.log('robotMouseDown ' + evt)
       if (pointIndex === this.selectedIndex) {
         this.deselectPoint()
       } else {
@@ -303,17 +304,17 @@ export default {
       }
     },
     mouseDown (evt) {
-      console.log('mouseDown ' + evt)
       if (evt.buttons !== 1) return // left click only
       let pos = this.getRealLocation(evt)
-      console.log(pos)
       let ptName = this.selectedPoint
       let coord = this.coordinates[ptName]
       pos.theta = coord ? coord.theta : 0
       if (this.selectedIndex === undefined) {
         let lastPoint = this.points.slice(-1)[0]
+        let lastCoord = this.coordinates[lastPoint]
         ptName = nextString(lastPoint)
         this.$emit('addPoint', ptName)
+        pos.theta = Math.atan2(pos.y - lastCoord.y, pos.x - lastCoord.x)
       }
       this.$emit('setCoordinate', ptName, pos)
     },
@@ -340,7 +341,6 @@ export default {
     },
     updateSite (site) {
       this.siteLoaded = false
-      console.log('mobility map for site ' + site)
       Promise.all([iotlab.getRobotsSiteMapImage(site),
         iotlab.getRobotsSiteMapConfig(site),
       ]).then(async ([b64, cfg]) => {
@@ -352,7 +352,6 @@ export default {
         this.mapHeight = this.site_image_dimensions.height
         this.svgWidth = this.mapWidth + this.xAxisMargin
         this.svgHeight = this.mapHeight + this.yAxisMargin
-        console.log(this.mapConfig)
 
         this.realOrigin = {x: this.mapConfig.origin[0], y: this.mapConfig.origin[1]}
         // real dimension = resolut * px
