@@ -1,123 +1,123 @@
 <template>
-    <form @submit.prevent="updateMobilityCircuit" class="mt-3">
-      <div class="form-group">
-        <label>Name</label>
-        <input v-model="circuitForm.name"
-               class="form-control"
-               type="text"
-               name="name"
-               placeholder="Circuit name"
-               ref="circuitName"
-               :readOnly="readOnly"
-               :class="{'is-invalid': !nameValidation}">
-        <div class="invalid-feedback">
-          Invalid name. Only alphanumeric characters allowed [0-9A-Za-z_]
-        </div>
+  <form @submit.prevent="updateMobilityCircuit" class="mt-3">
+    <div class="form-group">
+      <label>Name</label>
+      <input v-model="circuitForm.name"
+             class="form-control"
+             type="text"
+             name="name"
+             placeholder="Circuit name"
+             ref="circuitName"
+             :readOnly="readOnly"
+             :class="{'is-invalid': !nameValidation}">
+      <div class="invalid-feedback">
+        Invalid name. Only alphanumeric characters allowed [0-9A-Za-z_]
       </div>
-      <div class="form-group">
-        <label>Site</label>
-        <multiselect v-model="circuitForm.site"
+    </div>
+    <div class="form-group">
+      <label>Site</label>
+      <multiselect v-model="circuitForm.site"
                    v-if="!readOnly"
                    placeholder="Site"
                    :options="sites"
                    :allow-empty="false"
                    :searchable="false"
                    :show-labels="false">
-        </multiselect>
-        <input v-else
-               v-model="circuitForm.site"
-               class="form-control"
-               type="text"
-               :readOnly="readOnly">
-      </div>
-      <div v-if="circuitForm.site">
-      <label class="custom-control custom-checkbox">
-        <input v-model="circuitForm.loop" type="checkbox" :readOnly="readOnly" class="custom-control-input">
-        <span class="custom-control-indicator"></span>
-        <span class="custom-control-description">Loop</span>
-      </label>
-      <circuit-map-view
-        v-if="circuitForm.site"
-        :site="circuitForm.site"
-        :loop="circuitForm.loop"
-        :points="circuitForm.points"
-        :readOnly="readOnly"
-        :coordinates="circuitForm.coordinates"
-        @setCoordinate="(ptName, pos) => setCoordinate(ptName, pos)"
-        @addPoint="(ptName) => circuitForm.points.push(ptName)"
-        @setPoint="setPoint"
-        @removePoint="removePoint"></circuit-map-view>
-      <div class="btn btn-sm btn-secondary" v-on:click="showDetails=!showDetails">{{showDetails ? 'Hide ' : 'Show '}} Details</div>
-      <div class="container" v-if="showDetails">
-      <div class="form-group">
-        <h3 class="text-muted">Points coordinates</h3>
-        <table class="table table-sm">
-          <thead>
-          <tr>
-            <th>Point name</th>
-            <th>X</th>
-            <th>Y</th>
-            <th colspan="2">Direction (°)</th>
-            <th v-if="!readOnly"></th>
-          </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(coordinate, coordinate_name) in circuitForm.coordinates" :key="coordinate_name">
-              <td><input class="form-control form-control-sm" type="text" :value="coordinate_name" :readOnly="readOnly" @change="changeCoordinateName(coordinate_name, coordinate, $event.target.value)"></td>
-              <td><input class="form-control form-control-sm" type="text" v-model="coordinate.x" :readOnly="readOnly"></td>
-              <td><input class="form-control form-control-sm" type="text" v-model="coordinate.y" :readOnly="readOnly"></td>
-              <td>
-                <angle-picker :value="coordinate.theta" :readOnly="readOnly" @input="value => { coordinate.theta = value }"/>
-              </td>
-              <td>
-                <angle-input :value="coordinate.theta" :readOnly="readOnly" @input="value => { coordinate.theta = value }"/>
-              </td>
-              <td v-if="!readOnly">
-                <div class="btn-group">
-                  <i class="btn btn-outline-danger fa fa-trash" v-tooltip:top="'Delete'" @click="hideTooltip(); removeCoordinate(coordinate_name)"></i>
-                </div>
-              </td>
-            </tr>
-            <tr v-if="circuitForm.coordinates && circuitForm.coordinates !== {} && !readOnly">
-              <td colspan="4"></td>
-              <td class="text-right"><i class="btn btn-outline-success fa fa-plus" @click="addCoordinate()"></i></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="form-group">
-        <h3 class="text-muted">Points ordering</h3>
-        <table class="table table-sm">
-          <thead>
-          <tr>
-            <th>Point name</th>
-            <th v-if="!readOnly"></th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr v-for="(_, index) in circuitForm.points" :key="index">
-            <td><input class="form-control form-control-sm" type="text" v-model="circuitForm.points[index]" :readOnly="readOnly"></td>
-            <td class="text-right" v-if="!readOnly">
+      </multiselect>
+      <input v-else
+             v-model="circuitForm.site"
+             class="form-control"
+             type="text"
+             :readOnly="readOnly">
+    </div>
+    <div v-if="circuitForm.site">
+    <label class="custom-control custom-checkbox">
+      <input v-model="circuitForm.loop" type="checkbox" :readOnly="readOnly" class="custom-control-input">
+      <span class="custom-control-indicator"></span>
+      <span class="custom-control-description">Loop</span>
+    </label>
+    <circuit-map-view
+      v-if="circuitForm.site"
+      :site="circuitForm.site"
+      :loop="circuitForm.loop"
+      :points="circuitForm.points"
+      :readOnly="readOnly"
+      :coordinates="circuitForm.coordinates"
+      @setCoordinate="(ptName, pos) => setCoordinate(ptName, pos)"
+      @addPoint="(ptName) => circuitForm.points.push(ptName)"
+      @setPoint="setPoint"
+      @removePoint="removePoint"></circuit-map-view>
+    <div class="btn btn-sm btn-secondary" v-on:click="showDetails=!showDetails">{{showDetails ? 'Hide ' : 'Show '}} Details</div>
+    <div class="container" v-if="showDetails">
+    <div class="form-group">
+      <h3 class="text-muted">Points coordinates</h3>
+      <table class="table table-sm">
+        <thead>
+        <tr>
+          <th>Point name</th>
+          <th>X</th>
+          <th>Y</th>
+          <th colspan="2">Direction (°)</th>
+          <th v-if="!readOnly"></th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(coordinate, coordinate_name) in circuitForm.coordinates" :key="coordinate_name">
+            <td><input class="form-control form-control-sm" type="text" :value="coordinate_name" :readOnly="readOnly" @change="changeCoordinateName(coordinate_name, coordinate, $event.target.value)"></td>
+            <td><input class="form-control form-control-sm" type="text" v-model="coordinate.x" :readOnly="readOnly"></td>
+            <td><input class="form-control form-control-sm" type="text" v-model="coordinate.y" :readOnly="readOnly"></td>
+            <td>
+              <angle-picker :value="coordinate.theta" :readOnly="readOnly" @input="value => { coordinate.theta = value }"/>
+            </td>
+            <td>
+              <angle-input :value="coordinate.theta" :readOnly="readOnly" @input="value => { coordinate.theta = value }"/>
+            </td>
+            <td v-if="!readOnly">
               <div class="btn-group">
-                <i class="btn btn-outline-success fa fa-plus" v-tooltip:top="'Add before'" @click="addPoint(index)"></i>
-                <i class="btn btn-outline-danger fa fa-trash" v-tooltip:top="'Delete'" @click="hideTooltip(); removePoint(index)"></i>
-                <i class="btn btn-outline-success fa fa-plus" v-tooltip:top="'Add after'" @click="addPoint(index+1)"></i>
+                <i class="btn btn-outline-danger fa fa-trash" v-tooltip:top="'Delete'" @click="hideTooltip(); removeCoordinate(coordinate_name)"></i>
               </div>
             </td>
           </tr>
-          <tr v-if="!readOnly && circuitForm.points && circuitForm.points.length ===0">
-            <td></td>
-            <td class="text-right"><i class="btn btn-outline-success fa fa-plus" @click="addPoint(0)"></i></td>
+          <tr v-if="circuitForm.coordinates && circuitForm.coordinates !== {} && !readOnly">
+            <td colspan="4"></td>
+            <td class="text-right"><i class="btn btn-outline-success fa fa-plus" @click="addCoordinate()"></i></td>
           </tr>
-          </tbody>
-        </table>
-      </div>
-      </div>
-      <div class="form-group" v-if="!readOnly">
-        <button class="btn btn-success" type="submit">Save</button>
-      </div>
-      </div>
-    </form>
+        </tbody>
+      </table>
+    </div>
+    <div class="form-group">
+      <h3 class="text-muted">Points ordering</h3>
+      <table class="table table-sm">
+        <thead>
+        <tr>
+          <th>Point name</th>
+          <th v-if="!readOnly"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(_, index) in circuitForm.points" :key="index">
+          <td><input class="form-control form-control-sm" type="text" v-model="circuitForm.points[index]" :readOnly="readOnly"></td>
+          <td class="text-right" v-if="!readOnly">
+            <div class="btn-group">
+              <i class="btn btn-outline-success fa fa-plus" v-tooltip:top="'Add before'" @click="addPoint(index)"></i>
+              <i class="btn btn-outline-danger fa fa-trash" v-tooltip:top="'Delete'" @click="hideTooltip(); removePoint(index)"></i>
+              <i class="btn btn-outline-success fa fa-plus" v-tooltip:top="'Add after'" @click="addPoint(index+1)"></i>
+            </div>
+          </td>
+        </tr>
+        <tr v-if="!readOnly && circuitForm.points && circuitForm.points.length ===0">
+          <td></td>
+          <td class="text-right"><i class="btn btn-outline-success fa fa-plus" @click="addPoint(0)"></i></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+    <div class="form-group" v-if="!readOnly">
+      <button class="btn btn-success" type="submit">Save</button>
+    </div>
+    </div>
+  </form>
 </template>
 
 <script>
