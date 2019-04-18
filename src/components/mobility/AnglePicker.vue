@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-on:mouseup="drag = false">
   </div>
 </template>
 <script>
@@ -36,7 +36,7 @@ export default {
     },
   },
   methods: {
-    MouseAngle (evt) {
+    mouseAngle (evt) {
       let e = evt.target
       let dim = e.getBoundingClientRect()
       let x = evt.clientX - (dim.right + dim.left) / 2
@@ -56,31 +56,31 @@ export default {
         .attr('fill', '#CCC')
       var that = this
 
-      centerCircle.click(that.MouseAngle)
+      centerCircle.click(that.mouseAngle)
       centerCircle.mousedown(evt => { that.drag = true })
       centerCircle.mouseup(evt => { that.drag = false })
       centerCircle.mouseleave(evt => { that.drag = false })
       centerCircle.mousemove(evt => {
         if (that.drag) {
-          that.MouseAngle(evt)
+          that.mouseAngle(evt)
         }
       })
 
       for (var i = 0; i < 8; i++) {
         let theta = (Math.PI / 180) * i * 45
         let that = this
-        let rect = this.draw
+        let circle = this.draw
           .circle(pointerSize)
           .center(center.x + radius * Math.cos(-theta), center.y + radius * (Math.sin(-theta)))
           .attr({ fill: '#fff', stroke: '#000' })
         if (!this.readOnly) {
-          rect.click(function (evt) {
+          circle.click(function (evt) {
             that.$emit('input', theta)
             that.$forceUpdate()
           })
         }
         if (this.angleEqual(theta, this.value)) {
-          rect.attr({ fill: '#000' })
+          circle.attr({ fill: '#000' })
         }
       }
       let x = center.x + radius * Math.cos(-this.value)
