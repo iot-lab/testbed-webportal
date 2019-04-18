@@ -55,8 +55,13 @@
                 }">
             </div>
 
+            <div v-show="!loaded">
+              <i class="fa fa-spinner fa-spin fa-fw mr-1"></i>
+              <i>loading jobs and nodes states...</i>
+            </div>
+
             <div v-for="nodesState in node.states" v-bind:key="nodesState.network_address"
-                v-bind:style="nodeStateStyle(nodesState)"
+                :style="nodeStateStyle(nodesState)"
                 v-tooltip.auto.html="nodesState.info">
             </div>
 
@@ -65,13 +70,7 @@
                 class="job justify-text-center cursor"
                 :class="{ disabled: !job.reachable }"
                 v-on:click.native="closeTooltip"
-                v-bind:style="{
-                  position: 'absolute',
-                  backgroundColor: `hsl(${job2int(job)},${CONF.job_color_saturation_lightness})`,
-                  width: job.width + '%',
-                  left: date2pc(job.start) + '%',
-                  userSelect: 'none',
-                }"
+                :style="jobStyle(job)"
                 v-tooltip.auto.html="job.info">
               {{ job.id }}
             </router-link>
@@ -156,6 +155,7 @@ export default {
       CONF: CONF,
       now: null,
       table_height: 100,
+      loaded: false,
     }
   },
 
@@ -340,6 +340,7 @@ export default {
       // only the time window changed, update the nodes states and jobs
       this.jobs = []
       this.nodesStates = []
+      this.loaded = false
 
       Promise.all([
         iotlab.getNodesStates(start, stop).catch((err) => this.errorHandler('nodes states', err)),
@@ -347,6 +348,7 @@ export default {
       ]).then(([nodesStates, jobs]) => {
         this.nodesStates = nodesStates
         this.jobs = jobs
+        this.loaded = true
       })
     },
 
@@ -373,6 +375,16 @@ export default {
         width: (this.date2pc(nodesState.stop) - this.date2pc(nodesState.start)) + '%',
         left: this.date2pc(nodesState.start) + '%',
         // top: nodesState.y + 'px',
+      }
+    },
+
+    jobStyle (job) {
+      return {
+        position: 'absolute',
+        backgroundColor: `hsl(${this.job2int(job)},${CONF.job_color_saturation_lightness})`,
+        width: job.width + '%',
+        left: this.date2pc(job.start) + '%',
+        userSelect: 'none',
       }
     },
 
