@@ -6,16 +6,9 @@
       <tr>
         <th class="col-sticky text-center">Node hostname</th>
         <th class="col-sticky">
-          <div>Schedule</div>
-          <div :style="`position: relative; height: 50px; width: 100%`">
-            <div class="ruler" v-for="d in rulerValues"
-              v-bind:style="{
-                position: 'absolute',
-                top: '0px',
-                left: date2pc(d) + '%',
-                textAlign: 'center',
-                display: 'inline-block',
-                }">
+          <div style="position: relative; height: 50px; width: 100%">
+            <div class="timeRulerLabel" v-for="d in rulerValues" :key="`ruler-label-${d}`"
+                 :style="{ left: date2pc(d) + '%' }">
               <div style="position: relative; left:-50%; text-align:">
                 <div>{{ ymddate(d) }}</div>
                 <div>{{ hmsdate(d) }}</div>
@@ -26,33 +19,20 @@
       </tr>
     </thead>
     <tbody ref='table'>
-      <tr class="nodeIteration" v-for="node in svgNodes" v-bind:key='node.network_address'>
+      <tr class="nodeIteration" v-for="node in nodesJobsStates" v-bind:key='node.network_address'>
         <td class="text-center" v-tooltip:bottom="node.label">
           {{node.label}}
         </td>
         <td>
           <div :style="`position: relative; height: 25px; width: 100%`">
-            <div class="timeRuler primary" v-for="d in rulerValues"
-              v-bind:style="{
-                top: '0px',
-                left: date2pc(d) + '%',
-                height: '100%',
-                }">
+            <div class="timeRuler primary" v-for="d in rulerValues" :key="`ruler-${d}`"
+                 :style="{ left: date2pc(d) + '%' }">
             </div>
-            <div class="timeRuler secondary" v-for="d in secondaryRulerValues"
-              v-bind:style="{
-                top: '0px',
-                left: date2pc(d) + '%',
-                height: '100%',
-                }">
+            <div class="timeRuler secondary" v-for="d in secondaryRulerValues" :key="`ruler-secondary-${d}`"
+                 :style="{ left: date2pc(d) + '%' }">
             </div>
             <div class="timeRuler now"
-              v-bind:style="{
-                position: 'absolute',
-                top: '0px',
-                left: date2pc(gantt_now) + '%',
-                height: '100%',
-                }">
+                 :style="{ left: date2pc(gantt_now) + '%' }">
             </div>
 
             <div v-show="!loaded">
@@ -60,9 +40,9 @@
               <i>loading jobs and nodes states...</i>
             </div>
 
-            <div v-for="nodesState in node.states" v-bind:key="nodesState.network_address"
-                :style="nodeStateStyle(nodesState)"
-                v-tooltip.auto.html="nodesState.info">
+            <div class="nodeState" v-for="nodeState in node.states" v-bind:key="nodeState.network_address"
+                :style="nodeStateStyle(nodeState)"
+                v-tooltip.auto.html="nodeState.info">
             </div>
 
             <router-link v-for="job in node.jobs" v-bind:key="job.key"
@@ -85,11 +65,10 @@ import { iotlab } from '@/rest'
 import moment from 'moment-timezone'
 import $ from 'jquery'
 import { auth } from '@/auth'
-import { S_PER_MIN, S_PER_DAY, S_PER_HOUR } from '@/constants'
+import { S_PER_MIN, S_PER_HOUR, S_PER_DAY, S_PER_WEEK } from '@/constants'
 
 const CONF = {
   timezone: 'UTC',
-  resources_labels: ['network_address', 'cpuset'],
   state_colors: {
     Absent: '#ff0000',
     Suspected: '#000000',
@@ -148,10 +127,6 @@ export default {
       type: String,
       default: 'UTC',
     },
-    display: {
-      type: String,
-      default: 'all',
-    },
   },
 
   data () {
@@ -160,14 +135,13 @@ export default {
       jobs: [],
       CONF: CONF,
       now: null,
-      table_height: 100,
       loaded: false,
     }
   },
 
   computed: {
-    svgNodes () {
-      let svgNodesMap = {}
+    nodesJobsStates () {
+      let map = {}
       let nodes = this.nodes
 
       for (let node of nodes) {
@@ -178,24 +152,22 @@ export default {
           states: [],
           jobs: [],
         }
-        svgNodesMap[node.network_address] = svgNode
+        map[node.network_address] = svgNode
       }
 
-      if (!this.nodesStates) return Object.values(svgNodesMap)
+      if (!this.nodesStates) return Object.values(map)
 
       for (let nodesState of this.nodesStates) {
-        if (!(nodesState.network_address in svgNodesMap)) {
+        if (!(nodesState.network_address in map)) {
           continue
         }
         let stopDate = (new Date(nodesState.stop_date)).getTime() / 1000
         let openEnded = stopDate === 0
         let svgNodeState = {
-          y: svgNodesMap[nodesState.network_address].y,
           start: moment(nodesState.start_date).unix(),
           start_date: moment(nodesState.start_date).tz(this.timezone),
           stop: openEnded ? this.gantt_stop_date : stopDate,
           stop_date: moment(nodesState.stop_date).tz(this.timezone),
-          height: this.scale,
           state: nodesState.state,
           open_ended: openEnded,
         }
@@ -204,20 +176,20 @@ export default {
           svgNodeState.info += `<br>Until: ${this.formatDateTime(svgNodeState.stop_date)}`
         }
 
-        svgNodesMap[nodesState.network_address].states.push(svgNodeState)
+        map[nodesState.network_address].states.push(svgNodeState)
         if (svgNodeState.start === this.start && svgNodeState.stop === this.stop) {
-          svgNodesMap[nodesState.network_address].state = svgNodeState
+          map[nodesState.network_address].state = svgNodeState
         }
       }
 
       let nodesNetworkAddresses = nodes.map(el => el.network_address)
 
-      if (!this.jobs) return Object.values(svgNodesMap)
+      if (!this.jobs) return Object.values(map)
 
       for (let job of this.jobs) {
         let indices = []
         for (let node of job.nodes) {
-          if (!(node in svgNodesMap)) {
+          if (!(node in map)) {
             continue
           }
           indices.push(nodesNetworkAddresses.indexOf(node))
@@ -237,25 +209,21 @@ export default {
 
         for (let indicesArray of indices) {
           let node = nodes[indicesArray[0]].network_address
-          let svgNode = svgNodesMap[node]
+          let svgNode = map[node]
           if (svgNode) {
             let svgJob = {
-              y: svgNode.y,
               start: (new Date(job.start_date)).getTime() / 1000,
               stop: stopDate === 0 ? (job.submitted_duration ? this.gantt_start_date + 60 * job.submitted_duration : this.gantt_stop_date) : stopDate,
               id: job.id,
-              height: this.scale * (indicesArray[1] - indicesArray[0] + 1),
-              color: '#00FF00',
               info: `Id:&nbsp;${job.id}<br>User:&nbsp;${job.user}${job.name ? '<br>Name:&nbsp;' + job.name : ''}<br>Nodes:&nbsp;${job.nb_nodes}<br>Submission:&nbsp;${job.submission_date}<br>Duration:&nbsp;${job.submitted_duration}&nbsp;min`,
               reachable: auth.isAdmin || job.user === auth.username,
             }
-            svgJob.width = this.date2pc(svgJob.stop) - this.date2pc(svgJob.start)
             svgNode.jobs.push(svgJob)
           }
         }
       }
 
-      return Object.values(svgNodesMap)
+      return Object.values(map)
     },
     ruler_step () {
       let value = (this.gantt_stop_date - this.gantt_start_date) / CONF.time_ruler_scale
@@ -279,13 +247,6 @@ export default {
         values.push(d)
       }
       return values
-    },
-    gantt_top () {
-      if (this.display !== 'no_ruler') {
-        return CONF.gantt_top
-      } else {
-        return 1
-      }
     },
     gantt_relative_stop_date () {
       return this.gantt_relative_window.stop
@@ -315,9 +276,6 @@ export default {
     },
   },
   created () {
-    if (!this.scale) {
-      this.scale = CONF.scale
-    }
     global.moment = moment
 
     this.now = moment.tz(this.timezone)
@@ -367,50 +325,24 @@ export default {
     },
 
     errorHandler (type, err) {
-      console.log(err)
       this.$notify({text: err.response.data.message || 'Failed to fetch ' + type, type: 'error'})
     },
 
-    nodeStateStyle (nodesState) {
-      let stateColor = CONF.state_colors[nodesState.state]
+    nodeStateStyle (nodeState) {
+      let stateColor = CONF.state_colors[nodeState.state]
       return {
         background: `repeating-linear-gradient(-45deg, transparent, transparent 2.5px, ${stateColor} 2.5px, ${stateColor} 4.5px)`,
-        backgroundSize: '5px 5px',
-        position: 'absolute',
-        height: '100%',
-        width: (this.date2pc(nodesState.stop) - this.date2pc(nodesState.start)) + '%',
-        left: this.date2pc(nodesState.start) + '%',
-        // top: nodesState.y + 'px',
+        width: (this.date2pc(nodeState.stop) - this.date2pc(nodeState.start)) + '%',
+        left: this.date2pc(nodeState.start) + '%',
       }
     },
 
     jobStyle (job) {
       return {
-        position: 'absolute',
         backgroundColor: `hsl(${this.job2int(job)},${CONF.job_color_saturation_lightness})`,
-        width: job.width + '%',
+        width: (this.date2pc(job.stop) - this.date2pc(job.start)) + '%',
         left: this.date2pc(job.start) + '%',
-        userSelect: 'none',
       }
-    },
-
-    nodeHostnameSort (n1, n2) {
-      let short1 = this.$options.filters.stripDomain(n1.network_address).split(/[.-]/)
-      let [archi1, id1] = [short1[0], Number(short1[1])]
-      let short2 = this.$options.filters.stripDomain(n2.network_address).split(/[.-]/)
-      let [archi2, id2] = [short2[0], Number(short2[1])]
-
-      // sort by site, archi then id
-      if (n1.site > n2.site) return 1
-      if (n1.site < n2.site) return -1
-
-      // by archi
-      if (archi1 > archi2) return 1
-      if (archi1 < archi2) return -1
-
-      // by id
-      if (id1 > id2) return 1
-      if (id1 < id2) return -1
     },
 
     ymddate (d) {
@@ -436,7 +368,7 @@ export default {
     },
 
     job2int (job) {
-      // compute a suffled number for id, so that colors are not too close
+      // compute a shuffled number for id, so that colors are not too close
       let magicNumber = (1 + Math.sqrt(5)) / 2
       return parseInt(360 * this.fmod(job.id * magicNumber, 1))
     },
@@ -461,6 +393,14 @@ td, th {
   width: 1px;
   border-width: 1px;
   z-index: 1;
+  height: 100%;
+  top: 0px;
+}
+.timeRulerLabel {
+  position: absolute;
+  top: 0px;
+  text-align: center;
+  display: inline-block;
 }
 .primary {
   border-left: solid blue 1px;
@@ -473,5 +413,14 @@ td, th {
 .secondary {
   border-left: dotted blue 1px;
   top: 50px;
+}
+.nodeState {
+  background-size: 5px 5px;
+  position: absolute;
+  height: 100%;
+}
+.job {
+  position: absolute;
+  user-select: none;
 }
 </style>

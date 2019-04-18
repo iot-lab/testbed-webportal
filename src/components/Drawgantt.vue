@@ -1,10 +1,11 @@
 <template>
   <div>
-    <div class="mb-2 center col-5">
+    <div class="form-group mb-2 center col-5">
+      <label class="form-control-label" for="timezone">Timezone: </label>
       <multiselect v-model="timezone" placeholder="select timezone"
                 :options="tzNames"
                 :allow-empty="false"
-                style="z-index: 10"
+                style="z-index: 10" name="timezone"
                 id="timezoneSelect"/>
     </div>
     <div class="text-center time-header">
