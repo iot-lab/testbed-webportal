@@ -1,46 +1,62 @@
 <template>
   <div class='container mt-3'>
     <h3><i class='fa fa-lg fa-fw fa-users' aria-hidden='true'></i> Users statistics</h3>
-    <div class='dropdasn d-inline-block '>
-      <button class='btn btn-light mr-1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fa fa-fw fa-download'></i> Download All Users statistics</button>
-      <div class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenuButton'>
-        <a class='dropdown-item' href='#' @click.prevent='downloadUsersStatisticsJson'>IoT-LAB users statistics <span class='badge badge-pill badge-info'>JSON</span></a>
-        <a class='dropdown-item' href='#' @click.prevent='downloadUsersStatisticsCsv'>IoT-LAB users statistics <span class='badge badge-pill badge-info'>CSV</span></a>
+    <div v-show="usersLoaded">
+      <div class='dropdasn d-inline-block '>
+        <button class='btn btn-light mr-1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fa fa-fw fa-download'></i> Download All Users statistics</button>
+        <div class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenuButton'>
+          <a class='dropdown-item' href='#' @click.prevent='downloadUsersStatisticsJson'>IoT-LAB users statistics <span class='badge badge-pill badge-info'>JSON</span></a>
+          <a class='dropdown-item' href='#' @click.prevent='downloadUsersStatisticsCsv'>IoT-LAB users statistics <span class='badge badge-pill badge-info'>CSV</span></a>
+        </div>
       </div>
+      <h2>Total number of accounts: {{usersStatistics.length}}</h2>
+      <h3>Filter by year of creation:</h3>
+      <p v-if="userYears" class="mb-2">
+        <span class="badge badge-pill mr-1 cursor" :class="{'badge-info': filterUserYear === null, 'badge-secondary': filterUserYear !== null}" @click="filterUserYear = null">all</span>
+        <span v-for="year in userYears" :key="year" class="badge badge-pill mr-1 cursor"
+              :class="{'badge-info': filterUserYear === year, 'badge-secondary': filterUserYear !== year}"
+              @click="filterUserYear = year">{{year}}</span>
+      </p>
+      <bar-chart-table label='Number of users by country'
+                      category_title='Country'
+                      value_title='Number of users'
+                      :data='usersByCountry'/>
+      <bar-chart-table label='Number of users by category'
+                      category_title='Category'
+                      value_title='Number of users'
+                      :data='usersByCategory'/>
+      <line-chart-table label="Running count number of users"
+                        category_title="Date"
+                        value_title='Number of users over time'
+                        :data="usersRunningCount"/>
     </div>
-    <h2>Total number of accounts: {{usersStatistics.length}}</h2>
-    <h3>Filter by year of creation:</h3>
-    <p v-if="userYears" class="mb-2">
-      <span class="badge badge-pill mr-1 cursor" :class="{'badge-info': filterUserYear === null, 'badge-secondary': filterUserYear !== null}" @click="filterUserYear = null">all</span>
-      <span v-for="year in userYears" :key="year" class="badge badge-pill mr-1 cursor"
-            :class="{'badge-info': filterUserYear === year, 'badge-secondary': filterUserYear !== year}"
-            @click="filterUserYear = year">{{year}}</span>
-    </p>
-    <bar-chart-table label='Number of users by country'
-                     category_title='Country'
-                     value_title='Number of users'
-                     v-bind:data='usersByCountry'/>
-    <bar-chart-table label='Number of users by category'
-                     category_title='Category'
-                     value_title='Number of users'
-                     v-bind:data='usersByCategory'/>
+    <div v-if="!usersLoaded">
+      <i class="fa fa-spinner fa-spin fa-fw mr-1"></i>
+      <i>loading users statistics...</i>
+    </div>
     <h3><i class='fa fa-lg fa-fw fa-flask' aria-hidden='true'></i> Experiments statistics</h3>
-    <div class='dropdasn d-inline-block '>
-      <button class='btn btn-light mr-1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fa fa-fw fa-download'></i> Download All Experiments statistics</button>
-      <div class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenuButton'>
-        <a class='dropdown-item' href='#' @click.prevent='downloadExperimentsStatisticsJson'>IoT-LAB experiments statistics <span class='badge badge-pill badge-info'>JSON</span></a>
-        <a class='dropdown-item' href='#' @click.prevent='downloadExperimentsStatisticsCsv'>IoT-LAB experiments statistics <span class='badge badge-pill badge-info'>CSV</span></a>
+    <div v-show="experimentsLoaded">
+      <div class='dropdasn d-inline-block '>
+        <button class='btn btn-light mr-1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fa fa-fw fa-download'></i> Download All Experiments statistics</button>
+        <div class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenuButton'>
+          <a class='dropdown-item' href='#' @click.prevent='downloadExperimentsStatisticsJson'>IoT-LAB experiments statistics <span class='badge badge-pill badge-info'>JSON</span></a>
+          <a class='dropdown-item' href='#' @click.prevent='downloadExperimentsStatisticsCsv'>IoT-LAB experiments statistics <span class='badge badge-pill badge-info'>CSV</span></a>
+        </div>
       </div>
+      <h2 v-if='experimentsStatistics'>Total number of experiments: {{experimentsStatistics.length}}</h2>
+      <bar-chart-table label='Number of experiment per month'
+                       category_title='Month (YYYY-MM)'
+                       value_title='Number of experiments'
+                       :data='experimentsPerMonth'/>
+      <line-chart-table labels="Running count number of experiment"
+                        category_title="Date"
+                        value_title='Number of experiments over time'
+                        :data="experimentsRunningCount"/>
     </div>
-    <h2 v-if='experimentsStatistics'>Total number of experiments: {{experimentsStatistics.length}}</h2>
-    <bar-chart-table label='Number of experiment per month'
-                     category_title='Month (YYYY-MM)'
-                     value_title='Number of experiments'
-                     v-bind:data='experimentsPerMonth'/>
-    <line-chart-table labels="Running count number of experiment"
-                      category_title="Date"
-                      value_title='Number of experiments over time'
-                      v-bind:data="experimentsRunningCount"/>
+    <div v-if="!experimentsLoaded">
+      <i class="fa fa-spinner fa-spin fa-fw mr-1"></i>
+      <i>loading experiments statistics...</i>
+    </div>
   </div> <!-- container -->
 </template>
 
@@ -67,6 +83,8 @@ export default {
       usersStatistics: [],
       filterUserYear: null,
       tableOk: false,
+      usersLoaded: false,
+      experimentsLoaded: false,
     }
   },
 
@@ -153,9 +171,11 @@ export default {
       })
 
       this.usersStatistics = data
+      this.usersLoaded = true
     },
 
     getUsersStatistics () {
+      this.usersLoaded = false
       iotlab.getUsersStatistics()
         .then(this.setUsersStatistics)
         .catch(err => {
@@ -193,6 +213,7 @@ export default {
     },
 
     async getExperimentsStatistics () {
+      this.experimentsLoaded = false
       let offsets = (await iotlab.getExperimentsOffsetStatistics())
       for (let i = 0; i < offsets.length; i++) {
         let offset = offsets[i].toString()
@@ -203,12 +224,14 @@ export default {
           }
         ).then(
           async val => {
-            console.log(val)
             if (!val) {
               val = await iotlab.getExperimentsStatistics(offset)
               this.experimentsStore.setItem(offset, val)
             }
             this.addExperimentsStatistics(offset, val)
+            if (i === offsets.length - 1) {
+              this.experimentsLoaded = true
+            }
           }
         )
       }
