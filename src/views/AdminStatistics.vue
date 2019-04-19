@@ -10,9 +10,12 @@
     </div>
     <h2>Total number of accounts: {{usersStatistics.length}}</h2>
     <h3>Filter by year of creation:</h3>
-    <select v-model="filterUserYear" class="mr-1 bg-light form-control" >
-      <option v-for="year in userYears" :key="year" :value="year" :selected="year === filterUserYear">{{year}}</option>
-    </select>
+    <p v-if="userYears" class="mb-2">
+      <span class="badge badge-pill mr-1 cursor" :class="{'badge-info': filterUserYear === null, 'badge-secondary': filterUserYear !== null}" @click="filterUserYear = null">all</span>
+      <span v-for="year in userYears" :key="year" class="badge badge-pill mr-1 cursor"
+            :class="{'badge-info': filterUserYear === year, 'badge-secondary': filterUserYear !== year}"
+            @click="filterUserYear = year">{{year}}</span>
+    </p>
     <bar-chart-table label='Number of users by country'
                      category_title='Country'
                      value_title='Number of users'
