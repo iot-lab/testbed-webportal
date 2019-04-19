@@ -1,35 +1,19 @@
 <template>
   <div>
-    <label>{{label}}: </label>
-    <div>
-      <a class="cursor" title="Show Table" @click="toggle"><i class="fa fa-fw fa-eye"></i>{{table?'Hide' : 'Show'}} Table</a>
-    </div>
-    <table v-if="table" class="table table-striped table-sm mt-2">
-      <thead>
-      <tr>
-        <th>{{ category_title }}</th>
-        <th>{{ value_title }}</th>
-      </tr>
-      </thead>
-      <tbody>
-      <template v-for="([category, value]) in data">
-        <tr class="d-table-row" :key="category">
-          <td>{{category}}</td><td>{{value}}</td>
-        </tr>
-      </template>
-      </tbody>
-    </table>
-    <apexcharts ref="chart" width="900" type="bar" :options="options" :series="series"></apexcharts>
+    <label>{{label}}:</label>
+    <chart-table :category_title="category_title" :value_title="value_title" :data="data"/>
+    <vue-apex-charts ref="chart" width="900" type="bar" :options="options" :series="series"/>
   </div>
 </template>
 <script>
 import VueApexCharts from 'vue-apexcharts'
+import ChartTable from '@/components/charts/ChartTable'
 
 export default {
   name: 'LineChartTable',
 
   components: {
-    apexcharts: VueApexCharts,
+    VueApexCharts, ChartTable,
   },
 
   props: {
@@ -53,7 +37,6 @@ export default {
 
   data () {
     return {
-      table: false,
       options: {
         chart: {
           zoom: {
@@ -100,12 +83,6 @@ export default {
           max: maxTimes,
         },
       })
-    },
-  },
-
-  methods: {
-    toggle () {
-      this.table = !this.table
     },
   },
 }
