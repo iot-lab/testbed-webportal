@@ -2,7 +2,7 @@
   <div>
     <label>{{label}}:</label>
     <chart-table :category_title="category_title" :value_title="value_title" :data="data"/>
-    <vue-apex-charts ref="chart" width="900" type="bar" :options="options" :series="series"/>
+    <vue-apex-charts ref="chart" width="900" type="line" :options="options" :series="series"/>
   </div>
 </template>
 <script>
@@ -48,6 +48,14 @@ export default {
           type: 'datetime',
           min: null,
           max: null,
+          labels: {
+            datetimeFormatter: {
+              year: 'yyyy',
+              month: 'MMM \'yy',
+              day: 'dd MMM',
+              hour: 'HH:mm',
+            },
+          },
         },
         dataLabels: {
           enabled: false,
@@ -73,16 +81,30 @@ export default {
 
   watch: {
     data: function () {
-      this.series[0].data = this.data.map(el => [el[0].unix(), el[1]])
+      this.series[0].data = this.data.map(el => [el[0].unix() * 1000, el[1]])
       let times = this.series[0].data.map(el => el[0])
       let minTimes = Math.min(...times)
       let maxTimes = Math.max(...times)
-      this.$refs.chart.updateOptions({
-        xaxis: {
-          min: minTimes,
-          max: maxTimes,
+      let maxY = Math.max(...this.data.map(el => el[1]))
+      console.log(minTimes)
+      console.log(maxTimes)
+      console.log(maxY)
+      this.options = {
+        ...this.options,
+        ...{
+          xaxis: {
+            ...this.options.xaxis,
+            ...{
+              min: minTimes,
+              max: maxTimes,
+            },
+          },
+          yaxis: {
+            min: 0,
+            max: maxY,
+          },
         },
-      })
+      }
     },
   },
 }

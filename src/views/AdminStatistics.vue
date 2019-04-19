@@ -48,7 +48,7 @@
                        category_title='Month (YYYY-MM)'
                        value_title='Number of experiments'
                        :data='experimentsPerMonth'/>
-      <line-chart-table labels="Running count number of experiment"
+      <line-chart-table label="Running count number of experiment"
                         category_title="Date"
                         value_title='Number of experiments over time'
                         :data="experimentsRunningCount"/>
@@ -79,7 +79,6 @@ export default {
     return {
       experimentsStore: null,
       experimentsStatistics: [],
-      experimentsRunningCount: [],
       usersStatistics: [],
       filterUserYear: null,
       tableOk: false,
@@ -105,13 +104,18 @@ export default {
       }
     },
 
-    userRunningCount () {
+    usersRunningCount () {
       let total = 0
-      return this.usersStatistics.forEach(el => [el.created.unix(), total++])
+      return this.usersLoaded ? this.usersStatistics.map(el => [el.created, total++]) : []
     },
 
     experimentsPerMonth () {
       return countGroupBy(this.experimentsStatistics, 'month')
+    },
+
+    experimentsRunningCount () {
+      let total = 0
+      return this.experimentsLoaded ? this.experimentsStatistics.map(el => [el.submission_date, total++]) : []
     },
 
     userYears () {
@@ -171,6 +175,7 @@ export default {
       })
 
       this.usersStatistics = data
+      this.usersStatistics.sort((a, b) => a.created.valueOf() - b.created.valueOf())
       this.usersLoaded = true
     },
 
@@ -207,8 +212,7 @@ export default {
         if (d.scheduled_date) d.scheduled_date = moment(String(d.scheduled_date))
       })
 
-      let total = (this.experimentsRunningCount.length > 0) ? this.experimentsRunningCount[this.experimentsStatistics.length - 1][1] : 0
-      this.experimentsRunningCount.push(...data.map(el => [el.submission_date, total++]))
+      data.sort((a, b) => a.submission_date.valueOf() - b.submission_date.valueOf())
       this.experimentsStatistics.push(...data)
     },
 
