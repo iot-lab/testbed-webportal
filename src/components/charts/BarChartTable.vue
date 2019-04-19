@@ -1,7 +1,7 @@
 <template>
   <div>
     <label>{{label}}:</label>
-    <chart-table :category_title="category_title" :value_title="value_title" :data="data"/>
+    <chart-table :category_title="category_title" :value_title="value_title" :data="Object.entries(data)"/>
     <vue-apex-charts ref="chart" width="900" type="bar" :options="options" :series="series"/>
   </div>
 </template>
@@ -39,7 +39,7 @@ export default {
     return {
       options: {
         xaxis: {
-          categories: [],
+          categories: Object.keys(this.data),
         },
         dataLabels: {
           enabled: false,
@@ -47,7 +47,7 @@ export default {
       },
       series: [{
         name: this.value_title,
-        data: [],
+        data: Object.values(this.data),
       }],
     }
   },
@@ -55,8 +55,11 @@ export default {
   watch: {
     data: function () {
       this.options = {
-        xaxis: {
-          categories: Object.keys(this.data),
+        ...this.options,
+        ...{
+          xaxis: {
+            categories: Object.keys(this.data),
+          },
         },
       }
       this.series[0].data = Object.values(this.data)

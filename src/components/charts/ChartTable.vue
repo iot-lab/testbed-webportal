@@ -1,20 +1,25 @@
 <template>
-  <div class="with-scrollbar table-wrapper-scroll-y">
-    <table v-if="showTable" class="table table-striped table-sm mt-2">
-      <thead>
-      <tr>
-        <th>{{ category_title }}</th>
-        <th>{{ value_title }}</th>
-      </tr>
-      </thead>
-      <tbody>
-      <template v-for="(category, value) in data">
-        <tr class="d-table-row" :key="category">
-          <td>{{category}}</td><td>{{value}}</td>
+  <div>
+    <div>
+      <a class="cursor" title="Show Table" @click="toggle"><i class="fa fa-fw fa-eye"></i>{{showTable ? 'Hide' : 'Show'}} Table</a>
+    </div>
+    <div class="with-scrollbar table-wrapper-scroll-y">
+      <table v-if="showTable" class="table table-striped table-sm mt-2">
+        <thead>
+        <tr>
+          <th>{{ category_title }}</th>
+          <th>{{ value_title }}</th>
         </tr>
-      </template>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+        <template v-for="item in data">
+          <tr class="d-table-row" :key="item">
+            <td>{{item[0]}}</td><td>{{item[1]}}</td>
+          </tr>
+        </template>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 <script>
@@ -33,8 +38,8 @@ export default {
       default: () => '',
     },
     data: {
-      type: Object,
-      default: () => {},
+      type: Array,
+      default: () => [],
     },
   },
 
