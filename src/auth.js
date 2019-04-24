@@ -17,7 +17,7 @@ export const auth = {
     await iotlab.getUserInfo()
       .then(user => {
         this.loggedIn = true
-        this.username = username
+        this.username = user.login
         this.isAdmin = user.groups.includes('admin')
         localStorage.setItem('loggedIn', this.loggedIn)
         localStorage.setItem('isAdmin', this.isAdmin)
