@@ -262,7 +262,7 @@ export const iotlab = {
   },
 
   async getNodesStatistics () {
-    return iotlab.api.get('/nodes').then(resp => resp.data)
+    return iotlab.api.get('/nodes').then(resp => resp.data.items)
   },
 
   async getExperimentsOffsetStatistics () {
