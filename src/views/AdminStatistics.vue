@@ -93,7 +93,7 @@
       </div>
       <div v-if="!experimentsLoaded">
         <i class="fa fa-spinner fa-spin fa-fw mr-1"></i>
-        <i>loading experiments statistics...</i>
+        <i>loading experiments statistics, {{experimentsProgressPercentage}} % ...</i>
       </div>
     </div>
   </div> <!-- container -->
@@ -131,10 +131,19 @@ export default {
       tableOk: false,
       usersLoaded: false,
       experimentsLoaded: false,
+      experimentsProgress: null,
     }
   },
 
   computed: {
+    experimentsProgressPercentage () {
+      if (this.experimentsProgress) {
+        return (100 * this.experimentsProgress.value / this.experimentsProgress.max).toFixed(1)
+      } else {
+        return 0
+      }
+    },
+
     usersByCountry () {
       return countGroupBy(this.usersStatistics, 'country')
     },
@@ -337,7 +346,7 @@ export default {
         })
     },
 
-    addExperimentsStatistics (offset, data) {
+    treatExperimentsStatistics (data) {
       let treated = data.map(d => {
         if (d.submission_date) {
           let momDate = moment(String(d.submission_date))
@@ -355,7 +364,7 @@ export default {
       })
 
       treated.sort((a, b) => a.submission_date.valueOf() - b.submission_date.valueOf())
-      this.experimentsStatistics.push(...treated)
+      return treated
     },
 
     errorHandler (err) {
@@ -363,39 +372,36 @@ export default {
       this.$notify({text: err, type: 'error'})
     },
 
+    async getOrFetch (offset) {
+      let val = await this.experimentsStore.getItem(String(offset)).catch(this.errorHandler)
+      if (!val) {
+        console.log('from network')
+        val = await iotlab.getExperimentsStatistics(String(offset))
+        // store data stringified
+        this.experimentsStore.setItem(offset, JSON.stringify(val))
+          .catch(this.errorHandler)
+      } else {
+        // retrieve stringified data
+        console.log('from local storage')
+        val = JSON.parse(val)
+      }
+      let treated = this.treatExperimentsStatistics(val)
+      this.experimentsProgress.value++
+      return treated
+    },
+
     async getExperimentsStatistics () {
       this.experimentsLoaded = false
       let offsets = (await iotlab.getExperimentsOffsetStatistics())
-      for (let i = 0; i < offsets.length; i++) {
-        let offset = offsets[i].toString()
-        this.experimentsStore.getItem(String(offset))
-          .catch(this.errorHandler).then(
-            val => {
-              if (!val) {
-                console.log('from network')
-                iotlab.getExperimentsStatistics(offset).then(
-                  val => {
-                    // store data stringified
-                    this.experimentsStore.setItem(String(offset), JSON.stringify(val))
-                      .catch(this.errorHandler)
-                    this.addExperimentsStatistics(offset, val)
-                    if (i === offsets.length - 1) {
-                      this.experimentsLoaded = true
-                    }
-                  }
-                )
-              } else {
-                // retrieve stringified data
-                console.log('from local storage')
-                val = JSON.parse(val)
-                this.addExperimentsStatistics(offset, val)
-                if (i === offsets.length - 1) {
-                  this.experimentsLoaded = true
-                }
-              }
-            }
-          )
-      }
+      this.experimentsProgress = { value: 0, max: offsets.length }
+
+      let promises = offsets.map(offset => this.getOrFetch(offset))
+      Promise.all(promises).then(
+        values => {
+          this.experimentsStatistics = values.flat()
+          this.experimentsLoaded = true
+        }
+      )
     },
 
     async setupDB () {
