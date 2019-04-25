@@ -48,6 +48,12 @@
                           category_title="Date"
                           value_title='Number of users over time'
                           :data="usersRunningCount"/>
+        <bar-chart-table label='User registrations per month'
+                        category_title='Month'
+                        :data='userRegistrationsPerMonth'/>
+        <bar-chart-table label='User registrations per year'
+                        category_title='Year'
+                        :data='userRegistrationsPerYear'/>
       </div>
       <div v-if="!usersLoaded">
         <i class="fa fa-spinner fa-spin fa-fw mr-1"></i>
@@ -147,6 +153,14 @@ export default {
 
     usersByCategory () {
       return countGroupBy(this.usersStatistics, 'category')
+    },
+
+    userRegistrationsPerMonth () {
+      return countGroupBy(this.usersStatistics, 'created_month')
+    },
+
+    userRegistrationsPerYear () {
+      return countGroupBy(this.usersStatistics, 'created_year')
     },
 
     categories () {
@@ -293,6 +307,7 @@ export default {
           let date = moment(String(d.created))
           d.created = date
           d.created_year = date.format('YYYY')
+          d.created_month = date.format('YYYY-MM')
           d.continent = COUNTRYCONTINENTS[d.country]
         }
         return d
