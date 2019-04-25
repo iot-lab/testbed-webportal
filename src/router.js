@@ -56,6 +56,8 @@ const router = new Router({
     { path: '/account', name: 'account', component: UserAccount, meta: { requiresAuth: true } },
     { path: '/groups', name: 'groups', component: AdminGroups, meta: { requiresAdmin: true } },
     { path: '/statistics', name: 'statistics', component: AdminStatistics, meta: { requiresAdmin: true } },
+    { path: '/statistics/users', name: 'usersStatistics', component: AdminStatistics, props: {statsType: 'users'}, meta: { requiresAdmin: true } },
+    { path: '/statistics/experiments', name: 'experimentsStatistics', component: AdminStatistics, props: {statsType: 'experiments'}, meta: { requiresAdmin: true } },
     { path: '/users', name: 'users', component: AdminUsers, meta: { requiresAdmin: true } },
     { path: '/users/add', name: 'addUsers', component: AdminAddUser, meta: { requiresAdmin: true } },
     { path: '/users/:username/experiments', name: 'userExperiments', component: AdminExperiments, props: true, meta: { requiresAdmin: true } },

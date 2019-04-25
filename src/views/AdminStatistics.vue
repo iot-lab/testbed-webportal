@@ -1,61 +1,94 @@
 <template>
   <div class='container mt-3'>
-    <h3><i class='fa fa-lg fa-fw fa-users' aria-hidden='true'></i> Users statistics</h3>
-    <div v-show="usersLoaded">
-      <div class='dropdasn d-inline-block '>
-        <button class='btn btn-light mr-1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fa fa-fw fa-download'></i> Download All Users statistics</button>
-        <div class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenuButton'>
-          <a class='dropdown-item' href='#' @click.prevent='downloadUsersStatisticsJson'>IoT-LAB users statistics <span class='badge badge-pill badge-info'>JSON</span></a>
-          <a class='dropdown-item' href='#' @click.prevent='downloadUsersStatisticsCsv'>IoT-LAB users statistics <span class='badge badge-pill badge-info'>CSV</span></a>
+    <i class="btn btn-danger fa fa-trash float-right" @click="deleteLocalData">Delete local data</i>
+    <ul class="nav nav-tabs" style="position: relative; top: 1px">
+      <li class="nav-item" v-tooltip:top="'Users statistics'">
+        <router-link to="/statistics/users" class="nav-link" :class="{active: statsType === 'users'}" data-toggle="list" href="#users" role="tab" aria-controls="users"><i class='fa fa-lg fa-fw fa-users' aria-hidden='true'></i> Users statistics </router-link>
+      </li>
+      <li class="nav-item" v-tooltip:top="'Experiments statistics'">
+        <router-link to="/statistics/experiments" class="nav-link" :class="{active: statsType === 'experiments'}" data-toggle="list" href="#experiments" role="tab" aria-controls="experiments"><i class='fa fa-lg fa-fw fa-flask' aria-hidden='true'></i> Experiments statistics </router-link>
+      </li>
+    </ul>
+    <div class="tab-pane" :class="{active: statsType === 'users'}" v-if="statsType === 'users'">
+      <div v-if="usersLoaded">
+        <div class='dropdasn d-inline-block '>
+          <button class='btn btn-light mr-1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fa fa-fw fa-download'></i> Download All Users statistics</button>
+          <div class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenuButton'>
+            <a class='dropdown-item' href='#' @click.prevent='downloadUsersStatisticsJson'>IoT-LAB users statistics <span class='badge badge-pill badge-info'>JSON</span></a>
+            <a class='dropdown-item' href='#' @click.prevent='downloadUsersStatisticsCsv'>IoT-LAB users statistics <span class='badge badge-pill badge-info'>CSV</span></a>
+          </div>
         </div>
+        <h2>Total number of accounts: {{usersStatistics.length}}</h2>
+        <bar-chart-table label='Number of users by country'
+                        category_title='Country'
+                        value_title='Number of users'
+                        :data='usersByCountry'/>
+        <stacked-relative-area-chart-table label='Users by country over time'
+                                           category_title='Country'
+                                           value_title='Number of users'
+                                           :categories='countries'
+                                           :data='relativeUsersByCountry'/>
+        <bar-chart-table label='Number of users by continent'
+                        category_title='Continent'
+                        value_title='Number of users'
+                        :data='usersByContinent'/>
+        <stacked-relative-area-chart-table label='Users by continent over time'
+                                           category_title='Continent'
+                                           value_title='Number of users'
+                                           :categories='continents'
+                                           :data='relativeUsersByContinent'/>
+        <bar-chart-table label='Number of users by category'
+                        category_title='Category'
+                        :data='usersByCategory'/>
+        <stacked-relative-area-chart-table label='Users by category over time'
+                                           category_title='Category'
+                                           :categories='categories'
+                                           :data='relativeUsersByCategory'/>
+        <line-chart-table label="Running count number of users"
+                          category_title="Date"
+                          value_title='Number of users over time'
+                          :data="usersRunningCount"/>
       </div>
-      <h2>Total number of accounts: {{usersStatistics.length}}</h2>
-      <h3>Filter by year of creation:</h3>
-      <p v-if="userYears" class="mb-2">
-        <span class="badge badge-pill mr-1 cursor" :class="{'badge-info': filterUserYear === null, 'badge-secondary': filterUserYear !== null}" @click="filterUserYear = null">all</span>
-        <span v-for="year in userYears" :key="year" class="badge badge-pill mr-1 cursor"
-              :class="{'badge-info': filterUserYear === year, 'badge-secondary': filterUserYear !== year}"
-              @click="filterUserYear = year">{{year}}</span>
-      </p>
-      <bar-chart-table label='Number of users by country'
-                      category_title='Country'
-                      value_title='Number of users'
-                      :data='usersByCountry'/>
-      <bar-chart-table label='Number of users by category'
-                      category_title='Category'
-                      value_title='Number of users'
-                      :data='usersByCategory'/>
-      <line-chart-table label="Running count number of users"
-                        category_title="Date"
-                        value_title='Number of users over time'
-                        :data="usersRunningCount"/>
+      <div v-if="!usersLoaded">
+        <i class="fa fa-spinner fa-spin fa-fw mr-1"></i>
+        <i>loading users statistics...</i>
+      </div>
     </div>
-    <div v-if="!usersLoaded">
-      <i class="fa fa-spinner fa-spin fa-fw mr-1"></i>
-      <i>loading users statistics...</i>
-    </div>
-    <h3><i class='fa fa-lg fa-fw fa-flask' aria-hidden='true'></i> Experiments statistics</h3>
-    <div v-show="experimentsLoaded">
-      <div class='dropdasn d-inline-block '>
-        <button class='btn btn-light mr-1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fa fa-fw fa-download'></i> Download All Experiments statistics</button>
-        <div class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenuButton'>
-          <a class='dropdown-item' href='#' @click.prevent='downloadExperimentsStatisticsJson'>IoT-LAB experiments statistics <span class='badge badge-pill badge-info'>JSON</span></a>
-          <a class='dropdown-item' href='#' @click.prevent='downloadExperimentsStatisticsCsv'>IoT-LAB experiments statistics <span class='badge badge-pill badge-info'>CSV</span></a>
+    <div class="tab-pane" :class="{active: statsType === 'experiments'}" v-if="statsType === 'experiments'">
+      <div v-if="experimentsLoaded">
+        <div class='dropdasn d-inline-block '>
+          <button class='btn btn-light mr-1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fa fa-fw fa-download'></i> Download All Experiments statistics</button>
+          <div class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenuButton'>
+            <a class='dropdown-item' href='#' @click.prevent='downloadExperimentsStatisticsJson'>IoT-LAB experiments statistics <span class='badge badge-pill badge-info'>JSON</span></a>
+            <a class='dropdown-item' href='#' @click.prevent='downloadExperimentsStatisticsCsv'>IoT-LAB experiments statistics <span class='badge badge-pill badge-info'>CSV</span></a>
+          </div>
         </div>
+        <h2 v-if='experimentsStatistics'>Total number of experiments: {{experimentsStatistics.length}}</h2>
+        <bar-chart-table label='Number of experiment per month'
+                        category_title='Month (YYYY-MM)'
+                        value_title='Number of experiments'
+                        :data='experimentsPerMonth'/>
+        <bar-chart-table label='Usage ratio per month'
+                         category_title='Month (YYYY-MM)'
+                         value_title='Usage ratio (%)'
+                         :data='experimentUsageRatio'/>
+        <line-chart-table label="Number of experiments"
+                          category_title="Date"
+                          value_title='Number of experiments'
+                          :data="experimentsRunningCount"/>
+        <line-chart-table label="Cumulated experiment time"
+                          category_title="Date"
+                          :value_title='`Cumulated time of experiments (${experimentsRunningDuration.unit})`'
+                          :data="experimentsRunningDuration.values"/>
+        <line-chart-table label="Cumulated node run time"
+                          category_title="Date"
+                          :value_title='`Cumulated node run time (${experimentsRunningNodeDuration.unit})`'
+                          :data="experimentsRunningNodeDuration.values"/>
       </div>
-      <h2 v-if='experimentsStatistics'>Total number of experiments: {{experimentsStatistics.length}}</h2>
-      <bar-chart-table label='Number of experiment per month'
-                       category_title='Month (YYYY-MM)'
-                       value_title='Number of experiments'
-                       :data='experimentsPerMonth'/>
-      <line-chart-table label="Running count number of experiment"
-                        category_title="Date"
-                        value_title='Number of experiments over time'
-                        :data="experimentsRunningCount"/>
-    </div>
-    <div v-if="!experimentsLoaded">
-      <i class="fa fa-spinner fa-spin fa-fw mr-1"></i>
-      <i>loading experiments statistics...</i>
+      <div v-if="!experimentsLoaded">
+        <i class="fa fa-spinner fa-spin fa-fw mr-1"></i>
+        <i>loading experiments statistics...</i>
+      </div>
     </div>
   </div> <!-- container -->
 </template>
@@ -66,13 +99,22 @@ import { downloadObjectAsJson, countGroupBy, downloadObjectAsCsv } from '@/utils
 import moment from 'moment'
 import BarChartTable from '@/components/charts/BarChartTable'
 import LineChartTable from '@/components/charts/LineChartTable'
+import StackedRelativeAreaChartTable from '@/components/charts/StackedRelativeAreaChartTable'
 import localForage from 'localforage'
+import { COUNTRYCONTINENTS } from '@/countries'
 
 export default {
   name: 'AdminStatistics',
 
   components: {
-    BarChartTable, LineChartTable,
+    BarChartTable, LineChartTable, StackedRelativeAreaChartTable,
+  },
+
+  props: {
+    statsType: {
+      type: String,
+      default: 'users',
+    },
   },
 
   data () {
@@ -80,7 +122,6 @@ export default {
       experimentsStore: null,
       experimentsStatistics: [],
       usersStatistics: [],
-      filterUserYear: null,
       tableOk: false,
       usersLoaded: false,
       experimentsLoaded: false,
@@ -89,24 +130,44 @@ export default {
 
   computed: {
     usersByCountry () {
-      return countGroupBy(this.filteredUsers, 'country')
+      return countGroupBy(this.usersStatistics, 'country')
+    },
+
+    countries () {
+      return Object.keys(this.usersByCountry)
+    },
+
+    usersByContinent () {
+      return countGroupBy(this.usersStatistics, 'continent')
+    },
+
+    continents () {
+      return Object.keys(this.usersByContinent)
     },
 
     usersByCategory () {
-      return countGroupBy(this.filteredUsers, 'category')
+      return countGroupBy(this.usersStatistics, 'category')
     },
 
-    filteredUsers () {
-      if (this.filterUserYear) {
-        return this.usersStatistics.filter(el => el.created_year === this.filterUserYear)
-      } else {
-        return this.usersStatistics
-      }
+    categories () {
+      return Object.keys(this.usersByCategory)
     },
 
     usersRunningCount () {
       let total = 0
       return this.usersLoaded ? this.usersStatistics.map(el => [el.created, total++]) : []
+    },
+
+    relativeUsersByCountry () {
+      return this.relativeUsersBy('country')
+    },
+
+    relativeUsersByContinent () {
+      return this.relativeUsersBy('continent')
+    },
+
+    relativeUsersByCategory () {
+      return this.relativeUsersBy('category')
     },
 
     experimentsPerMonth () {
@@ -116,6 +177,41 @@ export default {
     experimentsRunningCount () {
       let total = 0
       return this.experimentsLoaded ? this.experimentsStatistics.map(el => [el.submission_date, total++]) : []
+    },
+
+    experimentsRunningDuration () {
+      let total = 0
+      return this.getDatetimeValuesUnit(this.experimentsLoaded ? this.experimentsStatistics.map(el => {
+        total += el.effective_duration * 60
+        return [el.submission_date, total]
+      }) : [])
+    },
+
+    experimentsRunningNodeDuration () {
+      let total = 0
+      return this.getDatetimeValuesUnit(this.experimentsLoaded ? this.experimentsStatistics.map(el => {
+        total += el.nodes ? el.effective_duration * 60 * el.nodes.length : 0
+        return [el.submission_date, total]
+      }) : [])
+    },
+
+    experimentsDuration () {
+      let duration = {}
+      if (this.experimentsLoaded) {
+        this.experimentsStatistics.forEach(el => {
+          duration[el.month] = (duration[el.month] ? duration[el.month] : 0) + el.effective_duration
+        })
+      }
+      return duration
+    },
+
+    experimentUsageRatio () {
+      let ratios = Object.assign({}, this.experimentsDuration)
+      for (var month in ratios) {
+        let monthDuration = moment(month, 'YYYY-MM').daysInMonth() * 24 * 3600
+        ratios[month] *= 100 / monthDuration
+      }
+      return ratios
     },
 
     userYears () {
@@ -134,6 +230,33 @@ export default {
   methods: {
     unique (array) {
       return [...new Set(array)]
+    },
+
+    relativeUsersBy (key) {
+      let running = {}
+      let total = 0
+      return this.usersLoaded ? this.usersStatistics.map(el => {
+        total++
+        running[el[key]] = (running[el[key]] || 0) + 1
+        return [el.created, {values: Object.assign({}, running), total: total}]
+      }) : []
+    },
+
+    getDatetimeValuesUnit (values) {
+      let maxY = Math.max(...values.map(el => el[1]))
+      var unit = 's'
+      var scale = 1
+      if (maxY > 60 && maxY < 3600) {
+        unit = 'min'
+        scale = 60
+      } else if (maxY <= 24 * 3600) {
+        unit = 'h'
+        scale = 3600
+      } else {
+        unit = 'day'
+        scale = 24 * 3600
+      }
+      return { values: values.map(el => [el[0], el[1] / scale]), unit: unit }
     },
 
     async downloadExperimentsStatisticsJson () {
@@ -165,17 +288,18 @@ export default {
     },
 
     setUsersStatistics (data) {
-      data.forEach((d, i, a) => {
+      let treated = data.map(d => {
         if (d.created) {
           let date = moment(String(d.created))
           d.created = date
           d.created_year = date.format('YYYY')
-          a[i] = d
+          d.continent = COUNTRYCONTINENTS[d.country]
         }
+        return d
       })
 
-      this.usersStatistics = data
-      this.usersStatistics.sort((a, b) => a.created.valueOf() - b.created.valueOf())
+      treated.sort((a, b) => a.created.valueOf() - b.created.valueOf())
+      this.usersStatistics = treated
       this.usersLoaded = true
     },
 
@@ -199,21 +323,29 @@ export default {
     },
 
     addExperimentsStatistics (offset, data) {
-      data.forEach((d, i, a) => {
+      let treated = data.map(d => {
         if (d.submission_date) {
           let momDate = moment(String(d.submission_date))
           d.submission_date = momDate
           d.month = momDate.format('YYYY-MM')
           d.year = momDate.format('YYYY')
-          a[i] = d
+        }
+        if (d.effective_duration === 0) {
+          d.effective_duration = d.submitted_duration
         }
         if (d.start_date) d.start_date = moment(String(d.start_date))
         if (d.stop_date) d.stop_date = moment(String(d.stop_date))
         if (d.scheduled_date) d.scheduled_date = moment(String(d.scheduled_date))
+        return d
       })
 
-      data.sort((a, b) => a.submission_date.valueOf() - b.submission_date.valueOf())
-      this.experimentsStatistics.push(...data)
+      treated.sort((a, b) => a.submission_date.valueOf() - b.submission_date.valueOf())
+      this.experimentsStatistics.push(...treated)
+    },
+
+    errorHandler (err) {
+      console.log(err)
+      this.$notify({text: err, type: 'error'})
     },
 
     async getExperimentsStatistics () {
@@ -221,38 +353,58 @@ export default {
       let offsets = (await iotlab.getExperimentsOffsetStatistics())
       for (let i = 0; i < offsets.length; i++) {
         let offset = offsets[i].toString()
-
-        this.experimentsStore.getItem(offset).catch(
-          async err => {
-            this.$notify({text: err, type: 'error'})
-          }
-        ).then(
-          async val => {
-            if (!val) {
-              val = await iotlab.getExperimentsStatistics(offset)
-              this.experimentsStore.setItem(offset, val)
+        this.experimentsStore.getItem(String(offset))
+          .catch(this.errorHandler).then(
+            val => {
+              if (!val) {
+                console.log('from network')
+                iotlab.getExperimentsStatistics(offset).then(
+                  val => {
+                    // store data stringified
+                    this.experimentsStore.setItem(String(offset), JSON.stringify(val))
+                      .catch(this.errorHandler)
+                    this.addExperimentsStatistics(offset, val)
+                    if (i === offsets.length - 1) {
+                      this.experimentsLoaded = true
+                    }
+                  }
+                )
+              } else {
+                // retrieve stringified data
+                console.log('from local storage')
+                val = JSON.parse(val)
+                this.addExperimentsStatistics(offset, val)
+                if (i === offsets.length - 1) {
+                  this.experimentsLoaded = true
+                }
+              }
             }
-            this.addExperimentsStatistics(offset, val)
-            if (i === offsets.length - 1) {
-              this.experimentsLoaded = true
-            }
-          }
-        )
+          )
       }
     },
+
     async setupDB () {
       this.experimentsStore = localForage.createInstance({
         driver: localForage.INDEXEDDB,
         name: 'iot-lab-stats-experiments',
       })
     },
+
+    deleteLocalData () {
+      confirm('Delete all cached local data and re-download the statistics data ? This can take a long time')
+      this.experimentsStore.clear()
+    },
+
+    loadData () {
+      this.getUsersStatistics()
+      this.getExperimentsStatistics()
+      this.getNodesStatistics()
+    },
   },
 
   async created () {
     await this.setupDB()
-    await this.getUsersStatistics()
-    await this.getExperimentsStatistics()
-    await this.getNodesStatistics()
+    this.loadData()
   },
 }
 
