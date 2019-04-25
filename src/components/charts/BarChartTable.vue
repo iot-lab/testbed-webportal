@@ -53,6 +53,14 @@ export default {
       return {
         xaxis: {
           categories: Object.keys(this.data),
+          title: {
+            text: this.category_title,
+          },
+        },
+        yaxis: {
+          title: {
+            text: this.value_title,
+          },
         },
         dataLabels: {
           enabled: false,

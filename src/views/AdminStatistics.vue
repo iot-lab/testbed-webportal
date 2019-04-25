@@ -90,6 +90,10 @@
                           category_title="Date"
                           :value_title='`Cumulated node run time (${experimentsRunningNodeDuration.unit})`'
                           :data="experimentsRunningNodeDuration.values"/>
+        <stacked-relative-area-chart-table label='Experiments by node type over time'
+                          category_title='Category'
+                          :categories='nodetypes'
+                          :data='relativeExperimentsByNodeType'/>
       </div>
       <div v-if="!experimentsLoaded">
         <i class="fa fa-spinner fa-spin fa-fw mr-1"></i>
@@ -127,6 +131,8 @@ export default {
     return {
       experimentsStore: null,
       experimentsStatistics: [],
+      nodesStatistics: [],
+      nodesMap: {},
       usersStatistics: [],
       tableOk: false,
       usersLoaded: false,
@@ -176,6 +182,10 @@ export default {
       return Object.keys(this.usersByCategory)
     },
 
+    nodetypes () {
+      return ['a8', 'm3', 'wsn430', 'custom']
+    },
+
     usersRunningCount () {
       let total = 0
       return this.usersLoaded ? this.usersStatistics.map(el => [el.created, total++]) : []
@@ -195,6 +205,28 @@ export default {
 
     experimentsPerMonth () {
       return countGroupBy(this.experimentsStatistics, 'month')
+    },
+
+    relativeExperimentsByNodeType () {
+      let running = {}
+      let total = 0
+      return this.experimentsLoaded ? this.experimentsStatistics.map(el => {
+        total++
+        if (el.nodes) {
+          for (let node of el.nodes) {
+            let nodeObj = this.nodesMap[node]
+            if (nodeObj) {
+              let nodeArchi = this.$options.filters.formatArchi(nodeObj.archi)
+              if (nodeArchi !== 'a8' && nodeArchi !== 'm3' && nodeArchi !== 'wsn430') {
+                nodeArchi = 'custom'
+              }
+
+              running[nodeArchi] = (running[nodeArchi] || 0) + 1
+            }
+          }
+        }
+        return [el.submission_date, {values: Object.assign({}, running), total: total}]
+      }) : []
     },
 
     experimentsRunningCount () {
@@ -308,6 +340,10 @@ export default {
 
     setNodesStatistics (data) {
       this.nodesStatistics = data
+      this.nodesMap = {}
+      data.forEach(value => {
+        this.nodesMap[value.network_address] = value
+      })
     },
 
     setUsersStatistics (data) {
@@ -330,20 +366,20 @@ export default {
     getUsersStatistics () {
       this.usersLoaded = false
       iotlab.getUsersStatistics()
-        .then(this.setUsersStatistics)
         .catch(err => {
           console.log(err)
           this.$notify({text: (err.response && err.response.data.message) || 'Failed to fetch Users statistics', type: 'error'})
         })
+        .then(this.setUsersStatistics)
     },
 
     getNodesStatistics () {
       iotlab.getNodesStatistics()
-        .then(this.setNodesStatistics)
         .catch(err => {
           console.log(err)
-          this.$notify({text: (err.rponse && err.response.data.message) || 'Failed to fetch Nodes statistics', type: 'error'})
+          this.$notify({text: (err.response && err.response.data.message) || 'Failed to fetch Nodes statistics', type: 'error'})
         })
+        .then(this.setNodesStatistics)
     },
 
     treatExperimentsStatistics (data) {
@@ -416,10 +452,10 @@ export default {
       this.experimentsStore.clear()
     },
 
-    loadData () {
-      this.getUsersStatistics()
+    async loadData () {
+      await this.getUsersStatistics()
+      await this.getNodesStatistics()
       this.getExperimentsStatistics()
-      this.getNodesStatistics()
     },
   },
 
