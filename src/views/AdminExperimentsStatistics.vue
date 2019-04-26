@@ -1,6 +1,6 @@
 <template>
   <div>
-    <i class="btn btn-danger fa fa-trash float-right" @click="deleteLocalData">Delete local data</i>
+    <i class="btn btn-danger fa fa-trash float-right" @click="refreshLocalData">Refresh local data</i>
     <div v-if="loaded">
       <div class='dropdasn d-inline-block '>
         <button class='btn btn-light mr-1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fa fa-fw fa-download'></i> Download All Experiments statistics</button>
@@ -20,7 +20,7 @@
               category_title='Month (YYYY-MM)'
               value_title='Usage ratio (%)'
               :data='experimentUsageRatio'/>
-      <linect label="Number of experiments"
+      <linect label="Number of experiments over time"
               category_title="Date"
               value_title='Number of experiments'
               :data="experimentsRunningCount"/>
@@ -73,6 +73,17 @@ export default {
       tableOk: false,
       loaded: false,
       experimentsProgress: null,
+      nodetypes: ['a8', 'm3', 'wsn430', 'custom'],
+      // calculated
+      experimentsPerMonth: [],
+      relativeExperimentsByNodeType: [],
+      experimentsRunningCount: [],
+      experimentsRunningDuration: {},
+      experimentsRunningNodeDuration: {},
+      experimentsDuration: [],
+      experimentUsageRatio: [],
+      experimentYears: [],
+      months: [],
     }
   },
 
@@ -84,20 +95,51 @@ export default {
         return 0
       }
     },
+  },
 
-    nodetypes () {
-      return ['a8', 'm3', 'wsn430', 'custom']
+  methods: {
+    unique (array) {
+      return [...new Set(array)]
     },
 
-    experimentsPerMonth () {
+    getExperimentsPerMonth () {
       return countGroupBy(this.experimentsStatistics, 'month')
     },
 
-    relativeExperimentsByNodeType () {
+    getExperimentUsageRatio () {
+      let ratios = Object.assign({}, this.experimentsDuration)
+      for (var month in ratios) {
+        let monthDuration = moment(month, 'YYYY-MM').daysInMonth() * 24 * 3600
+        ratios[month] *= 100 / monthDuration
+      }
+      return ratios
+    },
+
+    treatAllExperimentsStatistics () {
+      let months = new Set()
+      let years = new Set()
+      let duration = {}
+      this.experimentsRunningCount = []
+      let runningDuration = []
+      let runningNodeDuration = []
       let running = {}
-      let total = 0
-      return this.loaded ? this.experimentsStatistics.map(el => {
-        total++
+
+      let totalRunningCount = 0
+      let totalRunningDuration = 0
+      let totalRunningNodeDuration = 0
+
+      this.experimentsStatistics.map(el => {
+        months.add(el.month)
+        years.add(el.year)
+        duration[el.month] = (duration[el.month] ? duration[el.month] : 0) + el.effective_duration
+
+        totalRunningCount++
+        totalRunningDuration += el.effective_duration * 60
+        totalRunningNodeDuration += el.nodes ? el.effective_duration * 60 * el.nodes.length : 0
+        this.experimentsRunningCount.push([el.submission_date, totalRunningCount])
+        runningDuration.push([el.submission_date, totalRunningDuration])
+        runningNodeDuration.push([el.submission_date, totalRunningNodeDuration])
+
         if (el.nodes) {
           for (let node of el.nodes) {
             let nodeObj = this.nodesMap[node]
@@ -111,62 +153,15 @@ export default {
             }
           }
         }
-        return [el.submission_date, {values: Object.assign({}, running), total: total}]
-      }) : []
-    },
+        this.relativeExperimentsByNodeType.push([el.submission_date, {values: Object.assign({}, running), total: totalRunningCount}])
+      })
+      this.months = [...months]
+      this.years = [...years]
+      this.experimentsDuration = duration
+      this.experimentsRunningDuration = this.getDatetimeValuesUnit(runningDuration)
+      this.experimentsRunningNodeDuration = this.getDatetimeValuesUnit(runningNodeDuration)
 
-    experimentsRunningCount () {
-      let total = 0
-      return this.loaded ? this.experimentsStatistics.map(el => [el.submission_date, total++]) : []
-    },
-
-    experimentsRunningDuration () {
-      let total = 0
-      return this.getDatetimeValuesUnit(this.loaded ? this.experimentsStatistics.map(el => {
-        total += el.effective_duration * 60
-        return [el.submission_date, total]
-      }) : [])
-    },
-
-    experimentsRunningNodeDuration () {
-      let total = 0
-      return this.getDatetimeValuesUnit(this.loaded ? this.experimentsStatistics.map(el => {
-        total += el.nodes ? el.effective_duration * 60 * el.nodes.length : 0
-        return [el.submission_date, total]
-      }) : [])
-    },
-
-    experimentsDuration () {
-      let duration = {}
-      if (this.loaded) {
-        this.experimentsStatistics.forEach(el => {
-          duration[el.month] = (duration[el.month] ? duration[el.month] : 0) + el.effective_duration
-        })
-      }
-      return duration
-    },
-
-    experimentUsageRatio () {
-      let ratios = Object.assign({}, this.experimentsDuration)
-      for (var month in ratios) {
-        let monthDuration = moment(month, 'YYYY-MM').daysInMonth() * 24 * 3600
-        ratios[month] *= 100 / monthDuration
-      }
-      return ratios
-    },
-
-    experimentYears () {
-      return this.unique(this.experimentsStatistics.map(o => o.year))
-    },
-
-    months () {
-      return this.unique(this.experimentsStatistics.map(o => o.month))
-    },
-  },
-
-  methods: {
-    unique (array) {
-      return [...new Set(array)]
+      this.experimentUsageRatio = this.getExperimentUsageRatio()
     },
 
     getDatetimeValuesUnit (values) {
@@ -268,6 +263,11 @@ export default {
       Promise.all(promises).then(
         values => {
           this.experimentsStatistics = values.flat()
+
+          this.treatAllExperimentsStatistics()
+
+          this.experimentsPerMonth = this.getExperimentsPerMonth()
+
           this.loaded = true
         }
       )
@@ -280,9 +280,11 @@ export default {
       })
     },
 
-    deleteLocalData () {
-      confirm('Delete all cached local data and re-download the statistics data ? This can take a long time')
+    refreshLocalData () {
+      confirm('Delete all cached local data, and re-download the statistics data ? This can take a long time')
       this.experimentsStore.clear()
+      this.experimentsStatistics = []
+      this.loadData()
     },
 
     async loadData () {
