@@ -8,8 +8,8 @@
         <a><span class="badge badge-pill mr-1 cursor"  @click="type = 'pie'" :class="{'badge-primary': type === 'pie', 'badge-secondary': type !== 'pie'}">Pie</span></a>
       </p>
     </div>
-    <vue-apex-charts v-if="type === 'bar'" ref="chart" width="900" type="bar" :options="options" :series="data_series"/>
-    <vue-apex-charts v-if="type === 'pie'" ref="chart" width="900" type="pie" :options="pie_options" :series="data_values"/>
+    <vue-apex-charts v-if="type === 'bar'" ref="chart" type="bar" :options="options" :series="data_series"/>
+    <vue-apex-charts v-if="type === 'pie'" ref="chart" type="pie" :options="pie_options" :series="data_values"/>
   </div>
 </template>
 <script>

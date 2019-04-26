@@ -2,7 +2,7 @@
   <div>
     <label>{{label}}:</label>
     <chart-table :category_title="category_title" :value_title="value_title" :data="data"/>
-    <vue-apex-charts ref="chart" width="900" type="line" :options="options" :series="[data_series]"/>
+    <vue-apex-charts ref="chart" type="line" :options="options" :series="[data_series]"/>
   </div>
 </template>
 <script>

@@ -2,19 +2,19 @@
   <div>
     <div>
       <a class="cursor" title="Show Table" @click="toggle"><i class="fa fa-fw fa-eye"></i>{{showTable ? 'Hide' : 'Show'}} Table</a>
+      <a class='cursor float-right' @click.prevent='download'>download <span class='badge badge-pill badge-info'>CSV</span></a>
     </div>
     <div class="with-scrollbar table-wrapper-scroll-y">
       <table v-if="showTable" class="table table-striped table-sm mt-2">
         <thead>
         <tr>
-          <th>{{ category_title }}</th>
-          <th>{{ value_title }}</th>
+          <th v-for="header in headers">{{ header }}</th>
         </tr>
         </thead>
         <tbody>
         <template v-for="item in data">
           <tr class="d-table-row" :key="item">
-            <td>{{item[0]}}</td><td>{{item[1]}}</td>
+            <td v-for="element in item">{{element}}</td>
           </tr>
         </template>
         </tbody>
@@ -31,15 +31,15 @@ export default {
   props: {
     category_title: {
       type: String,
-      default: () => '',
     },
     value_title: {
       type: String,
-      default: () => '',
+    },
+    value_titles: {
+      type: Array,
     },
     data: {
       type: Array,
-      default: () => [],
     },
   },
 
@@ -49,13 +49,25 @@ export default {
     }
   },
 
+  computed: {
+    headers () {
+      if (this.value_titles) {
+        return [this.category_title, ...this.value_titles]
+      } else {
+        return [this.category_title, this.value_title]
+      }
+    },
+    csvOpts () {
+      return { fields: this.headers.map((header, index) => { return { label: header, value: String(index) } }) }
+    },
+  },
+
   methods: {
     toggle () {
       this.showTable = !this.showTable
     },
     async download () {
-      downloadObjectAsCsv(this.data, 'iotlab-table-statistics',
-        {fields: ['category', 'value'], header: [this.category_title, this.value_title]})
+      downloadObjectAsCsv(this.data, 'iotlab-table-statistics', this.csvOpts)
     },
   },
 }

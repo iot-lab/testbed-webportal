@@ -1,8 +1,8 @@
 <template>
   <div>
     <label>{{label}}:</label>
-    <chart-table :category_title="category_title" :value_title="value_title" :data="data"/>
-    <vue-apex-charts ref="chart" width="900" type="area" :options="options" :series="data_series"/>
+    <chart-table :category_title="category_title" :value_titles="value_titles" :data="data_table"/>
+    <vue-apex-charts ref="chart"  type="area" :options="options" :series="data_series"/>
   </div>
 </template>
 <script>
@@ -44,6 +44,17 @@ export default {
   },
 
   computed: {
+    value_titles () {
+      return [...this.categories, 'total']
+    },
+    data_table () {
+      let dataTable = []
+      this.data.map(el => {
+        dataTable.push([el[0], ...this.categories.map(category => el[1].values[category]), el[1].total])
+      })
+
+      return dataTable
+    },
     data_series () {
       let dataSeries = []
       this.categories.forEach((category, index, array) => {

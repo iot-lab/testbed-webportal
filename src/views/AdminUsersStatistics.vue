@@ -17,7 +17,7 @@
               value_title='Number of users'
               :data='usersByCountry'/>
       <stackedct label='Users by country over time'
-                  category_title='Country'
+                  category_title='Date'
                   value_title='Number of users (%)'
                   :categories='countries'
                   :data='relativeUsersByCountry'/>
@@ -26,7 +26,7 @@
               value_title='Number of users'
               :data='usersByContinent'/>
       <stackedct label='Users by continent over time'
-                  category_title='Continent'
+                  category_title='Date'
                   value_title='Number of users (%)'
                   :categories='continents'
                   :data='relativeUsersByContinent'/>
@@ -35,6 +35,7 @@
               :data='usersByCategory'/>
       <stackedct label='Users by category over time'
                   category_title='Category'
+                  value_title="Number of users"
                   :categories='categories'
                   :data='relativeUsersByCategory'/>
       <linect label="Running count number of users"
@@ -43,9 +44,11 @@
               :data="usersRunningCount"/>
       <barct label='User registrations per month'
               category_title='Month'
+              value_title="User Registration"
               :data='userRegistrationsPerMonth'/>
       <barct label='User registrations per year'
               category_title='Year'
+              value_title="User Registration"
               :data='userRegistrationsPerYear'/>
     </div>
     <div v-else>
@@ -124,7 +127,7 @@ export default {
 
     usersRunningCount () {
       let total = 0
-      return this.usersLoaded ? this.usersStatistics.map(el => [el.created, total++]) : []
+      return this.loaded ? this.usersStatistics.map(el => [el.created, total++]) : []
     },
 
     relativeUsersByCountry () {
