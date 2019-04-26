@@ -88,10 +88,16 @@ export default {
               hour: 'HH:mm',
             },
           },
+          title: {
+            text: this.category_title,
+          },
         },
         yaxis: {
           min: 0,
           max: 100,
+          title: {
+            text: this.value_title,
+          },
         },
         dataLabels: {
           enabled: false,
