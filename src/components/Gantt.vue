@@ -299,7 +299,7 @@ export default {
 
   methods: {
     click2date (e) {
-      let rect = e.target.getBoundingClientRect()
+      let rect = e.currentTarget.getBoundingClientRect()
       let ratio = (e.clientX - rect.left) / rect.width
       return this.gantt_relative_start_date + ratio * (this.gantt_relative_stop_date - this.gantt_relative_start_date)
     },
