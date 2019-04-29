@@ -24,7 +24,7 @@
           {{node.label}}
         </td>
         <td>
-          <div :style="`position: relative; height: 25px; width: 100%`">
+          <div style="position: relative; height: 25px; width: 100%">
             <div class="timeRuler primary" v-for="d in rulerValues" :key="`ruler-${d}`"
                  :style="{ left: date2pc(d) + '%' }">
             </div>
@@ -394,25 +394,20 @@ td, th {
   border-width: 1px;
   z-index: 1;
   height: 100%;
-  top: 0px;
 }
 .timeRulerLabel {
   position: absolute;
-  top: 0px;
   text-align: center;
   display: inline-block;
 }
 .primary {
   border-left: solid blue 1px;
-  top: 47px;
 }
 .now {
   border-left: dotted red 2px;
-  top: 47px;
 }
 .secondary {
   border-left: dotted blue 1px;
-  top: 50px;
 }
 .nodeState {
   background-size: 5px 5px;
