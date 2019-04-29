@@ -24,10 +24,15 @@
           {{node.label}}
         </td>
         <td>
-          <div style="position: relative; height: 25px; width: 100%">
+          <div style="position: relative; height: 25px; width: 100%"
+               v-on:mousemove="mousemove"
+               v-on:mouseup="mouseup"
+               v-on:mousedown="mousedown"
+               v-on:mouseleave="mouseleave">
             <div class="timeRuler primary" v-for="d in rulerValues" :key="`ruler-${d}`"
                  :style="{ left: date2pc(d) + '%' }">
             </div>
+            <div class="timeRange" v-if="window_start && window_stop" :style="{ left: relativedate2pc(window_start) + '%', width: (relativedate2pc(window_stop) - relativedate2pc(window_start)) + '%'}"/>
             <div class="timeRuler secondary" v-for="d in secondaryRulerValues" :key="`ruler-secondary-${d}`"
                  :style="{ left: date2pc(d) + '%' }">
             </div>
@@ -136,6 +141,9 @@ export default {
       CONF: CONF,
       now: null,
       loaded: false,
+      window_start: undefined,
+      window_stop: undefined,
+      drag: false,
     }
   },
 
@@ -290,6 +298,33 @@ export default {
   },
 
   methods: {
+    click2date (e) {
+      let rect = e.target.getBoundingClientRect()
+      let ratio = (e.clientX - rect.left) / rect.width
+      return this.gantt_relative_start_date + ratio * (this.gantt_relative_stop_date - this.gantt_relative_start_date)
+    },
+    mouseup (e) {
+      this.$emit('set_zoom', {start: this.window_start, stop: this.click2date(e)})
+      this.drag = false
+    },
+    mousedown (e) {
+      this.drag = true
+      this.window_start = this.click2date(e)
+      this.window_stop = this.click2date(e)
+    },
+    mouseleave (e) {
+      this.drag = false
+    },
+    clear_zoom () {
+      this.window_start = undefined
+      this.window_stop = undefined
+    },
+    mousemove (e) {
+      if (this.drag) {
+        this.window_stop = this.click2date(e)
+      }
+    },
+
     closeTooltip () {
       $('.tooltip').remove()
     },
@@ -357,6 +392,20 @@ export default {
       return Number((a - (Math.floor(a / b) * b)).toPrecision(8))
     },
 
+    ratio2date (ratio) {
+      return this.gantt_start_date + ratio * (this.gantt_stop_date - this.gantt_start_date)
+    },
+
+    relativedate2pc (relativedate) {
+      if (relativedate < this.gantt_relative_start_date) {
+        return 0
+      }
+      if (relativedate > this.gantt_relative_stop_date) {
+        return 100
+      }
+      return 100 * (relativedate - this.gantt_relative_start_date) / (this.gantt_relative_stop_date - this.gantt_relative_start_date)
+    },
+
     date2pc (date) {
       if (date < this.gantt_start_date) {
         return 0
@@ -388,12 +437,21 @@ table {
 td, th {
   white-space: nowrap;
 }
+.timeRange {
+  position: absolute;
+  border-width: 1px;
+  z-index: 1;
+  height: 100%;
+  background: #20539d22;
+  pointer-events : none;
+}
 .timeRuler {
   position: absolute;
   width: 1px;
   border-width: 1px;
   z-index: 1;
   height: 100%;
+  pointer-events : none;
 }
 .timeRulerLabel {
   position: absolute;

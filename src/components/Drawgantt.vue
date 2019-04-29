@@ -18,6 +18,7 @@
         <button class="btn mr-2" type="button" v-on:click="zoomout()">-</button>
         <button class="btn mr-2" type="button" v-on:click="refresh()">refresh</button>
         <button class="btn mr-2" type="button" v-on:click="reset()">reset</button>
+        <button class="btn mr-2" :aria-disabled="cant_zoom" :class="{disabled: cant_zoom}" type="button" v-on:click="zoom()">zoom</button>
         <button class="btn mr-2" type="button" v-on:click="zoomin()">+</button>
         <button class="btn mr-2" type="button" v-on:click="next()">&gt;&gt;</button>
         <button class="btn mr-2" type="button" v-on:click="shift(S_PER_HOUR)">&gt;1h</button>
@@ -26,7 +27,7 @@
         <button class="btn mr-2" type="button" v-on:click="shift(S_PER_WEEK)">&gt;1w</button>
       </div>
     </div>
-    <gantt ref='gantt' :timezone="timezone" :nodes="nodes" :gantt_relative_window="relative_window"></gantt>
+    <gantt ref='gantt' :timezone="timezone" :nodes="nodes" :gantt_relative_window="relative_window" @set_zoom="set_zoom"/>
   </div>
 </template>
 
@@ -53,6 +54,7 @@ export default {
       relative_window: Object.assign({}, DEFAULT_RELATIVE_WINDOW),
       timezone: 'UTC',
       tzUser: moment.tz.guess(),
+      zoom_window: {},
 
       S_PER_DAY: S_PER_DAY,
       S_PER_WEEK: S_PER_WEEK,
@@ -67,6 +69,9 @@ export default {
   },
 
   computed: {
+    cant_zoom () {
+      return Object.keys(this.zoom_window).length === 0
+    },
     relative_start () {
       return this.relative_window.start
     },
@@ -92,6 +97,10 @@ export default {
   },
 
   methods: {
+
+    set_zoom (window) {
+      this.zoom_window = window
+    },
 
     update (window) {
       if (window.stop - window.start < MAX_WINDOW) {
@@ -129,6 +138,14 @@ export default {
     prev () {
       var t = this.relative_start - (this.relative_stop - this.relative_start)
       this.update({ start: t, stop: this.relative_start })
+    },
+
+    zoom () {
+      if (!this.cant_zoom) {
+        this.update(this.zoom_window)
+        this.zoom_window = {}
+        this.$refs.gantt.clear_zoom()
+      }
     },
 
     zoomin () {
