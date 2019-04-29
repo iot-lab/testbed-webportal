@@ -2,6 +2,7 @@
 <div class="container mt-3">
   <h4><i class="fa fa-fw fa-hourglass-half" aria-hidden="true"></i> Running experiments ({{runningExp.length}})</h4>
   <running-experiments :exp-list="runningExp"></running-experiments>
+  </div>
   <div class="float-right mt-1 mb-4" v-if="showData === 'properties'">
     <div class="dropdown d-inline-block ">
       <button class="btn btn-light mr-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-fw fa-download"></i> Download</button>
@@ -40,10 +41,10 @@
   </p>
   <ul class="nav nav-tabs">
     <li class="nav-item" v-tooltip:top="'Nodes properties'">
-      <a class="nav-link" :class="{active: showData === 'properties'}" data-toggle="list" href="#properties" role="tab" aria-controls="properties" @click="showData = 'properties'"><i class="fa fa-fw fa-share-alt" aria-hidden="true"></i>Nodes properties</a>
+      <router-link class="nav-link" :to="{name: 'status'}" :class="{active: showData === 'properties'}" role="tab"><i class="fa fa-fw fa-share-alt"></i>Nodes properties</router-link>
     </li>
     <li class="nav-item" v-tooltip:top="'Testbed Activity'">
-      <a class="nav-link" :class="{active: showData === 'activity'}" data-toggle="list" href="#activity" role="tab" aria-controls="activity" @click="showData = 'activity'"><i class="fa fa-fw fa-calendar" aria-hidden="true"></i>Testbed Activity</a>
+      <router-link class="nav-link" :to="{name: 'activity'}" :class="{active: showData === 'activity'}" role="tab"><i class="fa fa-fw fa-calendar"></i>Testbed Activity</router-link>
     </li>
   </ul>
   <div class="row">
@@ -115,9 +116,18 @@ export default {
     Drawgantt,
   },
 
+  props: {
+    showData: {
+      type: String,
+      default: () => 'properties',
+      validator: val => ['activity', 'properties'].includes(val),
+    },
+  },
+
   data () {
     return {
       isAdmin: auth.isAdmin,
+      isLoggedIn: auth.loggedIn,
       sites: [],
       nodes: [],
       runningExp: [],
@@ -133,21 +143,21 @@ export default {
       },
       search: '',
       showMap: false,
-      showData: 'properties',
     }
   },
 
   created () {
-    this.showData = this.selectedTab ? this.selectedTab : this.showData
     iotlab.getSitesDetails().then(data => { this.sites = data.sort((a, b) => a.site.localeCompare(b.site)) }).catch(err => {
       this.$notify({text: err.response.data.message || 'Failed to fetch sites details', type: 'error'})
     })
     iotlab.getNodes().then(data => { this.nodes = data }).catch(err => {
       this.$notify({text: err.response.data.message || 'Failed to fetch nodes', type: 'error'})
     })
-    iotlab.getRunningExperiments().then(data => { this.runningExp = data }).catch(err => {
-      this.$notify({text: err.response.data.message || 'Failed to fetch running experiments', type: 'error'})
-    })
+    if (auth.loggedIn) {
+      iotlab.getRunningExperiments().then(data => { this.runningExp = data }).catch(err => {
+        this.$notify({text: err.response.data.message || 'Failed to fetch running experiments', type: 'error'})
+      })
+    }
   },
 
   computed: {
@@ -162,9 +172,6 @@ export default {
         archis = this.sites.find(site => site.site === this.currentSite.site).archis.map(archi => archi.archi)
       }
       return archis.sort((a, b) => a.localeCompare(b))
-    },
-    selectedTab () {
-      return window.location.hash.substring(1)
     },
     filteredNodes () {
       let nodes = this.getNodes()
