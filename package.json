@@ -18,6 +18,7 @@
     "axios": "^0.18.0",
     "bootstrap": "^4.0.0-beta.2",
     "chart.js": "^2.8.0",
+    "chartjs-plugin-downsample": "^1.1.0",
     "chroma-js": "^2.0.3",
     "font-awesome": "^4.7.0",
     "google-palette": "^1.1.0",

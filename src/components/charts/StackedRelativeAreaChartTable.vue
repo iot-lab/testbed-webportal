@@ -9,6 +9,7 @@
 import { StackedRelativeAreaChart } from '@/components/charts/charts.js'
 import ChartTable from '@/components/charts/ChartTable'
 import { colorPalette } from '@/utils'
+import downsamplePlugin from 'chartjs-plugin-downsample'
 
 export default {
   name: 'StackedRelativeAreaChartTable',
@@ -41,6 +42,7 @@ export default {
 
   data () {
     return {
+      plugins: [ downsamplePlugin ],
     }
   },
 
@@ -80,7 +82,7 @@ export default {
           this.categories.forEach((category, index, array) => {
             dataSeries[index].running = running
             running += values[category] ? 100 * values[category] / total : 0
-            dataSeries[index].data.push({t: time, y: running})
+            dataSeries[index].data.push({x: time, y: running})
           })
         }
       })
@@ -105,6 +107,10 @@ export default {
               return label
             },
           },
+        },
+        downsample: {
+          enabled: true,
+          threshold: 500, // max number of points to display per dataset
         },
         elements: {
           line: {
