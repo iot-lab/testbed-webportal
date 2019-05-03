@@ -2,18 +2,19 @@
   <div>
     <label>{{label}}:</label>
     <chart-table :category_title="category_title" :value_titles="value_titles" :data="data_table"/>
-    <vue-apex-charts ref="chart"  type="area" :options="options" :series="data_series"/>
+    <chart ref="chart"  type="area" :options="options" :chartData="chartdata"/>
   </div>
 </template>
 <script>
-import VueApexCharts from 'vue-apexcharts'
+import { StackedRelativeAreaChart } from '@/components/charts/charts.js'
 import ChartTable from '@/components/charts/ChartTable'
+import { colorPalette } from '@/utils'
 
 export default {
   name: 'StackedRelativeAreaChartTable',
 
   components: {
-    VueApexCharts, ChartTable,
+    ChartTable, chart: StackedRelativeAreaChart,
   },
 
   props: {
@@ -55,74 +56,73 @@ export default {
 
       return dataTable
     },
-    data_series () {
+    chartdata () {
       let dataSeries = []
+      let colors = colorPalette(this.categories.length)
       this.categories.forEach((category, index, array) => {
-        dataSeries[index] = {data: [], name: category}
+        dataSeries[index] = {
+          data: [],
+          backgroundColor: colors[index],
+          label: category,
+          fill: '-1',
+        }
+        if (index === 0) {
+          dataSeries[index].fill = 'start'
+        }
       })
 
       this.data.map(el => {
-        let time = el[0].unix() * 1000
+        let time = el[0].toDate()
         let values = el[1].values
         if (values) {
           let total = el[1].total
+          let running = 0
           this.categories.forEach((category, index, array) => {
-            dataSeries[index].data.push([time, values[category] ? 100 * values[category] / total : 0])
+            dataSeries[index].running = running
+            running += values[category] ? 100 * values[category] / total : 0
+            dataSeries[index].data.push({t: time, y: running})
           })
         }
       })
-      return dataSeries
+      return {
+        datasets: dataSeries,
+      }
     },
     options () {
-      let times = this.data_series[0].data.map(el => el[0])
-      let minTimes = Math.min(...times)
-      let maxTimes = Math.max(...times)
-
       return {
-        chart: {
-          zoom: {
-            type: 'x',
-            enabled: true,
-          },
-          type: 'area',
-          stacked: true,
-        },
-        xaxis: {
-          type: 'datetime',
-          min: minTimes,
-          max: maxTimes,
-          labels: {
-            datetimeFormatter: {
-              year: 'yyyy',
-              month: 'MMM \'yy',
-              day: 'dd MMM',
-              hour: 'HH:mm',
+        tooltips: {
+          callbacks: {
+            label (tooltipItem, data) {
+              let item = data.datasets[tooltipItem.datasetIndex]
+              let label = item.label || ''
+
+              if (label) {
+                label += ': '
+              }
+              label += Math.round(100 * (tooltipItem.yLabel - item.running)) / 100
+              label += '%'
+
+              return label
             },
           },
-          title: {
-            text: this.category_title,
-          },
         },
-        yaxis: {
-          min: 0,
-          max: 100,
-          title: {
-            text: this.value_title,
-          },
-        },
-        dataLabels: {
-          enabled: false,
-        },
-        plotOptions: {
+        elements: {
           line: {
-            curve: 'straight',
+            tension: 0, // disables bezier curves
           },
         },
-        stroke: {
-          show: true,
-        },
-        markers: {
-          size: 0,
+        scales: {
+          xAxes: [{
+            type: 'time',
+          }],
+          yAxes: [{
+            type: 'linear',
+            labelString: this.value_title,
+            ticks: {
+              min: 0,
+              max: 100,
+            },
+          }],
         },
       }
     },

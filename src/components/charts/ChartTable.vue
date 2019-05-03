@@ -13,7 +13,7 @@
         </thead>
         <tbody>
         <template v-for="item in data">
-          <tr class="d-table-row" :key="item">
+          <tr class="d-table-row">
             <td v-for="element in item">{{element}}</td>
           </tr>
         </template>

@@ -32,6 +32,7 @@
                   :data='relativeUsersByContinent'/>
       <barct label='Number of users by category'
               category_title='Category'
+              value_title="Number of users"
               :data='usersByCategory'/>
       <stackedct label='Users by category over time'
                   category_title='Category'
@@ -40,15 +41,17 @@
                   :data='relativeUsersByCategory'/>
       <linect label="Running count number of users"
               category_title="Date"
-              value_title='Number of users over time'
+              value_title='Number of users'
               :data="usersRunningCount"/>
       <barct label='User registrations per month'
               category_title='Month'
               value_title="User Registration"
+              :chartOptions="{allowPie: false}"
               :data='userRegistrationsPerMonth'/>
       <barct label='User registrations per year'
               category_title='Year'
               value_title="User Registration"
+              :chartOptions="{allowPie: false}"
               :data='userRegistrationsPerYear'/>
     </div>
     <div v-else>

@@ -1,4 +1,5 @@
 import json2csv from 'json2csv'
+import palette from 'google-palette'
 
 // Sleep function (in millisecond)
 // e.g. await sleep(1000)
@@ -92,6 +93,10 @@ export const downloadAsFile = function (filename, file, mimeType = 'application/
   document.body.appendChild(link)
   link.click()
   link.remove()
+}
+
+export const colorPalette = function (len) {
+  return palette('qualitative', len).map(el => '#' + el)
 }
 
 // Compute MD5 hash of string

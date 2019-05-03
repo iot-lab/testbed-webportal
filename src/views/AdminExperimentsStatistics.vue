@@ -15,10 +15,12 @@
       <barct label='Number of experiment per month'
             category_title='Month (YYYY-MM)'
             value_title='Number of experiments'
+            :chartOptions="{allowPie: false}"
             :data='experimentsPerMonth'/>
       <barct label='Usage ratio per month'
               category_title='Month (YYYY-MM)'
               value_title='Usage ratio (%)'
+              :chartOptions="{allowPie: false}"
               :data='experimentUsageRatio'/>
       <linect label="Number of experiments over time"
               category_title="Date"
