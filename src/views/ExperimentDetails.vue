@@ -66,7 +66,7 @@
             <!-- <a class="dropdown-item" href="#" @click.prevent="sendCmd('debug-stop')"><i class="fa fa-fw fa-stop"></i> Stop debug</a> -->
             <li class="dropdown-divider"></li>
             <a class="dropdown-item" href="#" data-toggle="modal" data-target=".monitoring-modal"><i class="fa fa-fw fa-thermometer"></i> Update monitoring</a>
-            <a v-if="showMobilityCommand" class="dropdown-item" href="#" data-toggle="modal" data-target=".circuit-modal"><i class="fa fa-fw fa-random"></i> Update circuit</a>
+            <a v-if="showMobilityCommand" class="dropdown-item" href="#" data-toggle="modal" data-target=".circuit-modal"><i class="fa fa-fw fa-random"></i> Update mobility</a>
           </div>
         </div>
       </div>
@@ -115,7 +115,7 @@
                 <button v-if="hasSerial(node)" class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Open Terminal'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleTerminal(node)">
                   <i class="fa fa-fw fa-terminal"></i>
                 </button>
-                <button v-if="isMobile(node)" class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Update circuit'" data-toggle="modal" data-target=".circuit-modal" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node">
+                <button v-if="isMobile(node)" class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Update mobility'" data-toggle="modal" data-target=".circuit-modal" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node">
                   <i class="fa fa-fw fa-random"></i>
                 </button>
                 <button v-if="hasCamera(node)" class="btn btn-sm border-0 btn-outline-dark" data-toggle="button" aria-pressed="false" v-tooltip="'Video'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleCamera(node)">
