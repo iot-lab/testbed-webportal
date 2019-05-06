@@ -28,12 +28,12 @@
             xlink:href="#middlePoint"
             :transform="`translate(${coord.x}, ${coord.y}) rotate(${180 * coord.theta / Math.PI})`"/>
         <g v-for="(point, index) in valid_points" :key="`p-${index}`"
-          :transform="`translate(${toSvg(coordinate(point)).x}, ${toSvg(coordinate(point)).y}) `"
+          :transform="`translate(${toSvg(getCoordinate(point)).x}, ${toSvg(getCoordinate(point)).y}) `"
           v-on="!readOnly ? {'mousedown': (e) => robotMouseDown(e, index, point) } : {}"
           @touchstart.prevent="(e) => robotMouseDown(e, index, point)"
           >
-          <use xlink:href="#turtlebot" :transform="`rotate(${- 180 * coordinate(point).theta / Math.PI})`"/>
-          <circle r="0.3" fill="#00FF00DD" v-if="selectedIndex === index ? 'active' : ''"></circle>
+          <use xlink:href="#turtlebot" :transform="`rotate(${- 180 * getCoordinate(point).theta / Math.PI})`"/>
+          <circle r="0.3" fill="#00FF00DD" v-if="selected.index === index ? 'active' : ''"></circle>
           <circle r="0.25" fill="#FF000055" v-if="index === 0"></circle>
           <text class="label" text-anchor="left" font-size="0.5">{{point}}</text>
         </g>
@@ -59,48 +59,12 @@
       </g>
       <text font-size="8" x="0" :y="svgHeight - 2" @click="showNodesOverlay = !showNodesOverlay">Nodes {{ showNodesOverlay ? "&#9745;" : "&#9744;" }}</text>
     </svg>
-    <div v-if="!readOnly && this.selectedPoint">
-      <div class="form-group">
-        <table class="table table-sm">
-          <thead>
-          <tr>
-            <th>Point name</th>
-            <th>X</th>
-            <th>Y</th>
-            <th colspan="2">Direction (°)</th>
-          </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <select class="form-control" v-model.lazy="currentPointName">
-                  <option v-for="c in Object.keys(coordinates)" :key="c">{{c}}</option>
-                </select>
-              </td>
-              <td><input class="form-control form-control-sm" type="text" v-model="currentPointX" :readOnly="readOnly"></td>
-              <td><input class="form-control form-control-sm" type="text" v-model="currentPointY" :readOnly="readOnly"></td>
-              <td>
-                <angle-picker :value="currentPointTheta" :angles="[previousPointAngle, nextPointAngle]" @input="value => { currentPointTheta = value }"/>
-              </td>
-              <td>
-                <angle-input :value="currentPointTheta" @input="value => { currentPointTheta = value }"/>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div>
-        <i class="btn btn-success fa fa-check-circle float-right" v-tooltip.right="'Modify the point'" @click="submitModifyPoint"></i>
-        <i class="btn btn-info fa fa-window-close float-right" v-tooltip.right="'Close'" @click="deselectPoint"></i>
-        <i class="btn btn-danger fa fa-trash float-right" v-tooltip.right="'Delete'" @click="deletePoint"></i>
-      </div>
-    </div>
   </div>
 
 </template>
 <script>
 import { iotlab } from '@/rest'
-import { nextString } from '@/utils'
+import { nextString, nextInArray } from '@/utils'
 import AngleInput from '@/components/mobility/AngleInput'
 import AnglePicker from '@/components/mobility/AnglePicker'
 import $ from 'jquery'
@@ -112,6 +76,10 @@ export default {
     AngleInput,
   },
   props: {
+    mode: {
+      type: String,
+      required: true,
+    },
     site: {
       type: String,
       required: true,
@@ -125,44 +93,32 @@ export default {
     },
     points: {
       type: Array,
-      required: true,
+      required: false,
     },
     coordinates: {
       type: Object,
-      required: true,
+      required: false,
+    },
+    coordinate: {
+      type: Object,
+      required: false,
+    },
+    selected: {
+      type: Object,
+      required: false,
+      default: () => ({}),
     },
   },
 
   computed: {
-    previousPointAngle () {
-      let previousPoint = this.coordinates[this.previousPoint(this.selectedIndex)]
-      let thisPoint = this.coordinates[this.selectedPoint]
-      if (previousPoint) {
-        return {
-          value: 180 + (180 / Math.PI) * Math.atan2(previousPoint.y - thisPoint.y, previousPoint.x - thisPoint.x),
-        }
-      }
-    },
-    nextPointAngle () {
-      let nextPoint = this.coordinates[this.nextPoint(this.selectedIndex)]
-      let thisPoint = this.coordinates[this.selectedPoint]
-      if (nextPoint && thisPoint) {
-        return {
-          value: (180 / Math.PI) * Math.atan2(nextPoint.y - thisPoint.y, nextPoint.x - thisPoint.x),
-        }
-      }
-    },
-    currentPointDegree () {
-      return Math.round((180 / Math.PI) * (1e4 * this.currentPointTheta)) / 1e4
-    },
     valid_points () {
-      return this.points.filter(p => this.coordinate(p) !== undefined)
+      return this.points.filter(p => this.getCoordinate(p) !== undefined)
     },
     middle_points () {
       let middlePoints = []
       let pointsLength = this.points.length
       for (var i = 0; i < pointsLength; i++) {
-        var next = this.nextPoint(i)
+        var next = nextInArray(this.points, i, this.loop)
         if (!next) break
         let pointCoord = this.toSvg(this.coordinates[this.points[i]])
         let nextCoord = this.toSvg(this.coordinates[next])
@@ -228,12 +184,6 @@ export default {
       mapConfig: {},
       showTooltip: false,
       showNodesOverlay: false,
-      currentPointName: undefined,
-      currentPointTheta: undefined,
-      currentPointX: undefined,
-      currentPointY: undefined,
-      selectedIndex: undefined,
-      selectedPoint: undefined,
       nodes: [],
       xAxisMargin: 70, // 30 pixels between map and svg
       yAxisMargin: 30, // 30 pixels between map and svg
@@ -250,24 +200,6 @@ export default {
   },
 
   methods: {
-    nextPoint (i) {
-      if (i === this.points.length - 1) {
-        if (this.loop) {
-          return this.points[0]
-        }
-      } else {
-        return this.points[i + 1]
-      }
-    },
-    previousPoint (i) {
-      if (i === 0) {
-        if (this.loop) {
-          return this.points[this.points.length - 1]
-        }
-      } else {
-        return this.points[i - 1]
-      }
-    },
     stepArray (start, step, n) {
       let values = []
       let value = start
@@ -286,33 +218,7 @@ export default {
     hideTooltip () {
       $('.tooltip[role=tooltip]').remove()
     },
-    deletePoint () {
-      this.hideTooltip()
-      if (this.selectedPoint) {
-        this.$emit('removePoint', this.selectedIndex)
-        this.deselectPoint()
-      }
-    },
-    submitModifyPoint () {
-      this.hideTooltip()
-      this.$emit('setCoordinate', this.currentPointName, {
-        x: this.currentPointX,
-        y: this.currentPointY,
-        theta: this.currentPointTheta,
-      })
-      this.$emit('setPoint', this.selectedIndex, this.currentPointName)
-      this.deselectPoint()
-    },
-    deselectPoint () {
-      this.hideTooltip()
-      this.selectedIndex = undefined
-      this.selectedPoint = undefined
-      this.currentPointName = undefined
-      this.currentPointTheta = undefined
-      this.currentPointX = undefined
-      this.currentPointY = undefined
-    },
-    coordinate (point) {
+    getCoordinate (point) {
       return this.coordinates[point]
     },
     getRealLocation (e) {
@@ -329,24 +235,23 @@ export default {
       return {x: svgP.x, y: svgP.y}
     },
     robotMouseDown (evt, pointIndex, pointName) {
-      if (pointIndex === this.selectedIndex) {
+      if (pointIndex === this.selected.index) {
         this.deselectPoint()
       } else {
-        this.selectedIndex = pointIndex
-        this.selectedPoint = pointName
-        this.currentPointName = pointName
-        this.currentPointTheta = this.coordinates[pointName].theta
-        this.currentPointX = this.coordinates[pointName].x
-        this.currentPointY = this.coordinates[pointName].y
+        this.$emit('selectPoint', {index: pointIndex, name: pointName})
       }
+    },
+    deselectPoint () {
+      this.$emit('deselectPoint')
+      this.hideTooltip()
     },
     mouseDown (evt, clickPos) {
       if (evt.buttons !== 1) return // left click only
       let pos = clickPos !== undefined ? clickPos : this.getRealLocation(evt)
-      let ptName = this.selectedPoint
+      let ptName = this.selected.name
       let coord = this.coordinates[ptName]
       pos.theta = coord ? coord.theta : 0
-      if (this.selectedIndex === undefined) {
+      if (this.selected.index === undefined) {
         let lastPoint = this.points.slice(-1)[0]
         let lastCoord = this.coordinates[lastPoint]
         ptName = nextString(lastPoint)
@@ -370,15 +275,6 @@ export default {
         y: this.realOrigin.y + this.realHeight - pos.y * this.realHeight / this.mapHeight,
       }
       return value
-    },
-    mousemove: function (evt) {
-      this.tooltip = {x: evt.x, y: evt.y}
-    },
-    mouseenter: function (evt) {
-      this.showTooltip = true
-    },
-    mouseleave: function (evt) {
-      this.showTooltip = false
     },
     updateSite (site) {
       this.siteLoaded = false

@@ -109,3 +109,23 @@ export const nextString = function (input) {
     return input.substring(0, input.length - 1) + alphabet[idx + 1]
   }
 }
+
+export const nextInArray = function (array, i, loop) {
+  if (i === array.length - 1) {
+    if (loop) {
+      return array[0]
+    }
+  } else {
+    return array[i + 1]
+  }
+}
+
+export const previousInArray = function (array, i, loop) {
+  if (i === 0) {
+    if (loop) {
+      return array[array.length - 1]
+    }
+  } else {
+    return array[i - 1]
+  }
+}

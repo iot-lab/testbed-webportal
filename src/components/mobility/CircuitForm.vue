@@ -44,11 +44,49 @@
       :loop="circuitForm.loop"
       :points="circuitForm.points"
       :readOnly="readOnly"
+      :mode="`circuit`"
       :coordinates="circuitForm.coordinates"
+      :selected="{index: selected.index, name: selected.name, x: selected.x, y:selected.y, theta:selected.theta}"
       @setCoordinate="(ptName, pos) => setCoordinate(ptName, pos)"
       @addPoint="(ptName) => circuitForm.points.push(ptName)"
-      @setPoint="setPoint"
-      @removePoint="removePoint"/>
+      @selectPoint="selectPoint"
+      @deselectPoint="deselectPoint"/>
+    <div v-if="!readOnly && this.selected.name">
+      <div class="form-group">
+        <table class="table table-sm">
+          <thead>
+          <tr>
+            <th>Point name</th>
+            <th>X</th>
+            <th>Y</th>
+            <th colspan="2">Direction (°)</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <select class="form-control" v-model.lazy="selected.name">
+                  <option v-for="c in Object.keys(circuitForm.coordinates)" :key="c">{{c}}</option>
+                </select>
+              </td>
+              <td><input class="form-control form-control-sm" type="text" v-model="selected.x" :readOnly="readOnly"></td>
+              <td><input class="form-control form-control-sm" type="text" v-model="selected.y" :readOnly="readOnly"></td>
+              <td>
+                <angle-picker :value="selected.theta" :angles="[previousPointAngle, nextPointAngle]" @input="value => { selected.theta = value }"/>
+              </td>
+              <td>
+                <angle-input :value="selected.theta" @input="value => { selected.theta = value }"/>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <i class="btn btn-success fa fa-check-circle float-right" v-tooltip.right="'Modify the point'" @click="submitModifyPoint"></i>
+        <i class="btn btn-info fa fa-window-close float-right" v-tooltip.right="'Close'" @click="deselectPoint"></i>
+        <i class="btn btn-danger fa fa-trash float-right" v-tooltip.right="'Delete'" @click="deletePoint"></i>
+      </div>
+    </div>
     <div class="btn btn-sm btn-secondary" v-on:click="showDetails=!showDetails">{{showDetails ? 'Hide ' : 'Show '}} Details</div>
     <div v-if="showDetails">
     <div class="form-group">
@@ -130,6 +168,7 @@ import { iotlab } from '@/rest'
 import AngleInput from '@/components/mobility/AngleInput'
 import AnglePicker from '@/components/mobility/AnglePicker'
 import RobotMapView from '@/components/mobility/RobotMapView'
+import { nextInArray, previousInArray } from '@/utils'
 import $ from 'jquery'
 import Vue from 'vue'
 
@@ -159,6 +198,7 @@ export default {
         coordinates: {},
       },
       showDetails: false,
+      selected: {},
     }
   },
 
@@ -185,14 +225,62 @@ export default {
         return true
       }
     },
+    previousPointAngle () {
+      let previousPoint = this.circuitForm.coordinates[previousInArray(this.circuitForm.points, this.selected.index, this.circuitForm.loop)]
+      let thisPoint = this.circuitForm.coordinates[this.selected.name]
+      if (previousPoint) {
+        return {
+          value: 180 + (180 / Math.PI) * Math.atan2(previousPoint.y - thisPoint.y, previousPoint.x - thisPoint.x),
+        }
+      }
+    },
+    nextPointAngle () {
+      let nextPoint = this.circuitForm.coordinates[nextInArray(this.circuitForm.points, this.selected.index, this.circuitForm.loop)]
+      let thisPoint = this.circuitForm.coordinates[this.selected.name]
+      if (nextPoint && thisPoint) {
+        return {
+          value: (180 / Math.PI) * Math.atan2(nextPoint.y - thisPoint.y, nextPoint.x - thisPoint.x),
+        }
+      }
+    },
   },
 
   methods: {
+    deletePoint () {
+      this.hideTooltip()
+      if (this.selected.name) {
+        this.removePoint(this.selected.index)
+        this.deselectPoint()
+      }
+    },
+    submitModifyPoint () {
+      this.hideTooltip()
+      this.setCoordinate(this.selected.name, {
+        x: this.selected.x,
+        y: this.selected.y,
+        theta: this.selected.theta,
+      })
+      this.setPoint(this.selected.index, this.selected.name)
+      this.deselectPoint()
+    },
+    selectPoint (select) {
+      select.theta = this.circuitForm.coordinates[select.name].theta
+      select.x = this.circuitForm.coordinates[select.name].x
+      select.y = this.circuitForm.coordinates[select.name].y
+
+      this.selected = select
+    },
+    deselectPoint () {
+      this.hideTooltip()
+      this.selected = {}
+    },
     setCoordinate (coordinateName, coordinate) {
       Vue.set(this.circuitForm.coordinates, coordinateName, coordinate)
+      if (this.selected.name === coordinateName) {
+        this.selectPoint({index: this.selected.index, name: coordinateName})
+      }
     },
     changeCoordinateName (coordinateName, coordinate, newCoordinateName) {
-      console.log('Vue set ' + [coordinateName, coordinate, newCoordinateName])
       Vue.set(this.circuitForm.coordinates, newCoordinateName, coordinate)
       Vue.delete(this.circuitForm.coordinates, coordinateName)
     },
