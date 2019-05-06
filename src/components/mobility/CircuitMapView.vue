@@ -136,15 +136,19 @@ export default {
     previousPointAngle () {
       let previousPoint = this.coordinates[this.previousPoint(this.selectedIndex)]
       let thisPoint = this.coordinates[this.selectedPoint]
-      return {
-        value: 180 + (180 / Math.PI) * Math.atan2(previousPoint.y - thisPoint.y, previousPoint.x - thisPoint.x),
+      if (previousPoint) {
+        return {
+          value: 180 + (180 / Math.PI) * Math.atan2(previousPoint.y - thisPoint.y, previousPoint.x - thisPoint.x),
+        }
       }
     },
     nextPointAngle () {
       let nextPoint = this.coordinates[this.nextPoint(this.selectedIndex)]
       let thisPoint = this.coordinates[this.selectedPoint]
-      return {
-        value: (180 / Math.PI) * Math.atan2(nextPoint.y - thisPoint.y, nextPoint.x - thisPoint.x),
+      if (nextPoint && thisPoint) {
+        return {
+          value: (180 / Math.PI) * Math.atan2(nextPoint.y - thisPoint.y, nextPoint.x - thisPoint.x),
+        }
       }
     },
     currentPointDegree () {
@@ -225,6 +229,8 @@ export default {
       showNodesOverlay: false,
       currentPointName: undefined,
       currentPointTheta: undefined,
+      currentPointX: undefined,
+      currentPointY: undefined,
       selectedIndex: undefined,
       selectedPoint: undefined,
       nodes: [],
@@ -293,9 +299,12 @@ export default {
       }
     },
     submitModifyPoint () {
-      let coord = this.coordinates[this.selectedPoint]
-      coord.theta = this.currentPointTheta
-      this.$emit('setCoordinate', this.currentPointName, coord)
+      this.hideTooltip()
+      this.$emit('setCoordinate', this.currentPointName, {
+        x: this.currentPointX,
+        y: this.currentPointY,
+        theta: this.currentPointTheta,
+      })
       this.$emit('setPoint', this.selectedIndex, this.currentPointName)
       this.deselectPoint()
     },
@@ -305,6 +314,8 @@ export default {
       this.selectedPoint = undefined
       this.currentPointName = undefined
       this.currentPointTheta = undefined
+      this.currentPointX = undefined
+      this.currentPointY = undefined
     },
     coordinate (point) {
       return this.coordinates[point]
@@ -330,11 +341,13 @@ export default {
         this.selectedPoint = pointName
         this.currentPointName = pointName
         this.currentPointTheta = this.coordinates[pointName].theta
+        this.currentPointX = this.coordinates[pointName].x
+        this.currentPointY = this.coordinates[pointName].y
       }
     },
-    mouseDown (evt) {
+    mouseDown (evt, clickPos) {
       if (evt.buttons !== 1) return // left click only
-      let pos = this.getRealLocation(evt)
+      let pos = clickPos !== undefined ? clickPos : this.getRealLocation(evt)
       let ptName = this.selectedPoint
       let coord = this.coordinates[ptName]
       pos.theta = coord ? coord.theta : 0
@@ -343,7 +356,11 @@ export default {
         let lastCoord = this.coordinates[lastPoint]
         ptName = nextString(lastPoint)
         this.$emit('addPoint', ptName)
-        pos.theta = Math.atan2(pos.y - lastCoord.y, pos.x - lastCoord.x)
+        if (lastCoord) {
+          pos.theta = Math.atan2(pos.y - lastCoord.y, pos.x - lastCoord.x)
+        } else {
+          pos.theta = 0
+        }
       }
       this.$emit('setCoordinate', ptName, pos)
     },

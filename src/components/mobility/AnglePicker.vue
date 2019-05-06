@@ -88,6 +88,7 @@ export default {
         }
       }
       for (let angle of this.angles) {
+        if (angle === undefined) continue
         let theta = (Math.PI / 180) * angle.value
         let that = this
         let points = [
