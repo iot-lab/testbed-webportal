@@ -11,6 +11,18 @@
         </defs>
         <rect id="map" :width="realWidth" :height="realHeight" x="0" y="0" fill="none" stroke="#000000" stroke-width="0.2"/>
         <image :width="realWidth" :height="realHeight" x="0" y="0" :xlink:href="site_image" v-on="!readOnly ? {'mousedown': mouseDown} : {}"/>
+        <g v-for="node in nodes" :key="node.network_address" v-if="showNodesOverlay"
+           :transform="`translate(${toSvg(node).x}, ${toSvg(node).y}) `">
+          <circle r="0.2" fill="#20539d55" v-tooltip:auto=""
+                  v-adv-tooltip="{
+                    title: node.name,
+                    placement: 'auto',
+                    trigger: 'hover',
+                    html: true,
+                    delay: 400,
+                    }"
+                  v-on="!readOnly ? {'mousedown': (e) => mouseDown(e, {x: node.x, y: node.y})} : {}"/>
+        </g>
         <path class="robottraj" :d="pathString"></path>
         <use v-for="(coord, index) in middle_points" :key="`m-${index}`"
             xlink:href="#middlePoint"
@@ -45,6 +57,7 @@
           </text>
         </g>
       </g>
+      <text font-size="8" x="0" :y="svgHeight - 2" @click="showNodesOverlay = !showNodesOverlay">Nodes {{ showNodesOverlay ? "&#9745;" : "&#9744;" }}</text>
     </svg>
     <div class="card float-top" v-if="!readOnly && this.selectedPoint">
       <div class="row m-2">
@@ -200,10 +213,12 @@ export default {
       realOrigin: {x: 0, y: 0},
       mapConfig: {},
       showTooltip: false,
+      showNodesOverlay: false,
       currentPointName: undefined,
       currentPointTheta: undefined,
       selectedIndex: undefined,
       selectedPoint: undefined,
+      nodes: [],
       xAxisMargin: 70, // 30 pixels between map and svg
       yAxisMargin: 30, // 30 pixels between map and svg
       config: {},
@@ -343,10 +358,24 @@ export default {
       this.siteLoaded = false
       Promise.all([iotlab.getRobotsSiteMapImage(site),
         iotlab.getRobotsSiteMapConfig(site),
-      ]).then(async ([b64, cfg]) => {
+        iotlab.getNodes(),
+      ]).then(async ([b64, cfg, nodes]) => {
         this.site_image = 'data:image/png;base64, ' + b64
         this.site_image_dimensions = await this.getImageDimensions(this.site_image)
         this.mapConfig = cfg
+        let func = node => node.x + '_' + node.y
+        this.nodes = nodes
+          .filter(node => node.site === this.site && node.x !== ' ' && node.mobile === 0)
+          .map(node => ({x: Number(node.x), y: Number(node.y), z: Number(node.z), name: `${node.network_address.split('.')[0]} z=${Number(node.z)}`}))
+          // groupbyFunc
+          .reduce(function (rv, element) {
+            if (rv[func(element)]) {
+              rv[func(element)].name += ('<br>' + element.name)
+            } else {
+              rv[func(element)] = element
+            }
+            return rv
+          }, {})
 
         this.mapWidth = this.site_image_dimensions.width
         this.mapHeight = this.site_image_dimensions.height
