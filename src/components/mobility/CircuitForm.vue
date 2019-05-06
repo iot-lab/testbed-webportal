@@ -99,9 +99,11 @@
           <td><input class="form-control form-control-sm" type="text" v-model="circuitForm.points[index]" :readOnly="readOnly"></td>
           <td class="text-right" v-if="!readOnly">
             <div class="btn-group">
+              <i class="btn btn-outline-success fa fa-arrow-up" v-tooltip:top="'Move Up'" :class="{disabled: index === 0}" @click="swap(index - 1, index)"></i>
               <i class="btn btn-outline-success fa fa-plus" v-tooltip:top="'Add before'" @click="addPoint(index)"></i>
               <i class="btn btn-outline-danger fa fa-trash" v-tooltip:top="'Delete'" @click="hideTooltip(); removePoint(index)"></i>
               <i class="btn btn-outline-success fa fa-plus" v-tooltip:top="'Add after'" @click="addPoint(index+1)"></i>
+              <i class="btn btn-outline-success fa fa-arrow-down" v-tooltip:top="'Move Down'" :class="{disabled: index === circuitForm.points.length - 1}" @click="swap(index, index + 1)"></i>
             </div>
           </td>
         </tr>
@@ -197,6 +199,13 @@ export default {
     },
     addCoordinate () {
       Vue.set(this.circuitForm.coordinates, '', { theta: 0, degree: 0 })
+    },
+    swap (i, j) {
+      if (i > 0 && j < this.circuitForm.points.length) {
+        let tmp = this.circuitForm.points[j]
+        Vue.set(this.circuitForm.points, j, this.circuitForm.points[i])
+        Vue.set(this.circuitForm.points, i, tmp)
+      }
     },
     addPoint (index) {
       this.circuitForm.points.splice(index, 0, '')
