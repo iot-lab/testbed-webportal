@@ -38,9 +38,11 @@
       <tbody v-for="mobility_type in mobility_types" :key="mobility_type.name">
       <tr v-for="mobility in filterByType(mobility_type, store[mobility_type.name])" :key="mobility.name">
         <td>
-          <a v-if="select" href="#" @click.prevent="selectItem(mobility)">{{mobility.name}}</a>
+          <a v-if="select" href="#" @click.prevent="selectItem(mobility)">
+            <mobility-link :mobility_type="mobility_type.name" :mobility="mobility"/>
+          </a>
           <router-link v-else :to="{name: mobility_type.rlink, params: {name: mobility.name}}">
-            {{mobility.name}}
+            <mobility-link :mobility_type="mobility_type.name" :mobility="mobility"/>
           </router-link>
         </td>
         <td v-if="filterMobilityType === 'circuits'">{{mobility.site}}</td>
@@ -53,9 +55,12 @@
 <script>
 import { iotlab } from '@/rest'
 import store from '@/store'
+import MobilityLink from '@/components/mobility/MobilityLink'
 
 export default {
   name: 'MobilityList',
+
+  components: { MobilityLink },
 
   props: {
     site: {
@@ -78,7 +83,6 @@ export default {
       sites: [],
       filterType: 'userdefined',
       filterMobilityType: 'all',
-
     }
   },
 
