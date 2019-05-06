@@ -106,7 +106,7 @@ import AnglePicker from '@/components/mobility/AnglePicker'
 import $ from 'jquery'
 
 export default {
-  name: 'CircuitMapView',
+  name: 'RobotMapView',
   components: {
     AnglePicker,
     AngleInput,
@@ -114,6 +114,7 @@ export default {
   props: {
     site: {
       type: String,
+      required: true,
     },
     loop: {
       type: Boolean,
@@ -246,12 +247,6 @@ export default {
 
   mounted () {
     this.updateSite(this.site)
-  },
-
-  watch: {
-    site: function (site) {
-      this.updateSite(site)
-    },
   },
 
   methods: {

@@ -38,7 +38,7 @@
       <span class="custom-control-indicator"></span>
       <span class="custom-control-description">Loop</span>
     </label>
-    <circuit-map-view
+    <robot-map-view
       v-if="circuitForm.site"
       :site="circuitForm.site"
       :loop="circuitForm.loop"
@@ -48,7 +48,7 @@
       @setCoordinate="(ptName, pos) => setCoordinate(ptName, pos)"
       @addPoint="(ptName) => circuitForm.points.push(ptName)"
       @setPoint="setPoint"
-      @removePoint="removePoint"></circuit-map-view>
+      @removePoint="removePoint"/>
     <div class="btn btn-sm btn-secondary" v-on:click="showDetails=!showDetails">{{showDetails ? 'Hide ' : 'Show '}} Details</div>
     <div v-if="showDetails">
     <div class="form-group">
@@ -129,7 +129,7 @@ import Multiselect from 'vue-multiselect'
 import { iotlab } from '@/rest'
 import AngleInput from '@/components/mobility/AngleInput'
 import AnglePicker from '@/components/mobility/AnglePicker'
-import CircuitMapView from '@/components/mobility/CircuitMapView'
+import RobotMapView from '@/components/mobility/RobotMapView'
 import $ from 'jquery'
 import Vue from 'vue'
 
@@ -137,7 +137,7 @@ import Vue from 'vue'
 
 export default {
   name: 'CircuitForm',
-  components: {Multiselect, CircuitMapView, AngleInput, AnglePicker},
+  components: {Multiselect, RobotMapView, AngleInput, AnglePicker},
 
   props: {
     mobilityCircuit: {
