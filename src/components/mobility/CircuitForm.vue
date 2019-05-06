@@ -1,6 +1,7 @@
 <template>
   <form @submit.prevent="updateMobilityCircuit" class="mt-3">
-    <div class="form-group">
+  <div class="form-group row">
+    <div class="col-6">
       <label>Name</label>
       <input v-model="circuitForm.name"
              class="form-control"
@@ -14,7 +15,7 @@
         Invalid name. Only alphanumeric characters allowed [0-9A-Za-z_]
       </div>
     </div>
-    <div class="form-group">
+    <div class="col-6">
       <label>Site</label>
       <multiselect v-model="circuitForm.site"
                    v-if="!readOnly"
@@ -30,6 +31,7 @@
              type="text"
              :readOnly="readOnly">
     </div>
+  </div>
     <div v-if="circuitForm.site">
     <label class="custom-control custom-checkbox">
       <input v-model="circuitForm.loop" type="checkbox" :readOnly="readOnly" class="custom-control-input">
@@ -48,7 +50,7 @@
       @setPoint="setPoint"
       @removePoint="removePoint"></circuit-map-view>
     <div class="btn btn-sm btn-secondary" v-on:click="showDetails=!showDetails">{{showDetails ? 'Hide ' : 'Show '}} Details</div>
-    <div class="container" v-if="showDetails">
+    <div v-if="showDetails">
     <div class="form-group">
       <h3 class="text-muted">Points coordinates</h3>
       <table class="table table-sm">

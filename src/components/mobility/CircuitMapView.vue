@@ -59,27 +59,35 @@
       </g>
       <text font-size="8" x="0" :y="svgHeight - 2" @click="showNodesOverlay = !showNodesOverlay">Nodes {{ showNodesOverlay ? "&#9745;" : "&#9744;" }}</text>
     </svg>
-    <div class="card float-top" v-if="!readOnly && this.selectedPoint">
-      <div class="row m-2">
-        <div class="col-6">
-          <div class="form-group">
-            <label class="form-control-label">Existing coordinate point</label>
-            <select class="form-control" v-model.lazy="currentPointName">
-              <option v-for="c in Object.keys(this.coordinates)" :key="c">{{c}}</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-control-label">Name for new coordinate point</label>
-            <input class="form-control" type="text" v-model.lazy="currentPointName"/>
-          </div>
-        </div>
-        <div class="form-group col-6">
-          <label class="form-control-label">Point rotation</label>
-          <div class="form-control">
-            <angle-picker :value="currentPointTheta" :angles="[previousPointAngle, nextPointAngle]" @input="value => { currentPointTheta = value }"/>
-            <angle-input :value="currentPointTheta" @input="value => { currentPointTheta = value }"/>
-          </div>
-        </div>
+    <div v-if="!readOnly && this.selectedPoint">
+      <div class="form-group">
+        <table class="table table-sm">
+          <thead>
+          <tr>
+            <th>Point name</th>
+            <th>X</th>
+            <th>Y</th>
+            <th colspan="2">Direction (°)</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <select class="form-control" v-model.lazy="currentPointName">
+                  <option v-for="c in Object.keys(coordinates)" :key="c">{{c}}</option>
+                </select>
+              </td>
+              <td><input class="form-control form-control-sm" type="text" v-model="currentPointX" :readOnly="readOnly"></td>
+              <td><input class="form-control form-control-sm" type="text" v-model="currentPointY" :readOnly="readOnly"></td>
+              <td>
+                <angle-picker :value="currentPointTheta" :angles="[previousPointAngle, nextPointAngle]" @input="value => { currentPointTheta = value }"/>
+              </td>
+              <td>
+                <angle-input :value="currentPointTheta" @input="value => { currentPointTheta = value }"/>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <div>
         <i class="btn btn-success fa fa-check-circle float-right" v-tooltip.right="'Modify the point'" @click="submitModifyPoint"></i>
