@@ -103,6 +103,7 @@ import { iotlab } from '@/rest'
 import { nextString } from '@/utils'
 import AngleInput from '@/components/mobility/AngleInput'
 import AnglePicker from '@/components/mobility/AnglePicker'
+import $ from 'jquery'
 
 export default {
   name: 'CircuitMapView',
@@ -281,7 +282,11 @@ export default {
     fromSvg (pos) {
       return {x: pos.x + this.realOrigin.x, y: this.realOrigin.y + this.realHeight - pos.y}
     },
+    hideTooltip () {
+      $('.tooltip[role=tooltip]').remove()
+    },
     deletePoint () {
+      this.hideTooltip()
       if (this.selectedPoint) {
         this.$emit('removePoint', this.selectedIndex)
         this.deselectPoint()
@@ -295,6 +300,7 @@ export default {
       this.deselectPoint()
     },
     deselectPoint () {
+      this.hideTooltip()
       this.selectedIndex = undefined
       this.selectedPoint = undefined
       this.currentPointName = undefined
