@@ -120,7 +120,7 @@ export default {
         return
       }
       let [nodeId, site] = this.node.split('.')
-      let connType = this.node.startsWith('a8') ? 'ssh' : 'serial'
+      let connType = this.node.startsWith('a8') ? 'ssh' : 'serial/text'
 
       let baseUrl = `wss://${process.env.VUE_APP_IOTLAB_HOST}:443/ws`
       let wsUrl = `${baseUrl}/${site}/${this.expId}/${nodeId}/${connType}`
@@ -135,7 +135,7 @@ export default {
         let buffer = ''
 
         term.on('key', (key, event) => {
-          if (connType === 'serial' && event.key === 'Backspace') {
+          if (connType === 'serial/text' && event.key === 'Backspace') {
             term.write('\b \b')
             buffer = buffer.slice(0, -1)
           } else if (event.key === 'Del') {
