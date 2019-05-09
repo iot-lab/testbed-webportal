@@ -12,7 +12,7 @@
       <li v-if="experiment.stop_date !== '1970-01-01T00:00:00Z'">Stopped <b>{{experiment.stop_date | formatDateTimeSec}}</b></li>
       <li v-if="experiment.state !== 'Running'">
         Duration <b>{{experiment.submitted_duration | humanizeDuration}}</b>
-        <span class="ml-1" v-if="experiment.effective_duration && experiment.effective_duration < experiment.submitted_duration">(stopped after {{experiment.effective_duration | humanizeDuration}})</span>
+        <span class="ml-1" v-if="stopped(experiment)">(stopped after {{experiment.effective_duration | humanizeDuration}})</span>
       </li>
       <li v-if="experiment.state === 'Running'">
         Duration
@@ -115,6 +115,9 @@
                 <button v-if="hasSerial(node)" class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Open Terminal'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleTerminal(node)">
                   <i class="fa fa-fw fa-terminal"></i>
                 </button>
+                <button v-if="isMobile(node)" class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Open Map'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleMap(node)">
+                  <i class="fa fa-fw fa-map"></i>
+                </button>
                 <button v-if="isMobile(node)" class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Update mobility'" data-toggle="modal" data-target=".circuit-modal" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node">
                   <i class="fa fa-fw fa-random"></i>
                 </button>
@@ -132,6 +135,7 @@
               <div class="d-flex align-items-center justify-content-between bg-secondary">
                 <terminal :ref="`term_${node}`" :cols="80" :rows="20" :node="node" :expId="id" :user="currentUser" :token="token" style="flex-grow: 1"></terminal>
                 <img class="camera" v-if="hasCamera(node)" v-show="(token !== undefined) && cameraVisible(node)" :src="cameraUrl(node)" align="right">
+                <robot-map-view :ref="`map_${node}`" mode="map" :site="site(node)" :points="[node]" :coordinates="robotCoordinates" ></robot-map-view>
               </div>
             </td>
           </tr>
@@ -210,6 +214,7 @@ import Terminal from '@/components/Terminal'
 import MonitoringList from '@/components/MonitoringList'
 import FirmwareList from '@/components/FirmwareList'
 import MobilityList from '@/components/mobility/List'
+import RobotMapView from '@/components/mobility/RobotMapView'
 import { iotlab } from '@/rest'
 import { auth } from '@/auth'
 import { experimentStates, extractArchiFromAddress, extractSiteFromAddress } from '@/assets/js/iotlab-utils'
@@ -217,6 +222,8 @@ import { capitalize, pluralize, downloadAsFile } from '@/utils'
 import $ from 'jquery'
 
 var polling = true
+var pollingPos = false
+var blurred = false
 
 export default {
   name: 'ExperimentDetails',
@@ -226,6 +233,7 @@ export default {
     MonitoringList,
     FirmwareList,
     MobilityList,
+    RobotMapView,
   },
 
   props: {
@@ -242,6 +250,8 @@ export default {
       selectedNodes: [],
       nodes: [],
       nodesCameraState: {},
+      nodesMapState: {},
+      robotCoordinates: {},
       token: undefined,
       allSelected: false,
       firmwareFile: undefined,
@@ -254,6 +264,9 @@ export default {
   computed: {
     deployedNodes () {
       return this.experiment.nodes.filter(node => this.getDeploymentStatus(node) === 'Success')
+    },
+    mobileNodes () {
+      return this.experiment.nodes.filter(node => this.isMobile(node))
     },
     startDate () {
       return [this.experiment.start_date, this.experiment.scheduled_date, this.experiment.submission_date].find(date => date !== '1970-01-01T00:00:00Z')
@@ -292,6 +305,7 @@ export default {
         html: true,
       })
     })
+    this.createPollingPos()
   },
 
   beforeRouteUpdate (to, from, next) {
@@ -313,6 +327,7 @@ export default {
 
   destroyed () {
     polling = clearTimeout(polling)
+    this.destroyPolling()
   },
 
   methods: {
@@ -344,6 +359,51 @@ export default {
       } catch (err) {
         this.$notify({ text: err.message, type: 'error' })
       }
+    },
+
+    disablePolling () {
+      if (!blurred) {
+        blurred = true
+        this.$notify({text: 'Position refresh paused', type: 'info', duration: -1, group: 'alt'})
+      }
+    },
+
+    enablePolling () {
+      blurred = false
+      this.$notify({group: 'alt', clean: true})
+    },
+
+    createPollingPos () {
+      if (this.nodes.find(n => n.mobile) && !pollingPos) {
+        console.debug('pollingPos started')
+        // start polling callback (1 seconds)
+        pollingPos = setInterval(() => this.getPositions(), 1000)
+        // poll only when browser window is active
+        addEventListener('blur', this.disablePolling)
+        addEventListener('focus', this.enablePolling)
+      }
+    },
+
+    destroyPolling () {
+      if (pollingPos) {
+        this.enablePolling()
+        this.stopPolling()
+        removeEventListener('blur', this.disablePolling)
+        removeEventListener('focus', this.enablePolling)
+      }
+    },
+
+    getPositions () {
+      console.log(new Date())
+      iotlab.getRobotStatus(this.id, this.mobileNodes).then(status => {
+        Object.keys(status).forEach(function (key) {
+          status[key] = status[key].position
+        })
+        this.robotCoordinates = status
+      })
+    },
+    stopped (experiment) {
+      return experiment.effective_duration && experiment.effective_duration < experiment.submitted_duration
     },
     canFlash (node) {
       return !(node.startsWith('a8-') || node.startsWith('rtl-sdr-') ||
@@ -379,10 +439,7 @@ export default {
       return this.experiment.profileassociations.reduce((acc, asso) => (asso.nodes.some(n => n === (node.alias || node)) ? asso.profilename : acc), '')
     },
     getDeploymentStatus (node) {
-      if (this.deploymentStatus === undefined) return ''
-      if ((this.deploymentStatus['0'] || []).includes(node)) return 'Success'
-      if ((this.deploymentStatus['1'] || []).includes(node)) return 'Error'
-      return 'Unknown'
+      return 'Success'
     },
     async stopExperiment (id) {
       if (!confirm('Cancel this experiment?')) return
@@ -661,8 +718,16 @@ export default {
       })
     },
 
+    site (node) {
+      return node.split('.')[1]
+    },
+
     cameraVisible (node) {
       return this.nodesCameraState[node] === true
+    },
+
+    mapVisible (node) {
+      return this.nodesMapState[node] === true
     },
 
     cameraUrl (hostname) {
@@ -672,6 +737,11 @@ export default {
         let url = `https://${apiHost}/camera/${site}/${this.id}/${node}/${this.token}`
         return url
       }
+    },
+
+    toggleMap (node) {
+      this.nodesMapState[node] = !this.nodesMapState[node]
+      this.$forceUpdate()
     },
 
     toggleTerminal (node) {

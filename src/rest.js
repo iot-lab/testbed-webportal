@@ -217,6 +217,10 @@ export const iotlab = {
     return iotlab.api.post(`/experiments/${id}/robots/mobility/${name}`, nodes).then(resp => resp.data)
   },
 
+  async getRobotStatus (id, nodes) {
+    return iotlab.api.post(`/experiments/${id}/robots/status`, nodes).then(resp => resp.data[0])
+  },
+
   async reloadExperiment (id) {
     return iotlab.api.post(`/experiments/${id}/reload`, {}).then(resp => resp.data)
   },

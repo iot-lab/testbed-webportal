@@ -13,7 +13,7 @@
         <image :width="realWidth" :height="realHeight" x="0" y="0" :xlink:href="site_image" v-on="!readOnly ? {'mousedown': mouseDown} : {}"/>
         <g v-for="node in nodes" :key="node.network_address" v-if="showNodesOverlay"
            :transform="`translate(${toSvg(node).x}, ${toSvg(node).y}) `">
-          <circle r="0.2" fill="#20539d55" v-tooltip:auto=""
+          <circle r="0.2" fill="#20539d55"
                   v-adv-tooltip="{
                     title: node.name,
                     placement: 'auto',
@@ -23,6 +23,12 @@
                     }"
                   v-on="!readOnly ? {'mousedown': (e) => mouseDown(e, {x: node.x, y: node.y})} : {}"/>
         </g>
+        <g v-if="mode === 'map'">
+          <g v-for="(point, index) in points" :key="`p-${index}`" :transform="`translate(${toSvg(getCoordinate(point)).x}, ${toSvg(getCoordinate(point)).y}) `">
+            <use xlink:href="#turtlebot" :transform="`rotate(${- 180 * getCoordinate(point).theta / Math.PI})`"/>
+          </g>
+        </g>
+        <g v-if="mode === 'circuit'">
         <path class="robottraj" :d="pathString"></path>
         <use v-for="(coord, index) in middle_points" :key="`m-${index}`"
             xlink:href="#middlePoint"
@@ -36,6 +42,7 @@
           <circle r="0.3" fill="#00FF00DD" v-if="selected.index === index ? 'active' : ''"></circle>
           <circle r="0.25" fill="#FF000055" v-if="index === 0"></circle>
           <text class="label" text-anchor="left" font-size="0.5">{{point}}</text>
+        </g>
         </g>
       </svg>
       <g :transform="`translate(${xAxisMargin}, ${mapHeight})`">
@@ -96,10 +103,6 @@ export default {
       required: false,
     },
     coordinates: {
-      type: Object,
-      required: false,
-    },
-    coordinate: {
       type: Object,
       required: false,
     },
