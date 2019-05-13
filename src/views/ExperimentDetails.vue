@@ -386,15 +386,13 @@ export default {
 
     destroyPolling () {
       if (pollingPos) {
-        this.enablePolling()
-        this.stopPolling()
+        clearInterval(pollingPos)
         removeEventListener('blur', this.disablePolling)
         removeEventListener('focus', this.enablePolling)
       }
     },
 
     getPositions () {
-      console.log(new Date())
       iotlab.getRobotStatus(this.id, this.mobileNodes).then(status => {
         Object.keys(status).forEach(function (key) {
           status[key] = status[key].position
