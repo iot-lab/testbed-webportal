@@ -66,7 +66,7 @@
             <!-- <a class="dropdown-item" href="#" @click.prevent="sendCmd('debug-stop')"><i class="fa fa-fw fa-stop"></i> Stop debug</a> -->
             <li class="dropdown-divider"></li>
             <a class="dropdown-item" href="#" data-toggle="modal" data-target=".monitoring-modal"><i class="fa fa-fw fa-thermometer"></i> Update monitoring</a>
-            <a v-if="showMobilityCommand" class="dropdown-item" href="#" data-toggle="modal" data-target=".circuit-modal"><i class="fa fa-fw fa-random"></i> Update mobility</a>
+            <a v-if="showMobilityCommand" class="dropdown-item" href="#" data-toggle="modal" data-target=".mobility-modal"><i class="fa fa-fw fa-random"></i> Update mobility</a>
           </div>
         </div>
       </div>
@@ -80,6 +80,7 @@
           <th>Firmware</th>
           <th>Monitoring</th>
           <th class="text-center">Deployment</th>
+          <th v-if="mobileNodes" class="text-center">Mobility</th>
           <th width="50px" v-if="showNodesCommands" class="text-center">Actions</th>
           <th width="15px" v-if="showNodesCommands">
             <input type="checkbox" @change="toggleSelectedNodes" v-model="allSelected">
@@ -94,6 +95,28 @@
             <td v-html="$options.filters.md5Tag(getFirmware(node))"></td>
             <td>{{getMonitoring(node)}}</td>
             <td class="text-center">{{getDeploymentStatus(node)}}</td>
+            <td v-if="mobileNodes">
+              <div v-if="isMobile(node)">
+                <span class="noselect" v-if="robotStatus && robotStatus[node]">
+                  <i class="fa fa-fw" :class="robotPowerClass(node)"
+                     v-adv-tooltip="{
+                    title: robotPower(node),
+                    placement: 'auto',
+                    trigger: 'hover',
+                    html: true,
+                    delay: 400,
+                    }"></i> {{robotStatus[node].robot_state}}
+                </span>
+                <div v-if="showNodesCommands" class="btn-group" role="group" aria-label="Node mobility actions" >
+                  <button class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Open Map'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleMap(node)">
+                    <i class="fa fa-fw fa-map"></i>
+                  </button>
+                  <button class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Update mobility'" data-toggle="modal" data-target=".mobility-modal" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node">
+                    <i class="fa fa-fw fa-random"></i>
+                  </button>
+                </div>
+              </div>
+            </td>
             <td v-if="showNodesCommands">
               <div class="btn-group" role="group" aria-label="Node actions" >
                 <button class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Start'" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node; sendCmd('start')">
@@ -115,12 +138,6 @@
                 <button v-if="hasSerial(node)" class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Open Terminal'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleTerminal(node)">
                   <i class="fa fa-fw fa-terminal"></i>
                 </button>
-                <button v-if="isMobile(node)" class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Open Map'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleMap(node)">
-                  <i class="fa fa-fw fa-map"></i>
-                </button>
-                <button v-if="isMobile(node)" class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Update mobility'" data-toggle="modal" data-target=".circuit-modal" :disabled="getDeploymentStatus(node) === 'Error'" @click="currentNode = node">
-                  <i class="fa fa-fw fa-random"></i>
-                </button>
                 <button v-if="hasCamera(node)" class="btn btn-sm border-0 btn-outline-dark" data-toggle="button" aria-pressed="false" v-tooltip="'Video'" :disabled="getDeploymentStatus(node) === 'Error'" @click="toggleCamera(node)">
                   <i class="fa fa-fw fa-video-camera"></i>
                 </button>
@@ -135,7 +152,7 @@
               <div class="d-flex align-items-center justify-content-between bg-secondary">
                 <terminal :ref="`term_${node}`" :cols="80" :rows="20" :node="node" :expId="id" :user="currentUser" :token="token" style="flex-grow: 1"></terminal>
                 <img class="camera" v-if="hasCamera(node)" v-show="(token !== undefined) && cameraVisible(node)" :src="cameraUrl(node)" align="right">
-                <robot-map-view :ref="`map_${node}`" mode="map" :site="site(node)" :points="[node]" :coordinates="robotCoordinates" ></robot-map-view>
+                <robot-map-view :ref="`map_${node}`" mode="map" v-show="mapVisible(node)" v-if="node in robotCoordinates" :site="site(node)" :points="[node]" :coordinates="robotCoordinates" ></robot-map-view>
               </div>
             </td>
           </tr>
@@ -178,7 +195,7 @@
             </button>
           </div>
           <div class="modal-body py-4">
-            <monitoring-list :archi="selectedArchis[0]" :select="true" @select="profile => updateMonitoring(profile)"></monitoring-list>
+            <monitoring-list :archi="selectedArchi" :select="true" @select="profile => updateMonitoring(profile)"></monitoring-list>
           </div>
           <div class="modal-footer dborder-0 dbg-light">
             <button type="button" class="btn" data-dismiss="modal">Close</button>
@@ -187,17 +204,17 @@
       </div>
     </div>
 
-    <div class="modal fade circuit-modal" tabindex="-1" role="dialog" aria-labelledby="circuitModal" aria-hidden="true">
+    <div class="modal fade mobility-modal" tabindex="-1" role="dialog" aria-labelledby="mobilityModal" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header bg-light">
-            <h5 class="modal-title">Select circuit</h5>
+            <h5 class="modal-title">Select mobility</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body py-4">
-            <mobility-list :site="selectedSites[0]" :select="true" @select="circuit => updateMobilityCircuit(circuit)"></mobility-list>
+            <mobility-list :site="selectedSite" :select="true" @select="mobility => updateMobility(mobility)"></mobility-list>
           </div>
           <div class="modal-footer dborder-0 dbg-light">
             <button type="button" class="btn" data-dismiss="modal">Close</button>
@@ -222,8 +239,6 @@ import { capitalize, pluralize, downloadAsFile } from '@/utils'
 import $ from 'jquery'
 
 var polling = true
-var pollingPos = false
-var blurred = false
 
 export default {
   name: 'ExperimentDetails',
@@ -246,6 +261,7 @@ export default {
     return {
       experiment: {name: undefined},
       deploymentStatus: undefined,
+      robotStatus: undefined,
       states: experimentStates,
       selectedNodes: [],
       nodes: [],
@@ -258,6 +274,8 @@ export default {
       firmware: undefined,
       currentUser: auth.username,
       currentNode: undefined,
+      runPollingPos: false,
+      pollingPos: undefined,
     }
   },
 
@@ -266,7 +284,7 @@ export default {
       return this.experiment.nodes.filter(node => this.getDeploymentStatus(node) === 'Success')
     },
     mobileNodes () {
-      return this.experiment.nodes.filter(node => this.isMobile(node))
+      return this.experiment && this.experiment.nodes && this.experiment.nodes.filter(node => this.isMobile(node))
     },
     startDate () {
       return [this.experiment.start_date, this.experiment.scheduled_date, this.experiment.submission_date].find(date => date !== '1970-01-01T00:00:00Z')
@@ -287,13 +305,19 @@ export default {
       // Gives the percentage of progress
       return Math.min(100, Math.round(100 * this.experiment.effective_duration / this.experiment.submitted_duration))
     },
+    selectedArchi () {
+      return this.currentNode ? extractArchiFromAddress(this.currentNode) : undefined
+    },
     selectedArchis () {
       let nodes = this.currentNode ? [this.currentNode] : this.selectedNodes
       return [...new Set(nodes.map(node => extractArchiFromAddress(node)))] // remove duplicates from archi list using a set
     },
+    selectedSite () {
+      return this.currentNode ? extractSiteFromAddress(this.currentNode) : undefined
+    },
     selectedSites () {
       let nodes = this.currentNode ? [this.currentNode] : this.selectedNodes
-      return [...new Set(nodes.map(node => extractSiteFromAddress(node)))] // remove duplicates from archi list using a set
+      return [...new Set(nodes.map(node => extractSiteFromAddress(node)))] // remove duplicates from site list using a set
     },
   },
 
@@ -305,7 +329,6 @@ export default {
         html: true,
       })
     })
-    this.createPollingPos()
   },
 
   beforeRouteUpdate (to, from, next) {
@@ -327,7 +350,7 @@ export default {
 
   destroyed () {
     polling = clearTimeout(polling)
-    this.destroyPolling()
+    clearInterval(this.pollingPos)
   },
 
   methods: {
@@ -349,6 +372,9 @@ export default {
         if (!this.deploymentStatus && !['Waiting', 'toLaunch', 'Launching'].includes(this.experiment.state)) {
           this.deploymentStatus = await iotlab.getExperimentDeployment(id)
         }
+        if (!this.robotStatus && !['Waiting', 'toLaunch', 'Launching'].includes(this.experiment.state)) {
+          this.robotStatus = (await iotlab.getRobotStatus(id, this.mobileNodes))
+        }
 
         if (!this.token && this.experiment.state === 'Running') {
           this.token = await iotlab.getExperimentToken(id)
@@ -361,44 +387,34 @@ export default {
       }
     },
 
-    disablePolling () {
-      if (!blurred) {
-        blurred = true
-        this.$notify({text: 'Position refresh paused', type: 'info', duration: -1, group: 'alt'})
-      }
-    },
-
-    enablePolling () {
-      blurred = false
-      this.$notify({group: 'alt', clean: true})
-    },
-
     createPollingPos () {
-      if (this.nodes.find(n => n.mobile) && !pollingPos) {
+      if (!this.pollingPos) {
         console.debug('pollingPos started')
-        // start polling callback (1 seconds)
-        pollingPos = setInterval(() => this.getPositions(), 1000)
-        // poll only when browser window is active
-        addEventListener('blur', this.disablePolling)
-        addEventListener('focus', this.enablePolling)
+        // start polling (1 seconds)
+        this.pollingPos = setInterval(() => this.getPositions(), 1000)
       }
     },
 
     destroyPolling () {
-      if (pollingPos) {
-        clearInterval(pollingPos)
-        removeEventListener('blur', this.disablePolling)
-        removeEventListener('focus', this.enablePolling)
+      if (this.pollingPos) {
+        console.debug('pollingPos stopped')
+        // stop polling
+        clearInterval(this.pollingPos)
+        this.pollingPos = false
       }
     },
 
     getPositions () {
-      iotlab.getRobotStatus(this.id, this.mobileNodes).then(status => {
-        Object.keys(status).forEach(function (key) {
-          status[key] = status[key].position
+      if (!this.runPollingPos) {
+        iotlab.getRobotStatus(this.id, this.mobileNodes).then(status => {
+          this.robotStatus = status
+          let data = {}
+          Object.keys(status).forEach(function (key) {
+            data[key] = status[key].position
+          })
+          this.robotCoordinates = data
         })
-        this.robotCoordinates = status
-      })
+      }
     },
     stopped (experiment) {
       return experiment.effective_duration && experiment.effective_duration < experiment.submitted_duration
@@ -435,6 +451,11 @@ export default {
     getMonitoring (node) {
       if (!this.experiment.profileassociations) return
       return this.experiment.profileassociations.reduce((acc, asso) => (asso.nodes.some(n => n === (node.alias || node)) ? asso.profilename : acc), '')
+    },
+    getRobotStatus (node) {
+      if (this.robotStatus) {
+        return this.robotStatus[node]
+      }
     },
     getDeploymentStatus (node) {
       if (this.deploymentStatus === undefined) return ''
@@ -529,6 +550,20 @@ export default {
 
     changeFirmwareFile (ref) {
       this.firmwareFile = this.$refs[ref].files[0]
+    },
+
+    robotPower (node) {
+      let power = this.robotStatus[node].power
+      return 'Laptop: ' + power.laptop_percentage + '%<br>' + 'Robot: ' + power.kobuki_percentage + '%'
+    },
+
+    robotPowerClass (node) {
+      let power = this.robotStatus[node].power
+      return {
+        'fa-battery-full': power.battery_level === 'high',
+        'fa-battery-half': power.battery_level === 'medium',
+        'fa-battery-quarter': power.battery_level === 'low',
+      }
     },
 
     flashFirmware (ref) {
@@ -666,12 +701,12 @@ export default {
       }
     },
 
-    async updateMobilityCircuit (circuit) {
+    async updateMobility (mobility) {
       let selectedNodes = this.currentNode ? [this.currentNode] : this.selectedNodes
       delete this.currentNode
       $('.modal').modal('hide')
 
-      let nodes = await iotlab.updateExperimentMobilityCircuit(this.id, selectedNodes, circuit).catch(err => {
+      let nodes = await iotlab.updateExperimentMobility(this.id, selectedNodes, mobility).catch(err => {
         this.$notify({ text: err.response.data.message || 'An error occured', type: 'error' })
       })
       let validNodes = Object.values(nodes).reduce((a, b) => a.concat(b))
@@ -679,21 +714,21 @@ export default {
 
       if (invalidNodes.length > 0) {
         this.$notify({
-          text: `Update mobility circuit not supported on ${pluralize(invalidNodes.length, 'node')}:<br><br>` + invalidNodes.join('<br>'),
+          text: `Update mobility not supported on ${pluralize(invalidNodes.length, 'node')}:<br><br>` + invalidNodes.join('<br>'),
           type: 'warning',
           duration: 6000,
         })
       }
       if (nodes['1'] && nodes['1'].length > 0) {
         this.$notify({
-          text: `Update mobility circuit failed on ${pluralize(nodes['1'].length, 'node')}:<br><br>` + nodes['1'].join('<br>'),
+          text: `Update mobility failed on ${pluralize(nodes['1'].length, 'node')}:<br><br>` + nodes['1'].join('<br>'),
           type: 'error',
           duration: 10000,
         })
       }
       if (nodes['0'] && nodes['0'].length > 0) {
         this.$notify({
-          text: `Update mobility circuit successful on ${pluralize(nodes['0'].length, 'node')}:<br><br>` + nodes['0'].join('<br>'),
+          text: `Update mobility successful on ${pluralize(nodes['0'].length, 'node')}:<br><br>` + nodes['0'].join('<br>'),
           type: 'success',
           duration: 6000,
         })
@@ -742,6 +777,11 @@ export default {
 
     toggleMap (node) {
       this.nodesMapState[node] = !this.nodesMapState[node]
+      if (Object.values(this.nodesMapState).some(e => e)) {
+        this.createPollingPos()
+      } else {
+        this.destroyPolling()
+      }
       this.$forceUpdate()
     },
 

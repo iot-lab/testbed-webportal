@@ -134,7 +134,7 @@
                   <i class="fa fa-map-o fa-fw fa-lg" aria-hidden="true"></i> View/select nodes on map <i class="fa fa-caret-down" aria-hidden="true"></i>
                 </a>
               </p>
-              <div id="collapseMap" v-show="showMap">
+              <div id="collapseMap" v-if="showMap">
                 <map-3d :nodes="filteredNodes" v-model="currentNodes" :selectedNodes="selectedNodesForSite" :shows="showMap" @selectSite="(site) => filterSite = site"></map-3d>
               </div>
             </div>
@@ -574,7 +574,6 @@ export default {
             mobilityname: group.mobility,
           }))
       }
-      console.log(asso)
       if (asso.length === 0) return null
       return { mobility: asso }
     },

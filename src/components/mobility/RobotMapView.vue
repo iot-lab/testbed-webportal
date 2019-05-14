@@ -24,8 +24,8 @@
                   v-on="!readOnly ? {'mousedown': (e) => mouseDown(e, {x: node.x, y: node.y})} : {}"/>
         </g>
         <g v-if="mode === 'map'">
-          <g v-for="(point, index) in points" :key="`p-${index}`" :transform="`translate(${toSvg(getCoordinate(point)).x}, ${toSvg(getCoordinate(point)).y}) `">
-            <use xlink:href="#turtlebot" :transform="`rotate(${- 180 * getCoordinate(point).theta / Math.PI})`"/>
+          <g v-for="(point, index) in points" :key="`p-${index}`" :transform="`translate(${toSvg(coordinates[point]).x}, ${toSvg(coordinates[point]).y}) `">
+            <use xlink:href="#turtlebot" :transform="`rotate(${- 180 * coordinates[point].theta / Math.PI})`"/>
           </g>
         </g>
         <g v-if="mode === 'circuit'">
@@ -34,11 +34,11 @@
             xlink:href="#middlePoint"
             :transform="`translate(${coord.x}, ${coord.y}) rotate(${180 * coord.theta / Math.PI})`"/>
         <g v-for="(point, index) in valid_points" :key="`p-${index}`"
-          :transform="`translate(${toSvg(getCoordinate(point)).x}, ${toSvg(getCoordinate(point)).y}) `"
+          :transform="`translate(${toSvg(coordinates[point]).x}, ${toSvg(coordinates[point]).y}) `"
           v-on="!readOnly ? {'mousedown': (e) => robotMouseDown(e, index, point) } : {}"
           @touchstart.prevent="(e) => robotMouseDown(e, index, point)"
           >
-          <use xlink:href="#turtlebot" :transform="`rotate(${- 180 * getCoordinate(point).theta / Math.PI})`"/>
+          <use xlink:href="#turtlebot" :transform="`rotate(${- 180 * coordinates[point].theta / Math.PI})`"/>
           <circle r="0.3" fill="#00FF00DD" v-if="selected.index === index ? 'active' : ''"></circle>
           <circle r="0.25" fill="#FF000055" v-if="index === 0"></circle>
           <text class="label" text-anchor="left" font-size="0.5">{{point}}</text>
@@ -115,7 +115,7 @@ export default {
 
   computed: {
     valid_points () {
-      return this.points.filter(p => this.getCoordinate(p) !== undefined)
+      return this.points.filter(p => p in this.coordinates)
     },
     middle_points () {
       let middlePoints = []
@@ -154,14 +154,10 @@ export default {
       if (this.points.length >= 1) {
         let firstPoint = this.points[0]
         let firstCoordinate = this.toSvg(this.coordinates[firstPoint])
-        if (firstCoordinate) {
-          path += `M ${firstCoordinate.x},${firstCoordinate.y} `
-        }
+        path += `M ${firstCoordinate.x},${firstCoordinate.y} `
         for (let point of this.points) {
           let coordinate = this.toSvg(this.coordinates[point])
-          if (coordinate) {
-            path += `L ${coordinate.x},${coordinate.y} `
-          }
+          path += `L ${coordinate.x},${coordinate.y} `
         }
         if (this.loop && firstCoordinate) {
           path += `L ${firstCoordinate.x},${firstCoordinate.y} `
@@ -220,9 +216,6 @@ export default {
     },
     hideTooltip () {
       $('.tooltip[role=tooltip]').remove()
-    },
-    getCoordinate (point) {
-      return this.coordinates[point]
     },
     getRealLocation (e) {
       // get position  of the click in the svg element
@@ -351,10 +344,7 @@ export default {
 }
 
 svg text {
-    -webkit-user-select: none;
-       -moz-user-select: none;
-        -ms-user-select: none;
-            user-select: none;
+  user-select: none;
 }
 svg text::selection {
     background: none;
