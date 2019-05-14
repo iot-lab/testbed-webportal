@@ -13,12 +13,12 @@
       </li>
     </ul>
     <p class="mb-2">
-      <span class="badge badge-pill mr-1 cursor" :class="{'badge-primary': filterMobilityType === 'all', 'badge-secondary': filterMobilityType !== 'all'}" @click="filterMobilityType = 'all'">All mobilities</span>
-      <span class="badge badge-pill mr-1 cursor" :class="{'badge-primary': filterMobilityType === 'circuits', 'badge-secondary': filterMobilityType !== 'circuits'}" @click="filterMobilityType = 'circuits'">Circuits</span>
-      <span class="badge badge-pill mr-1 cursor" :class="{'badge-primary': filterMobilityType === 'models', 'badge-secondary': filterMobilityType !== 'models'}" @click="filterMobilityType = 'models'">Models</span>
+      <span class="badge badge-pill mr-1 cursor" :class="{'badge-primary': filterMobilityType === 'all', 'badge-secondary': filterMobilityType !== 'all'}" v-on:click.stop="filterMobilityType = 'all'">All mobilities</span>
+      <span class="badge badge-pill mr-1 cursor" :class="{'badge-primary': filterMobilityType === 'circuits', 'badge-secondary': filterMobilityType !== 'circuits'}" v-on:click.stop="filterMobilityType = 'circuits'">Circuits</span>
+      <span class="badge badge-pill mr-1 cursor" :class="{'badge-primary': filterMobilityType === 'models', 'badge-secondary': filterMobilityType !== 'models'}" v-on:click.stop="filterMobilityType = 'models'">Models</span>
     </p>
     <p v-if="sites" class="mb-2">
-      <span class="badge badge-pill mr-1 cursor" :class="{'badge-info': currentSite === 'all', 'badge-secondary': currentSite !== 'all'}" @click="currentSite = 'all'">{{sites.length}} sites</span>
+      <span class="badge badge-pill mr-1 cursor" :class="{'badge-info': currentSite === 'all', 'badge-secondary': currentSite !== 'all'}" v-on:click.stop="currentSite = 'all'">{{sites.length}} sites</span>
       <span v-for="site in sites" :key="site.site" class="badge badge-pill mr-1 cursor" :class="{'badge-info': currentSite === site, 'badge-secondary': currentSite !== site}"
             @click="currentSite = site">{{site.site}}</span>
     </p>
