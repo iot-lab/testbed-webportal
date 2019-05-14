@@ -437,7 +437,10 @@ export default {
       return this.experiment.profileassociations.reduce((acc, asso) => (asso.nodes.some(n => n === (node.alias || node)) ? asso.profilename : acc), '')
     },
     getDeploymentStatus (node) {
-      return 'Success'
+      if (this.deploymentStatus === undefined) return ''
+      if ((this.deploymentStatus['0'] || []).includes(node)) return 'Success'
+      if ((this.deploymentStatus['1'] || []).includes(node)) return 'Error'
+      return 'Unknown'
     },
     async stopExperiment (id) {
       if (!confirm('Cancel this experiment?')) return
