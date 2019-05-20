@@ -8,6 +8,7 @@
 <script>
 import ChartTable from '@/components/charts/ChartTable'
 import { LineChart } from '@/components/charts/charts.js'
+import zoomPlugin from 'chartjs-plugin-zoom'
 
 export default {
   name: 'LineChartTable',
@@ -37,6 +38,7 @@ export default {
 
   data () {
     return {
+      plugins: [ zoomPlugin ],
     }
   },
 
@@ -54,6 +56,16 @@ export default {
     },
     options () {
       return {
+        plugins: {
+          zoom: {
+            zoom: {
+              enabled: true,
+              drag: true,
+              mode: 'x',
+              speed: 0.05,
+            },
+          },
+        },
         elements: {
           line: {
             tension: 0, // disables bezier curves

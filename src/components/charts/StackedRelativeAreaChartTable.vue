@@ -9,7 +9,7 @@
 import { StackedRelativeAreaChart } from '@/components/charts/charts.js'
 import ChartTable from '@/components/charts/ChartTable'
 import { colorPalette } from '@/utils'
-import downsamplePlugin from 'chartjs-plugin-downsample'
+import zoomPlugin from 'chartjs-plugin-zoom'
 
 export default {
   name: 'StackedRelativeAreaChartTable',
@@ -42,7 +42,7 @@ export default {
 
   data () {
     return {
-      plugins: [ downsamplePlugin ],
+      plugins: [zoomPlugin],
     }
   },
 
@@ -92,6 +92,16 @@ export default {
     },
     options () {
       return {
+        plugins: {
+          zoom: {
+            zoom: {
+              enabled: true,
+              drag: true,
+              mode: 'x',
+              speed: 0.05,
+            },
+          },
+        },
         tooltips: {
           callbacks: {
             label (tooltipItem, data) {
@@ -107,10 +117,6 @@ export default {
               return label
             },
           },
-        },
-        downsample: {
-          enabled: true,
-          threshold: 500, // max number of points to display per dataset
         },
         elements: {
           line: {
