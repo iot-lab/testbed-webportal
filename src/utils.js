@@ -94,6 +94,17 @@ export const downloadObjectAsCsv = function (exportObj, exportName, opts) {
   link.remove()
 }
 
+// Download as PNG file in the browser
+export const downloadCanvasAsPng = function (canvas, exportName) {
+  var dataStr = canvas.toDataURL('image/png')
+  var link = document.createElement('a')
+  link.setAttribute('href', dataStr)
+  link.setAttribute('download', exportName + '.png')
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
+}
+
 // Download binary file in the browser
 export const downloadAsFile = function (filename, file, mimeType = 'application/octet-stream') {
   let blob = new Blob([file], { type: mimeType })

@@ -2,7 +2,7 @@
   <div>
     <label>{{label}}:</label>
     <chart-table :category_title="category_title" :value_titles="value_titles" :data="data_table"/>
-    <chart ref="chart"  type="area" :options="options" :chartData="chartdata"/>
+    <chart ref="chart" type="area" :options="options" :chartData="chartdata"/>
   </div>
 </template>
 <script>
