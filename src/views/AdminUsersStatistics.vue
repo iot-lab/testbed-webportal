@@ -70,6 +70,8 @@ import LineChartTable from '@/components/charts/LineChartTable'
 import StackedRelativeAreaChartTable from '@/components/charts/StackedRelativeAreaChartTable'
 import { COUNTRYCONTINENTS } from '@/countries'
 
+const MAX_COUNTRY_ENTRIES = 10
+
 export default {
   name: 'AdminUsersStatistics',
 
@@ -97,7 +99,19 @@ export default {
 
   computed: {
     usersByCountry () {
-      return countGroupBy(this.usersStatistics, 'country')
+      let usersByCountry = countGroupBy(this.usersStatistics, 'country')
+      if (Object.keys(usersByCountry).length > MAX_COUNTRY_ENTRIES) {
+        let sortable = Object.entries(usersByCountry)
+        sortable.sort((a, b) => b[1] - a[1])
+        let others = sortable.splice(MAX_COUNTRY_ENTRIES)
+        let sum = others.reduce((total, item) => total + item[1], 0)
+        sortable.push([`Others`, sum])
+        return sortable.reduce((acc, elem) => {
+          acc[elem[0]] = elem[1]
+          return acc
+        }, {})
+      }
+      return usersByCountry
     },
 
     countries () {
@@ -174,9 +188,9 @@ export default {
           let diff = runningDate === undefined ? Infinity : el.created.diff(runningDate, 'days')
           runningDate = el.created
           if (diff > 1) {
-            return [el.created, {values: Object.assign({}, running), total: total, diff: diff}]
+            return [el.created, {values: Object.assign({}, running), total: total}]
           }
-        })
+        }).filter(el => el !== undefined)
       } else {
         return []
       }
