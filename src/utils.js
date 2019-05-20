@@ -46,6 +46,16 @@ export const groupBy = function (array, key) {
   }, {})
 }
 
+// Group an array of items by func(item)
+// groupBy(['one', 'two', 'three'], 'length')
+// => {3: ["one", "two"], 5: ["three"]}
+export const groupByFunc = function (array, func) {
+  return array.reduce(function (rv, x) {
+    (rv[func(x)] = rv[func(x)] || []).push(x)
+    return rv
+  }, {})
+}
+
 // Count size of group in an array of items by item.key
 // countGroupBy(['one', 'two', 'three'], 'length')
 // => {3: 2, 5: 1}

@@ -8,7 +8,6 @@
 <script>
 import ChartTable from '@/components/charts/ChartTable'
 import { LineChart } from '@/components/charts/charts.js'
-import downsamplePlugin from 'chartjs-plugin-downsample'
 
 export default {
   name: 'LineChartTable',
@@ -38,7 +37,6 @@ export default {
 
   data () {
     return {
-      plugins: [ downsamplePlugin ],
     }
   },
 
@@ -60,10 +58,6 @@ export default {
           line: {
             tension: 0, // disables bezier curves
           },
-        },
-        downsample: {
-          enabled: true,
-          threshold: 500, // max number of points to display per dataset
         },
         scales: {
           xAxes: [{

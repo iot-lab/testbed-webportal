@@ -63,7 +63,7 @@
 
 <script>
 import { iotlab } from '@/rest'
-import { downloadObjectAsJson, countGroupBy, downloadObjectAsCsv } from '@/utils'
+import { downloadObjectAsJson, countGroupBy, downloadObjectAsCsv, groupByFunc } from '@/utils'
 import moment from 'moment'
 import BarChartTable from '@/components/charts/BarChartTable'
 import LineChartTable from '@/components/charts/LineChartTable'
@@ -130,7 +130,15 @@ export default {
 
     usersRunningCount () {
       let total = 0
-      return this.loaded ? this.usersStatistics.map(el => [el.created, total++]) : []
+      if (this.loaded) {
+        let grouped = groupByFunc(this.usersStatistics, el => el.created.endOf('day').unix())
+        return Object.entries(grouped).map(el => {
+          total += el[1].length
+          return [moment.unix(el[0]), total]
+        })
+      } else {
+        return []
+      }
     },
 
     relativeUsersByCountry () {
@@ -156,13 +164,22 @@ export default {
     },
 
     relativeUsersBy (key) {
-      let running = {}
-      let total = 0
-      return this.loaded ? this.usersStatistics.map(el => {
-        total++
-        running[el[key]] = (running[el[key]] || 0) + 1
-        return [el.created, {values: Object.assign({}, running), total: total}]
-      }) : []
+      if (this.loaded) {
+        let running = {}
+        let total = 0
+        let runningDate
+        return this.usersStatistics.map(el => {
+          total++
+          running[el[key]] = (running[el[key]] || 0) + 1
+          let diff = runningDate === undefined ? Infinity : el.created.diff(runningDate, 'days')
+          runningDate = el.created
+          if (diff > 1) {
+            return [el.created, {values: Object.assign({}, running), total: total, diff: diff}]
+          }
+        })
+      } else {
+        return []
+      }
     },
 
     async downloadUsersStatisticsJson () {
