@@ -241,14 +241,14 @@ export default {
     async getOrFetch (offset) {
       let val = await this.experimentsStore.getItem(String(offset)).catch(this.errorHandler)
       if (!val) {
-        console.log('from network')
+        console.log('from network: ' + offset)
         val = await iotlab.getExperimentsStatistics(String(offset))
         // store data stringified
         this.experimentsStore.setItem(String(offset), JSON.stringify(val))
           .catch(this.errorHandler)
       } else {
         // retrieve stringified data
-        console.log('from local storage')
+        console.log('from local storage: ' + offset)
         val = JSON.parse(val)
       }
       let treated = this.treatExperimentsStatistics(val)
