@@ -39,6 +39,9 @@
   <p v-else>
     <i class="fa fa-spinner fa-spin fa-fw"></i>
   </p>
+  <div class="col-md-4 float-right">
+    <input type="text" class="form-control mb-3" placeholder="Search by hostname or uid" v-model="search">
+  </div>
   <ul class="nav nav-tabs">
     <li class="nav-item" v-tooltip:top="'Nodes properties'">
       <router-link class="nav-link" :to="{name: 'status'}" :class="{active: showData === 'properties'}" role="tab"><i class="fa fa-fw fa-share-alt"></i>Nodes properties</router-link>
@@ -53,9 +56,6 @@
       <a href="" @click.prevent="showMap = !showMap">
         <i class="fa fa-map-o fa-fw fa-lg" aria-hidden="true"></i> view on site map <i class="fa fa-caret-down" aria-hidden="true"></i>
       </a>
-    </div>
-    <div class="col-md-4">
-      <input type="text" class="form-control mb-3" placeholder="Search by hostname or uid" v-model="search">
     </div>
   </div>
   <map-3d :nodes="filteredNodes" :shows="showMap" v-show="showMap" @selectSite="(site) => currentSite = sites.find(s => s.site === site)"></map-3d>
