@@ -235,7 +235,7 @@ export default {
     },
     ruler_step () {
       let value = (this.gantt_stop_date - this.gantt_start_date) / CONF.time_ruler_scale
-      return CONF.time_ruler_steps.filter(r => r < value).pop()
+      return CONF.time_ruler_steps.find(r => r >= value)
     },
     secondary_ruler_step () {
       return this.ruler_step / 4
