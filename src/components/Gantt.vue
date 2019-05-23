@@ -20,7 +20,7 @@
     </thead>
     <tbody ref='table'>
       <tr class="nodeIteration" v-for="node in nodesJobsStates" v-bind:key='node.network_address'>
-        <td class="text-center" v-tooltip:bottom="node.label">
+        <td class="hostname-column text-center" v-tooltip:bottom="node.label">
           {{node.label}}
         </td>
         <td>
@@ -430,6 +430,9 @@ th.col-sticky {
   top: 40px;  /* 0px if you don't have a navbar, but something is required */
   background: white;
   z-index: 2;
+}
+.hostname-column {
+  overflow: hidden;
 }
 table {
   table-layout: fixed;
