@@ -1,30 +1,26 @@
 <template>
   <div>
-    <div>
-      <a class="cursor" title="Show Table" @click="toggle"><i class="fa fa-fw fa-eye"></i>{{showTable ? 'Hide' : 'Show'}} Table</a>
-      <div class='dropdasn d-inline-block float-right'>
-        <button class='btn btn-light mr-1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fa fa-fw fa-download'></i> Download</button>
-        <div class='dropdown-menu dropdown-menu-right col-xs-12' aria-labelledby='dropdownMenuButton'>
-          <a class='dropdown-item' href='#'
-          @click.prevent='downloadPng'><span class='badge badge-pill badge-info'>PNG</span></a>
-          <a class='dropdown-item' href='#'
-          @click.prevent='downloadCsv'><span class='badge badge-pill badge-info'>CSV</span></a>
-        </div>
-      </div>
+    <div class="d-flex align-items-center">
+      <a class="cursor text-muted mr-auto" @click.prevent="toggle">
+        <i class="ml-2 fa " v-bind:class="showTable ? 'fa-eye-slash' : 'fa-eye'"></i>
+      {{showTable ? 'Hide' : 'Show'}}
+      Data</a>
+      <a href='#' class="btn btn-sm btn-light ml-2" @click.prevent='downloadPng'><i class="fa fa-download"></i> PNG</a>
+      <a href='#' class="btn btn-sm btn-light ml-2" @click.prevent='downloadCsv'><i class="fa fa-download"></i> CSV</a>
     </div>
     <div class="with-scrollbar table-wrapper-scroll-y">
       <table v-if="showTable" class="table table-striped table-sm mt-2">
         <thead>
-        <tr>
-          <th v-for="header in headers">{{ header }}</th>
-        </tr>
+          <tr>
+            <th v-for="header in headers">{{ header }}</th>
+          </tr>
         </thead>
         <tbody>
-        <template v-for="item in data">
-          <tr class="d-table-row">
-            <td v-for="element in item">{{element}}</td>
-          </tr>
-        </template>
+          <template v-for="item in data">
+            <tr class="d-table-row">
+              <td v-for="element in item">{{element}}</td>
+            </tr>
+          </template>
         </tbody>
       </table>
     </div>
