@@ -9,9 +9,7 @@
       </p>
     </div>
     <bar-chart v-if="type === 'bar'" ref="chart" :options="options" :chartData="data_series"/>
-    <div style="width: 60%">
-      <pie-chart v-if="type === 'pie'" ref="chart" :chartData="pie_data_series"/>
-    </div>
+    <pie-chart v-if="type === 'pie'" ref="chart" :chartData="pie_data_series"/>
   </div>
 </template>
 <script>
