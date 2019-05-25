@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label>{{label}}:</label>
+    <label><h3 class="mt-3">{{label}}</h3></label>
     <line-chart ref="chart" type="line" :options="options" :chartData="chartdata" :plugins="plugins"/>
     <chart-table :category_title="category_title" :value_title="value_title" :data="data_table"/>
   </div>

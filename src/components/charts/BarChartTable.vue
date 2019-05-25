@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label>{{label}}:</label>
+    <label><h3 class="mt-3">{{label}}</h3></label>
     <div v-if="chartOptions.allowPie">
       <p >
         <a><span class="badge badge-pill mr-1 cursor"  @click="type = 'bar'" :class="{'badge-primary': type === 'bar', 'badge-secondary': type !== 'bar'}">Bars</span></a>
