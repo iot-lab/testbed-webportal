@@ -1,8 +1,8 @@
 <template>
   <div>
     <label>{{label}}:</label>
-    <chart-table :category_title="category_title" :value_title="value_title" :data="data_table"/>
     <line-chart ref="chart" type="line" :options="options" :chartData="chartdata" :plugins="plugins"/>
+    <chart-table :category_title="category_title" :value_title="value_title" :data="data_table"/>
   </div>
 </template>
 <script>
