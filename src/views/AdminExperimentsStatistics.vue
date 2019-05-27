@@ -36,7 +36,7 @@
               :data="experimentsRunningNodeDuration.values"/>
       <stackedct label='Experiments by node type over time'
                   category_title='Date'
-                  value_title="Experiments by node type"
+                  value_title="Ratio of experiments by node type (%)"
                   :categories='nodetypes'
                   :data='relativeExperimentsByNodeType'/>
     </div>
