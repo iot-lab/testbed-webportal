@@ -61,10 +61,13 @@ export default {
           data: [],
           backgroundColor: colors[index],
           label: category,
-          fill: '-1',
         }
         if (index === 0) {
           dataSeries[index].fill = 'start'
+        } else if (index === (this.categories.length - 1)) {
+          dataSeries[index].fill = 'end'
+        } else {
+          dataSeries[index].fill = '-1'
         }
       })
 
