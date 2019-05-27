@@ -127,10 +127,17 @@ export default {
         scales: {
           xAxes: [{
             type: 'time',
+            scaleLabel: {
+              display: true,
+              labelString: this.category_title,
+            },
           }],
           yAxes: [{
             type: 'linear',
-            labelString: this.value_title,
+            scaleLabel: {
+              display: true,
+              labelString: this.value_title,
+            },
             ticks: {
               min: 0,
               max: 100,
