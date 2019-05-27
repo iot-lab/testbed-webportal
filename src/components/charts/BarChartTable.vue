@@ -56,6 +56,9 @@ export default {
   computed: {
     options () {
       return {
+        legend: {
+          display: false,
+        },
         scales: {
           xAxes: [{
             type: 'category',

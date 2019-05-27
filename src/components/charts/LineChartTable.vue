@@ -74,6 +74,9 @@ export default {
             tension: 0, // disables bezier curves
           },
         },
+        legend: {
+          display: false,
+        },
         tooltips: {
           callbacks: {
             title: function (tooltipItem, data) {
