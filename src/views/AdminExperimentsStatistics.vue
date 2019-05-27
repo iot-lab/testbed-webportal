@@ -35,7 +35,8 @@
               :value_title='`Cumulated node run time (${experimentsRunningNodeDuration.unit})`'
               :data="experimentsRunningNodeDuration.values"/>
       <stackedct label='Experiments by node type over time'
-                  category_title='Category'
+                  category_title='Date'
+                  value_title="Experiments by node type"
                   :categories='nodetypes'
                   :data='relativeExperimentsByNodeType'/>
     </div>

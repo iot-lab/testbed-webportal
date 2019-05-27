@@ -18,7 +18,7 @@
               :data='usersByCountry'/>
       <stackedct label='Users by country over time'
                   category_title='Date'
-                  value_title='Number of users (%)'
+                  value_title='Number of users by country'
                   :categories='countries'
                   :data='relativeUsersByCountry'/>
       <barct label='Number of users by continent'
@@ -27,7 +27,7 @@
               :data='usersByContinent'/>
       <stackedct label='Users by continent over time'
                   category_title='Date'
-                  value_title='Number of users (%)'
+                  value_title='Number of users by continent'
                   :categories='continents'
                   :data='relativeUsersByContinent'/>
       <barct label='Number of users by category'
@@ -35,8 +35,8 @@
               value_title="Number of users"
               :data='usersByCategory'/>
       <stackedct label='Users by category over time'
-                  category_title='Category'
-                  value_title="Number of users"
+                  category_title='Date'
+                  value_title="Number of users by category"
                   :categories='categories'
                   :data='relativeUsersByCategory'/>
       <linect label="Running count number of users"
