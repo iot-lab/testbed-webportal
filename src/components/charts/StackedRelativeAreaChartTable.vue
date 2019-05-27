@@ -1,8 +1,8 @@
 <template>
   <div>
-    <label>{{label}}:</label>
-    <chart-table :category_title="category_title" :value_title="value_title" :value_titles="value_titles" :data="data_table"/>
+    <label><h3 class="mt-3">{{label}}</h3></label>
     <chart ref="chart" type="area" :options="options" :chartData="chartdata"/>
+    <chart-table :category_title="category_title" :value_title="value_title" :value_titles="value_titles" :data="data_table"/>
   </div>
 </template>
 <script>

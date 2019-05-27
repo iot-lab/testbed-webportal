@@ -1,7 +1,6 @@
 <template>
   <div>
-    <label>{{label}}:</label>
-    <chart-table :category_title="category_title" :value_title="value_title" :data="Object.entries(data)"/>
+    <label><h3 class="mt-3">{{label}}</h3></label>
     <div v-if="chartOptions.allowPie">
       <p >
         <a><span class="badge badge-pill mr-1 cursor"  @click="type = 'bar'" :class="{'badge-primary': type === 'bar', 'badge-secondary': type !== 'bar'}">Bars</span></a>
@@ -9,9 +8,8 @@
       </p>
     </div>
     <bar-chart v-if="type === 'bar'" ref="chart" :options="options" :chartData="data_series"/>
-    <div style="width: 60%">
-      <pie-chart v-if="type === 'pie'" ref="chart" :chartData="pie_data_series"/>
-    </div>
+    <pie-chart v-if="type === 'pie'" ref="chart" :chartData="pie_data_series"/>
+    <chart-table :category_title="category_title" :value_title="value_title" :data="Object.entries(data)"/>
   </div>
 </template>
 <script>
