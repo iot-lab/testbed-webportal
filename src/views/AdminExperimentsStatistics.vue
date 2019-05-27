@@ -49,7 +49,7 @@
 
 <script>
 import { iotlab } from '@/rest'
-import { downloadObjectAsJson, countGroupBy, downloadObjectAsCsv } from '@/utils'
+import { downloadObjectAsJson, countGroupBy, downloadObjectAsCsv, groupBy } from '@/utils'
 import moment from 'moment'
 import BarChartTable from '@/components/charts/BarChartTable'
 import LineChartTable from '@/components/charts/LineChartTable'
@@ -122,7 +122,7 @@ export default {
       let months = new Set()
       let years = new Set()
       let duration = {}
-      this.experimentsRunningCount = []
+      let runningCount = []
       let runningDuration = []
       let runningNodeDuration = []
       let running = {}
@@ -131,6 +131,15 @@ export default {
       let totalRunningDuration = 0
       let totalRunningNodeDuration = 0
 
+      let experimentsGroupedByDate = groupBy(this.experimentsStatistics, 'date')
+      Object.keys(experimentsGroupedByDate).sort().forEach(date => {
+        let experiments = experimentsGroupedByDate[date]
+        let el0 = experiments[0]
+        totalRunningCount += experiments.length
+        runningCount.push([moment(el0.date), totalRunningCount])
+      })
+
+      totalRunningCount = 0
       this.experimentsStatistics.map(el => {
         months.add(el.month)
         years.add(el.year)
@@ -139,7 +148,6 @@ export default {
         totalRunningCount++
         totalRunningDuration += el.effective_duration * 60
         totalRunningNodeDuration += el.nodes ? el.effective_duration * 60 * el.nodes.length : 0
-        this.experimentsRunningCount.push([el.submission_date, totalRunningCount])
         runningDuration.push([el.submission_date, totalRunningDuration])
         runningNodeDuration.push([el.submission_date, totalRunningNodeDuration])
 
@@ -163,6 +171,7 @@ export default {
       this.experimentsDuration = duration
       this.experimentsRunningDuration = this.getDatetimeValuesUnit(runningDuration)
       this.experimentsRunningNodeDuration = this.getDatetimeValuesUnit(runningNodeDuration)
+      this.experimentsRunningCount = runningCount
 
       this.experimentUsageRatio = this.getExperimentUsageRatio()
     },
@@ -218,6 +227,7 @@ export default {
         if (d.submission_date) {
           let momDate = moment(String(d.submission_date))
           d.submission_date = momDate
+          d.date = momDate.format('YYYY-MM-DD')
           d.month = momDate.format('YYYY-MM')
           d.year = momDate.format('YYYY')
         }
