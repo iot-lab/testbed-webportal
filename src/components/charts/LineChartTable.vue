@@ -1,7 +1,7 @@
 <template>
   <div>
     <label>{{label}}:</label>
-    <chart-table :category_title="category_title" :value_title="value_title" :data="data"/>
+    <chart-table :category_title="category_title" :value_title="value_title" :data="data_table"/>
     <line-chart ref="chart" type="line" :options="options" :chartData="chartdata" :plugins="plugins"/>
   </div>
 </template>
@@ -43,6 +43,9 @@ export default {
   },
 
   computed: {
+    data_table () {
+      return this.data.map(el => [el[0].format('YYYY-MM-DD'), el[1]])
+    },
     chartdata () {
       return {
         datasets: [
@@ -69,6 +72,13 @@ export default {
         elements: {
           line: {
             tension: 0, // disables bezier curves
+          },
+        },
+        tooltips: {
+          callbacks: {
+            title: function (tooltipItem, data) {
+              return data.datasets[tooltipItem[0].datasetIndex].data[tooltipItem[0].index].x.toISOString().split('T')[0]
+            },
           },
         },
         scales: {

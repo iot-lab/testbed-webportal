@@ -51,12 +51,7 @@ export default {
       return [...this.categories, 'total']
     },
     data_table () {
-      let dataTable = []
-      this.data.map(el => {
-        dataTable.push([el[0], ...this.categories.map(category => el[1].values[category]), el[1].total])
-      })
-
-      return dataTable
+      return this.data.map(el => [el[0].format('YYYY-MM-DD'), ...this.categories.map(category => el[1].values[category]), el[1].total])
     },
     chartdata () {
       let dataSeries = []
@@ -104,6 +99,9 @@ export default {
         },
         tooltips: {
           callbacks: {
+            title: function (tooltipItem, data) {
+              return data.datasets[tooltipItem[0].datasetIndex].data[tooltipItem[0].index].x.toISOString().split('T')[0]
+            },
             label (tooltipItem, data) {
               let item = data.datasets[tooltipItem.datasetIndex]
               let label = item.label || ''
