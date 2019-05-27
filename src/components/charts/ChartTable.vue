@@ -60,7 +60,7 @@ export default {
 
   computed: {
     exportName () {
-      return `${slugify(this.value_title)}_${slugify(this.category_title)}`
+      return slugify(`${this.value_title.toLowerCase()} by ${this.category_title.toLowerCase()}`)
     },
     headers () {
       if (this.value_titles) {
