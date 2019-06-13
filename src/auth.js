@@ -37,5 +37,6 @@ export const auth = {
     localStorage.removeItem('loggedIn')
     localStorage.removeItem('apiAuth')
     localStorage.removeItem('isAdmin')
+    localStorage.removeItem('username')
   },
 }
