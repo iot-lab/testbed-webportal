@@ -247,7 +247,7 @@
             <div class="dropdown-menu dropdown-menu-right">
               <div class="card-body">
                 <p class="lead">Assign a mobility <span class="text-muted">(optional)</span></p>
-                <mobility-list :site="p.site" :select="true" @select="mobility => { p.mobility = mobility }"></mobility-list>
+                <mobility-list :site="p.prop.properties.site" :select="true" @select="mobility => { p.mobility = mobility }"></mobility-list>
               </div>
             </div>
           </span>
