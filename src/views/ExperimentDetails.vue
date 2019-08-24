@@ -149,14 +149,6 @@
               <input type="file" id="file" ref="firmwareFile" class="custom-file-input" @change="changeFirmwareFile('firmwareFile')">
               <span class="custom-file-control">{{firmwareFile && firmwareFile.name}}</span>
             </label>
-            <label class="col-3">
-              <input type="checkbox" id="binary" ref="binary" v-model="firmwareIsBinary">
-              <span>Binary file</span>
-            </label>
-            <label class="col-3" v-if="firmwareIsBinary">
-              <input type="text" class="form-control" id="binary_offset" ref="binary_offset" v-model="firmwareBinaryOffset">
-              <span>Binary offset</span>
-            </label>
             <hr>
             <firmware-list :archi="selectedArchis.concat([undefined])" :select="true" @select="fw => flashResourcesFirmware(fw)"></firmware-list>
           </div>
@@ -229,7 +221,7 @@ export default {
       allSelected: false,
       firmwareFile: undefined,
       firmwareIsBinary: false,
-      firmwareBinaryOffset: '0x00',
+      firmwareBinaryOffset: '0x0',
       firmware: undefined,
       currentUser: auth.username,
       currentNode: undefined,
@@ -470,6 +462,7 @@ export default {
         return async function (e) {
           vm.$notify({ clean: true }) // close pending notification
 
+          vm.firmwareIsBinary = vm.firmwareFile.name.endsWith('.bin')
           if (!vm.firmwareIsBinary) {
             let res = await iotlab.checkFirmware(e.target.result)
             vm.$notify({ text: `firmware format ${res.format}`, type: res.format === 'unknown' ? 'error' : 'info' })
@@ -480,7 +473,7 @@ export default {
           $('.modal').modal('hide')
 
           let nodes = await iotlab.flashFirmware(vm.id, selectedNodes, e.target.result,
-            vm.firmwareIsBinary, vm.firmwareBinaryOffset).catch(err => {
+            vm.firmwareIsBinary, parseInt(vm.firmwareBinaryOffset, 16)).catch(err => {
             vm.$notify({ clean: true }) // close pending notification
             vm.$notify({ text: err.response.data.message, type: 'error' })
           })
