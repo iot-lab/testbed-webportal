@@ -472,11 +472,19 @@ export default {
           vm.$notify({ text: 'Flashing firmware...', type: 'info', duration: -1 })
           $('.modal').modal('hide')
 
-          let nodes = await iotlab.flashFirmware(vm.id, selectedNodes, e.target.result,
-            vm.firmwareIsBinary, parseInt(vm.firmwareBinaryOffset, 16)).catch(err => {
-            vm.$notify({ clean: true }) // close pending notification
-            vm.$notify({ text: err.response.data.message, type: 'error' })
-          })
+          let nodes
+          if (!vm.firmwareIsBinary) {
+            nodes = await iotlab.flashFirmware(vm.id, selectedNodes, e.target.result).catch(err => {
+              vm.$notify({ clean: true }) // close pending notification
+              vm.$notify({ text: err.response.data.message, type: 'error' })
+            })
+          } else {
+            nodes = await iotlab.flashBinaryFirmware(vm.id, selectedNodes, e.target.result).catch(err => {
+              vm.$notify({ clean: true }) // close pending notification
+              vm.$notify({ text: err.response.data.message, type: 'error' })
+            })
+          }
+
           let validNodes = Object.values(nodes).reduce((a, b) => a.concat(b))
           let invalidNodes = selectedNodes.filter(n => !validNodes.includes(n))
 
