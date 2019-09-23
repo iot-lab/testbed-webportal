@@ -203,9 +203,12 @@ export const iotlab = {
     return iotlab.api.post(`/experiments/${id}/nodes/flash`, formData).then(resp => resp.data)
   },
 
-  async flashBinaryFirmware (id, nodes, fileString) {
+  async flashBinaryFirmware (id, nodes, fileString, offset) {
     const formData = new FormData()
-    formData.append(`experiment${id}.json`, JSON.stringify(nodes))
+    let data = {}
+    data.nodes = nodes
+    data.offset = offset
+    formData.append(`experiment${id}.json`, JSON.stringify(data))
     formData.append('firmware.bin', new Blob([fileString], {type: 'application/octet-stream'}), 'firmware.bin')
     return iotlab.api.post(`/experiments/${id}/nodes/flash/binary`, formData).then(resp => resp.data)
   },
