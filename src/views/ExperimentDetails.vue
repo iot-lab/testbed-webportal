@@ -479,7 +479,8 @@ export default {
               vm.$notify({ text: err.response.data.message, type: 'error' })
             })
           } else {
-            nodes = await iotlab.flashBinaryFirmware(vm.id, selectedNodes, e.target.result).catch(err => {
+            nodes = await iotlab.flashBinaryFirmware(vm.id, selectedNodes, e.target.result,
+              parseInt(vm.firmwareBinaryOffset, 16)).catch(err => {
               vm.$notify({ clean: true }) // close pending notification
               vm.$notify({ text: err.response.data.message, type: 'error' })
             })
