@@ -25,6 +25,11 @@
           </router-link>
         </ul>
         <ul class="nav navbar-nav float-xs-right">
+          <router-link tag="li" :to="{name:'statistics'}" active-class="active" v-if="auth.isAdmin">
+            <a class="nav-link" v-tooltip:bottom="'Statistics'">
+              <i class="fa fa-lg fa-fw fa-bar-chart"></i>
+            </a>
+          </router-link>
           <router-link tag="li" :to="{name:'allExperiments'}" active-class="active" v-if="auth.isAdmin">
             <a class="nav-link" v-tooltip:bottom="'All Experiments'">
               <i class="fa fa-lg fa-fw fa-flask" aria-label="All experiments"></i>

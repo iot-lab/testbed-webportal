@@ -1,4 +1,5 @@
 import json2csv from 'json2csv'
+import palette from 'google-palette'
 
 // Sleep function (in millisecond)
 // e.g. await sleep(1000)
@@ -45,6 +46,26 @@ export const groupBy = function (array, key) {
   }, {})
 }
 
+// Group an array of items by func(item)
+// groupBy(['one', 'two', 'three'], 'length')
+// => {3: ["one", "two"], 5: ["three"]}
+export const groupByFunc = function (array, func) {
+  return array.reduce(function (rv, x) {
+    (rv[func(x)] = rv[func(x)] || []).push(x)
+    return rv
+  }, {})
+}
+
+// Count size of group in an array of items by item.key
+// countGroupBy(['one', 'two', 'three'], 'length')
+// => {3: 2, 5: 1}
+export const countGroupBy = function (array, key) {
+  return array.reduce(function (rv, x) {
+    rv[x[key]] = (rv[x[key]] + 1 || 1)
+    return rv
+  }, {})
+}
+
 // Replace all occurences of a substring in a string
 export const replaceAll = function (str, search, replacement) {
   // could be done with a RegExp paying attention to escape chars, but this solution is not bad in performance
@@ -53,7 +74,7 @@ export const replaceAll = function (str, search, replacement) {
 
 // Download JS object as JSON file in the browser
 export const downloadObjectAsJson = function (exportObj, exportName) {
-  var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportObj))
+  var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportObj, null, 2))
   var link = document.createElement('a')
   link.setAttribute('href', dataStr)
   link.setAttribute('download', exportName + '.json')
@@ -73,6 +94,17 @@ export const downloadObjectAsCsv = function (exportObj, exportName, opts) {
   link.remove()
 }
 
+// Download as PNG file in the browser
+export const downloadCanvasAsPng = function (canvas, exportName) {
+  var dataStr = canvas.toDataURL('image/png')
+  var link = document.createElement('a')
+  link.setAttribute('href', dataStr)
+  link.setAttribute('download', exportName + '.png')
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
+}
+
 // Download binary file in the browser
 export const downloadAsFile = function (filename, file, mimeType = 'application/octet-stream') {
   let blob = new Blob([file], { type: mimeType })
@@ -82,6 +114,10 @@ export const downloadAsFile = function (filename, file, mimeType = 'application/
   document.body.appendChild(link)
   link.click()
   link.remove()
+}
+
+export const colorPalette = function (len) {
+  return palette('qualitative', len).map(el => '#' + el)
 }
 
 // Compute MD5 hash of string
