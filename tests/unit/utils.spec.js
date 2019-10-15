@@ -25,3 +25,16 @@ describe('Utility "replaceAll".', () => {
     expect(Utils.replaceAll('toto', 'o', 'in')).toEqual('tintin')
   })
 })
+
+describe('Utility "nextString".', () => {
+  it('returns the next string in alphabet order', () => {
+    expect(Utils.nextString(undefined)).toEqual('A')
+    expect(Utils.nextString(null)).toEqual('A')
+    expect(Utils.nextString('a')).toEqual('b')
+    expect(Utils.nextString('a')).toEqual('b')
+    expect(Utils.nextString('Z')).toEqual('a')
+    expect(Utils.nextString('z')).toEqual('zA')
+    expect(Utils.nextString('abc')).toEqual('abd')
+    expect(Utils.nextString('ZA')).toEqual('ZB')
+  })
+})

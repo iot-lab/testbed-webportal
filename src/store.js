@@ -3,4 +3,6 @@ export default {
   groups: [],
   profiles: [],
   firmwares: [],
+  circuits: [],
+  models: [],
 }
