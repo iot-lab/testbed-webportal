@@ -9,10 +9,6 @@ export const auth = {
 
   async doLogin (username, password) {
     iotlab.create(username, password)
-    localStorage.setItem('apiAuth', JSON.stringify({
-      username: username,
-      password: password,
-    }))
 
     await iotlab.getUserInfo()
       .then(user => {
@@ -22,6 +18,10 @@ export const auth = {
         localStorage.setItem('loggedIn', this.loggedIn)
         localStorage.setItem('isAdmin', this.isAdmin)
         localStorage.setItem('username', this.username)
+        localStorage.setItem('apiAuth', JSON.stringify({
+          username: this.username,
+          password: password,
+        }))
       })
       .catch(err => {
       // console.log(err)
@@ -37,5 +37,6 @@ export const auth = {
     localStorage.removeItem('loggedIn')
     localStorage.removeItem('apiAuth')
     localStorage.removeItem('isAdmin')
+    localStorage.removeItem('username')
   },
 }
