@@ -1,3 +1,13 @@
+## 1.3.0 (2019-11-12)
+
+### Enhancements
+
+* Add binary firmware flash support
+
+### Bug fixes
+
+* Fix authentication with email as login
+
 ##  1.2.0 (2019-04-12)
 
 ### New features
