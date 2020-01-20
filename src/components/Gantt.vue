@@ -19,7 +19,7 @@
       </tr>
     </thead>
     <tbody ref='table'>
-      <tr class="nodeIteration" v-for="node in nodesJobsStates" v-bind:key='node.network_address'>
+      <tr class="nodeIteration" v-for="node in nodesExperimentsStates" v-bind:key='node.network_address'>
         <td class="hostname-column text-center" v-tooltip:bottom="node.label">
           {{node.label}}
         </td>
@@ -42,7 +42,7 @@
 
             <div v-show="!loaded">
               <i class="fa fa-spinner fa-spin fa-fw mr-1"></i>
-              <i>loading jobs and nodes states...</i>
+              <i>loading experiments and nodes states...</i>
             </div>
 
             <div class="nodeState" v-for="nodeState in node.states" v-bind:key="nodeState.network_address"
@@ -50,14 +50,14 @@
                 v-tooltip.auto.html="nodeState.info">
             </div>
 
-            <router-link v-for="job in node.jobs" v-bind:key="job.key"
-                tag="div" :to="{name: 'experimentDetails', params: { id: job.id }}"
-                class="job justify-text-center cursor"
-                :class="{ disabled: !job.reachable }"
+            <router-link v-for="experiment in node.experiments" v-bind:key="experiment.key"
+                tag="div" :to="{name: 'experimentDetails', params: { id: experiment.id }}"
+                class="experiment justify-text-center cursor"
+                :class="{ disabled: !experiment.reachable }"
                 v-on:click.native="closeTooltip"
-                :style="jobStyle(job)"
-                v-tooltip.auto.html="job.info">
-              {{ job.id }}
+                :style="experimentStyle(experiment)"
+                v-tooltip.auto.html="experiment.info">
+              {{ experiment.id }}
             </router-link>
           </div>
         </td>
@@ -110,7 +110,7 @@ const CONF = {
     8 * S_PER_WEEK,
     12 * S_PER_WEEK,
   ],
-  job_color_saturation_lightness: '75%,75%',
+  experiment_color_saturation_lightness: '75%,75%',
   min_width: 10,
 }
 
@@ -137,7 +137,7 @@ export default {
   data () {
     return {
       nodesStates: [],
-      jobs: [],
+      experiments: [],
       CONF: CONF,
       now: null,
       loaded: false,
@@ -148,7 +148,7 @@ export default {
   },
 
   computed: {
-    nodesJobsStates () {
+    nodesExperimentsStates () {
       let map = {}
       let nodes = this.nodes
 
@@ -158,7 +158,7 @@ export default {
           state: node.state,
           network_address: node.network_address,
           states: [],
-          jobs: [],
+          experiments: [],
         }
         map[node.network_address] = svgNode
       }
@@ -192,11 +192,11 @@ export default {
 
       let nodesNetworkAddresses = nodes.map(el => el.network_address)
 
-      if (!this.jobs) return Object.values(map)
+      if (!this.experiments) return Object.values(map)
 
-      for (let job of this.jobs) {
+      for (let experiment of this.experiments) {
         let indices = []
-        for (let node of job.nodes) {
+        for (let node of experiment.nodes) {
           if (!(node in map)) {
             continue
           }
@@ -213,20 +213,20 @@ export default {
           return r
         }, [])
 
-        let stopDate = (new Date(job.stop_date)).getTime() / 1000
+        let stopDate = (new Date(experiment.stop_date)).getTime() / 1000
 
         for (let indicesArray of indices) {
           let node = nodes[indicesArray[0]].network_address
           let svgNode = map[node]
           if (svgNode) {
-            let svgJob = {
-              start: (new Date(job.start_date)).getTime() / 1000,
-              stop: stopDate === 0 ? (job.submitted_duration ? this.gantt_start_date + 60 * job.submitted_duration : this.gantt_stop_date) : stopDate,
-              id: job.id,
-              info: `Id:&nbsp;${job.id}<br>User:&nbsp;${job.user}${job.name ? '<br>Name:&nbsp;' + job.name : ''}<br>Nodes:&nbsp;${job.nb_nodes}<br>Submission:&nbsp;${job.submission_date}<br>Duration:&nbsp;${job.submitted_duration}&nbsp;min`,
-              reachable: auth.isAdmin || job.user === auth.username,
+            let svgExperiment = {
+              start: (new Date(experiment.start_date)).getTime() / 1000,
+              stop: stopDate === 0 ? (experiment.submitted_duration ? this.gantt_start_date + 60 * experiment.submitted_duration : this.gantt_stop_date) : stopDate,
+              id: experiment.id,
+              info: `Id:&nbsp;${experiment.id}<br>User:&nbsp;${experiment.user}${experiment.name ? '<br>Name:&nbsp;' + experiment.name : ''}<br>Nodes:&nbsp;${experiment.nb_nodes}<br>Submission:&nbsp;${experiment.submission_date}<br>Duration:&nbsp;${experiment.submitted_duration}&nbsp;min`,
+              reachable: auth.isAdmin || experiment.user === auth.username,
             }
-            svgNode.jobs.push(svgJob)
+            svgNode.experiments.push(svgExperiment)
           }
         }
       }
@@ -336,17 +336,17 @@ export default {
       this.update(this.start, this.stop)
     },
     update (start, stop) {
-      // only the time window changed, update the nodes states and jobs
-      this.jobs = []
+      // only the time window changed, update the nodes states and experiments
+      this.experiments = []
       this.nodesStates = []
       this.loaded = false
 
       Promise.all([
-        iotlab.getNodesStates(start, stop).catch((err) => this.errorHandler('nodes states', err)),
-        iotlab.getExperimentsJobs(start, stop).catch((err) => this.errorHandler('jobs', err)),
-      ]).then(([nodesStates, jobs]) => {
+        iotlab.getDrawganttNodes(start, stop).catch((err) => this.errorHandler('drawgantt nodes', err)),
+        iotlab.getDrawganttExperiments(start, stop).catch((err) => this.errorHandler('drawgantt experiments', err)),
+      ]).then(([nodesStates, experiments]) => {
         this.nodesStates = nodesStates
-        this.jobs = jobs
+        this.experiments = experiments
         this.loaded = true
       })
     },
@@ -372,11 +372,11 @@ export default {
       }
     },
 
-    jobStyle (job) {
+    experimentStyle (experiment) {
       return {
-        backgroundColor: `hsl(${this.job2int(job)},${CONF.job_color_saturation_lightness})`,
-        width: (this.date2pc(job.stop) - this.date2pc(job.start)) + '%',
-        left: this.date2pc(job.start) + '%',
+        backgroundColor: `hsl(${this.experiment2int(experiment)},${CONF.experiment_color_saturation_lightness})`,
+        width: (this.date2pc(experiment.stop) - this.date2pc(experiment.start)) + '%',
+        left: this.date2pc(experiment.start) + '%',
       }
     },
 
@@ -416,10 +416,10 @@ export default {
       return 100 * (date - this.gantt_start_date) / (this.gantt_stop_date - this.gantt_start_date)
     },
 
-    job2int (job) {
+    experiment2int (experiment) {
       // compute a shuffled number for id, so that colors are not too close
       let magicNumber = (1 + Math.sqrt(5)) / 2
-      return parseInt(360 * this.fmod(job.id * magicNumber, 1))
+      return parseInt(360 * this.fmod(experiment.id * magicNumber, 1))
     },
   },
 }
@@ -475,7 +475,7 @@ td, th {
   position: absolute;
   height: 100%;
 }
-.job {
+.experiment {
   position: absolute;
   user-select: none;
 }

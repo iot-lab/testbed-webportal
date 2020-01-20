@@ -164,14 +164,6 @@ export const iotlab = {
     return iotlab.api.get(`/experiments/${id}/deployment`).then(resp => resp.data)
   },
 
-  async getNodesStates (start, stop) {
-    return iotlab.api.get(`/experiments/nodes_states?start=${start.toISOString()}&stop=${stop.toISOString()}`).then(resp => resp.data.items)
-  },
-
-  async getExperimentsJobs (start, stop) {
-    return iotlab.api.get(`/experiments/jobs?start=${start.toISOString()}&stop=${stop.toISOString()}`).then(resp => resp.data.items)
-  },
-
   async stopExperiment (id) {
     return iotlab.api.delete(`/experiments/${id}`)
   },
@@ -245,6 +237,16 @@ export const iotlab = {
 
   async deleteGroup (group) {
     return iotlab.api.delete(`/groups/${group}`)
+  },
+
+  // DRAWGANTT API
+
+  async getDrawganttNodes (start, stop) {
+    return iotlab.api.get(`/drawgantt/nodes?start=${start.toISOString()}&stop=${stop.toISOString()}`).then(resp => resp.data.items)
+  },
+
+  async getDrawganttExperiments (start, stop) {
+    return iotlab.api.get(`/drawgantt/experiments?start=${start.toISOString()}&stop=${stop.toISOString()}`).then(resp => resp.data.items)
   },
 
   // OTHER API
