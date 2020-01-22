@@ -38,7 +38,8 @@ import moment from 'moment-timezone'
 import Gantt from '@/components/Gantt'
 
 const DEFAULT_RELATIVE_WINDOW = {start: -S_PER_DAY, stop: S_PER_DAY}
-const MAX_WINDOW = 50 * S_PER_WEEK
+// time frame around 2 months
+const MAX_WINDOW = 10 * S_PER_WEEK
 
 export default {
   name: 'Drawgantt',
@@ -106,7 +107,7 @@ export default {
       if (window.stop - window.start < MAX_WINDOW) {
         this.relative_window = window
       } else {
-        this.$notify({text: 'can\'t zoom out more than ', type: 'error'})
+        this.$notify({text: 'Can\'t zoom out more than 2 months', type: 'error'})
       }
     },
 
