@@ -1,6 +1,6 @@
 <template>
 <div class="container mt-3">
-  <h4><i class="fa fa-fw fa-hourglass-half" aria-hidden="true"></i> Running experiments</h4>
+  <h4><i class="fa fa-fw fa-hourglass-half" aria-hidden="true"></i> Running experiments ({{runningExp.length}})</h4>
   <running-experiments :exp-list="runningExp"></running-experiments>
   <div class="float-right mt-1 mb-4">
     <div class="dropdown d-inline-block ">
