@@ -9,7 +9,7 @@ exports[`Status.vue should match snapshot 1`] = `
       aria-hidden="true"
       class="fa fa-fw fa-hourglass-half"
     />
-     Running experiments
+     Running experiments (0)
   </h4>
    
   <runningexperiments-stub
