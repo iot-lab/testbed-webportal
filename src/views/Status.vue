@@ -61,7 +61,7 @@
   <table class="table table-striped table-sm" v-if="nodes.length && showData === 'properties'">
     <thead>
       <tr>
-        <th class="cursor" title="sort by hostname" @click="sortBy(node => nodeSortByHostname(node))">Node hostname</th>
+        <th class="cursor" title="sort by hostname" @click="sortBy(node => node.network_address)">Node hostname</th>
         <th class="cursor text-center" title="sort by state" @click="sortBy(node => node.state)">State</th>
         <th class="cursor" title="sort by archi" @click="sortBy(node => node.archi)">Archi <span class="text-muted font-weight-normal">(radio)</span></th>
         <th class="cursor" title="sort by site" @click="sortBy(node => node.site)">Site</th>
@@ -160,7 +160,7 @@ export default {
     iotlab.getSitesDetails().then(data => { this.sites = data.sort((a, b) => a.site.localeCompare(b.site)) }).catch(err => {
       this.$notify({text: err.response.data.message || 'Failed to fetch sites details', type: 'error'})
     })
-    iotlab.getNodes().then(data => { this.nodes = data }).catch(err => {
+    iotlab.getNodes().then(data => { this.nodes = data.sort((a, b) => this.stringCompare(a.network_address, b.network_address)) }).catch(err => {
       this.$notify({text: err.response.data.message || 'Failed to fetch nodes', type: 'error'})
     })
     if (auth.loggedIn) {
@@ -204,26 +204,32 @@ export default {
       downloadObjectAsCsv(nodes, 'iotlab-nodes', {fields: Object.keys(nodes[0]).sort()})
     },
 
-    compareNetworkAddress (node1, node2) {
-      // m3-1.grenoble.iot-lab.info
-      let chuncks1 = node1.network_address.split('.')
-      let chuncks2 = node2.network_address.split('.')
-      // site comparator
-      let site = chuncks1[1].localeCompare(chuncks2[1])
-      if (site !== 0) return site
-      // archi comparator (ex: m3-1, arduino-zero-1)
-      let archi1 = chuncks1[0].slice(0, chuncks1[0].lastIndexOf('-') + 1)
-      let archi2 = chuncks2[0].slice(0, chuncks2[0].lastIndexOf('-') + 1)
-      let archi = archi1.localeCompare(archi2)
-      if (archi !== 0) return archi
-      // id comparator
-      let id1 = chuncks1[0].split('-').pop()
-      let id2 = chuncks2[0].split('-').pop()
-      return id1.localeCompare(id2, undefined, {numeric: true})
+    stringCompare (a, b) {
+      // eslint-disable-next-line no-useless-escape
+      let networkAddress = /^([a-z0-9-_]+\.){2}iot-lab.info$/
+      if (networkAddress.test(a) && networkAddress.test(b)) {
+        // m3-1.grenoble.iot-lab.info
+        let chuncksa = a.split('.')
+        let chuncksb = b.split('.')
+        // site comparator
+        let site = chuncksa[1].localeCompare(chuncksb[1])
+        if (site !== 0) return site
+        // archi comparator (ex: m3-1, arduino-zero-1)
+        let archia = chuncksa[0].slice(0, chuncksa[0].lastIndexOf('-') + 1)
+        let archib = chuncksb[0].slice(0, chuncksb[0].lastIndexOf('-') + 1)
+        let archi = archia.localeCompare(archib)
+        if (archi !== 0) return archi
+        // id comparator
+        let ida = chuncksa[0].split('-').pop()
+        let idb = chuncksb[0].split('-').pop()
+        return ida.localeCompare(idb, undefined, {numeric: true})
+      }
+      // standard string compare
+      return a.localeCompare(b)
     },
 
     getNodes (stateList = null) {
-      let nodes = this.nodes.sort(this.compareNetworkAddress)
+      let nodes = this.nodes
       if (this.currentSite !== 'all') nodes = nodes.filter(node => node.site === this.currentSite.site)
       if (this.currentArchi !== 'all') nodes = nodes.filter(node => node.archi === this.currentArchi)
       if (stateList) {
@@ -235,21 +241,11 @@ export default {
 
     sortBy (func, reverse = false) {
       this.nodes = this.nodes.sort((a, b) => {
-        if (func(a) === func(b)) return this.nodeSortByHostname(a).localeCompare(this.nodeSortByHostname(b))
-        if (typeof func(a) === 'string' || typeof func(b) === 'string') return func(a).localeCompare(func(b))
+        if (typeof func(a) === 'string' || typeof func(b) === 'string') return this.stringCompare(func(a), func(b))
         if (typeof func(a) === 'number' || typeof func(b) === 'number') return func(a) - func(b)
         console.log('Unhandled sort criteria', a.network_address, func(a), b.network_address, func(b))
       })
       if (reverse) this.nodes.reverse()
-    },
-
-    // Allow sorting of hostnames by domain then by servername
-    // the trick is to append the servername after the domain (e.g 'a8-1.grenoble.iot-lab.info' -> 'grenoble.iot-lab.info.a8-1')
-    // then it's possible to simply sort the strings
-    nodeSortByHostname (node) {
-      let chuncks = node.network_address.split('.')
-      chuncks.push(chuncks.shift()) // or we could use chunks.reverse()
-      return chuncks.join('.')
     },
 
     async updateNodesProperties () {
