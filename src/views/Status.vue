@@ -204,8 +204,26 @@ export default {
       downloadObjectAsCsv(nodes, 'iotlab-nodes', {fields: Object.keys(nodes[0]).sort()})
     },
 
+    compareNetworkAddress (node1, node2) {
+      // m3-1.grenoble.iot-lab.info
+      let chuncks1 = node1.network_address.split('.')
+      let chuncks2 = node2.network_address.split('.')
+      // site comparator
+      let site = chuncks1[1].localeCompare(chuncks2[1])
+      if (site !== 0) return site
+      // archi comparator (ex: m3-1, arduino-zero-1)
+      let archi1 = chuncks1[0].slice(0, chuncks1[0].lastIndexOf('-') + 1)
+      let archi2 = chuncks2[0].slice(0, chuncks2[0].lastIndexOf('-') + 1)
+      let archi = archi1.localeCompare(archi2)
+      if (archi !== 0) return archi
+      // id comparator
+      let id1 = chuncks1[0].split('-').pop()
+      let id2 = chuncks2[0].split('-').pop()
+      return id1.localeCompare(id2, undefined, {numeric: true})
+    },
+
     getNodes (stateList = null) {
-      let nodes = this.nodes
+      let nodes = this.nodes.sort(this.compareNetworkAddress)
       if (this.currentSite !== 'all') nodes = nodes.filter(node => node.site === this.currentSite.site)
       if (this.currentArchi !== 'all') nodes = nodes.filter(node => node.archi === this.currentArchi)
       if (stateList) {
