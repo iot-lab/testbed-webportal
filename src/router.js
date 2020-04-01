@@ -19,7 +19,6 @@ import NewExperiment from '@/views/NewExperiment'
 import ExperimentDetails from '@/views/ExperimentDetails'
 import Dashboard from '@/views/Dashboard'
 import Status from '@/views/Status'
-import Drawgantt from '@/wp-menu/Drawgantt'
 import {auth} from './auth'
 
 Vue.use(Router)
@@ -31,13 +30,14 @@ const router = new Router({
   mode: 'history',
   routes: [
     { path: '/', redirect: '/dashboard' },
-    { path: '/drawgantt', name: 'drawgantt', component: Drawgantt },
+    { path: '/drawgantt', name: 'drawgantt', component: Status, props: {showData: 'activity'} },
     { path: '/signup', name: 'signup', component: Signup },
     { path: '/reset', name: 'reset', component: ResetPassword },
     { path: '/login', name: 'login', component: Login },
     { path: '/activate', name: 'activate', component: ActivateAccount },
     { path: '/dashboard', name: 'dashboard', component: Dashboard, meta: { requiresAuth: true } },
     { path: '/status', name: 'status', component: Status, meta: { requiresAuth: true } },
+    { path: '/status/activity', name: 'activity', component: Status, props: {showData: 'activity'} },
     { path: '/experiment', name: 'experiment', component: NewExperiment, meta: { requiresAuth: true } },
     { path: '/resources',
       name: 'resources',

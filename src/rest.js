@@ -239,6 +239,16 @@ export const iotlab = {
     return iotlab.api.delete(`/groups/${group}`)
   },
 
+  // DRAWGANTT API
+
+  async getDrawganttNodes (start, stop) {
+    return iotlab.api.get(`/drawgantt/nodes?start=${start.toISOString()}&stop=${stop.toISOString()}`).then(resp => resp.data.items)
+  },
+
+  async getDrawganttExperiments (start, stop) {
+    return iotlab.api.get(`/drawgantt/experiments?start=${start.toISOString()}&stop=${stop.toISOString()}`).then(resp => resp.data.items)
+  },
+
   // OTHER API
 
   async getSites () {

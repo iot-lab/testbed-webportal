@@ -2,7 +2,8 @@
 <div class="container mt-3">
   <h4><i class="fa fa-fw fa-hourglass-half" aria-hidden="true"></i> Running experiments ({{runningExp.length}})</h4>
   <running-experiments :exp-list="runningExp"></running-experiments>
-  <div class="float-right mt-1 mb-4">
+  </div>
+  <div class="float-right mt-1 mb-4" v-if="showData === 'properties'">
     <div class="dropdown d-inline-block ">
       <button class="btn btn-light mr-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-fw fa-download"></i> Download</button>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
@@ -12,7 +13,6 @@
     </div>
     <button v-if="isAdmin" class="btn btn-warning" @click="updateNodesProperties"><i class="fa fa-lock"></i> Update properties</button>
   </div>
-  <h4><i class="fa fa-fw fa-share-alt" aria-hidden="true"></i> Nodes properties</h4>
   <p class="lead mb-0">Sites</p>
   <p class="mb-2" v-if="sites">
     <span class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentSite === 'all', 'badge-secondary': currentSite !== 'all'}" @click="currentSite = 'all'">{{sites.length}} sites</span>
@@ -39,6 +39,17 @@
   <p v-else>
     <i class="fa fa-spinner fa-spin fa-fw"></i>
   </p>
+  <div class="col-md-4 float-right">
+    <input type="text" class="form-control mb-3" placeholder="Search by hostname or uid" v-model="search">
+  </div>
+  <ul class="nav nav-tabs">
+    <li class="nav-item" v-tooltip:top="'Nodes properties'">
+      <router-link class="nav-link" :to="{name: 'status'}" :class="{active: showData === 'properties'}" role="tab"><i class="fa fa-fw fa-share-alt"></i>Nodes properties</router-link>
+    </li>
+    <li class="nav-item" v-tooltip:top="'Testbed Activity'">
+      <router-link class="nav-link" :to="{name: 'activity'}" :class="{active: showData === 'activity'}" role="tab"><i class="fa fa-fw fa-calendar"></i>Testbed Activity</router-link>
+    </li>
+  </ul>
   <div class="row">
     <div class="col-md-8">
       <label class="mt-2 mr-3 text-muted font-italic">Showing {{filteredNodes.length}} nodes</label>
@@ -46,12 +57,9 @@
         <i class="fa fa-map-o fa-fw fa-lg" aria-hidden="true"></i> view on site map <i class="fa fa-caret-down" aria-hidden="true"></i>
       </a>
     </div>
-    <div class="col-md-4">
-      <input type="text" class="form-control mb-3" placeholder="Search by hostname or uid" v-model="search">
-    </div>
   </div>
   <map-3d :nodes="filteredNodes" :shows="showMap" v-show="showMap" @selectSite="(site) => currentSite = sites.find(s => s.site === site)"></map-3d>
-  <table class="table table-striped table-sm" v-if="nodes.length">
+  <table class="table table-striped table-sm" v-if="nodes.length && showData === 'properties'">
     <thead>
       <tr>
         <th class="cursor" title="sort by hostname" @click="sortBy(node => nodeSortByHostname(node))">Node hostname</th>
@@ -86,7 +94,7 @@
       </tr>
     </tbody>
   </table>
-
+  <drawgantt :nodes="filteredNodes" :sites="sites" v-if="showData === 'activity'"/>
 </div> <!-- container -->
 
 </template>
@@ -94,6 +102,7 @@
 <script>
 import Map3d from '@/components/Map3d'
 import RunningExperiments from '@/components/RunningExperiments'
+import Drawgantt from '@/components/Drawgantt'
 import { iotlab } from '@/rest'
 import { auth } from '@/auth'
 import { downloadObjectAsJson, downloadObjectAsCsv } from '@/utils'
@@ -104,11 +113,21 @@ export default {
   components: {
     Map3d,
     RunningExperiments,
+    Drawgantt,
+  },
+
+  props: {
+    showData: {
+      type: String,
+      default: () => 'properties',
+      validator: val => ['activity', 'properties'].includes(val),
+    },
   },
 
   data () {
     return {
       isAdmin: auth.isAdmin,
+      isLoggedIn: auth.loggedIn,
       sites: [],
       nodes: [],
       runningExp: [],
@@ -134,9 +153,11 @@ export default {
     iotlab.getNodes().then(data => { this.nodes = data }).catch(err => {
       this.$notify({text: err.response.data.message || 'Failed to fetch nodes', type: 'error'})
     })
-    iotlab.getRunningExperiments().then(data => { this.runningExp = data }).catch(err => {
-      this.$notify({text: err.response.data.message || 'Failed to fetch running experiments', type: 'error'})
-    })
+    if (auth.loggedIn) {
+      iotlab.getRunningExperiments().then(data => { this.runningExp = data }).catch(err => {
+        this.$notify({text: err.response.data.message || 'Failed to fetch running experiments', type: 'error'})
+      })
+    }
   },
 
   computed: {

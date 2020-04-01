@@ -13,7 +13,7 @@
         <div v-html="topmenu"></div>
         <ul class="nav navbar-nav ml-auto">
           <li class="nav-item" :class="{'active': $route.name === 'drawgantt'}">
-            <router-link :to="{name: 'drawgantt'}" title="Testbed Activity" class="nav-link"><i class="fa fa-fw fa-calendar"></i> Activity</router-link>
+            <a href="/drawgantt" title="Testbed Activity" class="nav-link"><i class="fa fa-fw fa-calendar"></i> Activity</a>
           </li>
           <li class="nav-item" :class="{'active': $route.name !== 'drawgantt'}">
             <router-link :to="{name: 'dashboard'}" title="Testbed" class="nav-link"><i class="fa fa-wrench"></i> Testbed</router-link>
