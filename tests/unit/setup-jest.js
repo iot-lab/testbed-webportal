@@ -4,6 +4,11 @@ import localStorage from 'jest-localstorage-mock'
 
 global.$ = global.jQuery = $
 global.moment = moment
-Object.defineProperty(window, 'localStorage', {
-  value: localStorage,
-})
+
+const localStorageMock = {
+  getItem: jest.fn(),
+  setItem: jest.fn(),
+  clear: jest.fn(),
+  removeItem: jest.fn()
+};
+global.localStorage = localStorageMock;
