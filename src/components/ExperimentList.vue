@@ -28,7 +28,7 @@
           <td style="text-align: right"><span class="badge badge-state" :class="exp.state | stateBadgeClass">{{exp.state}}</span></td>
           <td>
             <div class="dropdown">
-              <button class="btn-link border-0 text-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+              <button class="btn py-0 px-1 text-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
               <div class="dropdown-menu dropdown-menu-right">
                 <router-link class="dropdown-item" :to="{name: 'experimentDetails', params: { id: exp.id }}">
                   <i class="fa fa-fw fa-eye"></i> View details
