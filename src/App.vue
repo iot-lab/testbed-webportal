@@ -1,52 +1,6 @@
 <template>
   <div id="app">
-    <wordpress-navbar></wordpress-navbar>
-    <nav class="navbar navbar-expand-md navbar-light bg-light" v-if="auth.loggedIn">
-    <div class="container">
-      <!-- <a class="navbar-brand" href="#"><img src="./assets/disc-iotlab.svg" width="30"></a> -->
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <router-link tag="li" :to="{name:'dashboard'}" active-class="active">
-            <a class="nav-link"><i class="fa fa-fw fa-flask" aria-hidden="true"></i> My Experiments</a>
-          </router-link>
-          <router-link tag="li" :to="{name:'experiment'}" active-class="active">
-            <a class="nav-link"><i class="fa fa-fw fa-plus" aria-hidden="true"></i> New Experiment</a>
-          </router-link>
-          <router-link tag="li" :to="{name:'resources'}" active-class="active">
-            <a class="nav-link"><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> My Resources</a>
-            <!-- <a class="nav-link"><i class="fa fa-briefcase" aria-hidden="true"></i> Resources</a> -->
-          </router-link>
-          <router-link tag="li" :to="{name:'status'}" active-class="active">
-            <a class="nav-link"><i class="fa fa-fw fa-tasks" aria-hidden="true"></i> Testbed Status</a>
-          </router-link>
-        </ul>
-        <ul class="nav navbar-nav float-xs-right">
-          <router-link tag="li" :to="{name:'allExperiments'}" active-class="active" v-if="auth.isAdmin">
-            <a class="nav-link" v-tooltip:bottom="'All Experiments'">
-              <i class="fa fa-lg fa-fw fa-flask" aria-label="All experiments"></i>
-            </a>
-          </router-link>
-          <router-link tag="li" :to="{name:'users'}" active-class="active" v-if="auth.isAdmin">
-            <a class="nav-link" v-tooltip:bottom="'Manage Users'">
-              <i class="fa fa-lg fa-fw fa-users" aria-label="Users"></i>
-            </a>
-          </router-link>
-          <router-link tag="li" :to="{name:'account'}" active-class="active" v-if="auth.loggedIn">
-            <a class="nav-link" v-tooltip:bottom.html="`Account <b>${auth.username}</b>`">
-              <i class="fa fa-lg fa-fw fa-user" aria-label="Account"></i>
-            </a>
-          </router-link>
-          <li>
-            <a class="nav-link" href="" @click="logout" v-tooltip:bottom="'Log out'"><i class="fa fa-lg fa-fw fa-sign-out" aria-label="Logout"></i></a>
-          </li>
-        </ul>
-      </div>
-    </div>
-    </nav>
+    <navbar></navbar>
 
     <notifications position="top right" :duration="3000" animation-type="velocity" style="margin: 10px;">
       <template slot="body" slot-scope="props" style="margin: 10px">
@@ -92,30 +46,15 @@
 </template>
 
 <script>
-import WordpressNavbar from '@/wp-menu/WordpressNavbar'
-import { auth } from '@/auth'
+import Navbar from '@/components/Navbar'
 
 export default {
   name: 'app',
-  components: { WordpressNavbar },
-  data () {
-    return {
-      auth: auth,
-    }
-  },
-
-  methods: {
-    logout: function (event) {
-      auth.doLogout()
-    },
-  },
+  components: { Navbar },
 }
 </script>
 
 <style>
-html {
-  --iotlab-primary: #20539d;
-}
 .text-capitalize-first:first-letter {
   text-transform: uppercase;
 }
