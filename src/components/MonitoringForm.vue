@@ -53,29 +53,33 @@
       </div>
       <div class="form-group">
         <label class="mr-3 my-label">Period</label>
-        <select class="custom-select" v-model="profile.consumption.period">
-          <option value="140">140 µs</option>
-          <option value="204">204 µs</option>
-          <option value="332">332 µs</option>
-          <option value="588">588 µs</option>
-          <option value="1100">1100 µs</option>
-          <option value="2116">2116 µs</option>
-          <option value="4156">4156 µs</option>
-          <option value="8244">8244 µs</option>
-        </select>
+        <label class="ustom-control-inline">
+          <select class="custom-select" v-model="profile.consumption.period">
+            <option value="140">140 µs</option>
+            <option value="204">204 µs</option>
+            <option value="332">332 µs</option>
+            <option value="588">588 µs</option>
+            <option value="1100">1100 µs</option>
+            <option value="2116">2116 µs</option>
+            <option value="4156">4156 µs</option>
+            <option value="8244">8244 µs</option>
+          </select>
+        </label>
       </div>
       <div class="form-group">
         <label class="mr-3 my-label">Average</label>
-        <select class="custom-select" v-model="profile.consumption.average" placeholder="avg">
-          <option value="1">1</option>
-          <option value="4">4</option>
-          <option value="16">16</option>
-          <option value="64">64</option>
-          <option value="256">256</option>
-          <option value="128">428</option>
-          <option value="512">512</option>
-          <option value="1024">1024</option>
-        </select>
+        <label class="ustom-control-inline">
+          <select class="custom-select" v-model="profile.consumption.average" placeholder="avg">
+            <option value="1">1</option>
+            <option value="4">4</option>
+            <option value="16">16</option>
+            <option value="64">64</option>
+            <option value="256">256</option>
+            <option value="128">428</option>
+            <option value="512">512</option>
+            <option value="1024">1024</option>
+          </select>
+        </label>
       </div>
     </fieldset>
     <fieldset class="card bg-light pt-2 mb-3" v-if="showRadio">
