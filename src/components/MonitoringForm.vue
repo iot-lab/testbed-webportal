@@ -111,7 +111,9 @@
         <label class="mr-3 my-label">Period</label>
         <div class="input-group" style="display: inline-flex; max-width: 300px;">
           <input v-model="profile.radio.period" type="number" class="form-control" min="1" max="65535" step="1">
-          <span class="input-group-addon">ms</span>
+          <div class="input-group-append">
+            <span class="input-group-text">ms</span>
+          </div>
         </div>
       </div>
       <div class="form-group" v-if="profile.radio.mode === 'rssi' && profile.radio.channels && profile.radio.channels.length > 1">
