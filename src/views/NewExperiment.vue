@@ -137,8 +137,8 @@
             </div>
             <!-- Select By ID -->
             <div class="tab-pane fade show" id="list-byid" role="tabpanel" aria-labelledby="list-byid-list">
-              <p class="mb-2 lead text-muted">Select a site, architecture and desired ids.</p>
-              <div class="d-md-flex" style="max-width: 800px">
+              <p class="mb-2 lead tex t-muted">Select a site, architecture and desired ids.</p>
+              <div class="form-inline">
                 <filter-select :items="sites.map(s => s.site).sort()" title="Site" v-model="filterSite"
                   @input="testArchi"></filter-select>
                 <filter-select title="Architecture" v-model="filterArchi"
