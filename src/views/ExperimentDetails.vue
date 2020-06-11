@@ -46,12 +46,12 @@
         <i class="fa fa-download"></i> Download
       </a>
       <div v-if="showNodesCommands" class="float-right">
-        <button class="btn btn-sm dropdown-toggle cursor" type="button" data-toggle="popover" v-show="selectedNodes.length === 0" data-placement="right"
+        <button class="btn btn-light btn-sm dropdown-toggle cursor disabled" type="button" data-toggle="popover" v-show="selectedNodes.length === 0" data-placement="right"
           data-content="<i class='fa fa-fw fa-lg fa-exclamation-circle text-warning'></i> Select nodes first">
           <i class="fa fa-wrench text-dark"></i> Actions on selected nodes
         </button>
         <div class="dropdown" v-show="selectedNodes.length">
-          <button class="btn btn-sm dropdown-toggle cursor" type="button" id="actionMenuBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button class="btn btn-light btn-sm dropdown-toggle cursor" type="button" id="actionMenuBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-wrench text-dark"></i> Actions on {{selectedNodes.length | pluralize('node')}}
           </button>
           <div class="dropdown-menu" aria-labelledby="actionMenuBtn">
