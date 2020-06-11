@@ -36,15 +36,13 @@
           </div>
           <div class="form-group">
             <label class="lead mr-3 my-label">Start</label>
-            <label class="custom-control custom-radio">
+            <label class="custom-control custom-control-inline custom-radio">
               <input id="radioStacked1" name="radio-stacked" type="radio" class="custom-control-input" v-model="start" value="asap">
-              <span class="custom-control-indicator"></span>
-              <span class="custom-control-description">As soon as possible</span>
+              <span class="custom-control-label">As soon as possible</span>
             </label>
-            <label class="custom-control custom-radio mr-0">
+            <label class="custom-control custom-control-inline custom-radio mr-0">
               <input id="radioStacked2" name="radio-stacked" type="radio" class="custom-control-input" v-model="start" value="scheduled" @click="startScheduled">
-              <span class="custom-control-indicator"></span>
-              <span class="custom-control-description">Scheduled</span>
+              <span class="custom-control-label">Scheduled</span>
             </label>
           </div>
           <div class="form-group" v-show="start == 'scheduled'">
