@@ -32,10 +32,9 @@
           </div>
         </div>
         <div class="form-check">
-          <label class="custom-control custom-checkbox">
+          <label class="custom-control custom-control-inline custom-checkbox">
             <input v-model="charter" name="charter" type="checkbox" class="custom-control-input" v-validate="'required'" :class="{'is-invalid': errors.has('charter') }">
-            <span class="custom-control-indicator"></span>
-            <span class="custom-control-description">
+            <span class="custom-control-label">
               I read and I accept <a href="/charter/" :class="{'text-danger': errors.has('charter') }" target="_blank">IoT-LAB Terms of Service</a>.
             </span>
           </label>
@@ -43,7 +42,7 @@
             You must check the box and accept the terms of service.
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group mt-3">
           <button class="btn btn-lg btn-primary mr-1" type="submit">Sign up</button>
           <router-link :to="{name:'login'}" class="btn btn-lg btn-secondary">Login</router-link>
         </div>
