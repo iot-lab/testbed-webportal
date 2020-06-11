@@ -87,10 +87,9 @@
                 </filter-select>
                 <filter-select title="Site" :items="sites4Archi.sort()" v-model="filterSite"></filter-select>
                 <filter-select :items="qtyAvailable" title="Qty" v-model.number="qty" style="max-width: 90px"></filter-select>
-                <label class="custom-control custom-checkbox mb-0 mt-1">
+                <label class="custom-control custom-control-inline custom-checkbox mb-0 mt-1">
                   <input v-model="propMobile" type="checkbox" class="custom-control-input">
-                  <span class="custom-control-indicator"></span>
-                  <span class="custom-control-description">Mobile</span>
+                  <span class="custom-control-label">Mobile</span>
                 </label>
                 <button class="btn btn-sm btn-success" @click="addProps"><i class="fa fa-plus" aria-hidden="true"></i> Add to experiment</button>
               </div>
