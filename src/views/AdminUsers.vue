@@ -144,7 +144,7 @@
             <user-form ref="user" :user="currentUser" :admin="true" mode="edit" :hidden="['password']"></user-form>
           </div>
           <div class="modal-footer border-0 dbg-light">
-            <button type="button" class="btn" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <button type="button" class="btn btn-success" @click.prevent="updateProfile">Save profile</button>
           </div>
         </div>
@@ -167,7 +167,7 @@
             <email-form ref="mail" :to="currentUser.email + ', admin@iot-lab.info'"></email-form>
           </div>
           <div class="modal-footer border-0">
-            <button type="button" class="btn" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <button type="button" class="btn btn-success" @click.prevent="$refs.mail.send">Send</button>
           </div>
         </div>

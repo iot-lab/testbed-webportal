@@ -153,7 +153,7 @@
             <firmware-list :archi="selectedArchis.concat([undefined])" :select="true" @select="fw => flashResourcesFirmware(fw)"></firmware-list>
           </div>
           <div class="modal-footer dborder-0 dbg-light">
-            <button type="button" class="btn" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <button type="button" class="btn btn-primary" @click.prevent="flashFirmware('firmwareFile')">Flash</button>
           </div>
         </div>
@@ -173,7 +173,7 @@
             <monitoring-list :archi="selectedArchis[0]" :select="true" @select="profile => updateMonitoring(profile)"></monitoring-list>
           </div>
           <div class="modal-footer dborder-0 dbg-light">
-            <button type="button" class="btn" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
