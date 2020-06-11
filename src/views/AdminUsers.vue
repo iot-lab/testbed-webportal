@@ -105,8 +105,7 @@
       </template>
       <label class="custom-control custom-checkbox d-block" v-for="group in store.groups">
         <input name="checkbox-monitor" type="checkbox" class="custom-control-input" v-model="currentGroups[group.name]">
-        <span class="custom-control-indicator"></span>
-        <span class="custom-control-description text-capitalize">{{group.name}}</span>
+        <span class="custom-control-label text-capitalize">{{group.name}}</span>
       </label>
       <template slot="action">Add groups</template>
     </modal-dialog>
@@ -117,8 +116,7 @@
       </template>
       <label class="custom-control custom-checkbox d-block" v-for="group in store.groups">
         <input name="checkbox-monitor" type="checkbox" class="custom-control-input" v-model="currentGroups[group.name]">
-        <span class="custom-control-indicator"></span>
-        <span class="custom-control-description text-capitalize">{{group.name}}</span>
+        <span class="custom-control-label text-capitalize">{{group.name}}</span>
       </label>
       <template slot="action">Remove groups</template>
     </modal-dialog>
@@ -129,8 +127,7 @@
       </template>
       <label class="custom-control custom-checkbox d-block" v-for="group in store.groups">
         <input name="checkbox-monitor" type="checkbox" class="custom-control-input" v-model="currentGroups[group.name]">
-        <span class="custom-control-indicator"></span>
-        <span class="custom-control-description text-capitalize">{{group.name}}</span>
+        <span class="custom-control-label text-capitalize">{{group.name}}</span>
       </label>
     </modal-dialog>
 
