@@ -11,52 +11,44 @@
     </div>
     <div class="form-group">
       <label class="mr-3 my-label">Architecture</label>
-      <label class="custom-control custom-radio">
+      <label class="custom-control custom-radio custom-control-inline">
         <input name="radio-archi" type="radio" class="custom-control-input" v-model="profile.nodearch" value="m3">
-        <span class="custom-control-indicator"></span>
-        <span class="custom-control-description">M3</span>
+        <span class="custom-control-label">M3</span>
       </label>
-      <label class="custom-control custom-radio">
+      <label class="custom-control custom-radio custom-control-inline">
         <input name="radio-archi" type="radio" class="custom-control-input" v-model="profile.nodearch" value="a8">
-        <span class="custom-control-indicator"></span>
-        <span class="custom-control-description">A8</span>
+        <span class="custom-control-label">A8</span>
       </label>
-      <label class="custom-control custom-radio">
+      <label class="custom-control custom-radio custom-control-inline">
         <input name="radio-archi" type="radio" class="custom-control-input" v-model="profile.nodearch" value="custom">
-        <span class="custom-control-indicator"></span>
-        <span class="custom-control-description">Other</span>
+        <span class="custom-control-label">Other</span>
       </label>
     </div>
     <div class="form-group">
       <label class="mr-3 my-label">Monitor</label>
-      <label class="custom-control custom-checkbox">
+      <label class="custom-control custom-checkbox custom-control-inline">
         <input name="checkbox-monitor" type="checkbox" class="custom-control-input" v-model="showConso">
-        <span class="custom-control-indicator"></span>
-        <span class="custom-control-description">Consumption <i class="fa fa-bolt text-muted"></i></span>
+        <span class="custom-control-label">Consumption <i class="fa fa-bolt text-muted"></i></span>
       </label>
-      <label class="custom-control custom-checkbox">
+      <label class="custom-control custom-checkbox custom-control-inline">
         <input name="checkbox-monitor" type="checkbox" class="custom-control-input" v-model="showRadio">
-        <span class="custom-control-indicator"></span>
-        <span class="custom-control-description">Radio <i class="fa fa-wifi text-muted"></i></span>
+        <span class="custom-control-label">Radio <i class="fa fa-wifi text-muted"></i></span>
       </label>
     </div>
     <fieldset class="card bg-light pt-2 mb-3" v-if="showConso">
       <div class="form-group">
         <label class="mr-3 my-label"><i class="fa fa-bolt"></i></label>
-        <label class="custom-control custom-checkbox">
+        <label class="custom-control custom-checkbox custom-control-inline">
           <input name="checkbox-conso" type="checkbox" class="custom-control-input" v-model="profile.consumption.current">
-          <span class="custom-control-indicator"></span>
-          <span class="custom-control-description">Current</span>
+          <span class="custom-control-label">Current</span>
         </label>
-        <label class="custom-control custom-checkbox">
+        <label class="custom-control custom-checkbox custom-control-inline">
           <input name="checkbox-conso" type="checkbox" class="custom-control-input" v-model="profile.consumption.voltage">
-          <span class="custom-control-indicator"></span>
-          <span class="custom-control-description">Voltage</span>
+          <span class="custom-control-label">Voltage</span>
         </label>
-        <label class="custom-control custom-checkbox">
+        <label class="custom-control custom-checkbox custom-control-inline">
           <input name="checkbox-conso" type="checkbox" class="custom-control-input" v-model="profile.consumption.power">
-          <span class="custom-control-indicator"></span>
-          <span class="custom-control-description">Power</span>
+          <span class="custom-control-label">Power</span>
         </label>
       </div>
       <div class="form-group">
@@ -89,15 +81,13 @@
     <fieldset class="card bg-light pt-2 mb-3" v-if="showRadio">
       <div class="form-group">
         <label class="mr-3 my-label"><i class="fa fa-wifi"></i></label>
-        <label class="custom-control custom-radio">
+        <label class="custom-control custom-radio custom-control-inline">
           <input name="radio-mode" type="radio" class="custom-control-input" v-model="profile.radio.mode" value="rssi">
-          <span class="custom-control-indicator"></span>
-          <span class="custom-control-description">rssi</span>
+          <span class="custom-control-label">rssi</span>
         </label>
-        <label class="custom-control custom-radio">
+        <label class="custom-control custom-radio custom-control-inline">
           <input name="radio-mode" type="radio" class="custom-control-input" v-model="profile.radio.mode" value="sniffer">
-          <span class="custom-control-indicator"></span>
-          <span class="custom-control-description">sniffer</span>
+          <span class="custom-control-label">sniffer</span>
         </label>
       </div>
       <div class="form-group">
