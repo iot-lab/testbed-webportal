@@ -28,9 +28,9 @@
             <label class="lead mr-3 my-label">Duration</label>
             <div class="input-group" style="display: inline-flex; max-width: 300px;">
               <input type="number" class="form-control" min="1" v-model="duration">
-              <div class="input-group-btn">
-                <button type="button" class="btn" :class="{'btn-secondary': durationMultiplier == 1}" @click="durationMultiplier = 1"> minutes </button>
-                <button type="button" class="btn" :class="{'btn-secondary': durationMultiplier == 60}" @click="durationMultiplier = 60"> hours </button>
+              <div class="input-group-append">
+                <button type="button" class="btn btn-outline-secondary" :class="{'active': durationMultiplier == 1}" @click="durationMultiplier = 1"> minutes </button>
+                <button type="button" class="btn btn-outline-secondary" :class="{'active': durationMultiplier == 60}" @click="durationMultiplier = 60"> hours </button>
               </div>
             </div>
           </div>
