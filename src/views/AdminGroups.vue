@@ -17,7 +17,7 @@
           <!-- <td><span class="badge badge-info mr-1" v-for="user in group.users.sort()">{{user}}</span></td> -->
           <td><span class="badge badge-pill badge-secondary">{{group.users.length}}</span> {{[...group.users].sort().join(', ')}}</td>
           <td>
-            <a href="" class="btn btn-sm border-0 btn-outline-danger" v-tooltip="'Delete group'" @click.prevent="deleteGroup(group.name)">
+            <a href="" class="btn btn-sm border-0 btn-outline-danger" v-tooltip:top="'Delete group'" @click.prevent="deleteGroup(group.name)">
               <i class="fa fa-fw fa-trash-o"></i>
             </a>
           </td>
