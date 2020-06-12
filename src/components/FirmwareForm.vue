@@ -5,10 +5,10 @@
       <div v-if="firmware.filename" class="mb-2">
         <a href="#" @click.prevent="download"><i class="fa fa-download"></i> {{firmware.filename}}</a>
       </div>
-      <label class="custom-file" v-if="!readOnly">
+      <div class="custom-file" v-if="!readOnly">
         <input type="file" id="file" ref="firmwareFile" class="custom-file-input" @change="uploadFirmware">
-        <span class="custom-file-control">{{firmwareFile && firmwareFile.name}}</span>
-      </label>
+        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+      </div>
     </div>
     <div class="form-group">
       <label>Identifier</label>
