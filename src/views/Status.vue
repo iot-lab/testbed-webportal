@@ -2,7 +2,6 @@
 <div class="container mt-3">
   <h4><i class="fa fa-fw fa-hourglass-half" aria-hidden="true"></i> Running experiments ({{runningExp.length}})</h4>
   <running-experiments :exp-list="runningExp"></running-experiments>
-  </div>
   <div class="float-right mt-1 mb-4" v-if="showData === 'properties'">
     <div class="dropdown d-inline-block ">
       <button class="btn btn-light mr-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-fw fa-download"></i> Download</button>
