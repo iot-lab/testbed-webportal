@@ -169,10 +169,10 @@
           <div class="dropdown-menu dropdown-menu-right">
             <div class="card-body">
               <p class="lead">Assign a firmware <span class="text-muted">(upload or select from list)</span></p>
-              <label class="custom-file mb-2">
+              <div class="custom-file mb-2">
                 <input type="file" id="file" :ref="'firmwareFile' + index" class="custom-file-input" @change="loadFirmwareFile('firmwareFile' + index, index)">
-                <span class="custom-file-control">{{group.firmware.name}}</span>
-              </label>
+                <label class="custom-file-label">{{group.firmware.name}}</label>
+              </div>
               <hr>
               <firmware-list :archi="[group.archi, undefined]" :select="true" @select="fw => { avoidCollision(fw); group.firmware = {name: fw} }"></firmware-list>
             </div>
@@ -207,10 +207,10 @@
           <div class="dropdown-menu dropdown-menu-right">
             <div class="card-body">
               <p class="lead">Assign a firmware <span class="text-muted">(upload or select from list)</span></p>
-              <label class="custom-file mb-2">
+              <div class="custom-file mb-2">
                 <input type="file" id="file" :ref="'firmwarePropFile' + index" class="custom-file-input" @change="loadFirmwareFile('firmwarePropFile' + index, index)">
-                <span class="custom-file-control">{{p.firmware.name}}</span>
-              </label>
+                <label class="custom-file-label">{{p.firmware.name}}</label>
+              </div>
               <hr>
               <firmware-list :archi="[p.archi, undefined]" :select="true" @select="fw => { avoidCollision(fw); p.firmware = {name: fw} }"></firmware-list>
             </div>
