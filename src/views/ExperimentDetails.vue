@@ -145,10 +145,10 @@
             </button>
           </div>
           <div class="modal-body py-4">
-            <label class="custom-file">
+            <div class="custom-file">
               <input type="file" id="file" ref="firmwareFile" class="custom-file-input" @change="changeFirmwareFile('firmwareFile')">
-              <span class="custom-file-control">{{firmwareFile && firmwareFile.name}}</span>
-            </label>
+              <label class="custom-file-label">{{firmwareFile && firmwareFile.name}}</label>
+            </div>
             <hr>
             <firmware-list :archi="selectedArchis.concat([undefined])" :select="true" @select="fw => flashResourcesFirmware(fw)"></firmware-list>
           </div>
