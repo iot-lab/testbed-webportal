@@ -63,27 +63,27 @@
           </td>
           <td>
             <div class="btn-group" role="group" aria-label="User actions">
-              <a href="" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Groups'"
+              <a href="" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip:top="'Groups'"
                 data-toggle="modal" data-target=".edit-groups-modal" @click="currentUser = user; currentGroups = getCurrentGroups(user)">
                 <i class="fa fa-fw fa-user-circle"></i>
               </a>
               <router-link :to="{name: 'userExperiments', params: {username: user.login}}"
-                class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Experiments'">
+                class="btn btn-sm border-0 btn-outline-secondary" v-tooltip:top="'Experiments'">
                 <i class="fa fa-fw fa-flask" @click="hideTooltip"></i>
               </router-link>
-              <a href="" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Edit'"
+              <a href="" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip:top="'Edit'"
                 data-toggle="modal" data-target=".edit-user-modal"
                 @click="currentUser = JSON.parse(JSON.stringify(user)); $refs.user.clean(user)">
                 <i class="fa fa-fw fa-pencil"></i>
               </a>
-              <a href="" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip="'Email'"
+              <a href="" class="btn btn-sm border-0 btn-outline-secondary" v-tooltip:top="'Email'"
                 data-toggle="modal" data-target=".email-user-modal" @click="currentUser = user; $refs.mail.$validator.reset()">
                 <i class="fa fa-fw fa-envelope"></i>
               </a>
-              <a href="" class="btn btn-sm border-0 btn-outline-dark" v-tooltip="'Reset password'" @click.prevent="resetPassword(user)">
+              <a href="" class="btn btn-sm border-0 btn-outline-dark" v-tooltip:top="'Reset password'" @click.prevent="resetPassword(user)">
                 <i class="fa fa-fw fa-unlock-alt"></i>
               </a>
-              <a href="" class="btn btn-sm border-0 btn-outline-danger" v-tooltip="'Delete'" @click.prevent="deleteUser(user)">
+              <a href="" class="btn btn-sm border-0 btn-outline-danger" v-tooltip:top="'Delete'" @click.prevent="deleteUser(user)">
                 <i class="fa fa-fw fa-trash"></i>
               </a>
             </div>
