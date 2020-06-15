@@ -375,8 +375,8 @@ export default {
     $('#collapseMap').on('hidden.bs.collapse', () => {
       this.showMap = false
     })
-    $(document).on('click', 'span[data-ids]', e => {
-      this.nodeIds = e.target.dataset.ids
+    $(document).on('click', 'span.data-ids', e => {
+      this.nodeIds = e.target.textContent
     })
     $(document).on('click', '.dropdown-menu a[data-toggle="list"]', e => {
       // prevent dropdown menu to close while switching tabs
@@ -428,7 +428,7 @@ export default {
           .filter(site => site.site === this.filterSite)[0].archis
           .filter(archi => archi.archi === this.filterArchi)[0].states
           .sort((a, b) => a.state > b.state)
-          .map(state => `<span class="badge ${this.$options.filters.stateBadgeClass(state.state)}">${state.state}</span> <span class="cursor" data-ids="${state.ids}">${state.ids}</span>`)
+          .map(state => `<span class="badge ${this.$options.filters.stateBadgeClass(state.state)}">${state.state}</span> <span class="cursor data-ids">${state.ids}</span>`)
           .join('<br>')
       } catch (err) {
         return 'no matching ids'
