@@ -14,9 +14,7 @@
   </div>
   <p class="lead mb-0">Sites</p>
   <p class="mb-2" v-if="sites">
-    <span class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentSite === 'all', 'badge-secondary': currentSite !== 'all'}" @click="currentSite = 'all'">{{sites.length}} sites</span>
-    <span v-for="site in sites" class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentSite === site, 'badge-secondary': currentSite !== site}"
-    @click="currentSite = site">{{site.site}}</span>
+    <span v-for="(site, index) in sites" class="badge badge-pill mr-1 cursor" :class="{'badge-primary': currentSite === index, 'badge-secondary': currentSite !== index}" @click="currentSite = index">{{site.site}}</span>
   </p>
   <p class="lead mb-0">Architectures</p>
   <p class="mb-2" v-if="sites">
@@ -130,7 +128,7 @@ export default {
       sites: [],
       nodes: [],
       runningExp: [],
-      currentSite: 'all',
+      currentSite: 0,
       currentArchi: 'all',
       nodeFilter: null,
       nodeFilters: {
@@ -162,21 +160,15 @@ export default {
   computed: {
     archis () {
       let archis
-      if (this.currentSite === 'all') {
-        archis = Array.from(this.sites.reduce((acc, site) => {
-          site.archis.map(archi => acc.add(archi.archi))
-          return acc
-        }, new Set()))
-      } else {
-        archis = this.sites.find(site => site.site === this.currentSite.site).archis.map(archi => archi.archi)
-      }
+      archis = this.sites[this.currentSite].archis.map(archi => archi.archi)
       return archis.sort((a, b) => a.localeCompare(b))
     },
+
     filteredNodes () {
       let nodes = this.getNodes()
       if (this.search) nodes = nodes.filter(node => node.network_address.includes(this.search) || node.uid.includes(this.search))
       if (this.nodeFilter) nodes = nodes.filter(this.nodeFilter)
-      if (this.currentSite !== 'all') nodes = nodes.filter(node => node.site === this.currentSite.site)
+      nodes = nodes.filter(node => node.site === this.sites[this.currentSite].site)
       if (this.currentArchi !== 'all') nodes = nodes.filter(node => node.archi === this.currentArchi)
       return nodes
     },
@@ -194,8 +186,8 @@ export default {
     },
 
     getNodes (stateList = null) {
-      let nodes = this.nodes
-      if (this.currentSite !== 'all') nodes = nodes.filter(node => node.site === this.currentSite.site)
+      let nodes
+      nodes = this.nodes.filter(node => node.site === this.sites[this.currentSite].site)
       if (this.currentArchi !== 'all') nodes = nodes.filter(node => node.archi === this.currentArchi)
       if (stateList) {
         return nodes.filter(node => stateList.includes(node.state))
