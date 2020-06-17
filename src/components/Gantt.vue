@@ -47,7 +47,7 @@
 
             <div class="nodeState" v-for="nodeState in node.states" v-bind:key="nodeState.network_address"
                 :style="nodeStateStyle(nodeState)"
-                v-tooltip.auto.html="nodeState.info">
+                v-tooltip:auto.html="nodeState.info">
             </div>
 
             <router-link v-for="experiment in node.experiments" v-bind:key="experiment.key"
@@ -56,7 +56,7 @@
                 :class="{ disabled: !experiment.reachable }"
                 v-on:click.native="closeTooltip"
                 :style="experimentStyle(experiment)"
-                v-tooltip.auto.html="experiment.info">
+                v-tooltip:auto.html="experiment.info">
               {{ experiment.id }}
             </router-link>
           </div>
