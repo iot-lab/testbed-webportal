@@ -93,7 +93,18 @@
       </tr>
     </tbody>
   </table>
-  <drawgantt :nodes="filteredNodes" :sites="sites" v-if="showData === 'activity'"/>
+  <div class="card card-body bg-light text-center" v-if="showData === 'activity' && currentSite === 'all'">
+    <p class="lead mt-2">
+      <i class="fa fa-fw fa-lg fa-calendar" aria-hidden="true"></i>
+      Select a site to view its Gantt chart
+    </p>
+    <ul class="nav nav-pills justify-content-center">
+      <li class="nav-item" v-for="site in sites">
+        <a class="nav-link text-capitalize bg-light" href="#" @click="currentSite = site">{{site.site}}</a>
+      </li>
+    </ul>
+  </div>
+  <drawgantt :nodes="filteredNodes" :sites="sites" v-if="showData === 'activity' && currentSite !== 'all'"/>
 </div> <!-- container -->
 
 </template>

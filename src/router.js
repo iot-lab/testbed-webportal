@@ -41,6 +41,7 @@ const router = new Router({
     { path: '/experiment', name: 'experiment', component: NewExperiment, meta: { requiresAuth: true } },
     { path: '/resources',
       name: 'resources',
+      redirect: { name: 'listMonitoring' },
       component: Resources,
       meta: { requiresAuth: true },
       children: [
