@@ -18,6 +18,10 @@ npm install
 # run local dev server with hot reload at localhost:8080
 npm run serve
 
+# run local dev server with another REST API host (view .env* files at the root path)
+export VUE_APP_IOTLAB_HOST=www.iot-lab.info
+npm run serve
+
 # build for production with minification (mode = [dev|dev-beta|prod|prod-beta])
 # (eg. 'dev[-beta]' <=> devwww.iot-lab.info/testbed[-beta])
 npm run build:<mode>
