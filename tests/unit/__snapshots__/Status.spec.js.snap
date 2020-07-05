@@ -67,14 +67,6 @@ exports[`Status.vue should match snapshot 1`] = `
     <!---->
   </div>
    
-  <h4>
-    <i
-      aria-hidden="true"
-      class="fa fa-fw fa-share-alt"
-    />
-     Nodes properties
-  </h4>
-   
   <p
     class="lead mb-0"
   >
@@ -136,6 +128,54 @@ exports[`Status.vue should match snapshot 1`] = `
   </p>
    
   <div
+    class="col-md-4 float-right"
+  >
+    <input
+      class="form-control mb-3"
+      placeholder="Search by hostname or uid"
+      type="text"
+    />
+  </div>
+   
+  <ul
+    class="nav nav-tabs"
+  >
+    <li
+      class="nav-item"
+    >
+      <router-link-stub
+        class="nav-link active"
+        event="click"
+        role="tab"
+        tag="a"
+        to="[object Object]"
+      >
+        <i
+          class="fa fa-fw fa-share-alt"
+        />
+        Nodes properties
+      </router-link-stub>
+    </li>
+     
+    <li
+      class="nav-item"
+    >
+      <router-link-stub
+        class="nav-link"
+        event="click"
+        role="tab"
+        tag="a"
+        to="[object Object]"
+      >
+        <i
+          class="fa fa-fw fa-calendar"
+        />
+        Testbed Activity
+      </router-link-stub>
+    </li>
+  </ul>
+   
+  <div
     class="row"
   >
     <div
@@ -161,16 +201,6 @@ exports[`Status.vue should match snapshot 1`] = `
         />
       </a>
     </div>
-     
-    <div
-      class="col-md-4"
-    >
-      <input
-        class="form-control mb-3"
-        placeholder="Search by hostname or uid"
-        type="text"
-      />
-    </div>
   </div>
    
   <map3d-stub
@@ -179,6 +209,10 @@ exports[`Status.vue should match snapshot 1`] = `
     style="display: none;"
     value=""
   />
+   
+  <!---->
+   
+  <!---->
    
   <!---->
 </div>
