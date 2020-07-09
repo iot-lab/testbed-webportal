@@ -1,3 +1,22 @@
+## 2.0.0 (2020-07-09)
+
+### New features
+
+* Update Navbar with new IoT-LAB Website style
+* Status view: add `Testbed activity` tab (Drawgantt)
+
+### Enhancements
+
+* Status view:
+  * Update sort function (`network_address`)
+  * Add number of running experiments
+
+### Internal
+
+* Upgrade Bootstrap version (4.5.0)
+* Upgrade xterm (3.8.1)
+* Tests/unit: update snapshots
+
 ## 1.3.0 (2019-11-12)
 
 ### Enhancements
