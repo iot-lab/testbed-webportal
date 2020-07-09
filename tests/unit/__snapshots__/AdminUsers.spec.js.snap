@@ -321,7 +321,7 @@ exports[`AdminUsers.vue should match snapshot 1`] = `
           class="modal-footer border-0 dbg-light"
         >
           <button
-            class="btn"
+            class="btn btn-secondary"
             data-dismiss="modal"
             type="button"
           >
@@ -404,7 +404,7 @@ https://www.iot-lab.info"
           class="modal-footer border-0"
         >
           <button
-            class="btn"
+            class="btn btn-secondary"
             data-dismiss="modal"
             type="button"
           >

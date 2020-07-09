@@ -42,7 +42,7 @@ exports[`ModalDialog.vue should match snapshot 1`] = `
         class="modal-footer border-0"
       >
         <button
-          class="btn"
+          class="btn btn-secondary"
           data-dismiss="modal"
           type="button"
         >

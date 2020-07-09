@@ -39,7 +39,7 @@ exports[`MonitoringForm.vue should match snapshot 1`] = `
     </label>
      
     <label
-      class="custom-control custom-radio"
+      class="custom-control custom-radio custom-control-inline"
     >
       <input
         class="custom-control-input"
@@ -49,18 +49,14 @@ exports[`MonitoringForm.vue should match snapshot 1`] = `
       />
        
       <span
-        class="custom-control-indicator"
-      />
-       
-      <span
-        class="custom-control-description"
+        class="custom-control-label"
       >
         M3
       </span>
     </label>
      
     <label
-      class="custom-control custom-radio"
+      class="custom-control custom-radio custom-control-inline"
     >
       <input
         class="custom-control-input"
@@ -70,18 +66,14 @@ exports[`MonitoringForm.vue should match snapshot 1`] = `
       />
        
       <span
-        class="custom-control-indicator"
-      />
-       
-      <span
-        class="custom-control-description"
+        class="custom-control-label"
       >
         A8
       </span>
     </label>
      
     <label
-      class="custom-control custom-radio"
+      class="custom-control custom-radio custom-control-inline"
     >
       <input
         class="custom-control-input"
@@ -91,11 +83,7 @@ exports[`MonitoringForm.vue should match snapshot 1`] = `
       />
        
       <span
-        class="custom-control-indicator"
-      />
-       
-      <span
-        class="custom-control-description"
+        class="custom-control-label"
       >
         Other
       </span>
@@ -112,7 +100,7 @@ exports[`MonitoringForm.vue should match snapshot 1`] = `
     </label>
      
     <label
-      class="custom-control custom-checkbox"
+      class="custom-control custom-checkbox custom-control-inline"
     >
       <input
         class="custom-control-input"
@@ -121,11 +109,7 @@ exports[`MonitoringForm.vue should match snapshot 1`] = `
       />
        
       <span
-        class="custom-control-indicator"
-      />
-       
-      <span
-        class="custom-control-description"
+        class="custom-control-label"
       >
         Consumption 
         <i
@@ -135,7 +119,7 @@ exports[`MonitoringForm.vue should match snapshot 1`] = `
     </label>
      
     <label
-      class="custom-control custom-checkbox"
+      class="custom-control custom-checkbox custom-control-inline"
     >
       <input
         class="custom-control-input"
@@ -144,11 +128,7 @@ exports[`MonitoringForm.vue should match snapshot 1`] = `
       />
        
       <span
-        class="custom-control-indicator"
-      />
-       
-      <span
-        class="custom-control-description"
+        class="custom-control-label"
       >
         Radio 
         <i
@@ -214,7 +194,7 @@ exports[`MonitoringForm.vue should match snapshot 2 1`] = `
     </label>
      
     <label
-      class="custom-control custom-radio"
+      class="custom-control custom-radio custom-control-inline"
     >
       <input
         class="custom-control-input"
@@ -224,18 +204,14 @@ exports[`MonitoringForm.vue should match snapshot 2 1`] = `
       />
        
       <span
-        class="custom-control-indicator"
-      />
-       
-      <span
-        class="custom-control-description"
+        class="custom-control-label"
       >
         M3
       </span>
     </label>
      
     <label
-      class="custom-control custom-radio"
+      class="custom-control custom-radio custom-control-inline"
     >
       <input
         class="custom-control-input"
@@ -245,18 +221,14 @@ exports[`MonitoringForm.vue should match snapshot 2 1`] = `
       />
        
       <span
-        class="custom-control-indicator"
-      />
-       
-      <span
-        class="custom-control-description"
+        class="custom-control-label"
       >
         A8
       </span>
     </label>
      
     <label
-      class="custom-control custom-radio"
+      class="custom-control custom-radio custom-control-inline"
     >
       <input
         class="custom-control-input"
@@ -266,11 +238,7 @@ exports[`MonitoringForm.vue should match snapshot 2 1`] = `
       />
        
       <span
-        class="custom-control-indicator"
-      />
-       
-      <span
-        class="custom-control-description"
+        class="custom-control-label"
       >
         Other
       </span>
@@ -287,7 +255,7 @@ exports[`MonitoringForm.vue should match snapshot 2 1`] = `
     </label>
      
     <label
-      class="custom-control custom-checkbox"
+      class="custom-control custom-checkbox custom-control-inline"
     >
       <input
         class="custom-control-input"
@@ -296,11 +264,7 @@ exports[`MonitoringForm.vue should match snapshot 2 1`] = `
       />
        
       <span
-        class="custom-control-indicator"
-      />
-       
-      <span
-        class="custom-control-description"
+        class="custom-control-label"
       >
         Consumption 
         <i
@@ -310,7 +274,7 @@ exports[`MonitoringForm.vue should match snapshot 2 1`] = `
     </label>
      
     <label
-      class="custom-control custom-checkbox"
+      class="custom-control custom-checkbox custom-control-inline"
     >
       <input
         class="custom-control-input"
@@ -319,11 +283,7 @@ exports[`MonitoringForm.vue should match snapshot 2 1`] = `
       />
        
       <span
-        class="custom-control-indicator"
-      />
-       
-      <span
-        class="custom-control-description"
+        class="custom-control-label"
       >
         Radio 
         <i
@@ -389,7 +349,7 @@ exports[`MonitoringForm.vue should match snapshot 3 1`] = `
     </label>
      
     <label
-      class="custom-control custom-radio"
+      class="custom-control custom-radio custom-control-inline"
     >
       <input
         class="custom-control-input"
@@ -399,18 +359,14 @@ exports[`MonitoringForm.vue should match snapshot 3 1`] = `
       />
        
       <span
-        class="custom-control-indicator"
-      />
-       
-      <span
-        class="custom-control-description"
+        class="custom-control-label"
       >
         M3
       </span>
     </label>
      
     <label
-      class="custom-control custom-radio"
+      class="custom-control custom-radio custom-control-inline"
     >
       <input
         class="custom-control-input"
@@ -420,18 +376,14 @@ exports[`MonitoringForm.vue should match snapshot 3 1`] = `
       />
        
       <span
-        class="custom-control-indicator"
-      />
-       
-      <span
-        class="custom-control-description"
+        class="custom-control-label"
       >
         A8
       </span>
     </label>
      
     <label
-      class="custom-control custom-radio"
+      class="custom-control custom-radio custom-control-inline"
     >
       <input
         class="custom-control-input"
@@ -441,11 +393,7 @@ exports[`MonitoringForm.vue should match snapshot 3 1`] = `
       />
        
       <span
-        class="custom-control-indicator"
-      />
-       
-      <span
-        class="custom-control-description"
+        class="custom-control-label"
       >
         Other
       </span>
@@ -462,7 +410,7 @@ exports[`MonitoringForm.vue should match snapshot 3 1`] = `
     </label>
      
     <label
-      class="custom-control custom-checkbox"
+      class="custom-control custom-checkbox custom-control-inline"
     >
       <input
         class="custom-control-input"
@@ -471,11 +419,7 @@ exports[`MonitoringForm.vue should match snapshot 3 1`] = `
       />
        
       <span
-        class="custom-control-indicator"
-      />
-       
-      <span
-        class="custom-control-description"
+        class="custom-control-label"
       >
         Consumption 
         <i
@@ -485,7 +429,7 @@ exports[`MonitoringForm.vue should match snapshot 3 1`] = `
     </label>
      
     <label
-      class="custom-control custom-checkbox"
+      class="custom-control custom-checkbox custom-control-inline"
     >
       <input
         class="custom-control-input"
@@ -494,11 +438,7 @@ exports[`MonitoringForm.vue should match snapshot 3 1`] = `
       />
        
       <span
-        class="custom-control-indicator"
-      />
-       
-      <span
-        class="custom-control-description"
+        class="custom-control-label"
       >
         Radio 
         <i

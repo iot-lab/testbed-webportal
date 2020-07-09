@@ -261,7 +261,7 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
         <div
           class="modal-body py-4"
         >
-          <label
+          <div
             class="custom-file"
           >
             <input
@@ -270,12 +270,12 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
               type="file"
             />
              
-            <span
-              class="custom-file-control"
+            <label
+              class="custom-file-label"
             >
               
-            </span>
-          </label>
+            </label>
+          </div>
            
           <hr />
            
@@ -289,7 +289,7 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
           class="modal-footer dborder-0 dbg-light"
         >
           <button
-            class="btn"
+            class="btn btn-secondary"
             data-dismiss="modal"
             type="button"
           >
@@ -356,7 +356,7 @@ exports[`ExperimentDetails.vue should match snapshot 1`] = `
           class="modal-footer dborder-0 dbg-light"
         >
           <button
-            class="btn"
+            class="btn btn-secondary"
             data-dismiss="modal"
             type="button"
           >
