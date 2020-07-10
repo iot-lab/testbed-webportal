@@ -17,6 +17,10 @@
 * Upgrade xterm (3.8.1)
 * Tests/unit: update snapshots
 
+### Bug fixes
+
+* Fix favicon.ico display
+
 ## 1.3.0 (2019-11-12)
 
 ### Enhancements
