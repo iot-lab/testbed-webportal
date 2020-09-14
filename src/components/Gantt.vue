@@ -203,20 +203,10 @@ export default {
           indices.push(nodesNetworkAddresses.indexOf(node))
         }
         indices.sort()
-        indices = indices.reduce((r, n) => {
-          const lastSubArray = r[r.length - 1]
-          if (!lastSubArray || lastSubArray[1] !== n - 1) {
-            r.push([n, n])
-          } else {
-            r[r.length - 1][1] = n
-          }
-          return r
-        }, [])
-
         let stopDate = (new Date(experiment.stop_date)).getTime() / 1000
 
-        for (let indicesArray of indices) {
-          let node = nodes[indicesArray[0]].network_address
+        for (let indice of indices) {
+          let node = nodes[indice].network_address
           let svgNode = map[node]
           if (svgNode) {
             let svgExperiment = {
