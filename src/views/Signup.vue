@@ -35,7 +35,7 @@
           <label class="custom-control custom-control-inline custom-checkbox">
             <input v-model="charter" name="charter" type="checkbox" class="custom-control-input" v-validate="'required'" :class="{'is-invalid': errors.has('charter') }">
             <span class="custom-control-label">
-              I read and I accept <a href="/charter/" :class="{'text-danger': errors.has('charter') }" target="_blank">IoT-LAB Terms of Service</a>.
+              I read and I accept <a href="/docs/getting-started/terms-of-use/" :class="{'text-danger': errors.has('charter') }" target="_blank">IoT-LAB Terms of Service</a>.
             </span>
           </label>
           <div class="invalid-feedback mb-3" :class="{'d-block': errors.has('charter') }" v-show="errors.has('charter')">
