@@ -15,7 +15,7 @@
     "test:e2e": "vue-cli-service test:e2e"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "bootstrap": "^4.5.0",
     "font-awesome": "^4.7.0",
     "humanize-duration": "^3.15.3",
