@@ -81,10 +81,3 @@ https://docs.cypress.io/guides/guides/network-requests.html
 It's possible to issue real ajax API requests to the backend server for real end to end testing, hence you test exactly what the end user gets.
 
 Or it's possible to stub API requests or responses with fixtures. So that it runs faster and it's easier to test edge cases.
-
-## CI
-
-fab ci civms.setup_slave_ubuntu -H bfor001@ci.iot-lab.info:22
-ssh bfor001@ci-ssh.inria.fr
-ssh ci@iot-lab-debian-8 (ci)
-ssh root@iot-lab-debian-8 (password)

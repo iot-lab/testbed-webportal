@@ -50,13 +50,6 @@ Note: project structure created with vue-cli 3.0 `vue create testbed-webportal` 
 
 [Testing tools & strategies](Testing.md)
 
-## Deployment
-
-``` bash
-# run tests, build and deploy
-fab test build deploy -H root@devwww:2222
-```
-
 ## IoT-LAB API
 
 New API url is `https://devwww|www.iot-lab.info/api/`
