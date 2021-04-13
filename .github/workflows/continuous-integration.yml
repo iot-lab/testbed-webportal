@@ -32,6 +32,8 @@ jobs:
         export DISPLAY=:99
         Xvfb $DISPLAY &
     - name: npm install and test
+      env:
+        IOTLAB_WEBPORTAL_PASSWD : ${{ secrets.IOTLAB_WEBPORTAL_PASSWD }}
       run: |
         npm install
         npm run test:unit
