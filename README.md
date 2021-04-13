@@ -2,8 +2,6 @@
 
 [![CI](https://github.com/iot-lab/testbed-webportal/workflows/CI/badge.svg)](https://github.com/iot-lab/testbed-webportal/actions?query=workflow%3ACI+branch%3Amaster)
 
-[![Build Status](https://ci.inria.fr/iot-lab/buildStatus/icon?job=testbed-webportal)](https://ci.inria.fr/iot-lab/job/testbed-webportal/)
-
 > A Vue.js webportal for the FIT IoT-LAB testbed
 
 ## Requirements
