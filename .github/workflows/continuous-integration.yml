@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  node-test:
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        node-version: [13.x, 14.x]
+    steps:
+    - name: setup timezone
+      uses: zcong1993/setup-timezone@v1.1.1
+      with:
+        timezone: "Europe/Paris"
+    - uses: actions/checkout@master
+    - name: setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: install and run Xvfb
+      run: |
+        sudo apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+        export DISPLAY=:99
+        Xvfb $DISPLAY &
+    - name: npm install and test
+      env:
+        IOTLAB_WEBPORTAL_PASSWD : ${{ secrets.IOTLAB_WEBPORTAL_PASSWD }}
+      run: |
+        npm install
+        npm run test:unit
+        npm run test:e2e -- --headless

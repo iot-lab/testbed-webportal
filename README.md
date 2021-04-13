@@ -1,6 +1,6 @@
 # testbed-webportal
 
-[![Build Status](https://ci.inria.fr/iot-lab/buildStatus/icon?job=testbed-webportal)](https://ci.inria.fr/iot-lab/job/testbed-webportal/)
+[![CI](https://github.com/iot-lab/testbed-webportal/workflows/CI/badge.svg)](https://github.com/iot-lab/testbed-webportal/actions?query=workflow%3ACI+branch%3Amaster)
 
 > A Vue.js webportal for the FIT IoT-LAB testbed
 
@@ -47,13 +47,6 @@ Note: project structure created with vue-cli 3.0 `vue create testbed-webportal` 
 ## Testing
 
 [Testing tools & strategies](Testing.md)
-
-## Deployment
-
-``` bash
-# run tests, build and deploy
-fab test build deploy -H root@devwww:2222
-```
 
 ## IoT-LAB API
 

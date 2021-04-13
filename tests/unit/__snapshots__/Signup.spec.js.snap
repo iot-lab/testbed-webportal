@@ -70,7 +70,7 @@ exports[`Signup.vue should match snapshot 1`] = `
               I read and I accept 
               <a
                 class=""
-                href="/charter/"
+                href="/docs/getting-started/terms-of-use/"
                 target="_blank"
               >
                 IoT-LAB Terms of Service
