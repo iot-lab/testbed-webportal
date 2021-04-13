@@ -17,9 +17,10 @@ jobs:
       matrix:
         node-version: [13.x, 14.x]
     steps:
-    - uses: actions/set-timezone-action@v1.1
+    - name: setup timezone
+      uses: zcong1993/setup-timezone@v1.1.1
       with:
-        timezoneLinux: "Europe/Paris"
+        timezone: "Europe/Paris"
     - uses: actions/checkout@master
     - name: setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
