@@ -65,7 +65,7 @@
         <th class="cursor text-center" title="sort by state" @click="sortBy(node => node.state)">State</th>
         <th class="cursor" title="sort by archi" @click="sortBy(node => node.archi)">Archi <span class="text-muted font-weight-normal">(radio)</span></th>
         <th class="cursor" title="sort by site" @click="sortBy(node => node.site)">Site</th>
-        <th class="cursor" title="sort by mobility" @click="sortBy(node => node.mobility_type, reverse = true)">Mobility</th>
+        <th class="cursor" title="sort by monitorable" @click="sortBy(node => node.monitorable, reverse = true)">Monitorable</th>
         <th class="cursor" title="sort by uid" @click="sortBy(node => node.uid)">UID</th>
         <th class="cursor" title="sort by X" @click="sortBy(node => node.x, reverse = true)">X</th>
         <th class="cursor" title="sort by Y" @click="sortBy(node => node.y, reverse = true)">Y</th>
@@ -84,7 +84,7 @@
           <span class="text-muted" v-if="$options.filters.formatRadio(node.archi)">({{node.archi | formatRadio}})</span>
         </td>
         <td class="text-capitalize">{{node.site}}</td>
-        <td v-if="node.mobile">Yes <span class="text-muted">({{node.mobility_type}})</span></td>
+        <td class="text-center" v-if="node.monitorable"><i class="fa fa-eye"></i></td>
         <td v-else></td>
         <td>{{node.uid}}</td>
         <td>{{node.x}}</td>
