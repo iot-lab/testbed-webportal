@@ -64,7 +64,9 @@
         <th class="cursor text-center" title="sort by state" @click="sortBy(node => node.state)">State</th>
         <th class="cursor" title="sort by archi" @click="sortBy(node => node.archi)">Archi <span class="text-muted font-weight-normal">(radio)</span></th>
         <th class="cursor" title="sort by site" @click="sortBy(node => node.site)">Site</th>
-        <th class="cursor" title="sort by monitorable" @click="sortBy(node => node.monitorable, reverse = true)">Monitorable</th>
+        <th class="cursor text-center" title="sort by power control" @click="sortBy(node => node.power_control, reverse = true)">Power control</th>
+        <th class="cursor text-center" title="sort by power consumption" @click="sortBy(node => node.power_consumption, reverse = true)">Power consumption</th>
+        <th class="cursor text-center" title="sort by radio sniffing" @click="sortBy(node => node.radio_sniffing, reverse = true)">Radio sniffing</th>
         <th class="cursor" title="sort by uid" @click="sortBy(node => node.uid)">UID</th>
         <th class="cursor" title="sort by X" @click="sortBy(node => node.x, reverse = true)">X</th>
         <th class="cursor" title="sort by Y" @click="sortBy(node => node.y, reverse = true)">Y</th>
@@ -83,7 +85,11 @@
           <span class="text-muted" v-if="$options.filters.formatRadio(node.archi)">({{node.archi | formatRadio}})</span>
         </td>
         <td class="text-capitalize">{{node.site}}</td>
-        <td class="text-center" v-if="node.monitorable"><i class="fa fa-eye"></i></td>
+        <td class="text-center" v-if="node.power_control"><i class="fa fa-power-off"></i></td>
+        <td v-else></td>
+        <td class="text-center" v-if="node.power_consumption"><i class="fa fa-battery-three-quarters"></i></td>
+        <td v-else></td>
+        <td class="text-center" v-if="node.radio_sniffing"><i class="fa fa-wifi"></i></td>
         <td v-else></td>
         <td>{{node.uid}}</td>
         <td>{{node.x}}</td>
