@@ -338,21 +338,6 @@ exports[`NewExperiment.vue should match snapshot 1`] = `
                   value="0"
                 />
                  
-                <label
-                  class="custom-control custom-control-inline custom-checkbox mb-0 mt-1"
-                >
-                  <input
-                    class="custom-control-input"
-                    type="checkbox"
-                  />
-                   
-                  <span
-                    class="custom-control-label"
-                  >
-                    Mobile
-                  </span>
-                </label>
-                 
                 <button
                   class="btn btn-sm btn-success"
                 >
@@ -393,13 +378,6 @@ exports[`NewExperiment.vue should match snapshot 1`] = `
                 <filterselect-stub
                   all="All architectures"
                   items="[object Object]"
-                  title=""
-                  value="all"
-                />
-                 
-                <filterselect-stub
-                  all="All mobility"
-                  items="[object Object],[object Object]"
                   title=""
                   value="all"
                 />

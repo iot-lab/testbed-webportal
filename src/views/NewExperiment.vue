@@ -87,10 +87,6 @@
                 </filter-select>
                 <filter-select title="Site" :items="sites4Archi.sort()" v-model="filterSite"></filter-select>
                 <filter-select :items="qtyAvailable" title="Qty" v-model.number="qty" style="max-width: 90px"></filter-select>
-                <label class="custom-control custom-control-inline custom-checkbox mb-0 mt-1">
-                  <input v-model="propMobile" type="checkbox" class="custom-control-input">
-                  <span class="custom-control-label">Mobile</span>
-                </label>
                 <button class="btn btn-sm btn-success" @click="addProps"><i class="fa fa-plus" aria-hidden="true"></i> Add to experiment</button>
               </div>
             </div>
@@ -104,8 +100,6 @@
                 <filter-select all="All architectures" v-model="filterArchi"
                   :items="sortedArchis4Site">
                 </filter-select>
-                <filter-select all="All mobility" :items="[{value: '1', option:'Mobile'}, {value: '0', option: 'Not mobile'}]" v-model="filterMobile"></filter-select>
-
               </div>
               <div class="d-md-flex flex-row mt-3" style="align-items: center;">
                 <multiselect v-model="currentNodes" :options="filteredNodes" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" :placeholder="searchNodesPlaceholder" label="network_address" track-by="network_address" class="multiselect-nodes mr-1">
@@ -119,7 +113,6 @@
                     <div class="option__desc">
                       <span class="option__title">{{props.option.network_address}}</span>
                       <span class="float-right badge badge-tag badge-secondary" :class="props.option.archi">{{props.option.archi}}</span>
-                      <span class="float-right badge badge-tag badge-primary" v-if="props.option.mobile">mobile</span>
                       <span class="float-right badge badge-tag" :class="props.option.state | stateBadgeClass">{{props.option.state}}</span>
                     </div>
                   </template>
@@ -199,8 +192,6 @@
         <div style="margin-top: 0.35rem" v-for="(p, index) in selectedProps">
           <span class="badge badge-info badge-tag"> {{p.prop.properties.archi | formatArchiRadio}} @ {{p.prop.properties.site}}</span>
           x {{p.prop.nbnodes}}
-          <span class="badge badge-primary badge-tag" v-if="p.prop.properties.mobile"> mobile </span>
-
           <span class="badge badge-light badge-tag cursor" v-if="p.hasFirmware" data-toggle="dropdown" v-tooltip:top="'Add firmware'">
             <i class="fa fa-microchip text-dark"></i> <span class="mx-1" v-if="p.firmware.name" v-html="$options.filters.md5Tag(p.firmware.name)"></span> <span v-if="p.firmware.name" class="tag-remove cursor" @click.stop="p.firmware = {name:undefined}">&times;</span>
           </span>
@@ -330,7 +321,6 @@ export default {
       mode: 'byprop',
       filterSite: 'all',
       filterArchi: 'all',
-      filterMobile: 'all',
       showMap: false,
       propMobile: false,
       firmwareFiles: [{name: undefined}],
@@ -406,9 +396,6 @@ export default {
       })
         .filter((node) => {
           return this.filterSite === 'all' || node.site === this.filterSite
-        })
-        .filter((node) => {
-          return this.filterMobile === 'all' || node.mobile === parseInt(this.filterMobile)
         })
         .filter((node) => {
           return !this.selectedNodes.some(e => e.network_address === node.network_address)
@@ -493,13 +480,11 @@ export default {
         }, [])
     },
     qtyAvailable () {
-      // qty available for (site, archi, mobile) = total qty - qty already selected
+      // qty available for (site, archi) = total qty - qty already selected
       return this.nodes.filter((node) => node.site === this.filterSite &&
-                                         node.archi === this.filterArchi &&
-                                         Boolean(node.mobile) === this.propMobile).length -
+                                         node.archi === this.filterArchi).length -
              this.selectedProps.filter((p) => p.prop.properties.site === this.filterSite &&
-                                              p.prop.properties.archi === this.filterArchi &&
-                                              Boolean(p.prop.properties.mobile) === this.propMobile)
+                                              p.prop.properties.archi === this.filterArchi)
                .reduce((a, e) => a + parseInt(e.prop.nbnodes), 0)
     },
     states () {
@@ -575,7 +560,6 @@ export default {
       this.mode = mode
       this.filterArchi = 'all'
       this.filterSite = 'all'
-      this.filterMobile = 'all'
     },
     clearAllNodes () {
       this.selectedNodeGroups = []
