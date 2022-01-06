@@ -50,7 +50,7 @@ const WebmailDomains = [
 
   /* Disposable email providers */
   "yopmail.com", "yopmail.fr", "yopmail.net", "jetable.org",
-  "cool.fr.nf", "jetable.fr.nf", "nospam.ze.tc", "nomail.xl.cx", "mega.zik.dj", "speed.1s.fr", "courriel.fr.nf", "moncourrier.fr.nf", "monemail.fr.nf", "monmail.fr.nf",
+  "cool.fr.nf", "jetable.fr.nf", "nospam.ze.tc", "nomail.xl.cx", "mega.zik.dj", "speed.1s.fr", "courriel.fr.nf", "moncourrier.fr.nf", "monemail.fr.nf", "monmail.fr.nf", "emailnax.com", "alaska-outfitters.com", "wiicheat.com",
   // extensive list can be found here https://github.com/wesbos/burner-email-providers
 ]
 
