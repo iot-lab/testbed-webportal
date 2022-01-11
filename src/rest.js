@@ -1,5 +1,14 @@
 import axios from 'axios'
 
+const API_DEBOUNCE_EMAIL = 'https://disposable.debounce.io'
+
+export const email = {
+  // https://docs.debounce.io/reference/disposable-email-detector
+  async getDebounceEmail (email) {
+    return axios.get(`${API_DEBOUNCE_EMAIL}/?email=${email}`).then(resp => resp.data.disposable)
+  },
+}
+
 const API_URL = `https://${process.env.VUE_APP_IOTLAB_HOST}/api/`
 
 export const iotlab = {
