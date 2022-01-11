@@ -197,7 +197,7 @@ import countries from '@/assets/js/countries'
 import UserCategories from '@/assets/js/categories'
 import $ from 'jquery'
 import { Validator } from 'vee-validate'
-import { iotlab } from '@/rest'
+import { iotlab, email } from '@/rest'
 import store from '@/store'
 
 export default {
@@ -243,7 +243,7 @@ export default {
   created () {
     Validator.extend('noWebMail', {
       getMessage: field => `Your email must be <b>academic</b> or <b>professional</b> in order to validate your account (<b>${this.user.email.split('@')[1]}</b> not allowed).`,
-      validate: email => this.admin || !WebmailDomains.includes(email.split('@')[1].toLowerCase()),
+      validate: email => this.admin || (!WebmailDomains.includes(email.split('@')[1].toLowerCase()) && !this.getDebounceEmail(email)),
     })
     if (!this.hidden.includes('groups')) {
       iotlab.getUserGroups()
@@ -262,6 +262,15 @@ export default {
       }
       // reset user value
       this.user = newUser
+    },
+    async getDebounceEmail (emailUser) {
+      try {
+        return await email.getDebounceEmail(emailUser)
+      } catch (ex) {
+        console.log(ex)
+        // no blocking in case of error (i.e. API rate limiting)
+        return false
+      }
     },
     async validate () {
       return this.$validator.validateAll().then((validated) => {
