@@ -243,7 +243,9 @@ export default {
   created () {
     Validator.extend('noWebMail', {
       getMessage: field => `Your email must be <b>academic</b> or <b>professional</b> in order to validate your account (<b>${this.user.email.split('@')[1]}</b> not allowed).`,
-      validate: email => this.admin || (!WebmailDomains.includes(email.split('@')[1].toLowerCase()) && !this.getDebounceEmail(email)),
+      validate: email => (this.admin || (!WebmailDomains.includes(email.split('@')[1].toLowerCase()) && this.getDebounceEmail(email))),
+    }, {
+      immediate: false,
     })
     if (!this.hidden.includes('groups')) {
       iotlab.getUserGroups()
@@ -265,11 +267,17 @@ export default {
     },
     async getDebounceEmail (emailUser) {
       try {
-        return await email.getDebounceEmail(emailUser)
+        let debounce = await email.getDebounceEmail(emailUser)
+        if (debounce === 'true') {
+          return false
+        } else {
+          // valid email
+          return true
+        }
       } catch (ex) {
         console.log(ex)
         // no blocking in case of error (i.e. API rate limiting)
-        return false
+        return true
       }
     },
     async validate () {
