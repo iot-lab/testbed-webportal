@@ -33,6 +33,14 @@
         </div>
         <div class="form-check">
           <label class="custom-control custom-control-inline custom-checkbox">
+            <input v-model="mailingList" name="mailinglist" type="checkbox" class="custom-control-input">
+            <span class="custom-control-label" v-tooltip:top="`Mailing list for user support, testbed maintenance and announcements.`">
+              Subscribing IoT-LAB users mailing list.
+            </span>
+          </label>
+        </div>
+        <div class="form-check">
+          <label class="custom-control custom-control-inline custom-checkbox">
             <input v-model="charter" name="charter" type="checkbox" class="custom-control-input" v-validate="'required'" :class="{'is-invalid': errors.has('charter') }">
             <span class="custom-control-label">
               I read and I accept <a href="/docs/getting-started/terms-of-use/" :class="{'text-danger': errors.has('charter') }" target="_blank">IoT-LAB Terms of Service</a>.
@@ -69,6 +77,7 @@ export default {
       user: {
         'sshkeys': [''],
       },
+      mailingList: true,
       charter: false,
       success: false,
       captcha: {
@@ -91,7 +100,7 @@ export default {
           return
         }
         try {
-          await iotlab.signup(this.user)
+          await iotlab.signup(this.user, this.mailingList)
           this.success = true
         } catch (err) {
           this.success = false
