@@ -19,6 +19,15 @@
           <form @submit.prevent="createSingle">
             <user-form :user="user" ref="user" :admin="true" :hidden="['password']"></user-form>
             <div class="form-group">
+              <label class="custom-control custom-control-inline custom-checkbox">
+                <input v-model="mailingList" name="mailinglist" type="checkbox" class="custom-control-input">
+                <span class="custom-control-label">
+                  Subscribing IoT-LAB users mailing list.
+                </span>
+              </label>
+            </div>
+
+            <div class="form-group">
               <button class="btn btn-success" type="submit">Create account</button>
               <button class="btn btn-secondary ml-1" type="reset" @click="$refs.user.clean()">Clear</button>
             </div>
@@ -119,6 +128,7 @@ export default {
         'motivations': `# created by ${auth.username} for <DESCRIBE THE EVENT>`,
       },
       qty: 3,
+      mailingList: true,
       baseLogin: '',
       showQty: false,
     }
@@ -135,7 +145,7 @@ export default {
       }
       try {
         this.user.status = 'active'
-        await iotlab.signup(this.user)
+        await iotlab.signup(this.user, this.mailingList)
         this.$notify({text: 'User created', type: 'success'})
       } catch (err) {
         this.$notify({text: err.response.data.message, type: 'error'})
@@ -148,7 +158,7 @@ export default {
         }
         try {
           this.users.login = this.baseLogin
-          await iotlab.signup(this.users, this.qty)
+          await iotlab.signup(this.users, undefined, this.qty)
           this.$notify({text: `${this.qty} users created`, type: 'success'})
         } catch (err) {
           this.$notify({text: 'An error occured', type: 'error'})

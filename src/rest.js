@@ -27,14 +27,16 @@ export const iotlab = {
 
   // USERS API
 
-  async signup (user, nbUsers) {
+  async signup (user, mailingList, nbUsers) {
+    let path = '/users'
     if (nbUsers) {
       // create multiple user accounts
-      await iotlab.api.post(`/users?nbusers=${nbUsers}`, user)
-    } else {
-      // create single user account
-      await iotlab.api.post('/users', user)
+      path += `?nbusers=${nbUsers}`
+    } else if (!mailingList) {
+      // create single user without mailing-list subscription
+      path += '?mailing-list=off'
     }
+    await iotlab.api.post(path, user)
   },
 
   async activateAccount (hash) {
