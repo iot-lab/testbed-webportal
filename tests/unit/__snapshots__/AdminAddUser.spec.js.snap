@@ -77,6 +77,28 @@ exports[`AdminAddUser.vue should match snapshot 1`] = `
             <div
               class="form-group"
             >
+              <label
+                class="custom-control custom-control-inline custom-checkbox"
+              >
+                <input
+                  class="custom-control-input"
+                  name="mailinglist"
+                  type="checkbox"
+                />
+                 
+                <span
+                  class="custom-control-label"
+                >
+                  
+                  Subscribing IoT-LAB users mailing list.
+                
+                </span>
+              </label>
+            </div>
+             
+            <div
+              class="form-group"
+            >
               <button
                 class="btn btn-success"
                 type="submit"
